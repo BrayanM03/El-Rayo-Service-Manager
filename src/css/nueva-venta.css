@@ -27,16 +27,28 @@
 
 .grupo-1{
    
-    width: 40%;
+    width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
+    align-items: flex-end;
+    
+}
+
+.folio-fecha{
+    width: 30%;
+    display: flex;
+    justify-content: center;
     margin-bottom: 3vh;
     padding: 2vh;
-    background-color: burlywood;
-    border: 1px solid coral ;
+    background-color:wheat;
     border-radius: 9px;
-    
+    border: 1px solid coral ;
+}
+
+.folio-fecha input{
+    padding: 5px;
+    margin: 0px 5px;
 }
 
 .grupo-2{

@@ -439,15 +439,18 @@
                          </div>
                          <div class="card-body">
                              <form action="" class="form-nueva-venta">
-                                <div class="grupo-1">
-                                    <label>
-                                        <span for="folio">Folio:</span>
-                                        <input type="text" id="folio" name="folio">
-                                    </label>
-                                    <label>
-                                        <span for="fecha">Fecha</span>
-                                        <input type="date" id="fecha" name="fecha">
-                                    </label>
+                                <div class="grupo-1 row">
+                                    <div class="folio-fecha">
+                                        <label>
+                                            <span for="folio">Folio:</span>
+                                            <input type="text" id="folio" name="folio">
+                                        </label>
+                                        <label>
+                                            <span for="fecha">Fecha</span>
+                                            <input type="date" id="fecha" name="fecha">
+                                        </label>
+                                    </div>
+                                  
                                 </div>
                                 
                                 <div class="area-venta row">
@@ -478,6 +481,11 @@
                                                 <option value="">Sendero</option>
                                             </select>
                                         </label>
+                                        <label>
+                                            <span for="description"style="height: 6vh;">Descripción</span>
+                                            <input type="text" id="description" name="description" class="input-group">
+                                        </label>
+
                                         <label style="border-color: transparent;">
                                             <div class="btn btn-info" id="agregar-producto">Agregar</div>
                                         </label>
