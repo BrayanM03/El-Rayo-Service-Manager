@@ -23,27 +23,30 @@ inputs.forEach( input => {
     }
 });
 
-console.log(selects);
+
 selects.forEach( select => {
 
     select.onfocus = function(){
-        alert("EN foco");
-       /* select.previousElementSibling.classList.add('top');
+        select.previousElementSibling.classList.add('top');
         select.previousElementSibling.classList.add('focus');
-        select.parentNode.classList.add('focus');  */
+        select.parentNode.classList.add('focus');  
     }
 
 
     select.onblur = function(){
         
-      /*  var indice = select.selectedIndex;
-        if (indice == null) {
+      var indice = select.selectedIndex;
+      
+        if (indice == 0) {
             select.previousElementSibling.classList.remove('top');
+            select.previousElementSibling.classList.remove('focus');
+            select.parentNode.classList.remove('focus');
         }else{
             select.previousElementSibling.classList.remove('focus');
-        select.parentNode.classList.remove('focus');*/
-        alert("Sin");
+        select.parentNode.classList.remove('focus');
+       
         }
+    }
         
         
 });
