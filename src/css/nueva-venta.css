@@ -60,6 +60,16 @@
 
 }
 
+.medidas-llanta{
+    display: flex;
+    width: 450px;
+    
+}
+
+.medidas-llanta label{
+    margin-right:15px;
+}
+
 .grupo-3{
     display: flex;
     flex-direction: column;
