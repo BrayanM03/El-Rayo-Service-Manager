@@ -52,7 +52,7 @@ selects.forEach( select => {
 });
 
     
-$(document).ready(function() {
+/*$(document).ready(function() {
         $('#pre-venta').DataTable({
             responsive: true,
             language: {
@@ -61,5 +61,5 @@ $(document).ready(function() {
                 infoEmpty: "Ups!, no hay registros aun en esta categoria."
               }
         });
-    } );
+    } );*/
   
