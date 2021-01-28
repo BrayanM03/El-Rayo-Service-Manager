@@ -36,7 +36,7 @@
 }
 
 .folio-fecha{
-    width: 30%;
+    width: auto;
     display: flex;
     justify-content: center;
     margin-bottom: 3vh;
@@ -47,7 +47,7 @@
 }
 
 .folio-fecha input{
-    width:45%;
+    width:auto;
     padding: 5px;
     margin: 0px 5px;
 }
@@ -55,14 +55,14 @@
 .grupo-2{
   display: flex;
   flex-direction: column;
-  border: 1px solid black;
-
+  
 
 }
 
 .medidas-llanta{
+
     display: flex;
-    width: 450px;
+    width: auto;
     
 }
 
