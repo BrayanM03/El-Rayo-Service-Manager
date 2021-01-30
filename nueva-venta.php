@@ -471,13 +471,13 @@
                                                     <!--<div class="col-4">-->
                                                     <label class="input-corto">
                                                         <span for="ancho">Ancho</span>
-                                                        <input type="text" id="ancho" name="ancho" class="input-group">
+                                                        <input type="number" id="ancho" name="ancho" class="input-group">
                                                     </label> 
                                                 <!-- </div>-->
                                                <!-- <div class="col-4">-->
                                                     <label class="input-corto" id="bloqueado_label">
                                                         <span for="proporcion">Proporcion</span>
-                                                        <input type="text" id="proporcion" name="proporcion" class="input-group" disabled>
+                                                        <input type="number" id="proporcion" name="proporcion" class="input-group" disabled>
                                                     </label>
                                                 <!-- </div>-->
                                                 <!--<div class="col-4">--->

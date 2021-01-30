@@ -58,13 +58,20 @@ selects.forEach( select => {
             inAncho.keyup(function () { 
             var Anchovalor = $(this).val();
             console.log(Anchovalor);
+            entrada="et"
 
             $.ajax({
                 type: "post",
                 url: "./modelo/buscar-llanta.php",
-                data: {ancho: Anchovalor},
+                async: true,
+                data: {entrada: entrada, ancho: Anchovalor},
                 success: function (response) {
-                    console.log("correcto la respuesta fue: "+ response);                }
+                    var jsonObject = JSON.parse(response);
+                    var Anchos = jsonObject;
+                    $.each(Anchos, function(key, value) { 
+                        console.log("Ancho: " + value.Ancho);
+                     })          
+                }
             });
         });
       }
