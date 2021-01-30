@@ -1,7 +1,17 @@
+
+    <?php
+    
+    include 'modelo/conexion.php';
+    $con= $conectando->conexion(); 
+
+    if (!$con) {
+        echo "maaaaal";
+    }
+    ?>
 <!DOCTYPE html>
 <html lang="es">
 
-<head>
+<head> 
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,6 +23,8 @@
     <title>El Rayo | Service Manager</title>
 
     <!-- Custom fonts for this template-->
+    
+    <link rel="stylesheet" href="src/css/nueva-venta.css">
     <link href="src/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
@@ -20,6 +32,9 @@
 
     <!-- Custom styles for this template-->
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="src/vendor/datatables/dataTables.bootstrap4.css">
+    <!---Librerias de estilos-->
+   
 
 </head>
 
@@ -60,7 +75,7 @@
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link" href="nueva-venta.php">
+                <a class="nav-link" href="#">
                     <i class="fas fa-fw fa-cart-plus"></i>
                     <span>Nueva venta</span>
                 </a>
@@ -424,183 +439,135 @@
 
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
+                <div class="container-fluid" style="display: flex; justify-content: center; ">
 
-                     <!-- Page Heading -->
-                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h3 class="h3 mb-0 text-gray-800">Bievenido al panel</h3>
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                class="fas fa-download fa-sm text-white-50"></i> Generar reporte</a>
-                    </div>
-                   
-                            <!-- Content Row -->
-                    <div class="row">
+                     <!-- Contenido Nueva venta -->
 
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Ganancias (Este mes)</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$0,00</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
-                                        </div>
+                     <div class="card">
+                         <div class="card-header bg-primary text-white">
+                             <span>Nueva venta</span>
+                         </div>
+                         <div class="card-body">
+                             <form action="" class="form-nueva-venta">
+                                <div class="grupo-1">
+                                    <div class="folio-fecha row">
+                                        <label>
+                                            <span for="folio">Folio:</span>
+                                            <input class="form-control"type="text" id="folio" name="folio">
+                                        </label>
+                                        <label>
+                                            <span for="fecha">Fecha</span>
+                                            <input class="form-control" type="date" id="fecha" name="fecha">
+                                        </label>
                                     </div>
+                                  
                                 </div>
-                            </div>
-                        </div>
-
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Ganancias (Anual)</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$0,00</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-info shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Ventas
-                                            </div>
-                                            <div class="row no-gutters align-items-center">
-                                                <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">0</div>
+                                
+                                <div class="area-venta row">
+                                    <div class="grupo-2">
+                                        
+                                            <div class="row">
+                                                <div class="medidas-llanta">
+                                                    <!--<div class="col-4">-->
+                                                    <label class="input-corto">
+                                                        <span for="ancho">Ancho</span>
+                                                        <input type="text" id="ancho" name="ancho" class="input-group">
+                                                    </label> 
+                                                <!-- </div>-->
+                                               <!-- <div class="col-4">-->
+                                                    <label class="input-corto" id="bloqueado_label">
+                                                        <span for="proporcion">Proporcion</span>
+                                                        <input type="text" id="proporcion" name="proporcion" class="input-group" disabled>
+                                                    </label>
+                                                <!-- </div>-->
+                                                <!--<div class="col-4">--->
+                                                    <label class="input-corto" id="bloqueado_label">
+                                                        <span for="diametro">Diametro</span>
+                                                        <input type="text" id="diametro" name="diametro" class="input-group" disabled>
+                                                    </label>
+                                               <!-- </div>-->
                                                 </div>
+                                              
                                                 
-                                            </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                            </div>  
+                                            
+                                        
+                                        
+                                        <label class="input-corto">
+                                            <span for="cantidad">Cantidad</span>
+                                            <input type="number" id="cantidad" name="cantidad" class="input-group">
+                                        </label>
+                                        
+                                            <label class="input-corto">
+                                                <span for="precio">$ Precio</span>
+                                                <input type="number" id="precio" name="precio" class="input-group">
+                                            </label>
+    
+                                        <label>
+                                            <span for="vendedor">Vendedor</span>
+                                            <input type="text" id="vendedor" name="vendedor" class="input-group">
+                                        </label>
+                                        <label >
+                                        <span for="sucursal">Sucursal</span>
+                                            <select  id="sucursal" name="sucursal" class="select-group form-select">
+                                                
+                                                <option disabled selected value></option>
+                                                <option value="">Pedro Cardenas</option>
+                                                <option value="">Sendero</option>
+                                            </select>
+                                        </label>
+                                        <label>
+                                            <span for="description">Descripción</span>
+                                            <input type="text" id="description" name="description" class="input-group">
+                                        </label>
 
-                        <!-- Pending Requests Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                Pending Requests</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-comments fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
+                                        <label style="border-color: transparent;">
+                                            <div class="btn btn-info" id="agregar-producto">Agregar</div>
+                                        </label>
+                                       
                                 </div>
-                            </div>
-                        </div>
-                    </div>
 
-                    
+                                        <div class="grupo-3">
+                                            <table id="pre-venta" class="table table-striped table-bordered table-hover" style="width:100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Codigo</th>
+                                                        <th>Descripción</th>
+                                                        <th>Cantidad</th>
+                                                        <th>Precio</th>
+                                                        <th>Subtotal</th>
+                                                        <th>Accion</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                       
+                                                    </tr>
+                                                    
+                                                    </tbody>
+                                                    </table><br>
+                                                    
+                                                    <div class="row" style="width: 100%; display: flex; justify-content: center; align-items: center;">
+                                                        <div class="form-group" style="display: flex; align-items: center; justify-content: space-around; width: 20%;" >
+                                                            <span for="total">Total: </span>
+                                                            <input type="text" value="$795" class="form-control" id="total" name="total" style="width:80px" disabled> 
+                                                    
+                                                        </div>
+                                                        </div>
+                                                    <div class="botones-de-venta">
+                                                        <div class="btn btn-warning" style="color: rgb(31, 28, 28); margin-right: 2vh;" id="limpiar-venta">Limpiar</div>
+                                                        <div class="btn btn-success" id="realizar-venta">Realizar venta</div>
+                                                    </div>   
+                                                    
+                                        </div>
+                                </div>
+                                
+                             </form>
+                         </div>
+                     </div>
+                   
 
                 </div>
-                <!-- /.container-fluid -->
-
-
-                
-                    <!-- Content Row -->
-
-                    <div class="row">
-
-                        <!-- Area Chart -->
-                        <div class="col-xl-8 col-lg-7">
-                            <div class="card shadow mb-4">
-                                <!-- Card Header - Dropdown -->
-                                <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Grafica de ventas</h6>
-                                    <div class="dropdown no-arrow">
-                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                            aria-labelledby="dropdownMenuLink">
-                                            <div class="dropdown-header">Sucursales:</div>
-                                            <a class="dropdown-item" href="#">Pedro Cardenas</a>
-                                            <a class="dropdown-item" href="#">Sendero</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Fusionar</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Card Body -->
-                                <div class="card-body">
-                                    <div class="chart-area">
-                                        <canvas id="myAreaChart"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Pie Chart -->
-                        <div class="col-xl-4 col-lg-5">
-                            <div class="card shadow mb-4">
-                                <!-- Card Header - Dropdown -->
-                                <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Ventas sucursales</h6>
-                                    <div class="dropdown no-arrow">
-                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                            aria-labelledby="dropdownMenuLink">
-                                            <div class="dropdown-header">Dropdown Header:</div>
-                                            <a class="dropdown-item" href="#">Action</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Something else here</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Card Body -->
-                                <div class="card-body">
-                                    <div class="chart-pie pt-4 pb-2">
-                                        <canvas id="myPieChart"></canvas>
-                                    </div>
-                                    <div class="mt-4 text-center small">
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-primary"></i> Pedro Cardenas
-                                        </span>
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-success"></i> Sendero
-                                        </span>
-                                        
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row" style="display: flex; justify-content: center; margin-top: 80px;">
-                        <img src="src/img/undraw_sobre_ruedas.svg" alt="" width="400px">
-                    </div>
-
-            </div>
             <!-- End of Main Content -->
   <!-- Footer -->
             <footer class="sticky-footer bg-white">
@@ -661,13 +628,16 @@
     <script src="src/js/demo/chart-area-demo.js"></script>
     <script src="src/js/demo/chart-pie-demo.js"></script>
 
-    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
 
-    <!-- Cargamos nuestro componente de React. -->
-    <script src="src/components/inicio.js">
- 
-    </script>
+    <!-- Cargamos nuestras librerias-->
+    <script src="src/vendor/nice-select/js/jquery.nice-select.js"></script>
+    <script src="src/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="src/vendor/datatables/dataTables.bootstrap4.js"></script>
+    <script src="src/js/nueva-venta.js"></script>
+    <script src="src/vendor/datatables/defaults.js"></script>
+    <script src="src/vendor/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    
    
 </body>
 

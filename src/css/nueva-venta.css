@@ -23,6 +23,7 @@
     width: 100%;
     display: flex;
    justify-content: space-around;
+   
 }
 
 .grupo-1{
@@ -53,27 +54,36 @@
 }
 
 .grupo-2{
+  width: 600px;
   display: flex;
   flex-direction: column;
+  background-color:white;
+  align-content: flex-start;
+  border-radius: 10px;
   
 
 }
 
 .medidas-llanta{
-
+    margin-top:2vh ;
+    margin-left: 12px;
     display: flex;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+.medidas-llanta label{
     width: auto;
     
 }
 
-.medidas-llanta label{
-    margin-right:15px;
+#bloqueado_label{
+    background-color:  rgb(240, 230, 230);
 }
-
 .grupo-3{
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content:space-between;
     align-items: center;
     width: auto;
   
@@ -88,6 +98,7 @@
     background: transparent;
     outline: none;
     font-size: 16px;
+  
     
 }
 
@@ -111,6 +122,7 @@
     box-sizing: border-box;
     margin-bottom: 2vh;
     transition: 0.15s;
+    margin-left: 1vh;
 }
 
 .grupo-2 .input-corto {
@@ -143,7 +155,7 @@
     left: 7px;
     top: -10px;
     font-size: 12px;
-    background-color: white;
+    background-color:white;
     padding: 0px 5px;
 }
 

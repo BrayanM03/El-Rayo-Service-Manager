@@ -51,15 +51,22 @@ selects.forEach( select => {
         
 });
 
-    
-/*$(document).ready(function() {
-        $('#pre-venta').DataTable({
-            responsive: true,
-            language: {
-            
-                emptyTable: "No hay registros",
-                infoEmpty: "Ups!, no hay registros aun en esta categoria."
-              }
-        });
-    } );*/
+
   
+    function buscar() {
+        var inAncho = $("#ancho");
+            inAncho.keyup(function () { 
+            var Anchovalor = $(this).val();
+            console.log(Anchovalor);
+
+            $.ajax({
+                type: "post",
+                url: "./modelo/buscar-llanta.php",
+                data: {ancho: Anchovalor},
+                success: function (response) {
+                    console.log("correcto la respuesta fue: "+ response);                }
+            });
+        });
+      }
+
+      buscar();
