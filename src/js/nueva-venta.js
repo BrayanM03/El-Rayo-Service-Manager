@@ -54,11 +54,19 @@ selects.forEach( select => {
 
   
     function buscar() {
-        var inAncho = $("#ancho");
+        var inAncho = $("#search");
             inAncho.keyup(function () { 
             var Anchovalor = $(this).val();
-            console.log(Anchovalor);
+            
             entrada="et"
+
+            inputSearch = $("#search").val();
+
+            if(inputSearch.length == 0){
+                contenedorLista = $(".contenedor-lista");
+                contenedorLista.empty();
+                contenedorLista.addClass("oculto");
+            }
 
             $.ajax({
                 type: "post",
@@ -66,11 +74,43 @@ selects.forEach( select => {
                 async: true,
                 data: {entrada: entrada, ancho: Anchovalor},
                 success: function (response) {
-                    var jsonObject = JSON.parse(response);
-                    var Anchos = jsonObject;
-                    $.each(Anchos, function(key, value) { 
-                        console.log("Ancho: " + value.Ancho);
-                     })          
+
+                    $(".contenedor-lista").empty();
+
+                    try {
+                        var jsonObject = JSON.parse(response);
+                        var Anchos = jsonObject;
+                   
+
+                    if(inputSearch.length == 0){
+                        contenedorLista = $(".contenedor-lista");
+                        contenedorLista.empty();
+                        contenedorLista.addClass("oculto");
+
+                    }else{
+                        $.each(Anchos, function(key, value) { 
+                           // console.log("Ancho: " + value.Descripcion);
+                            
+
+                            contenedorLista = $(".contenedor-lista");
+                            contenedorLista.removeClass("oculto");
+                            contenedorLista.append("<ul id='lista-busqueda'></ul>");
+                            listaBusqueda = $("#lista-busqueda");
+                            listaBusqueda.append("<li class='producto-individual'>"+ 
+                            "<span>LLanta: <b style='color: black;'>"+value.Ancho+"/"+value.Proporcion+value.Diametro+"</b> Modelo: "+value.Modelo+" Stock: "+value.Stock+"</span></li>");
+                            
+                          
+                         });  
+                    }
+
+                    } catch (error) {
+                        contenedorLista = $(".contenedor-lista");
+                        contenedorLista.addClass("oculto");
+                    }        
+                   
+                    $(".producto-individual").on("click", function () {
+                        alert("Click");
+                    }); 
                 }
             });
         });

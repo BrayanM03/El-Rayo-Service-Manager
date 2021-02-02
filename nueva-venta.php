@@ -469,23 +469,16 @@
                                             <div class="row">
                                                 <div class="medidas-llanta">
                                                     <!--<div class="col-4">-->
-                                                    <label class="input-corto">
-                                                        <span for="ancho">Ancho</span>
-                                                        <input type="number" id="ancho" name="ancho" class="input-group">
+                                                    <label>
+                                                        <span for="search">Busqueda</span>
+                                                        <input type="text" id="search" name="search" class="input-group">
                                                     </label> 
-                                                <!-- </div>-->
-                                               <!-- <div class="col-4">-->
-                                                    <label class="input-corto" id="bloqueado_label">
-                                                        <span for="proporcion">Proporcion</span>
-                                                        <input type="number" id="proporcion" name="proporcion" class="input-group" disabled>
-                                                    </label>
-                                                <!-- </div>-->
-                                                <!--<div class="col-4">--->
-                                                    <label class="input-corto" id="bloqueado_label">
-                                                        <span for="diametro">Diametro</span>
-                                                        <input type="text" id="diametro" name="diametro" class="input-group" disabled>
-                                                    </label>
-                                               <!-- </div>-->
+                                                    <div class="contenedor-lista oculto">
+                                                    <ul id="lista-busqueda">
+                                                    </div>
+                                                   
+                                                  
+                                                   </ul>
                                                 </div>
                                               
                                                 

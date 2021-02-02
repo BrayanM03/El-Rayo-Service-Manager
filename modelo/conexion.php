@@ -12,7 +12,7 @@ class Conectar
         $host = "localhost";
         $user = "root";
         $password = "";
-        $db = "llantera_rayo";  
+        $db = "el_rayo";  
 
         $con = mysqli_connect($host, $user, $password, $db);
         mysqli_set_charset($con,"utf8");

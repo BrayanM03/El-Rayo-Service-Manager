@@ -7,20 +7,22 @@
         echo "maaaaal";
     }
 
-    if (isset($_POST['ancho']) && is_numeric($_POST['ancho'])==true) {
+    if (isset($_POST['ancho'])) {
      $ancho = $_POST['ancho'];
      $parametro = "%$ancho%";
-     $query_mostrar = $con->prepare("SELECT COUNT(*) total FROM llantas WHERE Ancho LIKE ?");
+     $query_mostrar = $con->prepare("SELECT COUNT(*) total FROM llantas WHERE Ancho LIKE ? OR Proporcion LIKE ? OR Diametro LIKE ?
+     OR Modelo LIKE ? OR Marca LIKE ? OR Descripcion LIKE ?");
     
-     $query_mostrar->bind_param('s', $parametro);
+     $query_mostrar->bind_param('ssssss', $parametro, $parametro, $parametro, $parametro, $parametro, $parametro);
      $query_mostrar->execute();
      $query_mostrar->bind_result($total);
      $query_mostrar->fetch();
      $query_mostrar->close();
 
-     if ($total > 0) {
+     if ($total > 0) { 
         
-        $sqlTraerLlanta="SELECT * FROM llantas WHERE Ancho LIKE '%$ancho%'";
+        $sqlTraerLlanta="SELECT * FROM llantas WHERE Ancho LIKE '%$ancho%'  OR Proporcion LIKE '%$ancho%'  OR Diametro LIKE '%$ancho%'
+         OR modelo LIKE '%$ancho%'  OR Marca LIKE '%$ancho%' OR Descripcion LIKE '%$ancho%'";
         $result = mysqli_query($con, $sqlTraerLlanta);
         while ($datas=mysqli_fetch_array($result)){
            
