@@ -78,7 +78,7 @@
     
 }
 
-.contenedor-lista{
+.contenedor-tabla{
     width: 500px;
     background-color: white;
     border: 1px solid slateblue;
@@ -97,6 +97,11 @@
   
 }
 
+.logo-marca{
+    width: 50px;
+    border-radius: 8px;
+}
+
 @keyframes aparecer {
     from {
     visibility: hidden;
@@ -111,17 +116,13 @@
   }
   }
 
-#lista-busqueda{
-    list-style: none;
-}
-
-#lista-busqueda li{
+.tbody tr{
     margin: 4px 0px;
     cursor: pointer;
     padding: 8px;
 }
 
-#lista-busqueda li:hover{
+.tbody tr:hover{
     width: 400px;
     background-color: chocolate;
     color:white;

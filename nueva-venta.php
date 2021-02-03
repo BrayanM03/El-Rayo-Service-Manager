@@ -473,8 +473,19 @@
                                                         <span for="search">Busqueda</span>
                                                         <input type="text" id="search" name="search" class="input-group">
                                                     </label> 
-                                                    <div class="contenedor-lista oculto">
-                                                    <ul id="lista-busqueda">
+                                                    <div class="contenedor-tabla oculto">
+                                                        <table class="table">
+                                                        <thead class="table-info">
+                                                        <tr>
+                                                            <th>Descripción</th>
+                                                            <th>Costo</th>
+                                                            <th>Marca</th>
+                                                            <th>Stock</th>
+                                                        </tr>
+                                                        <thead>
+                                                        <tbody class="tbody">
+                                                        </tbody>
+                                                        </table>
                                                     </div>
                                                    
                                                   

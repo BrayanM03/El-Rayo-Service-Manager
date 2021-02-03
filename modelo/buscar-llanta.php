@@ -19,6 +19,8 @@
      $query_mostrar->fetch();
      $query_mostrar->close();
 
+    //$querySucursal = $con->prepare("SELECT OR INNER JOIN sucursal ON llantas.id_Sucursal = sucursal.id")
+
      if ($total > 0) { 
         
         $sqlTraerLlanta="SELECT * FROM llantas WHERE Ancho LIKE '%$ancho%'  OR Proporcion LIKE '%$ancho%'  OR Diametro LIKE '%$ancho%'
