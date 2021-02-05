@@ -480,6 +480,7 @@
                                                             <th>Descripción</th>
                                                             <th>Costo</th>
                                                             <th>Marca</th>
+                                                            <th>Sucursal</th>
                                                             <th>Stock</th>
                                                         </tr>
                                                         <thead>
