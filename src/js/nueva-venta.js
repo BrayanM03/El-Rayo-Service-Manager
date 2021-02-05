@@ -151,7 +151,7 @@ selects.forEach( select => {
                                 tablaBusqueda.append(
 
                                        "<tr class='producto-individual'>"+
-                                       "<td class='descripcion'>" + value2.Descripcion + "</td>" +
+                                       "<td id='descripcion'>" + value2.Descripcion + "</td>" +
                                        "<td class='precio'>$" + value2.precio_Venta + "</td>" +
                                        "<td class='marca'><img class='logo-marca' src='./src/img/logos/" + value2.Marca + ".jpg'></td>" +
                                        "<td class='sucursal'>" + value2.Sucursal + "</td>" +
@@ -174,7 +174,7 @@ selects.forEach( select => {
                    
                     $(".producto-individual").on("click", function () {
                        
-                        descripcion = $(".descripcion").text();
+                        descripcion = $("#descripcion").text();
                         console.log(descripcion);
                     }); 
                 }
