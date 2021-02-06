@@ -91,15 +91,25 @@ selects.forEach( select => {
                                
                                 tablaBusqueda.append(
 
-                                       "<tr class='producto-individual'>"+
-                                       "<td class='descripcion1'>" + value.Descripcion + "</td>" +
-                                       "<td class='precio1'>$" + value.precio_Venta + "</td>" +
-                                       "<td class='marca1'><img class='logo-marca' src='./src/img/logos/" + value.Marca + ".jpg'></td>" +
-                                       "<td class='sucursal1'>" + value.Sucursal + "</td>" +
-                                       "<td class='stock1'>" + value.Stock + "</td></tr>");
+                                       "<tr class='producto-individual' "+
+                                       "descripcion='"+value.Descripcion + "' " +
+                                       "modelo='"+value.Modelo + "'"  +
+                                       "precio-venta='"+value.precio_Venta + "' " +
+                                       "precio-mayoreo='"+value.precio_Mayoreo + "' "  +
+                                       "marca='"+value.Marca + "'"  +
+                                       "sucursal='"+value.Sucursal + "' "  +
+                                       "stock='"+value.Stock +
+                                       "'>"+
+                                       "<td>" + value.Descripcion + "</td>" +
+                                       "<td>" + value.Modelo + "</td>" +
+                                       "<td>$" + value.precio_Venta + "</td>" +
+                                       "<td>$" + value.precio_Mayoreo + "</td>" +
+                                       "<td><img class='logo-marca' src='./src/img/logos/" + value.Marca + ".jpg'></td>" +
+                                       "<td>" + value.Sucursal + "</td>" +
+                                       "<td>" + value.Stock + "</td></tr>");
 
                                        contenedorTabla.removeClass("oculto");
-
+                                       
                           });  
                     }
    
@@ -112,12 +122,26 @@ selects.forEach( select => {
                         contenedorLista.addClass("oculto");
                         console.log("No se pudo usar la funcion");
                     }    
-                    
+
                     $(".producto-individual").on("click", function () {
                        
-                        descripcion1 = $("#descripcion1").text();
-                        console.log(descripcion1);
+                        descripcion1     = $(this).attr("descripcion");
+                        modelo1          = $(this).attr("modelo");
+                        precio_Venta1    = $(this).attr("precio-venta");
+                        precio_Mayoreo1  = $(this).attr("precio-mayoreo");
+                        marca1           = $(this).attr("marca");
+                        sucursal1        = $(this).attr("sucursal");
+                        stock1           = $(this).attr("stock");
+
+                        array = [ descripcion1, modelo1, precio_Venta1, marca1, sucursal1, stock1 ];
+
+                        $('')
+
+                        
+                        console.log(array);
                     });
+                    
+                    
                    
                 }
             }); //Termina la llamada AJAX para la sucursal 1
@@ -149,15 +173,26 @@ selects.forEach( select => {
                              tablaBusqueda = $(".tbody");
                                
                                 tablaBusqueda.append(
-
-                                       "<tr class='producto-individual'>"+
-                                       "<td id='descripcion'>" + value2.Descripcion + "</td>" +
-                                       "<td class='precio'>$" + value2.precio_Venta + "</td>" +
-                                       "<td class='marca'><img class='logo-marca' src='./src/img/logos/" + value2.Marca + ".jpg'></td>" +
-                                       "<td class='sucursal'>" + value2.Sucursal + "</td>" +
-                                       "<td class='stock'>" + value2.Stock + "</td></tr>");
+                                        "<tr class='producto-individual' "+
+                                        "descripcion='"+value2.Descripcion + "' "  +
+                                        "modelo='"+value2.Modelo + "'"  +
+                                        "precio-venta='"+value2.precio_Venta + "' "  +
+                                        "precio-mayoreo='"+value2.precio_Mayoreo + "' "  +
+                                        "marca='"+value2.Marca + "' "  +
+                                        "sucursal='"+value2.Sucursal + "' "  +
+                                        "stock='"+value2.Stock +
+                                        "'>"+
+                                       "<td>" + value2.Descripcion + "</td>" +
+                                       "<td>" + value2.Modelo + "</td>" +
+                                       "<td>$" + value2.precio_Venta + "</td>" +
+                                       "<td>$" + value2.precio_Mayoreo + "</td>" +
+                                       "<td><img class='logo-marca' src='./src/img/logos/" + value2.Marca + ".jpg'></td>" +
+                                       "<td>" + value2.Sucursal + "</td>" +
+                                       "<td>" + value2.Stock + "</td></tr>");
 
                                        contenedorTabla.removeClass("oculto");
+
+                                     
 
                           });  
                     }
@@ -172,11 +207,7 @@ selects.forEach( select => {
                         console.log("No se pudo usar la funcion");
                     }        
                    
-                    $(".producto-individual").on("click", function () {
-                       
-                        descripcion = $("#descripcion").text();
-                        console.log(descripcion);
-                    }); 
+
                 }
             }); //Termina la llamada AJAX para sucursal 2
         
