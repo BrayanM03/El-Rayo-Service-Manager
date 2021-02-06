@@ -468,7 +468,7 @@
                             <div class="grupo-2">
                                         
                                             
-                                            <div class="medidas-llanta">
+                                            <div class="medidas-llanta"> 
                                                     <!--<div class="col-4">-->
                                                     <label>
                                                         <span for="search">Busqueda</span>
@@ -486,9 +486,9 @@
                                                             <th>Sucursal</th>
                                                             <th>Stock</th>
                                                         </tr>
-                                                        <thead>
+                                                        <thead> 
                                                         <tbody class="tbody">
-                                                        </tbody>
+                                                        </tbody> 
                                                         </table>
                                                     </div>
                                                    
