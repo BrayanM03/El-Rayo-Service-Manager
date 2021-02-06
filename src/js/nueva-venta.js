@@ -133,12 +133,15 @@ selects.forEach( select => {
                         sucursal1        = $(this).attr("sucursal");
                         stock1           = $(this).attr("stock");
 
-                        array = [ descripcion1, modelo1, precio_Venta1, marca1, sucursal1, stock1 ];
+                        $("#description").focus().val(descripcion1);
+                        $("#modelo").focus().val(modelo1);
+                        $("#precio").focus().val(precio_Venta1);
+                        contenedorTabla.addClass("oculto");
 
-                        $('')
-
+                        var cuadro = document.getElementsByClassName("logo-marca-grande")[0];
                         
-                        console.log(array);
+                        cuadro.style.backgroundImage = "url('src/img/logos/"+ marca1 +".jpg')";
+                        
                     });
                     
                     

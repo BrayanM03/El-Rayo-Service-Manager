@@ -19,64 +19,99 @@
     width: 100%;
 }
 
-.area-venta{
+.fila4{
     width: 100%;
+    height: 100%;
     display: flex;
-   justify-content: space-around;
+    justify-content: center;
    
 }
 
+.logo-marca-grande{
+    border: 1px solid gray ;
+    border-radius: 8px;
+    width: 130px;
+    height: 130px;
+    margin: 2vh;
+    background-position: center;
+    background-size: cover;
+
+}
 .grupo-1{
    
-    width: 100%;
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.grupo-1 .fila1{
+    display: flex;
+    flex-direction: column;
+}
+
+.grupo-1 .fila2{
     display: flex;
     flex-direction: row;
+    width: 355px;
+   
+    justify-content: center;
+}
+
+.input-corto{
+    display: block;
+    width: 150px;
+    border: 1px solid gray;
+    border-radius: 4px;
+    padding: 8px 10px;
+    position: relative;
+    box-sizing: border-box;
+    margin-bottom: 2vh;
+    transition: 0.15s;
+    margin-left: 1vh;
+}
+
+.fila3{
+    display: flex;
     justify-content: flex-end;
-    align-items: flex-end;
-    
+    width: 100%;
+    margin-bottom: 2vh;
 }
 
 .folio-fecha{
-    width: auto;
+    width: 350px;
+    height: auto;
     display: flex;
-    justify-content: center;
-    margin-bottom: 3vh;
-    padding: 2vh;
+    justify-content: space-around;
+    margin: 2vh;
     background-color:wheat;
     border-radius: 9px;
     border: 1px solid coral ;
+    padding-top: 8px;
 }
 
 .folio-fecha input{
-    width:auto;
-    padding: 5px;
-    margin: 0px 5px;
+    width:100px;
+    height: 50%;
+    font-size: 13px;
+    padding: 8px;
+   
 }
 
 .grupo-2{
-  width: 600px;
+  width:60%;
   display: flex;
   flex-direction: column;
   background-color:white;
+  align-items: center;
+  justify-content: flex-start;
   align-content: flex-start;
   border-radius: 10px;
-  
-
 }
 
-.medidas-llanta{
-    margin-top:2vh ;
-    margin-left: 12px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    width: 300px;
-}
 
-.medidas-llanta label{
-    width: 100%;
-    
-}
 
 .contenedor-tabla{
     width: 800px;
@@ -138,18 +173,11 @@
 #bloqueado_label{
     background-color:  rgb(240, 230, 230);
 }
-.grupo-3{
-    display: flex;
-    flex-direction: column;
-    justify-content:space-between;
-    align-items: center;
-    width: auto;
-  
-}
+
 
 
 /*Reposo*/
-.grupo-2 label .input-group{
+.grupo-1 label .input-group{
     display: block;
     width: 100%;
     border: none;
@@ -160,7 +188,7 @@
     
 }
 
-.grupo-2 label .select-group{
+.grupo-1 label .select-group{
     display: block;
     width: 100%;
     border: none;
@@ -170,9 +198,9 @@
     
 }
 
-.grupo-2 label{
+.grupo-1 .input-largo{
     display: block;
-    width: 250px;
+    width: 350px;
     border: 1px solid gray;
     border-radius: 4px;
     padding: 8px 10px;
@@ -183,12 +211,7 @@
     margin-left: 1vh;
 }
 
-.grupo-2 .input-corto {
-    width: 150px;
-}
-
-
-.grupo-2 label span{
+.grupo-1 label span{
     font-size: 15px;
     color: gray;
     position: absolute;
@@ -200,16 +223,16 @@
 
 
 /*Foco*/
-.grupo-2 label.focus{
+.grupo-1 label.focus{
     border-color: tomato;
 }
 
-.grupo-2 label span.focus{
+.grupo-1 label span.focus{
  color: tomato;
 }
 
 /*Top*/
-.grupo-2 label span.top{
+.grupo-1 label span.top{
     left: 7px;
     top: -10px;
     font-size: 12px;

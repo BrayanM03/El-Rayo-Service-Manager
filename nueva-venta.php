@@ -450,103 +450,100 @@
                          <div class="card-body">
                             <div class="row">
 
-                            <div class="grupo-1">
-                                    <div class="folio-fecha">
-                                        <label>
-                                            <span for="folio">Folio:</span>
-                                            <input class="form-control"type="text" id="folio" name="folio">
-                                        </label>
-                                        <label>
-                                            <span for="fecha">Fecha</span>
-                                            <input class="form-control" type="date" id="fecha" name="fecha">
-                                        </label>
-                                    </div>
-                                
+                            <div class="grupo-1" >
+                            
+                                                <div class="logo-marca-grande">
+
+                                                </div>
+
+                                                <!--Fila 1-->
+                                                 
+                                                <div class="fila1">
+                                                        <label class="input-largo">
+                                                            <span for="search">Busqueda</span>
+                                                            <input type="text" id="search" name="search" class="input-group">
+                                                        </label> 
+                                                        <div class="contenedor-tabla oculto">
+                                                                <table class="table">
+                                                                <thead class="table-info">
+                                                                <tr>
+                                                                    <th>Descripción</th>
+                                                                    <th>Modelo</th>
+                                                                    <th>Costo</th>
+                                                                    <th>Costo c/Desc</th>
+                                                                    <th>Marca</th>
+                                                                    <th>Sucursal</th>
+                                                                    <th>Stock</th>
+                                                                </tr>
+                                                                <thead> 
+                                                                <tbody class="tbody">
+                                                                </tbody> 
+                                                                </table>
+                                                        </div>
+                                                        <label class="input-largo">
+                                                            <span for="description">Descripción</span>
+                                                            <input type="text" id="description" name="description" class="input-group">
+                                                        </label>
+                                                </div> 
+                                                
+                                                <!--Fila 1-->
+
+                                                <div class="fila2 row">
+                                                    
+                                                    <label class="input-corto">
+                                                        <span for="modelo">Modelo</span>
+                                                        <input type="text" id="modelo" name="modelo" class="input-group">
+                                                    </label>
+
+                                                    <label class="input-corto">
+                                                         <span for="sucursal">Sucursal</span>
+                                                         <select  id="sucursal" name="sucursal" class="select-group form-select"> 
+                                                                <option disabled selected value></option>
+                                                                <option value="">Pedro Cardenas</option>
+                                                                <option value="">Sendero</option>
+                                                         </select>
+                                                    </label>
+
+                                                    <label class="input-corto">
+                                                        <span for="cantidad">Cantidad</span>
+                                                        <input type="number" id="cantidad" name="cantidad" class="input-group">
+                                                    </label>
+                                        
+                                                    <label class="input-corto">
+                                                        <span for="precio">$ Precio</span>
+                                                        <input type="number" id="precio" name="precio" class="input-group">
+                                                    </label>
+
+                                                    <label style="border-color: transparent;">
+                                                        <div class="btn btn-info" id="agregar-producto">Agregar</div>
+                                                    </label>
+
+                                                </div>
+                                                 
+                                      
+                                        
                                 </div>
 
 
                             <div class="grupo-2">
-                                        
-                                            
-                                            <div class="medidas-llanta"> 
-                                                    <!--<div class="col-4">-->
-                                                    <label>
-                                                        <span for="search">Busqueda</span>
-                                                        <input type="text" id="search" name="search" class="input-group">
-                                                    </label> 
-                                                    <div class="contenedor-tabla oculto">
-                                                        <table class="table">
-                                                        <thead class="table-info">
-                                                        <tr>
-                                                            <th>Descripción</th>
-                                                            <th>Modelo</th>
-                                                            <th>Costo</th>
-                                                            <th>Costo c/Desc</th>
-                                                            <th>Marca</th>
-                                                            <th>Sucursal</th>
-                                                            <th>Stock</th>
-                                                        </tr>
-                                                        <thead> 
-                                                        <tbody class="tbody">
-                                                        </tbody> 
-                                                        </table>
-                                                    </div>
-                                                   
-                                                  
-                                                   </ul>
-                                                </div>
-                                              
-                                                
-                                             
-                                        <div class="row" style="margin-left: 10px;" >
-                                        <label>
-                                            <span for="description">Descripción</span>
-                                            <input type="text" id="description" name="description" class="input-group">
-                                        </label>
-                                        <label>
-                                            <span for="modelo">Modelo</span>
-                                            <input type="text" id="modelo" name="modelo" class="input-group">
-                                        </label>
 
-                                        <label >
-                                        <span for="sucursal">Sucursal</span>
-                                            <select  id="sucursal" name="sucursal" class="select-group form-select">
-                                                
-                                                <option disabled selected value></option>
-                                                <option value="">Pedro Cardenas</option>
-                                                <option value="">Sendero</option>
-                                            </select>
-                                        </label>
-
-                                        <label class="input-corto">
-                                            <span for="cantidad">Cantidad</span>
-                                            <input type="number" id="cantidad" name="cantidad" class="input-group">
-                                        </label>
-                                        
-                                            <label class="input-corto">
-                                                <span for="precio">$ Precio</span>
-                                                <input type="number" id="precio" name="precio" class="input-group">
-                                            </label>
-    
-                                        <label>
-                                            <span for="vendedor">Vendedor</span>
-                                            <input type="text" id="vendedor" name="vendedor" class="input-group">
-                                        </label>
-
-                                        </div>
-                                     
-
-                                        <label style="border-color: transparent;">
-                                            <div class="btn btn-info" id="agregar-producto">Agregar</div>
-                                        </label>
-                                       
+                                <div class="fila3">
+                                            <div class="folio-fecha">
+                                                <label>
+                                                    <span for="folio">Folio:</span>
+                                                    <input class="form-control" value="00" type="text" id="folio" name="folio" disabled>
+                                                </label>
+                                                <label>
+                                                    <span for="fecha">Fecha</span>
+                                                    <input class="form-control"  type="date" id="fecha" name="fecha" style="width: 150px;"> 
+                                                </label>
+                                            </div>  
                                 </div>
-
-                                <div class="area-venta row">
-                                
-                               
-                                    <div class="grupo-3">
-                                        <table id="pre-venta" class="table table-striped table-bordered table-hover" style="width:100%">
+                                    
+                                    
+                                    <div class="fila4 row">
+                                    
+                                        <table id="pre-venta" class="table table-striped table-bordered table-hover" style="width:90%">
                                             <thead>
                                                 <tr>
                                                     <th>Codigo</th>
@@ -568,7 +565,7 @@
                                                 <div class="row" style="width: 100%; display: flex; justify-content: center; align-items: center;">
                                                     <div class="form-group" style="display: flex; align-items: center; justify-content: space-around; width: 20%;" >
                                                         <span for="total">Total: </span>
-                                                        <input type="text" value="$795" class="form-control" id="total" name="total" style="width:80px" disabled> 
+                                                        <input type="text" value="$795" class="form-control" id="total" name="total" style="width:80px; margin-left:5px;" disabled> 
                                                 
                                                     </div>
                                                     </div>
@@ -577,9 +574,9 @@
                                                     <div class="btn btn-success" id="realizar-venta">Realizar venta</div>
                                                 </div>   
                                                 
+                                    
                                     </div>
-                            </div>
-
+                                </div>
 
                             </div>
 
