@@ -499,8 +499,8 @@
                                                          <span for="sucursal">Sucursal</span>
                                                          <select  id="sucursal" name="sucursal" class="select-group form-select"> 
                                                                 <option disabled selected value></option>
-                                                                <option value="">Pedro Cardenas</option>
-                                                                <option value="">Sendero</option>
+                                                                <option value="0">Pedro Cardenas</option>
+                                                                <option value="1">Sendero</option>
                                                          </select>
                                                     </label>
 
@@ -515,7 +515,7 @@
                                                     </label>
 
                                                     <label style="border-color: transparent;">
-                                                        <div class="btn btn-info" id="agregar-producto">Agregar</div>
+                                                        <div class="btn btn-info" id="agregar-producto" onclick="agregarInfo()">Agregar</div>
                                                     </label>
 
                                                 </div>
@@ -554,7 +554,7 @@
                                                     <th>Accion</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
+                                            <tbody id="tbody-venta">
                                                 <tr>
                                                    
                                                 </tr>
@@ -658,6 +658,7 @@
     <script src="src/vendor/datatables/defaults.js"></script>
     <script src="src/vendor/datatables-responsive/js/dataTables.responsive.min.js"></script>
     <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="src/js/agregar-info-tabla-venta.js"></script>
     
    
 </body>

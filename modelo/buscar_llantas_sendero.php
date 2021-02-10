@@ -29,7 +29,7 @@
 
      if ($total > 0) { 
         
-        $sqlTraerLlanta="SELECT l.*, sendero.Sucursal, sendero.Stock FROM llantas l INNER JOIN inventario_mat2 sendero
+        $sqlTraerLlanta="SELECT l.*, sendero.id, sendero.Sucursal, sendero.Stock FROM llantas l INNER JOIN inventario_mat2 sendero
                                                                     ON sendero.id_Llanta = l.id 
                                                                     WHERE l.Ancho LIKE '%$ancho%'  
                                                                     OR l.Proporcion LIKE '%$ancho%'  

@@ -92,6 +92,7 @@ selects.forEach( select => {
                                 tablaBusqueda.append(
 
                                        "<tr class='producto-individual' "+
+                                       "id='"+value.id + "' "+
                                        "descripcion='"+value.Descripcion + "' " +
                                        "modelo='"+value.Modelo + "'"  +
                                        "precio-venta='"+value.precio_Venta + "' " +
@@ -104,7 +105,7 @@ selects.forEach( select => {
                                        "<td>" + value.Modelo + "</td>" +
                                        "<td>$" + value.precio_Venta + "</td>" +
                                        "<td>$" + value.precio_Mayoreo + "</td>" +
-                                       "<td><img class='logo-marca' src='./src/img/logos/" + value.Marca + ".jpg'></td>" +
+                                       "<td><img class='logo-marca' marca='"+ value.Marca + "' src='./src/img/logos/" + value.Marca + ".jpg'></td>" +
                                        "<td>" + value.Sucursal + "</td>" +
                                        "<td>" + value.Stock + "</td></tr>");
 
@@ -124,7 +125,8 @@ selects.forEach( select => {
                     }    
 
                     $(".producto-individual").on("click", function () {
-                       
+
+                        id1              = $(this).attr("id");
                         descripcion1     = $(this).attr("descripcion");
                         modelo1          = $(this).attr("modelo");
                         precio_Venta1    = $(this).attr("precio-venta");
@@ -136,11 +138,26 @@ selects.forEach( select => {
                         $("#description").focus().val(descripcion1);
                         $("#modelo").focus().val(modelo1);
                         $("#precio").focus().val(precio_Venta1);
+                        $("#agregar-producto").attr("idLlanta", id1);
                         contenedorTabla.addClass("oculto");
+
+                       
+                        if(marca1 == "Sendero"){
+                            select = $("#sucursal");
+                            select.focus().val(1);
+
+                        }else{
+                        
+                            select = $("#sucursal");
+                            select.focus().val(0);
+                        }
 
                         var cuadro = document.getElementsByClassName("logo-marca-grande")[0];
                         
                         cuadro.style.backgroundImage = "url('src/img/logos/"+ marca1 +".jpg')";
+
+                        inAncho.focus().val("");
+                        inAncho.blur();
                         
                     });
                     
@@ -161,7 +178,7 @@ selects.forEach( select => {
                     try {
                         var jsonObject = JSON.parse(response);
                         var Anchos = jsonObject;
-                   
+                        
 
                     if(inputSearch.length == 0){
                         $(".tbody").empty();
@@ -174,9 +191,12 @@ selects.forEach( select => {
                             contenedorTabla = $(".contenedor-tabla");
                         
                              tablaBusqueda = $(".tbody");
+
+                             
                                
                                 tablaBusqueda.append(
                                         "<tr class='producto-individual' "+
+                                        "id='"+value2.id + "' "+
                                         "descripcion='"+value2.Descripcion + "' "  +
                                         "modelo='"+value2.Modelo + "'"  +
                                         "precio-venta='"+value2.precio_Venta + "' "  +
@@ -189,7 +209,7 @@ selects.forEach( select => {
                                        "<td>" + value2.Modelo + "</td>" +
                                        "<td>$" + value2.precio_Venta + "</td>" +
                                        "<td>$" + value2.precio_Mayoreo + "</td>" +
-                                       "<td><img class='logo-marca' src='./src/img/logos/" + value2.Marca + ".jpg'></td>" +
+                                       "<td><img class='logo-marca' marca='"+ value2.Marca + "' src='./src/img/logos/" + value2.Marca + ".jpg'></td>" +
                                        "<td>" + value2.Sucursal + "</td>" +
                                        "<td>" + value2.Stock + "</td></tr>");
 
@@ -210,6 +230,43 @@ selects.forEach( select => {
                         console.log("No se pudo usar la funcion");
                     }        
                    
+
+                    $(".producto-individual").on("click", function () {
+                       
+                        id1              = $(this).attr("id");
+                        descripcion1     = $(this).attr("descripcion");
+                        modelo1          = $(this).attr("modelo");
+                        precio_Venta1    = $(this).attr("precio-venta");
+                        precio_Mayoreo1  = $(this).attr("precio-mayoreo");
+                        marca1           = $(this).attr("marca");
+                        sucursal1        = $(this).attr("sucursal");
+                        stock1           = $(this).attr("stock");
+
+                        $("#description").focus().val(descripcion1);
+                        $("#modelo").focus().val(modelo1);
+                        $("#precio").focus().val(precio_Venta1);
+                        $("#agregar-producto").attr("idLlanta", id1);
+
+                        contenedorTabla.addClass("oculto");
+                       
+                        if(sucursal1 == "Sendero"){
+                            select = $("#sucursal").focus().val(1);
+                            
+
+                        }else{
+                            select = $("#sucursal").focus().val(0);
+                            
+                        }
+                        
+                        var cuadro = document.getElementsByClassName("logo-marca-grande")[0];
+                        
+                        cuadro.style.backgroundImage = "url('src/img/logos/"+ marca1 +".jpg')";
+
+                        inAncho.focus().val("");
+                        inAncho.blur();
+                        
+                    });
+
 
                 }
             }); //Termina la llamada AJAX para sucursal 2
