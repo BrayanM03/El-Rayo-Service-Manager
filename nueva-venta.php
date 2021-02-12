@@ -475,11 +475,12 @@
                                                                     <th>Sucursal</th>
                                                                     <th>Stock</th>
                                                                 </tr>
-                                                                <thead> 
+                                                                </thead> 
                                                                 <tbody class="tbody">
                                                                 </tbody> 
                                                                 </table>
                                                         </div>
+
                                                         <label class="input-largo">
                                                             <span for="description">Descripción</span>
                                                             <input type="text" id="description" name="description" class="input-group">
@@ -542,25 +543,25 @@
                                     
                                     
                                     <div class="fila4 row">
-                                    
+                                        <div class="table-wrapper">
                                         <table id="pre-venta" class="table table-striped table-bordered table-hover" style="width:90%">
-                                            <thead>
+                                            <!---<thead>
                                                 <tr>
                                                     <th>Codigo</th>
-                                                    <th>Descripción</th>
+                                                    <th class="ds">Descripción</th>
                                                     <th>Cantidad</th>
                                                     <th>Precio</th>
                                                     <th>Subtotal</th>
                                                     <th>Accion</th>
                                                 </tr>
                                             </thead>
-                                            <tbody id="tbody-venta">
-                                                <tr>
-                                                   
-                                                </tr>
+                                                <tbody id="tbody-venta">
                                                 
-                                                </tbody>
+                                                    
+                                                </tbody> --->
                                                 </table><br>
+                                        </div>
+                                        
                                                 
                                                 <div class="row" style="width: 100%; display: flex; justify-content: center; align-items: center;">
                                                     <div class="form-group" style="display: flex; align-items: center; justify-content: space-around; width: 20%;" >

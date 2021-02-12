@@ -164,8 +164,25 @@
     color:white;
 }
 
+/*.table-wrapper{
+    width: 100%;
+    height: 400px;
+    overflow: auto;
+}
+
+#pre-venta thead tr .ds{
+    width: 280px;
+}*/
+
+
+.scroll-table{
+    height: 450px;
+    overflow: scroll;
+}
+
 .oculto{
     display: none;
+   
 }
 
 

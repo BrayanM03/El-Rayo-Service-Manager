@@ -111,7 +111,46 @@ selects.forEach( select => {
 
                                        contenedorTabla.removeClass("oculto");
                                        
-                          });  
+                          }); 
+                          
+                          //Obtener datos de fila clickeada
+
+                          $(".producto-individual").on("click", function () {
+
+                            id1              = $(this).attr("id");
+                            descripcion1     = $(this).attr("descripcion");
+                            modelo1          = $(this).attr("modelo");
+                            precio_Venta1    = $(this).attr("precio-venta");
+                            precio_Mayoreo1  = $(this).attr("precio-mayoreo");
+                            marca1           = $(this).attr("marca");
+                            sucursal1        = $(this).attr("sucursal");
+                            stock1           = $(this).attr("stock");
+    
+                            $("#description").focus().val(descripcion1);
+                            $("#modelo").focus().val(modelo1);
+                            $("#precio").focus().val(precio_Venta1);
+                            $("#agregar-producto").attr("idLlanta", id1);
+                            contenedorTabla.addClass("oculto");
+    
+                           
+                            if(sucursal1 == "Sendero"){
+                                select = $("#sucursal");
+                                select.focus().val(1);
+    
+                            }else{
+                            
+                                select = $("#sucursal");
+                                select.focus().val(0);
+                            }
+    
+                            var cuadro = document.getElementsByClassName("logo-marca-grande")[0];
+                            
+                            cuadro.style.backgroundImage = "url('src/img/logos/"+ marca1 +".jpg')";
+    
+                            inAncho.focus().val("");
+                            inAncho.blur();
+                            
+                        });
                     }
    
 
@@ -121,45 +160,10 @@ selects.forEach( select => {
                         $(".tbody").empty();
                         contenedorLista = $(".contenedor-tabla");
                         contenedorLista.addClass("oculto");
-                        console.log("No se pudo usar la funcion");
+                        console.log("No se encontro llanta en el inventario de la Pedro Cardenas");
                     }    
 
-                    $(".producto-individual").on("click", function () {
-
-                        id1              = $(this).attr("id");
-                        descripcion1     = $(this).attr("descripcion");
-                        modelo1          = $(this).attr("modelo");
-                        precio_Venta1    = $(this).attr("precio-venta");
-                        precio_Mayoreo1  = $(this).attr("precio-mayoreo");
-                        marca1           = $(this).attr("marca");
-                        sucursal1        = $(this).attr("sucursal");
-                        stock1           = $(this).attr("stock");
-
-                        $("#description").focus().val(descripcion1);
-                        $("#modelo").focus().val(modelo1);
-                        $("#precio").focus().val(precio_Venta1);
-                        $("#agregar-producto").attr("idLlanta", id1);
-                        contenedorTabla.addClass("oculto");
-
-                       
-                        if(marca1 == "Sendero"){
-                            select = $("#sucursal");
-                            select.focus().val(1);
-
-                        }else{
-                        
-                            select = $("#sucursal");
-                            select.focus().val(0);
-                        }
-
-                        var cuadro = document.getElementsByClassName("logo-marca-grande")[0];
-                        
-                        cuadro.style.backgroundImage = "url('src/img/logos/"+ marca1 +".jpg')";
-
-                        inAncho.focus().val("");
-                        inAncho.blur();
-                        
-                    });
+                    
                     
                     
                    
@@ -218,54 +222,56 @@ selects.forEach( select => {
                                      
 
                           });  
+
+                          $(".producto-individual").on("click", function () {
+                       
+                            id1              = $(this).attr("id");
+                            descripcion1     = $(this).attr("descripcion");
+                            modelo1          = $(this).attr("modelo");
+                            precio_Venta1    = $(this).attr("precio-venta");
+                            precio_Mayoreo1  = $(this).attr("precio-mayoreo");
+                            marca1           = $(this).attr("marca");
+                            sucursal1        = $(this).attr("sucursal");
+                            stock1           = $(this).attr("stock");
+    
+                            $("#description").focus().val(descripcion1);
+                            $("#modelo").focus().val(modelo1);
+                            $("#precio").focus().val(precio_Venta1);
+                            $("#agregar-producto").attr("idLlanta", id1);
+    
+                            contenedorTabla.addClass("oculto");
+                           
+                            if(sucursal1 == "Sendero"){
+                                select = $("#sucursal").focus().val(1);
+                                
+    
+                            }else{
+                                select = $("#sucursal").focus().val(0);
+                                
+                            }
+                            
+                            var cuadro = document.getElementsByClassName("logo-marca-grande")[0];
+                            
+                            cuadro.style.backgroundImage = "url('src/img/logos/"+ marca1 +".jpg')";
+    
+                            inAncho.focus().val("");
+                            inAncho.blur();
+                            
+                        });
                     }
    
 
                    
 
                     } catch (error) {
-                        $(".tbody").empty();
+                       /* $(".tbody").empty();
                         contenedorLista = $(".contenedor-tabla");
-                        contenedorLista.addClass("oculto");
-                        console.log("No se pudo usar la funcion");
+                        contenedorLista.addClass("oculto");*/
+                        console.log("No encontro llantas de la sucursal Sendero");
                     }        
                    
 
-                    $(".producto-individual").on("click", function () {
-                       
-                        id1              = $(this).attr("id");
-                        descripcion1     = $(this).attr("descripcion");
-                        modelo1          = $(this).attr("modelo");
-                        precio_Venta1    = $(this).attr("precio-venta");
-                        precio_Mayoreo1  = $(this).attr("precio-mayoreo");
-                        marca1           = $(this).attr("marca");
-                        sucursal1        = $(this).attr("sucursal");
-                        stock1           = $(this).attr("stock");
-
-                        $("#description").focus().val(descripcion1);
-                        $("#modelo").focus().val(modelo1);
-                        $("#precio").focus().val(precio_Venta1);
-                        $("#agregar-producto").attr("idLlanta", id1);
-
-                        contenedorTabla.addClass("oculto");
-                       
-                        if(sucursal1 == "Sendero"){
-                            select = $("#sucursal").focus().val(1);
-                            
-
-                        }else{
-                            select = $("#sucursal").focus().val(0);
-                            
-                        }
-                        
-                        var cuadro = document.getElementsByClassName("logo-marca-grande")[0];
-                        
-                        cuadro.style.backgroundImage = "url('src/img/logos/"+ marca1 +".jpg')";
-
-                        inAncho.focus().val("");
-                        inAncho.blur();
-                        
-                    });
+                   
 
 
                 }
@@ -276,3 +282,7 @@ selects.forEach( select => {
       }
 
       buscar();
+
+    
+
+        
