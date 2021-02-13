@@ -470,6 +470,7 @@
                                                                 <table class="table">
                                                                 <thead class="table-info">
                                                                 <tr>
+                                                                    <th>Codigo</th>
                                                                     <th>Descripción</th>
                                                                     <th>Modelo</th>
                                                                     <th>Costo</th>
@@ -496,12 +497,12 @@
                                                     
                                                     <label class="input-corto">
                                                         <span for="modelo">Modelo</span>
-                                                        <input type="text" id="modelo" name="modelo" class="input-group">
+                                                        <input type="text" id="modelo" name="modelo" class="input-group" disabled>
                                                     </label>
 
                                                     <label class="input-corto">
                                                          <span for="sucursal">Sucursal</span>
-                                                         <select  id="sucursal" name="sucursal" class="select-group form-select"> 
+                                                         <select  id="sucursal" name="sucursal" class="select-group form-select" disabled> 
                                                                 <option disabled selected value></option>
                                                                 <option value="0">Pedro Cardenas</option>
                                                                 <option value="1">Sendero</option>

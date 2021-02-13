@@ -4,7 +4,7 @@
 $(document).ready(function() {
   
   columnDefs = [{
-    title: "ID"
+    title: "Codigo"
   }, {
     title: "Descripción"
   }, {
@@ -32,6 +32,12 @@ $(document).ready(function() {
     
   });
 
+
+  table.on( 'click', '.borrar-articulo',  function () {
+    table.row( $(this).parents('tr') ).remove().draw(false);
+    toastr.success('Producto borrado con exito', 'Correcto' );
+  } );
+
 } );
 
 toastr.options = {
@@ -55,18 +61,37 @@ toastr.options = {
 function agregarInfo(){
     //Funcion que se encargara de mover informacion del producto a una tabla para luego ser procesada como una venta
 
-
+    valorCant0 = $('#cantidad').val();
+    valorCant = parseInt(valorCant0);
     valitationQuanty = $('#cantidad')[0].checkValidity();
     valitationdescription = $("#description")[0].checkValidity();
     valitationModel = $("#modelo")[0].checkValidity();
     valitationPrice = $("#precio").val();
+    sucursalVal = $("#sucursal").val();
+
+    stockLlanta0 = $("#agregar-producto").attr("stock");
+    stockLlanta = parseInt(stockLlanta0);
+    console.log(valorCant);
+    console.log(stockLlanta);
 
     //console.log(valitationQuanty);
-    if (valitationQuanty == false) {
+    if (valitationQuanty == false ) {
 
       toastr.warning('Necesita especificar una cantidad', 'Alerta' );
 
       
+    }else if(valorCant <= 0){
+
+      toastr.warning('La cantidad no puede ser 0 o menor', 'Alerta' );
+
+    }else if(valorCant > stockLlanta){
+
+      toastr.error('La cantidad es mayor que el stock', 'Error' );
+
+    }else if(sucursalVal == null){
+
+      toastr.error('Debe colocar una sucursal', 'Error' );
+
     }else if(valitationdescription == false){
 
       toastr.warning('La descripción no puede ir vacia', 'Alerta' );
@@ -77,9 +102,13 @@ function agregarInfo(){
     } else if(valitationPrice == 0 ){
       toastr.warning('Anote un precio', 'Alerta');
       
-    }else {
+    }else if(valitationPrice == 0 ){
+      toastr.warning('Anote un precio', 'Alerta');
       
-      idBotonLLanta    =   $("#agregar-producto").attr("idLlanta");
+    }else {
+      toastr.success('Producto agregado correctamente', 'Correcto' );
+      
+      idBotonLLanta    =   $("#agregar-producto").attr("codigo");
       descripcion      =   $("#description").val();
       modelo           =   $("#modelo").val();
       marca            =   $(".logo-marca").attr("marca");
@@ -87,8 +116,7 @@ function agregarInfo(){
       precio           =   $("#precio").val();
       sucursal         =   $("select[id = sucursal] option:selected").text();
       subtotal         =   precio * cantidad;
-      botones = "<div style='display:flex;'><div class='btn btn-success' id='realizar-venta' style='margin-right:5px;'><i class='fas fa-pen'></i></div>" +
-                "<div class='btn btn-danger' id='realizar-venta'><i class='fas fa-trash'></i></div></div>";
+      botones = "<div class='btn btn-danger borrar-articulo' style='margin-right:5px;'><i class='fas fa-trash'></i></div>";
       
       
         table.row.add( [
@@ -105,8 +133,22 @@ function agregarInfo(){
        newTotal = subtotal + parseInt(total);
        $("#total").val(newTotal);
 
+       /*table.rows().data().each(function (key, value) {
+        var a = value.Codigo;
+        console.log(a);
+     
+            
+            });*/
+
+            Rows =  table.rows();
+            console.log(Rows);
+
     }
 
    
       
 }
+
+
+
+

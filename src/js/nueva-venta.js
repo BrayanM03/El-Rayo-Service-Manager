@@ -93,6 +93,7 @@ selects.forEach( select => {
 
                                        "<tr class='producto-individual' "+
                                        "id='"+value.id + "' "+
+                                       "cod='"+value.Codigo + "' "+
                                        "descripcion='"+value.Descripcion + "' " +
                                        "modelo='"+value.Modelo + "'"  +
                                        "precio-venta='"+value.precio_Venta + "' " +
@@ -101,6 +102,7 @@ selects.forEach( select => {
                                        "sucursal='"+value.Sucursal + "' "  +
                                        "stock='"+value.Stock +
                                        "'>"+
+                                       "<td>" + value.Codigo + "</td>" +
                                        "<td>" + value.Descripcion + "</td>" +
                                        "<td>" + value.Modelo + "</td>" +
                                        "<td>$" + value.precio_Venta + "</td>" +
@@ -118,6 +120,7 @@ selects.forEach( select => {
                           $(".producto-individual").on("click", function () {
 
                             id1              = $(this).attr("id");
+                            cod1              = $(this).attr("cod");
                             descripcion1     = $(this).attr("descripcion");
                             modelo1          = $(this).attr("modelo");
                             precio_Venta1    = $(this).attr("precio-venta");
@@ -129,19 +132,24 @@ selects.forEach( select => {
                             $("#description").focus().val(descripcion1);
                             $("#modelo").focus().val(modelo1);
                             $("#precio").focus().val(precio_Venta1);
+
                             $("#agregar-producto").attr("idLlanta", id1);
+                            $("#agregar-producto").attr("stock", stock1);
+                            $("#agregar-producto").attr("codigo", cod1);
                             contenedorTabla.addClass("oculto");
     
                            
                             if(sucursal1 == "Sendero"){
                                 select = $("#sucursal");
-                                select.focus().val(1);
+                                select.focus().val(1).blur();
     
                             }else{
                             
                                 select = $("#sucursal");
-                                select.focus().val(0);
+                                select.focus().val(0).blur();
                             }
+
+                            
     
                             var cuadro = document.getElementsByClassName("logo-marca-grande")[0];
                             
@@ -149,7 +157,7 @@ selects.forEach( select => {
     
                             inAncho.focus().val("");
                             inAncho.blur();
-                            
+                            $("#modelo").blur();
                         });
                     }
    
@@ -201,6 +209,7 @@ selects.forEach( select => {
                                 tablaBusqueda.append(
                                         "<tr class='producto-individual' "+
                                         "id='"+value2.id + "' "+
+                                        "cod='"+value2.Codigo + "' "+
                                         "descripcion='"+value2.Descripcion + "' "  +
                                         "modelo='"+value2.Modelo + "'"  +
                                         "precio-venta='"+value2.precio_Venta + "' "  +
@@ -209,6 +218,7 @@ selects.forEach( select => {
                                         "sucursal='"+value2.Sucursal + "' "  +
                                         "stock='"+value2.Stock +
                                         "'>"+
+                                       "<td>" + value2.Codigo + "</td>" +
                                        "<td>" + value2.Descripcion + "</td>" +
                                        "<td>" + value2.Modelo + "</td>" +
                                        "<td>$" + value2.precio_Venta + "</td>" +
@@ -226,6 +236,7 @@ selects.forEach( select => {
                           $(".producto-individual").on("click", function () {
                        
                             id1              = $(this).attr("id");
+                            cod1              = $(this).attr("cod");
                             descripcion1     = $(this).attr("descripcion");
                             modelo1          = $(this).attr("modelo");
                             precio_Venta1    = $(this).attr("precio-venta");
@@ -237,16 +248,20 @@ selects.forEach( select => {
                             $("#description").focus().val(descripcion1);
                             $("#modelo").focus().val(modelo1);
                             $("#precio").focus().val(precio_Venta1);
+
+                            
+                            $("#agregar-producto").attr("stock", stock1);
                             $("#agregar-producto").attr("idLlanta", id1);
+                            $("#agregar-producto").attr("codigo", cod1);
     
                             contenedorTabla.addClass("oculto");
                            
                             if(sucursal1 == "Sendero"){
-                                select = $("#sucursal").focus().val(1);
+                                select = $("#sucursal").focus().val(1).blur();
                                 
     
                             }else{
-                                select = $("#sucursal").focus().val(0);
+                                select = $("#sucursal").focus().val(0).blur();
                                 
                             }
                             
@@ -256,6 +271,8 @@ selects.forEach( select => {
     
                             inAncho.focus().val("");
                             inAncho.blur();
+                            
+                            $("#modelo").blur();
                             
                         });
                     }
