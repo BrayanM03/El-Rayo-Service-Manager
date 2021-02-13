@@ -23,16 +23,19 @@
     <title>El Rayo | Service Manager</title>
 
     <!-- Custom fonts for this template-->
-    
     <link rel="stylesheet" href="src/css/nueva-venta.css">
     <link href="src/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
+
 
     <!-- Custom styles for this template-->
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="src/vendor/datatables/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.css" integrity="sha512-oe8OpYjBaDWPt2VmSFR+qYOdnTjeV9QPLJUeqZyprDEQvQLJ9C5PCFclxwNuvb/GQgQngdCXzKSFltuHD3eCxA==" crossorigin="anonymous" />
+    
+
     <!---Librerias de estilos-->
    
 
@@ -443,7 +446,7 @@
 
                      <!-- Contenido Nueva venta -->
 
-                     <div class="card">
+                     <div class="card" style="margin-bottom: 7vh; padding-bottom: 5vh;">
                          <div class="card-header bg-primary text-white">
                              <span>Nueva venta</span>
                          </div>
@@ -457,7 +460,7 @@
                                                 </div>
 
                                                 <!--Fila 1-->
-                                                 
+                                                <form id="form-punto-venta">
                                                 <div class="fila1">
                                                         <label class="input-largo">
                                                             <span for="search">Busqueda</span>
@@ -483,7 +486,7 @@
 
                                                         <label class="input-largo">
                                                             <span for="description">Descripción</span>
-                                                            <input type="text" id="description" name="description" class="input-group">
+                                                            <input type="text" id="description" name="description" class="input-group" required>
                                                         </label>
                                                 </div> 
                                                 
@@ -507,7 +510,7 @@
 
                                                     <label class="input-corto">
                                                         <span for="cantidad">Cantidad</span>
-                                                        <input type="number" id="cantidad" name="cantidad" class="input-group">
+                                                        <input type="number" id="cantidad" name="cantidad" class="input-group" required>
                                                     </label>
                                         
                                                     <label class="input-corto">
@@ -521,7 +524,7 @@
 
                                                 </div>
                                                  
-                                      
+                                                </form>
                                         
                                 </div>
 
@@ -543,30 +546,17 @@
                                     
                                     
                                     <div class="fila4 row">
-                                        <div class="table-wrapper">
-                                        <table id="pre-venta" class="table table-striped table-bordered table-hover" style="width:90%">
-                                            <!---<thead>
-                                                <tr>
-                                                    <th>Codigo</th>
-                                                    <th class="ds">Descripción</th>
-                                                    <th>Cantidad</th>
-                                                    <th>Precio</th>
-                                                    <th>Subtotal</th>
-                                                    <th>Accion</th>
-                                                </tr>
-                                            </thead>
-                                                <tbody id="tbody-venta">
-                                                
-                                                    
-                                                </tbody> --->
-                                                </table><br>
-                                        </div>
+                                        
+                                                <table id="pre-venta" class="table table-striped table-bordered table-hover">
+                                           
+                                                </table>
+                                        
                                         
                                                 
-                                                <div class="row" style="width: 100%; display: flex; justify-content: center; align-items: center;">
-                                                    <div class="form-group" style="display: flex; align-items: center; justify-content: space-around; width: 20%;" >
-                                                        <span for="total">Total: </span>
-                                                        <input type="text" value="$795" class="form-control" id="total" name="total" style="width:80px; margin-left:5px;" disabled> 
+                                                <div class="row" style="width: 100%; display: flex; justify-content: center; align-items: center; margin-top:25px">
+                                                    <div class="form-group" style="display: flex; align-items: center; justify-content: space-around; width: 25%;" >
+                                                        <span for="total" >Total: $</span>
+                                                        <input type="number" value="0" class="form-control" id="total" name="total" style="width:120px; margin-left:5px; display:flex; justify-content:center;" disabled> 
                                                 
                                                     </div>
                                                     </div>
@@ -652,15 +642,17 @@
 
 
     <!-- Cargamos nuestras librerias-->
-    <script src="src/vendor/nice-select/js/jquery.nice-select.js"></script>
-    <script src="src/vendor/datatables/jquery.dataTables.min.js"></script>
+    
+    <script src="src/vendor/datatables/jquery.dataTables.min.js"></script> 
+    <script src="src/vendor/datatables-responsive/js/dataTables.responsive.min.js"></script>
     <script src="src/vendor/datatables/dataTables.bootstrap4.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous"></script>
+    
     <script src="src/js/nueva-venta.js"></script>
     <script src="src/vendor/datatables/defaults.js"></script>
-    <script src="src/vendor/datatables-responsive/js/dataTables.responsive.min.js"></script>
     <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
     <script src="src/js/agregar-info-tabla-venta.js"></script>
-    
+   
    
 </body>
 

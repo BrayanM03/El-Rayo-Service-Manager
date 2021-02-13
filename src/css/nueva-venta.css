@@ -127,8 +127,9 @@
     animation: aparecer .1s;
     transition: all 0.2s cubic-bezier(0.5, 0, 0, 1.25), opacity 0.15s ease-out;
     opacity: 1;
-    overflow-y: auto;
+    overflow-y: scroll;
     scroll-snap-align: start end;
+    height: 300px;
   
 }
 

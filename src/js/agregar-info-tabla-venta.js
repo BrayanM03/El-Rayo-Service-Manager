@@ -1,99 +1,112 @@
 
-  var columnDefs = [{
-    title: "Name"
+
+
+$(document).ready(function() {
+  
+  columnDefs = [{
+    title: "ID"
   }, {
-    title: "Position"
+    title: "Descripción"
   }, {
-    title: "cant"
+    title: "Modelo"
   },  {
-    title: "Office"
+    title: "Cantidad"
   }, {
-    title: "Extn."
+    title: "Precio"
   }, {
-    title: "Start date"
+    title: "Importe"
   }, {
-    title: "Salary"
+    title: "Accion"
   }];
- 
-     array = [["idBotonLLanta", "descripcion", "modelo"," cantidad", "precio", "sucursal", "subtotal" ],
-     ["idBotonLLanta", "descripcion", "modelo"," cantidad", "precio", "sucursal", "subtotal" ],
-     ["idBotonLLanta", "descripcion", "modelo"," cantidad", "precio", "sucursal", "subtotal" ],["idBotonLLanta", "descripcion", "modelo"," cantidad", "precio", "sucursal", "subtotal" ]];
-    $('#pre-venta').on("draw.dt", function () {
-        $(this).find(".dataTables_empty").parents('tbody').empty();}).DataTable({
-        paging: false,
-        searching: false,
-        scrollY: "350px",
-        scrollCollapse: true,
-        info: false,
-        responsive: true,
-        data: array,
-        columns: columnDefs,
+  
+  table = $('#pre-venta').DataTable({
 
-        
-    });
+    columns: columnDefs,
+    paging: false,
+    searching: false,
+    scrollY: "350px",
+    info: false,
+    //responsive: true,
+    
+  
+    
+  });
 
+} );
 
+toastr.options = {
+  "closeButton": true,
+  "debug": false,
+  "newestOnTop": false,
+  "progressBar": true,
+  "positionClass": "toast-bottom-right",
+  "preventDuplicates": false,
+  "onclick": null,
+  "showDuration": "300",
+  "hideDuration": "1000",
+  "timeOut": "5000",
+  "extendedTimeOut": "1000",
+  "showEasing": "swing",
+  "hideEasing": "linear",
+  "showMethod": "fadeIn",
+  "hideMethod": "fadeOut"
+}
 
 function agregarInfo(){
     //Funcion que se encargara de mover informacion del producto a una tabla para luego ser procesada como una venta
 
-    idBotonLLanta    =   $("#agregar-producto").attr("idLlanta");
-    descripcion      =   $("#description").val();
-    modelo           =   $("#modelo").val();
-    marca            =   $(".logo-marca").attr("marca");
-    cantidad         =   $("#cantidad").val();
-    precio           =   $("#precio").val();
-    sucursal         =   $("select[id = sucursal] option:selected").text();
-    subtotal         =   precio * cantidad;
-    
-    array = [idBotonLLanta, descripcion, modelo, cantidad, precio, sucursal, subtotal ];
 
-    console.log(array);
+    valitationQuanty = $('#cantidad')[0].checkValidity();
+    valitationdescription = $("#description")[0].checkValidity();
+    valitationModel = $("#modelo")[0].checkValidity();
+    valitationPrice = $("#precio").val();
 
-    $("#tbody-venta").append("<tr class='producto-individual' "+
-            "id='"+idBotonLLanta + "' "+
-            "descripcion='"+ descripcion + "' " +
-            "modelo='"+ modelo + "'"  +
-            "precio-venta='"+ precio + "' " +
-            "marca='"+ marca  + "'"  +
-            "sucursal='"+ sucursal + "' "  +
-            "cantidad='"+ cantidad +
-            "'>"+
-            "<td>" + idBotonLLanta + "</td>" +
-            "<td>"+ descripcion + " modelo: " + modelo + "</td>" +
-            "<td>" + cantidad + "</td>" +
-            "<td>$" + precio + "</td>" +
-            "<td>$" + subtotal + "</td>" +
-            "<td>dd</td>" +
-            //"<td><img class='logo-marca' src='./src/img/logos/" + value.Marca + ".jpg'></td>" +
-            "</tr>");
+    //console.log(valitationQuanty);
+    if (valitationQuanty == false) {
 
-            $("#tbody-venta").addClass("scroll-table");
+      toastr.warning('Necesita especificar una cantidad', 'Alerta' );
 
+      
+    }else if(valitationdescription == false){
 
+      toastr.warning('La descripción no puede ir vacia', 'Alerta' );
 
-    /*if (select == "Pedro Cardenas" ) {
-       
-        $.ajax({
-            type: "method",
-            url: "url",
-            data: {pedro: idBotonLLanta},
-            success: function (response) {
-                alert("Correcto, de Pedrito");
-            }
-        });
+    }else if(valitationModel == false ){
+      toastr.warning('Especifique un modelo', 'Alerta');
+      
+    } else if(valitationPrice == 0 ){
+      toastr.warning('Anote un precio', 'Alerta');
+      
+    }else {
+      
+      idBotonLLanta    =   $("#agregar-producto").attr("idLlanta");
+      descripcion      =   $("#description").val();
+      modelo           =   $("#modelo").val();
+      marca            =   $(".logo-marca").attr("marca");
+      cantidad         =   $("#cantidad").val();
+      precio           =   $("#precio").val();
+      sucursal         =   $("select[id = sucursal] option:selected").text();
+      subtotal         =   precio * cantidad;
+      botones = "<div style='display:flex;'><div class='btn btn-success' id='realizar-venta' style='margin-right:5px;'><i class='fas fa-pen'></i></div>" +
+                "<div class='btn btn-danger' id='realizar-venta'><i class='fas fa-trash'></i></div></div>";
+      
+      
+        table.row.add( [
+           idBotonLLanta,
+           descripcion, 
+           modelo, 
+           cantidad, 
+           precio,  
+           subtotal,
+           botones
+        ] ).draw(false);  
 
-    } else if(select == "Sendero") {
-        
-        $.ajax({
-            type: "method",
-            url: "url",
-            data: {sendero: idBotonLLanta},
-            success: function (response) {
-                alert("Correcto, de Snedero");
-            }
-        });
+       total = $("#total").val();
+       newTotal = subtotal + parseInt(total);
+       $("#total").val(newTotal);
 
+    }
 
-    }*/
+   
+      
 }
