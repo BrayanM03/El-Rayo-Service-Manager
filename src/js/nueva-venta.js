@@ -134,7 +134,7 @@ selects.forEach( select => {
                             $("#precio").focus().val(precio_Venta1);
 
                             $("#agregar-producto").attr("idLlanta", id1);
-                            $("#agregar-producto").attr("stock", stock1);
+                            $("#agregar-producto").attr("stock", stock1); 
                             $("#agregar-producto").attr("codigo", cod1);
                             contenedorTabla.addClass("oculto");
     

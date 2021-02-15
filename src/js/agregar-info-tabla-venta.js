@@ -71,9 +71,7 @@ function agregarInfo(){
 
     stockLlanta0 = $("#agregar-producto").attr("stock");
     stockLlanta = parseInt(stockLlanta0);
-    console.log(valorCant);
-    console.log(stockLlanta);
-
+   
     //console.log(valitationQuanty);
     if (valitationQuanty == false ) {
 
@@ -107,7 +105,7 @@ function agregarInfo(){
       
     }else {
       toastr.success('Producto agregado correctamente', 'Correcto' );
-      
+
       idBotonLLanta    =   $("#agregar-producto").attr("codigo");
       descripcion      =   $("#description").val();
       modelo           =   $("#modelo").val();
@@ -117,32 +115,64 @@ function agregarInfo(){
       sucursal         =   $("select[id = sucursal] option:selected").text();
       subtotal         =   precio * cantidad;
       botones = "<div class='btn btn-danger borrar-articulo' style='margin-right:5px;'><i class='fas fa-trash'></i></div>";
-      
+
+      if ( ! table.data().any() ) {
       
         table.row.add( [
-           idBotonLLanta,
-           descripcion, 
-           modelo, 
-           cantidad, 
-           precio,  
-           subtotal,
-           botones
-        ] ).draw(false);  
+          idBotonLLanta,
+          descripcion, 
+          modelo, 
+          cantidad, 
+          precio,  
+          subtotal,
+          botones
+       ] ).draw(false); 
+    }
+
+
+      Rows =  table.rows();
+        
+      Rows.data().each(function (value, index) {
+        codigo = value[0];
+        llanta = value[1];
+        console.log(index);
+
+        console.log(idBotonLLanta, codigo);
+
+        if (idBotonLLanta == codigo) {
+          alert("Es la misma llanta");
+          
+        }else{
+          alert("No es la misma llanta");
+
+          table.row.add( [
+            idBotonLLanta,
+            descripcion, 
+            modelo, 
+            cantidad, 
+            precio,  
+            subtotal,
+            botones
+         ] ).draw(false); 
+        }
+
+    });
+
+    
+
+     
+      
+     
+      
+     
 
        total = $("#total").val();
        newTotal = subtotal + parseInt(total);
        $("#total").val(newTotal);
 
-       /*table.rows().data().each(function (key, value) {
-        var a = value.Codigo;
-        console.log(a);
-     
-            
-            });*/
+      
 
-            Rows =  table.rows();
-            console.log(Rows);
-
+           
     }
 
    
