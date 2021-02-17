@@ -104,7 +104,7 @@ function agregarInfo(){
       toastr.warning('Anote un precio', 'Alerta');
       
     }else {
-      toastr.success('Producto agregado correctamente', 'Correcto' );
+     
 
       idBotonLLanta    =   $("#agregar-producto").attr("codigo");
       descripcion      =   $("#description").val();
@@ -116,59 +116,69 @@ function agregarInfo(){
       subtotal         =   precio * cantidad;
       botones = "<div class='btn btn-danger borrar-articulo' style='margin-right:5px;'><i class='fas fa-trash'></i></div>";
 
-      if ( ! table.data().any() ) {
-      
-        table.row.add( [
-          idBotonLLanta,
-          descripcion, 
-          modelo, 
-          cantidad, 
-          precio,  
-          subtotal,
-          botones
-       ] ).draw(false); 
-    }
-
-
-      Rows =  table.rows();
+     
+  
+function Recorrer() { 
+  contador = 0;
+  Rows =  table.rows();
         
       Rows.data().each(function (value, index) {
         codigo = value[0];
         llanta = value[1];
         console.log(index);
+       
 
         console.log(idBotonLLanta, codigo);
 
         if (idBotonLLanta == codigo) {
-          alert("Es la misma llanta");
+          alert("Es es la misma llanta");
+          contador++;
           
-        }else{
+          
+        }else if(idBotonLLanta != codigo){
           alert("No es la misma llanta");
 
-          table.row.add( [
-            idBotonLLanta,
-            descripcion, 
-            modelo, 
-            cantidad, 
-            precio,  
-            subtotal,
-            botones
-         ] ).draw(false); 
         }
 
-    });
+
+    }); 
+
+    if ( ! table.data().any() ) {
+      
+     llantaAgregada();
 
     
+    }else if(contador == 0){
+ 
+      llantaAgregada();
+    
+    }
 
-     
-      
-     
-      
-     
+ }
 
-       total = $("#total").val();
-       newTotal = subtotal + parseInt(total);
-       $("#total").val(newTotal);
+ Recorrer();   
+  
+      function llantaAgregada() {
+          table.row.add( [
+              idBotonLLanta,
+              descripcion, 
+              modelo, 
+              cantidad, 
+              precio,  
+              subtotal,
+              botones
+          ] ).draw(false); 
+
+          total = $("#total").val();
+          newTotal = subtotal + parseInt(total);
+          $("#total").val(newTotal);
+          console.log("Hay " + contador + " llantas repetidas");
+
+          toastr.success('Producto agregado correctamente', 'Correcto' );
+
+      }
+
+    
 
       
 
