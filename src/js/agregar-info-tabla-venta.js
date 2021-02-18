@@ -133,7 +133,11 @@ function Recorrer() {
         if (idBotonLLanta == codigo) {
           alert("Es es la misma llanta");
           contador++;
-          
+          cantidadLlantas = this.row().data()[3];
+          totalCant = parseInt(cantidadLlantas) + parseInt(cantidad);
+          console.log(totalCant);
+          table.rows(this).remove().draw(false);
+        
           
         }else if(idBotonLLanta != codigo){
           alert("No es la misma llanta");
