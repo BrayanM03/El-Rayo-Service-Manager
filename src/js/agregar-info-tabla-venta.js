@@ -40,6 +40,8 @@ $(document).ready(function() {
 
 } );
 
+contador = 0;
+
 toastr.options = {
   "closeButton": true,
   "debug": false,
@@ -116,52 +118,62 @@ function agregarInfo(){
       subtotal         =   precio * cantidad;
       botones = "<div class='btn btn-danger borrar-articulo' style='margin-right:5px;'><i class='fas fa-trash'></i></div>";
 
-     
+      
+
+      //Despues de que se valida el formulario se recorre la tabla para revisar que no se repita una llanta con la funcion Recorrer()
+      Recorrer(); 
   
-function Recorrer() { 
-  contador = 0;
-  Rows =  table.rows();
-        
+       function Recorrer() { 
+  
+      Rows =  table.rows();  //Agregamos las filas a la variable Rows
+      
+      //Recorremos los datos de esas filas 
       Rows.data().each(function (value, index) {
         codigo = value[0];
         llanta = value[1];
-        console.log(index);
+        cantidadLlantas = value[3];
        
 
         console.log(idBotonLLanta, codigo);
 
+        //Si hay una fila en la cual su columna codigo y el codigo de la llanta sea el mismo entonces hacemos lo siguiente:  
         if (idBotonLLanta == codigo) {
           alert("Es es la misma llanta");
-          contador++;
-          cantidadLlantas = this.row().data()[3];
-          totalCant = parseInt(cantidadLlantas) + parseInt(cantidad);
-          console.log(totalCant);
-          table.rows(this).remove().draw(false);
+          contador++;  //Incrementamos el contador 
+          //cantidadLlantas = this.row().data()[3];  //Obtenes la cantidad de unidades en la fila
+          totalCant = parseInt(cantidadLlantas) + parseInt(cantidad);  //Sumamos esa cantidad con la cantidad que mandamos y la agregamos a la variable
+          console.log("El valor del contador del condicional es "+ contador + "y el total de llantas que son las mismas es " + totalCant); //Imprimimos el valor del contador
+
+          table.row(  $("td").filter(":contains('"+codigo+"')").parents("tr")).remove().draw(false); //Borramos la fila
+
+          table.row.add( [
+            idBotonLLanta,
+            descripcion, 
+            modelo, 
+            totalCant, 
+            precio,  
+            subtotal,
+            botones
+        ] ).draw(false); 
         
-          
+        
+        
+         //Si el codigo no es el mismo osea no es la misma llanta 
         }else if(idBotonLLanta != codigo){
           alert("No es la misma llanta");
+          
 
-        }
+        } //Se cierra el else if
 
 
-    }); 
+    }); //Cerramos el ciclo que recorre las filas de la tabla
 
-    if ( ! table.data().any() ) {
-      
-     llantaAgregada();
+   
 
-    
-    }else if(contador == 0){
- 
-      llantaAgregada();
-    
-    }
+ } //Aqui termina la función Recorrer()
 
- }
-
- Recorrer();   
   
+     //Esta es la funcion llanta agregada y es para agregar la llanta si es una llanta no repetida y si el contador de llantas repetidas esta en 0
       function llantaAgregada() {
           table.row.add( [
               idBotonLLanta,
@@ -180,18 +192,22 @@ function Recorrer() {
 
           toastr.success('Producto agregado correctamente', 'Correcto' );
 
-      }
+      }//Termina la funcion llantaAgregada()
 
-    
-
+      if ( !table.data().any() || contador >=0 ) {
       
-
+        llantaAgregada();
+        console.log("Si se agrego llanta");
+       
+       }else if( contador == 1){
+         console.log("No se agrego llanta");
+       } //Se cierra if
            
-    }
+    } //Se cierra if que valida el formulario
 
    
       
-}
+} //Se cierra la funcion anidada a la boton de agregar informacion
 
 
 
