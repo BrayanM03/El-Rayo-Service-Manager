@@ -132,40 +132,21 @@ function agregarInfo(){
         codigo = value[0];
         llanta = value[1];
         cantidadLlantas = value[3];
-       
 
-        console.log(idBotonLLanta, codigo);
-
-        //Si hay una fila en la cual su columna codigo y el codigo de la llanta sea el mismo entonces hacemos lo siguiente:  
-        if (idBotonLLanta == codigo) {
-          alert("Es es la misma llanta");
-          contador++;  //Incrementamos el contador 
-          //cantidadLlantas = this.row().data()[3];  //Obtenes la cantidad de unidades en la fila
-          totalCant = parseInt(cantidadLlantas) + parseInt(cantidad);  //Sumamos esa cantidad con la cantidad que mandamos y la agregamos a la variable
-          console.log("El valor del contador del condicional es "+ contador + "y el total de llantas que son las mismas es " + totalCant); //Imprimimos el valor del contador
-
-          table.row(  $("td").filter(":contains('"+codigo+"')").parents("tr")).remove().draw(false); //Borramos la fila
-
-          table.row.add( [
-            idBotonLLanta,
-            descripcion, 
-            modelo, 
-            totalCant, 
-            precio,  
-            subtotal,
-            botones
-        ] ).draw(false); 
+        switch (codigo) {
+          case idBotonLLanta:
+              contador = 1;
+              totalCant = parseInt(cantidadLlantas) + parseInt(cantidad);  //Sumamos esa cantidad con la cantidad que mandamos y la agregamos a la variable
+              table.row(  $("td").filter(":contains('"+codigo+"')").parents("tr")).data([
+              idBotonLLanta, descripcion, modelo, totalCant, precio, subtotal, botones]).draw(false); //Borramos la fila
+            
+            break;
         
-        
-        
-         //Si el codigo no es el mismo osea no es la misma llanta 
-        }else if(idBotonLLanta != codigo){
-          alert("No es la misma llanta");
-          
-
-        } //Se cierra el else if
-
-
+          default:
+            contador = "perro";
+            break;
+        }
+  
     }); //Cerramos el ciclo que recorre las filas de la tabla
 
    
@@ -188,20 +169,18 @@ function agregarInfo(){
           total = $("#total").val();
           newTotal = subtotal + parseInt(total);
           $("#total").val(newTotal);
-          console.log("Hay " + contador + " llantas repetidas");
+          console.log("el contador vale: " + contador);
 
           toastr.success('Producto agregado correctamente', 'Correcto' );
 
       }//Termina la funcion llantaAgregada()
 
-      if ( !table.data().any() || contador >=0 ) {
+      if ( !table.data().any() || contador == "perro") {
       
         llantaAgregada();
         console.log("Si se agrego llanta");
        
-       }else if( contador == 1){
-         console.log("No se agrego llanta");
-       } //Se cierra if
+       }//Se cierra if
            
     } //Se cierra if que valida el formulario
 
