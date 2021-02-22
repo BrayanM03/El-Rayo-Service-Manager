@@ -40,7 +40,7 @@ $(document).ready(function() {
 
 } );
 
-contador = 0;
+contador = 2;
 
 toastr.options = {
   "closeButton": true,
@@ -133,17 +133,60 @@ function agregarInfo(){
         llanta = value[1];
         cantidadLlantas = value[3];
 
+        thisRow =  $("td").filter(":contains('"+codigo+"')").parents("tr");
+        despuesFila= $(thisRow).next();
+        cantFilasDespues = despuesFila.length;
+        anteriorFila= $(thisRow).prevAll();
+        cantFilasAnteriores = anteriorFila.length;
+
         switch (codigo) {
           case idBotonLLanta:
-              contador = 1;
+             
+              alert("Es la misma llanta");
               totalCant = parseInt(cantidadLlantas) + parseInt(cantidad);  //Sumamos esa cantidad con la cantidad que mandamos y la agregamos a la variable
-              table.row(  $("td").filter(":contains('"+codigo+"')").parents("tr")).data([
+              
+              table.row(thisRow).data([
               idBotonLLanta, descripcion, modelo, totalCant, precio, subtotal, botones]).draw(false); //Borramos la fila
-            
+             
+              thisRow.addClass("repetida");
+
+              if (cantFilasDespues >=1) {
+                contador =1
+                console.log("Filas posteriores: "+despuesFila.length);  
+                console.log("Filas anteriores: "+anteriorFila.length);  
+              }else{
+                contador = 0;
+                console.log("<b>el contador vale: " + contador);
+                console.log("Filas posteriores: "+despuesFila.length);
+                console.log("Filas anteriores: "+anteriorFila.length);
+               
+              }
+              
+              
             break;
         
           default:
-            contador = "perro";
+              alert("No es la misma llanta");
+                if (contador == 1 ) {
+                  
+                
+                 if (cantFilasAnteriores == 0) {
+                   contador =2;
+                   console.log("Filas posteriores: "+despuesFila.length);
+                   console.log("Filas anteriores: "+anteriorFila.length);    
+                 }else{
+                  console.log("Filas posteriores: "+despuesFila.length);
+                  console.log("Filas anteriores: "+anteriorFila.length);
+                  alert("llanta abajo de una que ya fue duplicada");
+                 }
+                 
+
+                }else if(contador ==0){
+                  contador =0;
+                  console.log("Filas posteriores: "+despuesFila.length);
+                  console.log("Filas anteriores: "+anteriorFila.length); 
+                }
+                
             break;
         }
   
@@ -169,17 +212,21 @@ function agregarInfo(){
           total = $("#total").val();
           newTotal = subtotal + parseInt(total);
           $("#total").val(newTotal);
-          console.log("el contador vale: " + contador);
-
+          
           toastr.success('Producto agregado correctamente', 'Correcto' );
 
       }//Termina la funcion llantaAgregada()
 
-      if ( !table.data().any() || contador == "perro") {
+      if ( !table.data().any() || contador ==2) {
       
         llantaAgregada();
         console.log("Si se agrego llanta");
+        contador = 2;
+        console.log("<b>el contador vale: </b>" + contador);
+
        
+       }else if(contador == 0){
+         alert("Se termina validaciones");
        }//Se cierra if
            
     } //Se cierra if que valida el formulario
