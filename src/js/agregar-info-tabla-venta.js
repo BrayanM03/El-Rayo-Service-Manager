@@ -120,81 +120,9 @@ function agregarInfo(){
 
       
 
-      //Despues de que se valida el formulario se recorre la tabla para revisar que no se repita una llanta con la funcion Recorrer()
-      Recorrer(); 
   
-       function Recorrer() { 
-  
-      Rows =  table.rows();  //Agregamos las filas a la variable Rows
-      
-      //Recorremos los datos de esas filas 
-      Rows.data().each(function (value, index) {
-        codigo = value[0];
-        llanta = value[1];
-        cantidadLlantas = value[3];
+     
 
-        thisRow =  $("td").filter(":contains('"+codigo+"')").parents("tr");
-        despuesFila= $(thisRow).next();
-        cantFilasDespues = despuesFila.length;
-        anteriorFila= $(thisRow).prevAll();
-        cantFilasAnteriores = anteriorFila.length;
-
-        switch (codigo) {
-          case idBotonLLanta:
-             
-              alert("Es la misma llanta");
-              totalCant = parseInt(cantidadLlantas) + parseInt(cantidad);  //Sumamos esa cantidad con la cantidad que mandamos y la agregamos a la variable
-              
-              table.row(thisRow).data([
-              idBotonLLanta, descripcion, modelo, totalCant, precio, subtotal, botones]).draw(false); //Borramos la fila
-             
-              thisRow.addClass("repetida");
-
-              if (cantFilasDespues >=1) {
-                contador =1
-                console.log("Filas posteriores: "+despuesFila.length);  
-                console.log("Filas anteriores: "+anteriorFila.length);  
-              }else{
-                contador = 0;
-                console.log("<b>el contador vale: " + contador);
-                console.log("Filas posteriores: "+despuesFila.length);
-                console.log("Filas anteriores: "+anteriorFila.length);
-               
-              }
-              
-              
-            break;
-        
-          default:
-              alert("No es la misma llanta");
-                if (contador == 1 ) {
-                  
-                
-                 if (cantFilasAnteriores == 0) {
-                   contador =2;
-                   console.log("Filas posteriores: "+despuesFila.length);
-                   console.log("Filas anteriores: "+anteriorFila.length);    
-                 }else{
-                  console.log("Filas posteriores: "+despuesFila.length);
-                  console.log("Filas anteriores: "+anteriorFila.length);
-                  alert("llanta abajo de una que ya fue duplicada");
-                 }
-                 
-
-                }else if(contador ==0){
-                  contador =0;
-                  console.log("Filas posteriores: "+despuesFila.length);
-                  console.log("Filas anteriores: "+anteriorFila.length); 
-                }
-                
-            break;
-        }
-  
-    }); //Cerramos el ciclo que recorre las filas de la tabla
-
-   
-
- } //Aqui termina la función Recorrer()
 
   
      //Esta es la funcion llanta agregada y es para agregar la llanta si es una llanta no repetida y si el contador de llantas repetidas esta en 0
@@ -217,16 +145,166 @@ function agregarInfo(){
 
       }//Termina la funcion llantaAgregada()
 
-      if ( !table.data().any() || contador ==2) {
+  
+
+      if ( !table.data().any()) {
       
         llantaAgregada();
-        console.log("Si se agrego llanta");
-        contador = 2;
-        console.log("<b>el contador vale: </b>" + contador);
 
        
-       }else if(contador == 0){
-         alert("Se termina validaciones");
+       }else{
+
+        Rows =  table.rows();  //Agregamos las filas a la variable Rows
+        flag =0;
+
+        //Recorremos los datos de esas filas 
+        Rows.data().each(function (value, index) {
+          codigo = value[0];
+          cantidadLlantas = value[3];
+          totalCant = parseInt(cantidadLlantas) + parseInt(cantidad);
+
+          thisRow = table.row(this);
+          alert("Iteracion: "+ index + " Llanta iterada:  "+codigo);
+          despuesFila= $(thisRow).next();
+          console.log("Esta iterecion de fila ");
+          console.log(thisRow );
+          console.log("Y la que sigue: ");
+          console.log(despuesFila);
+          anteriorFila= $(thisRow).prevAll();
+          anterior = parseInt(anteriorFila.length);
+          posterior = parseInt(despuesFila.length);
+
+          if(flag == 1){
+            alert("Se cancela el pedo");
+            return false;
+          }
+          
+          if (codigo == idBotonLLanta) { //Si es la misma llanta se actualiza
+            sameRow =  $("td").filter(":contains('"+codigo+"')").parents("tr");
+            console.log("Es la misma");
+            
+            table.row(sameRow).data( [
+              idBotonLLanta,
+              descripcion, 
+              modelo, 
+              totalCant, 
+              precio,  
+              subtotal,
+              botones
+          ] ).draw(false);
+          alert("Se actualizo la llanta "  + codigo);
+          flag = 1;
+          return false;
+          
+
+          }else{  //Si no es la misma llanta
+
+              if(anterior == 0){ //No hay filas atras 
+                
+                alert("No hay fila atras para llanta " + codigo + "hay " +anterior + "filas atras y " + posterior +"filas enfrente");
+                      if (posterior == 0) { //Y no hay enfrente
+                        alert("No hay fila enfrente para llanta " + codigo +" por lo tanto se agrega esta llanta 1");
+                          table.row.add( [
+                            idBotonLLanta,
+                            descripcion, 
+                            modelo, 
+                            cantidad, 
+                            precio,  
+                            subtotal,
+                            botones
+                        ] ).draw(false);
+
+                        flag = 1;
+                        return false;
+
+                      }else{//Si hay enfrente
+                        alert("Si hay una llanta enfrente de "+codigo);
+                        if (codigo == idBotonLLanta) {//Es el mismo codigo
+
+                          sameRow =  $("td").filter(":contains('"+codigo+"')").parents("tr");
+                            console.log("Es la misma");
+                            
+                            table.row(sameRow).data( [
+                              idBotonLLanta,
+                              descripcion, 
+                              modelo, 
+                              totalCant, 
+                              precio,  
+                              subtotal,
+                              botones
+                          ] ).draw(false);
+
+                          alert("La llanta" + idBotonLLanta + "ya se encuentra, por lo tanto se actualiza 1");
+                          flag = 1;
+                          return false;
+                        }else{
+                          alert("Siguiente iteracion");
+                        }
+                      }
+              }else{  //SI hay filas atras
+                alert("Si hay fila atras para la llanta "+ codigo);
+                    if (codigo == idBotonLLanta) { //Es el mismo codigo
+
+                            sameRow =  $("td").filter(":contains('"+codigo+"')").parents("tr");
+                            console.log("Es la misma");
+                            
+                            table.row(sameRow).data( [
+                              idBotonLLanta,
+                              descripcion, 
+                              modelo, 
+                              totalCant, 
+                              precio,  
+                              subtotal,
+                              botones
+                          ] ).draw(false);
+
+                          alert("La llanta" + idBotonLLanta + "ya se encuentra, por lo tanto se actualiza 2");
+                          flag = 1;
+                          return false;
+                    }else{ //No es el mismo codigo
+                          if (posterior == 0) { //No hay fila enfrente
+                            alert("No hay fila enfrente para llanta " + idBotonLLanta +" por lo tanto se agrega esta llanta 2");
+                            table.row.add( [
+                              idBotonLLanta,
+                              descripcion, 
+                              modelo, 
+                              cantidad, 
+                              precio,  
+                              subtotal,
+                              botones
+                          ] ).draw(false); 
+                          flag = 1;
+                          return false;
+                          }else{ //Si hay una enfrente
+                            if (codigo == idBotonLLanta) { //Y es la misma
+                              sameRow =  $("td").filter(":contains('"+codigo+"')").parents("tr");
+                              console.log("Es la misma");
+                              
+                              table.row(sameRow).data( [
+                                idBotonLLanta,
+                                descripcion, 
+                                modelo, 
+                                totalCant, 
+                                precio,  
+                                subtotal,
+                                botones
+                            ] ).draw(false);
+                            alert("La llanta" + idBotonLLanta + "ya se encuentra, por lo tanto se actualiza 3");
+                            flag = 1;
+                            return false;
+                            }else{
+                              alert("Siguiente iteracion");
+                            }
+                          }
+                    }
+              }
+          }
+         
+          alert("Siguiente iteracion perrillo");
+         
+    
+      }); //Cerramos el ciclo que recorre las filas de la tabla
+
        }//Se cierra if
            
     } //Se cierra if que valida el formulario
