@@ -3,6 +3,8 @@
 
 $(document).ready(function() {
   
+
+ 
   columnDefs = [{
     title: "Codigo"
   }, {
@@ -27,10 +29,12 @@ $(document).ready(function() {
     scrollY: "350px",
     info: false,
     //responsive: true,
-    
+   
   
     
   });
+
+ 
 
 
   table.on( 'click', '.borrar-articulo',  function () {
@@ -127,7 +131,7 @@ function agregarInfo(){
   
      //Esta es la funcion llanta agregada y es para agregar la llanta si es una llanta no repetida y si el contador de llantas repetidas esta en 0
       function llantaAgregada() {
-          table.row.add( [
+         fila = table.row.add( [
               idBotonLLanta,
               descripcion, 
               modelo, 
@@ -137,6 +141,13 @@ function agregarInfo(){
               botones
           ] ).draw(false); 
 
+          elemento = document.getElementsByTagName("tr");
+          for (let index = 0; index < elemento.length; index++) {
+            elemento[index].className = idBotonLLanta;
+            
+          }
+         
+
           total = $("#total").val();
           newTotal = subtotal + parseInt(total);
           $("#total").val(newTotal);
@@ -145,12 +156,12 @@ function agregarInfo(){
 
       }//Termina la funcion llantaAgregada()
 
-  
+      
 
       if ( !table.data().any()) {
       
         llantaAgregada();
-
+        
        
        }else{
 
@@ -165,11 +176,7 @@ function agregarInfo(){
 
           thisRow = table.row(this);
           alert("Iteracion: "+ index + " Llanta iterada:  "+codigo);
-          despuesFila= $(thisRow).next();
-          console.log("Esta iterecion de fila ");
-          console.log(thisRow );
-          console.log("Y la que sigue: ");
-          console.log(despuesFila);
+          despuesFila= $(thisRow).next("tr");
           anteriorFila= $(thisRow).prevAll();
           anterior = parseInt(anteriorFila.length);
           posterior = parseInt(despuesFila.length);
