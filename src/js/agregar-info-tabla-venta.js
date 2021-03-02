@@ -38,6 +38,9 @@ $(document).ready(function() {
 
 
   table.on( 'click', '.borrar-articulo',  function () {
+    hijosTabla = $("#pre-venta tbody").children();
+    console.log(hijosTabla);
+
     table.row( $(this).parents('tr') ).remove().draw(false);
     toastr.success('Producto borrado con exito', 'Correcto' );
   } );
@@ -141,14 +144,6 @@ function agregarInfo(){
               botones
           ] ).draw(false); 
 
-          elemento = document.getElementsByTagName("tr");
-          for (let index = 0; index < elemento.length; index++) {
-            elemento[index].className = idBotonLLanta;
-            
-          }
-         
-          llanta = idBotonLLanta;
-
           total = $("#total").val();
           newTotal = subtotal + parseInt(total);
           $("#total").val(newTotal);
@@ -176,24 +171,19 @@ function agregarInfo(){
           cantidadLlantas = value[3];
           totalCant = parseInt(cantidadLlantas) + parseInt(cantidad);
 
-          //thisRow = table.row(this);
-          thisRow = $("."+llanta); 
-
-          alert("Iteracion: "+ index + " Llanta iterada:  "+codigo);
-          despuesFila= $(thisRow).next("tr");
-          anteriorFila= $(thisRow).prevAll();
-          anterior = parseInt(anteriorFila.length);
-          posterior = parseInt(despuesFila.length);
+          thisRow = table.row(this);
+          
+  
+        
 
           if(flag == 1){
-            alert("Se cancela el pedo");
+           
             return false;
           }
           
           if (codigo == idBotonLLanta) { //Si es la misma llanta se actualiza
             sameRow =  $("td").filter(":contains('"+codigo+"')").parents("tr");
-            console.log("Es la misma");
-            
+             
             table.row(sameRow).data( [
               idBotonLLanta,
               descripcion, 
@@ -203,18 +193,29 @@ function agregarInfo(){
               subtotal,
               botones
           ] ).draw(false);
-          alert("Se actualizo la llanta "  + codigo);
+
+          total = $("#total").val();
+          newTotal = subtotal + parseInt(total);
+          $("#total").val(newTotal);
+         
           flag = 1;
           return false;
           
 
           }else{  //Si no es la misma llanta
 
+            primerFila0 = $( "#pre-venta tbody" ).children();
+            primerFila = primerFila0[index];
+            despuesFila= $(primerFila).next("tr");
+            anteriorFila= $(primerFila).prevAll("tr");
+            anterior = parseInt(anteriorFila.length);
+            posterior = parseInt(despuesFila.length);
+
               if(anterior == 0){ //No hay filas atras 
                 
-                alert("No hay fila atras para llanta " + codigo + "hay " +anterior + "filas atras y " + posterior +"filas enfrente");
+              
                       if (posterior == 0) { //Y no hay enfrente
-                        alert("No hay fila enfrente para llanta " + codigo +" por lo tanto se agrega esta llanta 1");
+                       
                           table.row.add( [
                             idBotonLLanta,
                             descripcion, 
@@ -225,15 +226,19 @@ function agregarInfo(){
                             botones
                         ] ).draw(false);
 
+                        total = $("#total").val();
+                        newTotal = subtotal + parseInt(total);
+                        $("#total").val(newTotal);
+
                         flag = 1;
                         return false;
 
                       }else{//Si hay enfrente
-                        alert("Si hay una llanta enfrente de "+codigo);
+                       
                         if (codigo == idBotonLLanta) {//Es el mismo codigo
 
                           sameRow =  $("td").filter(":contains('"+codigo+"')").parents("tr");
-                            console.log("Es la misma");
+                            
                             
                             table.row(sameRow).data( [
                               idBotonLLanta,
@@ -245,19 +250,33 @@ function agregarInfo(){
                               botones
                           ] ).draw(false);
 
-                          alert("La llanta" + idBotonLLanta + "ya se encuentra, por lo tanto se actualiza 1");
+                          total = $("#total").val();
+                          newTotal = subtotal + parseInt(total);
+                          $("#total").val(newTotal);
+
+                          
                           flag = 1;
                           return false;
                         }else{
-                          alert("Siguiente iteracion");
+                         
                         }
                       }
               }else{  //SI hay filas atras
-                alert("Si hay fila atras para la llanta "+ codigo);
+
+                primerFila0 = $( "#pre-venta tbody" ).children();
+                primerFila = primerFila0[index];
+                despuesFila= $(primerFila).next("tr");
+                anteriorFila= $(primerFila).prevAll("tr");
+                anterior = parseInt(anteriorFila.length);
+                posterior = parseInt(despuesFila.length);
+
+              
+
+                
                     if (codigo == idBotonLLanta) { //Es el mismo codigo
 
                             sameRow =  $("td").filter(":contains('"+codigo+"')").parents("tr");
-                            console.log("Es la misma");
+                          
                             
                             table.row(sameRow).data( [
                               idBotonLLanta,
@@ -269,12 +288,16 @@ function agregarInfo(){
                               botones
                           ] ).draw(false);
 
-                          alert("La llanta" + idBotonLLanta + "ya se encuentra, por lo tanto se actualiza 2");
+                          total = $("#total").val();
+                          newTotal = subtotal + parseInt(total);
+                          $("#total").val(newTotal);
+
+                         
                           flag = 1;
                           return false;
                     }else{ //No es el mismo codigo
                           if (posterior == 0) { //No hay fila enfrente
-                            alert("No hay fila enfrente para llanta " + idBotonLLanta +" por lo tanto se agrega esta llanta 2");
+                           
                             table.row.add( [
                               idBotonLLanta,
                               descripcion, 
@@ -284,12 +307,17 @@ function agregarInfo(){
                               subtotal,
                               botones
                           ] ).draw(false); 
+
+                          total = $("#total").val();
+                          newTotal = subtotal + parseInt(total);
+                          $("#total").val(newTotal);
+
                           flag = 1;
                           return false;
                           }else{ //Si hay una enfrente
                             if (codigo == idBotonLLanta) { //Y es la misma
                               sameRow =  $("td").filter(":contains('"+codigo+"')").parents("tr");
-                              console.log("Es la misma");
+                             
                               
                               table.row(sameRow).data( [
                                 idBotonLLanta,
@@ -300,18 +328,22 @@ function agregarInfo(){
                                 subtotal,
                                 botones
                             ] ).draw(false);
-                            alert("La llanta" + idBotonLLanta + "ya se encuentra, por lo tanto se actualiza 3");
+
+                            total = $("#total").val();
+                            newTotal = subtotal + parseInt(total);
+                            $("#total").val(newTotal);
+                           
                             flag = 1;
                             return false;
                             }else{
-                              alert("Siguiente iteracion");
+                             
                             }
                           }
                     }
               }
           }
          
-          alert("Siguiente iteracion perrillo");
+          
          
     
       }); //Cerramos el ciclo que recorre las filas de la tabla
