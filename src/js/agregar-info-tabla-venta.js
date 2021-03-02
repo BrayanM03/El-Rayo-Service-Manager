@@ -147,6 +147,7 @@ function agregarInfo(){
             
           }
          
+          llanta = idBotonLLanta;
 
           total = $("#total").val();
           newTotal = subtotal + parseInt(total);
@@ -170,11 +171,14 @@ function agregarInfo(){
 
         //Recorremos los datos de esas filas 
         Rows.data().each(function (value, index) {
+
           codigo = value[0];
           cantidadLlantas = value[3];
           totalCant = parseInt(cantidadLlantas) + parseInt(cantidad);
 
-          thisRow = table.row(this);
+          //thisRow = table.row(this);
+          thisRow = $("."+llanta); 
+
           alert("Iteracion: "+ index + " Llanta iterada:  "+codigo);
           despuesFila= $(thisRow).next("tr");
           anteriorFila= $(thisRow).prevAll();
