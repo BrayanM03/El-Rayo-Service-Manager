@@ -8,7 +8,8 @@
     }
 
     
-    $sqlTraerInventario="SELECT * FROM `llantas`";
+    $sqlTraerInventario="SELECT * FROM llantas l INNER JOIN inventario_mat1 pedro
+    ON pedro.id_Llanta = l.id ";
 
     $result = mysqli_query($con, $sqlTraerInventario);
     while ($datas=mysqli_fetch_assoc($result)){

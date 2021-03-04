@@ -442,11 +442,11 @@
 
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid" style="display: flex; justify-content: center; ">
+                <div class="container-fluid" style="display: flex; justify-content: center; align-items:center; flex-direction:column">
 
                      <!-- Contenido inventario -->
-
-                     <table id="inventario" class="table table-striped table-bordered table-hover">
+                      <h3 style="margin: 10px 0px;">Stock de llantas </h3>  
+                      <table id="inventario" class="table table-striped table-bordered table-hover">
                       
                                          
                      </table>
