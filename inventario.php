@@ -20,10 +20,10 @@
     <meta name="author" content="">
     <link rel="shortcut icon" href="src/img/rayo.svg" />
 
-    <title>Nueva Venta</title>
+    <title>Inventario</title>
 
     <!-- Custom fonts for this template-->
-    <link rel="stylesheet" href="src/css/nueva-venta.css">
+    <link rel="stylesheet" href="src/css/inventario.css">
     <link href="src/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
@@ -77,8 +77,8 @@
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item active">
-                <a class="nav-link" href="#">
+            <li class="nav-item">
+                <a class="nav-link" href="nueva-venta.php">
                     <i class="fas fa-fw fa-cart-plus"></i>
                     <span>Nueva venta</span>
                 </a>
@@ -123,7 +123,7 @@
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTyres"
                     aria-expanded="true" aria-controls="collapsePages">
                     <i class="fas fa-fw fa-folder"></i>
@@ -444,140 +444,14 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid" style="display: flex; justify-content: center; ">
 
-                     <!-- Contenido Nueva venta -->
+                     <!-- Contenido inventario -->
 
-                     <div class="card" style="margin-bottom: 7vh; padding-bottom: 5vh;">
-                         <div class="card-header bg-primary text-white">
-                             <span>Nueva venta</span>
-                         </div>
-                         <div class="card-body">
-                            <div class="row">
+                     <table id="inventario" class="table table-striped table-bordered table-hover">
+                      
+                                         
+                     </table>
 
-                            <div class="grupo-1" >
-                            
-                                                <div class="logo-marca-grande">
-
-                                                </div>
-
-                                                <!--Fila 1-->
-                                                <form id="form-punto-venta">
-                                                <div class="fila1">
-                                                        <label class="input-largo">
-                                                            <span for="search">Busqueda</span>
-                                                            <input type="text" id="search" name="search" class="input-group">
-                                                        </label> 
-                                                        <div class="contenedor-tabla oculto">
-                                                                <table class="table">
-                                                                <thead class="table-info">
-                                                                <tr>
-                                                                    <th>Codigo</th>
-                                                                    <th>Descripción</th>
-                                                                    <th>Modelo</th>
-                                                                    <th>Costo</th>
-                                                                    <th>Costo c/Desc</th>
-                                                                    <th>Marca</th>
-                                                                    <th>Sucursal</th>
-                                                                    <th>Stock</th>
-                                                                </tr>
-                                                                </thead> 
-                                                                <tbody class="tbody">
-                                                                </tbody> 
-                                                                </table>
-                                                        </div>
-
-                                                        <label class="input-largo">
-                                                            <span for="description">Descripción</span>
-                                                            <input type="text" id="description" name="description" class="input-group" required>
-                                                        </label>
-                                                </div> 
-                                                
-                                                <!--Fila 1-->
-
-                                                <div class="fila2 row">
-                                                    
-                                                    <label class="input-corto">
-                                                        <span for="modelo">Modelo</span>
-                                                        <input type="text" id="modelo" name="modelo" class="input-group" disabled>
-                                                    </label>
-
-                                                    <label class="input-corto">
-                                                         <span for="sucursal">Sucursal</span>
-                                                         <select  id="sucursal" name="sucursal" class="select-group form-select" disabled> 
-                                                                <option disabled selected value></option>
-                                                                <option value="0">Pedro Cardenas</option>
-                                                                <option value="1">Sendero</option>
-                                                         </select>
-                                                    </label>
-
-                                                    <label class="input-corto">
-                                                        <span for="cantidad">Cantidad</span>
-                                                        <input type="number" id="cantidad" name="cantidad" class="input-group" required>
-                                                    </label>
-                                        
-                                                    <label class="input-corto">
-                                                        <span for="precio">$ Precio</span>
-                                                        <input type="number" id="precio" name="precio" class="input-group">
-                                                    </label>
-
-                                                    <label style="border-color: transparent;">
-                                                        <div class="btn btn-info" id="agregar-producto" onclick="agregarInfo()">Agregar</div>
-                                                    </label>
-
-                                                </div>
-                                                 
-                                                </form>
-                                        
-                                </div>
-
-
-                            <div class="grupo-2">
-
-                                <div class="fila3">
-                                            <div class="folio-fecha">
-                                                <label>
-                                                    <span for="folio">Folio:</span>
-                                                    <input class="form-control" value="00" type="text" id="folio" name="folio" disabled>
-                                                </label>
-                                                <label>
-                                                    <span for="fecha">Fecha</span>
-                                                    <input class="form-control"  type="date" id="fecha" name="fecha" style="width: 150px;"> 
-                                                </label>
-                                            </div>  
-                                </div>
-                                    
-                                    
-                                    <div class="fila4 row">
-                                        
-                                                <table id="pre-venta" class="table table-striped table-bordered table-hover">
-                                           
-                                                </table>
-                                        
-                                        
-                                                
-                                                <div class="row" style="width: 100%; display: flex; justify-content: center; align-items: center; margin-top:25px">
-                                                    <div class="form-group" style="display: flex; align-items: center; justify-content: space-around; width: 25%;" >
-                                                        <span for="total" >Total: $</span>
-                                                        <input type="number" value="0" class="form-control" id="total" name="total" style="width:120px; margin-left:5px; display:flex; justify-content:center;" disabled> 
-                                                
-                                                    </div>
-                                                    </div>
-                                                <div class="botones-de-venta">
-                                                    <div class="btn btn-warning" style="color: rgb(31, 28, 28); margin-right: 2vh;" id="limpiar-venta">Limpiar</div>
-                                                    <div class="btn btn-success" id="realizar-venta">Realizar venta</div>
-                                                </div>   
-                                                
-                                    
-                                    </div>
-                                </div>
-
-                            </div>
-
-                                
-                              
-                                
-                            
-                         </div>
-                     </div>
+                     
                    
 
                 </div>
@@ -649,10 +523,9 @@
     <script src="src/vendor/datatables/dataTables.bootstrap4.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous"></script>
     
-    <script src="src/js/nueva-venta.js"></script>
     <script src="src/vendor/datatables/defaults.js"></script>
     <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-    <script src="src/js/agregar-info-tabla-venta.js"></script>
+    <script src="src/js/inventario.js"></script>
    
    
 </body>
