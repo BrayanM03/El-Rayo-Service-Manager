@@ -131,8 +131,19 @@
                 </a>
                 <div id="collapseTyres" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Categorias:</h6>
-                        <a class="collapse-item" href="inventario.php" style="display:flex; flex-direction: row; justify-content:start;">
+                        <h6 class="collapse-header">Sucursales:</h6>
+                        <a class="collapse-item" href="inventario-pedro.php" style="display:flex; flex-direction: row; justify-content:start;">
+                        <i class="fas fa-fw fa-store"></i> 
+                            <span style="margin-left:12px;"> Pedro Cardenas</span> </a>
+                        <a class="collapse-item" href="register.html" style="display:flex; flex-direction: row; justify-content:start;">
+                        <i class="fas fa-fw fa-store"></i>
+                            <span style="margin-left:12px;"> Sendero</span> </a>
+    
+                    
+                    </div>
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Stock total:</h6>
+                        <a class="collapse-item" href="inventario-total.php" style="display:flex; flex-direction: row; justify-content:start;">
                             <img src="src/img/tyre-invent.svg" width="18px" /> 
                             <span style="margin-left:12px;"> Existencia</span> </a>
                         <a class="collapse-item" href="register.html" style="display:flex; flex-direction: row; justify-content:start;">
@@ -445,10 +456,26 @@
                 <div class="container-fluid" style="display: flex; justify-content: center; align-items:center; flex-direction:column">
 
                      <!-- Contenido inventario -->
-                      <h3 style="margin: 10px 0px;">Stock de llantas </h3>  
-                      <table id="inventario" class="table table-striped table-bordered table-hover">
-                      
-                                         
+                     <div class="titulo-inventario">
+                         <h5 style="margin: 10px 0px;">Stock de llantas en existencia</h5>
+                         <p style="color: gray;">Sucursal Pedro Cardenas</p>
+                        </div>
+                        
+                      <div class="botones">
+                                    <a href="#" class="btn btn-success btn-icon-split" onclick="agregarLLanta();">
+                                        <span class="icon text-white-50">
+                                            <i class="fas fa-check-circle"></i>
+                                        </span>
+                                        <span class="text">Agregar llanta</span>
+                                    </a>
+                                    <a href="#" class="btn btn-danger btn-icon-split">
+                                        <span class="icon text-white-50">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </span>
+                                        <span class="text">Borrar todas las llantas</span>
+                                    </a>
+                      </div>
+                      <table id="inventario" class="table table-striped table-bordered table-hover">                   
                      </table>
 
                      
@@ -522,7 +549,7 @@
     <script src="src/vendor/datatables-responsive/js/dataTables.responsive.min.js"></script>
     <script src="src/vendor/datatables/dataTables.bootstrap4.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous"></script>
-    
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="src/vendor/datatables/defaults.js"></script>
     <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
     <script src="src/js/inventario.js"></script>
