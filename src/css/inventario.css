@@ -34,3 +34,34 @@ table.dataTable thead {
   z-index: 99999999999999;
   }
 
+  .select2_statistics{
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    font-size: 10px;
+    font-weight: normal;
+  }
+
+  
+
+  .select2-contenedor{
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    font-size: 14px;
+    font-weight: bold;
+
+
+    /*margin-left: 8px;*/
+  }
+
+  .select2-contenedor div{
+    margin-left: 8px;
+  }
+
+  .select2-contenedor-principal{
+    display: flex;
+
+  }

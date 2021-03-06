@@ -132,7 +132,7 @@
                 <div id="collapseTyres" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Sucursales:</h6>
-                        <a class="collapse-item" href="inventario.php" style="display:flex; flex-direction: row; justify-content:start;">
+                        <a class="collapse-item" href="inventario-pedro.php" style="display:flex; flex-direction: row; justify-content:start;">
                         <i class="fas fa-fw fa-store"></i> 
                             <span style="margin-left:12px;"> Pedro Cardenas</span> </a>
                         <a class="collapse-item" href="register.html" style="display:flex; flex-direction: row; justify-content:start;">

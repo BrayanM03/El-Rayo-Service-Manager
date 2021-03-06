@@ -9,7 +9,8 @@
         },  
   
       columns: [   
-        { title: "Codigo",         data: "id"             },
+        { title: "#",              data: null             },
+        { title: "Codigo",         data: "Codigo"         },
         { title: "Descripcion",    data: "Descripcion"    },
         { title: "Marca",          data: "Marca"          },
         { title: "Modelo",         data: "Modelo"         },
@@ -38,8 +39,13 @@
       
     });
 
-   
-      
+     //Enumerar las filas "index column"
+    table.on( 'order.dt search.dt', function () {
+      table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+          cell.innerHTML = i+1;
+         
+      } );
+  } ).draw();
     
 
 
@@ -219,20 +225,24 @@ function agregarLLanta() {
 
 
             function formatRepo (repo) {
-                if (repo.loading) {
-                    return repo.text;
-                  }
+                
+              if (repo.loading) {
+                return repo.text;
+              }
               
                 var $container = $(
-                  "<div class='select2-result-repository clearfix'>" +
+                    "<div class='select2-result-repository clearfix'>" +
+                    "<div class='select2-contenedor-principal'>" +
                     "<div class='select2-result-repository__avatar'><img style='width: 50px; border-radius: 6px' src='./src/img/logos/" + repo.marca + ".jpg' /></div>" +
-                   
+                      "<div class='select2-contenedor'>" +
                       "<div class='select2_modelo'></div>" +
                       "<div class='select2_description'></div>" +
                       "<div class='select2_statistics'>" +
                       "<div class='select2_marca'><i class='fa fa-star'></i> </div>" +
                         "<div class='select2_costo'><i class='fa fa-dollar-sign'></i> </div>" +
                         "<div class='select2_precio_venta'><i class='fa fa-tag'></i> </div>" +
+                      "</div>" +
+                      "</div>" +
                       "</div>" +
                     "</div>" +
                   "</div>"
@@ -248,7 +258,7 @@ function agregarLLanta() {
               }
 
               function formatRepoSelection (repo) {
-                return repo.Descripcion || repo.text;
+                return repo.descripcion || repo.text;
               }
         });
     } ,
@@ -259,7 +269,4 @@ function agregarLLanta() {
 }
 
 
-$(document).ready(function() {
-    $('#ejemplo').select2();
-});
 

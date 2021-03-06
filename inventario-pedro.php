@@ -478,11 +478,6 @@
                                         </span>
                                         <span class="text">Borrar todas las llantas</span>
                                     </a>
-
-                                    <select name="ejemplo" id="ejemplo">
-                                        <option value="1">Uno</option>
-                                        <option value="2">Dos</option>
-                                    </select>
                       </div>
                       <table id="inventario" class="table table-striped table-bordered table-hover">                   
                      </table>
