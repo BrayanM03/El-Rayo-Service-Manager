@@ -1,4 +1,4 @@
-$(document).ready(function() {
+
   
     table = $('#inventario').DataTable({
       
@@ -13,10 +13,10 @@ $(document).ready(function() {
         { title: "Descripcion",    data: "Descripcion"    },
         { title: "Marca",          data: "Marca"          },
         { title: "Modelo",         data: "Modelo"         },
-        { title: "Costo", data: "precio_Inicial" },
-        { title: "Precio",   data: "precio_Venta"   },
+        { title: "Costo",          data: "precio_Inicial" },
+        { title: "Precio",         data: "precio_Venta"   },
         { title: "Precio Mayoreo", data: "precio_Mayoreo" },
-        { title: "Sucursal",       data: "Sucursal" },
+        { title: "Sucursal",       data: "Sucursal"       },
         { title: "Stock",          data: "Stock"          },
         { title: "Imagen",         data: "Marca", render: function(data,type,row) {
           return '<img src="./src/img/logos/'+ data +'.jpg" style="width: 60px; border-radius: 8px">';
@@ -38,9 +38,10 @@ $(document).ready(function() {
       
     });
 
+   
+      
     
 
-});
 
 /**/
 
@@ -61,8 +62,7 @@ function agregarLLanta() {
        '<div class="form-group">'+
        '<label><b>Buscar llanta:</b></label></br>'+
        '<select class="form-control" id="busquedaLlantas" value="" name="cate-input-modal">'+
-       '<option value="Abierto">Abierto</option>'+
-        '<option value="Cerrado">Cerrado</option>'+
+      
        '</select>'+
           '</div>'+
           '</div>'+
@@ -101,6 +101,7 @@ function agregarLLanta() {
         '<select class="form-control" id="select-status" value="" name="status-new-orden">'+
         '<option value="Abierto">Abierto</option>'+
         '<option value="Cerrado">Cerrado</option>'+
+       
         '</select>'+
     '</div>'+
         '</div>'+
@@ -169,9 +170,96 @@ function agregarLLanta() {
     showConfirmButton: true,
     confirmButtonText: 'Actualizar', 
     cancelButtonColor:'#ff764d',
+    didOpen: function () {
+        $(document).ready(function() {
+            $('#busquedaLlantas').select2({
+                placeholder: "Selecciona una llanta",
+                theme: "bootstrap",
+                minimumInputLength: 1,
+                ajax: {
+                    url: "./modelo/traer_stock_llantas_totales.php",
+                    type: "post",
+                    dataType: 'json',
+                    delay: 250,
+
+                    data: function (params) {
+                     return {
+                       searchTerm: params.term // search term
+                       
+                     };
+                    },
+                    processResults: function (data) {
+                        return {
+                           results: data
+                        };
+                      },
+                   
+                    cache: true
+
+                },
+                language:  {
+
+                    inputTooShort: function () {
+                        return "Busca la llanta...";
+                      },
+                      
+                    noResults: function() {
+                
+                      return "Sin resultados";        
+                    },
+                    searching: function() {
+                
+                      return "Buscando..";
+                    }
+                  },
+
+                  templateResult: formatRepo,
+                  templateSelection: formatRepoSelection
+            });
+
+
+            function formatRepo (repo) {
+                if (repo.loading) {
+                    return repo.text;
+                  }
+              
+                var $container = $(
+                  "<div class='select2-result-repository clearfix'>" +
+                    "<div class='select2-result-repository__avatar'><img style='width: 50px; border-radius: 6px' src='./src/img/logos/" + repo.marca + ".jpg' /></div>" +
+                   
+                      "<div class='select2_modelo'></div>" +
+                      "<div class='select2_description'></div>" +
+                      "<div class='select2_statistics'>" +
+                      "<div class='select2_marca'><i class='fa fa-star'></i> </div>" +
+                        "<div class='select2_costo'><i class='fa fa-dollar-sign'></i> </div>" +
+                        "<div class='select2_precio_venta'><i class='fa fa-tag'></i> </div>" +
+                      "</div>" +
+                    "</div>" +
+                  "</div>"
+                );
+              
+                $container.find(".select2_modelo").text(repo.modelo);
+                $container.find(".select2_description").text(repo.descripcion);
+                $container.find(".select2_marca").append(repo.marca);
+                $container.find(".select2_precio_venta").append(repo.precio);
+                $container.find(".select2_costo").append(repo.costo);
+              
+                return $container;
+              }
+
+              function formatRepoSelection (repo) {
+                return repo.Descripcion || repo.text;
+              }
+        });
+    } ,
+
+    
   });
   
-
-  
 }
+
+
+$(document).ready(function() {
+    $('#ejemplo').select2();
+});
 

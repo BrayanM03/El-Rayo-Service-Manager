@@ -36,13 +36,14 @@
                                                                 WHERE l.Ancho LIKE '%$ancho%'  
                                                                 OR l.Proporcion LIKE '%$ancho%'  
                                                                 OR l.Diametro LIKE '%$ancho%'
-                                                                OR l.modelo LIKE '%$ancho%'  
+                                                                OR l.Modelo LIKE '%$ancho%'  
                                                                 OR l.Marca LIKE '%$ancho%' 
                                                                 OR Descripcion LIKE '%$ancho%'";
         $result = mysqli_query($con, $sqlTraerLlanta);
         while ($datas=mysqli_fetch_array($result)){
            
-            $arrayAnchos[] = $datas;
+           $arrayAnchos[] = $datas;
+          
         }
 
         echo json_encode($arrayAnchos, JSON_UNESCAPED_UNICODE);
