@@ -479,7 +479,7 @@
                                         <span class="text">Borrar todas las llantas</span>
                                     </a>
                       </div>
-                      <table id="inventario" class="table table-striped table-bordered table-hover">                   
+                      <table id="inventario-pedro" class="table table-striped table-bordered table-hover">                   
                      </table>
 
                      

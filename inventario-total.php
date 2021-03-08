@@ -35,6 +35,8 @@
     <link rel="stylesheet" href="src/vendor/datatables/dataTables.bootstrap4.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.css" integrity="sha512-oe8OpYjBaDWPt2VmSFR+qYOdnTjeV9QPLJUeqZyprDEQvQLJ9C5PCFclxwNuvb/GQgQngdCXzKSFltuHD3eCxA==" crossorigin="anonymous" />
     
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="src/vendor/bower_components/select2-bootstrap-theme/dist/select2-bootstrap.css">
 
     <!---Librerias de estilos-->
    
@@ -457,8 +459,8 @@
 
                      <!-- Contenido inventario -->
                      <div class="titulo-inventario">
-                         <h5 style="margin: 10px 0px;">Stock de llantas en existencia</h5>
-                         <p style="color: gray;">Sucursal Pedro Cardenas</p>
+                         <h5 style="margin: 10px 0px;">Stock total de llantas en existencia</h5>
+                         <p style="color: gray;">Inventario completo</p>
                         </div>
                         
                       <div class="botones">
@@ -552,7 +554,9 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="src/vendor/datatables/defaults.js"></script>
     <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-    <script src="src/js/inventario.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    
+    <script src="src/js/inventario-total.js"></script>
    
    
 </body>

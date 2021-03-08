@@ -1,6 +1,6 @@
 
   
-    table = $('#inventario').DataTable({
+    table = $('#inventario-pedro').DataTable({
       
       
         ajax: {

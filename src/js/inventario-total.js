@@ -5,19 +5,18 @@ $(document).ready(function() {
       
         ajax: {
             method: "POST",
-            url: "./modelo/traerInventario.php"
+            url: "./modelo/traer_inv_total.php"
         },  
   
       columns: [   
+        { title: "#",         data: null             },
         { title: "Codigo",         data: "id"             },
         { title: "Descripcion",    data: "Descripcion"    },
         { title: "Marca",          data: "Marca"          },
         { title: "Modelo",         data: "Modelo"         },
-        { title: "Costo", data: "precio_Inicial" },
-        { title: "Precio",   data: "precio_Venta"   },
+        { title: "Costo",          data: "precio_Inicial" },
+        { title: "Precio",         data: "precio_Venta"   },
         { title: "Precio Mayoreo", data: "precio_Mayoreo" },
-        { title: "Sucursal",       data: "Sucursal" },
-        { title: "Stock",          data: "Stock"          },
         { title: "Imagen",         data: "Marca", render: function(data,type,row) {
           return '<img src="./src/img/logos/'+ data +'.jpg" style="width: 60px; border-radius: 8px">';
           }},
@@ -38,7 +37,15 @@ $(document).ready(function() {
       
     });
 
-    
+     //Enumerar las filas "index column"
+     table.on( 'order.dt search.dt', function () {
+        table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+            cell.innerHTML = i+1;
+                   
+      } );
+    } ).draw();
+
+      
 
 });
 
@@ -57,8 +64,8 @@ function agregarLLanta() {
        '</div>'+
        '<div class="col-8">'+
        '<div class="form-group">'+
-       '<label><b>Clave SAT:</b></label></br>'+
-       '<input class="form-control " value="" name="cate-input-modal" readonly>'+
+       '<label><b>Marca:</b></label></br>'+
+       '<select class="form-control " id="marca" value="" name="marca"></select>'+
           '</div>'+
           '</div>'+
        '</div>'+
@@ -66,8 +73,8 @@ function agregarLLanta() {
     '<div class="row">'+
         '<div class="col-4">'+
         '<div class="form-group">'+
-        '<label for="exampleInputEmail1"><b>Ancho:</b></label></br>'+
-        '<input type="number" class="form-control" id="cr-input-modal" value="" name="cr-input-nuevaOrden" aria-describedby="emailHelp" placeholder="Ancho" autocomplete="off">'+
+        '<label for="ancho"><b>Ancho:</b></label></br>'+
+        '<input type="number" class="form-control" id="ancho" value="" name="ancho" placeholder="Ancho" autocomplete="off">'+
 
 
    ' </div>'+
@@ -77,7 +84,7 @@ function agregarLLanta() {
    '<div class="col-4">'+
     '<div class="form-group">'+
     '<label><b>Alto:</b></label></br>'+
-    '<input type="number" value="" name="date-nuevaOrden" class="form-control" placeholder="Proporcion">'+
+    '<input type="number" value="" name="alto" id="alto" class="form-control" placeholder="Proporcion">'+
     '</div>'+
     '</div>'+
 
@@ -85,25 +92,16 @@ function agregarLLanta() {
         '<div class="col-4">'+
         '<div class="form-group">'+
         '<label><b>Rin</b></label>'+
-        '<input type="text" class="tienda-span-modal-mto form-control" value=""  id="tienda-cliente" name="tienda-span-modal-mto" placeholder="Diametro">'+
+        '<input type="text" class="form-control" value=""  id="rin" name="rin" placeholder="Diametro">'+
     '</div>'+
         '</div>'+
 
        
-        '<div class="col-6">'+
-        '<div class="form-group">'+
-        '<label><b>Marca</b></label>'+
-        '<select class="form-control" id="select-status" value="" name="status-new-orden">'+
-        '<option value="Abierto">Abierto</option>'+
-        '<option value="Cerrado">Cerrado</option>'+
-        '</select>'+
-    '</div>'+
-        '</div>'+
 
         '<div class="col-6">'+
         '<div class="form-group">'+
         '<label><b>Modelo</b></label>'+
-        '<input type="text" class="form-control" value=""  id="usuario-editar" name="usuario-editar" placeholder="Modelo">'+
+        '<input type="text" class="form-control" value=""  id="modelo" name="modelo" placeholder="Modelo">'+
         '</div>'+
         '</div>'+
        
@@ -115,19 +113,19 @@ function agregarLLanta() {
         '<div class="col-4">'+
             '<div class="form-group">'+
                 '<label><b>Costo</b></label>'+
-                '<input type="number" class="form-control" value=""name="folio-nueva-orden" placeholder="0.00">'+
+                '<input type="number" class="form-control" id="costo" value=""name="costo" placeholder="0.00">'+
             '</div>'+
         '</div>'+
         '<div class="col-4">'+
         '<div class="form-group">'+
         '<label><b>Precio</b></label>'+
-        '<input type="number" class="form-control" value=""name="folio-nueva-orden" placeholder="0.00">'+
+        '<input type="number" class="form-control" value="" name="precio" id="precio" placeholder="0.00">'+
     '</div>'+
 '</div>'+
 '<div class="col-4">'+
         '<div class="form-group">'+
         '<label><b>Mayorista</b></label>'+
-        '<input type="number" class="form-control" value=""name="folio-nueva-orden" placeholder="0.00">'+
+        '<input type="number" class="form-control" value="" name="mayorista" di="mayorista" placeholder="0.00">'+
     '</div>'+
 '</div>'+
         '</div>'+
@@ -136,14 +134,14 @@ function agregarLLanta() {
     '<div class="col-6">'+
         '<div class="form-group">'+
             '<label><b>Fecha</b></label>'+
-            '<input type="date" class="form-control" value=""name="subcat-editar-orden" >'+
+            '<input type="date" class="form-control" value="" name="fecha" id="fecha" >'+
         '</div>'+
     '</div>'+
     
     '<div class="col-6">'+
         '<div class="form-group">'+
             '<label><b>Cantidad</b></label>'+
-            '<input type="text" class="form-control" value=""name="mes-editar-orden" placeholder="0">'+
+            '<input type="number" class="form-control" value=""name="cantidad" id="cantidad" placeholder="0">'+
         '</div>'+
     '</div>'+
     '</div>'+
@@ -152,7 +150,7 @@ function agregarLLanta() {
     '<div class="col-12">'+
     '<div class="form-group" id="area-solucion">'+
     '<label><b>Descripción</b></label>'+
-    '<textarea class="form-control" name="swal-solucion" style="height:100px" id="textarea-swal-solucion" form="formulario-editar-registro" placeholder="Escriba la descripcion del producto"></textarea>'+
+    '<textarea class="form-control" style="height:100px" name="descripcion" id="descripcion" form="formulario-editar-registro" placeholder="Escriba la descripcion del producto"></textarea>'+
     '</div>'+
     '</div>'+
     '</div>'+
@@ -164,6 +162,121 @@ function agregarLLanta() {
     showConfirmButton: true,
     confirmButtonText: 'Actualizar', 
     cancelButtonColor:'#ff764d',
-  });
+    didOpen: function () {
+        $(document).ready(function() {
+
+              
+            
+
+            $('#marca').select2({
+                placeholder: "Selecciona una marca",
+                theme: "bootstrap",
+                minimumInputLength: 1,
+                ajax: {
+                    url: "./modelo/traer-marca.php",
+                    type: "post",
+                    dataType: 'json',
+                    delay: 250,
+
+                    data: function (params) {
+                     return {
+                       searchTerm: params.term // search term
+                       
+                     };
+                    },
+                    processResults: function (data) {
+                        return {
+                           results: data
+                        };
+                      },
+                   
+                    cache: true
+
+                },
+                language:  {
+
+                    inputTooShort: function () {
+                        return "Busca la llanta...";
+                      },
+                      
+                    noResults: function() {
+                
+                      return "Sin resultados";        
+                    },
+                    searching: function() {
+                
+                      return "Buscando..";
+                    }
+                  },
+
+                  templateResult: formatRepo,
+                  templateSelection: formatRepoSelection
+            });
+
+
+            function formatRepo (repo) {
+                
+              if (repo.loading) {
+                return repo.text;
+              }
+              
+                var $container = $(
+                    "<div class='select2-result-repository clearfix'>" +
+                    "<div class='select2-contenedor-principal'>" +
+                    "<div class='select2-result-repository__avatar'><img style='width: 50px; border-radius: 6px' src='./src/img/logos/" + repo.imagen + ".jpg' /></div>" +
+                      "<div class='select2-contenedor'>" +
+                      "<div class='select2_marca' marca='"+ repo.imagen +"'></div>" +
+                      "</div>" +
+                      "</div>" +
+                      "</div>" 
+                );
+              
+                $container.find(".select2_marca").text(repo.nombre);
+
+               
+              
+                return $container;
+              }
+
+              function formatRepoSelection (repo) {
+                return repo.nombre || repo.text;
+              }
+
+
+        });
+    } ,
+  }).then(function () {  
+      Llata = $("#select2-marca-container").text();  
+      alert(Llata);
+   /* $.ajax({
+        type: "POST",
+        url: "agregar-llanta-inv-total.php",
+        data: { 'CustomerKey': CustomerKey},
+        cache: false,
+        success: function(response) {
+            Swal.fire(
+            "¡Correcto!",
+            "La llanta fue agregada.",
+            "success"
+            )
+        },
+        failure: function (response) {
+            Swal.fire(
+            "Error",
+            "La llanta no fue agregada.", // had a missing comma
+            "error"
+            )
+        }
+    });
+}, 
+function (dismiss) {
+  if (dismiss === "cancel") {
+    swal.fire(
+      "Cancelled",
+        "Se cancelo la operacion",
+      "error"
+    )
+  };*/
+})
 
 }

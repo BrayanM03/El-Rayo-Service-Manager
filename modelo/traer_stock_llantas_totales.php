@@ -54,28 +54,6 @@
         
         $data[] = array("id" => 0, "Descripcion"=>"Sin resultados");
     }   
-
-
-
-       /* $sqlTraerLlantas->bind_param('iisss', $parametro, $parametro, $parametro, $parametro, $parametro);
-        $data = array();
-        if ($sqlTraerLlantas->execute()) {
-            $resultado = $sqlTraerLlantas->get_result();
-            if ($resultado->num_rows > 0) {
-                while($fila= $resultado->fetch_assoc()){
-                    $id = $fila["id"];
-                    $descripcion = $fila["Descripcion"];
-                    $data = array("id" => $id, "text"=>$descripcion);
-                }
-                $sqlTraerLlantas->close();
-            }else{
-                $data = array("id" => 0, "text"=>"Sin resultados");
-            }
-
-            echo json_encode($arrayInven, JSON_UNESCAPED_UNICODE);
-
-        }*/
-
     
 
    
