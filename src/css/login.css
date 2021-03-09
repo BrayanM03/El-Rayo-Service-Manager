@@ -1,0 +1,58 @@
+
+body{
+    height: 100vh;
+    font-size:14px;
+    background-image: url(../img/bg-login.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    backdrop-filter: blur(10px);   
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+}
+.simple-login-container{
+    width:350px;
+    max-width:100%;
+    margin: auto;
+    background-color: azure;
+    border-radius: 15px;
+    height: 450px;
+    opacity: .8;
+    
+}
+
+.simple-login-container h2 img{
+    
+    width: 180px;
+}
+
+.formulario{
+display: flex;    
+flex-direction: column;
+justify-content: center;
+height: 100%;
+margin: 0px 50px;
+
+
+}
+
+.formulario label{
+    color: gray;
+}
+
+.simple-login-container h2{
+    text-align:center;
+    font-size:20px;
+}
+
+.simple-login-container .btn-login{
+    background-color:#36b9cc;
+    color:#fff;
+    margin-top: 40px;
+}
+a{
+    color:#fff;
+}
+
