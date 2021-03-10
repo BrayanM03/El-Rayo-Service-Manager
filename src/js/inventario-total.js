@@ -53,7 +53,7 @@ function agregarLLanta() {
 
   Swal.fire({
     title: "Agregar llanta nueva",
-    html: '<form class="mt-4" id="formulario-editar-registro">'+
+    html: '<form class="mt-4" id="agregar-llanta-inv-total">'+
 
     '<div class="row">'+
     '<div class="col-4">'+
@@ -101,7 +101,7 @@ function agregarLLanta() {
         '<div class="col-6">'+
         '<div class="form-group">'+
         '<label><b>Modelo</b></label>'+
-        '<input type="text" class="form-control" value=""  id="modelo" name="modelo" placeholder="Modelo">'+
+        '<input type="text" class="form-control" id="modelo" name="modelo" placeholder="Modelo">'+
         '</div>'+
         '</div>'+
        
@@ -163,9 +163,8 @@ function agregarLLanta() {
     confirmButtonText: 'Actualizar', 
     cancelButtonColor:'#ff764d',
     didOpen: function () {
-        $(document).ready(function() {
-
-              
+     
+        $(document).ready(function() { 
             
 
             $('#marca').select2({
@@ -233,32 +232,40 @@ function agregarLLanta() {
               
                 $container.find(".select2_marca").text(repo.nombre);
 
-               
+                
               
                 return $container;
               }
 
+             
+
               function formatRepoSelection (repo) {
-                return repo.nombre || repo.text;
+                return repo.imagen || repo.text;
               }
 
 
         });
     } ,
   }).then(function () {  
-      Llata = $("#select2-marca-container").text();  
-      alert(Llata);
-   /* $.ajax({
+      marcaLLanta = $("#select2-marca-container").text();  
+      
+      datos = $("#agregar-llanta-inv-total").serialize();
+      model = $("#modelo").val();
+     
+    $.ajax({
         type: "POST",
-        url: "agregar-llanta-inv-total.php",
-        data: { 'CustomerKey': CustomerKey},
+        url: "./modelo/agregar-llanta-inv-total.php",
+        data: { 'marca': marcaLLanta, 'modelo': datos},
         cache: false,
         success: function(response) {
             Swal.fire(
             "¡Correcto!",
-            "La llanta fue agregada.",
+            "El servidor respondio " + response,
+
             "success"
             )
+
+            console.log(response);
         },
         failure: function (response) {
             Swal.fire(
@@ -276,7 +283,9 @@ function (dismiss) {
         "Se cancelo la operacion",
       "error"
     )
-  };*/
+  };
 })
+
+
 
 }
