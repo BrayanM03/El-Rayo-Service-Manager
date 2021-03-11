@@ -65,3 +65,11 @@ table.dataTable thead {
     display: flex;
 
   }
+
+  .datoVacio{
+    border: 1px solid red;
+  }
+
+  #ancho{
+    
+  }
