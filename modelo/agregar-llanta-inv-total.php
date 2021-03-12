@@ -9,13 +9,13 @@
 
     if (isset($_POST)) {
       $respuesta =  $_POST["mayorista"];
-      
+      $nulo = null;
 
 
-      $query = "INSERT INTO llantas (Ancho, Proporcion, Diametro, Descripcion, Marca, Modelo, precio_Inicial, precio_Venta, precio_Mayoreo, Fecha) VALUES (?,?,?,?,?,?,?,?,?,?)";
+      $query = "INSERT INTO llantas (Ancho, Proporcion, Diametro, Descripcion, Marca, Modelo, precio_Inicial, precio_Venta, precio_Mayoreo, Fecha, id_Sucursal) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
       $resultado = $con->prepare($query);
       $resultado->bind_param(
-          'iissssiiis',
+          'iissssiiisi',
           $_POST['ancho'],
           $_POST['alto'],
           $_POST['rin'],
@@ -26,11 +26,19 @@
           $_POST['precio'],
           $_POST['mayorista'],
           $_POST['fecha'],
+          $nulo
 
       );
 
       $resultado->execute();
-      print_r(1);
+
+      if ($resultado->error) {
+          
+          print_r("error" . $resultado->error);
+      }else{
+        print_r(1);
+       
+      }
         
     }else{
         print_r("Error al conectar");

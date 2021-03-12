@@ -9,7 +9,7 @@ $(document).ready(function() {
         },  
   
       columns: [   
-        { title: "#",         data: null             },
+        { title: "#",              data: null             },
         { title: "Codigo",         data: "id"             },
         { title: "Descripcion",    data: "Descripcion"    },
         { title: "Marca",          data: "Marca"          },
@@ -37,6 +37,8 @@ $(document).ready(function() {
     
       
     });
+
+    $("table.dataTable thead").addClass("table-success")
 
      //Enumerar las filas "index column"
      table.on( 'order.dt search.dt', function () {
@@ -392,6 +394,7 @@ function agregarLLanta() {
             "success"
             )
             console.log(response);
+
         }else{
           Swal.fire(
             "¡Erro!",
@@ -399,6 +402,7 @@ function agregarLLanta() {
             "error"
             )
             console.log(response);
+            table.draw(false);
         }
           
 
