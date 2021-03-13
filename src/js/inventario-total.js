@@ -1,26 +1,55 @@
 $(document).ready(function() {
+
+  //Trabajar con Selects
+
+  $(document).on('change', '#select-sucursal', function(event) {
+    sucu = $("#select-sucursal option:selected").text();
+    console.log(sucu);
+});
   
     table = $('#inventario').DataTable({
       
       
         ajax: {
             method: "POST",
-            url: "./modelo/traer_inv_total.php"
+            url: "./modelo/traer_inv_total.php",
+            dataType: "json"
         },  
   
       columns: [   
         { title: "#",              data: null             },
-        { title: "Codigo",         data: "id"             },
-        { title: "Descripcion",    data: "Descripcion"    },
-        { title: "Marca",          data: "Marca"          },
-        { title: "Modelo",         data: "Modelo"         },
-        { title: "Costo",          data: "precio_Inicial" },
-        { title: "Precio",         data: "precio_Venta"   },
-        { title: "Precio Mayoreo", data: "precio_Mayoreo" },
-        { title: "Fecha",          data: "Fecha"          },
-        { title: "Imagen",         data: "Marca", render: function(data,type,row) {
+        //{ title: "Codigo",         data: "id"             },
+        { title: "Descripcion",    data: "descripcion"    },
+        { title: "Marca",          data: "marca"          },
+        { title: "Modelo",         data: "modelo"         },
+        { title: "Costo",          data: "costo"          },
+        { title: "Precio",         data: "precio"         },
+        { title: "Precio Mayoreo", data: "mayoreo"        },
+        {title: "Sucursal",
+          data: null,
+          className: "celda-select",
+          render: function () {
+
+            return '<select id="select-sucursal" class="form-control">'+
+            '<option value="total">Total</option> '+
+            '<option value="pedro">Pedro Cardenas</option> '+
+            '<option value="sendero">Sendero</option> '+
+            '</select>';
+          },
+        },
+        {title: "Stock",
+          data: null,
+          className: "celda-stock",
+          render: function () {     
+
+            return "2";
+          },
+        },
+        //{ title: "Stock",          data: "stock"          },
+        { title: "Fecha",          data: "fecha"          },
+        { title: "Imagen",         data: "marca", render: function(data,type,row) {
           return '<img src="./src/img/logos/'+ data +'.jpg" style="width: 60px; border-radius: 8px">';
-          }},
+          }}, 
         {
           data: null,
           className: "celda-acciones",

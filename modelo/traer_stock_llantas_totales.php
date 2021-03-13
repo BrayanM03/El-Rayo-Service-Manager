@@ -18,7 +18,7 @@
 
                                                                                  
        
-       $sqlContarLlantas->bind_param('sss', $parametro, $parametro, $parametro);
+       $sqlContarLlantas->bind_param('sss', $parametro, $parametro, $parametro); 
        $sqlContarLlantas->execute();
        $sqlContarLlantas->bind_result($total);
        $sqlContarLlantas->fetch();
