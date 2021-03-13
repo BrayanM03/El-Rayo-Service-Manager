@@ -3,6 +3,8 @@ $(document).ready(function() {
   //Trabajar con Selects
 
   $(document).on('change', '#select-sucursal', function(event) {
+    array = [];
+    $("#select-sucursal").each()
     sucu = $("#select-sucursal option:selected").text();
     console.log(sucu);
 });
