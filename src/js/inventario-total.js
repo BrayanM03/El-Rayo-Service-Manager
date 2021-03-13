@@ -1,10 +1,22 @@
 $(document).ready(function() {
 
   //Trabajar con Selects
+ 
+  $(document).on('change', '.select-sucursal', function(event) {
+    valor=[];
 
-  $(document).on('change', '#select-sucursal', function(event) {
-    sucu = $("#select-sucursal option:selected").text();
-    console.log(sucu);
+    $('.select-sucursal').find("option:selected").each(function () {
+       
+        iteracion = $(this).text()
+        valor.push(iteracion);
+        
+
+      });
+      console.log(valor);
+     
+
+    /*sucu = $("#select-sucursal option:selected").text();
+    console.log(sucu);*/
 });
   
     table = $('#inventario').DataTable({
@@ -30,7 +42,7 @@ $(document).ready(function() {
           className: "celda-select",
           render: function () {
 
-            return '<select id="select-sucursal" class="form-control">'+
+            return '<select class="select-sucursal form-control">'+
             '<option value="total">Total</option> '+
             '<option value="pedro">Pedro Cardenas</option> '+
             '<option value="sendero">Sendero</option> '+
