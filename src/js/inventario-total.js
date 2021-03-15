@@ -5,6 +5,7 @@ $(document).ready(function() {
   $(document).on('change', '.select-sucursal', function(event) {
     valor=[];
 
+<<<<<<< HEAD
     $('.select-sucursal').find("option:selected").each(function () {
        
         iteracion = $(this).text()
@@ -17,6 +18,13 @@ $(document).ready(function() {
 
     /*sucu = $("#select-sucursal option:selected").text();
     console.log(sucu);*/
+=======
+  $(document).on('change', '#select-sucursal', function(event) {
+    array = [];
+    $("#select-sucursal").each()
+    sucu = $("#select-sucursal option:selected").text();
+    console.log(sucu);
+>>>>>>> 28076e9c5b09da21278c04acfcaefa5c48cb1e01
 });
   
     table = $('#inventario').DataTable({
