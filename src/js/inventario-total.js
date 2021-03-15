@@ -5,7 +5,6 @@ $(document).ready(function() {
   $(document).on('change', '.select-sucursal', function(event) {
     valor=[];
 
-
     $('.select-sucursal').find("option:selected").each(function () {
        
         iteracion = $(this).text()
@@ -14,7 +13,8 @@ $(document).ready(function() {
 
       });
       console.log(valor);
-     
+      
+    });
 
     /*sucu = $("#select-sucursal option:selected").text();
     console.log(sucu);*/
