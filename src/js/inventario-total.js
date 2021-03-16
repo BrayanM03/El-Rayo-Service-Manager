@@ -1,20 +1,23 @@
 $(document).ready(function() {
 
-  //Trabajar con Selects
+  /*Trabajar con Selects
  
   $(document).on('change', '.select-sucursal', function(event) {
     valor=[];
 
+   
+
     $('.select-sucursal').find("option:selected").each(function () {
+
        
         iteracion = $(this).text()
         valor.push(iteracion);
         
 
       });
-      console.log(valor);
+     // console.log(codigo +" - " + suc );
       
-    });
+    });*/
 
     /*sucu = $("#select-sucursal option:selected").text();
     console.log(sucu);*/
@@ -41,9 +44,9 @@ $(document).ready(function() {
         {title: "Sucursal",
           data: null,
           className: "celda-select",
-          render: function () {
-
-            return '<select class="select-sucursal form-control">'+
+          render: function (row, meta) {
+            //console.log(meta.index)
+            return '<select class="select-sucursal form-control" id="select'+ row.id +'" codigo="'+ row.id +'">'+
             '<option value="total">Total</option> '+
             '<option value="pedro">Pedro Cardenas</option> '+
             '<option value="sendero">Sendero</option> '+
@@ -53,14 +56,46 @@ $(document).ready(function() {
         {title: "Stock",
           data: null,
           className: "celda-stock",
-          render: function () {     
+          render: function (row) {  
+            $(document).on('change', '#select'+row.id, function(event, valorcillo) {
+            
+              
 
-            return "2";
+            codigo = $(this).attr("codigo");
+            suc = $(this).find("option:selected").attr("value");
+            //console.log(codigo +" - " + suc );
+
+                        $.ajax({
+                          type: "post",
+                          url: "./modelo/traer-stock-por-suc.php",
+                          data: {"codigo" : codigo, "sucursal" : suc},
+                          dataType: "json",
+                          success: function (response) {
+                            comprobacion = response.isArray;
+                            if(response != 0){
+                              console.log(comprobacion);
+                              $('#select'+row.id).attr("respuesta", response);
+                              valorcillo = $('#select'+row.id).attr("respuesta");  
+                              valor = $('#select'+row.id).parent().next().text(response.stock); 
+                            }
+                            
+                             
+                             
+                          },
+                         
+                        });
+                       
+
+                      
+            });
+           
+            return "0";
           },
         },
         //{ title: "Stock",          data: "stock"          },
         { title: "Fecha",          data: "fecha"          },
         { title: "Imagen",         data: "marca", render: function(data,type,row) {
+          
           return '<img src="./src/img/logos/'+ data +'.jpg" style="width: 60px; border-radius: 8px">';
           }}, 
         {
