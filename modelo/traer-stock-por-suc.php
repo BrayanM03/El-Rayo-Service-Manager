@@ -58,87 +58,37 @@
         }   
     
         }else if($_POST["sucursal"] == "total"){
-            
-            $query_mostrar = $con->prepare("SELECT COUNT(*) total FROM llantas l");
 
-            //-----------------------------------------------------------------------------------------------------//
-            //-----------------------------------------------------------------------------------------------------/
-            $query_mostrar->execute();
-            $query_mostrar->bind_result($total);
-            $query_mostrar->fetch();
-            $query_mostrar->close();
-       
-       
-            if ($total > 0) { 
-               
-               $sqlTraerLlanta="SELECT l.* FROM llantas l";
-               $resultado = mysqli_query($con, $sqlTraerLlanta);
-              
-               while($fila= $resultado->fetch_assoc()){
-       
-                   $id = $fila["id"];
-       
-                   //print_r("El ID de la llanta es ".$id ." - ");
-                  
-                  
-                    if ($result = mysqli_query($con,"SELECT Stock FROM inventario_mat1 WHERE id_Llanta = $id")) {
-       
-                       $row_cnt = mysqli_num_rows($result);
-                       //echo "Para la llanta " . $id . " se encontraron " .$row_cnt . "filas<br>";
-                       // Free result set
-                       mysqli_free_result($result);
-       
-                       if($row_cnt == 0){
-                           $pedro = 0;
-                       }else{
-                           $sqlContarLlantas= $con->prepare("SELECT Stock FROM inventario_mat1 WHERE id_Llanta = $id");
-                           $sqlContarLlantas->execute();
-                           $sqlContarLlantas->bind_result($pedro);
-                           $sqlContarLlantas->fetch();
-                           $sqlContarLlantas->close();
-                       }
-                     }
-       
-                     if ($result2 = mysqli_query($con,"SELECT Stock FROM inventario_mat2 WHERE id_Llanta = $id")) {
-       
-                       $row_cnt2 = mysqli_num_rows($result2);
-                       //echo "Para la llanta " . $id . " se encontraron " .$row_cnt . "filas<br>";
-                       // Free result set
-                       mysqli_free_result($result2);
-       
-                       if($row_cnt2 == 0){
-                           $sendero = 0;
-                       }else{
-                           $sqlContarLlantas2= $con->prepare("SELECT Stock FROM inventario_mat2 WHERE id_Llanta = $id");
-                           $sqlContarLlantas2->execute();
-                           $sqlContarLlantas2->bind_result($sendero);
-                           $sqlContarLlantas2->fetch();
-                           $sqlContarLlantas2->close();
-                       }
-                     }
-       
-       
-                
-                   //print_r(" la llanta ID " . $id . " tiene de stock ". $TotalStock);
-       
-                   $TotalStock = $pedro + $sendero;
-       
-                   
-       
-                   $data = array("stock"=>$TotalStock);
-                      
-                   
-                   
-                    //print_r(" la segunda iteracion de la llanta ID " . $id . " tiene de stock ". $TotalStock);
-               }
-       
-               echo json_encode($data, JSON_UNESCAPED_UNICODE);
-              
+            $codigo = $_POST["codigo"];
+            
+            $traerStockPedro = $con->prepare("SELECT Stock FROM inventario_mat1 WHERE id_Llanta = ?");
+            $traerStockPedro->bind_param('i', $codigo);
+            $traerStockPedro->execute();
+            $traerStockPedro->bind_result($stockPedro);
+            $traerStockPedro->fetch();
+            $traerStockPedro->store_result();
+            $row_cnt = $traerStockPedro->num_rows();
            
-           }else{ 
-               
-               echo 'Ninguna llanta coincide con ese ancho';
-           } 
+
+            $traerStockPedro->close();
+
+            $traerStockSendero = $con->prepare("SELECT Stock FROM inventario_mat2 WHERE id_Llanta = ?");
+            $traerStockSendero->bind_param('i', $codigo);
+            $traerStockSendero->execute();
+            $traerStockSendero->bind_result($stockSendero);
+            $traerStockSendero->fetch();
+            $traerStockSendero->store_result();
+            $row_cnt2 = $traerStockSendero->num_rows();
+            
+            $traerStockSendero->close();
+
+            $totalStock = $stockPedro + $stockSendero;
+            $data = array("stock"=>$totalStock);
+
+            echo json_encode($data, JSON_UNESCAPED_UNICODE);
+
+
+
         }
 
         

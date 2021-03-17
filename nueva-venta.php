@@ -498,7 +498,7 @@
 
                                                         <label class="input-largo">
                                                             <span for="description">Descripción</span>
-                                                            <input type="text" id="description" name="description" class="input-group" required>
+                                                            <input type="text" id="description" name="description" class="input-group" disabled>
                                                         </label>
                                                 </div> 
                                                 
@@ -525,13 +525,13 @@
                                                         <input type="number" id="cantidad" name="cantidad" class="input-group" required>
                                                     </label>
                                         
-                                                    <label class="input-corto">
-                                                        <span for="precio">$ Precio</span>
-                                                        <input type="number" id="precio" name="precio" class="input-group">
+                                                    <label class="input-corto precio-pointer" onclick="generarToken();">
+                                                        <span for="precio" class="precio-pointer">$ Precio</span>
+                                                        <input type="number" id="precio" name="precio" class="input-group precio-pointer" disabled>
                                                     </label>
 
                                                     <label style="border-color: transparent;">
-                                                        <div class="btn btn-info" id="agregar-producto" onclick="agregarInfo()">Agregar</div>
+                                                        <div class="btn btn-info" id="agregar-producto" onclick="agregarInfo()" >Agregar</div>
                                                     </label>
 
                                                 </div>
@@ -663,7 +663,9 @@
     <script src="src/js/nueva-venta.js"></script>
     <script src="src/vendor/datatables/defaults.js"></script>
     <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="src/js/agregar-info-tabla-venta.js"></script>
+    <script src="src/js/generar-token.js"></script>
    
    
 </body>

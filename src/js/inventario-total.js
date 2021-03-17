@@ -1,26 +1,6 @@
 $(document).ready(function() {
 
-  /*Trabajar con Selects
- 
-  $(document).on('change', '.select-sucursal', function(event) {
-    valor=[];
 
-   
-
-    $('.select-sucursal').find("option:selected").each(function () {
-
-       
-        iteracion = $(this).text()
-        valor.push(iteracion);
-        
-
-      });
-     // console.log(codigo +" - " + suc );
-      
-    });*/
-
-    /*sucu = $("#select-sucursal option:selected").text();
-    console.log(sucu);*/
 
   
     table = $('#inventario').DataTable({
@@ -57,10 +37,8 @@ $(document).ready(function() {
           data: null,
           className: "celda-stock",
           render: function (row) {  
-            $(document).on('change', '#select'+row.id, function(event, valorcillo) {
+            $(document).on('change', '#select'+row.id, function(event) {
             
-              
-
             codigo = $(this).attr("codigo");
             suc = $(this).find("option:selected").attr("value");
             //console.log(codigo +" - " + suc );
@@ -71,25 +49,21 @@ $(document).ready(function() {
                           data: {"codigo" : codigo, "sucursal" : suc},
                           dataType: "json",
                           success: function (response) {
-                            comprobacion = response.isArray;
-                            if(response != 0){
-                              console.log(comprobacion);
+                          
+                             
                               $('#select'+row.id).attr("respuesta", response);
                               valorcillo = $('#select'+row.id).attr("respuesta");  
                               valor = $('#select'+row.id).parent().next().text(response.stock); 
-                            }
-                            
-                             
+                                            
                              
                           },
                          
                         });
-                       
-
-                      
+                              
             });
+
            
-            return "0";
+            return row.stock;
           },
         },
         //{ title: "Stock",          data: "stock"          },
@@ -184,6 +158,17 @@ function agregarLLanta() {
         '<input type="text" class="form-control" id="modelo" name="modelo" placeholder="Modelo">'+
         '</div>'+
         '</div>'+
+
+       
+    '<div class="col-6">'+
+        '<div class="form-group">'+
+            '<label><b>Fecha</b></label>'+
+            '<input type="date" class="form-control" value="" name="fecha" id="fecha" >'+
+        '</div>'+
+    '</div>'+
+    
+    
+   
        
 
 
@@ -209,21 +194,6 @@ function agregarLLanta() {
     '</div>'+
 '</div>'+
         '</div>'+
-    '</div>'+
-    '<div class="row">'+
-    '<div class="col-6">'+
-        '<div class="form-group">'+
-            '<label><b>Fecha</b></label>'+
-            '<input type="date" class="form-control" value="" name="fecha" id="fecha" >'+
-        '</div>'+
-    '</div>'+
-    
-    '<div class="col-6">'+
-        '<div class="form-group">'+
-            '<label><b>Cantidad</b></label>'+
-            '<input type="number" class="form-control" name="cantidad" id="cantidad" placeholder="0">'+
-        '</div>'+
-    '</div>'+
     '</div>'+
 
     '<div class="row  mt-1">'+

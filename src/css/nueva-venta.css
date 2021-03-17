@@ -116,7 +116,8 @@
 .contenedor-tabla{
     width: 800px;
     background-color: white;
-    border: 1px solid slateblue;
+    border: 5px solid rgb(16, 128, 233);
+    border-style: double;
     border-radius: 9px;
     padding: 10px;
     /*margin-bottom: 2vh;*/
@@ -206,6 +207,17 @@
     
 }
 
+.grupo-1 label .input-group-disabled{
+    display: block;
+    width: 100%;
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 16px;
+  
+    
+}
+
 .grupo-1 label .select-group{
     display: block;
     width: 100%;
@@ -258,5 +270,16 @@
     padding: 0px 5px;
 }
 
+.precio-pointer{
+cursor: pointer;
+}
+
+body.swal2-shown > [aria-hidden="true"] {
+    filter: blur(10px);
+  }
+  
+  body > * {
+    transition: 0.1s filter linear;
+  }
 
 

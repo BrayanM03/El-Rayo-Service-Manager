@@ -107,7 +107,8 @@ selects.forEach( select => {
                                        "<td>" + value.Modelo + "</td>" +
                                        "<td>$" + value.precio_Venta + "</td>" +
                                        "<td>$" + value.precio_Mayoreo + "</td>" +
-                                       "<td><img class='logo-marca' marca='"+ value.Marca + "' src='./src/img/logos/" + value.Marca + ".jpg'></td>" +
+                                       "<td class='cont-marca'><img class='logo-marca' marca='"+ value.Marca + "' src='./src/img/logos/" + value.Marca + ".jpg'>"+
+                                       "<span>"+ value.Marca+"<span></td>" +
                                        "<td>" + value.Sucursal + "</td>" +
                                        "<td>" + value.Stock + "</td></tr>");
 
@@ -158,6 +159,8 @@ selects.forEach( select => {
                             inAncho.focus().val("");
                             inAncho.blur();
                             $("#modelo").blur();
+                            $("#description").blur();
+                            $("#precio").blur();
                         });
                     }
    
@@ -223,7 +226,8 @@ selects.forEach( select => {
                                        "<td>" + value2.Modelo + "</td>" +
                                        "<td>$" + value2.precio_Venta + "</td>" +
                                        "<td>$" + value2.precio_Mayoreo + "</td>" +
-                                       "<td><img class='logo-marca' marca='"+ value2.Marca + "' src='./src/img/logos/" + value2.Marca + ".jpg'></td>" +
+                                       "<td><img class='logo-marca' marca='"+ value2.Marca + "' src='./src/img/logos/" + value2.Marca + ".jpg'>"+
+                                       "<span>"+ value2.Marca+"<span></td>" +
                                        "<td>" + value2.Sucursal + "</td>" +
                                        "<td>" + value2.Stock + "</td></tr>");
 
@@ -273,6 +277,8 @@ selects.forEach( select => {
                             inAncho.blur();
                             
                             $("#modelo").blur();
+                            $("#description").blur();
+                            $("#precio").blur();
                             
                         });
                     }
