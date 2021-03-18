@@ -58,13 +58,8 @@ function agregarLLanta() {
     html: '<form class="mt-4" id="formulario-editar-registro">'+
 
     '<div class="row">'+
-    '<div class="col-4">'+
-    '<div class="form-group">'+
-    '<label><b>Unidad:</b></label></br>'+
-    '<input class="form-control " value="" name="id-input-modal[]" readonly>'+
-       '</div>'+
-       '</div>'+
-       '<div class="col-8">'+
+  
+       '<div class="col-12">'+
        '<div class="form-group">'+
        '<label><b>Buscar llanta:</b></label></br>'+
        '<select class="form-control" id="busquedaLlantas" value="" name="cate-input-modal">'+

@@ -75,8 +75,8 @@ $(document).ready(function() {
         {
           data: null,
           className: "celda-acciones",
-          render: function () {
-            return '<div style="display: flex"><button type="button" class="buttonEditar btn btn-warning" style="margin-right: 8px"><span class="fa fa-edit"></span><span class="hidden-xs"></span></button><br><button type="button" class="buttonBorrar btn btn-danger"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
+          render: function (row) {
+            return '<div style="display: flex"><button type="button" onclick="editarRegistro('+row.id+');" id="'+ row.id +'" class="buttonEditar btn btn-warning" style="margin-right: 8px"><span class="fa fa-edit"></span><span class="hidden-xs"></span></button><br><button type="button"  onclick="borrarRegistro('+row.id+');" class="buttonBorrar btn btn-danger"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
           },
         },
       ],
@@ -85,7 +85,7 @@ $(document).ready(function() {
       scrollY: "600px",
       info: true,
       responsive: true,
-    
+      order: [9, "desc"]
       
     });
 
@@ -110,13 +110,8 @@ function agregarLLanta() {
     html: '<form class="mt-4" id="agregar-llanta-inv-total">'+
 
     '<div class="row">'+
-    '<div class="col-4">'+
-    '<div class="form-group">'+
-    '<label><b>Unidad:</b></label></br>'+
-    '<input class="form-control " value="" name="id-input-modal" readonly>'+
-       '</div>'+
-       '</div>'+
-       '<div class="col-8">'+
+    
+       '<div class="col-12">'+
        '<div class="form-group">'+
        '<label><b>Marca:</b></label></br>'+
        '<select class="form-control" id="marca" name="marca"></select>'+

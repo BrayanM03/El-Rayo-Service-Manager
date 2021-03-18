@@ -13,12 +13,16 @@
         $parametro = "%$term%";
         $total =0;
         $sqlContarLlantas= $con->prepare("SELECT COUNT(*) total FROM llantas WHERE Descripcion LIKE ? 
+                                                                             OR Ancho LIKE ?
+                                                                             OR Proporcion LIKE ?
+                                                                             OR Diametro LIKE ?
+                                                                             OR Descripcion LIKE ?
                                                                              OR Marca LIKE ?
                                                                              OR Modelo LIKE ?");
 
                                                                                  
        
-       $sqlContarLlantas->bind_param('sss', $parametro, $parametro, $parametro); 
+       $sqlContarLlantas->bind_param('sssssss', $parametro, $parametro, $parametro,  $parametro, $parametro, $parametro, $parametro); 
        $sqlContarLlantas->execute();
        $sqlContarLlantas->bind_result($total);
        $sqlContarLlantas->fetch();
@@ -52,7 +56,7 @@
     
     }else{ 
         
-        $data[] = array("id" => 0, "Descripcion"=>"Sin resultados");
+        $data = array("id" => 0, "Descripcion"=>"Sin resultados");
     }   
     
 
