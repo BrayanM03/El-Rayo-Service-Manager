@@ -226,7 +226,7 @@ function agregarLLanta() {
               }
               
                 var $container = $(
-                    "<div class='select2-result-repository clearfix'>" +
+                    "<div class='select2-result-repository clearfix' id='"+repo.id+"'>" +
                     "<div class='select2-contenedor-principal'>" +
                     "<div class='select2-result-repository__avatar'><img style='width: 50px; border-radius: 6px' src='./src/img/logos/" + repo.marca + ".jpg' /></div>" +
                       "<div class='select2-contenedor'>" +
@@ -248,12 +248,21 @@ function agregarLLanta() {
                 $container.find(".select2_marca").append(repo.marca);
                 $container.find(".select2_precio_venta").append(repo.precio);
                 $container.find(".select2_costo").append(repo.costo);
+
+                $(".select2-result-repository clearfix").on("click", function() { 
+                  alert("Llanta " + repo.marca);
+                 })  
+                //
               
                 return $container;
               }
 
               function formatRepoSelection (repo) {
-                return repo.descripcion || repo.text;
+                //A partir de aqui puedes agregar las llantas Brayan
+                console.log(repo.marca);
+                $("#select2-busquedaLlantas-container").attr("marca", repo.marca);
+
+                return repo.id && repo.descripcion;
               }
         });
     } ,
