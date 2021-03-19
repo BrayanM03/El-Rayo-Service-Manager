@@ -57,113 +57,43 @@ function agregarLLanta() {
     title: "Agregar llanta nueva",
     html: '<form class="mt-4" id="formulario-editar-registro">'+
 
-    '<div class="row">'+
-  
-       '<div class="col-12">'+
-       '<div class="form-group">'+
-       '<label><b>Buscar llanta:</b></label></br>'+
-       '<select class="form-control" id="busquedaLlantas" value="" name="cate-input-modal">'+
-      
-       '</select>'+
+      '<div class="row">'+
+          '<div class="col-8">'+
+          '<div class="form-group">'+
+          '<label><b>Buscar llanta:</b></label></br>'+
+          '<select class="form-control" id="busquedaLlantas" value="" name="cate-input-modal">'+
+          '</select>'+
+          '</div>'+
+          '</div>'+
+
+          '<div class="col-4">'+
+          '<div class="form-group">'+
+          '<label for=""><b>Cantidad:</b></label></br>'+
+          '<input type="number" class="form-control" id="cantidad" value="" name="cr-input-nuevaOrden" aria-describedby="emailHelp" placeholder="0" autocomplete="off">'+
           '</div>'+
           '</div>'+
        '</div>'+
 
-    '<div class="row">'+
-        '<div class="col-4">'+
-        '<div class="form-group">'+
-        '<label for="exampleInputEmail1"><b>Ancho:</b></label></br>'+
-        '<input type="number" class="form-control" id="cr-input-modal" value="" name="cr-input-nuevaOrden" aria-describedby="emailHelp" placeholder="Ancho" autocomplete="off">'+
 
-
-   ' </div>'+
-    '</div>'+
-    
-    
-   '<div class="col-4">'+
-    '<div class="form-group">'+
-    '<label><b>Alto:</b></label></br>'+
-    '<input type="number" value="" name="date-nuevaOrden" class="form-control" placeholder="Proporcion">'+
-    '</div>'+
-    '</div>'+
-
-    
-        '<div class="col-4">'+
-        '<div class="form-group">'+
-        '<label><b>Rin</b></label>'+
-        '<input type="text" class="tienda-span-modal-mto form-control" value=""  id="tienda-cliente" name="tienda-span-modal-mto" placeholder="Diametro">'+
-    '</div>'+
-        '</div>'+
-
+       '<div class="row">'+
        
-        '<div class="col-6">'+
-        '<div class="form-group">'+
-        '<label><b>Marca</b></label>'+
-        '<select class="form-control" id="select-status" value="" name="status-new-orden">'+
-        '<option value="Abierto">Abierto</option>'+
-        '<option value="Cerrado">Cerrado</option>'+
-       
-        '</select>'+
-    '</div>'+
-        '</div>'+
+       '<div class=" inventario-pedro">'+
 
-        '<div class="col-6">'+
-        '<div class="form-group">'+
-        '<label><b>Modelo</b></label>'+
-        '<input type="text" class="form-control" value=""  id="usuario-editar" name="usuario-editar" placeholder="Modelo">'+
-        '</div>'+
-        '</div>'+
+       '<div class="arriba">'+
+       '<span><b>Ancho: </b><span id="ancho-agregado"></span></span>'+
+       '<span><b>Alto: </b><span id="alto-agregado"></span></span>'+ 
+       '<span><b>Rin: </b><span id="rin-agregado"></span></span>'+
+       '</div>'+
+
+       '<div class="abajo">'+
+       '<span><b>Modelo: </b><span id="modelo-agregado"></span></span>'+
+       '<span><b>Marca: </b><span id="marca-agregado"></span></span>'+
+       
        
 
+       '</div>'+//inventario-pedro
+       '</div>'+//row
 
-    '</div>'+
-
-    '<div class="row">'+
-        '<div class="col-4">'+
-            '<div class="form-group">'+
-                '<label><b>Costo</b></label>'+
-                '<input type="number" class="form-control" value=""name="folio-nueva-orden" placeholder="0.00">'+
-            '</div>'+
-        '</div>'+
-        '<div class="col-4">'+
-        '<div class="form-group">'+
-        '<label><b>Precio</b></label>'+
-        '<input type="number" class="form-control" value=""name="folio-nueva-orden" placeholder="0.00">'+
-    '</div>'+
-'</div>'+
-'<div class="col-4">'+
-        '<div class="form-group">'+
-        '<label><b>Mayorista</b></label>'+
-        '<input type="number" class="form-control" value=""name="folio-nueva-orden" placeholder="0.00">'+
-    '</div>'+
-'</div>'+
-        '</div>'+
-    '</div>'+
-    '<div class="row">'+
-    '<div class="col-6">'+
-        '<div class="form-group">'+
-            '<label><b>Fecha</b></label>'+
-            '<input type="date" class="form-control" value=""name="subcat-editar-orden" >'+
-        '</div>'+
-    '</div>'+
-    
-    '<div class="col-6">'+
-        '<div class="form-group">'+
-            '<label><b>Cantidad</b></label>'+
-            '<input type="text" class="form-control" value=""name="mes-editar-orden" placeholder="0">'+
-        '</div>'+
-    '</div>'+
-    '</div>'+
-
-    '<div class="row  mt-1">'+
-    '<div class="col-12">'+
-    '<div class="form-group" id="area-solucion">'+
-    '<label><b>Descripción</b></label>'+
-    '<textarea class="form-control" name="swal-solucion" style="height:100px" id="textarea-swal-solucion" form="formulario-editar-registro" placeholder="Escriba la descripcion del producto"></textarea>'+
-    '</div>'+
-    '</div>'+
-    '</div>'+
-            '</div>'+
 '</form>',
     showCancelButton: true,
     cancelButtonText: 'Cerrar',
@@ -259,8 +189,16 @@ function agregarLLanta() {
 
               function formatRepoSelection (repo) {
                 //A partir de aqui puedes agregar las llantas Brayan
-                console.log(repo.marca);
-                $("#select2-busquedaLlantas-container").attr("marca", repo.marca);
+               
+                
+                $("#select2-busquedaLlantas-container").attr("codigo", repo.id);
+                $("#ancho-agregado").text(repo.ancho);
+                $("#alto-agregado").text(repo.alto);
+                $("#rin-agregado").text(repo.rin);
+                $("#modelo-agregado").text(repo.modelo);
+                $("#marca-agregado").text(repo.marca);
+                
+               
 
                 return repo.id && repo.descripcion;
               }
@@ -268,6 +206,34 @@ function agregarLLanta() {
     } ,
 
     
+  }).then((result) =>{
+
+    if(result.isConfirmed){
+
+      code = $("#select2-busquedaLlantas-container").attr("codigo");
+
+      $.ajax({
+        type: "POST",
+        url: "./modelo/agregar-llanta-inv-pedro.php",
+        data: {"code": code},
+        //dataType: "dataType",
+        success: function (response) {
+          
+          if (response) {
+            Swal.fire(
+              "Correcto",
+              "Hay conexión, la llanta es " + response,
+              "success"
+            )
+          }
+
+        }
+      });
+
+
+    }
+
+
   });
   
 }

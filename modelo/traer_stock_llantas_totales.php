@@ -42,12 +42,15 @@
        
         while($fila= $resultado->fetch_assoc()){
             $id = $fila["id"];
+            $ancho = $fila["Ancho"];
+            $alto = $fila["Proporcion"];
+            $rin = $fila["Diametro"];
             $descripcion = $fila["Descripcion"];
             $modelo = $fila["Modelo"];
             $marca = $fila["Marca"];
             $costo = $fila["precio_Inicial"];
             $precio = $fila["precio_Venta"];
-            $data[] = array("id" => $id, "descripcion"=>$descripcion, "modelo" => $modelo, "marca"=> $marca,
+            $data[] = array("id" => $id, "ancho" => $ancho, "alto" => $alto, "rin" => $rin, "descripcion"=>$descripcion, "modelo" => $modelo, "marca"=> $marca,
                              "costo"=> $costo, "precio"=>$precio);
         }
 
