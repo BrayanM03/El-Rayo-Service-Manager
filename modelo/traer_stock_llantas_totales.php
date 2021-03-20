@@ -50,8 +50,9 @@
             $marca = $fila["Marca"];
             $costo = $fila["precio_Inicial"];
             $precio = $fila["precio_Venta"];
+            $mayoreo = $fila["precio_Mayoreo"];
             $data[] = array("id" => $id, "ancho" => $ancho, "alto" => $alto, "rin" => $rin, "descripcion"=>$descripcion, "modelo" => $modelo, "marca"=> $marca,
-                             "costo"=> $costo, "precio"=>$precio);
+                             "costo"=> $costo, "precio"=>$precio, "mayoreo"=>$mayoreo);
         }
 
         echo json_encode($data, JSON_UNESCAPED_UNICODE);

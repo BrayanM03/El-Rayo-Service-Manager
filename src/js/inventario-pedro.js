@@ -55,6 +55,7 @@ function agregarLLanta() {
 
   Swal.fire({
     title: "Agregar llanta nueva",
+    background: "#dcdcdc" ,
     html: '<form class="mt-4" id="formulario-editar-registro">'+
 
       '<div class="row">'+
@@ -80,16 +81,39 @@ function agregarLLanta() {
        '<div class=" inventario-pedro">'+
 
        '<div class="arriba">'+
-       '<span><b>Ancho: </b><span id="ancho-agregado"></span></span>'+
-       '<span><b>Alto: </b><span id="alto-agregado"></span></span>'+ 
-       '<span><b>Rin: </b><span id="rin-agregado"></span></span>'+
+       '<span class="tag"><b>Ancho: </b><span id="ancho-agregado">   </span></span>'+
+       '<span class="tag"><b>Alto: </b><span id="alto-agregado">   </span></span>'+ 
+       '<span class="tag"><b>Rin: </b><span id="rin-agregado">   </span></span>'+
        '</div>'+
 
        '<div class="abajo">'+
-       '<span><b>Modelo: </b><span id="modelo-agregado"></span></span>'+
-       '<span><b>Marca: </b><span id="marca-agregado"></span></span>'+
-       
-       
+       '<div class="caja">'+
+       '<span><b>Modelo: </b></span>'+
+       '<span id="modelo-agregado"></span>'+
+       '</div>'+
+
+       '<div class="caja">'+
+       '<span><b>Marca: </b></span>'+
+       '<img class="logo-marca-agregada" src="./src/img/logos/Atlas.jpg">'+
+       '<span id="marca-agregado"></span>'+
+       '</div>'+
+       '</div>'+
+
+       '<div class="precios">'+
+       '<span class="tag">Precio por unidad: </span>' +
+       '<div class="precios-body">'+
+       '<span class="tag">' +
+       '<span><b>Costo: </b></span>'+
+       '<span>$<span id="costo-agregado"></span></span></span>'+
+       '<span class="tag">' +  
+       '<span><b>Precio: </b></span>'+
+       '<span>$<span id="precio-agregado"></span></span></span>'+
+       '<span class="tag">' + 
+       '<span><b>Mayoreo: </b></span>'+
+       '<span>$<span id="mayoreo-agregado"></span></span></span>'+
+       '</div>'+
+       '</div>'+
+      
 
        '</div>'+//inventario-pedro
        '</div>'+//row
@@ -189,7 +213,7 @@ function agregarLLanta() {
 
               function formatRepoSelection (repo) {
                 //A partir de aqui puedes agregar las llantas Brayan
-               
+                ruta = "./src/img/logos/" + repo.marca + ".jpg";
                 
                 $("#select2-busquedaLlantas-container").attr("codigo", repo.id);
                 $("#ancho-agregado").text(repo.ancho);
@@ -197,10 +221,15 @@ function agregarLLanta() {
                 $("#rin-agregado").text(repo.rin);
                 $("#modelo-agregado").text(repo.modelo);
                 $("#marca-agregado").text(repo.marca);
-                
+                $(".logo-marca-agregada").attr("src", ruta);
+
+                $("#costo-agregado").text(repo.costo);
+                $("#precio-agregado").text(repo.precio);
+                $("#mayoreo-agregado").text(repo.mayoreo);
+                $("#mayoreo-agregado").fadeIn(400)
                
 
-                return repo.id && repo.descripcion;
+                return repo.text || repo.descripcion;
               }
         });
     } ,
@@ -211,19 +240,37 @@ function agregarLLanta() {
     if(result.isConfirmed){
 
       code = $("#select2-busquedaLlantas-container").attr("codigo");
-
+      cantidad = $("#cantidad").val();
       $.ajax({
         type: "POST",
         url: "./modelo/agregar-llanta-inv-pedro.php",
-        data: {"code": code},
+        data: {"code": code, "stock": cantidad},
         //dataType: "dataType",
         success: function (response) {
           
-          if (response) {
+          if (response==1) {
             Swal.fire(
               "Correcto",
               "Hay conexión, la llanta es " + response,
               "success"
+            )
+          }else if ( response == 2){
+            Swal.fire(
+              "Error",
+              "Hubo un problema al insertar la llanta",
+              "error"
+            )
+          }else if ( response == 3){
+            Swal.fire(
+              "Peligro",
+              "Selecciona una llanta!",
+              "warning"
+            )
+          }else if ( response == 4){
+            Swal.fire(
+              "Error",
+              "Ingresa una cantidad",
+              "warning"
             )
           }
 

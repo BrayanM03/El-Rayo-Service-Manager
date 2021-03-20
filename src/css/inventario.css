@@ -75,11 +75,11 @@ table.dataTable thead {
     background-color: white;
     border: 1px solid rgb(209, 206, 206);
     border-radius: 8px;
-    padding: 8px;
+    padding: 10px;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    height: 100px;
+    height: auto;
   
   }
 
@@ -88,11 +88,54 @@ table.dataTable thead {
     display: flex;
     flex-direction:flex;
     justify-content: space-around;
+    margin: 20px auto;
   }
   
   .abajo{
     width: 100%;
     display: flex;
     flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .tag{
+    border: 1px solid burlywood;
+    padding: 5px 8px;
+    border-radius: 5px;
+    background-color: whitesmoke;
+    margin: 6px 0px;
+  }
+
+  .swal2-modal{
+    background-color: #dcdcdc;
+  }
+
+  .caja{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .caja span {
+    margin-bottom: 15px;
+  }
+  .logo-marca-agregada{
+    width: 60px;
+    border: 1px solid gray;
+    border-radius: 8px;
+  }
+
+  .precios{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    background-color: lightcoral;
+    padding: 8px;
+    border-radius: 8px;
+  }
+
+  .precios-body{
+    width: 100%;
+    display: flex;
     justify-content: space-around;
   }
