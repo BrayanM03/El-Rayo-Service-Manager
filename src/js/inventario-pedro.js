@@ -272,6 +272,12 @@ function agregarLLanta() {
               "Ingresa una cantidad",
               "warning"
             )
+          }else if ( response == 5){
+            Swal.fire(
+              "Error",
+              "Esa llanta ya esta en el inventario",
+              "warning"
+            )
           }
 
         }
