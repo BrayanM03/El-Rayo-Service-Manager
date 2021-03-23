@@ -5,7 +5,7 @@ function MostrarInventarioPedro() {
       
         ajax: {
             method: "POST",
-            url: "./modelo/traerInventario.php"
+            url: "./modelo/traerInventarioSend.php"
         },  
   
       columns: [   
@@ -24,10 +24,10 @@ function MostrarInventarioPedro() {
           }},
         {
           data: null,
-          className: "celda-acciones",
+          className: "celda-acciones", 
           render: function (row) {
             console.log(row);
-            return '<div style="display: flex"><button type="button" onclick="editarInvPedro('+row.id_Llanta+');" id="'+row.id_Llanta+'" class="buttonEditar btn btn-warning" style="margin-right: 8px"><span class="fa fa-edit"></span><span class="hidden-xs"></span></button><br><button type="button" onclick="borrarRegistro('+row.id_Llanta+');" id="'+row.id_Llanta+'" class="buttonBorrar btn btn-danger"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
+            return '<div style="display: flex"><button type="button" onclick="editarInvSendero('+row.id_Llanta+');" id="'+row.id_Llanta+'" class="buttonEditar btn btn-warning" style="margin-right: 8px"><span class="fa fa-edit"></span><span class="hidden-xs"></span></button><br><button type="button" onclick="borrarRegistro('+row.id_Llanta+');" id="'+row.id_Llanta+'" class="buttonBorrar btn btn-danger"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
           },
         },
       ],
@@ -249,7 +249,7 @@ function agregarLLanta(table) {
       cantidad = $("#cantidad").val();
       $.ajax({
         type: "POST",
-        url: "./modelo/agregar-llanta-inv-pedro.php",
+        url: "./modelo/agregar-llanta-inv-sendero.php",
         data: {"code": code, "stock": cantidad},
         //dataType: "dataType",
         success: function (response) {

@@ -462,7 +462,7 @@
                      <!-- Contenido inventario -->
                      <div class="titulo-inventario">
                          <h5 style="margin: 10px 0px;">Stock de llantas en existencia</h5>
-                         <p style="color: gray;">Sucursal Pedro Cardenas</p>
+                         <p style="color: gray;">Sucursal Sendero</p>
                         </div>
                         
                       <div class="botones">
@@ -557,8 +557,8 @@
     <script src="src/vendor/datatables/defaults.js"></script>
     <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="src/js/inventario-pedro.js"></script>
-    <script src="src/js/editar-inv-pedro.js"></script>
+    <script src="src/js/inventario-sendero.js"></script>
+    <script src="src/js/editar-inv-sendero.js"></script>
    
    
 </body>

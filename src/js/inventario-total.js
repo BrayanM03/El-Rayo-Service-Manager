@@ -70,12 +70,13 @@ $(document).ready(function() {
         { title: "Fecha",          data: "fecha"          },
         { title: "Imagen",         data: "marca", render: function(data,type,row) {
           
-          return '<img src="./src/img/logos/'+ data +'.jpg" style="width: 60px; border-radius: 8px">';
+          return '<img src="./src/img/logos/'+ data +'.jpg" style="width: 60px; border-radius: 8px">'; 
           }}, 
         {
           data: null,
           className: "celda-acciones",
           render: function (row) {
+           
             return '<div style="display: flex"><button type="button" onclick="editarRegistro('+row.id+');" id="'+ row.id +'" class="buttonEditar btn btn-warning" style="margin-right: 8px"><span class="fa fa-edit"></span><span class="hidden-xs"></span></button><br><button type="button"  onclick="borrarRegistro('+row.id+');" class="buttonBorrar btn btn-danger"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
           },
         },

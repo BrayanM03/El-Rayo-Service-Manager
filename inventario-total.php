@@ -213,9 +213,9 @@
 
             <!-- Nav Item - Charts -->
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Charts</span></a>
+                <a class="nav-link" href="generar-token.php">
+                    <i class="fas fa-fw fa-lock"></i>
+                    <span>Generar token</span></a>
             </li>
 
             <!-- Nav Item - Tables -->

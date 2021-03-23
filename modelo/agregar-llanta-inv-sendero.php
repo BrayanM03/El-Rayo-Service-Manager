@@ -21,7 +21,7 @@
         }else{
 
             
-            $sqlcomprobar = "SELECT COUNT(*) total FROM inventario_mat1 WHERE id_Llanta = ?";
+            $sqlcomprobar = "SELECT COUNT(*) total FROM inventario_mat2 WHERE id_Llanta = ?";
             $res = $con->prepare($sqlcomprobar);
             $res->bind_param('i', $codigo);
             $res->execute();
@@ -33,19 +33,19 @@
             
 
             if ($total == 0) {
-                $sql = "SELECT COUNT(*) total FROM inventario_mat1";
+                $sql = "SELECT COUNT(*) total FROM inventario_mat2";
                 $result = mysqli_query($con, $sql);
                 $fila = mysqli_fetch_assoc($result);
                 $concatenar = intval($fila["total"])+ 1;
                 
-                $code = "PEDC" . $codigo;
+                $code = "SEND" . $codigo;
                 
                 $sucursal = "Pedro Cardenas";
                 
         
                 //print_r($code);
         
-                $query = "INSERT INTO inventario_mat1 (Codigo, id_Llanta, Sucursal, Stock) VALUES (?,?,?,?)";
+                $query = "INSERT INTO inventario_mat2 (Codigo, id_Llanta, Sucursal, Stock) VALUES (?,?,?,?)";
                 $resultado = $con->prepare($query);
                 $resultado->bind_param('sisi', $code, $codigo, $sucursal,$stock );
                 $resultado->execute();

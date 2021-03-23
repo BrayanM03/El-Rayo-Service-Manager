@@ -25,7 +25,7 @@
     <title>Inventario</title>
 
     <!-- Custom fonts for this template-->
-    <link rel="stylesheet" href="src/css/inventario.css">
+    <link rel="stylesheet" href="src/css/token.css">
     <link href="src/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
@@ -215,9 +215,9 @@
 
             <!-- Nav Item - Charts -->
             <li class="nav-item">
-                <a class="nav-link" href="generar-token.php">
-                    <i class="fas fa-fw fa-lock"></i>
-                    <span>Generar token</span></a>
+                <a class="nav-link" href="charts.html">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Charts</span></a>
             </li>
 
             <!-- Nav Item - Tables -->
@@ -461,26 +461,25 @@
 
                      <!-- Contenido inventario -->
                      <div class="titulo-inventario">
-                         <h5 style="margin: 10px 0px;">Stock de llantas en existencia</h5>
-                         <p style="color: gray;">Sucursal Pedro Cardenas</p>
+                         <h5 style="margin: 10px 0px;">Generar token</h5>
+                         <p style="color: gray;">Click en generar para generar un nuevo token de seguridad para cambiar el precio de una llanta durante una venta.</p>
+                         <div class="tokens">
+                         <p style="color: gray;">El token actual es: </br>
+                         <span id="token-actual">0000</span>
+                         </p> 
+                         </div> 
                         </div>
                         
                       <div class="botones">
-                                    <a href="#" class="btn btn-success btn-icon-split" onclick="agregarLLanta();">
+                                    <a href="#" class="btn btn-success btn-icon-split"  onclick="random();">
                                         <span class="icon text-white-50">
                                             <i class="fas fa-check-circle"></i>
                                         </span>
-                                        <span class="text">Agregar llanta</span>
+                                        <span class="text">Generar Token</span>
                                     </a>
-                                    <a href="#" class="btn btn-danger btn-icon-split">
-                                        <span class="icon text-white-50">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </span>
-                                        <span class="text">Borrar todas las llantas</span>
-                                    </a>
+                                    
                       </div>
-                      <table id="inventario-pedro" class="table table-striped table-bordered table-hover">                   
-                     </table>
+                      
 
                      
                    
@@ -557,8 +556,8 @@
     <script src="src/vendor/datatables/defaults.js"></script>
     <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="src/js/inventario-pedro.js"></script>
-    <script src="src/js/editar-inv-pedro.js"></script>
+   
+    <script src="src/js/generar-token.js"></script>
    
    
 </body>

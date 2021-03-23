@@ -135,7 +135,7 @@
                         <a class="collapse-item" href="inventario-pedro.php" style="display:flex; flex-direction: row; justify-content:start;">
                         <i class="fas fa-fw fa-store"></i> 
                             <span style="margin-left:12px;"> Pedro Cardenas</span> </a>
-                        <a class="collapse-item" href="register.html" style="display:flex; flex-direction: row; justify-content:start;">
+                        <a class="collapse-item" href="inventario-sendero.php" style="display:flex; flex-direction: row; justify-content:start;">
                         <i class="fas fa-fw fa-store"></i>
                             <span style="margin-left:12px;"> Sendero</span> </a>
     
@@ -211,9 +211,9 @@
 
             <!-- Nav Item - Charts -->
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Charts</span></a>
+                <a class="nav-link" href="generar-token.php">
+                    <i class="fas fa-fw fa-lock"></i>
+                    <span>Generar token</span></a>
             </li>
 
             <!-- Nav Item - Tables -->
@@ -525,7 +525,7 @@
                                                         <input type="number" id="cantidad" name="cantidad" class="input-group" required>
                                                     </label>
                                         
-                                                    <label class="input-corto precio-pointer" onclick="generarToken();">
+                                                    <label class="input-corto precio-pointer" id="precio-tok" onclick="generarToken();">
                                                         <span for="precio" class="precio-pointer">$ Precio</span>
                                                         <input type="number" id="precio" name="precio" class="input-group precio-pointer" disabled>
                                                     </label>
