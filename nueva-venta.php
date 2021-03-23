@@ -573,8 +573,8 @@
                                                     </div>
                                                     </div>
                                                 <div class="botones-de-venta">
-                                                    <div class="btn btn-warning" style="color: rgb(31, 28, 28); margin-right: 2vh;" id="limpiar-venta">Limpiar</div>
-                                                    <div class="btn btn-success" id="realizar-venta">Realizar venta</div>
+                                                    <div class="btn btn-warning" onclick="limpiarTabla();" style="color: rgb(31, 28, 28); margin-right: 2vh;" id="limpiar-venta">Limpiar</div>
+                                                    <div class="btn btn-success" onclick="realizarVenta();" id="realizar-venta">Realizar venta</div>
                                                 </div>   
                                                 
                                     

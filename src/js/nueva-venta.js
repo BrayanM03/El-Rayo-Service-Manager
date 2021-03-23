@@ -247,7 +247,7 @@ selects.forEach( select => {
                             precio_Mayoreo1  = $(this).attr("precio-mayoreo");
                             marca1           = $(this).attr("marca");
                             sucursal1        = $(this).attr("sucursal");
-                            stock1           = $(this).attr("stock");
+                            stock1           = $(this).attr("stock"); 
     
                             $("#description").focus().val(descripcion1);
                             $("#modelo").focus().val(modelo1);
@@ -305,6 +305,69 @@ selects.forEach( select => {
       }
 
       buscar();
+
+      function limpiarTabla(){
+
+
+        
+        if ( !table.data().any()){
+
+            toastr.warning('La tabla ya esta vaciada', 'Tabla limpia' );
+        }else{
+            
+            table.clear().draw();
+            $("#total").val(0.00);
+            toastr.success('Tabla fue vaciada ', 'Listo' );
+
+
+        }
+        //$(".tbody").empty();
+      }
+
+
+
+      function realizarVenta(){
+
+
+        
+      /*  if ( !table.data().any()){
+
+            toastr.warning('La tabla no tiene productos', 'Sin productos' );
+        }else{*/
+            
+            table.clear().draw();
+            $("#total").val(0.00);
+            
+            Swal.fire({
+                title: 'Venta realizada',
+                html: "<span>La venta se realizo con exito</span>",
+                icon: "success",
+                showCancelButton: true,
+                cancelButtonText: 'Cerrar',
+                cancelButtonColor: '#00e059',
+                showConfirmButton: true,
+                confirmButtonText: 'Aceptar', 
+                cancelButtonColor:'#ff764d',
+                showDenyButton: true,
+                denyButtonText: 'Reporte'
+            },
+               
+              ).then((result) =>{
+  
+                if(result.isConfirmed){
+                   //location.reload();
+                   alert("acepto");
+                }else if(result.isDenied){
+                    window.open('./modelo/generar-reporte-venta.php', '_blank');
+                    
+                }
+                });
+
+
+       // }
+        //$(".tbody").empty();
+      }
+
 
     
 
