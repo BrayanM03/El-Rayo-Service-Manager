@@ -330,20 +330,78 @@ selects.forEach( select => {
 
 
         
-      /*  if ( !table.data().any()){
+        if ( !table.data().any()){
 
             toastr.warning('La tabla no tiene productos', 'Sin productos' );
-        }else{*/
+        }else{
+            //Iterando datos de la tabla de venta
+            arregloCodigo = []; 
+            table.column(0).data().each( function ( value, index ) {
+                        arregloCodigo.push(value);  
+                    } );
+
+            arregloDescripcion = []; 
+            table.column(1).data().each( function ( value, index ) {
+                        arregloDescripcion.push(value);  
+                    } );
+                    
+            arregloModelo = []; 
+            table.column(2).data().each( function ( value, index ) {
+                        arregloModelo.push(value);  
+                   } );
+        
+           arregloCantidad = []; 
+           table.column(3).data().each( function ( value, index ) {
+                        arregloCantidad.push(value);  
+                  } );
+                
+            console.log(arregloCodigo);
+            console.log(arregloDescripcion);
+            console.log(arregloModelo);
+            console.log(arregloCantidad);   
+            total = $("#total").val();
+            fecha = $("#fecha").val();   
+            console.log("El total es " + total); 
             
-            table.clear().draw();
-            $("#total").val(0.00);
+            
+            if(fecha == 0){
+                
+                const fecha_sistema = new Date();
+                console.log("No se definio una fecha, la fecha del sistema es: " + fecha_sistema);
+
+            }else{
+                console.log("Se definio una fecha");
+                console.log("El fecha es " + fecha);
+            }
+
+
+
+
+            //Enviando data
+
+
+            
+            $.ajax({
+                type: "POST",
+                url: "./modelo/ventas/insertar-venta.php",
+                data: {'codigos':       JSON.stringify(arregloCodigo),
+                       'descripciones': JSON.stringify(arregloDescripcion),
+                       'modelos':       JSON.stringify(arregloModelo),
+                       'cantidades':    JSON.stringify(arregloCantidad),
+                       'fecha': fecha,
+                       'total': total},
+                dataType: "JSON",
+                success: function (response) {
+                    console.log(response);
+                }
+            });
+
+            
             
             Swal.fire({
                 title: 'Venta realizada',
                 html: "<span>La venta se realizo con exito</span>",
                 icon: "success",
-                showCancelButton: true,
-                cancelButtonText: 'Cerrar',
                 cancelButtonColor: '#00e059',
                 showConfirmButton: true,
                 confirmButtonText: 'Aceptar', 
@@ -356,15 +414,24 @@ selects.forEach( select => {
   
                 if(result.isConfirmed){
                    //location.reload();
-                   alert("acepto");
+                  
+                   table.clear().draw();
+                   $("#total").val(0.00);
                 }else if(result.isDenied){
-                    window.open('./modelo/generar-reporte-venta.php', '_blank');
+
+                    //window.open('./modelo/generar-reporte-venta.php', '_blank');
+                         
+                    table.clear().draw();
+                    $("#total").val(0.00);
                     
                 }
+
+                table.clear().draw();
+                    $("#total").val(0.00);
                 });
 
 
-       // }
+        }
         //$(".tbody").empty();
       }
 

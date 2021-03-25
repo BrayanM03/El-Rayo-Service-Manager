@@ -3,7 +3,7 @@
 
 $(document).ready(function() {
   
-
+ 
  
   columnDefs = [{
     title: "Codigo"
@@ -75,7 +75,7 @@ toastr.options = {
 
 function agregarInfo(){
     //Funcion que se encargara de mover informacion del producto a una tabla para luego ser procesada como una venta
-
+    
     valorCant0 = $('#cantidad').val();
     valorCant = parseInt(valorCant0);
     valitationQuanty = $('#cantidad')[0].checkValidity();
@@ -136,8 +136,7 @@ function agregarInfo(){
 
   
      
-
-
+    
   
      //Esta es la funcion llanta agregada y es para agregar la llanta si es una llanta no repetida y si el contador de llantas repetidas esta en 0
       function llantaAgregada() {
@@ -150,6 +149,10 @@ function agregarInfo(){
               subtotal,
               botones
           ] ).draw(false); 
+
+          
+
+          
 
           total = $("#total").val();
           newTotal = subtotal + parseInt(total);

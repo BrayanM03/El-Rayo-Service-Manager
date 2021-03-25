@@ -36,13 +36,11 @@ function Header()
     $this->Ln(4);
     $this->Cell(210,10,utf8_decode("RFC:SARK9104063L6"),0,0,'C', false);
     $this->Ln(4);
-    $this->Cell(210,10,utf8_decode("Ricardo Alexis Reyna"),0,0,'C', false);
-    $this->Ln(4);
-    $this->Cell(210,10,utf8_decode("Telefono: 8-24-44-02"),0,0,'C', false);
+    $this->Cell(210,10,utf8_decode("Telefono: 8688244404"),0,0,'C', false);
     $this->Ln(20);
 
-    $this->Rect(133, 62, 20, 7, 'F');
-    $this->Rect(133, 69, 20, 7, 'F');
+    $this->Rect(133, 58, 20, 7, 'F');
+    $this->Rect(133, 65, 20, 7, 'F');
 
     
     $this->SetFont('Times','B',12);
@@ -99,7 +97,7 @@ function cuerpoTabla(){
     $pdf->SetFillColor(241, 210, 34);
     
     
-    $pdf->Rect(10, 84, 189, 8, 'F');
+    $pdf->Rect(10, 80, 189, 8, 'F');
     $pdf->Cell(19,8,utf8_decode("Cantidad"),1,0);  
     $pdf->Cell(80,8,utf8_decode("Concepto"),1,0, 'C');
     $pdf->Cell(30,8,utf8_decode("Marca"),1,0, 'C');

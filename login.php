@@ -7,8 +7,8 @@
     <link rel="shortcut icon" href="src/img/rayo.svg" />
     <title>Iniciar Sesión</title>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 <link href="./src/css/login.css" rel="stylesheet">
 <!------ Include the above in your HEAD tag ---------->
@@ -21,18 +21,18 @@
     <div class="row">
         <div class="col-md-12 form-group">
             <label for="">Usuario</label>
-            <input type="text" class="form-control" placeholder="Username">
+            <input type="text" class="form-control" id="user"  placeholder="Username">
         </div>
     </div>
     <div class="row">
         <div class="col-md-12 form-group">
             <label for="">Contraseña</label>
-            <input type="password" placeholder="Enter your Password" class="form-control">
+            <input type="password" id="password" placeholder="Enter your Password" class="form-control">
         </div>
     </div>
     <div class="row">
         <div class="col-md-12 form-group">
-            <input value="Iniciar sesión" type="submit" class="btn btn-block btn-login" placeholder="Enter your Password" >
+            <input value="Iniciar sesión" onclick="iniciarSesion();" type="submit" class="btn btn-block btn-login" placeholder="Enter your Password" >
         </div>
     </div>
     <div class="row">
@@ -43,5 +43,7 @@
 
     </div> 
 </div>
+
+<script src="src/js/iniciar-sesion.js"></script>
 </body>
 </html>
