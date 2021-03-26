@@ -12,7 +12,7 @@
                 type: "POST",
                 url: "./modelo/login/iniciar-sesion.php",
                 data: {"user": user, "pass": pass},
-                dataType: "dataType",
+               
                 success: function (response) {
                     if(response == 0){
                         alert("Contraseña incorrecta");

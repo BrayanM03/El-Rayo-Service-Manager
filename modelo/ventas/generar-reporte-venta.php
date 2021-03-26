@@ -1,5 +1,5 @@
 <?php
-require('../src/vendor/fpdf/fpdf.php');
+require('../../src/vendor/fpdf/fpdf.php');
 
 class PDF extends FPDF
 {
@@ -7,7 +7,7 @@ class PDF extends FPDF
 function Header()
 {
     // Logo
-    $this->Image('../src/img/logo.jpg',20,10,25);
+    $this->Image('../../src/img/logo.jpg',20,10,25);
     // Arial bold 15
    
     
