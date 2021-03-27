@@ -2,30 +2,49 @@
    include '../conexion.php';
    $con= $conectando->conexion(); 
 
-if(isset($_POST["user"])){
+if(isset($_POST)){
 
-    $usuario = $_POST["user"];
-    $contraseña = $_POST["pass"];
+    $usuario = $_POST["usuario"];
+    $contraseña = $_POST["contraseña"];
+    
 
-
-    $query_mostrar = $con->prepare("SELECT * FROM usuarios WHERE usuario = ? AND password = ?");
-
-//-----------------------------------------------------------------------------------------------------//
-//-----------------------------------------------------------------------------------------------------//
-
-    $query_mostrar->bind_param('ss', $usuario, $contraseña);
+    $query_mostrar = $con->prepare("SELECT * FROM usuarios WHERE usuario =?");
+    $query_mostrar->bind_param('s', $usuario);
     $query_mostrar->execute();
-    $total = $query_mostrar->num_rows();
-    //$query_mostrar->bind_result($total);
-    $query_mostrar->fetch();
-   
-    $query_mostrar->close();
+    $query_mostrar->store_result();    
+    $rows= $query_mostrar->num_rows();
 
-    if($total == 0){
-        print_r(0);
-    }else if($total == 1){
-        print_r(1);
+    if ($rows > 0 ) {
+        $query_mostrar->bind_result($id, $nombre, $apellidos, $user, $password, $cumple, $rol, $numero, $direccion, $sucursal);
+        $query_mostrar->fetch();
+        $validar_pass = password_verify($contraseña, $password);
+        if ($validar_pass) {
+
+            session_start();
+            
+            $_SESSION['id_usuario'] = $id;
+            $_SESSION['nombre'] = $nombre;
+            $_SESSION['apellidos'] = $apellidos;
+            $_SESSION['user'] = $user;
+            $_SESSION['cumple'] = $cumple;
+            $_SESSION['rol'] = $rol;
+            $_SESSION['numero'] = $numero;
+            $_SESSION['direccion'] = $direccion;
+            $_SESSION['sucursal'] = $sucursal;
+
+
+            print_r(1);
+        }else{
+            print_r(0);
+        }
+    }else{
+        print_r(2);
     }
+ 
+
+}else{
+
+    print_r("no existe la variable data");
 
 }
 
