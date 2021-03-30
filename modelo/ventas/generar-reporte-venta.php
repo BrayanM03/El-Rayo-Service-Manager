@@ -6,7 +6,7 @@ require('../../src/vendor/fpdf/fpdf.php');
 
 
 if (!isset($_SESSION['id_usuario'])) {
-    header("Location:login.php");
+    header("Location:../../login.php");
 }
 
 
