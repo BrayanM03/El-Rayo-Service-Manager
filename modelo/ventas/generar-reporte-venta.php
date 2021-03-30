@@ -1,11 +1,30 @@
 <?php
+session_start();
+
 require('../../src/vendor/fpdf/fpdf.php');
+
+
+
+if (!isset($_SESSION['id_usuario'])) {
+    header("Location:login.php");
+}
+
+
 
 class PDF extends FPDF
 {
+
+
+    
 // Cabecera de página
 function Header()
 {
+    if($_SESSION['sucursal'] == "Pedro"){
+        $direccion = "Avenida Pedro Cardenas KM5 No.207";
+        $colonia = "Col. Francisco Castellanos";
+        
+   }
+
     // Logo
     $this->Image('../../src/img/logo.jpg',20,10,25);
     // Arial bold 15
@@ -26,9 +45,9 @@ function Header()
     $this->Cell(60,10,'Reporte de Venta',0,0,'C');
     $this->Ln(5);
     $this->SetFont('Arial','',9);
-    $this->Cell(160,10,utf8_decode("Avenida Pedro Cardenas KM5 No.207"),0,0,'C', false);
+    $this->Cell(160,10,utf8_decode($direccion),0,0,'C', false);
     $this->Ln(4);
-    $this->Cell(160,10,utf8_decode("Col. Francisco Castellanos"),0,0,'C', false);
+    $this->Cell(160,10,utf8_decode($colonia),0,0,'C', false);
     $this->Ln(4);
     $this->Cell(160,10,utf8_decode("H. Matamoros Tam"),0,0,'C', false);
     $this->Ln(4);
@@ -45,8 +64,8 @@ function Header()
     $this->Cell(24,10,utf8_decode("Cliente:"),0,0,'L', 1);
     $this->SetFont('Times','',12);
     $this->SetFillColor(236, 236, 236);
-    $this->Cell(40,10,utf8_decode("Publico en General"),0,0, 'L',1);
-    $this->Cell(60,7,'',0,0,'', false);
+    $this->Cell(70,10,utf8_decode("Publico en General"),0,0, 'L',1);
+    $this->Cell(30,7,'',0,0,'', false);
     $this->SetFont('Arial','B',12);
     $this->SetTextColor(194, 34, 16);
     $this->Cell(20,7,utf8_decode("Folio:"),0,0, false);
@@ -62,8 +81,9 @@ function Header()
     $this->Cell(24,7,utf8_decode("Vendedor:"),0,0,'L', 1);
     $this->SetFont('Times','',12);
     $this->SetFillColor(236, 236, 236);
-    $this->Cell(40,7,utf8_decode("Candelaria Diaz"),0,0, 'L',1);
-    $this->Cell(60,7,'',0,0,'', false);
+    $vendedor = $_SESSION['nombre'] . " " . $_SESSION['apellidos'];
+    $this->Cell(70,7,utf8_decode($vendedor),0,0, 'L',1);
+    $this->Cell(30,7,'',0,0,'', false);
 
     $this->SetFont('Arial','B',12);
     $this->SetTextColor(194, 34, 16);
