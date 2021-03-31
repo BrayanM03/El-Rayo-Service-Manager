@@ -361,17 +361,17 @@ selects.forEach( select => {
             console.log(arregloCantidad);   
             total = $("#total").val();
             fecha = $("#fecha").val();   
-            console.log("El total es " + total); 
+             
             
             
             if(fecha == 0){
                 
                 const fecha_sistema = new Date();
-                console.log("No se definio una fecha, la fecha del sistema es: " + fecha_sistema);
+               // console.log("No se definio una fecha, la fecha del sistema es: " + fecha_sistema);
 
             }else{
-                console.log("Se definio una fecha");
-                console.log("El fecha es " + fecha);
+               // console.log("Se definio una fecha");
+                //console.log("El fecha es " + fecha);
             }
 
 
