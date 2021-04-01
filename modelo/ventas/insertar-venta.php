@@ -13,29 +13,32 @@ if(isset($_POST)){
 
    
 
-   
+    //Variables para el historial venta
     $codigo_llanta = $_POST['codigos']; 
     $fecha = $_POST['fecha'];
     $sucursal = $_SESSION['sucursal'];
     $idUser = $_SESSION['id_usuario'];
-    $cliente = "Publico en General";
+    $cliente = 1;
     $cantidad = $_POST['cantidades'];
     $total = $_POST["total"];
+    $estatus = "Activo";
 
       $codigos = json_decode($codigo_llanta); 
-
-      foreach($codigos as $value){
-        echo "El codigo es " . $value; 
-      } 
+      $cantidades = json_decode($cantidad);
+      $count = count($codigos);
       
+      $suma = array_sum($cantidades);
+      echo $suma;
 
-
-    /*    
-    $queryInsertar = "INSERT INTO ventas (id, Fecha, id_Sucursal, id_Usuarios, id_Cliente, Cantidad, Total) VALUES (null,?,?,?,?,?,?)";
+      if($sucursal = "Sendero")
+   
+    $queryInsertar = "INSERT INTO ventas (id, Fecha, id_Sucursal, id_Usuarios, id_Cliente, Cantidad, Total, estatus) VALUES (null,?,?,?,?,?,?,?)";
     $resultado = $con->prepare($queryInsertar);
-    $resultado->bind_param('siiiid', $fecha, $sucursal, $idUser, $cliente, $cantidad ,$total );
+    $resultado->bind_param('ssiiids', $fecha, $sucursal, $idUser, $cliente, $suma ,$total, $estatus);
     $resultado->execute();
-    $resultado->close();  */
+    $resultado->close();
+
+    print_r(1);
 
      
 

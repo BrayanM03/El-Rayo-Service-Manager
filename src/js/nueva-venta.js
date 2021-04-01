@@ -355,10 +355,7 @@ selects.forEach( select => {
                         arregloCantidad.push(value);  
                   } );
                 
-            console.log(arregloCodigo);
-            console.log(arregloDescripcion);
-            console.log(arregloModelo);
-            console.log(arregloCantidad);   
+              
             total = $("#total").val();
             fecha = $("#fecha").val();   
              
