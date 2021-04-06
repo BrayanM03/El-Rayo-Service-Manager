@@ -22,10 +22,11 @@ if(isset($_POST)){
     $cantidad = $_POST['cantidades'];
     $total = $_POST["total"];
     $estatus = "Activo";
-
-      $codigos = json_decode($codigo_llanta); 
-      $cantidades = json_decode($cantidad);
-      $count = count($codigos);
+    $unidad = "pieza";
+      
+    $codigos = json_decode($codigo_llanta); 
+    $cantidades = json_decode($cantidad);
+    $count = count($codigos);
       
       $suma = array_sum($cantidades);
       
@@ -48,23 +49,34 @@ if(isset($_POST)){
       while ($dato=mysqli_fetch_assoc($resultado)) {
         $arreglo[] = $dato;
 
-        while ($codigo_llanta <= count($codigo_llanta)) {
-         echo "CUakc";
+        //editar esta parte
+
+        foreach ($codigos as $key => $value) {
+          
+          $query_mostrar = $con->prepare("SELECT precio_Inicial, Codigo FROM llantas l, pedro, sendero INNER JOIN inventario_mat1 pedro
+                                           ON pedro.id_Llanta = l.id INNER JOIN inventario_mat2 sendero ON sendero.id_Llanta = l.id");
+          $query_mostrar->bind_param('s', $value);
+          $query_mostrar->execute();
+          $query_mostrar->store_result(); 
+
+/*
+          $queryInsertar = "INSERT INTO detalle_venta (id, id_Venta, id_Llanta, Cantidad, Unidad, precio_Unitario, Importe) VALUES (null,?,?,?,?,?,?,?)";
+          $resultado = $con->prepare($query);
+          $resultado->bind_param('sisi',$arreglo[0], $value, $suma, $unidad, $precio_unitario, $importe);
+          $resultado->execute();
+          $resultado->close();*/
+
         }
 
     /*usar esta consulta:  select * from ventas ORDER BY id DESC LIMIT 1 para escoger el ultimo id
 
-          $queryInsertar = "INSERT INTO detalle_venta (id, id_Venta, id_Llanta, Cantidad, Unidad, precio_Unitario, Importe) VALUES (null,?,?,?,?,?,?,?)";
-          $resultado = $con->prepare($query);
-          $resultado->bind_param('sisi',$dato, $code, $codigo, $sucursal,$stock );
-          $resultado->execute();
-          $resultado->close();*/
+          
 
-   // echo json_encode($codigo_llanta, JSON_UNESCAPED_UNICODE);
+   // echo json_encode($codigo_llanta, JSON_UNESCAPED_UNICODE);*/
 
     }
 
-    print_r($arreglo[0]);
+    
   }
   
 }
