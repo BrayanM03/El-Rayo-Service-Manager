@@ -335,7 +335,7 @@ selects.forEach( select => {
             toastr.warning('La tabla no tiene productos', 'Sin productos' );
         }else{
             //Iterando datos de la tabla de venta
-            arregloCodigo = []; 
+           /* arregloCodigo = []; 
             table.column(0).data().each( function ( value, index ) {
                         arregloCodigo.push(value);  
                     } );
@@ -354,6 +354,14 @@ selects.forEach( select => {
            table.column(3).data().each( function ( value, index ) {
                         arregloCantidad.push(value);  
                   } );
+
+            arregloPrecio = []; 
+           table.column(4).data().each( function ( value, index ) {
+                        arregloPrecio.push(value);  
+                  } );      */
+
+            llantaData = table.rows().data();
+            console.log(llantaData);       
                 
               
             total = $("#total").val();
@@ -381,10 +389,7 @@ selects.forEach( select => {
             $.ajax({
                 type: "POST",
                 url: "./modelo/ventas/insertar-venta.php",
-                data: {'codigos':       JSON.stringify(arregloCodigo),
-                       'descripciones': JSON.stringify(arregloDescripcion),
-                       'modelos':       JSON.stringify(arregloModelo),
-                       'cantidades':    JSON.stringify(arregloCantidad),
+                data: {'data':       JSON.stringify(llantaData),
                        'fecha': fecha,
                        'total': total},
                 dataType: "JSON",

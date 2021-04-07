@@ -14,28 +14,25 @@ if(isset($_POST)){
    
 
     //Variables para el historial venta
-    $codigo_llanta = $_POST['codigos']; 
+ 
     $fecha = $_POST['fecha'];
     $sucursal = $_SESSION['sucursal'];
     $idUser = $_SESSION['id_usuario'];
     $cliente = 1;
-    $cantidad = $_POST['cantidades'];
+    
     $total = $_POST["total"];
     $estatus = "Activo";
     $unidad = "pieza";
-      
-    $codigos = json_decode($codigo_llanta); 
-    $cantidades = json_decode($cantidad);
-    $count = count($codigos);
-      
-      $suma = array_sum($cantidades);
-      
+
+   
+    $datos = $_POST['data'];
+    $info_producto_individual = json_decode($datos);  
 
 
    
-    /*$queryInsertar = "INSERT INTO ventas (id, Fecha, id_Sucursal, id_Usuarios, id_Cliente, Cantidad, Total, estatus) VALUES (null,?,?,?,?,?,?,?)";
+    /*$queryInsertar = "INSERT INTO ventas (id, Fecha, id_Sucursal, id_Usuarios, id_Cliente, Total, estatus) VALUES (null,?,?,?,?,?,?)";
     $resultado = $con->prepare($queryInsertar);
-    $resultado->bind_param('ssiiids', $fecha, $sucursal, $idUser, $cliente, $suma ,$total, $estatus);
+    $resultado->bind_param('ssiids', $fecha, $sucursal, $idUser, $cliente ,$total, $estatus);
     $resultado->execute();
     $resultado->close();*/
 
@@ -47,24 +44,67 @@ if(isset($_POST)){
 
     }else{
       while ($dato=mysqli_fetch_assoc($resultado)) {
-        $arreglo[] = $dato;
 
-        //editar esta parte
+        $arreglo["id"] = $dato;
+        $id_Venta = $arreglo["id"];
+        
+        
 
-        foreach ($codigos as $key => $value) {
+        foreach ($info_producto_individual as $key => $value) {
           
-          $query_mostrar = $con->prepare("SELECT precio_Inicial, Codigo FROM llantas l, pedro, sendero INNER JOIN inventario_mat1 pedro
-                                           ON pedro.id_Llanta = l.id INNER JOIN inventario_mat2 sendero ON sendero.id_Llanta = l.id");
-          $query_mostrar->bind_param('s', $value);
-          $query_mostrar->execute();
-          $query_mostrar->store_result(); 
+          $validacion = is_numeric($key);
 
-/*
-          $queryInsertar = "INSERT INTO detalle_venta (id, id_Venta, id_Llanta, Cantidad, Unidad, precio_Unitario, Importe) VALUES (null,?,?,?,?,?,?,?)";
-          $resultado = $con->prepare($query);
-          $resultado->bind_param('sisi',$arreglo[0], $value, $suma, $unidad, $precio_unitario, $importe);
-          $resultado->execute();
-          $resultado->close();*/
+          if($validacion){
+            
+            $codigo = $value[0];
+            $descripcion = $value[1];
+            $modelo = $value[2];
+            $cantidad = $value[3];
+            $precio_unitario = $value[4];
+            $importe = $value[5];
+
+            $subcadena = substr($codigo, 0, 4);
+            if ($subcadena == "SEND") {
+               
+              
+               $ID = $con->prepare("SELECT id_Llanta FROM inventario_mat2 sendero INNER JOIN llantas ON sendero.id_Llanta = llantas.id WHERE Codigo LIKE ?");
+               $ID->bind_param('s', $codigo);
+               $ID->execute();
+               $ID->bind_result($id_Llanta);
+               $ID->fetch();
+               $ID->close();
+
+
+            }else if($subcadena == "PEDC"){
+              $ID = $con->prepare("SELECT id_Llanta FROM inventario_mat1 pedro INNER JOIN llantas ON pedro.id_Llanta = llantas.id WHERE Codigo LIKE ?");
+              $ID->bind_param('s', $codigo);
+              $ID->execute();
+              $ID->bind_result($id_Llanta);
+              $ID->fetch();
+              $ID->close();
+            }
+
+            foreach($id_Venta as $key => $value){
+
+            
+            $queryInsertar = "INSERT INTO detalle_venta (id, id_Venta, id_Llanta, Cantidad, Unidad, precio_Unitario, Importe) VALUES (null,?,?,?,?,?,?)";
+            $resultado = $con->prepare($queryInsertar);
+            $resultado->bind_param('iiisdd',$id_Venta, $id_Llanta, $cantidad, $unidad, $precio_unitario, $importe);
+            $resultado->execute();
+            $resultado->close();
+
+              
+            }
+          
+          
+
+
+          
+           
+
+          }else{
+            echo "";
+          }
 
         }
 
