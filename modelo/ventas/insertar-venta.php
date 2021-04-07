@@ -84,12 +84,12 @@ if(isset($_POST)){
               $ID->close();
             }
 
-            foreach($id_Venta as $key => $value){
+            foreach($id_Venta as $keys => $value2){
 
             
             $queryInsertar = "INSERT INTO detalle_venta (id, id_Venta, id_Llanta, Cantidad, Unidad, precio_Unitario, Importe) VALUES (null,?,?,?,?,?,?)";
             $resultado = $con->prepare($queryInsertar);
-            $resultado->bind_param('iiisdd',$id_Venta, $id_Llanta, $cantidad, $unidad, $precio_unitario, $importe);
+            $resultado->bind_param('iiisdd',$value2, $id_Llanta, $cantidad, $unidad, $precio_unitario, $importe);
             $resultado->execute();
             $resultado->close();
 
