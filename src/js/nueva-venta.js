@@ -334,31 +334,7 @@ selects.forEach( select => {
 
             toastr.warning('La tabla no tiene productos', 'Sin productos' );
         }else{
-            //Iterando datos de la tabla de venta
-           /* arregloCodigo = []; 
-            table.column(0).data().each( function ( value, index ) {
-                        arregloCodigo.push(value);  
-                    } );
-
-            arregloDescripcion = []; 
-            table.column(1).data().each( function ( value, index ) {
-                        arregloDescripcion.push(value);  
-                    } );
-                    
-            arregloModelo = []; 
-            table.column(2).data().each( function ( value, index ) {
-                        arregloModelo.push(value);  
-                   } );
-        
-           arregloCantidad = []; 
-           table.column(3).data().each( function ( value, index ) {
-                        arregloCantidad.push(value);  
-                  } );
-
-            arregloPrecio = []; 
-           table.column(4).data().each( function ( value, index ) {
-                        arregloPrecio.push(value);  
-                  } );      */
+            
 
             llantaData = table.rows().data();
             console.log(llantaData);       
@@ -366,20 +342,6 @@ selects.forEach( select => {
               
             total = $("#total").val();
             fecha = $("#fecha").val();   
-             
-            
-            
-            if(fecha == 0){
-                
-                const fecha_sistema = new Date();
-               // console.log("No se definio una fecha, la fecha del sistema es: " + fecha_sistema);
-
-            }else{
-               // console.log("Se definio una fecha");
-                //console.log("El fecha es " + fecha);
-            }
-
-
 
 
             //Enviando data

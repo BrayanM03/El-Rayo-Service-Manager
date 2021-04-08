@@ -106,7 +106,7 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Ordenes de:</h6>
-                        <a class="collapse-item" href="utilities-color.html">
+                        <a class="collapse-item" href="ventas-pv.php">
                             <img src="src/img/ventas.svg" width="18px" /> 
                             <span style="margin-left:12px;"> Ventas</span>
                         </a>
@@ -491,7 +491,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; El Rayo Service Manager 2020</span><br><br>
+                        <span>Copyright &copy; El Rayo Service Manager <?php print_r(date("Y")) ?></span><br><br>
                         <span>Edicion e integración por <a href="https://www.facebook.com/BrayanM03/">Brayan Maldonado</a></span>
                     </div>
                 </div>
