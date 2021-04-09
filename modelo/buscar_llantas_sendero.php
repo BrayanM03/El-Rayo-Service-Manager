@@ -13,13 +13,14 @@
      $query_mostrar = $con->prepare("SELECT COUNT(*) total FROM llantas l INNER JOIN inventario_mat2 sendero
                                                                           ON sendero.id_Llanta = l.id 
                                                                           WHERE l.Ancho LIKE ? 
+                                                                          OR sendero.Codigo LIKE ? 
                                                                           OR l.Proporcion LIKE ? 
                                                                           OR l.Diametro LIKE ?
                                                                           OR l.Modelo LIKE ? 
                                                                           OR l.Marca LIKE ? 
                                                                           OR l.Descripcion LIKE ?");
     
-     $query_mostrar->bind_param('ssssss', $parametro, $parametro, $parametro, $parametro, $parametro, $parametro);
+     $query_mostrar->bind_param('sssssss', $parametro, $parametro, $parametro, $parametro, $parametro, $parametro, $parametro);
      $query_mostrar->execute();
      $query_mostrar->bind_result($total);
      $query_mostrar->fetch();
@@ -31,7 +32,8 @@
         
         $sqlTraerLlanta="SELECT l.*, sendero.id, sendero.Codigo, sendero.Sucursal, sendero.Stock FROM llantas l INNER JOIN inventario_mat2 sendero
                                                                     ON sendero.id_Llanta = l.id 
-                                                                    WHERE l.Ancho LIKE '%$ancho%'  
+                                                                    WHERE l.Ancho LIKE '%$ancho%'
+                                                                    OR sendero.Codigo LIKE '%$ancho%'  
                                                                     OR l.Proporcion LIKE '%$ancho%'  
                                                                     OR l.Diametro LIKE '%$ancho%'
                                                                     OR l.Modelo LIKE '%$ancho%'  

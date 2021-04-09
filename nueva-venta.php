@@ -478,7 +478,7 @@
                                                             <input type="text" id="search" name="search" class="input-group">
                                                         </label> 
                                                         <div class="contenedor-tabla oculto">
-                                                                <table class="table">
+                                                                <table class="table" id="table-llantas-mostradas">
                                                                 <thead class="table-info">
                                                                 <tr>
                                                                     <th>Codigo</th>

@@ -12,7 +12,8 @@
      $parametro = "%$ancho%";
      $query_mostrar = $con->prepare("SELECT COUNT(*) total FROM llantas l INNER JOIN inventario_mat1 pedro
                                                                           ON pedro.id_Llanta = l.id 
-                                                                          WHERE l.Ancho LIKE ? 
+                                                                          WHERE l.Ancho LIKE ?
+                                                                          OR pedro.Codigo LIKE ? 
                                                                           OR l.Proporcion LIKE ? 
                                                                           OR l.Diametro LIKE ?
                                                                           OR l.Modelo LIKE ? 
@@ -22,7 +23,7 @@
      //-----------------------------------------------------------------------------------------------------//
      //-----------------------------------------------------------------------------------------------------//
     
-     $query_mostrar->bind_param('ssssss', $parametro, $parametro, $parametro, $parametro, $parametro, $parametro);
+     $query_mostrar->bind_param('sssssss', $parametro, $parametro, $parametro, $parametro, $parametro, $parametro, $parametro);
      $query_mostrar->execute();
      $query_mostrar->bind_result($total);
      $query_mostrar->fetch();
@@ -34,6 +35,7 @@
         $sqlTraerLlanta="SELECT l.*, pedro.id, pedro.Codigo, pedro.Sucursal, pedro.Stock FROM llantas l INNER JOIN inventario_mat1 pedro
                                                                 ON pedro.id_Llanta = l.id 
                                                                 WHERE l.Ancho LIKE '%$ancho%'  
+                                                                OR pedro.Codigo LIKE '%$ancho%'
                                                                 OR l.Proporcion LIKE '%$ancho%'  
                                                                 OR l.Diametro LIKE '%$ancho%'
                                                                 OR l.Modelo LIKE '%$ancho%'  

@@ -88,10 +88,16 @@ selects.forEach( select => {
                             contenedorTabla = $(".contenedor-tabla");
                         
                              tablaBusqueda = $(".tbody");
+
+                             if(value.Stock == 0){
+                                color = "table-danger";
+                             }else{
+                                color = "";
+                             }
                                
                                 tablaBusqueda.append(
 
-                                       "<tr class='producto-individual' "+
+                                       "<tr class='producto-individual "+ color +"' "+
                                        "id='"+value.id + "' "+
                                        "cod='"+value.Codigo + "' "+
                                        "descripcion='"+value.Descripcion + "' " +
@@ -115,6 +121,11 @@ selects.forEach( select => {
                                        contenedorTabla.removeClass("oculto");
                                        
                           }); 
+
+
+
+
+                         
                           
                           //Obtener datos de fila clickeada
 
@@ -129,38 +140,44 @@ selects.forEach( select => {
                             marca1           = $(this).attr("marca");
                             sucursal1        = $(this).attr("sucursal");
                             stock1           = $(this).attr("stock");
-    
-                            $("#description").focus().val(descripcion1);
-                            $("#modelo").focus().val(modelo1);
-                            $("#precio").focus().val(precio_Venta1);
-
-                            $("#agregar-producto").attr("idLlanta", id1);
-                            $("#agregar-producto").attr("stock", stock1); 
-                            $("#agregar-producto").attr("codigo", cod1);
-                            contenedorTabla.addClass("oculto");
-    
-                           
-                            if(sucursal1 == "Sendero"){
-                                select = $("#sucursal");
-                                select.focus().val(1).blur();
-    
+                            
+                            if (stock1 == 0) {
                             }else{
-                            
-                                select = $("#sucursal");
-                                select.focus().val(0).blur();
-                            }
 
-                            
+                                $("#description").focus().val(descripcion1);
+                                $("#modelo").focus().val(modelo1);
+                                $("#precio").focus().val(precio_Venta1);
     
-                            var cuadro = document.getElementsByClassName("logo-marca-grande")[0];
-                            
-                            cuadro.style.backgroundImage = "url('src/img/logos/"+ marca1 +".jpg')";
+                                $("#agregar-producto").attr("idLlanta", id1);
+                                $("#agregar-producto").attr("stock", stock1); 
+                                $("#agregar-producto").attr("codigo", cod1);
+
+                                contenedorTabla.addClass("oculto");
+        
+                               
+                                if(sucursal1 == "Sendero"){
+                                    select = $("#sucursal");
+                                    select.focus().val(1).blur();
+        
+                                }else{
+                                
+                                    select = $("#sucursal");
+                                    select.focus().val(0).blur();
+                                }
     
-                            inAncho.focus().val("");
-                            inAncho.blur();
-                            $("#modelo").blur();
-                            $("#description").blur();
-                            $("#precio").blur();
+                                
+        
+                                var cuadro = document.getElementsByClassName("logo-marca-grande")[0];
+                                
+                                cuadro.style.backgroundImage = "url('src/img/logos/"+ marca1 +".jpg')";
+        
+                                inAncho.focus().val("");
+                                inAncho.blur();
+                                $("#modelo").blur();
+                                $("#description").blur();
+                                $("#precio").blur();
+                            }
+                           
                         });
                     }
    
@@ -207,10 +224,14 @@ selects.forEach( select => {
                         
                              tablaBusqueda = $(".tbody");
 
-                             
+                             if(value2.Stock == 0){
+                                color = "table-danger";
+                             }else{
+                                color = "";
+                             }
                                
                                 tablaBusqueda.append(
-                                        "<tr class='producto-individual' "+
+                                        "<tr class='producto-individual "+ color +"' "+
                                         "id='"+value2.id + "' "+
                                         "cod='"+value2.Codigo + "' "+
                                         "descripcion='"+value2.Descripcion + "' "  +
@@ -249,11 +270,30 @@ selects.forEach( select => {
                             sucursal1        = $(this).attr("sucursal");
                             stock1           = $(this).attr("stock"); 
     
+                           
+
+                            if (stock1==0) {
+                                
+                                Swal.fire({
+                                    title: 'Ya no quedan llantas',
+                                    html: "<span>La llanta: </br>"+
+                                    "Codigo: <strong>"+ cod1+"</strong></br>"+
+                                    "Marca: <strong>"+ marca1 +"</strong></br>"+
+                                    "Descripcion: <strong>"+ descripcion1 +"</strong></br>"+
+                                    "Se agoto del inventario, contacta a un administrador para que modifique el inventario</span>",
+                                    icon: "warning",
+                                    cancelButtonColor: '#00e059',
+                                    showConfirmButton: true,
+                                    confirmButtonText: 'Aceptar', 
+                                    cancelButtonColor:'#ff764d'
+                                })
+
+                            }else{
+
                             $("#description").focus().val(descripcion1);
                             $("#modelo").focus().val(modelo1);
                             $("#precio").focus().val(precio_Venta1);
 
-                            
                             $("#agregar-producto").attr("stock", stock1);
                             $("#agregar-producto").attr("idLlanta", id1);
                             $("#agregar-producto").attr("codigo", cod1);
@@ -279,6 +319,13 @@ selects.forEach( select => {
                             $("#modelo").blur();
                             $("#description").blur();
                             $("#precio").blur();
+
+                            
+
+                            }
+
+                            
+                            
                             
                         });
                     }
@@ -398,6 +445,18 @@ selects.forEach( select => {
         }
         //$(".tbody").empty();
       }
+
+
+      $(document).on("click",function(e) {
+
+        var container = $("#table-llantas-mostradas");
+
+            if (!container.is(e.target) && container.has(e.target).length === 0) { 
+                contenedorLista = $(".contenedor-tabla");
+                contenedorLista.addClass("oculto");
+
+            }
+   });
 
 
     

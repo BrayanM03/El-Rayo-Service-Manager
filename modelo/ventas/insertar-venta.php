@@ -69,6 +69,8 @@ if(isset($_POST)){
             $importe = $value[5];
 
             $subcadena = substr($codigo, 0, 4);
+
+
             if ($subcadena == "SEND") {
                
               
@@ -81,6 +83,11 @@ if(isset($_POST)){
 
                $resultStock = $stockActual - $cantidad;
 
+              $updateStockSendero = $con->prepare("UPDATE inventario_mat2 SET Stock = ? WHERE id_Llanta = ?");
+              $updateStockSendero->bind_param('ii', $resultStock, $id_Llanta);
+              $updateStockSendero->execute();
+              $updateStockSendero->close();
+
                
 
 
@@ -92,7 +99,12 @@ if(isset($_POST)){
               $ID->fetch();
               $ID->close();
 
-              
+              $resultStock = $stockActual - $cantidad;
+
+              $updateStockSendero = $con->prepare("UPDATE inventario_mat1 SET Stock = ? WHERE id_Llanta = ?");
+              $updateStockSendero->bind_param('ii', $resultStock, $id_Llanta);
+              $updateStockSendero->execute();
+              $updateStockSendero->close();
 
              
             }
@@ -101,12 +113,9 @@ if(isset($_POST)){
 
             foreach($id_Venta as $keys => $value2){
 
-              $resultStock = $stockActual - $cantidad;
+             
 
-              $updateStockSendero = $con->prepare("UPDATE inventario_mat1 SET Stock = ? WHERE Codigo = ?");
-              $updateStockSendero->bind_param('ii', $resultStock, $codigo);
-              $updateStockSendero->execute();
-              $updateStockSendero->close();
+              
             
             $queryInsertar = "INSERT INTO detalle_venta (id, id_Venta, id_Llanta, Cantidad, Unidad, precio_Unitario, Importe) VALUES (null,?,?,?,?,?,?)";
             $resultado = $con->prepare($queryInsertar);
