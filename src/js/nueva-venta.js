@@ -142,6 +142,21 @@ selects.forEach( select => {
                             stock1           = $(this).attr("stock");
                             
                             if (stock1 == 0) {
+
+                                Swal.fire({
+                                    title: 'Ya no quedan llantas',
+                                    html: "<span>La llanta: </br>"+
+                                    "Codigo: <strong>"+ cod1+"</strong></br>"+
+                                    "Marca: <strong>"+ marca1 +"</strong></br>"+
+                                    "Descripcion: <strong>"+ descripcion1 +"</strong></br>"+
+                                    "Se agoto del inventario, contacta a un administrador para que modifique el inventario</span>",
+                                    icon: "warning",
+                                    cancelButtonColor: '#00e059',
+                                    showConfirmButton: true,
+                                    confirmButtonText: 'Aceptar', 
+                                    cancelButtonColor:'#ff764d'
+                                });
+
                             }else{
 
                                 $("#description").focus().val(descripcion1);
@@ -430,7 +445,7 @@ selects.forEach( select => {
                    $("#total").val(0.00);
                 }else if(result.isDenied){
 
-                    //window.open('./modelo/generar-reporte-venta.php', '_blank');
+                    window.open('./modelo/ventas/generar-reporte-venta.php', '_blank');
                          
                     table.clear().draw();
                     $("#total").val(0.00);

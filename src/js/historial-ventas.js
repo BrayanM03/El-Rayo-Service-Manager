@@ -25,7 +25,7 @@ table = $('#ventas').DataTable({
     { title: "Accion",
       data: null,
       className: "celda-acciones",
-      render: function (row) {
+      render: function (row, data) {
     
         return '<div style="display: flex"><button type="button" class="buttonEditar btn btn-warning" style="margin-right: 8px"><span class="fa fa-edit"></span><span class="hidden-xs"></span></button><br><button type="button" onclick="borrarVenta('+ row.folio +');" class="buttonBorrar btn btn-danger"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
       },
@@ -35,9 +35,12 @@ table = $('#ventas').DataTable({
   searching: true,
   scrollY: "50vh",
   info: true,
-  responsive: true,
+  responsive: false,
+  order: [2, "desc"]
   
 });
+
+$("table.dataTable thead").addClass("table-info")
 
  //Enumerar las filas "index column"
  table.on( 'order.dt search.dt', function () {
@@ -82,8 +85,13 @@ function borrarVenta(id) {
                 showConfirmButton: true,
                 confirmButtonText: 'Aceptar', 
                 cancelButtonColor:'#ff764d',
-            })
-            location.reload();
+            }).then((result) => {  
+
+                if(result.isConfirmed){
+                    location.reload();
+                }});
+
+           
            }else{
             Swal.fire({
                 title: 'Venta no eliminada',
@@ -95,9 +103,11 @@ function borrarVenta(id) {
                 cancelButtonColor:'#ff764d',
                 showDenyButton: true,
                 
-            });
+            }).then((result) => {  
 
-            location.reload();
+                if(result.isConfirmed){
+                    location.reload();
+                }});
            }
         }
     });

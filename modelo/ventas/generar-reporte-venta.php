@@ -23,6 +23,9 @@ function Header()
         $direccion = "Avenida Pedro Cardenas KM5 No.207";
         $colonia = "Col. Francisco Castellanos";
         
+   }else if($_SESSION['sucursal'] == "Sendero"){
+    $direccion = "Av. Sendero Nacional";
+    $colonia = $_POST["codigo_venta"];//"Kilometro 50";
    }
 
     // Logo
