@@ -419,42 +419,45 @@ selects.forEach( select => {
                 dataType: "JSON",
                 success: function (response) {
                     console.log(response);
+                    Swal.fire({
+                        title: 'Venta realizada',
+                        html: "<span>La venta se realizo con exito</br></span>"+
+                        "ID Venta: RAY" + response,
+                        icon: "success",
+                        cancelButtonColor: '#00e059',
+                        showConfirmButton: true,
+                        confirmButtonText: 'Aceptar', 
+                        cancelButtonColor:'#ff764d',
+                        showDenyButton: true,
+                        denyButtonText: 'Reporte'
+                    },
+                       
+                      ).then((result) =>{
+          
+                        if(result.isConfirmed){
+                           //location.reload();
+                          
+                           table.clear().draw();
+                           $("#total").val(0.00);
+                        }else if(result.isDenied){
+
+                            window.open('./modelo/ventas/generar-reporte-venta.php?id='+ response, '_blank');
+        
+                                 
+                            table.clear().draw();
+                            $("#total").val(0.00);
+                            
+                        }
+        
+                        table.clear().draw();
+                            $("#total").val(0.00);
+                        });
                 }
             });
 
             
             
-            Swal.fire({
-                title: 'Venta realizada',
-                html: "<span>La venta se realizo con exito</span>",
-                icon: "success",
-                cancelButtonColor: '#00e059',
-                showConfirmButton: true,
-                confirmButtonText: 'Aceptar', 
-                cancelButtonColor:'#ff764d',
-                showDenyButton: true,
-                denyButtonText: 'Reporte'
-            },
-               
-              ).then((result) =>{
-  
-                if(result.isConfirmed){
-                   //location.reload();
-                  
-                   table.clear().draw();
-                   $("#total").val(0.00);
-                }else if(result.isDenied){
-
-                    window.open('./modelo/ventas/generar-reporte-venta.php', '_blank');
-                         
-                    table.clear().draw();
-                    $("#total").val(0.00);
-                    
-                }
-
-                table.clear().draw();
-                    $("#total").val(0.00);
-                });
+            
 
 
         }

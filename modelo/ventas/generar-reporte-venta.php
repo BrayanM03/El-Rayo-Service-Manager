@@ -1,5 +1,19 @@
+
+
 <?php
 session_start();
+include '../conexion.php';
+$con = $conectando->conexion(); 
+
+$folio = "RAY" . $_GET["id"];
+global $folio;
+
+/*$ID = $con->prepare("SELECT Fecha, id_Cliente, Cantidad, Total_Pelc FROM inventario_mat2 sendero INNER JOIN llantas ON sendero.id_Llanta = llantas.id WHERE Codigo LIKE ?");
+$ID->bind_param('s', $codigo);
+$ID->execute();
+$ID->bind_result($id_Llanta, $stockActual);
+$ID->fetch();
+$ID->close();*/
 
 require('../../src/vendor/fpdf/fpdf.php');
 
@@ -14,10 +28,12 @@ if (!isset($_SESSION['id_usuario'])) {
 class PDF extends FPDF
 {
 
-
     
 // Cabecera de página
 function Header()
+
+
+
 {
     if($_SESSION['sucursal'] == "Pedro"){
         $direccion = "Avenida Pedro Cardenas KM5 No.207";
@@ -25,8 +41,12 @@ function Header()
         
    }else if($_SESSION['sucursal'] == "Sendero"){
     $direccion = "Av. Sendero Nacional";
-    $colonia = $_POST["codigo_venta"];//"Kilometro 50";
+    $colonia = "Kilometro 50";
    }
+
+   
+
+  
 
     // Logo
     $this->Image('../../src/img/logo.jpg',20,10,25);
@@ -74,7 +94,7 @@ function Header()
     $this->Cell(20,7,utf8_decode("Folio:"),0,0, false);
     $this->SetFont('Times','',12);
     $this->SetTextColor(36, 35, 28);
-    $this->Cell(50,7,utf8_decode("A1"),0,0,'', false);
+    $this->Cell(50,7,utf8_decode($GLOBALS["folio"]),0,0,'', false);
 
     $this->Ln(7);
 
@@ -231,7 +251,7 @@ function cuerpoTabla(){
     $pdf->SetLineWidth(1);
     $pdf->Line(10,285,200,285);
 
-    $pdf->Output();
+    $pdf->Output("Folio RAY" . $_GET["id"] .".pdf", "I");
 }
 
 cuerpoTabla();
