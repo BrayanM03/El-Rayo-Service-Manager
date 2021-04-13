@@ -6,6 +6,8 @@ $(document).ready(function() {
  
  
   columnDefs = [{
+    title: "#"
+  },{
     title: "Codigo"
   }, {
     title: "Descripción"
@@ -34,6 +36,12 @@ $(document).ready(function() {
     
   });
 
+  table.on( 'order.dt search.dt', function () {
+    table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+        cell.innerHTML = i+1;
+       
+    } );
+} ).draw();
  
 
   //Borrar articulo
@@ -141,6 +149,7 @@ function agregarInfo(){
      //Esta es la funcion llanta agregada y es para agregar la llanta si es una llanta no repetida y si el contador de llantas repetidas esta en 0
       function llantaAgregada() {
          fila = table.row.add( [
+            null,
               idBotonLLanta,
               descripcion, 
               modelo, 
@@ -177,11 +186,11 @@ function agregarInfo(){
         //Recorremos los datos de esas filas 
         Rows.data().each(function (value, index) {
 
-          codigo = value[0];
-          cantidadLlantas = value[3];
+          codigo = value[1];
+          cantidadLlantas = value[4];
           totalCant = parseInt(cantidadLlantas) + parseInt(cantidad);
-          importe2 = value[5];
-          precio2 = value[4];
+          importe2 = value[6];
+          precio2 = value[5];
 
           thisRow = table.row(this);
           
@@ -209,6 +218,7 @@ function agregarInfo(){
             parseFloat(subtotal);
              
             table.row(sameRow).data( [
+              null,
               idBotonLLanta,
               descripcion, 
               modelo, 
@@ -238,6 +248,7 @@ function agregarInfo(){
                       if (posterior == 0) { //Y no hay enfrente
                        
                           table.row.add( [
+                            null,
                             idBotonLLanta,
                             descripcion, 
                             modelo, 
@@ -246,6 +257,7 @@ function agregarInfo(){
                             subtotal,
                             botones
                         ] ).draw(false);
+                      
 
                         flag = 1;
                         return false;
@@ -255,6 +267,7 @@ function agregarInfo(){
                         if (codigo == idBotonLLanta) {//Es el mismo codigo
 
                           stockTotal = parseInt(cantidadLlantas) + parseInt(cantidad);
+                          alert("Si hay enfrente");
 
                           if(stockLlanta < stockTotal){
 
@@ -268,6 +281,7 @@ function agregarInfo(){
                             
                             
                             table.row(sameRow).data( [
+                              null,
                               idBotonLLanta,
                               descripcion, 
                               modelo, 
@@ -313,6 +327,7 @@ function agregarInfo(){
                           
                             
                             table.row(sameRow).data( [
+                              null,
                               idBotonLLanta,
                               descripcion, 
                               modelo, 
@@ -332,6 +347,7 @@ function agregarInfo(){
                           if (posterior == 0) { //No hay fila enfrente
                            
                             table.row.add( [
+                              null,
                               idBotonLLanta,
                               descripcion, 
                               modelo, 
@@ -364,6 +380,7 @@ function agregarInfo(){
                              
                               
                               table.row(sameRow).data( [
+                                null,
                                 idBotonLLanta,
                                 descripcion, 
                                 modelo, 
@@ -404,7 +421,7 @@ function agregarInfo(){
     Rows =  table.rows(); 
     contador = 0;
     Rows.data().each(function (value, index) {
-      contador = contador + value[5];
+      contador = contador + value[6];
       
       $("#total").val(contador);
     });

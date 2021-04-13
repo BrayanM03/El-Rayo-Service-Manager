@@ -61,12 +61,12 @@ if(isset($_POST)){
 
           if($validacion){
             
-            $codigo = $value[0];
-            $descripcion = $value[1];
-            $modelo = $value[2];
-            $cantidad = $value[3];
-            $precio_unitario = $value[4];
-            $importe = $value[5];
+            $codigo = $value[1];
+            $descripcion = $value[2];
+            $modelo = $value[3];
+            $cantidad = $value[4];
+            $precio_unitario = $value[5];
+            $importe = $value[6];
 
             $subcadena = substr($codigo, 0, 4);
 
