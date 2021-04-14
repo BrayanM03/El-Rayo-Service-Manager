@@ -23,7 +23,7 @@ global $cliente;
 global $total;
 
 
-$formatterES = new NumberFormatter("es-ES", NumberFormatter::SPELLOUT);;
+$formatterES = new NumberFormatter("es-ES", NumberFormatter::SPELLOUT);
 $izquierda = intval(floor($total));
 $derecha = intval(($total - floor($total)) * 100);
 $formatTotal = $formatterES->format($izquierda) . " con " . $formatterES->format($derecha) . " centavos";
@@ -321,7 +321,7 @@ function cuerpoTabla(){
        
         
         $pdf->Cell(19,10,$cantidad,0,0,'C',1);
-        $pdf-> Cell(30,10, $descripcion,0,0,'C',1);
+        $pdf->Cell(30,10, $descripcion,0,0,'C',1);
         $pdf->Cell(30,10,utf8_decode($marca),0,0, 'C',1);
         $pdf->Cell(30,10,utf8_decode($precio_unitario),0,0, 'C',1);
         $pdf->Cell(30,10,utf8_decode($importe),0,0, 'C',1);

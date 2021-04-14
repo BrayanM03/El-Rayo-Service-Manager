@@ -3,7 +3,7 @@
 
 $(document).ready(function() {
   
- 
+  $.fn.dataTable.ext.errMode = 'none';
  
   columnDefs = [{
     title: "#"
@@ -149,7 +149,7 @@ function agregarInfo(){
      //Esta es la funcion llanta agregada y es para agregar la llanta si es una llanta no repetida y si el contador de llantas repetidas esta en 0
       function llantaAgregada() {
          fila = table.row.add( [
-            null,
+              null,
               idBotonLLanta,
               descripcion, 
               modelo, 
@@ -211,11 +211,13 @@ function agregarInfo(){
               return false;
               
             }else{
-              
-            sameRow =  $("td").filter(":contains('"+codigo+"')").parents("tr");
 
-            subtotal = precio2 * totalCant;
-            parseFloat(subtotal);
+              alert("mismo codigo");
+              
+              sameRow =  $("td").filter(":contains('"+codigo+"')").parents("tr");
+              console.log(sameRow);
+              subtotal = precio2 * totalCant;
+              parseFloat(subtotal);
              
             table.row(sameRow).data( [
               null,
@@ -244,8 +246,11 @@ function agregarInfo(){
 
               if(anterior == 0){ //No hay filas atras 
                 
-              
+              alert("A1");
                       if (posterior == 0) { //Y no hay enfrente
+
+                        
+               alert("A2");
                        
                           table.row.add( [
                             null,
@@ -263,8 +268,10 @@ function agregarInfo(){
                         return false;
 
                       }else{//Si hay enfrente
+                        alert("A3");
                        
                         if (codigo == idBotonLLanta) {//Es el mismo codigo
+                          alert("A4");
 
                           stockTotal = parseInt(cantidadLlantas) + parseInt(cantidad);
                           alert("Si hay enfrente");
@@ -276,7 +283,7 @@ function agregarInfo(){
                             return false;
                             
                           }else{
-
+                            alert("A5");
                           sameRow =  $("td").filter(":contains('"+codigo+"')").parents("tr");
                             
                             
@@ -296,11 +303,11 @@ function agregarInfo(){
                           return false;
                         }
                         }else{
-                         
+                          alert("A6");
                         }
                       }
               }else{  //SI hay filas atras
-
+                alert("A7");
                 primerFila0 = $( "#pre-venta tbody" ).children();
                 primerFila = primerFila0[index];
                 despuesFila= $(primerFila).next("tr");
@@ -312,17 +319,17 @@ function agregarInfo(){
 
                 
                     if (codigo == idBotonLLanta) { //Es el mismo codigo
-
+                      alert("A8");
                       stockTotal = parseInt(cantidadLlantas) + parseInt(cantidad);
 
                       if(stockLlanta < stockTotal){
-
+                        alert("A9");
                         toastr.error('La cantidad de llantas que quieres vender sobrepasa el stock, cambia el dato', 'Error' );
                         flag = 1;
                         return false;
                         
                       }else{
-
+                        alert("A10");
                             sameRow =  $("td").filter(":contains('"+codigo+"')").parents("tr");
                           
                             
@@ -344,7 +351,9 @@ function agregarInfo(){
                           return false;
                         }
                     }else{ //No es el mismo codigo
+                      alert("A11");
                           if (posterior == 0) { //No hay fila enfrente
+                            alert("A12");
                            
                             table.row.add( [
                               null,
@@ -365,17 +374,18 @@ function agregarInfo(){
                           return false;
                           }else{ //Si hay una enfrente
                             if (codigo == idBotonLLanta) { //Y es la misma
-
+                              alert("A13");
                               stockTotal = parseInt(cantidadLlantas) + parseInt(cantidad);
 
                               if(stockLlanta < stockTotal){
+                                alert("A14");
     
                                 toastr.error('La cantidad de llantas que quieres vender sobrepasa el stock, cambia el dato', 'Error' );
                                 flag = 1;
                                 return false;
                                 
                               }else{
-
+                                alert("A15");
                               sameRow =  $("td").filter(":contains('"+codigo+"')").parents("tr");
                              
                               
@@ -398,7 +408,7 @@ function agregarInfo(){
                             return false;
                           }
                             }else{
-                             
+                              alert("A16");
                             }
                           }
                     }

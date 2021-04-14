@@ -1,8 +1,9 @@
 function MostrarVentas() {  
+    $.fn.dataTable.ext.errMode = 'none';
 
 table = $('#ventas').DataTable({
       
-      
+    serverSide: false,
     ajax: {
         method: "POST",
         url: "./modelo/ventas/historial-ventas.php",
@@ -34,9 +35,10 @@ table = $('#ventas').DataTable({
   paging: true,
   searching: true,
   scrollY: "50vh",
-  info: true,
+  info: false,
   responsive: false,
-  order: [2, "desc"]
+  order: [2, "desc"],
+ 
   
 });
 

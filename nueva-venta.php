@@ -664,7 +664,8 @@
     <script src="src/vendor/datatables/defaults.js"></script>
     <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script src="src/js/agregar-info-tabla-venta.js"></script>
+    <!--<script src="src/js/agregar-info-tabla-venta.js"></script>-->
+    <script src="src/js/prueba.js"></script>
     <script src="src/js/generar-token.js"></script>
    
    
