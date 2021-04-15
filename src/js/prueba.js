@@ -16,12 +16,13 @@ $(document).ready(function() {
     },  
 
   columns: [   
-    { title: "#",              data: null             },
-    { title: "Codigo",         data: "folio",         }, 
-    { title: "Descripcion",       data: "sucursal"    },
-    { title: "Modelo",       data: "vendedor"         },
-    { title: "Cantidad",        data: "cliente"       },
-    { title: "Precio",       data: "cantidad"         },
+    { title: "#",               data: null             },
+    { title: "Codigo",          data: "codigo",         }, 
+    { title: "Descripcion",     data: "descripcion"    },
+    { title: "Modelo",          data: "modelo"         },
+    { title: "Cantidad",        data: "cantidad"       },
+    { title: "Precio",          data: "precio"         },
+    { title: "Importe",         data: "importe"        },
     { title: "Accion",
       data: null,
       className: "celda-acciones",
@@ -36,7 +37,7 @@ $(document).ready(function() {
   scrollY: "350px",
   info: false,
   responsive: false,
-  order: [2, "desc"],
+  order: [0, "desc"],
  
   
 });
@@ -47,7 +48,7 @@ $(document).ready(function() {
         cell.innerHTML = i+1;
        
     } );
-} ).draw();
+} );
  
 
   //Borrar articulo
@@ -65,7 +66,8 @@ $(document).ready(function() {
     toastr.success('Producto borrado con exito', 'Correcto' );
   } );
 
-} );
+
+});
 
 contador = 2;
 
@@ -143,7 +145,7 @@ function agregarInfo(){
       precio           =   $("#precio").val();
       sucursal         =   $("select[id = sucursal] option:selected").text();
       importes         =   precio * cantidad; 
-      subtotal         =   parseFloat(importes);
+      //subtotal         =   parseFloat(importes);
       botones = "<div class='btn btn-danger borrar-articulo' style='margin-right:5px;'><i class='fas fa-trash'></i></div>";
 
       
@@ -154,36 +156,21 @@ function agregarInfo(){
   
      //Esta es la funcion llanta agregada y es para agregar la llanta si es una llanta no repetida y si el contador de llantas repetidas esta en 0
       function llantaAgregada() {
-        /* fila = table.row.add( [
-              null,
-              idBotonLLanta,
-              descripcion, 
-              modelo, 
-              cantidad, 
-              precio,  
-              subtotal,
-              botones
-          ] ).draw(false);
-          
-          
-          total = $("#total").val();
-          newTotal = subtotal + parseInt(total);
-          $("#total").val(newTotal);
-          
-          toastr.success('Producto agregado correctamente', 'Correcto' );*/ 
-
-          console.log(idBotonLLanta, descripcion, modelo, cantidad, precio, subtotal, botones);
 
           $.ajax({
             type: "POST",
             url: "./modelo/ventas/detalle-venta-insertar.php",
             data: {"codigo": idBotonLLanta, "descripcion": descripcion,
                     "modelo": modelo, "cantidad": cantidad, "precio": precio,
-                    "subtotal": subtotal},
-            dataType: "dataType",
+                    "subtotal": importes},
+            
             success: function (response) {
-              
-            }
+             
+              table.ajax.reload();
+
+            },
+
+            
           });
 
 
@@ -197,11 +184,11 @@ function agregarInfo(){
       if ( !table.data().any()) {
       
         llantaAgregada();
-        
+       
        
        }else{
-
-       
+        llantaAgregada();
+        
        }//Se cierra if
 
 
@@ -209,15 +196,21 @@ function agregarInfo(){
     } //Se cierra if que valida el formulario
 
     //Calculamos el valor total
-    Rows =  table.rows(); 
-    contador = 0;
-    Rows.data().each(function (value, index) {
-      contador = contador + value[6];
-      
-      $("#total").val(contador);
+
+    
+    $.ajax({
+      type: "POST",
+      url: "./modelo/ventas/sumarTotaldetalleVenta.php",
+      data: {"data":"data"},
+      success: function (response) {
+        console.log(response);
+        $("#total").val(response);
+      }
     });
       
 } //Se cierra la funcion anidada a la boton de agregar informacion
+
+
 
 
 
