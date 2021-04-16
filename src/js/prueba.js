@@ -8,18 +8,30 @@ $(document).ready(function() {
   table = $('#pre-venta').DataTable({
     
     destroy: true,
-    serverSide: false,
+    serverSide: true,
     processing: true,
     ajax: {
         method: "POST",
         url: "./modelo/ventas/detalle-venta-temp.php",
-        dataType: "json"
+        dataType: "json",
+        error: function(){  // error handling
+          numRows = table.column( 0 ).data().length;
+     
+      if (numRows == 0) {
+        $(".pre-venta-error").html("");
+        $("#pre-venta tbody").append('<tr><th id="empty-table" colspan="8">Preventa vacia</th></tr>');
+        $("#pre-venta_processing").css("display","none");
+      }
+
+        
+          
+        }
 
     },  
 
   columns: [   
     { title: "#",               data: null             },
-    { title: "Codigo",          data: "codigo",         }, 
+    { title: "Codigo",          data: "codigo",        }, 
     { title: "Descripcion",     data: "descripcion"    },
     { title: "Modelo",          data: "modelo"         },
     { title: "Cantidad",        data: "cantidad"       },
@@ -35,7 +47,7 @@ $(document).ready(function() {
     },
   ],
 
-  paging: true,
+  paging: false,
   searching: true,
   scrollY: "350px",
   info: false,
@@ -87,7 +99,24 @@ function borrarProductoTmp(id){
     data: {"id": id},
     success: function (response) {
       if (response == 1) {
-      table.ajax.reload();
+     
+      
+      numRows = table.column( 0 ).data().length;
+     
+
+      if (numRows==1){
+       
+        table.ajax.reload();
+        $("#pre-venta tbody tr").remove();
+        $(".pre-venta-error").html("");
+        $(".products-grid-error").remove();
+        $("#pre-venta tbody").append('<tr><th id="empty-table" style="width: 100%" colspan="8">Preventa vacia</th></tr>');
+        $("#pre-venta_processing").css("display","none");
+      
+      }else{
+        table.ajax.reload();
+      }
+
       toastr.success('Producto borrado con exito', 'Correcto' );
      
 
@@ -176,8 +205,11 @@ function agregarInfo(){
                     "subtotal": importes},
             
             success: function (response) {
-             
+
+            
               table.ajax.reload();
+              
+              $("#empty-table").remove();
 
             },
 

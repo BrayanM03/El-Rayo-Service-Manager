@@ -8,7 +8,7 @@ table = $('#ventas').DataTable({
         method: "POST",
         url: "./modelo/ventas/historial-ventas.php",
         dataType: "json"
-
+ 
     },  
 
   columns: [   
