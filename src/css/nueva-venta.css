@@ -249,7 +249,7 @@
     left: 10px;
     transition: 0.15s;
 }
-
+div.dataTables_processing { z-index: 1; }
 
 
 /*Foco*/

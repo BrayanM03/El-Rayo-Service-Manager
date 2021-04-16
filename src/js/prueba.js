@@ -6,8 +6,10 @@ $(document).ready(function() {
   $.fn.dataTable.ext.errMode = 'none';
 
   table = $('#pre-venta').DataTable({
-      
+    
+    destroy: true,
     serverSide: false,
+    processing: true,
     ajax: {
         method: "POST",
         url: "./modelo/ventas/detalle-venta-temp.php",
@@ -28,10 +30,11 @@ $(document).ready(function() {
       className: "celda-acciones",
       render: function (row, data) {
     
-        return '<span class="hidden-xs"></span></button><br><button type="button" onclick="borrarVenta('+ row.folio +');" class="borrar-articulo btn btn-danger"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
+        return '<span class="hidden-xs"></span></button><br><button type="button" onclick="borrarProductoTmp('+ row.id +');" class="borrar-articulo btn btn-danger"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
       },
     },
   ],
+
   paging: true,
   searching: true,
   scrollY: "350px",
@@ -50,21 +53,6 @@ $(document).ready(function() {
     } );
 } );
  
-
-  //Borrar articulo
-  table.on( 'click', '.borrar-articulo',  function () {
-
-    textoImport = table.row( $(this).parents('tr') ).data();
-    ImporteaEliminar = textoImport[5];
-    
-
-    total = $("#total").val();
-          newTotal = parseInt(total) - ImporteaEliminar;
-          $("#total").val(newTotal);
-
-    table.row( $(this).parents('tr') ).remove().draw(false);
-    toastr.success('Producto borrado con exito', 'Correcto' );
-  } );
 
 
 });
@@ -87,6 +75,29 @@ toastr.options = {
   "hideEasing": "linear",
   "showMethod": "fadeIn",
   "hideMethod": "fadeOut"
+}
+
+//Borrar producto temporal
+
+function borrarProductoTmp(id){
+
+  $.ajax({
+    type: "POST",
+    url: "./modelo/ventas/borrar-producto-temp.php",
+    data: {"id": id},
+    success: function (response) {
+      if (response == 1) {
+      table.ajax.reload();
+      toastr.success('Producto borrado con exito', 'Correcto' );
+     
+
+      }else{
+        toastr.warning('Hubo un error al borrar el producto', 'Error' );
+  
+      }
+    }
+  });
+
 }
 
 function agregarInfo(){
