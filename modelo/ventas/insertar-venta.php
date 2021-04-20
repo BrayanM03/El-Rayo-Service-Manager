@@ -31,8 +31,8 @@ if(isset($_POST)){
 
    
     $datos = $_POST['data'];
-    $info_producto_individual = json_decode($datos);  
-
+   // $info_producto_individual = json_decode($datos);  
+   $info_producto_individual = $datos;
 
    
     $queryInsertar = "INSERT INTO ventas (id, Fecha, id_Sucursal, id_Usuarios, id_Cliente, Total, estatus) VALUES (null,?,?,?,?,?,?)";
@@ -59,14 +59,15 @@ if(isset($_POST)){
           
           $validacion = is_numeric($key);
 
+          
           if($validacion){
             
-            $codigo = $value[1];
-            $descripcion = $value[2];
-            $modelo = $value[3];
-            $cantidad = $value[4];
-            $precio_unitario = $value[5];
-            $importe = $value[6];
+            $codigo = $value["codigo"];
+            $descripcion = $value["descripcion"];
+            $modelo = $value["modelo"];
+            $cantidad = $value["cantidad"];
+            $precio_unitario = $value["precio"];
+            $importe = $value["importe"];
 
             $subcadena = substr($codigo, 0, 4);
 
@@ -108,7 +109,7 @@ if(isset($_POST)){
 
              
             }
-
+ 
            
 
             
@@ -123,7 +124,7 @@ if(isset($_POST)){
             $resultado->execute();
             $resultado->close();
 
-            
+           
 
               
            
@@ -141,7 +142,7 @@ if(isset($_POST)){
         }
 
 
-        print_r($id_Venta);
+      print_r($id_Venta);
     /*usar esta consulta:  select * from ventas ORDER BY id DESC LIMIT 1 para escoger el ultimo id
 
           

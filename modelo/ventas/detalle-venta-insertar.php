@@ -20,9 +20,15 @@ if(isset($_POST)){
     $importe = $_POST["subtotal"];
 
     $iduser = $_SESSION["id_usuario"];
+
+    
+
+
+    
     $comprobar = "SELECT COUNT(*) total FROM productos_temp$iduser";
     $result = $con->query($comprobar);
     if($result == false){
+        
         
         
         $crear = "CREATE TABLE productos_temp$iduser (
@@ -60,6 +66,18 @@ if(isset($_POST)){
 
 
     }else{
+
+    $match = "SELECT COUNT(*) iguales FROM productos_temp$iduser WHERE codigo = ?";
+    $stmt = $con->prepare($match);
+    $stmt->bind_param('s', $codigo);
+    $stmt->execute();
+    $stmt->bind_result($iguales);
+    
+    if ($iguales >= 1) {
+       echo "Hay productos iguales";
+    }else if($iguales == 0){
+        echo "No hay productos iguales";
+    }
        
 
             $insertar = "INSERT INTO productos_temp$iduser(id, codigo, descripcion, modelo, cantidad, precio, importe) VALUES(null,?,?,?,?,?,?)";

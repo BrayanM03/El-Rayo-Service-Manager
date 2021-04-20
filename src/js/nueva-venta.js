@@ -368,23 +368,7 @@ selects.forEach( select => {
 
       buscar();
 
-      function limpiarTabla(){
-
-
-        
-        if ( !table.data().any()){
-
-            toastr.warning('La tabla ya esta vaciada', 'Tabla limpia' );
-        }else{
-            
-            table.clear().draw();
-            $("#total").val(0.00);
-            toastr.success('Tabla fue vaciada ', 'Listo' );
-
-
-        }
-        //$(".tbody").empty();
-      }
+     
 
 
 
@@ -395,11 +379,12 @@ selects.forEach( select => {
         if ( !table.data().any()){
 
             toastr.warning('La tabla no tiene productos', 'Sin productos' );
+
         }else{
             
 
-            llantaData = table.rows().data();
-            console.log(llantaData);       
+            llantaData = $("#pre-venta").dataTable().fnGetData();
+            console.log(llantaData);
                 
               
             total = $("#total").val();
@@ -413,47 +398,50 @@ selects.forEach( select => {
             $.ajax({
                 type: "POST",
                 url: "./modelo/ventas/insertar-venta.php",
-                data: {'data':       JSON.stringify(llantaData),
+                data: {'data': llantaData,
                        'fecha': fecha,
                        'total': total},
                 dataType: "JSON",
                 success: function (response) {
                     console.log(response);
-                    Swal.fire({
-                        title: 'Venta realizada',
-                        html: "<span>La venta se realizo con exito</br></span>"+
-                        "ID Venta: RAY" + response,
-                        icon: "success",
-                        cancelButtonColor: '#00e059',
-                        showConfirmButton: true,
-                        confirmButtonText: 'Aceptar', 
-                        cancelButtonColor:'#ff764d',
-                        showDenyButton: true,
-                        denyButtonText: 'Reporte'
-                    },
-                       
-                      ).then((result) =>{
-          
-                        if(result.isConfirmed){
-                           //location.reload();
-                          
-                           table.clear().draw();
-                           $("#total").val(0.00);
-                        }else if(result.isDenied){
-
-                            window.open('./modelo/ventas/generar-reporte-venta.php?id='+ response, '_blank');
-        
-                                 
+                    if (response) {
+                        Swal.fire({
+                            title: 'Venta realizada',
+                            html: "<span>La venta se realizo con exito</br></span>"+
+                            "ID Venta: RAY" + response,
+                            icon: "success",
+                            cancelButtonColor: '#00e059',
+                            showConfirmButton: true,
+                            confirmButtonText: 'Aceptar', 
+                            cancelButtonColor:'#ff764d',
+                            showDenyButton: true,
+                            denyButtonText: 'Reporte'
+                        },
+                           
+                          ).then((result) =>{
+              
+                            if(result.isConfirmed){
+                               //location.reload();
+                              
+                               table.clear().draw();
+                               $("#total").val(0.00);
+                            }else if(result.isDenied){
+    
+                                window.open('./modelo/ventas/generar-reporte-venta.php?id='+ response, '_blank');
+            
+                                     
+                                table.clear().draw();
+                                $("#total").val(0.00);
+                                
+                            }
+            
                             table.clear().draw();
-                            $("#total").val(0.00);
-                            
-                        }
-        
-                        table.clear().draw();
-                            $("#total").val(0.00);
-                        });
+                                $("#total").val(0.00);
+                            });
+                    }
+                    
                 }
-            });
+            }); 
 
             
             
@@ -475,6 +463,7 @@ selects.forEach( select => {
 
             }
    });
+
 
 
     

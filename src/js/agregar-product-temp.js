@@ -9,7 +9,7 @@ $(document).ready(function() {
     
     destroy: true,
     serverSide: true,
-    processing: true,
+    processing: false,
     ajax: {
         method: "POST",
         url: "./modelo/ventas/detalle-venta-temp.php",
@@ -19,7 +19,7 @@ $(document).ready(function() {
      
       if (numRows == 0) {
         $(".pre-venta-error").html("");
-        $("#pre-venta tbody").append('<tr><th id="empty-table" colspan="8">Preventa vacia</th></tr>');
+        $("#pre-venta tbody").append('<tr><th id="empty-table" style="text-align: center;" colspan="8">Preventa vacia</th></tr>');
         $("#pre-venta_processing").css("display","none");
       }
 
@@ -42,13 +42,13 @@ $(document).ready(function() {
       className: "celda-acciones",
       render: function (row, data) {
     
-        return '<span class="hidden-xs"></span></button><br><button type="button" onclick="borrarProductoTmp('+ row.id +');" class="borrar-articulo btn btn-danger"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
+        return '<span class="hidden-xs"></span></button><br><button type="button" onclick="borrarProductoTmp('+ row.id +"," + row.importe +');" class="borrar-articulo btn btn-danger"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
       },
     },
   ],
 
   paging: false,
-  searching: true,
+  searching: false,
   scrollY: "350px",
   info: false,
   responsive: false,
@@ -91,7 +91,7 @@ toastr.options = {
 
 //Borrar producto temporal
 
-function borrarProductoTmp(id){
+function borrarProductoTmp(id, importe){
 
   $.ajax({
     type: "POST",
@@ -110,7 +110,7 @@ function borrarProductoTmp(id){
         $("#pre-venta tbody tr").remove();
         $(".pre-venta-error").html("");
         $(".products-grid-error").remove();
-        $("#pre-venta tbody").append('<tr><th id="empty-table" style="width: 100%" colspan="8">Preventa vacia</th></tr>');
+        $("#pre-venta tbody").append('<tr><th id="empty-table" style="text-align: center;" style="width: 100%" colspan="8">Preventa vacia</th></tr>');
         $("#pre-venta_processing").css("display","none");
       
       }else{
@@ -118,6 +118,10 @@ function borrarProductoTmp(id){
       }
 
       toastr.success('Producto borrado con exito', 'Correcto' );
+      total = $("#total").val();
+      result =  parseInt(total) - parseInt(importe);
+      console.log(result);
+      $("#total").val(result);
      
 
       }else{
@@ -252,6 +256,44 @@ function agregarInfo(){
     });
       
 } //Se cierra la funcion anidada a la boton de agregar informacion
+
+
+function limpiarTabla(){
+
+
+        
+  if ( !table.data().any()){
+
+      toastr.warning('La tabla esta vacia', 'Tabla limpia' );
+  }else{
+      $.ajax({
+          type: "POST",
+          url: "./modelo/ventas/vaciar-tabla-temp.php",
+          data: {"data": "data"},
+          success: function (response) {
+              if (response == 1) {
+                  toastr.success('Tabla fue vaciada ', 'Listo' );  
+                  $('#pre-venta > tbody').empty();
+                  $(".pre-venta-error").html("");
+                  $("#pre-venta tbody").append('<tr><th id="empty-table" style="text-align: center;" colspan="8">Preventa vacia</th></tr>');
+                  $("#pre-venta_processing").css("display","none"); 
+                  $("#total").val(0.00);
+
+              }else if(response == 0){
+                  toastr.warning('La tabla ya esta vaciada', 'Advertencia');
+              
+              }else{
+                  toastr.danger('Hubo un problema al vaciar la tabla ', 'Error' );
+              }
+              
+          }
+      });
+    
+
+
+  }
+  //$(".tbody").empty();
+}
 
 
 

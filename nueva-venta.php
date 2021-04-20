@@ -545,10 +545,7 @@
 
                                 <div class="fila3">
                                             <div class="folio-fecha">
-                                                <label>
-                                                    <span for="folio">Folio:</span>
-                                                    <input class="form-control" value="00" type="text" id="folio" name="folio" disabled>
-                                                </label>
+                                                
                                                 <label>
                                                     <span for="fecha">Fecha</span>
                                                     <input class="form-control"  type="date" id="fecha" name="fecha" style="width: 150px;"> 
@@ -665,7 +662,7 @@
     <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <!--<script src="src/js/agregar-info-tabla-venta.js"></script>-->
-    <script src="src/js/prueba.js"></script>
+    <script src="src/js/agregar-product-temp.js"></script>
     <script src="src/js/generar-token.js"></script>
    
    
