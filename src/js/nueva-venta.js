@@ -422,22 +422,42 @@ selects.forEach( select => {
               
                             if(result.isConfirmed){
                                //location.reload();
-                              
-                               table.clear().draw();
-                               $("#total").val(0.00);
+                               table.ajax.reload();
+                                $("#pre-venta tbody tr").remove();
+                                $(".pre-venta-error").html("");
+                                $(".products-grid-error").remove();
+                                $("#pre-venta tbody").append('<tr><th id="empty-table" style="text-align: center;" style="width: 100%" colspan="8">Preventa vacia</th></tr>');
+                                $("#pre-venta_processing").css("display","none");
+                                $("#total").val(0);
+                               
+
                             }else if(result.isDenied){
     
                                 window.open('./modelo/ventas/generar-reporte-venta.php?id='+ response, '_blank');
-            
+                                table.ajax.reload();
+                                $("#pre-venta tbody tr").remove();
+                                $(".pre-venta-error").html("");
+                                $(".products-grid-error").remove();
+                                $("#pre-venta tbody").append('<tr><th id="empty-table" style="text-align: center;" style="width: 100%" colspan="8">Preventa vacia</th></tr>');
+                                $("#pre-venta_processing").css("display","none");
+                                $("#total").val(0);
                                      
-                                table.clear().draw();
-                                $("#total").val(0.00);
+                              
                                 
+                            }else{
+                                table.ajax.reload();
+                                $("#pre-venta tbody tr").remove();
+                                $(".pre-venta-error").html("");
+                                $(".products-grid-error").remove();
+                                $("#pre-venta tbody").append('<tr><th id="empty-table" style="text-align: center;" style="width: 100%" colspan="8">Preventa vacia</th></tr>');
+                                $("#pre-venta_processing").css("display","none");
+                                $("#total").val(0);
                             }
             
-                            table.clear().draw();
-                                $("#total").val(0.00);
+                           
                             });
+
+                            
                     }
                     
                 }

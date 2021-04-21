@@ -21,6 +21,9 @@
         
     }
 
+
+    ///A partir de aqui ponerlo en otro archivo para que el token no se muestre en la pantall de venta
+
     if(isset($_POST["token"])){
 
         $token = $_POST["token"];

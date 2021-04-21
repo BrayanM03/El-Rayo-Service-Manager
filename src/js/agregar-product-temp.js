@@ -210,10 +210,22 @@ function agregarInfo(){
             
             success: function (response) {
 
-            
-              table.ajax.reload();
-              
+            if (response == 1) {
+              table.ajax.reload(); 
               $("#empty-table").remove();
+              toastr.success('Producto agregado correctamente', 'Agregado');
+
+            }else if(response == 2){
+              
+              toastr.error('La cantidad que especificaste revasa el stock actual', 'Error');
+              table.ajax.reload();
+              $("#empty-table").remove();
+
+            }else{
+              table.ajax.reload();
+              $("#empty-table").remove();
+            }
+             
 
             },
 
@@ -264,7 +276,7 @@ function limpiarTabla(){
         
   if ( !table.data().any()){
 
-      toastr.warning('La tabla esta vacia', 'Tabla limpia' );
+      toastr.warning('La tabla esta vacia', 'Tabla limpia' ); 
   }else{
       $.ajax({
           type: "POST",

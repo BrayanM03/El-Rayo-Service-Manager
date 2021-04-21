@@ -124,6 +124,11 @@ if(isset($_POST)){
             $resultado->execute();
             $resultado->close();
 
+            $iduser = $_SESSION["id_usuario"];
+
+            $vaciarTabla = "TRUNCATE TABLE productos_temp$iduser";
+
+            $consulta = mysqli_query($con, $vaciarTabla);
            
 
               
