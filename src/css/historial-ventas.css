@@ -1,6 +1,36 @@
 
-
+.titulo-inventario{
+    
+    z-index: 100;
+    position: relative;
+}
 
 .historial-ventas{
     background-color: burlywood;
+}
+
+.tyre-decoration-right{
+position: relative;
+margin-top: -126px;
+margin-left: 280px;
+width: 112px;
+height: auto;
+
+}
+
+.tyre-decoration-left{
+    position: absolute;
+    margin-top: -6px;
+    margin-left: -52px;
+    width: 112px;
+    height: auto;
+}
+
+.contenedor-tit{
+    margin-bottom: 10vh;
+}
+
+.botones{
+    margin-top: 1px;
+    margin-left:200px ;
 }

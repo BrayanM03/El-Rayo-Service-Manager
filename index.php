@@ -47,7 +47,7 @@ if (!isset($_SESSION['id_usuario'])) {
         <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <!-- <i class="fas fa-laugh-wink"></i>--->
                     <img style="filter: invert(100%);" width="40px" src="src/img/racing.svg"/>
@@ -60,7 +60,7 @@ if (!isset($_SESSION['id_usuario'])) {
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="index.html">
+                <a class="nav-link" href="index.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Inicio</span></a>
             </li>
@@ -103,7 +103,7 @@ if (!isset($_SESSION['id_usuario'])) {
                             <img src="src/img/ventas.svg" width="18px" /> 
                             <span style="margin-left:12px;"> Ventas</span>
                         </a>
-                        <a class="collapse-item" href="utilities-border.html">
+                        <a class="collapse-item" href="compras-pv.php">
                             <img src="src/img/compras.svg" width="18px" /> 
                             <span style="margin-left:12px;"> Compras</span>
                         </a>
@@ -112,14 +112,24 @@ if (!isset($_SESSION['id_usuario'])) {
             </li>
 
             <!-- Divider -->
+
+            <?php 
+                $user_jerarquia = $_SESSION["rol"];
+
+                if ($user_jerarquia == 1) {
+                    # code...
+                
+
+            ?>
+
             <hr class="sidebar-divider">
 
-            <!-- Heading -->
+            <!-- Inventario -->
             <div class="sidebar-heading">
                 Inventario
             </div>
 
-            <!-- Nav Item - Pages Collapse Menu -->
+            <!-- Inventario - Pages Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTyres"
                     aria-expanded="true" aria-controls="collapsePages">
@@ -156,6 +166,7 @@ if (!isset($_SESSION['id_usuario'])) {
             </li>
 
 
+            <!-- Clientes -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseClients"
                     aria-expanded="true" aria-controls="collapsePages">
@@ -165,7 +176,7 @@ if (!isset($_SESSION['id_usuario'])) {
                 <div id="collapseClients" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Categorias:</h6>
-                        <a class="collapse-item" href="login.html" style="display:flex; flex-direction: row; justify-content:start;">
+                        <a class="collapse-item" href="clientes.php" style="display:flex; flex-direction: row; justify-content:start;">
                             <img src="src/img/cliente.svg" width="18px" /> 
                             <span style="margin-left:12px;"> Clientes</span> </a>
                         <a class="collapse-item" href="register.html" style="display:flex; flex-direction: row; justify-content:start;">
@@ -181,6 +192,7 @@ if (!isset($_SESSION['id_usuario'])) {
             </li>
 
 
+            <!-- Proveedores -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProvider"
                     aria-expanded="true" aria-controls="collapsePages">
@@ -206,7 +218,7 @@ if (!isset($_SESSION['id_usuario'])) {
             </li>
 
 
-            <!-- Nav Item - Charts -->
+            <!-- Token -->
             <li class="nav-item">
                 <a class="nav-link" href="generar-token.php">
                     <i class="fas fa-fw fa-lock"></i>
@@ -214,11 +226,11 @@ if (!isset($_SESSION['id_usuario'])) {
             </li>
 
             <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Tables</span></a>
-            </li>
+    
+    <?php }else{ ?>
+
+
+    <?php } ?>
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">

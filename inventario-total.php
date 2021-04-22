@@ -1,12 +1,18 @@
+<?php
+    session_start();
 
-    <?php
-    
     include 'modelo/conexion.php';
     $con= $conectando->conexion(); 
 
     if (!$con) {
         echo "maaaaal";
     }
+
+    if (!isset($_SESSION['id_usuario'])) {
+        header("Location:login.php");
+    }
+
+    
     ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -52,7 +58,7 @@
         <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <!-- <i class="fas fa-laugh-wink"></i>--->
                     <img style="filter: invert(100%);" width="40px" src="src/img/racing.svg"/>
@@ -65,7 +71,7 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item">
-                <a class="nav-link" href="index.html">
+                <a class="nav-link" href="index.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Inicio</span></a>
             </li>
@@ -116,6 +122,14 @@
                 </div>
             </li>
 
+            <?php 
+                $user_jerarquia = $_SESSION["rol"];
+
+                if ($user_jerarquia == 1) {
+                    # code...
+                
+
+            ?>
             <!-- Divider -->
             <hr class="sidebar-divider">
 
@@ -170,7 +184,7 @@
                 <div id="collapseClients" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Categorias:</h6>
-                        <a class="collapse-item" href="login.html" style="display:flex; flex-direction: row; justify-content:start;">
+                        <a class="collapse-item" href="clientes.php" style="display:flex; flex-direction: row; justify-content:start;">
                             <img src="src/img/cliente.svg" width="18px" /> 
                             <span style="margin-left:12px;"> Clientes</span> </a>
                         <a class="collapse-item" href="register.html" style="display:flex; flex-direction: row; justify-content:start;">
@@ -224,6 +238,11 @@
                     <i class="fas fa-fw fa-table"></i>
                     <span>Tables</span></a>
             </li>
+
+            <?php 
+              }else{}  
+
+            ?>
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -421,7 +440,11 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline  small" style="color: aliceblue;">Brayan Maldonado</span>
+                                <span class="mr-2 d-none d-lg-inline  small" style="color: aliceblue;"><?php
+                                
+                                echo $_SESSION['nombre'] . " " . $_SESSION['apellidos'];
+                            
+                            ?></span>
                                 <img class="img-profile rounded-circle"
                                     src="src/img/undraw_profile.svg">
                             </a>
@@ -521,7 +544,7 @@
                 <div class="modal-body">Seleccione "salir" para cerra su sesión actual.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
-                    <a class="btn btn-primary" href="login.html">Salir</a>
+                    <a class="btn btn-primary" href="./modelo/login/cerrar-sesion.php">Salir</a>
                 </div>
             </div>
         </div>

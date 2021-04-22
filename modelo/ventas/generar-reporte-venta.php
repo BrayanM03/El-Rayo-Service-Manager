@@ -57,11 +57,11 @@ function Header()
 
 
 {
-    if($_SESSION['sucursal'] == "Pedro"){
+    if($GLOBALS["sucursal"] == "Pedro"){
         $direccion = "Avenida Pedro Cardenas KM5 No.207";
         $colonia = "Col. Francisco Castellanos";
         
-   }else if($_SESSION['sucursal'] == "Sendero"){
+   }else if($GLOBALS["sucursal"] == "Sendero"){
     $direccion = "Av. Sendero Nacional";
     $colonia = "Kilometro 50";
    }

@@ -1,4 +1,4 @@
-function MostrarVentas() {  
+function MostrarClientes() {  
     $.fn.dataTable.ext.errMode = 'none';
 
 table = $('#ventas').DataTable({
@@ -6,19 +6,19 @@ table = $('#ventas').DataTable({
     serverSide: false,
     ajax: {
         method: "POST",
-        url: "./modelo/ventas/historial-ventas.php",
+        url: "./modelo/ventas/traer-clientes.php",
         dataType: "json"
  
     },  
 
   columns: [   
     { title: "#",              data: null             },
-    { title: "Folio",         data: "folio", render: function(data,type,row) {
-        return '<span>RAY'+ data +'</span>';
+    { title: "Codigo",         data: "id", render: function(data,type,row) {
+        return '<span>R'+ data +'</span>';
         }},
-    { title: "Fecha",          data: "fecha"          },
-    { title: "Sucursal",       data: "sucursal"       },
-    { title: "Vendedor",       data: "vendedor"       },
+    { title: "Nombre",         data: "nombre"          },
+    { title: "Telefono",       data: "telefono"       },
+    { title: "Direccion",       data: "direccion"       },
     { title: "Cliente",        data: "cliente"        },
     { title: "Cantidad",       data: "cantidad"       },
     { title: "Total",          data: "total"          },
@@ -54,7 +54,7 @@ $("table.dataTable thead").addClass("table-info")
 
 }
 
-MostrarVentas();
+MostrarClientes();
 
 
 function borrarVenta(id) {

@@ -1,12 +1,19 @@
 
-    <?php
-    
+  <?php
+    session_start();
+
     include 'modelo/conexion.php';
     $con= $conectando->conexion(); 
 
     if (!$con) {
         echo "maaaaal";
     }
+
+    if (!isset($_SESSION['id_usuario'])) {
+        header("Location:login.php");
+    }
+
+    
     ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -117,6 +124,15 @@
                     </div>
                 </div>
             </li>
+
+            <?php 
+                $user_jerarquia = $_SESSION["rol"];
+
+                if ($user_jerarquia == 1) {
+                    # code...
+                
+
+            ?>
 
             <!-- Divider -->
             <hr class="sidebar-divider">
@@ -234,6 +250,11 @@
                     <span>Tables</span></a>
             </li>
 
+            <?php 
+               }else{}
+                
+
+            ?>
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 
@@ -430,7 +451,11 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline  small" style="color: aliceblue;">Brayan Maldonado</span>
+                                <span class="mr-2 d-none d-lg-inline  small" style="color: aliceblue;"><?php
+                                
+                                echo $_SESSION['nombre'] . " " . $_SESSION['apellidos'];
+                            
+                            ?></span>
                                 <img class="img-profile rounded-circle"
                                     src="src/img/undraw_profile.svg">
                             </a>
@@ -439,20 +464,20 @@
                                 aria-labelledby="userDropdown">
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Profile
+                                    Perfil
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
+                                    Configuraciones
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Activity Log
+                                    Registro de actividad
                                 </a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Logout
+                                    Cerrar sesión
                                 </a>
                             </div>
                         </li>
@@ -529,7 +554,7 @@
                 <div class="modal-body">Seleccione "salir" para cerra su sesión actual.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
-                    <a class="btn btn-primary" href="login.html">Salir</a>
+                    <a class="btn btn-primary" href="./modelo/login/cerrar-sesion.php">Salir</a>
                 </div>
             </div>
         </div>

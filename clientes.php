@@ -1,5 +1,5 @@
 
-  <?php
+    <?php
     session_start();
 
     include 'modelo/conexion.php';
@@ -33,6 +33,8 @@
 
     <!-- Custom fonts for this template-->
     <link rel="stylesheet" href="src/css/inventario.css">
+    <link rel="stylesheet" href="src/css/historial-ventas.css">
+
     <link href="src/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
@@ -126,6 +128,15 @@
             </li>
 
             <!-- Divider -->
+            <?php 
+                $user_jerarquia = $_SESSION["rol"];
+
+                if ($user_jerarquia == 1) {
+                    # code...
+                
+
+            ?>
+
             <hr class="sidebar-divider">
 
             <!-- Heading -->
@@ -233,6 +244,10 @@
                     <i class="fas fa-fw fa-table"></i>
                     <span>Tables</span></a>
             </li>
+
+            <?php }else{ ?>
+            
+                <?php }  ?>
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -430,7 +445,11 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline  small" style="color: aliceblue;">Brayan Maldonado</span>
+                                <span class="mr-2 d-none d-lg-inline  small" style="color: aliceblue;"><?php
+                                
+                                echo $_SESSION['nombre'] . " " . $_SESSION['apellidos'];
+                            
+                            ?></span>
                                 <img class="img-profile rounded-circle"
                                     src="src/img/undraw_profile.svg">
                             </a>
@@ -439,20 +458,20 @@
                                 aria-labelledby="userDropdown">
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Profile
+                                    Perfil
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
+                                    Configuraciones
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Activity Log
+                                    Registro de actividad
                                 </a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Logout
+                                    Cerrar sesión
                                 </a>
                             </div>
                         </li>
@@ -467,26 +486,25 @@
                 <div class="container-fluid" style="display: flex; justify-content: center; align-items:center; flex-direction:column">
 
                      <!-- Contenido inventario -->
-                     <div class="titulo-inventario">
-                         <h5 style="margin: 10px 0px;">Stock de llantas en existencia</h5>
-                         <p style="color: gray;">Sucursal Sendero</p>
+                     
+                        <div class="contenedor-tit">
+                        <img class="tyre-decoration-left" src="./src/img/tyre.svg" alt="insertar SVG con la etiqueta image"> 
+                        <div class="titulo-inventario">
+                         <h5 style="margin: 10px 0px;">Clientes</h5>
+                         <p style="color: gray;">Registro de clientes</p>
                         </div>
-                        
-                      <div class="botones">
+                        <img class="tyre-decoration-right" src="./src/img/tyre.svg" alt="insertar SVG con la etiqueta image">   
+                        </div>
+                        <div class="botones">
                                     <a href="#" class="btn btn-success btn-icon-split" onclick="agregarLLanta();">
                                         <span class="icon text-white-50">
-                                            <i class="fas fa-check-circle"></i>
+                                            <i class="fas fa-user-plus"></i>
                                         </span>
-                                        <span class="text">Agregar llanta</span>
+                                        <span class="text">Agregar cliente</span>
                                     </a>
-                                    <a href="#" class="btn btn-danger btn-icon-split">
-                                        <span class="icon text-white-50">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </span>
-                                        <span class="text">Borrar todas las llantas</span>
-                                    </a>
+                                    
                       </div>
-                      <table id="inventario-pedro" class="table table-striped table-bordered table-hover">                   
+                      <table id="ventas" class="table table-striped table-bordered table-hover">                   
                      </table>
 
                      
@@ -530,7 +548,7 @@
                 <div class="modal-body">Seleccione "salir" para cerra su sesión actual.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
-                    <a class="btn btn-primary" href="login.html">Salir</a>
+                    <a class="btn btn-primary" href="./modelo/login/cerrar-sesion.php">Salir</a>
                 </div>
             </div>
         </div>
@@ -564,8 +582,7 @@
     <script src="src/vendor/datatables/defaults.js"></script>
     <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="src/js/inventario-sendero.js"></script>
-    <script src="src/js/editar-inv-sendero.js"></script>
+    <script src="src/js/clientes.js"></script>
    
    
 </body>
