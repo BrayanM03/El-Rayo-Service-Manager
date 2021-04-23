@@ -25,7 +25,7 @@ if (isset($_POST)) {
   
 
     $data["data"][] = array("id" => $id, "nombre"=>$nombre, "telefono" => $telefono,
-                    "direccion" => $direccion, "correo"=>$correo, "credito"=>$credito, "total"=>$total, "estatus"=>$estatus, "rfc"=>$rfc);
+                    "direccion" => $direccion, "correo"=>$correo, "credito"=>$credito, "rfc"=>$rfc);
 
                   
 }
