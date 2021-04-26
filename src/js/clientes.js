@@ -120,11 +120,6 @@ function borrarVenta(id) {
   }
 
 
-  function traerPdf(folio){
-    window.open('./modelo/ventas/generar-reporte-venta.php?id='+ folio , '_blank');
-  }
-
-
   function agregarCliente(){
 
     Swal.fire({
@@ -153,8 +148,9 @@ function borrarVenta(id) {
             '<div class="col-6">'+
             '<div class="form-group">'+
             '<label><b>Credito</b></label>'+
-            '<select class="form-control" value="" id="credito" name="credito">'+
-            '<option value="sin credito">Sin credito </option>'+
+            '<select class="form-control" id="credito" name="credito">'+
+            '<option value="0">Sin credito </option>'+
+            '<option value="1">Con credito </option>'+
             '</select>'+
           
     
@@ -166,7 +162,7 @@ function borrarVenta(id) {
        '<div class="col-6">'+
         '<div class="form-group">'+
         '<label for="telefono"><b>Telefono:</b></label></br>'+
-        '<input type="number" class="form-control" id="telefono" value="" name="telefono" placeholder="Telefono" autocomplete="off">'+
+        '<input type="number" class="form-control" id="telefono" name="telefono" placeholder="Telefono" autocomplete="off">'+
         '</div>'+
         '</div>'+
     
@@ -175,7 +171,7 @@ function borrarVenta(id) {
             '<div class="form-group">'+
              
             '<label><b>Correo:</b></label></br>'+
-              '<input type="text" name="correo" id="correo" value="" class="form-control" placeholder="Correo">'+
+              '<input type="text" name="correo" id="correo" class="form-control" placeholder="Correo">'+
         '</div>'+
             '</div>'+
     
@@ -184,7 +180,7 @@ function borrarVenta(id) {
             '<div class="col-5">'+
             '<div class="form-group">'+
             '<label><b>RFC</b></label>'+
-            '<input type="text" class="form-control" value="" id="rf" name="rfc" placeholder="RFC">'+
+            '<input type="text" class="form-control" id="rfc" name="rfc" placeholder="RFC">'+
             '</div>'+
             '</div>'+
     
@@ -192,7 +188,7 @@ function borrarVenta(id) {
         '<div class="col-12">'+
             '<div class="form-group">'+
                 '<label><b>Dirección</b></label>'+
-                '<textarea type="text" class="form-control" value="" name="direccion" id="direccion" placeholder="Escribe la dirección del cliente">'+
+                '<textarea type="text" class="form-control" name="direccion" id="direccion" placeholder="Escribe la dirección del cliente">'+
                 '</textarea>'+
             '</div>'+
         '</div>'+
@@ -200,8 +196,10 @@ function borrarVenta(id) {
             '<div class="form-group">'+
                 '<label><b>Mapear dirección</b></label>'+
                 '<div id="map-id"></div>'+
-                '<div class="alert alert-info" id="label-coord">Cordenadas del marcador</div>'+
-                '<pre id="coordenadas"></pre>'+
+                '<div class="alert alert-info coordenadas-agregar" id="label-coord"><strong>Cordenadas del marcador:</strong>'+
+                ' </br>Latitud: <span id="lat-agregar"></span> </br>longitud: <span id="long-agregar"></span></div>'+
+               // "<img id='marker' class='marker' src='./src/img/marker.svg' alt='insertar SVG con la etiqueta image'>"+
+                
             '</div>'+
         '</div>'+
     
@@ -212,44 +210,42 @@ function borrarVenta(id) {
             '<div>'+
     '</form>',
 
+    }).then((result) =>{
+        //Agregando cliente
+        if(result.isConfirmed){
+
+            nombre = $("#nombre-cliente").val();
+            credito = $("#credito").val();
+            telefono = $("#telefono").val();
+            correo = $("#correo").val()
+            rfc = $("#rfc").val();
+            direccion = $("#direccion").val();
+            latitud = $("#lat-agregar").text();
+            longitud = $("#long-agregar").text();
+
+            
+            $.ajax({
+                type: "POST",
+                url: "./modelo/clientes/agregar-cliente.php",
+                data: {
+                    "nombre": nombre,
+                    "credito": credito,
+                    "telefono": telefono,
+                    "correo": correo,
+                    "rfc": rfc,
+                    "direccion": direccion,
+                    "latitud": latitud,
+                    "longitud": longitud},
+                
+                success: function (response) {
+                    console.log(response);
+                }
+            });
+
+        }
     });
 
-   /* var mymap = L.map('map-id').setView([25.8587547, -97.5136721], 13);
-
-//Creando mapa
-L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-    attribution: 'Contribuidores de los datos del mapa &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, Imagenes de © <a href="https://www.mapbox.com/">Mapbox</a>',
-    maxZoom: 18,
-    id: 'mapbox/streets-v11',
-    tileSize: 512,
-    zoomOffset: -1,
-    accessToken: 'pk.eyJ1IjoiYnJheWFubTAzIiwiYSI6ImNrbnRlNTdyZzAxcXcycG84ZnRvNnJtdmoifQ.8k-_U2-Eq-CmSrH6jm8KEg'
-}).addTo(mymap);
-
-//Marca de agua
-L.Control.Watermark = L.Control.extend({
-    onAdd: function(mymap) {
-        var img = L.DomUtil.create('img');
-
-        img.src = 'src/img/Optimized-logo-horizintal.png';
-        img.style.width = '100px';
-        img.style.top = '-22px'
-
-        return img;
-    },
-
-    onRemove: function(mymap) {
-        // Nothing to do here
-    }
-
-
-});
-
-L.control.watermark = function(opts) {
-    return new L.Control.Watermark(opts);
-}
-
-L.control.watermark({ position: 'bottomleft' }).addTo(mymap);*/
+  
 mapboxgl.accessToken = 'pk.eyJ1IjoiYnJheWFubTAzIiwiYSI6ImNrbnRlNTdyZzAxcXcycG84ZnRvNnJtdmoifQ.8k-_U2-Eq-CmSrH6jm8KEg';
 
 var mymap = new mapboxgl.Map({
@@ -260,6 +256,8 @@ var mymap = new mapboxgl.Map({
     }); 
 
     var nav = new mapboxgl.NavigationControl();
+    
+    
 
 mymap.addControl(
   new MapboxGeocoder({
@@ -278,14 +276,41 @@ mymap.addControl(new mapboxgl.GeolocateControl({
     trackUserLocation: true
 }));
 
-/*mymap.on('mousemove', function (e) {
-    document.getElementById('coordenadas').innerHTML =
-        JSON.stringify(e.lngLat);
-});*/
+mymap.on('click', function (e) {
 
-var coordinates = document.getElementById('coordenadas');
+    $("#marker").remove();  
+        latitud = JSON.stringify(e.lngLat);
+        console.log(latitud);
 
-var marker = new mapboxgl.Marker({
+        var el = document.createElement("img");
+        el.id = "marker";
+        el.src = "./src/img/marker.svg";
+
+      
+        // make a marker for each feature and add it to the map
+        marker = new mapboxgl.Marker({
+            element: el,
+            draggable: true
+        }).setLngLat(e.lngLat).addTo(mymap);
+          /*.setPopup(
+            new mapboxgl.Popup({ offset: 25 }) // add popups
+              .setHTML(
+                '<h3>' +
+                  marker.properties.title +
+                  '</h3><p>' +
+                  marker.properties.description +
+                  '</p>'
+              )
+          )*/
+
+          $("#lat-agregar").text(e.lngLat.lat);
+          $("#long-agregar").text(e.lngLat.lng);
+          
+
+});
+
+
+/*var marker = new mapboxgl.Marker({
     draggable: true
     })
     .setLngLat([-97.51302566191197,25.860074578125104])
@@ -294,12 +319,14 @@ var marker = new mapboxgl.Marker({
      
     function onDragEnd() {
     var lngLat = marker.getLngLat();
-    coordinates.style.display = 'block';
-    coordinates.innerHTML =
-    '<span class="badge badge-info coord"> Longitud:  </span>' + lngLat.lng + '<br /><span class="badge badge-info coord">Latitud: </span> ' + lngLat.lat;
-    }
+    //coordinates.style.display = 'block';
+    $("#lat-agregar").text(lngLat.lat);
+    $("#long-agregar").text(lngLat.lng);
+   // coordinates.innerHTML =
+    //'<span class="badge badge-info coord"> Longitud:  </span>' + lngLat.lng + '<br /><span class="badge badge-info coord">Latitud: </span> ' + lngLat.lat;
+}
      
-    marker.on('dragend', onDragEnd);
+    marker.on('dragend', onDragEnd);*/
 
     
 

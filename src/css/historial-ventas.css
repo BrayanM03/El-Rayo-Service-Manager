@@ -40,19 +40,10 @@ height: auto;
     height: 270px;
 }
 
-#coordenadas {     
-    display: block;
-    position: relative;
-    margin: 20px auto;
-    width: 80%;
-    padding: 15px;
-    border: none;
-    border-radius: 7px;
-    font-size: 15px;
-    font-family: Montserrat;
-    text-align: center;
-    color: #000;
-    background: #D6EAF8;
+.coordenadas-agregar {     
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 #label-coord{
@@ -63,4 +54,8 @@ height: auto;
 .coord{
     font-size: 15px;
     margin-bottom: 10px;
+}
+
+#marker{
+    width: 35px;
 }
