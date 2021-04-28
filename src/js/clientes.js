@@ -21,15 +21,20 @@ table = $('#ventas').DataTable({
     { title: "Direccion",      data: "direccion"      },
     { title: "Correo",         data: "correo"         },
     { title: "Credito",        data: "credito", render: function (data) {  
-            return '<span class="badge badge-info">'+ data +'</span>';
+        if (data == 1) {
+            return '<span class="badge badge-warning">Con credito</span>';
+        }else if(data == 0){
+            return '<span class="badge badge-info">Sin credito</span>';
+        }
+            
      }},
     { title: "RFC",            data: "rfc"            },
     { title: "Accion",
       data: null,
       className: "celda-acciones",
       render: function (row, data) {
-        return '<div style="display: flex"><button onclick="traerPdf(' +row.folio+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>'+
-        '<button type="button" onclick="borrarVenta('+ row.folio +');" class="buttonBorrar btn btn-warning"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
+        return '<div style="display: flex"><button onclick="editarCliente(' +row.id+ ');" type="button" class="buttonPDF btn btn-success" style="margin-right: 8px"><span class="fa fa-edit"></span><span class="hidden-xs"></span></button><br>'+
+        '<button type="button" onclick="borrarVenta('+ row.id +');" class="buttonBorrar btn btn-warning"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
       },
     },
   ],
@@ -37,7 +42,7 @@ table = $('#ventas').DataTable({
   searching: true,
   scrollY: "50vh",
   info: false,
-  responsive: false,
+  responsive: true,
   order: [2, "desc"],
  
   
@@ -238,14 +243,26 @@ function borrarVenta(id) {
                     "longitud": longitud},
                 
                 success: function (response) {
-                    console.log(response);
+                   if (response == 1) {
+                    Swal.fire(
+                        "¡Registrado!",
+                        "Se agrego el cliente correctamente",
+                        "success"
+                        )
+                   }else if(response == 0){
+                    Swal.fire(
+                        "¡Correcto!",
+                        "No se pud agregar el cliente",
+                        "error"
+                        )
+                   }
                 }
             });
 
         }
     });
 
-  
+  //Codigo que genera mapa
 mapboxgl.accessToken = 'pk.eyJ1IjoiYnJheWFubTAzIiwiYSI6ImNrbnRlNTdyZzAxcXcycG84ZnRvNnJtdmoifQ.8k-_U2-Eq-CmSrH6jm8KEg';
 
 var mymap = new mapboxgl.Map({
@@ -331,6 +348,236 @@ mymap.on('click', function (e) {
     
 
   };
+
+
+
+
+  function editarCliente(id){
+
+    $.ajax({
+        type: "POST",
+        url: "./modelo/clientes/traer-pa-editar-cliente.php",
+        data: {
+            "id": id},
+        dataType: "JSON",    
+        
+        success: function (response) {
+
+
+            Swal.fire({
+                title: "Editar cliente",
+                showCancelButton: true,
+                    cancelButtonText: 'Cerrar',
+                    cancelButtonColor: '#00e059',
+                    showConfirmButton: true,
+                    confirmButtonText: 'Agregar', 
+                    cancelButtonColor:'#ff764d',
+                    focusConfirm: false,
+                    iconColor : "#36b9cc",
+                html: '<form class="mt-4" id="agregar-cliente-form">'+
+                
+                '<div class="row">'+
+        
+                   '<div class="col-12">'+
+                   '<div class="form-group">'+
+                   '<label><b>Nombre:</b></label></br>'+
+                   '<input class="form-control" value="'+ response.nombre + '" type="text" id="nombre-cliente" name="nombre" placeholder="Nombre completo">'+
+                      '</div>'+
+                      '</div>'+
+                   '</div>'+
+            
+                '<div class="row">'+
+                    '<div class="col-6">'+
+                    '<div class="form-group">'+
+                    '<label><b>Credito</b></label>'+
+                    '<select class="form-control" value="1" id="credito" name="credito">'+
+                    '<option value="0">Sin credito </option>'+
+                    '<option value="1">Con credito </option>'+
+                    '</select>'+
+                  
+            
+            
+               ' </div>'+
+                '</div>'+
+                
+                
+               '<div class="col-6">'+
+                '<div class="form-group">'+
+                '<label for="telefono"><b>Telefono:</b></label></br>'+
+                '<input type="number" class="form-control" id="telefono" value="'+ response.numero +'" name="telefono" placeholder="Telefono" autocomplete="off">'+
+                '</div>'+
+                '</div>'+
+            
+                
+                    '<div class="col-7">'+
+                    '<div class="form-group">'+
+                     
+                    '<label><b>Correo:</b></label></br>'+
+                      '<input type="text" name="correo" value="'+ response.correo +'" id="correo" class="form-control" placeholder="Correo">'+
+                '</div>'+
+                    '</div>'+
+            
+                   
+            
+                    '<div class="col-5">'+
+                    '<div class="form-group">'+
+                    '<label><b>RFC</b></label>'+
+                    '<input type="text" class="form-control" value="'+ response.rfc +'" id="rfc" name="rfc" placeholder="RFC">'+
+                    '</div>'+
+                    '</div>'+
+            
+                   
+                '<div class="col-12">'+
+                    '<div class="form-group">'+
+                        '<label><b>Dirección</b></label>'+
+                        '<textarea type="text" class="form-control" name="direccion" id="direccion" placeholder="Escribe la dirección del cliente">'+ response.direccion +
+                        '</textarea>'+
+                    '</div>'+
+                '</div>'+
+                '<div class="col-12">'+
+                    '<div class="form-group">'+
+                        '<label><b>Mapear dirección</b></label>'+
+                        '<div id="map-edit"></div>'+
+                        '<div class="alert alert-info coordenadas-agregar" id="label-coord"><strong>Cordenadas del marcador:</strong>'+
+                        ' </br>Latitud: <span id="lat-editar"></span> </br>longitud: <span id="long-editar"></span></div>'+
+                       // "<img id='marker' class='marker' src='./src/img/marker.svg' alt='insertar SVG con la etiqueta image'>"+
+                        
+                    '</div>'+
+                '</div>'+
+            
+                '</div>'+
+            
+        
+        
+                    '<div>'+
+            '</form>',
+        
+            }).then((result) =>{
+                //Agregando cliente
+                if(result.isConfirmed){
+        
+                    nombre = $("#nombre-cliente").val();
+                    credito = $("#credito").val();
+                    telefono = $("#telefono").val();
+                    correo = $("#correo").val()
+                    rfc = $("#rfc").val();
+                    direccion = $("#direccion").val();
+                    latitud = $("#lat-agregar").text();
+                    longitud = $("#long-agregar").text();
+        
+                    
+                    $.ajax({
+                        type: "POST",
+                        url: "./modelo/clientes/agregar-cliente.php",
+                        data: {
+                            "nombre": nombre,
+                            "credito": credito,
+                            "telefono": telefono,
+                            "correo": correo,
+                            "rfc": rfc,
+                            "direccion": direccion,
+                            "latitud": latitud,
+                            "longitud": longitud},
+                        
+                        success: function (response) {
+                           if (response == 1) {
+                            Swal.fire(
+                                "¡Registrado!",
+                                "Se agrego el cliente correctamente",
+                                "success"
+                                )
+                           }else if(response == 0){
+                            Swal.fire(
+                                "¡Correcto!",
+                                "No se pudo agregar el cliente",
+                                "error"
+                                )
+                           }
+                        }
+                    });
+        
+                }
+            });
+
+            if (response.credito == 0) {
+                $('#credito option:eq(0)').prop('selected', true);
+            }else if(response.credito == 1){
+                $('#credito option:eq(1)').prop('selected', true)
+            }
+
+
+            //Mapa de la edicion del cliente
+            mapboxgl.accessToken = 'pk.eyJ1IjoiYnJheWFubTAzIiwiYSI6ImNrbnRlNTdyZzAxcXcycG84ZnRvNnJtdmoifQ.8k-_U2-Eq-CmSrH6jm8KEg';
+            var mymapedit = new mapboxgl.Map({
+                container: 'map-edit',
+                style: 'mapbox://styles/mapbox/streets-v11',
+                center: [-97.51302566191197,25.860074578125104],
+                zoom: 13
+                }); 
+            
+                var nav = new mapboxgl.NavigationControl();
+                
+                
+            
+            mymapedit.addControl(
+              new MapboxGeocoder({
+                  accessToken: mapboxgl.accessToken,
+                  mapboxgl: mapboxgl,
+              })
+            );
+            
+            mymapedit.addControl(nav,"top-left");
+            mymapedit.addControl(new mapboxgl.FullscreenControl());
+            
+            mymapedit.addControl(new mapboxgl.GeolocateControl({
+                positionOptions: {
+                    enableHighAccuracy: true
+                },
+                trackUserLocation: true
+            }));
+            
+            mymapedit.on('click', function (e) {
+            
+                $("#marker").remove();  
+                    latitud = JSON.stringify(e.lngLat);
+                    console.log(latitud);
+            
+                    var el = document.createElement("img");
+                    el.id = "marker";
+                    el.src = "./src/img/marker.svg";
+            
+                  
+                    // make a marker for each feature and add it to the map
+                    markers = new mapboxgl.Marker({
+                        element: el,
+                        draggable: true
+                    }).setLngLat(e.lngLat).addTo(mymapedit);
+                      /*.setPopup(
+                        new mapboxgl.Popup({ offset: 25 }) // add popups
+                          .setHTML(
+                            '<h3>' +
+                              marker.properties.title +
+                              '</h3><p>' +
+                              marker.properties.description +
+                              '</p>'
+                          )
+                      )*/
+            
+                      $("#lat-editar").text(e.lngLat.lat);
+                      $("#long-editar").text(e.lngLat.lng);
+                      
+            
+            });
+            
+            
+           
+          
+        }
+    });
+  
+   
+
+  }
 
  
 
