@@ -42,7 +42,7 @@ table = $('#ventas').DataTable({
   searching: true,
   scrollY: "50vh",
   info: false,
-  responsive: true,
+  responsive: false,
   order: [2, "desc"],
  
   
@@ -252,7 +252,7 @@ function borrarVenta(id) {
                    }else if(response == 0){
                     Swal.fire(
                         "¡Correcto!",
-                        "No se pud agregar el cliente",
+                        "No se puede agregar el cliente",
                         "error"
                         )
                    }
@@ -325,26 +325,6 @@ mymap.on('click', function (e) {
           
 
 });
-
-
-/*var marker = new mapboxgl.Marker({
-    draggable: true
-    })
-    .setLngLat([-97.51302566191197,25.860074578125104])
-    
-    .addTo(mymap);
-     
-    function onDragEnd() {
-    var lngLat = marker.getLngLat();
-    //coordinates.style.display = 'block';
-    $("#lat-agregar").text(lngLat.lat);
-    $("#long-agregar").text(lngLat.lng);
-   // coordinates.innerHTML =
-    //'<span class="badge badge-info coord"> Longitud:  </span>' + lngLat.lng + '<br /><span class="badge badge-info coord">Latitud: </span> ' + lngLat.lat;
-}
-     
-    marker.on('dragend', onDragEnd);*/
-
     
 
   };
@@ -515,7 +495,7 @@ mymap.on('click', function (e) {
                 zoom: 13
                 }); 
             
-                var nav = new mapboxgl.NavigationControl();
+                var navs = new mapboxgl.NavigationControl();
                 
                 
             
@@ -526,7 +506,7 @@ mymap.on('click', function (e) {
               })
             );
             
-            mymapedit.addControl(nav,"top-left");
+            mymapedit.addControl(navs,"top-left");
             mymapedit.addControl(new mapboxgl.FullscreenControl());
             
             mymapedit.addControl(new mapboxgl.GeolocateControl({
