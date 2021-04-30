@@ -274,10 +274,12 @@ function limpiarTabla(){
 
 
         
-  if ( !table.data().any()){
+  if ( !table.data().any()){ 
 
       toastr.warning('La tabla esta vacia', 'Tabla limpia' ); 
   }else{
+    
+
       $.ajax({
           type: "POST",
           url: "./modelo/ventas/vaciar-tabla-temp.php",
@@ -287,15 +289,17 @@ function limpiarTabla(){
                   toastr.success('Tabla fue vaciada ', 'Listo' );  
                   $('#pre-venta > tbody').empty();
                   $(".pre-venta-error").html("");
-                  $("#pre-venta tbody").append('<tr><th id="empty-table" style="text-align: center;" colspan="8">Preventa vacia</th></tr>');
+                 // $("#pre-venta tbody").append('<tr><th id="empty-table" style="text-align: center;" colspan="8">Preventa vacia</th></tr>');
                   $("#pre-venta_processing").css("display","none"); 
                   $("#total").val(0.00);
-
+                  table.rows().remove().draw()
               }else if(response == 0){
                   toastr.warning('La tabla ya esta vaciada', 'Advertencia');
+                  table.rows().remove().draw()
               
               }else{
                   toastr.danger('Hubo un problema al vaciar la tabla ', 'Error' );
+                  
               }
               
           }

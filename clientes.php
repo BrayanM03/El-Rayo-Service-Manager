@@ -32,13 +32,14 @@
     <title>Inventario</title>
 
     <!-- Custom fonts for this template-->
-    <link href='https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css' rel='stylesheet' />
     <link rel="stylesheet" href="src/css/inventario.css">
     <link rel="stylesheet" href="src/css/historial-ventas.css">
 
     <link href="src/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
+        
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css' rel='stylesheet' />
 
         
 
@@ -483,7 +484,7 @@
                     </ul>
 
                 </nav>
-                <!-- End of Topbar -->
+                <!-- End of Topbar --> 
 
 
                 <!-- Begin Page Content -->
@@ -508,14 +509,8 @@
                                     </a>
                                     
                       </div>
-                      <table id="ventas" class="table table-striped">                   
+                      <table id="ventas" class="table table-striped">    
                      </table>
-
-                     
-
-                     
-                   
-
                 </div>
             <!-- End of Main Content -->
   <!-- Footer -->
@@ -590,7 +585,7 @@
     <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     
-<script src="https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js"></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js"></script>
     <script src="src/js/clientes.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
      <!-- Make sure you put this AFTER Leaflet's CSS -->

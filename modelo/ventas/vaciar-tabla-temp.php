@@ -4,7 +4,7 @@ include '../conexion.php';
 $con= $conectando->conexion(); 
 
 if (!isset($_SESSION['id_usuario'])) {
-    header("Location:../../login.php");
+    header("Location:../../login.php"); 
 }
 
 $iduser = $_SESSION["id_usuario"];
@@ -15,17 +15,30 @@ if (!$con) {
 
 if (isset($_POST["data"])) {
 
-    $vaciarTabla = "TRUNCATE TABLE productos_temp$iduser";
+    $consultar = "SELECT COUNT(*) total FROM productos_temp$iduser";
+    $resultado = mysqli_query($con, $consultar);
 
-    $consulta = mysqli_query($con, $vaciarTabla);
+    while($fila = $resultado->fetch_assoc()){
+            $validacion = $fila["total"];
 
+            if ($validacion == 0) {
+                print_r(0);
+            }else{
+                $vaciarTabla = "TRUNCATE TABLE productos_temp$iduser";
 
-if ($consulta) {
-    print_r(1);
-    
-}else{
-    print_r(0);
-}
+                $consulta = mysqli_query($con, $vaciarTabla);
+            
+            
+            if ($consulta) {
+                print_r(1);
+                
+            }else{
+                print_r(0);
+            }
+            }
+    }
+
+   
 
 
 }

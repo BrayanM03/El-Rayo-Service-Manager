@@ -40,6 +40,11 @@ height: auto;
     height: 270px;
 }
 
+#map-edit{
+    width: 100%;
+    height: 270px;
+}
+
 .coordenadas-agregar {     
     display: flex;
     flex-direction: column;

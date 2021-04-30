@@ -18,13 +18,13 @@ table = $('#ventas').DataTable({
         }},
     { title: "Nombre",         data: "nombre"         },
     { title: "Telefono",       data: "telefono"       },
-    { title: "Direccion",      data: "direccion"      },
+    { title: "Direccion",      data: "direccion" , width: "20%"  },
     { title: "Correo",         data: "correo"         },
     { title: "Credito",        data: "credito", render: function (data) {  
         if (data == 1) {
             return '<span class="badge badge-warning">Con credito</span>';
         }else if(data == 0){
-            return '<span class="badge badge-info">Sin credito</span>';
+            return '<span class="badge badge-info">Sin credito</span>'; 
         }
             
      }},
@@ -262,7 +262,7 @@ function borrarVenta(id) {
         }
     });
 
-  //Codigo que genera mapa
+//Codigo que genera mapa
 mapboxgl.accessToken = 'pk.eyJ1IjoiYnJheWFubTAzIiwiYSI6ImNrbnRlNTdyZzAxcXcycG84ZnRvNnJtdmoifQ.8k-_U2-Eq-CmSrH6jm8KEg';
 
 var mymap = new mapboxgl.Map({
@@ -272,9 +272,7 @@ var mymap = new mapboxgl.Map({
     zoom: 13
     }); 
 
-    var nav = new mapboxgl.NavigationControl();
-    
-    
+var nav = new mapboxgl.NavigationControl();   
 
 mymap.addControl(
   new MapboxGeocoder({
@@ -343,6 +341,67 @@ mymap.on('click', function (e) {
         
         success: function (response) {
 
+            $(document).ready(function() { 
+                $("#latitud-editar").text(response.latitud);
+                $("#longitud-editar").text(response.longitud);
+                //console.log(response.longitud)
+
+                //Codigo que genera mapa
+                mapboxgl.accessToken = 'pk.eyJ1IjoiYnJheWFubTAzIiwiYSI6ImNrbnRlNTdyZzAxcXcycG84ZnRvNnJtdmoifQ.8k-_U2-Eq-CmSrH6jm8KEg';
+
+                var mymaps = new mapboxgl.Map({
+                    container: 'map-edit',
+                    style: 'mapbox://styles/mapbox/streets-v11',
+                    center: [response.longitud,response.latitud],
+                    zoom: 13
+                    }); 
+
+                    var nav = new mapboxgl.NavigationControl();
+                    
+                    
+
+                mymaps.addControl(
+                new MapboxGeocoder({
+                    accessToken: mapboxgl.accessToken,
+                    mapboxgl: mapboxgl,
+                })
+                );
+
+                mymaps.addControl(nav,"top-left");
+                mymaps.addControl(new mapboxgl.FullscreenControl());
+
+                mymaps.addControl(new mapboxgl.GeolocateControl({
+                    positionOptions: {
+                        enableHighAccuracy: true
+                    },
+                    trackUserLocation: true
+                }));
+
+                mymaps.on('click', function (e) {
+
+                    $("#marker").remove();  
+                        latitud = JSON.stringify(e.lngLat);
+                        console.log(latitud);
+
+                        var el = document.createElement("img");
+                        el.id = "marker";
+                        el.src = "./src/img/marker.svg";
+
+                    
+                        // make a marker for each feature and add it to the map
+                        marker = new mapboxgl.Marker({
+                            element: el,
+                            draggable: true
+                        }).setLngLat(e.lngLat).addTo(mymaps);
+
+                        $("#latitud-editar").text(e.lngLat.lat);
+                        $("#longitud-editar").text(e.lngLat.lng);
+                        
+
+                });
+            
+            })
+
 
             Swal.fire({
                 title: "Editar cliente",
@@ -350,11 +409,11 @@ mymap.on('click', function (e) {
                     cancelButtonText: 'Cerrar',
                     cancelButtonColor: '#00e059',
                     showConfirmButton: true,
-                    confirmButtonText: 'Agregar', 
+                    confirmButtonText: 'Actualizar', 
                     cancelButtonColor:'#ff764d',
                     focusConfirm: false,
                     iconColor : "#36b9cc",
-                html: '<form class="mt-4" id="agregar-cliente-form">'+
+                    html: '<form class="mt-4" id="agregar-cliente-form">'+
                 
                 '<div class="row">'+
         
@@ -384,7 +443,7 @@ mymap.on('click', function (e) {
                '<div class="col-6">'+
                 '<div class="form-group">'+
                 '<label for="telefono"><b>Telefono:</b></label></br>'+
-                '<input type="number" class="form-control" id="telefono" value="'+ response.numero +'" name="telefono" placeholder="Telefono" autocomplete="off">'+
+                '<input type="number" class="form-control" id="telefono" value="'+ response.telefono +'" name="telefono" placeholder="Telefono" autocomplete="off">'+
                 '</div>'+
                 '</div>'+
             
@@ -419,18 +478,18 @@ mymap.on('click', function (e) {
                         '<label><b>Mapear dirección</b></label>'+
                         '<div id="map-edit"></div>'+
                         '<div class="alert alert-info coordenadas-agregar" id="label-coord"><strong>Cordenadas del marcador:</strong>'+
-                        ' </br>Latitud: <span id="lat-editar"></span> </br>longitud: <span id="long-editar"></span></div>'+
+                        ' </br>Latitud: <span id="latitud-editar"></span> </br>longitud: <span id="longitud-editar"></span></div>'+
                        // "<img id='marker' class='marker' src='./src/img/marker.svg' alt='insertar SVG con la etiqueta image'>"+
                         
                     '</div>'+
                 '</div>'+
             
                 '</div>'+
-            
-        
-        
                     '<div>'+
             '</form>',
+            didOpen: function () { 
+                
+            },
         
             }).then((result) =>{
                 //Agregando cliente
@@ -448,8 +507,9 @@ mymap.on('click', function (e) {
                     
                     $.ajax({
                         type: "POST",
-                        url: "./modelo/clientes/agregar-cliente.php",
+                        url: "./modelo/clientes/actualizar-cliente.php",
                         data: {
+                            "id": id,
                             "nombre": nombre,
                             "credito": credito,
                             "telefono": telefono,
@@ -479,86 +539,27 @@ mymap.on('click', function (e) {
                 }
             });
 
+            
+
             if (response.credito == 0) {
                 $('#credito option:eq(0)').prop('selected', true);
             }else if(response.credito == 1){
                 $('#credito option:eq(1)').prop('selected', true)
-            }
-
-
-            //Mapa de la edicion del cliente
-            mapboxgl.accessToken = 'pk.eyJ1IjoiYnJheWFubTAzIiwiYSI6ImNrbnRlNTdyZzAxcXcycG84ZnRvNnJtdmoifQ.8k-_U2-Eq-CmSrH6jm8KEg';
-            var mymapedit = new mapboxgl.Map({
-                container: 'map-edit',
-                style: 'mapbox://styles/mapbox/streets-v11',
-                center: [-97.51302566191197,25.860074578125104],
-                zoom: 13
-                }); 
-            
-                var navs = new mapboxgl.NavigationControl();
-                
-                
-            
-            mymapedit.addControl(
-              new MapboxGeocoder({
-                  accessToken: mapboxgl.accessToken,
-                  mapboxgl: mapboxgl,
-              })
-            );
-            
-            mymapedit.addControl(navs,"top-left");
-            mymapedit.addControl(new mapboxgl.FullscreenControl());
-            
-            mymapedit.addControl(new mapboxgl.GeolocateControl({
-                positionOptions: {
-                    enableHighAccuracy: true
-                },
-                trackUserLocation: true
-            }));
-            
-            mymapedit.on('click', function (e) {
-            
-                $("#marker").remove();  
-                    latitud = JSON.stringify(e.lngLat);
-                    console.log(latitud);
-            
-                    var el = document.createElement("img");
-                    el.id = "marker";
-                    el.src = "./src/img/marker.svg";
-            
-                  
-                    // make a marker for each feature and add it to the map
-                    markers = new mapboxgl.Marker({
-                        element: el,
-                        draggable: true
-                    }).setLngLat(e.lngLat).addTo(mymapedit);
-                      /*.setPopup(
-                        new mapboxgl.Popup({ offset: 25 }) // add popups
-                          .setHTML(
-                            '<h3>' +
-                              marker.properties.title +
-                              '</h3><p>' +
-                              marker.properties.description +
-                              '</p>'
-                          )
-                      )*/
-            
-                      $("#lat-editar").text(e.lngLat.lat);
-                      $("#long-editar").text(e.lngLat.lng);
-                      
-            
-            });
-            
-            
-           
-          
+            }           
+                   
         }
+
+        
     });
   
-   
-
   }
 
+  
+
+    
+
+   
+   
  
 
  

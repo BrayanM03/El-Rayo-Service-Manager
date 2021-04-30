@@ -378,7 +378,7 @@ selects.forEach( select => {
         
         if ( !table.data().any()){
 
-            toastr.warning('La tabla no tiene productos', 'Sin productos' );
+            toastr.warning('La tabla no tiene productos', 'Sin productos' ); 
 
         }else{
             
