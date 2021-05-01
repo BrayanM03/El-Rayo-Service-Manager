@@ -485,6 +485,11 @@ selects.forEach( select => {
    });
 
 
+   $(document).ready(function() {
+    $("#clientes").select2();
+});
+
+
 
     
 

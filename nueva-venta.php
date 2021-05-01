@@ -40,7 +40,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="src/vendor/datatables/dataTables.bootstrap4.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.css" integrity="sha512-oe8OpYjBaDWPt2VmSFR+qYOdnTjeV9QPLJUeqZyprDEQvQLJ9C5PCFclxwNuvb/GQgQngdCXzKSFltuHD3eCxA==" crossorigin="anonymous" />
-    
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="src/vendor/bower_components/select2-bootstrap-theme/dist/select2-bootstrap.css">
 
     <!---Librerias de estilos-->
    
@@ -496,7 +497,7 @@
                                                 </div>
 
                                                 <!--Fila 1-->
-                                                <form id="form-punto-venta">
+                                                <form id="form-punto-venta" style="border: 1px solid black;">
                                                 <div class="fila1">
                                                         <label class="input-largo">
                                                             <span for="search">Busqueda</span>
@@ -521,24 +522,35 @@
                                                                 </table>
                                                         </div>
 
-                                                        <label class="input-largo">
+                                                    
+                                                         <select style="cursor: pointer; color:black;" id="clientes" name="clientes" class="form-select"> 
+                                                                <option disabled selected value></option>
+                                                                <option value="0">Publico en general</option>
+                                                                <option value="1">Pedro</option>
+                                                                <option value="2">Juan</option>
+                                                                <option value="3">Pedro</option>
+                                                         </select>
+                                                  
+
+                                                        <label class="no-editable">
                                                             <span for="description">Descripción</span>
-                                                            <input type="text" id="description" name="description" class="input-group" disabled>
+                                                            <input style="cursor: not-allowed;color:#696969;" type="text" id="description" name="description" class="input-group" disabled>
                                                         </label>
+                                                        
                                                 </div> 
                                                 
                                                 <!--Fila 1-->
 
                                                 <div class="fila2 row">
                                                     
-                                                    <label class="input-corto">
+                                                    <label class="no-editable-corto">
                                                         <span for="modelo">Modelo</span>
-                                                        <input type="text" id="modelo" name="modelo" class="input-group" disabled>
+                                                        <input type="text" style="cursor: not-allowed; color:#696969;" id="modelo" name="modelo" class="input-group" disabled>
                                                     </label>
 
-                                                    <label class="input-corto">
-                                                         <span for="sucursal">Sucursal</span>
-                                                         <select  id="sucursal" name="sucursal" class="select-group form-select" disabled> 
+                                                    <label class="no-editable-corto">
+                                                         <span for="sucursal" >Sucursal</span>
+                                                         <select style="cursor: not-allowed; color:#696969;" id="sucursal" name="sucursal" class="select-group form-select" disabled> 
                                                                 <option disabled selected value></option>
                                                                 <option value="0">Pedro Cardenas</option>
                                                                 <option value="1">Sendero</option>
@@ -594,9 +606,10 @@
                                                 
                                                     </div>
                                                     </div>
-                                                <div class="botones-de-venta">
+                                                <div class="botones-de-venta" style="margin-top: 8px;">
                                                     <div class="btn btn-warning" onclick="limpiarTabla();" style="color: rgb(31, 28, 28); margin-right: 2vh;" id="limpiar-venta">Limpiar</div>
                                                     <div class="btn btn-success" onclick="realizarVenta();" id="realizar-venta">Realizar venta</div>
+                                                    <div class="btn btn-primary" onclick="alert('Holis');" style="margin-left: 2vh;" id="realizar-venta">Realizar venta a credito</div>
                                                 </div>   
                                                 
                                     
@@ -686,6 +699,8 @@
     <script src="src/vendor/datatables/defaults.js"></script>
     <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     <!--<script src="src/js/agregar-info-tabla-venta.js"></script>-->
     <script src="src/js/agregar-product-temp.js"></script>
     <script src="src/js/generar-token.js"></script>

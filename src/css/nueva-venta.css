@@ -5,11 +5,8 @@
 }
 
 .card{
-    width: 100%;
-   
-   
+    width: 100%;   
 }
-
 
 
 .form-nueva-venta{
@@ -18,6 +15,7 @@
    align-items: flex-start;
    justify-content: flex-start;
     width: 100%;
+    height: 500px;
 }
 
 .fila4{
@@ -45,6 +43,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    height: auto;
+    border: 1px solid black;
     
 }
 
@@ -75,6 +75,20 @@
     margin-bottom: 2vh;
     transition: 0.15s;
     margin-left: 1vh;
+}
+
+.no-editable-corto{
+    display: block;
+    width: 150px;
+    border: 1px solid gray;
+    border-radius: 4px;
+    padding: 8px 10px;
+    position: relative;
+    box-sizing: border-box;
+    margin-bottom: 2vh;
+    transition: 0.15s;
+    margin-left: 1vh;
+    cursor: not-allowed;
 }
 
 .fila3{
@@ -246,6 +260,27 @@
     margin-bottom: 2vh;
     transition: 0.15s;
     margin-left: 1vh;
+}
+
+#clientes{
+    width: 350px;
+    height: 26px;
+
+}
+
+.no-editable{
+    display: block;
+    width: 350px;
+    border: 1px solid gray;
+    border-radius: 4px;
+    padding: 8px 10px;
+    position: relative;
+    box-sizing: border-box;
+    margin-bottom: 2vh;
+    transition: 0.15s;
+    margin-left: 1vh;
+    cursor: not-allowed;
+
 }
 
 .grupo-1 label span{
