@@ -482,10 +482,10 @@
 
                      <!-- Contenido Nueva venta -->
 
-                     <div class="card" style="margin-bottom: 7vh; padding-bottom: 5vh;">
-                         <div class="card-header bg-primary text-white">
-                             <span>Nueva venta</span>
-                         </div>
+                     <div class="card" style="margin-bottom: 7vh; padding-bottom: 5vh; padding-right: 30px;">
+                        
+                             <h3 class="titulo-nueva-venta">Nueva venta</h3>
+                         
                          <div class="card-body">
                             <div class="row">
 

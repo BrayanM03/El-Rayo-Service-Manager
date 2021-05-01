@@ -83,16 +83,19 @@
     width: 100%;
     margin-bottom: 2vh;
 }
-
+.titulo-nueva-venta{
+    margin: 15px 0px 0px 35px;
+    color: gray;
+}
 .folio-fecha{
     width: 350px;
     height: auto;
     display: flex;
     justify-content: space-around;
     margin: 2vh;
-    background-color:wheat;
+  
     border-radius: 9px;
-    border: 1px solid coral ;
+    
     padding-top: 8px;
 }
 

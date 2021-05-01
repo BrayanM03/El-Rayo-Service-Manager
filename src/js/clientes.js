@@ -377,6 +377,24 @@ mymap.on('click', function (e) {
                     trackUserLocation: true
                 }));
 
+                var mark = document.createElement("img");
+                        mark.id = "marker";
+                        mark.src = "./src/img/marker.svg";
+
+                        lngLat = {
+                            "lng": response.longitud,
+                            "lat": response.latitud
+                        }
+
+                    
+                        // make a marker for each feature and add it to the map
+                        marker = new mapboxgl.Marker({
+                            element: mark,
+                            draggable: true
+                        }).setLngLat(lngLat).addTo(mymaps);
+
+
+                //Click para establecer un marcador    
                 mymaps.on('click', function (e) {
 
                     $("#marker").remove();  
@@ -501,8 +519,10 @@ mymap.on('click', function (e) {
                     correo = $("#correo").val()
                     rfc = $("#rfc").val();
                     direccion = $("#direccion").val();
-                    latitud = $("#lat-agregar").text();
-                    longitud = $("#long-agregar").text();
+                    latitud = $("#latitud-editar").text();
+                    longitud = $("#longitud-editar").text();
+                    console.log(latitud);
+                    console.log(longitud);
         
                     
                     $.ajax({
@@ -523,13 +543,13 @@ mymap.on('click', function (e) {
                            if (response == 1) {
                             Swal.fire(
                                 "¡Registrado!",
-                                "Se agrego el cliente correctamente",
+                                "Se actualizó el cliente correctamente",
                                 "success"
                                 )
                            }else if(response == 0){
                             Swal.fire(
                                 "¡Correcto!",
-                                "No se pudo agregar el cliente",
+                                "No se pudo actualizar el cliente",
                                 "error"
                                 )
                            }
