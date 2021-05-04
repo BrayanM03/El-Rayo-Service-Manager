@@ -512,7 +512,7 @@ selects.forEach( select => {
                   );
                 
                 break;
-            case "Targeta":
+            case "Tarjeta":
                 var $state = $(
                     '<span><i class="fas fa-money-check"></i> '+state.text+'</span>'
                     

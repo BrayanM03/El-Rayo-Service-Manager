@@ -534,7 +534,7 @@
                                                          <select id="metodos-pago" name="clientes" class="form-select"> 
                                                                 <option disabled selected value></option>
                                                                 <option value="0">Efectivo</option>
-                                                                <option value="1">Targeta</option>
+                                                                <option value="1">Tarjeta</option>
                                                                 <option value="2">Transferencia</option>
                                                                 <option value="3">Cheque</option>
                                                          </select>
