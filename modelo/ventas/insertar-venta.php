@@ -118,9 +118,9 @@ if(isset($_POST)){
 
               
             
-            $queryInsertar = "INSERT INTO detalle_venta (id, id_Venta, id_Llanta, Cantidad, Unidad, precio_Unitario, Importe) VALUES (null,?,?,?,?,?,?)";
+            $queryInsertar = "INSERT INTO detalle_venta (id, id_Venta, id_Llanta, Modelo, Cantidad, Unidad, precio_Unitario, Importe) VALUES (null,?,?,?,?,?,?,?)";
             $resultado = $con->prepare($queryInsertar);
-            $resultado->bind_param('iiisdd',$id_Venta, $id_Llanta, $cantidad, $unidad, $precio_unitario, $importe);
+            $resultado->bind_param('iisisdd',$id_Venta, $id_Llanta, $modelo, $cantidad, $unidad, $precio_unitario, $importe);
             $resultado->execute();
             $resultado->close();
 

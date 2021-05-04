@@ -224,9 +224,11 @@
     background: transparent;
     outline: none;
     font-size: 16px;
+    
   
     
 }
+
 
 .grupo-1 label .input-group-disabled{
     display: block;
@@ -262,10 +264,14 @@
     margin-left: 1vh;
 }
 
-#clientes{
+.select2-selection{
     width: 350px;
-    height: 26px;
+    margin-left: 7px;
+    margin-bottom: 20px;
 
+}
+.select2-selection__arrow{
+    margin-bottom: 20px;
 }
 
 .no-editable{
@@ -280,6 +286,7 @@
     transition: 0.15s;
     margin-left: 1vh;
     cursor: not-allowed;
+    
 
 }
 

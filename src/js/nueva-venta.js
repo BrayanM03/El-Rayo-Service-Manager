@@ -486,7 +486,63 @@ selects.forEach( select => {
 
 
    $(document).ready(function() {
-    $("#clientes").select2();
+
+    $("#clientes").select2({
+        placeholder: "Clientes",
+        theme: "bootstrap"
+    });
+
+    $("#metodos-pago").select2({
+        placeholder: "Metodo de pago",
+        theme: "bootstrap",
+        templateResult: formatState,
+    });
+
+
+    function formatState (state) {
+        if (!state.id) {
+          return state.text;
+        }
+
+        switch (state.text) {
+            case "Efectivo":
+                var $state = $(
+                    '<span><i class="fas fa-money-bill-wave"></i> '+state.text+'</span>'
+                    
+                  );
+                
+                break;
+            case "Targeta":
+                var $state = $(
+                    '<span><i class="fas fa-money-check"></i> '+state.text+'</span>'
+                    
+                  );
+                
+                break;
+            case "Transferencia":
+                var $state = $(
+                    '<span><i class="fas fa-university"></i> '+state.text+'</span>'
+                        
+                );
+                    
+                    break;           
+            case "Cheque":
+                var $state = $(
+                    '<span><i class="fas fa-money-check-alt"></i> '+state.text+'</span>'
+                );
+                            
+            break;                
+            default:
+                break;
+        }
+
+        
+        return $state;
+      };
+
+   
+
+    
 });
 
 

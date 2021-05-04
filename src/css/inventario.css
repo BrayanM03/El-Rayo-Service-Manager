@@ -45,7 +45,7 @@ table.dataTable thead {
   
 
   .select2-contenedor{
-    display: flex;
+    display: flex; 
     justify-content: flex-start;
     flex-direction: column;
     align-items: center;
@@ -60,6 +60,7 @@ table.dataTable thead {
   .select2-contenedor div{
     margin-left: 8px;
   }
+ 
 
   .select2-contenedor-principal{
     display: flex;

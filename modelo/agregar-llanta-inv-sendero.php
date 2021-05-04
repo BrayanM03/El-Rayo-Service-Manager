@@ -40,7 +40,7 @@
                 
                 $code = "SEND" . $codigo;
                 
-                $sucursal = "Pedro Cardenas";
+                $sucursal = "Sendero";
                 
         
                 //print_r($code);
