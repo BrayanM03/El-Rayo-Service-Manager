@@ -524,11 +524,11 @@
 
                                                     
                                                          <select id="clientes" name="clientes" class="form-select"> 
-                                                                <option disabled selected value></option>
+                                                                <!--<option disabled selected value></option>
                                                                 <option value="0">Publico en general</option>
                                                                 <option value="1">Pedro</option>
                                                                 <option value="2">Juan</option>
-                                                                <option value="3">Pedro</option>
+                                                                <option value="3">Pedro</option>-->
                                                          </select>
 
                                                          <select id="metodos-pago" name="clientes" class="form-select"> 

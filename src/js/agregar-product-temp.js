@@ -144,6 +144,7 @@ function agregarInfo(){
     valitationPrice = $("#precio").val();
     sucursalVal = $("#sucursal").val();
 
+
     stockLlanta0 = $("#agregar-producto").attr("stock");
     stockLlanta = parseInt(stockLlanta0);
    
@@ -191,6 +192,8 @@ function agregarInfo(){
       importes         =   precio * cantidad; 
       //subtotal         =   parseFloat(importes);
       botones = "<div class='btn btn-danger borrar-articulo' style='margin-right:5px;'><i class='fas fa-trash'></i></div>";
+
+      
 
       
 

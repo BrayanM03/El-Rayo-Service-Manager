@@ -45,7 +45,7 @@
             $ancho = $fila["Ancho"];
             $alto = $fila["Proporcion"];
             $rin = $fila["Diametro"];
-            $descripcion = $fila["Descripcion"];
+            $descripcion = $fila["Descripcion"]; 
             $modelo = $fila["Modelo"];
             $marca = $fila["Marca"];
             $costo = $fila["precio_Inicial"];

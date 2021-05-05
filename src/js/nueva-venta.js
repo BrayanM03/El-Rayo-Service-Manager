@@ -388,7 +388,9 @@ selects.forEach( select => {
                 
               
             total = $("#total").val();
-            fecha = $("#fecha").val();   
+            fecha = $("#fecha").val(); 
+            cliente = $("#select2-clientes-container").attr("id-cliente");
+            metodo_pago = $("#metodos-pago").val();  
 
 
             //Enviando data
@@ -399,6 +401,8 @@ selects.forEach( select => {
                 type: "POST",
                 url: "./modelo/ventas/insertar-venta.php",
                 data: {'data': llantaData,
+                       'cliente': cliente,
+                       'metodo_pago': metodo_pago,
                        'fecha': fecha,
                        'total': total},
                 dataType: "JSON",
@@ -489,8 +493,86 @@ selects.forEach( select => {
 
     $("#clientes").select2({
         placeholder: "Clientes",
-        theme: "bootstrap"
+        theme: "bootstrap",
+        ajax: {
+            url: "./modelo/ventas/traer_clientes.php",
+            type: "post",
+            dataType: 'json',
+            delay: 250,
+
+            data: function (params) {
+             return {
+               searchTerm: params.term // search term
+               
+             };
+            },
+            processResults: function (data) {
+                return {
+                   results: data
+                };
+              },
+           
+            cache: true
+
+        },
+        language:  {
+
+            inputTooShort: function () {
+                return "Busca la llanta...";
+              },
+              
+            noResults: function() {
+        
+              return "Sin resultados";        
+            },
+            searching: function() {
+        
+              return "Buscando..";
+            }
+          },
+
+          templateResult: formatResultClientes,
+          templateSelection: formatSelection
+
     });
+
+    function formatResultClientes(repo){
+
+
+        if (repo.loading) {
+            return repo.text;
+          }
+          
+          if (repo.credito == 0) {
+              cred = "Sin credito"
+              badge="badge-info";
+          }else if (repo.credito == 1){
+              cred= "Con credito";
+              badge = "badge-warning";
+          }
+
+            var $container = $(
+                "<span id='"+repo.id+"'>"+ repo.nombre +" <span class='badge " + badge +"'>"+ cred +"</span></span>"
+            );
+          
+           
+            //
+          
+            return $container;
+
+    }
+
+    function formatSelection (repo) {
+        //A partir de aqui puedes agregar los clientes
+        
+        $("#select2-clientes-container").attr("id-cliente", repo.id);
+     
+       
+
+        return repo.text || repo.nombre;
+      }
+
+//Select2 para los metodos de pago:
 
     $("#metodos-pago").select2({
         placeholder: "Metodo de pago",

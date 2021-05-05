@@ -11,9 +11,8 @@ if (!isset($_SESSION['id_usuario'])) {
 
 if(isset($_POST)){
 
-  date_default_timezone_set('UTC');
-
-  date_default_timezone_set("America/Mexico_City");
+  date_default_timezone_set("America/Matamoros");
+  $hora = strftime("%R");
 
     //Variables para el historial venta
   if ($_POST['fecha'] == "") {
@@ -23,11 +22,32 @@ if(isset($_POST)){
   }
     $sucursal = $_SESSION['sucursal'];
     $idUser = $_SESSION['id_usuario'];
-    $cliente = 1;
-    
+    $cliente = $_POST["cliente"];
     $total = $_POST["total"];
     $estatus = "Activo";
     $unidad = "pieza";
+
+    switch ($_POST["metodo_pago"]) {
+      case 0:
+       $metodo_pago = "Efectivo";
+        break;
+      
+      case 1:
+      $metodo_pago = "Targeta";
+      break;
+      
+      case 2:
+      $metodo_pago = "Transferencia";
+      break;
+
+      case 3:
+      $metodo_pago = "Cheque";
+          break;
+      
+      default:
+        $metodo_pago = "Sin valor";
+        break;
+    }
 
    
     $datos = $_POST['data'];
@@ -35,9 +55,9 @@ if(isset($_POST)){
    $info_producto_individual = $datos;
 
    
-    $queryInsertar = "INSERT INTO ventas (id, Fecha, id_Sucursal, id_Usuarios, id_Cliente, Total, estatus) VALUES (null,?,?,?,?,?,?)";
+    $queryInsertar = "INSERT INTO ventas (id, Fecha, id_Sucursal, id_Usuarios, id_Cliente, Total, estatus, metodo_pago, hora) VALUES (null,?,?,?,?,?,?,?,?)";
     $resultado = $con->prepare($queryInsertar);
-    $resultado->bind_param('ssiids', $fecha, $sucursal, $idUser, $cliente ,$total, $estatus);
+    $resultado->bind_param('ssiidsss', $fecha, $sucursal, $idUser, $cliente ,$total, $estatus, $metodo_pago, $hora);
     $resultado->execute();
     $resultado->close();
 
@@ -68,6 +88,7 @@ if(isset($_POST)){
             $cantidad = $value["cantidad"];
             $precio_unitario = $value["precio"];
             $importe = $value["importe"];
+            
 
             $subcadena = substr($codigo, 0, 4);
 

@@ -178,7 +178,7 @@ function agregarLLanta(table) {
                   templateSelection: formatRepoSelection
             });
 
-
+ 
             function formatRepo (repo) {
                 
               if (repo.loading) {
