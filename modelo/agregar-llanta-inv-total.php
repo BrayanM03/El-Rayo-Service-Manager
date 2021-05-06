@@ -12,10 +12,10 @@
       $nulo = null;
 
 
-      $query = "INSERT INTO llantas (Ancho, Proporcion, Diametro, Descripcion, Marca, Modelo, precio_Inicial, precio_Venta, precio_Mayoreo, Fecha, id_Sucursal) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+      $query = "INSERT INTO llantas (Ancho, Proporcion, Diametro, Descripcion, Marca, Modelo, precio_Inicial, precio_Venta, precio_Mayoreo, Fecha) VALUES (?,?,?,?,?,?,?,?,?,?)";
       $resultado = $con->prepare($query);
       $resultado->bind_param(
-          'iissssiiisi',
+          'iissssssss',
           $_POST['ancho'],
           $_POST['alto'],
           $_POST['rin'],
@@ -25,8 +25,7 @@
           $_POST['costo'],
           $_POST['precio'],
           $_POST['mayorista'],
-          $_POST['fecha'],
-          $nulo
+          $_POST['fecha']
 
       );
 
