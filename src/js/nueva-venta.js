@@ -266,7 +266,7 @@ selects.forEach( select => {
                                        "<span>"+ value2.Marca+"<span></td>" +
                                        "<td>" + value2.Sucursal + "</td>" +
                                        "<td>" + value2.Stock + "</td></tr>");
-
+ 
                                        contenedorTabla.removeClass("oculto");
 
                                      

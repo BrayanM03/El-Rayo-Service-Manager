@@ -435,9 +435,15 @@ function agregarLLanta() {
             "¡Correcto!",
             "Se agrego la llanta",
             "success"
-            )
-            console.log(response);
+            ).then((result) =>{
 
+              if(result.isConfirmed){
+                 location.reload();
+              }else if(result.isDenied){
+                location.reload();
+              }
+              });
+           
         }else{
           Swal.fire(
             "¡Erro!",

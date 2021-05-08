@@ -141,8 +141,11 @@ function agregarInfo(){
     valitationQuanty = $('#cantidad')[0].checkValidity();
     valitationdescription = $("#description")[0].checkValidity();
     valitationModel = $("#modelo")[0].checkValidity();
+    valitationMetodoPago = $("#metodos-pago").val();
     valitationPrice = $("#precio").val();
     sucursalVal = $("#sucursal").val();
+    cliente = $("#select2-clientes-container").attr("id-cliente");
+    
 
 
     stockLlanta0 = $("#agregar-producto").attr("stock");
@@ -154,6 +157,14 @@ function agregarInfo(){
       toastr.warning('Necesita especificar una cantidad', 'Alerta' );
 
       
+    }else if(!cliente){
+
+      toastr.warning('Necesita seleccionar un cliente', 'Alerta' );
+
+    }else if(!valitationMetodoPago){
+
+      toastr.warning('Seleccione un metodo de pago', 'Alerta' );
+
     }else if(valorCant <= 0){
 
       toastr.warning('La cantidad no puede ser 0 o menor', 'Alerta' );

@@ -66,7 +66,7 @@ MostrarClientes();
 function borrarVenta(id) {
 
     Swal.fire({
-        title: "Eliminar Venta",
+        title: "Eliminar Cliente",
         html: '<span>¿Estas seguro de eliminar esta cliente?</span>',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
@@ -96,9 +96,10 @@ function borrarVenta(id) {
             }).then((result) => {  
 
                 if(result.isConfirmed){
-                    location.reload();
+                    table.ajax.reload();
                 }});
 
+                table.ajax.reload();
            
            }else{
             Swal.fire({
@@ -248,10 +249,15 @@ function borrarVenta(id) {
                         "¡Registrado!",
                         "Se agrego el cliente correctamente",
                         "success"
-                        )
+                        ).then((result) => { 
+                            if(result.isConfirmed){
+                                table.ajax.reload();
+                            }
+                            table.ajax.reload();
+                            });
                    }else if(response == 0){
                     Swal.fire(
-                        "¡Correcto!",
+                        "¡Error!",
                         "No se puede agregar el cliente",
                         "error"
                         )
@@ -545,7 +551,13 @@ mymap.on('click', function (e) {
                                 "¡Registrado!",
                                 "Se actualizó el cliente correctamente",
                                 "success"
-                                )
+                                ).then((result) => { 
+                                    if(result.isConfirmed){
+                                        table.ajax.reload();
+                                    }
+                                    table.ajax.reload();
+                                    });
+                               
                            }else if(response == 0){
                             Swal.fire(
                                 "¡Correcto!",

@@ -1,0 +1,104 @@
+function realizarVentaCredito(){
+
+    if ( !table.data().any()){
+
+        toastr.warning('La tabla no tiene productos', 'Sin productos' ); 
+    
+    }else{
+        
+                
+                
+       
+
+    }
+//Pasar el codigo de aqui abajo al IF cuando termines
+    clienteid = $("#select2-clientes-container").attr("id-cliente");
+    
+    $.ajax({
+        type: "post",
+        url: "./modelo/creditos/traer-cliente-credito.php",
+        data: {"id": clienteid},
+        datatype: "json",
+        
+        success: function (response) {
+            importetotal = $("#total").val() ;
+           
+           
+
+            //restante = parseFloat(importetotal) - parseFloat(abono);
+
+            Swal.fire({
+                title: "Nuevo credito",
+                background: "#dcdcdc" ,
+                width: '800px',
+                showCancelButton: true,
+                cancelButtonText: 'Cerrar',
+                cancelButtonColor: '#00e059',
+                showConfirmButton: true,
+                confirmButtonText: 'Registrar', 
+                cancelButtonColor:'#ff764d',
+                didOpen: function () {   
+                
+                },
+                html: '<form class="mt-4" id="formulario-nuevo-credito">'+
+                '<h5>Agregar nuevo registro de credito para '+ response+'</h5><br>'+
+                '<div class="row">'+
+                    '<div class="col-4">'+
+                    '<label><b>Primer pago:</b></label></br>'+
+                    '<input id="abono" type="number" class="form-control" placeholder="$ 0.00">'+
+                    '</div>'+
+                    '<div class="col-4">'+
+                    '<label><b>Restan:</b></label></br>'+
+                    '<input id="restante" type="text" class="form-control" value="$" disabled>'+
+                    '</div>'+
+                    '<div class="col-4">'+
+                    '<label><b>Total a pagar:</b></label></br>'+
+                    '<input type="text" class="form-control" value="$'+  importetotal +'" disabled>'+
+                    '</div>'+
+
+                    /*'<div class="col-12">'+
+                    '<div class="form-group">'+
+                    '<label><b>Productos:</b></label></br>'+
+                    '<table class="table table-bordered" style="border: 1px solid black;">'+
+                    '<thead class="thead-dark">'+
+                    '<tr>'+
+                    '<th>Codigo</th>'+
+                    '<th>Concepto</th>'+
+                    '<th>Precio</th>'+
+                    '<th>Cantidad</th>'+
+                    '</thead>'+
+                    '<tbody id="tbody-products-credito" style="background: white;">'+
+                    '</tbody>'+
+                    '</div>'+
+                    '</div>'+*/
+
+
+                '</div>'+
+        
+                    '</form>'
+                    
+                    });
+
+                    abono = $("#abono");
+                    abono.keyup(function () { 
+                        abono_tecleado = $(this).val();
+                        restante = parseFloat(importetotal) - parseFloat(abono_tecleado);
+                        noNumerico = isNaN(restante);
+                        restanteVal = $("#restante").val();
+                        if (abono_tecleado == 0 && noNumerico == false) {
+                            $("#restante").val("$" + importetotal);    
+                        }else if(noNumerico == true){
+                            
+                            $("#restante").val("$-");
+                        }
+                        else{
+                            $("#restante").val("$" + restante);
+                        }
+                        
+                    });
+        }
+    });
+   
+
+}
+

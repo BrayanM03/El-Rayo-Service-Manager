@@ -17,8 +17,11 @@ if (isset($_POST)) {
          $editar_llanta->execute();
          $editar_llanta->close();
          
-        print_r(1);
-
+        if($editar_llanta){
+            print_r(1);
+        }else{
+            print_r(2);
+        }
 
 
 }else{

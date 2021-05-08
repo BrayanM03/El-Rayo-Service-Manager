@@ -242,7 +242,12 @@ function editarRegistro(id){
                             "¡Correcto!",
                             "Se actualizo llanta la llanta",
                             "success"
-                            )
+                            ).then((result) => { 
+                                if(result.isConfirmed){
+                                    table.ajax.reload();
+                                }
+                                table.ajax.reload();
+                                })
                        }else{
                         Swal.fire(
                             "¡Error!",
@@ -265,8 +270,9 @@ function editarRegistro(id){
 
 function borrarRegistro(id) { 
     Swal.fire({
-        title: "Eliminar llanta",
-        html: '<span>¿Estas seguro de eliminar esta llanta?</span>',
+        icon: 'warning',
+        title: "¿Estas seguro de eliminar esta llanta?",
+        html: '<span>Al eliminar esta llanta tambien desaparecera del inventario fisico en tus sucursales donde la tengas agregada.</span>',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
         cancelButtonColor: '#00e059',
@@ -288,13 +294,21 @@ function borrarRegistro(id) {
                  "¡Correcto!",
                  "Se elimino la llanta del inventario",
                  "success"
-                 )
+                 ).then((result) =>{
+
+                    if(result.isConfirmed){
+                        table.ajax.reload();
+                    }
+                    table.ajax.reload();
+                    });
+                 
             }else{
              Swal.fire(
                  "¡Error!",
                  "Ocurrio un error inesperado",
                  "error"
-                 )
+                 );
+                 table.ajax.reload();
             }
         
         }

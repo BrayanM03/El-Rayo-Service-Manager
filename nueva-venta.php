@@ -497,7 +497,7 @@
                                                 </div>
 
                                                 <!--Fila 1-->
-                                                <form id="form-punto-venta" style="border: 1px solid black;">
+                                                <form id="form-punto-venta">
                                                 <div class="fila1">
                                                         <label class="input-largo">
                                                             <span for="search">Busqueda</span>
@@ -617,7 +617,7 @@
                                                 <div class="botones-de-venta" style="margin-top: 8px;">
                                                     <div class="btn btn-warning" onclick="limpiarTabla();" style="color: rgb(31, 28, 28); margin-right: 2vh;" id="limpiar-venta">Limpiar</div>
                                                     <div class="btn btn-success" onclick="realizarVenta();" id="realizar-venta">Realizar venta</div>
-                                                    <div class="btn btn-primary" onclick="alert('Holis');" style="margin-left: 2vh;" id="realizar-venta">Realizar venta a credito</div>
+                                                    <div class="btn btn-primary" onclick="realizarVentaCredito();" style="margin-left: 2vh;" id="realizar-venta">Realizar venta a credito</div>
                                                 </div>   
                                                 
                                     
@@ -712,6 +712,7 @@
     <!--<script src="src/js/agregar-info-tabla-venta.js"></script>-->
     <script src="src/js/agregar-product-temp.js"></script>
     <script src="src/js/generar-token.js"></script>
+    <script src="src/js/nueva-venta-credito.js"></script>
    
    
 </body>

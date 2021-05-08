@@ -44,7 +44,7 @@
     justify-content: center;
     align-items: center;
     height: auto;
-    border: 1px solid black;
+   
     
 }
 
@@ -330,5 +330,4 @@ body.swal2-shown > [aria-hidden="true"] {
   body > * {
     transition: 0.1s filter linear;
   }
-
 

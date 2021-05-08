@@ -49,7 +49,7 @@ function editarInvSendero(id){
             if(result.isConfirmed){
 
                 
-                stock_para_editar       = $("#stock-ind").val();
+                stock_para_editar = $("#stock-ind").val();
               
 
                 
@@ -71,8 +71,9 @@ function editarInvSendero(id){
                             ).then((result) =>{
 
                             if(result.isConfirmed){
-                                location.reload();
+                                table.ajax.reload();
                             }
+                            table.ajax.reload();
                             });
                        }else{
                         Swal.fire(
@@ -121,9 +122,9 @@ function borrarRegistro(id) {
                  "success"
                  ).then((result) => { 
             if(result.isConfirmed){
-                location.reload();
+                table.ajax.reload();
             }
-             location.reload();
+            table.ajax.reload();
             })
 
             }else{

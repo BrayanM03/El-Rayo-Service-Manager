@@ -12,7 +12,7 @@ if (!isset($_SESSION['id_usuario'])) {
 if(isset($_POST)){
 
   date_default_timezone_set("America/Matamoros");
-  $hora = strftime("%R");
+  $hora = date("h:i a");
 
     //Variables para el historial venta
   if ($_POST['fecha'] == "") {

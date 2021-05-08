@@ -10,10 +10,10 @@ $folio = "RAY" . $_GET["id"];
 $idVenta = $_GET["id"];
 global $folio;
 
-$ID = $con->prepare("SELECT ventas.Fecha, ventas.id_Sucursal, clientes.Nombre_Cliente, ventas.Total FROM ventas INNER JOIN clientes ON ventas.id_Cliente = clientes.id WHERE ventas.id = ?");
+$ID = $con->prepare("SELECT ventas.Fecha, ventas.id_Sucursal, clientes.Nombre_Cliente, ventas.Total, ventas.metodo_pago, ventas.hora FROM ventas INNER JOIN clientes ON ventas.id_Cliente = clientes.id WHERE ventas.id = ?");
 $ID->bind_param('i', $idVenta);
 $ID->execute();
-$ID->bind_result($fecha, $sucursal, $cliente, $total);
+$ID->bind_result($fecha, $sucursal, $cliente, $total, $metodo_pago, $hora );
 $ID->fetch();
 $ID->close();
 
@@ -21,7 +21,8 @@ global $fecha;
 global $sucursal;
 global $cliente;
 global $total;
-
+global $metodo_pago;
+global $hora;
 
 $formatterES = new NumberFormatter("es-ES", NumberFormatter::SPELLOUT);
 $izquierda = intval(floor($total));
@@ -110,7 +111,12 @@ function Header()
     $this->SetFont('Times','',12);
     $this->SetFillColor(236, 236, 236);
     $this->Cell(70,10,utf8_decode($GLOBALS["cliente"]),0,0, 'L',1);
-    $this->Cell(30,7,'',0,0,'', false);
+    $this->SetFont('Arial','B',12);
+    $this->SetTextColor(194, 34, 16);
+    $this->Cell(30,7,utf8_decode("Metodo pago:"),0,0,'', false);
+    $this->SetFont('Times','',12);
+    $this->SetTextColor(36, 35, 28);
+    $this->Cell(20,7,utf8_decode($GLOBALS["metodo_pago"]),0,0,'', false);
     $this->SetFont('Arial','B',12);
     $this->SetTextColor(194, 34, 16);
     $this->Cell(20,7,utf8_decode("Folio:"),0,0, false);
@@ -128,7 +134,12 @@ function Header()
     $this->SetFillColor(236, 236, 236);
     $vendedor = $_SESSION['nombre'] . " " . $_SESSION['apellidos'];
     $this->Cell(70,7,utf8_decode($vendedor),0,0, 'L',1);
-    $this->Cell(30,7,'',0,0,'', false);
+    $this->SetFont('Arial','B',12);
+    $this->SetTextColor(194, 34, 16);
+    $this->Cell(30,7,'Hora: ',0,0,'R', false);
+    $this->SetFont('Times','',12);
+    $this->SetTextColor(36, 35, 28);
+    $this->Cell(20,7,utf8_decode($GLOBALS["hora"]),0,0,'', false);
 
     $this->SetFont('Arial','B',12);
     $this->SetTextColor(194, 34, 16);

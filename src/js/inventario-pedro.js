@@ -57,7 +57,7 @@ function MostrarInventarioPedro() {
 
 /**/
 
-function agregarLLanta(table) {
+function agregarLLanta() {
 
   Swal.fire({
     title: "Agregar llanta nueva",
@@ -257,13 +257,14 @@ function agregarLLanta(table) {
           if (response==1) {
             Swal.fire(
               "Correcto",
-              "Hay conexión, la llanta es " + response,
+              "Se agrego la llanta correctamente",
               "success"
             ).then((result) =>{
 
               if(result.isConfirmed){
-                 location.reload();
+                table.ajax.reload();
               }
+              table.ajax.reload();
               });
             
            
