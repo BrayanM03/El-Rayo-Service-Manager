@@ -148,7 +148,7 @@ function agregarLLanta() {
 
        
 
-        '<div class="col-6">'+
+        '<div class="col-8 ">'+
         '<div class="form-group">'+
         '<label><b>Modelo</b></label>'+
         '<input type="text" class="form-control" id="modelo" name="modelo" placeholder="Modelo">'+
@@ -156,12 +156,12 @@ function agregarLLanta() {
         '</div>'+
 
        
-    '<div class="col-6">'+
+    /*'<div class="col-6">'+
         '<div class="form-group">'+
             '<label><b>Fecha</b></label>'+
             '<input type="date" class="form-control" value="" name="fecha" id="fecha" >'+
         '</div>'+
-    '</div>'+
+    '</div>'+*/
     
     
    
@@ -306,7 +306,6 @@ function agregarLLanta() {
         "precio":         $("#precio").val(),
         "mayorista":      $("#mayorista").val(),
         "modelo":         $("#modelo").val(),
-        "fecha":          $("#fecha").val(),
         "descripcion":    $("#descripcion").val()
       };
 
@@ -381,13 +380,6 @@ function agregarLLanta() {
         Swal.showValidationMessage(
           `Establece un precio de mayorista o descuento`
         )
-      }else if(data["fecha"] == ""){
-        $(".datoVacio").removeClass("datoVacio");      
-        $(".border-danger").removeClass("border-danger");
-        $("#fecha").addClass("border-danger");
-        Swal.showValidationMessage(
-          `Establece una fecha`
-        )
       }else if( data["cantidad"] == ""){
         $(".datoVacio").removeClass("datoVacio");      
         $(".border-danger").removeClass("border-danger");
@@ -418,11 +410,9 @@ function agregarLLanta() {
       "precio":         $("#precio").val(),
       "mayorista":      $("#mayorista").val(),
       "modelo":         $("#modelo").val(),
-      "fecha":          $("#fecha").val(),
       "descripcion":    $("#descripcion").val()
     };
-
-    console.log(data["marca"]);  
+ 
 
     $.ajax({
       type: "POST",

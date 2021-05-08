@@ -61,15 +61,16 @@ function Header()
     if($GLOBALS["sucursal"] == "Pedro"){
         $direccion = "Avenida Pedro Cardenas KM5 No.207";
         $colonia = "Col. Francisco Castellanos";
+        $telefono = "8688244404";
+        $rfc = "SARK9104063L6";
+
         
    }else if($GLOBALS["sucursal"] == "Sendero"){
     $direccion = "Av. Sendero Nacional";
     $colonia = "Kilometro 50";
+    $telefono = "868 127 5833";
+    $rfc = "REFR971218619";
    }
-
-   
-
-  
 
     // Logo
     $this->Image('../../src/img/logo.jpg',20,10,25);
@@ -97,9 +98,9 @@ function Header()
     $this->Ln(4);
     $this->Cell(160,10,utf8_decode("H. Matamoros Tam"),0,0,'C', false);
     $this->Ln(4);
-    $this->Cell(160,10,utf8_decode("RFC:SARK9104063L6"),0,0,'C', false);
+    $this->Cell(160,10,utf8_decode("RFC: " .$rfc),0,0,'C', false);
     $this->Ln(4);
-    $this->Cell(160,10,utf8_decode("Telefono: 8688244404"),0,0,'C', false);
+    $this->Cell(160,10,utf8_decode("Telefono: " .$telefono),0,0,'C', false);
     $this->Ln(17);
 
     //$this->Rect(133, 58, 20, 7, 'F');

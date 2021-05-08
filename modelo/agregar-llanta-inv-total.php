@@ -10,7 +10,7 @@
     if (isset($_POST)) {
       $respuesta =  $_POST["mayorista"];
       $nulo = null;
-
+      $fecha = date("Y-m-d"); 
 
       $query = "INSERT INTO llantas (Ancho, Proporcion, Diametro, Descripcion, Marca, Modelo, precio_Inicial, precio_Venta, precio_Mayoreo, Fecha) VALUES (?,?,?,?,?,?,?,?,?,?)";
       $resultado = $con->prepare($query);
@@ -25,7 +25,7 @@
           $_POST['costo'],
           $_POST['precio'],
           $_POST['mayorista'],
-          $_POST['fecha']
+          $fecha 
 
       );
 

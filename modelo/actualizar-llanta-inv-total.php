@@ -13,7 +13,7 @@ if (!isset($_SESSION['id_usuario'])) {
 
 if (isset($_POST)) {
 
-
+    
         $codigo = $_POST["codigo"]; 
 
         $e_ancho       = $_POST["ancho"];
