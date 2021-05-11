@@ -53,7 +53,19 @@ function realizarVentaCredito(){
                     '</div>'+
                     '<div class="col-4">'+
                     '<label><b>Total a pagar:</b></label></br>'+
-                    '<input type="text" class="form-control" value="$'+  importetotal +'" disabled>'+
+                    '<input type="text" id="importe-total" class="form-control" value="$ '+  importetotal +'" disabled>'+
+                    '</div>'+
+                    '<div class="col-12 mt-5">'+
+                    '<div class="form-group">'+
+                    '<label><b>Elige un plazo para pagar:</b></label></br>'+
+                    '<select class="form-control" id="plazo">'+
+                    '<option value="1">1 Semana</option>'+
+                    '<option value="2">15 dias</option>'+
+                    '<option value="3">1 mes</option>'+
+                    '<option value="4">1 año</option>'+
+                    '<option value="5">Sin definir</option>'+
+                    '</select>'+
+                    '</div>'+
                     '</div>'+
 
                     /*'<div class="col-12">'+
@@ -63,7 +75,7 @@ function realizarVentaCredito(){
                     '<thead class="thead-dark">'+
                     '<tr>'+
                     '<th>Codigo</th>'+
-                    '<th>Concepto</th>'+
+                    '<th>Concepto</th>'+ 
                     '<th>Precio</th>'+
                     '<th>Cantidad</th>'+
                     '</thead>'+
@@ -77,6 +89,31 @@ function realizarVentaCredito(){
         
                     '</form>'
                     
+                    }).then((result) =>{
+
+                        plazo = $("#plazo").val();
+                        importe_total = $("#importe-total").val();
+                        abono = $("#abono").val();
+                        restante = $("#restante").val();
+
+                        fimporte_total    =    importe_total.replace('$','');
+                        fabono    =    abono.replace('$','');
+                        frestante =    restante.replace('$','');
+
+
+
+                        if(result.isConfirmed){
+                            $.ajax({
+                                type: "POST",
+                                url: "./modelo/creditos/nuevo-credito.php",
+                                data: {"plazo": plazo, "importe": fimporte_total, "abono": fabono, "restante": frestante},
+                                //dataType: "",
+                                success: function (response) {
+                                  console.log(response); 
+
+                                }
+                            });
+                        }
                     });
 
                     abono = $("#abono");

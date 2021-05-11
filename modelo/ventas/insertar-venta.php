@@ -75,7 +75,7 @@ if(isset($_POST)){
         
         
 
-        foreach ($info_producto_individual as $key => $value) {
+        foreach ($info_producto_individual as $key => $value) { 
           
           $validacion = is_numeric($key);
 
