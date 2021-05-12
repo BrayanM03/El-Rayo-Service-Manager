@@ -26,7 +26,7 @@
     <meta name="author" content="">
     <link rel="shortcut icon" href="src/img/rayo.svg" />
 
-    <title>Inventario</title>
+    <title>Inventario de llantas totales</title>
 
     <!-- Custom fonts for this template-->
     <link rel="stylesheet" href="src/css/inventario.css">
@@ -187,7 +187,7 @@
                         <a class="collapse-item" href="clientes.php" style="display:flex; flex-direction: row; justify-content:start;">
                             <img src="src/img/cliente.svg" width="18px" /> 
                             <span style="margin-left:12px;"> Clientes</span> </a>
-                        <a class="collapse-item" href="register.html" style="display:flex; flex-direction: row; justify-content:start;">
+                        <a class="collapse-item" href="creditos.php" style="display:flex; flex-direction: row; justify-content:start;">
                             <img src="src/img/credito.svg" width="18px" /> 
                             <span style="margin-left:12px;"> Creditos</span> </a>
                         <a class="collapse-item" href="forgot-password.html">

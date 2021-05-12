@@ -586,7 +586,7 @@ selects.forEach( select => {
           return state.text;
         }
 
-        switch (state.text) {
+        switch (state.text) { 
             case "Efectivo":
                 var $state = $(
                     '<span><i class="fas fa-money-bill-wave"></i> '+state.text+'</span>'

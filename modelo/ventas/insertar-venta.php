@@ -24,7 +24,15 @@ if(isset($_POST)){
     $idUser = $_SESSION['id_usuario'];
     $cliente = $_POST["cliente"];
     $total = $_POST["total"];
-    $estatus = "Activo";
+    
+
+    if(isset($_POST["plazo"])){
+      $estatus = "Abierta";
+    }else{
+      $estatus = "Pagado";
+    }
+
+    
     $unidad = "pieza";
 
     switch ($_POST["metodo_pago"]) {
@@ -131,10 +139,6 @@ if(isset($_POST)){
              
             }
  
-           
-
-            
-
              
 
               

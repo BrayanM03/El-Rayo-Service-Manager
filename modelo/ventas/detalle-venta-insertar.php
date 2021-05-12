@@ -22,9 +22,6 @@ if(isset($_POST)){
     $iduser = $_SESSION["id_usuario"];
 
     
-
-
-    
     $comprobar = "SELECT COUNT(*) total FROM productos_temp$iduser";
     $result = $con->query($comprobar);
     if($result == false){
@@ -94,7 +91,7 @@ if(isset($_POST)){
                 }
 
                 $revisarStock = "SELECT Stock FROM inventario_mat$suc WHERE Codigo = ?";
-                $res = $con->prepare($revisarStock);
+                $res = $con->prepare($revisarStock); 
                 $res->bind_param('s', $codigo);
                 $res->execute();
                 $res->bind_result($StockActual);

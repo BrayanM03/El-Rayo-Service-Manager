@@ -6,12 +6,7 @@ function realizarVentaCredito(){
     
     }else{
         
-                
-                
-       
-
-    }
-//Pasar el codigo de aqui abajo al IF cuando termines
+             //Pasar el codigo de aqui abajo al IF cuando termines
     clienteid = $("#select2-clientes-container").attr("id-cliente");
     
     $.ajax({
@@ -99,6 +94,7 @@ function realizarVentaCredito(){
                         fimporte_total    =    importe_total.replace('$','');
                         fabono    =    abono.replace('$','');
                         frestante =    restante.replace('$','');
+                        fecha = $("#fecha").val();
 
 
 
@@ -106,13 +102,99 @@ function realizarVentaCredito(){
                             $.ajax({
                                 type: "POST",
                                 url: "./modelo/creditos/nuevo-credito.php",
-                                data: {"plazo": plazo, "importe": fimporte_total, "abono": fabono, "restante": frestante},
+                                data: {"id_cliente": clienteid, "plazo": plazo, "importe": fimporte_total, "abono": fabono, "restante": frestante, "fecha": fecha},
                                 //dataType: "",
                                 success: function (response) {
                                   console.log(response); 
 
                                 }
                             });
+
+                                                //Insertar venta
+                                llantaData = $("#pre-venta").dataTable().fnGetData();
+                                console.log(llantaData);
+                                    
+                                
+                                total = $("#total").val();
+                                fecha = $("#fecha").val(); 
+                                cliente = $("#select2-clientes-container").attr("id-cliente");
+                                metodo_pago = $("#metodos-pago").val();  
+
+
+                                //Enviando data
+
+
+                                
+                                $.ajax({
+                                    type: "POST",
+                                    url: "./modelo/ventas/insertar-venta.php",
+                                    data: {'data': llantaData,
+                                        'plazo': plazo,
+                                        'cliente': cliente,
+                                        'metodo_pago': metodo_pago,
+                                        'fecha': fecha,
+                                        'total': total},
+                                    dataType: "JSON",
+                                    success: function (response) {
+                                        console.log(response);
+                                        if (response) {
+                                            Swal.fire({
+                                                title: 'Venta a credito realizada',
+                                                html: "<span>La venta a credito se realizo con exito</br></span>"+
+                                                "ID Venta: RAY" + response,
+                                                icon: "success",
+                                                cancelButtonColor: '#00e059',
+                                                showConfirmButton: true,
+                                                confirmButtonText: 'Aceptar', 
+                                                cancelButtonColor:'#ff764d',
+                                                showDenyButton: true,
+                                                denyButtonText: 'Reporte'
+                                            },
+                                            
+                                            ).then((result) =>{
+                                
+                                                if(result.isConfirmed){
+                                                //location.reload();
+                                                table.ajax.reload();
+                                                    $("#pre-venta tbody tr").remove();
+                                                    $(".pre-venta-error").html("");
+                                                    $(".products-grid-error").remove();
+                                                    $("#pre-venta tbody").append('<tr><th id="empty-table" style="text-align: center;" style="width: 100%" colspan="8">Preventa vacia</th></tr>');
+                                                    $("#pre-venta_processing").css("display","none");
+                                                    $("#total").val(0);
+                                                
+
+                                                }else if(result.isDenied){
+                        
+                                                    window.open('./modelo/ventas/generar-reporte-venta.php?id='+ response, '_blank');
+                                                    table.ajax.reload();
+                                                    $("#pre-venta tbody tr").remove();
+                                                    $(".pre-venta-error").html("");
+                                                    $(".products-grid-error").remove();
+                                                    $("#pre-venta tbody").append('<tr><th id="empty-table" style="text-align: center;" style="width: 100%" colspan="8">Preventa vacia</th></tr>');
+                                                    $("#pre-venta_processing").css("display","none");
+                                                    $("#total").val(0);
+                                                        
+                                                
+                                                    
+                                                }else{
+                                                    table.ajax.reload();
+                                                    $("#pre-venta tbody tr").remove();
+                                                    $(".pre-venta-error").html("");
+                                                    $(".products-grid-error").remove();
+                                                    $("#pre-venta tbody").append('<tr><th id="empty-table" style="text-align: center;" style="width: 100%" colspan="8">Preventa vacia</th></tr>');
+                                                    $("#pre-venta_processing").css("display","none");
+                                                    $("#total").val(0);
+                                                }
+                                
+                                            
+                                                });
+
+                                                
+                                        }
+                                        
+                                    }
+                                }); //fin
                         }
                     });
 
@@ -136,6 +218,11 @@ function realizarVentaCredito(){
         }
     });
    
+   
+                
+       
+
+    }
 
 }
 
