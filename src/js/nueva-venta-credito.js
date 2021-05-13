@@ -96,7 +96,7 @@ function realizarVentaCredito(){
                         frestante =    restante.replace('$','');
                         fecha = $("#fecha").val();
 
-
+                        console.log(fecha);
 
                         if(result.isConfirmed){
                             $.ajax({
@@ -112,14 +112,14 @@ function realizarVentaCredito(){
 
                                                 //Insertar venta
                                 llantaData = $("#pre-venta").dataTable().fnGetData();
-                                console.log(llantaData);
+                               
                                     
                                 
                                 total = $("#total").val();
                                 fecha = $("#fecha").val(); 
                                 cliente = $("#select2-clientes-container").attr("id-cliente");
                                 metodo_pago = $("#metodos-pago").val();  
-
+                                
 
                                 //Enviando data
 

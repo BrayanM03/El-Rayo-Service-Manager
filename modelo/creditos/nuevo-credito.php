@@ -24,10 +24,11 @@ if(isset($_POST)){
     $estatus = 1;
    
 
-    if(isset($_POST["fecha"])){
-        $fecha_inicio = $_POST["fecha"];
-    }else{
+    if($_POST["fecha"] == ""){
         $fecha_inicio = date("d-m-Y");
+    }else{
+        
+        $fecha_inicio = $_POST["fecha"];
     }
     
     $fecha = date($fecha_inicio);

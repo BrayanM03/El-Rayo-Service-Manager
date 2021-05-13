@@ -391,7 +391,7 @@ selects.forEach( select => {
             fecha = $("#fecha").val(); 
             cliente = $("#select2-clientes-container").attr("id-cliente");
             metodo_pago = $("#metodos-pago").val();  
-
+            
 
             //Enviando data
 
