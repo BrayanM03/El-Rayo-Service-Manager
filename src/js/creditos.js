@@ -172,8 +172,22 @@ function borrarVenta(id) {
                 background: "#dcdcdc" ,
                 didOpen: function () {
                     $("#abonar-btn").on('click', function () { 
-                       $("#contenedor-abono").append('<input class="form-control">'+
-                       '<div class="btn btn-warning">Registrar</div>');
+                      var item = document.getElementById("chevron");
+                      var chevron = $("#chevron");
+                      var hasChevronRight = item.classList.contains( 'chevron-der' );
+                      if (hasChevronRight == true) {
+                        chevron.removeClass("chevron-der");
+                        chevron.addClass("chevron-abaj");
+                        $("#contenedor-abono").empty();
+                      }else{
+                        chevron.removeClass("chevron-abaj");
+                        chevron.addClass("chevron-der");
+                        $("#contenedor-abono").append('<input type="number" style="width: 120px; margin-right: 10px;" class="form-control">'+
+                        '<div class="btn btn-warning">Registrar</div>');
+                      }
+                      
+                      
+
                      })
                 },
                 html: '<form class="mt-4" id="formulario-editar-abono">'+
@@ -182,7 +196,7 @@ function borrarVenta(id) {
                       '<div class="col-8">'+
                       '<div class="form-group">'+
                       '<label><b>Cliente:</b></label></br>'+
-                      '<input class="form-control" value="'+ response.cliente+'" disabled>'+
+                      '<input class="form-control" value="'+ response.cliente +'" disabled>'+
                       '</div>'+
                       '</div>'+
             
@@ -195,16 +209,18 @@ function borrarVenta(id) {
                    '</div>'+
             
             
-                   '<div class="row">'+
-
-                   '<div class="col-12">'+
                    '<div class="card tabla-abonos">'+
+
+                   '<div class="row">'+
                    '<div class="col-4">'+
-                   '<div id="abonar-btn" class="btn btn-info" style="width: 100px; margin: 10px ;">Abonar</div>'+
+                   '<div id="abonar-btn" class="btn btn-info" style="width: 100px; margin: 10px; ">Abonar<i id="chevron" class="chevron-abaj ml-2 fas fa-chevron-down"></i></div>'+
                    '</div>'+
                    '<div class="col-8">'+
-                   '<div id="contenedor-abono"></div>'+
+                   '<div id="contenedor-abono" class="form-group" style="display:flex; margin-top:10px; "></div>'+
                    '</div>'+
+                   '</div>'+
+                   
+
                    
                    '<table style="margin: 8px;" class="table table-hover table-bordered">'+  
                    '<thead class="thead-dark"><tr>'+
@@ -221,9 +237,9 @@ function borrarVenta(id) {
                    '</tr>'+
                    '</tbody>'+
                    '</table>'+
+                   
 
-                   '</div>'+
-                   '</div>'+ //       
+                          
                    '</div>'+//row
             
             '</form>',
