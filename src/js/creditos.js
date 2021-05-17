@@ -29,7 +29,7 @@ table = $('#creditos').DataTable({
                 return '<span class="badge badge-info">Primer abono</span>';    
             break;
             case "2":
-                return '<span class="badge badge-info">Pagando</span>';    
+                return '<span class="badge badge-warning">Pagando</span>';    
             break;
             case "3":
                 return '<span class="badge badge-dark">Finalizado</span>';    
@@ -167,10 +167,13 @@ function borrarVenta(id) {
         data: {"id_credito": id},
         dataType: "JSON",
         success: function (response) {
+
             Swal.fire({
                 title: "Historial de credito",
                 background: "#dcdcdc" ,
                 didOpen: function () {
+                  $(document).ready(function() {
+
                     $("#abonar-btn").on('click', function () { 
                       var item = document.getElementById("chevron");
                       var chevron = $("#chevron");
@@ -182,13 +185,72 @@ function borrarVenta(id) {
                       }else{
                         chevron.removeClass("chevron-abaj");
                         chevron.addClass("chevron-der");
-                        $("#contenedor-abono").append('<input type="number" style="width: 120px; margin-right: 10px;" class="form-control">'+
-                        '<div class="btn btn-warning">Registrar</div>');
+                        $("#contenedor-abono").append('<input type="number" id="abono-in" style="width: 120px; margin-right: 10px;" class="form-control">'+
+                        '<div id="registrar-abono" class="btn btn-warning">Registrar</div>');
+                        $("#registrar-abono").on('click', function () { 
+                          registrarAbono(id);
+                        });
                       }
-                      
-                      
 
-                     })
+                     }) //Termino de clickear el boton 
+
+                  
+                    
+
+                     function registrarAbono(id) {
+                      abono_in = $("#abono-in").val();
+                      if(abono_in == null || abono_in ==0){
+                        alert("Ingresa una cantidad");
+                      }else{
+                        $.ajax({
+                          type: "POST",
+                          url: "./modelo/creditos/insertar-abono.php",
+                          data: {"id-credito":  id, "abono": abono_in},
+                          dataType: "JSON",
+                          success: function (response) {
+                            tabla.ajax.reload();
+                            $("#pagado").val(response.pagado_nuevo);
+                            $("#restante").val(response.restante_nuevo);
+
+                            
+                          }
+                        });
+                      }
+                       
+                       }
+
+
+                     tabla = $("#tabla-abonos").DataTable({
+                      //destroy: true,
+                      //processing: true,
+                      //serverSide: true,
+                      ajax: {
+                       type: "POST",
+                        data: {"id_cred": id},
+                        url: "./modelo/creditos/traer-abonos.php",
+                        dataType: "JSON"
+                    },   
+                    columns: [   
+                      { title: "#",             data: null , width:"60px"            },
+                      { title: "Abono",         data: "abono"         },
+                      { title: "fecha",         data: "fecha_abono"    }],
+                      
+                      paging: false,
+                      searching: false,
+                      scrollY: "260px",
+                      info: false,
+                      responsive: true,
+                     });
+
+                     tabla.on( 'order.dt search.dt', function () {
+                      tabla.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+                          cell.innerHTML = i+1;
+                         
+                      } );
+                  } ).draw();
+
+
+                });
                 },
                 html: '<form class="mt-4" id="formulario-editar-abono">'+
             
@@ -221,97 +283,44 @@ function borrarVenta(id) {
                    '</div>'+
                    
 
-                   
-                   '<table style="margin: 8px;" class="table table-hover table-bordered">'+  
+                   '<div class="row">'+
+                   '<div class="col-12 aling-items-center">'+
+                   '<table style="margin: 8px;" id="tabla-abonos" class="table table-hover table-bordered">'+  
                    '<thead class="thead-dark"><tr>'+
                    '<th>#</th>'+ 
                    '<th>cantidad</th>'+
                    '<th>Fecha</th>'+
                    '</tr>'+
                    '</thead>'+
+                   
                    '<tbody>'+
-                   '<tr>'+
-                   '<td>Primer pago</td>'+
-                   '<td>'+ response.abono+'</td>'+
-                   '<td>'+ response.fecha_abono+'</td>'+
-                   '</tr>'+
+                   
                    '</tbody>'+
                    '</table>'+
-                   
+                   '</div></div>'+
 
                           
-                   '</div>'+//row
+                   '</div>'+
+                   '<div class="row">'+
+                   '<div class="col-6 aling-items-center">'+
+                   '<div class="mt-2"><b>Pagado:</br> </div>'+
+                   '<input value="$'+response.pagado+'" id="pagado" class="form-control" disabled>'+
+                   '</div>'+
+                   '<div class="col-6 aling-items-center">'+
+                   '<div class="mt-2"><b>Restante:</br> </div>'+
+                   '<input value="$'+response.restante+'" id="restante" class="form-control" disabled>'+
+                   '</div>'+
+                   '</div>'+
             
             '</form>',
                 showCancelButton: true,
                 cancelButtonText: 'Cerrar',
                 cancelButtonColor: '#00e059',
-                showConfirmButton: true,
+                showConfirmButton: false,
                 confirmButtonText: 'Actualizar', 
                 cancelButtonColor:'#ff764d'
         
             }).then((result) =>{
-            
-                if(result.isConfirmed){
-            
-                  code = $("#select2-busquedaLlantas-container").attr("codigo");
-                  cantidad = $("#cantidad").val();
-                  $.ajax({
-                    type: "POST",
-                    url: "./modelo/agregar-llanta-inv-pedro.php",
-                    data: {"code": code, "stock": cantidad},
-                    //dataType: "dataType",
-                    success: function (response) {
-                      
-                      if (response==1) {
-                        Swal.fire(
-                          "Correcto",
-                          "Se agrego la llanta correctamente",
-                          "success"
-                        ).then((result) =>{
-            
-                          if(result.isConfirmed){
-                            table.ajax.reload();
-                          }
-                          table.ajax.reload();
-                          });
-                        
-                       
-            
-                      }else if ( response == 2){
-                        Swal.fire(
-                          "Error",
-                          "Hubo un problema al insertar la llanta",
-                          "error"
-                        )
-            
-                      }else if ( response == 3){
-                        Swal.fire(
-                          "Peligro",
-                          "Selecciona una llanta!",
-                          "warning"
-                        )
-                      }else if ( response == 4){
-                        Swal.fire(
-                          "Error",
-                          "Ingresa una cantidad",
-                          "warning"
-                        )
-                      }else if ( response == 5){
-                        Swal.fire(
-                          "Error",
-                          "Esa llanta ya esta en el inventario",
-                          "warning"
-                        )
-                      }
-            
-                       
-            
-                    }
-                  });
-            
-            
-                }
             
             
               });
