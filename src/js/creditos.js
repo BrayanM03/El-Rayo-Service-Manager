@@ -170,23 +170,39 @@ function borrarVenta(id) {
 
             Swal.fire({
                 title: "Historial de credito",
+                width: '800px',
                 background: "#dcdcdc" ,
                 didOpen: function () {
                   $(document).ready(function() {
 
-                    $("#abonar-btn").on('click', function () { 
+                    $("#abonar-btn").on('click', function () {                  
+
                       var item = document.getElementById("chevron");
                       var chevron = $("#chevron");
                       var hasChevronRight = item.classList.contains( 'chevron-der' );
                       if (hasChevronRight == true) {
+                        $("#abono-in").removeClass("animation");
+                        $("#abono-in").addClass("animation-out");
+
                         chevron.removeClass("chevron-der");
                         chevron.addClass("chevron-abaj");
-                        $("#contenedor-abono").empty();
+
+
+                        function salida() { 
+                          $("#contenedor-abono").fadeOut(function() {
+                            $("#contenedor-abono").empty();
+                            });
+                         }
+                        setTimeout(salida,400);
                       }else{
+                        $("#contenedor-abono").fadeIn();
                         chevron.removeClass("chevron-abaj");
                         chevron.addClass("chevron-der");
-                        $("#contenedor-abono").append('<input type="number" id="abono-in" style="width: 120px; margin-right: 10px;" class="form-control">'+
+                        $("#contenedor-abono").append('<input type="number" id="abono-in" style="width: 120px; margin-right: 10px;" class="animation form-control">'+
                         '<div id="registrar-abono" class="btn btn-warning">Registrar</div>');
+                        $("#abono-in").removeClass("animation-out");
+                        $("#abono-in").addClass("animation");
+
                         $("#registrar-abono").on('click', function () { 
                           registrarAbono(id);
                         });

@@ -18,3 +18,49 @@
     transform: rotate(0deg);
 
    }
+
+
+   .animation{
+    animation-duration: 1s;
+    animation-name: slidein;
+    
+   }
+
+   .animation-out{
+    animation-duration: 1s;
+    animation-name: slideout;
+   }
+
+   @keyframes slidein {
+    from {
+      margin-right: 70%;
+      width: 0px;  
+    }
+  
+    to {
+      margin-right: 5%;
+      width: 120px; 
+    }
+  }
+
+  
+  @keyframes slideout {
+    from {
+      margin-right: 5%;
+      width: 120px;  
+    }
+  
+    to {
+      margin-right: 70%;
+      width: 0px; 
+    }
+  }
+
+
+  .swal-wide{
+    width:450px !important;
+}
+
+body.swal2-shown > [aria-hidden="true"] {
+    filter: blur(10px);
+  }

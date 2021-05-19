@@ -99,17 +99,8 @@ function realizarVentaCredito(){
                         console.log(fecha);
 
                         if(result.isConfirmed){
-                            $.ajax({
-                                type: "POST",
-                                url: "./modelo/creditos/nuevo-credito.php",
-                                data: {"id_cliente": clienteid, "plazo": plazo, "importe": fimporte_total, "abono": fabono, "restante": frestante, "fecha": fecha},
-                                //dataType: "",
-                                success: function (response) {
-                                  console.log(response); 
 
-                                }
-                            });
-
+                            
                                                 //Insertar venta
                                 llantaData = $("#pre-venta").dataTable().fnGetData();
                                
@@ -138,6 +129,19 @@ function realizarVentaCredito(){
                                     success: function (response) {
                                         console.log(response);
                                         if (response) {
+                                            
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "./modelo/creditos/nuevo-credito.php",
+                                                data: {"id_cliente": clienteid, "plazo": plazo, "importe": fimporte_total, "abono": fabono, "restante": frestante, "fecha": fecha},
+                                                //dataType: "",
+                                                success: function (response) {
+                                                  console.log(response); 
+                
+                                                }
+                                            });
+
+                                            
                                             Swal.fire({
                                                 title: 'Venta a credito realizada',
                                                 html: "<span>La venta a credito se realizo con exito</br></span>"+

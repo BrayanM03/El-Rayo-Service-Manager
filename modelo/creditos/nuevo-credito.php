@@ -59,11 +59,25 @@ if(isset($_POST)){
         break;
     }
 
+    $sql = "SELECT id FROM ventas ORDER BY id DESC LIMIT 1";
+    $resultados = mysqli_query($con, $sql);
+    
+    if(!$resultados){
+      echo "no se pudo realizar la consulta";
+
+    }else{
+      $dato =  mysqli_fetch_array($resultados, MYSQLI_ASSOC);
+
+        
+        $id_Venta = $dato["id"];
+    }
+
+
    
-    $insertar_credito = "INSERT INTO creditos(id_cliente, pagado, restante, total, estatus, fecha_inicio, fecha_final, plazo)
-                         VALUES(?,?,?,?,?,?,?,?)";
+    $insertar_credito = "INSERT INTO creditos(id_cliente, pagado, restante, total, estatus, fecha_inicio, fecha_final, plazo, id_venta)
+                         VALUES(?,?,?,?,?,?,?,?,?)";
     $resultado = $con->prepare($insertar_credito);                     
-    $resultado->bind_param('idddissi', $id_cliente, $abono, $restante, $importe_total ,$estatus, $fecha_inicio, $fecha_limite, $plazo);
+    $resultado->bind_param('idddissii', $id_cliente, $abono, $restante, $importe_total ,$estatus, $fecha_inicio, $fecha_limite, $plazo, $id_Venta);
     $resultado->execute();
     $resultado->close();
 
