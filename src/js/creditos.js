@@ -170,7 +170,7 @@ function borrarVenta(id) {
 
             Swal.fire({
                 title: "Historial de credito",
-                width: '800px',
+                width: '800px', 
                 background: "#dcdcdc" ,
                 didOpen: function () {
                   $(document).ready(function() {
