@@ -224,7 +224,6 @@ function editarRegistro(id){
                     url: "./modelo/actualizar-llanta-inv-total.php",
                     data: {codigo      : response.id,
                            marca       : marca,
-                           marca       : marca,
                            ancho       : ancho,
                            alto        : alto,
                            rin         : rin,
