@@ -65,7 +65,7 @@ if(isset($_POST)){
         $result->fetch();
         $result->close();
 
-        if($restante==0.00){
+        if($pagado2 == $total2){
 
             $actualizar2 = "UPDATE creditos SET estatus= 3 WHERE id = ?";
             $res2 = $con->prepare($actualizar2);

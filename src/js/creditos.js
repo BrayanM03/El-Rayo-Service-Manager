@@ -16,8 +16,8 @@ table = $('#creditos').DataTable({
     { title: "id",             data: "id", render: function(data,type,row) {
         return '<span>CRED'  + data +'</span>';
         }},
-    { title: "Cliente",        data: "cliente"   },
-    { title: "Fecha inicio",   data: "fecha_inicial"   },
+    { title: "Cliente",        data: "cliente"        },
+    { title: "Fecha inicio",   data: "fecha_inicial"  },
     { title: "Fecha final",    data: "fecha_final"    },
     { title: "Total",          data: "total"          },
     { title: "Restante",       data: "restante"       },
@@ -36,7 +36,7 @@ table = $('#creditos').DataTable({
                 return '<span class="badge badge-warning">Pagando</span>';    
             break;
             case "3":
-                return '<span class="badge badge-dark">Finalizado</span>';    
+                return '<span class="badge badge-success">Finalizado</span>';    
             break;
         
             default:
@@ -352,10 +352,12 @@ function borrarVenta(id) {
         
             }).then((result) =>{
 
-              
+              table.ajax.reload();
             
             
               });
+
+              table.ajax.reload();
         }
     });
     
