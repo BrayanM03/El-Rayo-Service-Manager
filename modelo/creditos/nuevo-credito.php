@@ -21,7 +21,13 @@ if(isset($_POST)){
     $abono = $_POST["abono"];
     $restante = $_POST["restante"];
     $hora = date("h:i a");
-    $estatus = 1;
+
+    if ($abono == 0) {
+        $estatus = 0;
+    }else{
+        $estatus = 1;
+    }
+    
    
 
     if($_POST["fecha"] == ""){

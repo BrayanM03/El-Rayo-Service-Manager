@@ -132,7 +132,7 @@ selects.forEach( select => {
                           $(".producto-individual").on("click", function () {
 
                             id1              = $(this).attr("id");
-                            cod1              = $(this).attr("cod");
+                            cod1             = $(this).attr("cod");
                             descripcion1     = $(this).attr("descripcion");
                             modelo1          = $(this).attr("modelo");
                             precio_Venta1    = $(this).attr("precio-venta");

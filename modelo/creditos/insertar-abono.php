@@ -14,17 +14,13 @@ if (!$con) {
 
 
 if(isset($_POST)){
+
     $id_credito = $_POST["id-credito"];
     $abono = $_POST["abono"];
     $fecha = date("Y-m-d");
   
    
-    $insertar_abono = "INSERT INTO abonos(id, id_credito, fecha, abono)
-                         VALUES(null,?,?,?)";
-    $resultado = $con->prepare($insertar_abono);                     
-    $resultado->bind_param('isd', $id_credito, $fecha, $abono);
-    $resultado->execute();
-    $resultado->close();
+   
 
     
     $traerdata = "SELECT pagado, restante, total FROM creditos WHERE id = ?";
@@ -35,29 +31,65 @@ if(isset($_POST)){
     $result->fetch();
     $result->close();
 
-    $pagado_update = $pagado + $abono;
-    $restante_update = $restante - $abono;
+    $comproba = $abono + $pagado;
+
+
+    if($comproba > $total){
+        print_r (1);
+    }else{
+
+        $insertar_abono = "INSERT INTO abonos(id, id_credito, fecha, abono)
+        VALUES(null,?,?,?)";
+        $resultado = $con->prepare($insertar_abono);                     
+        $resultado->bind_param('isd', $id_credito, $fecha, $abono);
+        $resultado->execute();
+        $resultado->close();
+
+        
+        $pagado_update = $pagado + $abono;
+        $restante_update = $restante - $abono;
+
+
+        $actualizar = "UPDATE creditos SET pagado = ?, restante = ?, estatus= 2 WHERE id = ?";
+        $res = $con->prepare($actualizar);
+        $res->bind_param('ddi', $pagado_update, $restante_update, $id_credito);
+        $res->execute();
+        $res->close();
+        
+    
+        $traerdatadenew = "SELECT pagado, restante, total FROM creditos WHERE id = ?";
+        $result = $con->prepare($traerdatadenew);
+        $result->bind_param('i',$id_credito);
+        $result->execute();
+        $result->bind_result($pagado2, $restante2, $total2);
+        $result->fetch();
+        $result->close();
+
+        if($restante==0.00){
+
+            $actualizar2 = "UPDATE creditos SET estatus= 3 WHERE id = ?";
+            $res2 = $con->prepare($actualizar2);
+            $res2->bind_param('i', $id_credito);
+            $res2->execute();
+            $res2->close();
+
+            $data = array("pagado_nuevo"=> $pagado2, "restante_nuevo"=>$restante2);
+
+        }else{
+
+            $data = array("pagado_nuevo"=> $pagado2, "restante_nuevo"=>$restante2);
+        }
+    
+        
+    
+        echo json_encode($data, JSON_UNESCAPED_UNICODE); 
+
+    }
+
     
  
 
-    $actualizar = "UPDATE creditos SET pagado = ?, restante = ?, estatus= 2 WHERE id = ?";
-    $res = $con->prepare($actualizar);
-    $res->bind_param('ddi', $pagado_update, $restante_update, $id_credito);
-    $res->execute();
-    $res->close();
-    
-
-    $traerdatadenew = "SELECT pagado, restante FROM creditos WHERE id = ?";
-    $result = $con->prepare($traerdatadenew);
-    $result->bind_param('i',$id_credito);
-    $result->execute();
-    $result->bind_result($pagado2, $restante2);
-    $result->fetch();
-    $result->close();
-
-    $data = array("pagado_nuevo"=> $pagado2, "restante_nuevo"=>$restante2);
-
-    echo json_encode($data, JSON_UNESCAPED_UNICODE); 
+  
     
 }
 

@@ -25,6 +25,10 @@ table = $('#creditos').DataTable({
     { title: "Total",          data: "total"          },
     { title: "Estatus",        data: "estatus", render: function(data,type,row) {
         switch (data) {
+          case "0":
+                return '<span class="badge badge-danger">Sin abono</span>';    
+            break;
+
             case "1":
                 return '<span class="badge badge-info">Primer abono</span>';    
             break;
@@ -170,7 +174,7 @@ function borrarVenta(id) {
 
             Swal.fire({
                 title: "Historial de credito",
-                width: '800px', 
+                width: '600px', 
                 background: "#dcdcdc" ,
                 didOpen: function () {
                   $(document).ready(function() {
@@ -224,9 +228,18 @@ function borrarVenta(id) {
                           data: {"id-credito":  id, "abono": abono_in},
                           dataType: "JSON",
                           success: function (response) {
-                            tabla.ajax.reload();
-                            $("#pagado").val(response.pagado_nuevo);
-                            $("#restante").val(response.restante_nuevo);
+                            if(response == 1){
+                              $("#alerta").empty();
+                              $("#alerta").append('<div class="alert alert-warning" role="alert">'+
+                              'El abono sobrepasa el total'+
+                               '</div>');
+                            }else{
+                              $("#alerta").empty();
+                              tabla.ajax.reload();
+                              $("#pagado").val(response.pagado_nuevo);
+                              $("#restante").val(response.restante_nuevo);
+                            }
+                          
 
                             
                           }
@@ -313,6 +326,7 @@ function borrarVenta(id) {
                    
                    '</tbody>'+
                    '</table>'+
+                   '<div id="alerta"></div>'+
                    '</div></div>'+
 
                           
@@ -337,6 +351,8 @@ function borrarVenta(id) {
                 cancelButtonColor:'#ff764d'
         
             }).then((result) =>{
+
+              
             
             
               });
