@@ -179,6 +179,14 @@ function borrarVenta(id) {
                 didOpen: function () {
                   $(document).ready(function() {
 
+                    restante = $("#restante").val();
+                    if(restante=="$0.00"){
+                      $("#alerta").empty();
+                      $("#alerta").append('<div class="alert alert-success" role="alert">'+
+                      'Credito pagado'+
+                       '</div>');
+                    }
+
                     $("#abonar-btn").on('click', function () {                  
 
                       var item = document.getElementById("chevron");
