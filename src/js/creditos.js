@@ -36,7 +36,7 @@ table = $('#creditos').DataTable({
                 return '<span class="badge badge-warning">Pagando</span>';    
             break;
             case "3":
-                return '<span class="badge badge-success">Finalizado</span>';    
+                return '<span class="badge badge-dark">Finalizado</span>';    
             break;
         
             default:
@@ -72,7 +72,7 @@ table = $('#creditos').DataTable({
       className: "celda-acciones",
       render: function (row, data) {
     
-        return '<div style="display: flex"><button onclick="traerCredito(' +row.id+ ');" type="button" class="buttonPDF btn btn-primary" style="margin-right: 8px"><span class="fa fa-eye"></span><span class="hidden-xs"></span></button><br><button type="button" onclick="borrarVenta('+ row.folio +');" class="buttonBorrar btn btn-warning"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
+        return '<div style="display: flex"><button onclick="traerCredito(' +row.id+ ');" type="button" class="buttonPDF btn btn-primary" style="margin-right: 8px"><span class="fa fa-eye"></span><span class="hidden-xs"></span></button><br><button type="button" onclick="borrarCredito('+ row.id +');" class="buttonBorrar btn btn-warning"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
       },
     },
   ],
@@ -101,11 +101,11 @@ $("table.dataTable thead").addClass("table-info")
 MostrarCreditos();
 
 
-function borrarVenta(id) {
+function borrarCredito(id) {
 
     Swal.fire({
-        title: "Eliminar Venta",
-        html: '<span>¿Estas seguro de eliminar esta venta?</span>',
+        title: "Eliminar credito",
+        html: '<span>¿Estas seguro de eliminar este credito?</span>',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
         cancelButtonColor: '#00e059',
@@ -118,14 +118,14 @@ function borrarVenta(id) {
 
     $.ajax({
         type: "post",
-        url: "./modelo/ventas/borraVentaHistorial.php",
-        data: {"folio": id},
+        url: "./modelo/creditos/borrar-credito.php",
+        data: {"id": id},
         success: function (response) {
            if (response==1) {
               
             Swal.fire({
-                title: 'Venta eliminada',
-                html: "<span>La venta se elimino con exito</span>",
+                title: 'Credito eliminado',
+                html: "<span>El crfedito se eliminó con exito</span>",
                 icon: "success",
                 cancelButtonColor: '#00e059',
                 showConfirmButton: true,
@@ -134,7 +134,7 @@ function borrarVenta(id) {
             }).then((result) => {  
 
                 if(result.isConfirmed){
-                    location.reload();
+                  table.ajax.reload();
                 }});
 
            
@@ -152,7 +152,7 @@ function borrarVenta(id) {
             }).then((result) => {  
 
                 if(result.isConfirmed){
-                    location.reload();
+                  table.ajax.reload();
                 }});
            }
         }
