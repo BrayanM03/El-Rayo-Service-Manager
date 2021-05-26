@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 28-04-2021 a las 03:03:24
+-- Tiempo de generación: 25-05-2021 a las 01:45:32
 -- Versión del servidor: 10.4.13-MariaDB
 -- Versión de PHP: 7.4.7
 
@@ -24,25 +24,83 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `abonos`
+--
+
+CREATE TABLE `abonos` (
+  `id` int(11) NOT NULL,
+  `id_credito` int(11) NOT NULL,
+  `fecha` varchar(50) NOT NULL,
+  `abono` decimal(10,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `abonos`
+--
+
+INSERT INTO `abonos` (`id`, `id_credito`, `fecha`, `abono`) VALUES
+(54, 19, '22-05-2021', '100.00'),
+(55, 19, '2021-05-22', '50.00'),
+(56, 19, '2021-05-22', '700.00'),
+(57, 20, '22-05-2021', '100.00'),
+(58, 20, '2021-05-22', '10.00'),
+(59, 20, '2021-05-22', '740.00');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `clientes`
 --
 
 CREATE TABLE `clientes` (
   `id` int(11) NOT NULL,
   `Nombre_Cliente` varchar(150) DEFAULT NULL,
-  `Telefono` int(11) DEFAULT NULL,
+  `Telefono` varchar(150) DEFAULT NULL,
   `Direccion` varchar(250) DEFAULT NULL,
   `Correo` varchar(150) DEFAULT NULL,
   `Credito` varchar(100) NOT NULL,
-  `RFC` varchar(100) NOT NULL
+  `RFC` varchar(100) NOT NULL,
+  `Latitud` varchar(250) NOT NULL,
+  `Longitud` varchar(250) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `clientes`
 --
 
-INSERT INTO `clientes` (`id`, `Nombre_Cliente`, `Telefono`, `Direccion`, `Correo`, `Credito`, `RFC`) VALUES
-(1, 'Publico en general', 0, 'zdcf', 'zcszdcz', 'Sin credito', 'MAB1697HTSLR009');
+INSERT INTO `clientes` (`id`, `Nombre_Cliente`, `Telefono`, `Direccion`, `Correo`, `Credito`, `RFC`, `Latitud`, `Longitud`) VALUES
+(1, 'Publico en general', '0', 'No aplica', 'No aplica', '0', 'No aplica', '', ''),
+(2, 'Brayan Maldonado', '8683471939', 'Calle Atapco #613 Mov. 18 de Octubre H. Matamoros Tamaulipass', 'natsu5679@gmail.com', '1', 'HEHJ740317KX5', '25.791644589398373', '-97.50238877908083'),
+(3, 'Ricardo Reyna', '8683454545', 'San Benito 123 Calle Itil s', 'No aplica', '0', 'HEHJ740317KX5', '25.80469272879482', '-97.52006471303417'),
+(4, 'Javier Cortez', '85245454', 'kvfbdskjcvbdscv', 'No aplica', '1', 'No aplica', '25.859776159143067', '-97.51418324029747'),
+(5, 'Saudiel Grajales', '866356885', 'Calle 16 #582-A COlonia Buerna Vista', 'jhernandez@powerpsc.com.mx', '1', 'HEHJ740317KX5', '25.86004585553883', '-97.51279657026969');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `creditos`
+--
+
+CREATE TABLE `creditos` (
+  `id` int(11) NOT NULL,
+  `id_cliente` int(11) NOT NULL,
+  `pagado` decimal(10,2) NOT NULL,
+  `restante` decimal(10,2) NOT NULL,
+  `total` decimal(10,2) NOT NULL,
+  `estatus` int(11) NOT NULL,
+  `fecha_inicio` varchar(50) NOT NULL,
+  `fecha_final` varchar(50) NOT NULL,
+  `plazo` int(11) NOT NULL,
+  `id_venta` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `creditos`
+--
+
+INSERT INTO `creditos` (`id`, `id_cliente`, `pagado`, `restante`, `total`, `estatus`, `fecha_inicio`, `fecha_final`, `plazo`, `id_venta`) VALUES
+(19, 2, '850.00', '0.00', '850.00', 3, '22-05-2021', '29-05-2021', 1, 226),
+(20, 2, '850.00', '0.00', '850.00', 3, '22-05-2021', '29-05-2021', 1, 227);
 
 -- --------------------------------------------------------
 
@@ -55,6 +113,7 @@ CREATE TABLE `detalle_venta` (
   `id_Venta` int(11) NOT NULL,
   `id_Llanta` int(11) NOT NULL,
   `Cantidad` int(11) NOT NULL,
+  `Modelo` varchar(250) NOT NULL,
   `Unidad` varchar(60) NOT NULL,
   `precio_Unitario` decimal(11,2) NOT NULL,
   `Importe` decimal(11,2) NOT NULL
@@ -64,11 +123,9 @@ CREATE TABLE `detalle_venta` (
 -- Volcado de datos para la tabla `detalle_venta`
 --
 
-INSERT INTO `detalle_venta` (`id`, `id_Venta`, `id_Llanta`, `Cantidad`, `Unidad`, `precio_Unitario`, `Importe`) VALUES
-(207, 180, 1, 1, 'pieza', '960.00', '960.00'),
-(208, 180, 30, 1, 'pieza', '213.15', '213.15'),
-(209, 181, 12, 4, 'pieza', '960.00', '3840.00'),
-(210, 181, 1, 1, 'pieza', '960.00', '960.00');
+INSERT INTO `detalle_venta` (`id`, `id_Venta`, `id_Llanta`, `Cantidad`, `Modelo`, `Unidad`, `precio_Unitario`, `Importe`) VALUES
+(20, 226, 11, 1, 'T68', 'pieza', '850.00', '850.00'),
+(21, 227, 11, 1, 'T68', 'pieza', '850.00', '850.00');
 
 -- --------------------------------------------------------
 
@@ -78,8 +135,8 @@ INSERT INTO `detalle_venta` (`id`, `id_Venta`, `id_Llanta`, `Cantidad`, `Unidad`
 
 CREATE TABLE `inventario_mat1` (
   `id` int(11) NOT NULL,
-  `Codigo` varchar(120) NOT NULL,
   `id_Llanta` int(11) NOT NULL,
+  `Codigo` varchar(120) NOT NULL,
   `Sucursal` varchar(120) NOT NULL,
   `Stock` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -88,10 +145,10 @@ CREATE TABLE `inventario_mat1` (
 -- Volcado de datos para la tabla `inventario_mat1`
 --
 
-INSERT INTO `inventario_mat1` (`id`, `Codigo`, `id_Llanta`, `Sucursal`, `Stock`) VALUES
-(31, 'PEDC1', 1, 'Pedro Cardenas', 7),
-(32, 'PEDC11', 11, 'Pedro Cardenas', 23),
-(33, 'PEDC12', 12, 'Pedro Cardenas', 29);
+INSERT INTO `inventario_mat1` (`id`, `id_Llanta`, `Codigo`, `Sucursal`, `Stock`) VALUES
+(33, 1, 'PEDC1', 'Pedro Cardenas', 10),
+(34, 11, 'PEDC11', 'Pedro Cardenas', 31),
+(37, 12, 'PEDC12', 'Pedro Cardenas', 10);
 
 -- --------------------------------------------------------
 
@@ -101,8 +158,8 @@ INSERT INTO `inventario_mat1` (`id`, `Codigo`, `id_Llanta`, `Sucursal`, `Stock`)
 
 CREATE TABLE `inventario_mat2` (
   `id` int(11) NOT NULL,
-  `Codigo` varchar(120) NOT NULL,
   `id_Llanta` int(11) NOT NULL,
+  `Codigo` varchar(120) NOT NULL,
   `Sucursal` varchar(120) NOT NULL,
   `Stock` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -111,8 +168,9 @@ CREATE TABLE `inventario_mat2` (
 -- Volcado de datos para la tabla `inventario_mat2`
 --
 
-INSERT INTO `inventario_mat2` (`id`, `Codigo`, `id_Llanta`, `Sucursal`, `Stock`) VALUES
-(7, 'SEND30', 30, 'Pedro Cardenas', 33);
+INSERT INTO `inventario_mat2` (`id`, `id_Llanta`, `Codigo`, `Sucursal`, `Stock`) VALUES
+(12, 11, 'SEND11', 'Sendero', 91),
+(14, 12, 'SEND12', 'Sendero', 19);
 
 -- --------------------------------------------------------
 
@@ -131,20 +189,17 @@ CREATE TABLE `llantas` (
   `precio_Inicial` decimal(11,2) NOT NULL,
   `precio_Venta` decimal(11,2) NOT NULL,
   `precio_Mayoreo` decimal(11,2) NOT NULL,
-  `Fecha` date DEFAULT NULL,
-  `id_Sucursal` int(11) DEFAULT NULL
+  `Fecha` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `llantas`
 --
 
-INSERT INTO `llantas` (`id`, `Ancho`, `Proporcion`, `Diametro`, `Descripcion`, `Marca`, `Modelo`, `precio_Inicial`, `precio_Venta`, `precio_Mayoreo`, `Fecha`, `id_Sucursal`) VALUES
-(1, 175, 65, 'R15', 'Llanta 175/65/R15', 'Goodyear', '65', '890.00', '960.00', '600.00', '2021-03-16', 1),
-(11, 185, 75, 'R13', 'Llanta 185/75/R13', 'Ling-Long', 'T68', '750.00', '850.00', '550.00', '2021-03-16', 1),
-(12, 175, 65, 'R15', 'Llanta 175/65/R16', 'Sumitomo', '65', '890.00', '960.00', '600.00', '2021-03-02', 1),
-(30, 774, 174, 'R78', 'Llanta 175/68/R15 Marca Hikvision Modelo T6789 Color Negro', 'Goodride', 'Good', '35.45', '213.15', '45.78', '2021-03-17', 1),
-(33, 2, 2, '10', '131', 'Fromway', 'SURFACE GO 2', '1.00', '2.00', '2.00', '2021-04-12', NULL);
+INSERT INTO `llantas` (`id`, `Ancho`, `Proporcion`, `Diametro`, `Descripcion`, `Marca`, `Modelo`, `precio_Inicial`, `precio_Venta`, `precio_Mayoreo`, `Fecha`) VALUES
+(11, 185, 75, 'R13', 'Llanta 185/75/R13', 'Ling-Long', 'T68', '750.00', '850.00', '550.00', '2021-03-16'),
+(12, 175, 65, 'R15', 'Llanta 175/65/R161', 'Sumitomo', '65', '890.00', '960.00', '600.00', '2021-03-02'),
+(31, 12, 121, '12', '123', 'Austone', '12', '12.00', '12.00', '12.00', '2021-05-08');
 
 -- --------------------------------------------------------
 
@@ -205,7 +260,7 @@ INSERT INTO `marcas` (`id`, `Nombre`, `Imagen`) VALUES
 (42, 'Onyx', 'Onyx'),
 (43, 'Power king', 'Power-king'),
 (44, 'Primewell', 'Primewell'),
-(45, 'Roadmaster', 'Hifly'),
+(45, 'Roadmaster', 'Roadmaster'),
 (46, 'Royal Black', 'Royal-Black'),
 (47, 'Saferich', 'Saferich'),
 (48, 'Sailun', 'Sailun'),
@@ -219,9 +274,26 @@ INSERT INTO `marcas` (`id`, `Nombre`, `Imagen`) VALUES
 (56, 'Uniroyal', 'Uniroyal'),
 (57, 'Wanli', 'Wanli'),
 (58, 'West Lake', 'West-Lake'),
-(59, 'Winrur', 'Winrur'),
+(59, 'Winrun', 'Winrun'),
 (60, 'Xcent', 'Xcent'),
-(61, 'Zetum', 'Zetum');
+(61, 'Zetum', 'Zetum'),
+(62, 'Seiberling', 'Seiberling'),
+(63, 'BFGoodrich', 'BFGoodrich'),
+(64, 'Bridgestone', 'Bridgestone'),
+(65, 'American Farmer', 'American-farmer'),
+(66, 'Trazano', 'Trazano'),
+(67, 'Carlisle', 'Carlisle'),
+(68, 'Onix', 'Onix'),
+(69, 'BKT', 'BKT'),
+(70, 'Aurora', 'Aurora'),
+(71, 'Continental', 'Continental'),
+(72, 'Dunlop', 'Dunlop'),
+(73, 'Firestone', 'Firestone'),
+(74, 'Fuzion', 'Fuzion'),
+(75, 'Kelly', 'Kelly'),
+(76, 'Pirelli', 'Pirelli'),
+(77, 'Venezia', 'Venezia'),
+(78, 'Yokohama', 'Yokohama');
 
 -- --------------------------------------------------------
 
@@ -332,20 +404,28 @@ CREATE TABLE `ventas` (
   `id_Cliente` int(11) NOT NULL,
   `Cantidad` int(11) NOT NULL,
   `Total` decimal(10,2) NOT NULL,
-  `estatus` varchar(50) NOT NULL
+  `estatus` varchar(50) NOT NULL,
+  `metodo_pago` varchar(150) NOT NULL,
+  `hora` varchar(150) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `ventas`
 --
 
-INSERT INTO `ventas` (`id`, `Fecha`, `id_Sucursal`, `id_Usuarios`, `id_Cliente`, `Cantidad`, `Total`, `estatus`) VALUES
-(180, '2021-04-21', 'Sendero', 1, 1, 0, '1173.15', 'Activo'),
-(181, '2021-04-21', 'Sendero', 1, 1, 0, '3840.00', 'Activo');
+INSERT INTO `ventas` (`id`, `Fecha`, `id_Sucursal`, `id_Usuarios`, `id_Cliente`, `Cantidad`, `Total`, `estatus`, `metodo_pago`, `hora`) VALUES
+(226, '2021-05-22', 'Sendero', 1, 2, 0, '850.00', 'Abierta', 'Targeta', '11:26 am'),
+(227, '2021-05-22', 'Sendero', 1, 2, 0, '850.00', 'Abierta', 'Targeta', '01:48 pm');
 
 --
 -- Índices para tablas volcadas
 --
+
+--
+-- Indices de la tabla `abonos`
+--
+ALTER TABLE `abonos`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `clientes`
@@ -354,33 +434,34 @@ ALTER TABLE `clientes`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indices de la tabla `creditos`
+--
+ALTER TABLE `creditos`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `detalle_venta`
 --
 ALTER TABLE `detalle_venta`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `id_Llanta` (`id_Llanta`),
-  ADD KEY `id_Venta` (`id_Venta`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `inventario_mat1`
 --
 ALTER TABLE `inventario_mat1`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_id_Llanta` (`id_Llanta`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `inventario_mat2`
 --
 ALTER TABLE `inventario_mat2`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_id_Llanta` (`id_Llanta`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `llantas`
 --
 ALTER TABLE `llantas`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `id_Sucursal` (`id_Sucursal`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `marcas`
@@ -430,40 +511,52 @@ ALTER TABLE `ventas`
 --
 
 --
+-- AUTO_INCREMENT de la tabla `abonos`
+--
+ALTER TABLE `abonos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+
+--
 -- AUTO_INCREMENT de la tabla `clientes`
 --
 ALTER TABLE `clientes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT de la tabla `creditos`
+--
+ALTER TABLE `creditos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de la tabla `detalle_venta`
 --
 ALTER TABLE `detalle_venta`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=211;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT de la tabla `inventario_mat1`
 --
 ALTER TABLE `inventario_mat1`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT de la tabla `inventario_mat2`
 --
 ALTER TABLE `inventario_mat2`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de la tabla `llantas`
 --
 ALTER TABLE `llantas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT de la tabla `marcas`
 --
 ALTER TABLE `marcas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
 
 --
 -- AUTO_INCREMENT de la tabla `productos_temp1`
@@ -499,38 +592,11 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `ventas`
 --
 ALTER TABLE `ventas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=182;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=228;
 
 --
 -- Restricciones para tablas volcadas
 --
-
---
--- Filtros para la tabla `detalle_venta`
---
-ALTER TABLE `detalle_venta`
-  ADD CONSTRAINT `detalle_venta_ibfk_1` FOREIGN KEY (`id_Venta`) REFERENCES `ventas` (`id`),
-  ADD CONSTRAINT `detalle_venta_ibfk_2` FOREIGN KEY (`id_Llanta`) REFERENCES `llantas` (`id`),
-  ADD CONSTRAINT `detalle_venta_ibfk_3` FOREIGN KEY (`id_Llanta`) REFERENCES `llantas` (`id`),
-  ADD CONSTRAINT `detalle_venta_ibfk_4` FOREIGN KEY (`id_Venta`) REFERENCES `ventas` (`id`);
-
---
--- Filtros para la tabla `inventario_mat1`
---
-ALTER TABLE `inventario_mat1`
-  ADD CONSTRAINT `fk_id_Llanta` FOREIGN KEY (`id_Llanta`) REFERENCES `llantas` (`id`);
-
---
--- Filtros para la tabla `inventario_mat2`
---
-ALTER TABLE `inventario_mat2`
-  ADD CONSTRAINT `inventario_mat2_ibfk_1` FOREIGN KEY (`id_Llanta`) REFERENCES `llantas` (`id`);
-
---
--- Filtros para la tabla `llantas`
---
-ALTER TABLE `llantas`
-  ADD CONSTRAINT `llantas_ibfk_1` FOREIGN KEY (`id_Sucursal`) REFERENCES `sucursal` (`id`);
 
 --
 -- Filtros para la tabla `ventas`

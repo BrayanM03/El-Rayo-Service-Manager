@@ -1,11 +1,16 @@
 <?php
-    
+    session_start();
     include 'conexion.php';
     $con= $conectando->conexion(); 
 
     if (!$con) {
         echo "Problemas con la conexion";
     }
+
+    if (!isset($_SESSION['id_usuario'])) {
+        header("Location:../login.php");
+    }
+    
 
     if (isset($_POST["code"]) && isset($_POST["stock"]) ) {
 

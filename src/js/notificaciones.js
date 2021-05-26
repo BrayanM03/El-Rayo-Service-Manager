@@ -16,8 +16,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
             
             $.ajax({
-                type: "method",
-                url: "url",
+                type: "POST",
+                url: "./modelo/creditos/comprobar-creditos-vencidos.php",
                 data: "data",
                 dataType: "dataType",
                 success: function (response) {
