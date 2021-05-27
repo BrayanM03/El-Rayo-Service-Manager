@@ -26,7 +26,7 @@ table = $('#creditos').DataTable({
     { title: "Estatus",        data: "estatus", render: function(data,type,row) {
         switch (data) {
           case "0":
-                return '<span class="badge badge-danger">Sin abono</span>';    
+                return '<span class="badge badge-primary">Sin abono</span>';    
             break;
 
             case "1":
@@ -38,7 +38,9 @@ table = $('#creditos').DataTable({
             case "3":
                 return '<span class="badge badge-dark">Finalizado</span>';    
             break;
-        
+            case "4":
+              return '<span class="badge badge-danger">Vencido</span>';    
+          break;
             default:
                 break;
         }

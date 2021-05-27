@@ -35,6 +35,7 @@ if (!isset($_SESSION['id_usuario'])) {
 
     <!-- Custom styles for this template-->
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="src/css/menu-vertical.css" rel="stylesheet">
 
 </head>
 
@@ -309,7 +310,7 @@ if (!isset($_SESSION['id_usuario'])) {
                         <li class="nav-item dropdown no-arrow mx-1">
                             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-bell fa-fw"></i>
+                                <i class="fas fa-bell fa-fw icon-menu"></i>
                                 <!-- Counter - Alerts -->
                                 <span class="badge badge-danger badge-counter">3+</span>
                             </a>
@@ -317,7 +318,7 @@ if (!isset($_SESSION['id_usuario'])) {
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="alertsDropdown">
                                 <h6 class="dropdown-header">
-                                    Alerts Center
+                                   Notificaciones
                                 </h6>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="mr-3">
@@ -360,7 +361,7 @@ if (!isset($_SESSION['id_usuario'])) {
                         <li class="nav-item dropdown no-arrow mx-1">
                             <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-envelope fa-fw"></i>
+                                <i class="fas fa-envelope fa-fw icon-menu"></i>
                                 <!-- Counter - Messages -->
                                 <span class="badge badge-danger badge-counter">7</span>
                             </a>
@@ -368,7 +369,7 @@ if (!isset($_SESSION['id_usuario'])) {
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="messagesDropdown">
                                 <h6 class="dropdown-header">
-                                    Message Center
+                                    Mensajes
                                 </h6>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
@@ -703,9 +704,6 @@ if (!isset($_SESSION['id_usuario'])) {
     <script src="src/js/demo/chart-area-demo.js"></script>
     <script src="src/js/demo/chart-pie-demo.js"></script>
     <script src="src/js/notificaciones.js"></script>
-
-    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
 
   
  
