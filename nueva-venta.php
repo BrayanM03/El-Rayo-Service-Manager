@@ -537,6 +537,7 @@
                                                                 <option value="1">Tarjeta</option>
                                                                 <option value="2">Transferencia</option>
                                                                 <option value="3">Cheque</option>
+                                                                <option value="4">Sin definir</option>
                                                          </select>
                                                   
 
@@ -713,6 +714,7 @@
     <script src="src/js/agregar-product-temp.js"></script>
     <script src="src/js/generar-token.js"></script>
     <script src="src/js/nueva-venta-credito.js"></script>
+    <script src="src/js/notificaciones.js"></script>
    
    
 </body>

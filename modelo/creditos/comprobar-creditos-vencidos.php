@@ -24,6 +24,7 @@ date_default_timezone_set("America/Matamoros");
         if (isset($_POST)) {
 
             $fecha_actual = date("d-m-Y");
+
     
             $validar_lapso = $con->prepare("SELECT COUNT(*) total FROM creditos WHERE fecha_final = ?");
             $validar_lapso->bind_param('s', $fecha_actual);
@@ -58,8 +59,8 @@ date_default_timezone_set("America/Matamoros");
                         
                         if($estatus !== "3"){
 
-                            $validar = $con->prepare("SELECT COUNT(*) FROM registro_notificaciones WHERE refe LIKE ?");
-                            $validar->bind_param('i', $id);
+                            $validar = $con->prepare("SELECT COUNT(*) FROM registro_notificaciones WHERE refe LIKE ? AND id_usuario LIKE ?");
+                            $validar->bind_param('ii', $id, $id_usuario);
                             $validar->execute();
                             $validar->bind_result($count);
                             $validar->fetch();
@@ -69,12 +70,13 @@ date_default_timezone_set("America/Matamoros");
                                 print_r("Este registro ya esta notificado");
                             }else{
 
-                            $estatus_not = "Se a vencido el credito para el usuario " . $cliente;
+                            $estatus_not = "Se a vencido el credito para el cliente " . $cliente;
                             $hora = date("h:i a");
+                            $stat = 1;
 
-                            $insertar_notifi = "INSERT INTO registro_notificaciones(id, id_usuario, estatus, hora, refe) VALUES(null,?,?,?,?)";
+                            $insertar_notifi = "INSERT INTO registro_notificaciones(id, id_usuario, descripcion, estatus, fecha, hora, refe) VALUES(null,?,?,?,?,?,?)";
                             $result = $con->prepare($insertar_notifi);                     
-                            $result->bind_param('issi', $id_usuario,$estatus_not, $hora, $id);
+                            $result->bind_param('isissi', $id_usuario,$estatus_not,$stat, $fecha_actual, $hora, $id);
                             $result->execute();
                             $result->close();
                             

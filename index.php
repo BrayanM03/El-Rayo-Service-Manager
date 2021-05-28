@@ -9,6 +9,9 @@ if (!isset($_SESSION['id_usuario'])) {
     header("Location:login.php");
 }
 
+if ($_SESSION['rol'] == 3) {
+    header("Location:nueva-venta.php");
+}else{
 
 
 ?>
@@ -312,50 +315,27 @@ if (!isset($_SESSION['id_usuario'])) {
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-bell fa-fw icon-menu"></i>
                                 <!-- Counter - Alerts -->
-                                <span class="badge badge-danger badge-counter">3+</span>
+                                <span id="contador-notifi" class="badge badge-danger badge-counter">0</span>
                             </a>
+ 
                             <!-- Dropdown - Alerts -->
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="alertsDropdown">
                                 <h6 class="dropdown-header">
                                    Notificaciones
                                 </h6>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-primary">
-                                            <i class="fas fa-file-alt text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 12, 2019</div>
-                                        <span class="font-weight-bold">A new monthly report is ready to download!</span>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-success">
-                                            <i class="fas fa-donate text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 7, 2019</div>
-                                        $290.29 has been deposited into your account!
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-warning">
-                                            <i class="fas fa-exclamation-triangle text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 2, 2019</div>
-                                        Spending Alert: We've noticed unusually high spending for your account.
-                                    </div>
-                                </a>
-                                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+                                <div class="empty-notification">
+                                 <img src="src/img/undraw_Notify_re_65on.svg" alt="" width="400px">
+                                 <span>Ups, por el momento no hay nada por aqui</span> 
+                              </div>
+                              
+                              <div id="contenedor-alertas"></div>
+                              <a class="dropdown-item text-center small text-gray-500" href="#">Mostrar mas notificaciones</a>
+                             
                             </div>
                         </li>
+
+
 
                         <!-- Nav Item - Messages -->
                         <li class="nav-item dropdown no-arrow mx-1">
@@ -545,8 +525,8 @@ if (!isset($_SESSION['id_usuario'])) {
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                Pending Requests</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                                                Creditos pendientes</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-comments fa-2x text-gray-300"></i>
@@ -712,3 +692,5 @@ if (!isset($_SESSION['id_usuario'])) {
 </body>
 
 </html>
+
+<?php }?>

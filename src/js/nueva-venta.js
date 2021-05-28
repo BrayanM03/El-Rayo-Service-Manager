@@ -613,7 +613,15 @@ selects.forEach( select => {
                     '<span><i class="fas fa-money-check-alt"></i> '+state.text+'</span>'
                 );
                             
-            break;                
+            break; 
+            
+            case "Sin definir":
+                var $state = $(
+                    '<span><i class="fas fa-question"></i> '+state.text+'</span>'
+                );
+                            
+            break; 
+
             default:
                 break;
         }

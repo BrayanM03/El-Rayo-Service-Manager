@@ -14,7 +14,9 @@ table = $('#creditos').DataTable({
   columns: [   
     { title: "#",              data: null             },
     { title: "id",             data: "id", render: function(data,type,row) {
+
         return '<span>CRED'  + data +'</span>';
+        
         }},
     { title: "Cliente",        data: "cliente"        },
     { title: "Fecha inicio",   data: "fecha_inicial"  },

@@ -1,3 +1,18 @@
 .icon-menu{
    color: whitesmoke;
 }
+
+.empty-notification{
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   height: auto;
+   margin-bottom: 10px;
+}
+
+.empty-notification img{
+   width: 120px;
+   height: 120px;
+   margin-bottom: 0px;
+}

@@ -5,7 +5,7 @@ include '../conexion.php';
 $con= $conectando->conexion(); 
 
 if (!isset($_SESSION['id_usuario'])) {
-    header("Location:../../login.php");
+    header("Location:../../login.php"); 
 }
 
 
@@ -51,6 +51,10 @@ if(isset($_POST)){
       case 3:
       $metodo_pago = "Cheque";
           break;
+
+      case 4:
+      $metodo_pago = "Sin definir";
+      break;     
       
       default:
         $metodo_pago = "Sin valor";
