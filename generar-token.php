@@ -48,7 +48,8 @@
     <link rel="stylesheet" href="src/vendor/bower_components/select2-bootstrap-theme/dist/select2-bootstrap.css">
 
     <!---Librerias de estilos-->
-   
+    <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="src/css/menu-vertical.css" rel="stylesheet">
 
 </head>
 
@@ -489,7 +490,7 @@
 
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid" style="display: flex; justify-content: center; align-items:center; flex-direction:column">
+                <div class="container-fluid" style="height: 80vh; display: flex; justify-content: center; align-items:center; flex-direction:column; ">
 
                      <!-- Contenido inventario -->
                      <div class="titulo-inventario">

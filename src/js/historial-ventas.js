@@ -27,9 +27,15 @@ table = $('#ventas').DataTable({
       data: null,
       className: "celda-acciones",
       render: function (row, data) {
-    
-        return '<div style="display: flex"><button onclick="traerPdf(' +row.folio+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br><button type="button" onclick="borrarVenta('+ row.folio +');" class="buttonBorrar btn btn-warning"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
-      },
+        console.log(row.estatus);
+        if (row.estatus == "Abierta") {
+            return '<div style="display: flex"><button onclick="traerPdfCredito(' +row.folio+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br><button type="button" onclick="borrarVenta('+ row.folio +');" class="buttonBorrar btn btn-warning"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
+            
+        }else{
+            return '<div style="display: flex"><button onclick="traerPdf(' +row.folio+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br><button type="button" onclick="borrarVenta('+ row.folio +');" class="buttonBorrar btn btn-warning"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
+     
+        }
+         },
     },
   ],
   paging: true,
@@ -121,6 +127,10 @@ function borrarVenta(id) {
 
   function traerPdf(folio){
     window.open('./modelo/ventas/generar-reporte-venta.php?id='+ folio , '_blank');
+  }
+
+  function traerPdfCredito(folio){
+      window.open('./modelo/creditos/generar-reporte-credito.php?id='+ folio, '_blank');
   }
 
 

@@ -14,8 +14,13 @@
 
 <link href="./src/css/login.css" rel="stylesheet">
 <!------ Include the above in your HEAD tag ---------->
+
 </head>
 <body>
+<video autoplay muted loop id="myVideo">
+  <source src="./src/video/bg.mp4" type="video/mp4">
+</video>
+
 <div class="simple-login-container">
     <div class="formulario">
 

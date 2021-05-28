@@ -176,9 +176,19 @@ document.addEventListener("DOMContentLoaded", function() {
                           
                       '  </div>'+
                     '</a>');
-                    
-
-                   
+                    }else if(value.state==2){
+                        contenedor.append('<a class="dropdown-item d-flex align-items-center" href="#">'+
+                       '<div class="mr-3">'+
+                           ' <div class="icon-circle bg-primary">'+
+                                '<i class="fas fa-hourglass-end text-white"></i>'+
+                            '</div>'+
+                       ' </div>'+
+                        '<div>'+
+                            '<div class="small text-gray-500">'+ fecha_format +'</div>'+
+                          '  <span class="">'+ value.descripcion +'</span>'+
+                          
+                      '  </div>'+
+                    '</a>');
                     }
 
                  }) 

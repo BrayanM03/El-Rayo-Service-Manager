@@ -83,7 +83,7 @@ $(document).ready(function() {
       ],
       paging: true,
       searching: true,
-      scrollY: "600px",
+      scrollY: "350px",
       info: true,
       responsive: true,
       order: [9, "desc"]

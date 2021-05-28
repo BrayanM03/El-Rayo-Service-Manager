@@ -33,7 +33,7 @@ function MostrarInventarioPedro() {
       ],
       paging: true,
       searching: true,
-      scrollY: "600px",
+      scrollY: "300px",
       info: true,
       responsive: true,
     

@@ -2,29 +2,29 @@
 body{
     height: 100vh;
     font-size:14px;
-    background-image: url(../img/bg-login.jpg);
-    background-repeat: no-repeat;
+    background-repeat: repeat;
     background-size: cover;
-    backdrop-filter: blur(10px);   
+    backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);  
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     
 }
 .simple-login-container{
     width:350px;
-    max-width:100%;
-    margin: auto;
+    max-width:100%;  
+    margin-left: 100px;
     background-color: azure;
     border-radius: 15px;
     height: 450px;
-    opacity: .8;
+    opacity: .9;
     
 }
 
 .simple-login-container h2 img{
-    
+   
     width: 180px;
 }
 
@@ -41,6 +41,13 @@ margin: 0px 50px;
 .formulario label{
     color: gray;
 }
+
+#myVideo {
+    position: fixed;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+  }
 
 .simple-login-container h2{
     text-align:center;
