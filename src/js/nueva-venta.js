@@ -1,3 +1,13 @@
+$.ajax({
+    type: "POST",
+    url: "./modelo/ventas/borrar-producto-temp.php",
+    data: {"reinicio":"reinicio"},
+   
+    success: function (response) {
+        
+    }
+});
+
 
 const inputs = document.querySelectorAll(".input-group");
 const selects = document.querySelectorAll(".select-group");

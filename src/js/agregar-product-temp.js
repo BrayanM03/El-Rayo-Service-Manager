@@ -96,7 +96,7 @@ function borrarProductoTmp(id, importe){
   $.ajax({
     type: "POST",
     url: "./modelo/ventas/borrar-producto-temp.php",
-    data: {"id": id},
+    data: {"id": id, "borrar": "borrar"},
     success: function (response) {
       if (response == 1) {
      
@@ -121,8 +121,12 @@ function borrarProductoTmp(id, importe){
       total = $("#total").val();
       result =  parseInt(total) - parseInt(importe);
       console.log(result);
-      $("#total").val(result);
-     
+      
+      if(total == 0){
+        $("#total").val(0);
+      }else{
+        $("#total").val(result);
+      }
 
       }else{
         toastr.warning('Hubo un error al borrar el producto', 'Error' );
@@ -287,6 +291,7 @@ function agregarInfo(){
 function limpiarTabla(){
 
 
+
         
   if ( !table.data().any()){ 
 
@@ -305,7 +310,7 @@ function limpiarTabla(){
                   $(".pre-venta-error").html("");
                  // $("#pre-venta tbody").append('<tr><th id="empty-table" style="text-align: center;" colspan="8">Preventa vacia</th></tr>');
                   $("#pre-venta_processing").css("display","none"); 
-                  $("#total").val(0.00);
+                  $("#total").val(0);
                   table.rows().remove().draw()
               }else if(response == 0){
                   toastr.warning('La tabla ya esta vaciada', 'Advertencia');

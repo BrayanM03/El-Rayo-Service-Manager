@@ -10,10 +10,10 @@ if (!isset($_SESSION['id_usuario'])) {
 }
 
 $iduser = $_SESSION["id_usuario"];
-$idproduct = $_POST["id"];
 
-if(isset($_POST)){
 
+if(isset($_POST["borrar"])){
+    $idproduct = $_POST["id"];
 $consulta = mysqli_query($con, "DELETE FROM productos_temp$iduser WHERE id = $idproduct");
 
 
@@ -25,6 +25,10 @@ if ($consulta) {
 }
 
 
+}
+
+if(isset($_POST["reinicio"])){
+    $consulta = mysqli_query($con, "DELETE FROM productos_temp$iduser");
 }
 
 ?>
