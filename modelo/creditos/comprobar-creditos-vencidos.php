@@ -33,7 +33,7 @@ date_default_timezone_set("America/Matamoros");
             $validar_lapso->fetch();
             $validar_lapso->close();
     
-            if ($total == 0) {
+            if ($total == 0) { 
                
     
             }else{

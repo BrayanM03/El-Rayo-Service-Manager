@@ -160,6 +160,28 @@ if(isset($_POST)){
             $consulta = mysqli_query($con, $vaciarTabla);
            
 
+            $consulta = mysqli_query($con, "SELECT * FROM usuarios WHERE rol LIKE 1 OR rol LIKE 2");
+
+
+            if ($consulta) {
+                while($row = mysqli_fetch_assoc($consulta))
+                {
+                  $id_usuario_admi = $row['id'] . " " . $row["nombre"] ; // Sumar variable $total + resultado de la consulta 
+                  $desc_notifi = $_SESSION['nombre'] . " acaba de realizar una venta";
+                  $estatus = 1; 
+                  $fecha = date("d-m-Y"); 
+                  $hora = date("h:i a");
+                  $refe = 0;  
+                  $queryInsertarNoti = "INSERT INTO registro_notificaciones (id, id_usuario, descripcion, estatus, fecha, hora, refe) VALUES (null,?,?,?,?,?,?)";
+                        $resultados = $con->prepare($queryInsertarNoti);
+                        $resultados->bind_param('isissi',$id_usuario_admi, $desc_notifi, $estatus, $fecha, $hora, $refe);
+                        $resultados->execute();
+                        $resultados->close();
+                }
+                
+                
+            }
+
               
            
           

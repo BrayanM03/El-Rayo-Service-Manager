@@ -233,6 +233,16 @@ function agregarInfo(){
               $("#empty-table").remove();
               toastr.success('Producto agregado correctamente', 'Agregado');
 
+              $.ajax({
+                type: "POST",
+                url: "./modelo/ventas/sumarTotaldetalleVenta.php",
+                data: {"data":"data"},
+                success: function (response) {
+                  console.log(response);
+                  $("#total").val(response);
+                }
+              });
+
             }else if(response == 2){
               
               toastr.error('La cantidad que especificaste revasa el stock actual', 'Error');
@@ -258,15 +268,7 @@ function agregarInfo(){
 
       
 
-      if ( !table.data().any()) {
-      
-        llantaAgregada();
-       
-       
-       }else{
-        llantaAgregada();
-        
-       }//Se cierra if
+      llantaAgregada();
 
 
            
@@ -275,15 +277,7 @@ function agregarInfo(){
     //Calculamos el valor total
 
     
-    $.ajax({
-      type: "POST",
-      url: "./modelo/ventas/sumarTotaldetalleVenta.php",
-      data: {"data":"data"},
-      success: function (response) {
-        console.log(response);
-        $("#total").val(response);
-      }
-    });
+   
       
 } //Se cierra la funcion anidada a la boton de agregar informacion
 

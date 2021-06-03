@@ -157,39 +157,74 @@ document.addEventListener("DOMContentLoaded", function() {
                         default:
                             break;
                     }
-
-
                     fecha_format = mes + " " + dia + ", " + año;
-                    console.log(fecha_format);
-                    
-                    if (value.state == 1) {    
-                       
-                       contenedor.append('<a class="dropdown-item d-flex align-items-center" href="#">'+
-                       '<div class="mr-3">'+
-                           ' <div class="icon-circle bg-primary">'+
-                                '<i class="fas fa-hourglass-end text-white"></i>'+
-                            '</div>'+
-                       ' </div>'+
-                        '<div>'+
-                            '<div class="small text-gray-500">'+ fecha_format +'</div>'+
-                          '  <span class="font-weight-bold">'+ value.descripcion +'</span>'+
-                          
-                      '  </div>'+
-                    '</a>');
-                    }else if(value.state==2){
-                        contenedor.append('<a class="dropdown-item d-flex align-items-center" href="#">'+
-                       '<div class="mr-3">'+
-                           ' <div class="icon-circle bg-primary">'+
-                                '<i class="fas fa-hourglass-end text-white"></i>'+
-                            '</div>'+
-                       ' </div>'+
-                        '<div>'+
-                            '<div class="small text-gray-500">'+ fecha_format +'</div>'+
-                          '  <span class="">'+ value.descripcion +'</span>'+
-                          
-                      '  </div>'+
-                    '</a>');
-                    }
+
+                    function appendNotification() {
+
+                        if (value.state == 1) {     
+                            contenedor.append('<a idnotify="'+ value.id+'" class="dropdown-item d-flex align-items-center" href="#">'+
+                            '<div class="mr-3">'+
+                                ' <div class="icon-circle bg-primary">'+
+                                     '<i class="fas fa-hourglass-end text-white"></i>'+
+                                 '</div>'+
+                            ' </div>'+
+                             '<div>'+
+                                 '<div class="small text-gray-500">'+ fecha_format +'</div>'+
+                               '  <span class="font-weight-bold">'+ value.descripcion +'</span>'+
+                               
+                           '  </div>'+
+                         '</a>'); }else if(value.state ==2){
+                            
+                                contenedor.append('<a class="dropdown-item d-flex align-items-center" href="#">'+
+                                '<div class="mr-3">'+
+                                    ' <div class="icon-circle bg-primary">'+
+                                         '<i class="fas fa-hourglass-end text-white"></i>'+
+                                     '</div>'+
+                                ' </div>'+
+                                 '<div>'+
+                                     '<div class="small text-gray-500">'+ fecha_format +'</div>'+
+                                   '  <span class="">'+ value.descripcion +'</span>'+
+                                   
+                               '  </div>'+
+                             '</a>');
+                            
+                        }
+
+                      }
+
+                   
+                   
+
+                    var foo = document.getElementById("contenedor-alertas");
+
+                    if (foo.hasChildNodes()) {
+                       // console.log("Si notificaciones en la entrada");
+                       flag = 0;
+                        $("#contenedor-alertas a").each(function(){
+                            
+                            idnotify = $(this).attr('idnotify');
+
+                            if(idnotify !== value.id){
+                               // appendNotification();
+                              // console.log("Es diferente id");
+                               
+                            }else{
+                               // console.log("Es el mismo id");
+                                flag = 1;
+                            }
+                        });
+
+                        if(flag == 0){
+                            console.log(flag);
+                            appendNotification();
+                        }
+                      
+                    }else{
+                       // console.log("No notificaciones en la entrada");
+                        appendNotification();
+                    } 
+                   
+               
 
                  }) 
 
@@ -207,9 +242,10 @@ document.addEventListener("DOMContentLoaded", function() {
         });
 
       }
-
+ 
       notificarCreditosVencidos();
-      NotificationManager();
+
+      setInterval(NotificationManager,3000);
 
  })
 

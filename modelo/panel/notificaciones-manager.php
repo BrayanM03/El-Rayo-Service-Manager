@@ -59,6 +59,7 @@ if($_SESSION["rol"] !==1 ){
                         print_r("No se econtro nada");
                     }             
                 
+
                     
             }
 }

@@ -19,7 +19,7 @@ $total = 0; // total declarado antes del bucle
 if ($consulta) {
     while($row = mysqli_fetch_assoc($consulta))
     {
-      $total = $total + $row['importe']; // Sumar variable $total + resultado de la consulta
+      $total = $total + $row['importe']; // Sumar variable $total + resultado de la consulta 
     }
     
     print_r($total);
