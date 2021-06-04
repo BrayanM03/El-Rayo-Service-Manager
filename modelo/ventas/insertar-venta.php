@@ -167,7 +167,7 @@ if(isset($_POST)){
                 while($row = mysqli_fetch_assoc($consulta))
                 {
                   $id_usuario_admi = $row['id'] . " " . $row["nombre"] ; // Sumar variable $total + resultado de la consulta 
-                  $desc_notifi = $_SESSION['nombre'] . " acaba de realizar una venta";
+                  $desc_notifi = $_SESSION['nombre'] . " realizó una venta";
                   $estatus = 1; 
                   $fecha = date("d-m-Y"); 
                   $hora = date("h:i a");

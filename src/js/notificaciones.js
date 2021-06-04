@@ -162,27 +162,27 @@ document.addEventListener("DOMContentLoaded", function() {
                     function appendNotification() {
 
                         if (value.state == 1) {     
-                            contenedor.append('<a idnotify="'+ value.id+'" class="dropdown-item d-flex align-items-center" href="#">'+
+                            contenedor.prepend('<a idnotify="'+ value.id+'" class="dropdown-item d-flex align-items-center" href="#">'+
                             '<div class="mr-3">'+
                                 ' <div class="icon-circle bg-primary">'+
                                      '<i class="fas fa-hourglass-end text-white"></i>'+
                                  '</div>'+
                             ' </div>'+
                              '<div>'+
-                                 '<div class="small text-gray-500">'+ fecha_format +'</div>'+
+                                 '<div class="small text-gray-500">'+ fecha_format + ', ' + value.hora +'</div>'+
                                '  <span class="font-weight-bold">'+ value.descripcion +'</span>'+
                                
                            '  </div>'+
                          '</a>'); }else if(value.state ==2){
                             
-                                contenedor.append('<a class="dropdown-item d-flex align-items-center" href="#">'+
+                                contenedor.prepend('<a class="dropdown-item d-flex align-items-center" href="#">'+
                                 '<div class="mr-3">'+
                                     ' <div class="icon-circle bg-primary">'+
                                          '<i class="fas fa-hourglass-end text-white"></i>'+
                                      '</div>'+
                                 ' </div>'+
                                  '<div>'+
-                                     '<div class="small text-gray-500">'+ fecha_format +'</div>'+
+                                     '<div class="small text-gray-500">'+ fecha_format+ ', ' + value.hora +'</div>'+
                                    '  <span class="">'+ value.descripcion +'</span>'+
                                    
                                '  </div>'+
@@ -244,7 +244,7 @@ document.addEventListener("DOMContentLoaded", function() {
       }
  
       notificarCreditosVencidos();
-
+      NotificationManager();
       setInterval(NotificationManager,3000);
 
  })

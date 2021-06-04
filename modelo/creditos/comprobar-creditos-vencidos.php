@@ -16,7 +16,7 @@ date_default_timezone_set("America/Matamoros");
     $id_usuario = $_SESSION["id_usuario"];
     $rol = $_SESSION["rol"];
 
-    if ($rol !== "1") {
+    if ($rol == "3") {
         print_r("Nada");
     }else{
 
@@ -38,7 +38,7 @@ date_default_timezone_set("America/Matamoros");
     
             }else{
     
-            
+            //Esta consulta trae los creditos que ya estan vencidos
                 $query="SELECT creditos.id, creditos.id_cliente, creditos.pagado, creditos.restante, creditos.total, creditos.estatus, creditos.fecha_inicio, creditos.fecha_final, creditos.plazo, clientes.Nombre_Cliente FROM creditos INNER JOIN clientes ON creditos.id_cliente = clientes.id WHERE fecha_final LIKE '$fecha_actual'";
     
                 $resultado = mysqli_query($con, $query);
@@ -55,30 +55,65 @@ date_default_timezone_set("America/Matamoros");
                         $fecha_final = $fila["fecha_final"];
                         $plazo = $fila["plazo"];
                     
-                       
-                        
+                        /*creditos:
+                          1 = sin abono
+                          2 = pagando
+                          3 = Finalizado
+                          4 = Vencido  */
+                        //Esta parte del codigo cuenta la notificaciones que tengan el id del credito vencido y el id de la sesion del usuario
+                        //para comprobar que la notificacion no haya sido emitida siempre y cuando el estatus del credito sea distinto a  3 osea finalizado
                         if($estatus !== "3"){
-
-                            $validar = $con->prepare("SELECT COUNT(*) FROM registro_notificaciones WHERE refe LIKE ? AND id_usuario LIKE ?");
-                            $validar->bind_param('ii', $id, $id_usuario);
+                            $alertada = "SI";
+                            $validar = $con->prepare("SELECT COUNT(*) FROM registro_notificaciones WHERE refe LIKE ? AND id_usuario LIKE ? AND alertada LIKE ?");
+                            $validar->bind_param('iis', $id, $id_usuario, $alertada);
                             $validar->execute();
                             $validar->bind_result($count);
                             $validar->fetch();
                             $validar->close();
 
+                            //Al ser 0 significa que esta notificaciones
                             if ($count > 0) {
-                                print_r("Este registro ya esta notificado");
+                                print_r("Este registro ya esta notificado a este usuario");
                             }else{
 
-                            $estatus_not = "Se a vencido el credito para el cliente " . $cliente;
-                            $hora = date("h:i a");
-                            $stat = 1;
+                           
 
-                            $insertar_notifi = "INSERT INTO registro_notificaciones(id, id_usuario, descripcion, estatus, fecha, hora, refe) VALUES(null,?,?,?,?,?,?)";
-                            $result = $con->prepare($insertar_notifi);                     
-                            $result->bind_param('isissi', $id_usuario,$estatus_not,$stat, $fecha_actual, $hora, $id);
-                            $result->execute();
-                            $result->close();
+                            /*Insertar notificaciones
+                                //$consulta = mysqli_query($con, "SELECT * FROM usuarios WHERE rol LIKE 1 OR rol LIKE 2");
+
+
+                               // if ($consulta) {
+                                //    while($row = mysqli_fetch_assoc($consulta))
+                                    {
+                                    $id_usuario_admi = $row['id'] . " " . $row["nombre"] ; // Sumar variable $total + resultado de la consulta 
+                                   
+                                    $estatus_not = "Se a vencido el credito para el cliente " . $cliente;
+                                    $estatus = 1; 
+                                    $fecha = date("d-m-Y"); 
+                                    $hora = date("h:i a");
+                                    $refe = 0;  
+                                    $estado_alerta = "SI";
+                                    $queryInsertarNoti = "INSERT INTO registro_notificaciones (id, id_usuario, descripcion, estatus, fecha, hora, refe, alertada) VALUES (null,?,?,?,?,?,?,?)";
+                                            $resultados = $con->prepare($queryInsertarNoti);
+                                            $resultados->bind_param('isissis',$id_usuario_admi, $estatus_not, $estatus, $fecha, $hora, $id, $estado_alerta);
+                                            $resultados->execute();
+                                            $resultados->close();
+                                    }
+                                    
+                                    
+                                }*/
+
+                                $estatus_not = "Se a vencido el credito para el cliente " . $cliente;
+                                $estatus = 1; 
+                                $fecha = date("d-m-Y"); 
+                                $hora = date("h:i a");
+                                $refe = 0;  
+                                $estado_alerta = "SI";
+                                $queryInsertarNoti = "INSERT INTO registro_notificaciones (id, id_usuario, descripcion, estatus, fecha, hora, refe, alertada) VALUES (null,?,?,?,?,?,?,?)";
+                                        $resultados = $con->prepare($queryInsertarNoti);
+                                        $resultados->bind_param('isissis',$id_usuario, $estatus_not, $estatus, $fecha, $hora, $id, $estado_alerta);
+                                        $resultados->execute();
+                                        $resultados->close();
                             
 
                             $data[] = array("id" => $id,"state"=>1, "fecha_inicial"=>$fecha_inicio,"fecha_final"=>$fecha_final, "restante" => $restante,

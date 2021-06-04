@@ -115,10 +115,23 @@ if ($_SESSION['rol'] == 3) {
                 </div>
             </li>
 
-            <!-- Divider -->
-
             <?php 
                 $user_jerarquia = $_SESSION["rol"];
+
+                if ($user_jerarquia == 1) {
+                   $name = "Inventario";
+                }else if($user_jerarquia ==2){
+                 $name = "Clientes y creditos";
+                }
+
+            ?>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+            <div class="sidebar-heading">
+            <?php echo $name   ?>
+            </div>
+            <?php 
 
                 if ($user_jerarquia == 1) {
                     # code...
@@ -126,12 +139,10 @@ if ($_SESSION['rol'] == 3) {
 
             ?>
 
-            <hr class="sidebar-divider">
+           
 
             <!-- Inventario -->
-            <div class="sidebar-heading">
-                Inventario
-            </div>
+            
 
             <!-- Inventario - Pages Collapse Menu -->
             <li class="nav-item">
@@ -169,7 +180,14 @@ if ($_SESSION['rol'] == 3) {
                 </div>
             </li>
 
+            <?php 
+                }
 
+                if ($user_jerarquia == 1 || $user_jerarquia == 2) {
+                    # code...
+                
+
+            ?>
             <!-- Clientes -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseClients"
@@ -220,7 +238,10 @@ if ($_SESSION['rol'] == 3) {
                     </div>
                 </div>
             </li>
+            <?php 
+                }
 
+            ?>
 
             <!-- Token -->
             <li class="nav-item">
@@ -231,10 +252,6 @@ if ($_SESSION['rol'] == 3) {
 
             <!-- Nav Item - Tables -->
     
-    <?php }else{ ?>
-
-
-    <?php } ?>
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">

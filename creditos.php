@@ -139,7 +139,7 @@
             <?php 
                 $user_jerarquia = $_SESSION["rol"];
 
-                if ($user_jerarquia == 1) {
+                if ($user_jerarquia == 1 || $user_jerarquia == 2) {
                     # code...
                 
 
