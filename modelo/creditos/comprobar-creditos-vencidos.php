@@ -109,9 +109,10 @@ date_default_timezone_set("America/Matamoros");
                                 $hora = date("h:i a");
                                 $refe = 0;  
                                 $estado_alerta = "SI";
-                                $queryInsertarNoti = "INSERT INTO registro_notificaciones (id, id_usuario, descripcion, estatus, fecha, hora, refe, alertada) VALUES (null,?,?,?,?,?,?,?)";
+                                $tipo = "vencimiento";
+                                $queryInsertarNoti = "INSERT INTO registro_notificaciones (id, id_usuario, descripcion, estatus, fecha, hora, refe, alertada, tipo) VALUES (null,?,?,?,?,?,?,?,?)";
                                         $resultados = $con->prepare($queryInsertarNoti);
-                                        $resultados->bind_param('isissis',$id_usuario, $estatus_not, $estatus, $fecha, $hora, $id, $estado_alerta);
+                                        $resultados->bind_param('isississ',$id_usuario, $estatus_not, $estatus, $fecha, $hora, $id, $estado_alerta, $tipo);
                                         $resultados->execute();
                                         $resultados->close();
                             

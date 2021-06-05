@@ -36,9 +36,17 @@ function MostrarInventarioPedro() {
       scrollY: "300px",
       info: true,
       responsive: true,
-    
       
-    });
+      language: {
+            
+        emptyTable: "No hay registros",
+        infoEmpty: "Ups!, no hay registros aun en esta categoria."
+      }
+      
+    });// fin de la tabla
+
+
+    //table.appendTo("#inventario-pedro_wrapper .col-md-6:eq(0)");
 
      //Enumerar las filas "index column"
     table.on( 'order.dt search.dt', function () {

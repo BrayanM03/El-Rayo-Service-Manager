@@ -41,6 +41,9 @@
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="src/vendor/datatables/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="src/vendor/datatables-responsive/css/responsive.bootstrap4.min.css">
+
+  <link rel="stylesheet" href="https://nightly.datatables.net/colreorder/css/colReorder.dataTables.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.css" integrity="sha512-oe8OpYjBaDWPt2VmSFR+qYOdnTjeV9QPLJUeqZyprDEQvQLJ9C5PCFclxwNuvb/GQgQngdCXzKSFltuHD3eCxA==" crossorigin="anonymous" />
     
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -480,11 +483,11 @@
                 <!-- End of Topbar -->
 
 
-                <!-- Begin Page Content -->
-                <div class="container-fluid" style="display: flex; justify-content: center; align-items:center; flex-direction:column">
+                <!-- Begin Page Content style="display: flex; justify-content: center; align-items:center; flex-direction:column" -->
+                <div class="container-fluid" >
 
                      <!-- Contenido inventario -->
-                     <div class="titulo-inventario">
+                     <div class="titulo-inventario m-auto">
                          <h5 style="margin: 10px 0px;">Stock de llantas en existencia</h5>
                          <p style="color: gray;">Sucursal Pedro Cardenas</p>
                         </div>
@@ -503,7 +506,7 @@
                                         <span class="text"> Borrar todas las llantas</span>
                                     </a>
                       </div>
-                      <table id="inventario-pedro" class="table table-striped table-bordered table-hover">                   
+                      <table id="inventario-pedro"  class="table table-striped table-bordered table-hover">                   
                      </table>
 
                      
@@ -574,7 +577,11 @@
     <!-- Cargamos nuestras librerias-->
     
     <script src="src/vendor/datatables/jquery.dataTables.min.js"></script> 
+    <script src="src/vendor/datatables/defaults.js"></script>
     <script src="src/vendor/datatables-responsive/js/dataTables.responsive.min.js"></script>
+  <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+
+  <script src="https://nightly.datatables.net/colreorder/js/dataTables.colReorder.min.js"></script>
     <script src="src/vendor/datatables/dataTables.bootstrap4.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>

@@ -40,6 +40,7 @@
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="src/vendor/datatables/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="src/vendor/datatables-responsive/css/responsive.bootstrap4.min.css">
    
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="src/vendor/bower_components/select2-bootstrap-theme/dist/select2-bootstrap.css">
@@ -717,7 +718,7 @@
     <script src="src/js/agregar-product-temp.js"></script>
     <script src="src/js/generar-token.js"></script>
     <script src="src/js/nueva-venta-credito.js"></script>
-    <script src="src/js/notificaciones.js"></script>
+  <!--  <script src="src/js/notificaciones.js"></script>   -->
    
    
 </body>

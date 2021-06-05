@@ -414,7 +414,8 @@ selects.forEach( select => {
                        'cliente': cliente,
                        'metodo_pago': metodo_pago,
                        'fecha': fecha,
-                       'total': total},
+                       'total': total,
+                       'tipo': 'vt-normal'},
                 dataType: "JSON",
                 success: function (response) {
                     console.log(response);

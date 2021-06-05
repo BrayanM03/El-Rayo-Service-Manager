@@ -51,7 +51,7 @@ $(document).ready(function() {
   searching: false,
   scrollY: "350px",
   info: false,
-  responsive: false,
+  responsive: true,
   order: [0, "desc"],
  
   

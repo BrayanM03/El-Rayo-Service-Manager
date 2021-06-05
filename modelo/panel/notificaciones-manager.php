@@ -42,11 +42,13 @@ if($_SESSION["rol"] !==1 ){
                     $fecha = $fila["fecha"];
                     $hora = $fila["hora"];
                     $refe = $fila["refe"];
+                    $alertada = $fila["alertada"];
+                    $tipo = $fila["tipo"];
                 
                    
                     
                     $data[] = array("id" => $id,"id_usuario" => $id_usuario, "descripcion"=>$descripcion, "state"=>$estatus,"fecha"=>$fecha,
-                    "hora" => $hora, "refe"=>$refe);
+                    "hora" => $hora, "refe"=>$refe, "alertada" => $alertada,"tipo" => $tipo);
     
                         }
     

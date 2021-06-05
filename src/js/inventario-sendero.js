@@ -31,6 +31,7 @@ function MostrarInventarioPedro() {
           },
         },
       ],
+      width: "auto",
       paging: true,
       searching: true,
       scrollY: "300px",

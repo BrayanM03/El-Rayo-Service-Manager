@@ -160,12 +160,32 @@ document.addEventListener("DOMContentLoaded", function() {
                     fecha_format = mes + " " + dia + ", " + año;
 
                     function appendNotification() {
+                        tipoNotificacion = value.tipo;
+                        switch (tipoNotificacion) {
+                            case "vencimiento":
+                                color = "bg-danger"
+                                icono = "fa-hourglass-end"    
+                                break;
+                     
+                            case "vt-normal":
+                                color = "bg-success"
+                                icono = "fa-hand-holding-usd";
+                            break;
+
+                            case "vt-credito":
+                                color = "bg-warning"
+                                icono = "fa-comment-dollar";
+                            break;
+                        
+                            default:
+                                break;
+                        }
 
                         if (value.state == 1) {     
                             contenedor.prepend('<a idnotify="'+ value.id+'" class="dropdown-item d-flex align-items-center" href="#">'+
                             '<div class="mr-3">'+
-                                ' <div class="icon-circle bg-primary">'+
-                                     '<i class="fas fa-hourglass-end text-white"></i>'+
+                                ' <div class="icon-circle '+ color +'">'+
+                                     '<i class="fas '+ icono +' text-white"></i>'+
                                  '</div>'+
                             ' </div>'+
                              '<div>'+
@@ -224,11 +244,80 @@ document.addEventListener("DOMContentLoaded", function() {
                         appendNotification();
                     } 
                    
-               
+               //Notificar a usuario notificaciones no alertadas
+                    if(value.alertada == "NO" ){
+
+                        switch (value.tipo) {
+                            case "vt-credito":
+
+                                var notificacion = new Notification("Nueva venta a credito",
+                                {
+                                    icon: "./src/img/logo.jpg",
+                                    body: value.descripcion
+                                });
+                    
+                                
+                              //Cerrar notificacion del registro para que no se haga un loop
+                                 $.ajax({
+                                     type: "POST",
+                                     url: "./modelo/panel/liberar-notificacion.php",
+                                     data: {"id": value.id},
+                                     
+                                     success: function (response) {
+                                         if(response == 1){
+                                             console.log("Notificacion de credito - alertada: SI");
+                                         }
+                                     }
+                                 });
+
+                                 notificacion.onclick = function() { 
+                                    window.open("http://localhost/el-rayo-service-manager/creditos.php");
+                                 }
+
+                                break;
+
+                            case "vt-normal":
+
+                                var notificacion = new Notification("Nueva venta",
+                                {
+                                    icon: "./src/img/logo.jpg",
+                                    body: value.descripcion
+                                });
+
+                                 //Cerrar notificacion del registro para que no se haga un loop
+                                 $.ajax({
+                                    type: "POST",
+                                    url: "./modelo/panel/liberar-notificacion.php",
+                                    data: {"id": value.id},
+                                    
+                                    success: function (response) {
+                                        if(response == 1){
+                                            console.log("Notificacion de venta - alertada: SI");
+                                        }
+                                    }
+                                });
+                    
+                                notificacion.onclick = function() { 
+                                    window.open("http://localhost/el-rayo-service-manager/ventas.php");
+                                }
+
+                                break;
+                        
+                            default:
+                                break;
+                        }
+
+                       
+            
+            
+                    }
+
+
 
                  }) 
-
             }
+
+
         });
 
         $.ajax({
@@ -240,6 +329,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 $("#contador-notifi").text(response);
             }
         });
+
+
+       
 
       }
  
