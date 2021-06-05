@@ -4,11 +4,11 @@ class Conectar
 {
     public function conexion()
     {
-  /*     $host = "174.136.52.208";
-        $user = "powerpsc";
-        $password = "9y40bEwzL3:>)<";
-        $db = "powerpsc_servicemanager";
-*/
+     /* $host = "198.59.144.9";
+        $user = "llante14_brayanm03";
+        $password = "siemprefiel0";
+        $db = "llante14_servicemanager";*/
+
         $host = "localhost";
         $user = "root";
         $password = "";
