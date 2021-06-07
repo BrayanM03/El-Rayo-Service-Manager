@@ -1,24 +1,7 @@
-
-  <?php
-    session_start();
-
-    include 'modelo/conexion.php';
-    $con= $conectando->conexion(); 
-
-    if (!$con) {
-        echo "maaaaal";
-    }
-
-    if (!isset($_SESSION['id_usuario'])) {
-        header("Location:login.php");
-    }
-
-    
-    ?>
 <!DOCTYPE html>
 <html lang="es">
 
-<head> 
+<head>
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -26,30 +9,17 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="shortcut icon" href="src/img/rayo.svg" />
- 
-	
 
-    <title>Inventario</title>
+    <title>El Rayo | Service Manager</title>
 
     <!-- Custom fonts for this template-->
-    <link rel="stylesheet" href="src/css/token.css">
     <link href="src/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
-
 
     <!-- Custom styles for this template-->
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="src/vendor/datatables/dataTables.bootstrap4.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.css" integrity="sha512-oe8OpYjBaDWPt2VmSFR+qYOdnTjeV9QPLJUeqZyprDEQvQLJ9C5PCFclxwNuvb/GQgQngdCXzKSFltuHD3eCxA==" crossorigin="anonymous" />
-    
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="src/vendor/bower_components/select2-bootstrap-theme/dist/select2-bootstrap.css">
-
-    <!---Librerias de estilos-->
-    <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
-    <link href="src/css/menu-vertical.css" rel="stylesheet">
 
 </head>
 
@@ -74,8 +44,8 @@
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item">
-                <a class="nav-link" href="index.html">
+            <li class="nav-item active">
+                <a class="nav-link" href="index.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Inicio</span></a>
             </li>
@@ -126,15 +96,6 @@
                 </div>
             </li>
 
-            <?php 
-                $user_jerarquia = $_SESSION["rol"];
-
-                if ($user_jerarquia == 1) {
-                    # code...
-                
-
-            ?>
-
             <!-- Divider -->
             <hr class="sidebar-divider">
 
@@ -144,7 +105,7 @@
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTyres"
                     aria-expanded="true" aria-controls="collapsePages">
                     <i class="fas fa-fw fa-folder"></i>
@@ -152,18 +113,7 @@
                 </a>
                 <div id="collapseTyres" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Sucursales:</h6>
-                        <a class="collapse-item" href="inventario-pedro.php" style="display:flex; flex-direction: row; justify-content:start;">
-                        <i class="fas fa-fw fa-store"></i> 
-                            <span style="margin-left:12px;"> Pedro Cardenas</span> </a>
-                        <a class="collapse-item" href="inventario-sendero.php" style="display:flex; flex-direction: row; justify-content:start;">
-                        <i class="fas fa-fw fa-store"></i>
-                            <span style="margin-left:12px;"> Sendero</span> </a>
-    
-                    
-                    </div>
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Stock total:</h6>
+                        <h6 class="collapse-header">Categorias:</h6>
                         <a class="collapse-item" href="inventario-total.php" style="display:flex; flex-direction: row; justify-content:start;">
                             <img src="src/img/tyre-invent.svg" width="18px" /> 
                             <span style="margin-left:12px;"> Existencia</span> </a>
@@ -230,32 +180,16 @@
             </li>
 
 
-
-            <li class="nav-item">
+              <!-- Nav Item - Charts -->
+              <li class="nav-item">
                 <a class="nav-link" href="generar-token.php">
                     <i class="fas fa-fw fa-lock"></i>
                     <span>Generar token</span></a>
             </li>
+
+
             
-            <!-- Nav Item - Charts -->
-            <li class="nav-item">
-                <a class="nav-link" href="charts.html">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Charts</span></a>
-            </li>
 
-            <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Tables</span></a>
-            </li>
-
-            <?php 
-               }else{}
-                
-
-            ?>
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 
@@ -396,7 +330,7 @@
                                 </h6>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="src/img/undraw_profile_1.svg"
+                                        <img class="rounded-circle" src="../src/img/undraw_profile_1.svg"
                                             alt="">
                                         <div class="status-indicator bg-success"></div>
                                     </div>
@@ -408,7 +342,7 @@
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="src/img/undraw_profile_2.svg"
+                                        <img class="rounded-circle" src="../src/img/undraw_profile_2.svg"
                                             alt="">
                                         <div class="status-indicator"></div>
                                     </div>
@@ -420,7 +354,7 @@
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="src/img/undraw_profile_3.svg"
+                                        <img class="rounded-circle" src="../src/img/undraw_profile_3.svg"
                                             alt="">
                                         <div class="status-indicator bg-warning"></div>
                                     </div>
@@ -452,11 +386,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline  small" style="color: aliceblue;"><?php
-                                
-                                echo $_SESSION['nombre'] . " " . $_SESSION['apellidos'];
-                            
-                            ?></span>
+                                <span class="mr-2 d-none d-lg-inline  small" style="color: aliceblue;">Brayan Maldonado</span>
                                 <img class="img-profile rounded-circle"
                                     src="src/img/undraw_profile.svg">
                             </a>
@@ -465,20 +395,20 @@
                                 aria-labelledby="userDropdown">
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Perfil
+                                    Profile
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Configuraciones
+                                    Settings
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Registro de actividad
+                                    Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Cerrar sesión
+                                    Logout
                                 </a>
                             </div>
                         </li>
@@ -490,31 +420,21 @@
 
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid" style="height: 80vh; display: flex; justify-content: center; align-items:center; flex-direction:column; ">
+                <div class="container-fluid">
 
-                     <!-- Contenido inventario -->
-                     <div class="titulo-inventario">
-                         <h5 style="margin: 10px 0px;">Generar token</h5>
-                         <p style="color: gray;">Click en generar para generar un nuevo token de seguridad para cambiar el precio de una llanta durante una venta.</p>
-                         <div class="tokens">
-                         <p style="color: gray;">El token actual es: </br>
-                         <span id="token-actual">0000</span>
-                         </p> 
-                         </div> 
-                        </div>
-                        
-                      <div class="botones">
-                                    <a href="#" class="btn btn-success btn-icon-split"  onclick="random();">
-                                        <span class="icon text-white-50">
-                                            <i class="fas fa-check-circle"></i>
-                                        </span>
-                                        <span class="text">Generar Token</span>
-                                    </a>
-                                    
-                      </div>
-                      
+                     <!-- Contenido -->
+                     <div class="card" style="height: 80vh;">
+                            <h4 class="ml-auto mr-auto mt-5">Nueva cotización</h4>
 
-                     
+                            <form action="">
+                                <div class="row mr-auto ml-auto">    
+                                <label for="busqueda" class="">Agregar llantas</label>
+                                <select style="width:30%" class="form-control " id="busquedaLlantas" value="" name="search"></select>
+                                </div>
+                            </form>
+
+
+                     </div>
                    
 
                 </div>
@@ -523,7 +443,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; El Rayo Service Manager <?php print_r(date("Y")) ?></span><br><br>
+                        <span>Copyright &copy; El Rayo Service Manager 2020</span><br><br>
                         <span>Edicion e integración por <a href="https://www.facebook.com/BrayanM03/">Brayan Maldonado</a></span>
                     </div>
                 </div>
@@ -555,7 +475,7 @@
                 <div class="modal-body">Seleccione "salir" para cerra su sesión actual.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
-                    <a class="btn btn-primary" href="./modelo/login/cerrar-sesion.php">Salir</a>
+                    <a class="btn btn-primary" href="login.html">Salir</a>
                 </div>
             </div>
         </div>
@@ -574,24 +494,17 @@
     <!-- Page level plugins -->
     <script src="src/vendor/chart.js/Chart.min.js"></script>
 
-    <!-- Page level custom scripts 
+    <!-- Page level custom scripts -->
     <script src="src/js/demo/chart-area-demo.js"></script>
-    <script src="src/js/demo/chart-pie-demo.js"></script>-->
+    <script src="src/js/demo/chart-pie-demo.js"></script>
 
+    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
 
-    <!-- Cargamos nuestras librerias-->
-    
-    <script src="src/vendor/datatables/jquery.dataTables.min.js"></script> 
-    <script src="src/vendor/datatables-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="src/vendor/datatables/dataTables.bootstrap4.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous"></script>
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script src="src/vendor/datatables/defaults.js"></script>
-    <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-   
-    <script src="src/js/generar-token.js"></script>
-   
+    <!-- Cargamos nuestro componente de React. -->
+    <script src="src/components/inicio.js">
+ 
+    </script>
    
 </body>
 

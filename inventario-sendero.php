@@ -480,12 +480,7 @@
                                         </span>
                                         <span class="text">Agregar llanta</span>
                                     </a>
-                                    <a href="#" class="btn btn-danger btn-icon-split">
-                                        <span class="icon text-white-50">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </span>
-                                        <span class="text">Borrar todas las llantas</span>
-                                    </a>
+                                  
                       </div>
                       <table id="inventario-pedro" class="table table-striped table-bordered table-hover">                   
                      </table>
