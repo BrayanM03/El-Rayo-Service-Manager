@@ -4,9 +4,9 @@ class Conectar
 {
     public function conexion()
     {
-     /* $host = "198.59.144.9";
-        $user = "llante14_brayanm03";
-        $password = "siemprefiel0";
+       /* $host = "llantera";
+        $user = "root";
+        $password = "";
         $db = "llante14_servicemanager";*/
 
         $host = "localhost";
