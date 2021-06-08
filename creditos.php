@@ -12,6 +12,10 @@
     if (!isset($_SESSION['id_usuario'])) {
         header("Location:login.php");
     }
+    $rol = $_SESSION["rol"];
+    if ($rol ==3) {
+        header("Location:nueva-venta.php");
+    }
 
     
     ?>

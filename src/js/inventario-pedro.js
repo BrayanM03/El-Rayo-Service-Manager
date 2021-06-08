@@ -25,7 +25,7 @@ function MostrarInventarioPedro() {
         {
           data: null,
           className: "celda-acciones",
-          render: function (row) {
+          render: function (row) { 
             console.log(row);
             return '<div style="display: flex"><button type="button" onclick="editarInvPedro('+row.id_Llanta+');" id="'+row.id_Llanta+'" class="buttonEditar btn btn-warning" style="margin-right: 8px"><span class="fa fa-edit"></span><span class="hidden-xs"></span></button><br><button type="button" onclick="borrarRegistro('+row.id_Llanta+');" id="'+row.id_Llanta+'" class="buttonBorrar btn btn-danger"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
           },

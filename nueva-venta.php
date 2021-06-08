@@ -244,7 +244,7 @@
             </li>
 
             <?php 
-              }else{}      # code...
+              }     # code...
                 
 
             ?>
@@ -494,7 +494,7 @@
                          <div class="card-body">
                             <div class="row">
 
-                            <div class="grupo-1" >
+                            <div class="grupo-1 col">
                             
                                                 <div class="logo-marca-grande">
 
@@ -591,7 +591,7 @@
                                 </div>
 
 
-                            <div class="grupo-2">
+                            <div class="grupo-2 col">
 
                                 <div class="fila3">
                                             <div class="folio-fecha">
@@ -629,7 +629,7 @@
                                     </div>
                                 </div>
 
-                            </div>
+                            </div> <!---Fin row-->
 
                                 
                               

@@ -10,15 +10,25 @@ $folio = "RAY" . $_GET["id"];
 $idVenta = $_GET["id"];
 global $folio;
 
-$ID = $con->prepare("SELECT ventas.Fecha, ventas.id_Sucursal, clientes.Nombre_Cliente, ventas.Total, ventas.metodo_pago, ventas.hora FROM ventas INNER JOIN clientes ON ventas.id_Cliente = clientes.id WHERE ventas.id = ?");
+$ID = $con->prepare("SELECT ventas.Fecha, ventas.id_Sucursal, ventas.id_Usuarios, clientes.Nombre_Cliente, ventas.Total, ventas.metodo_pago, ventas.hora FROM ventas INNER JOIN clientes ON ventas.id_Cliente = clientes.id WHERE ventas.id = ?");
 $ID->bind_param('i', $idVenta);
 $ID->execute();
-$ID->bind_result($fecha, $sucursal, $cliente, $total, $metodo_pago, $hora );
+$ID->bind_result($fecha, $sucursal, $vendedor_id, $cliente, $total, $metodo_pago, $hora );
 $ID->fetch();
 $ID->close();
 
+$ID = $con->prepare("SELECT nombre, apellidos FROM usuarios WHERE id = ?");
+$ID->bind_param('i', $vendedor_id);
+$ID->execute();
+$ID->bind_result($vendedor_name, $vendedor_apellido);
+$ID->fetch();
+$ID->close();
+
+$vendedor_usuario = $vendedor_name . " " . $vendedor_apellido;
+
 global $fecha;
 global $sucursal;
+global $vendedor_usuario;
 global $cliente;
 global $total;
 global $metodo_pago;
@@ -147,8 +157,7 @@ function Header()
     $this->Cell(24,7,utf8_decode("Vendedor:"),0,0,'L', 1);
     $this->SetFont('Times','',12);
     $this->SetFillColor(236, 236, 236);
-    $vendedor = $_SESSION['nombre'] . " " . $_SESSION['apellidos'];
-    $this->Cell(70,7,utf8_decode($vendedor),0,0, 'L',1);
+    $this->Cell(70,7,utf8_decode($GLOBALS["vendedor_usuario"]),0,0, 'L',1);
     $this->SetFont('Arial','B',12);
     $this->SetTextColor(194, 34, 16);
     $this->Cell(30,7,'Hora: ',0,0,'R', false);

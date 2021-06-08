@@ -171,7 +171,7 @@ function realizarVentaCredito(){
 
                                                 }else if(result.isDenied){
                         
-                                                    window.open('./modelo/ventas/generar-reporte-venta.php?id='+ response, '_blank');
+                                                    window.open('./modelo/creditos/generar-reporte-credito.php?id='+ response, '_blank');
                                                     table.ajax.reload();
                                                     $("#pre-venta tbody tr").remove();
                                                     $(".pre-venta-error").html("");

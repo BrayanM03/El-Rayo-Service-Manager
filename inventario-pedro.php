@@ -484,7 +484,7 @@
 
 
                 <!-- Begin Page Content style="display: flex; justify-content: center; align-items:center; flex-direction:column" -->
-                <div class="container-fluid" >
+                <div class="container-fluid" > 
 
                      <!-- Contenido inventario -->
                      <div class="titulo-inventario m-auto">

@@ -34,7 +34,7 @@ table = $('#ventas').DataTable({
       className: "celda-acciones",
       render: function (row, data) {
         return '<div style="display: flex"><button onclick="editarCliente(' +row.id+ ');" type="button" class="buttonPDF btn btn-success" style="margin-right: 8px"><span class="fa fa-edit"></span><span class="hidden-xs"></span></button><br>'+
-        '<button type="button" onclick="borrarVenta('+ row.id +');" class="buttonBorrar btn btn-warning"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
+        '<button type="button" onclick="borrarCliente('+ row.id +');" class="buttonBorrar btn btn-warning"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
       },
     },
   ],
@@ -63,11 +63,11 @@ $("table.dataTable thead").addClass("table-info")
 MostrarClientes();
 
 
-function borrarVenta(id) {
+function borrarCliente(id) {
 
     Swal.fire({
         title: "Eliminar Cliente",
-        html: '<span>¿Estas seguro de eliminar esta cliente?</span>',
+        html: '<span>¿Estas seguro de eliminar este cliente?</span>',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
         cancelButtonColor: '#00e059',
@@ -80,8 +80,8 @@ function borrarVenta(id) {
 
     $.ajax({
         type: "post",
-        url: "./modelo/ventas/editar-cliente.php",
-        data: {"folio": id},
+        url: "./modelo/clientes/borrar-cliente.php",
+        data: {"id": id},
         success: function (response) {
            if (response==1) {
               
@@ -586,9 +586,6 @@ mymap.on('click', function (e) {
   
   }
 
-  
-
-    
 
    
    

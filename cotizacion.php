@@ -1,3 +1,20 @@
+<?php
+    session_start();
+
+    include 'modelo/conexion.php';
+    $con= $conectando->conexion(); 
+
+    if (!$con) {
+        echo "maaaaal";
+    }
+
+    if (!isset($_SESSION['id_usuario'])) {
+        header("Location:login.php");
+    }
+
+    
+    ?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -96,6 +113,15 @@
                 </div>
             </li>
 
+            <?php 
+                $user_jerarquia = $_SESSION["rol"];
+
+                if ($user_jerarquia == 1) {
+                    # code...
+                
+
+            ?>
+
             <!-- Divider -->
             <hr class="sidebar-divider">
 
@@ -189,7 +215,11 @@
 
 
             
+        <?php 
+              }     # code...
+                
 
+            ?>
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 
@@ -386,7 +416,11 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline  small" style="color: aliceblue;">Brayan Maldonado</span>
+                                <span class="mr-2 d-none d-lg-inline  small" style="color: aliceblue;"><?php
+                                
+                                echo $_SESSION['nombre'] . " " . $_SESSION['apellidos'];
+                            
+                            ?></span>
                                 <img class="img-profile rounded-circle"
                                     src="src/img/undraw_profile.svg">
                             </a>
@@ -454,7 +488,7 @@
         <!-- End of Content Wrapper -->
 
     </div>
-    <!-- End of Page Wrapper -->
+    <!-- End of Page Wrapper --> 
 
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
@@ -475,7 +509,7 @@
                 <div class="modal-body">Seleccione "salir" para cerra su sesión actual.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
-                    <a class="btn btn-primary" href="login.html">Salir</a>
+                    <a class="btn btn-primary" href="./modelo/login/cerrar-sesion.php">Salir</a>
                 </div>
             </div>
         </div>
