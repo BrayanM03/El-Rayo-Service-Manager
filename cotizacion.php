@@ -37,6 +37,10 @@
 
     <!-- Custom styles for this template-->
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="src/vendor/datatables/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="src/vendor/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="src/vendor/bower_components/select2-bootstrap-theme/dist/select2-bootstrap.css">
 
 </head>
 
@@ -460,20 +464,30 @@
                      <div class="card" style="height: 80vh; width: auto;">
                             <h4 class="ml-auto mr-auto mt-5" style="color:#191919;">Nueva cotización</h4>
                             <div class="row mt-4">
-                            <div class="col">
-                            <form action=""  class="m-auto" style="border:1px solid black; width: 50%;">   
+                            <div class="col-md-12">
+                            <form action=""  class="m-auto" style="width: 50%;">   
                             <div class="form-group m-auto"  style="width: 100%;">
-                            <label for="busqueda" class="">Agregar llantas</label>
+                            <label for="busquedaLlantas" class="">Agregar llantas</label>
                             <select style="width:100%" class="form-control" id="busquedaLlantas" value="" name="search"></select> 
                             </div> 
-                            <div class="form-group mt-3"  style="width: 100%;">
+                            <div class="form-group mt-3 row"  style="width: 100%;">
+                            <div class="col-md-6">
+
                             <label for="busqueda" class="">Cliente</label>
-                            <label for="Cantidad" class="">Cliente</label>
-                            <select style="width:40%" class="form-control" id="clientes" value="" name="clientes"></select> 
-                            <select style="width:40%" class="form-control" id="clientes" value="" name="clientes"></select> 
+                            <select style="width:100%" class="form-control" id="clientes" value="" name="clientes"></select>
+                            </div>
+                            <div class="col-md-6">
+                            <label for="Cantidad" class="">Cantidad</label> 
+                            <input style="width:100%" type="number" class="form-control" id="cantidad" value="" name="cantidad">
+                            </div>
+                             
                             </div> 
 
                             </form>
+                            </div>
+
+                            <div class="col">
+                                <table id="pre-cotizacion" class="table table-bordered table-hover"></table>
                             </div>
                             </div>
 
@@ -538,14 +552,15 @@
     <script src="src/vendor/chart.js/Chart.min.js"></script>
 
     <!-- Page level custom scripts -->
-    <script src="src/js/demo/chart-area-demo.js"></script>
-    <script src="src/js/demo/chart-pie-demo.js"></script>
-
-    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+ 
+    <script src="src/vendor/datatables/jquery.dataTables.min.js"></script> 
+    <script src="src/vendor/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="src/vendor/datatables/dataTables.bootstrap4.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <!-- Cargamos nuestro componente de React. -->
-    <script src="src/components/inicio.js">
+    <script src="src/js/cotizacion.js">
  
     </script>
    

@@ -335,3 +335,67 @@ body.swal2-shown > [aria-hidden="true"] {
   .toast-container{
       z-index: 100;
   }
+
+
+  /*/Auto ayuda/*/
+
+  #help-addclient-span{
+    display:none;
+    
+  }
+
+  .targeta-ayuda{
+      transition: all;
+      animation: aparecer .5s;
+      width: 250px;
+      border-radius: 8px;
+      padding: 10px;
+      display: flex;
+      opacity: 1;
+      flex-direction: column;
+      justify-content: center;
+      overflow: hidden;
+      left: 31%;
+      z-index: 150;
+  }
+ 
+  @keyframes aparecer {
+      from{
+          opacity: 0;
+      }
+      to{
+          opacity: 1;
+      }
+  }
+
+  #map-id{
+    width: 100%;
+    height: 270px;
+}
+
+#map-edit{
+    width: 100%;
+    height: 270px;
+}
+
+.coordenadas-agregar {     
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+
+#label-coord{
+
+    width: 100%;
+    margin: 10px;
+}
+.coord{
+    font-size: 15px;
+    margin-bottom: 10px;
+}
+
+#marker{
+    width: 35px;
+}

@@ -34,7 +34,7 @@
     <link href="src/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
-
+        <link href='https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css' rel='stylesheet' />
 
     <!-- Custom styles for this template-->
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
@@ -502,6 +502,7 @@
 
                                                 <!--Fila 1-->
                                                 <form id="form-punto-venta">
+
                                                 <div class="fila1">
                                                         <label class="input-largo">
                                                             <span for="search">Busqueda</span>
@@ -526,16 +527,15 @@
                                                                 </table>
                                                         </div>
 
-                                                    
-                                                         <select id="clientes" name="clientes" class="form-select"> 
-                                                                <!--<option disabled selected value></option>
-                                                                <option value="0">Publico en general</option>
-                                                                <option value="1">Pedro</option>
-                                                                <option value="2">Juan</option>
-                                                                <option value="3">Pedro</option>-->
+                                                      
+                                                        <select id="clientes" name="clientes" class="form-control"> 
+                                                            
                                                          </select>
 
-                                                         <select id="metodos-pago" name="clientes" class="form-select"> 
+                                                                              
+                                                        
+
+                                                         <select id="metodos-pago" name="clientes" class="form-control"> 
                                                                 <option disabled selected value></option>
                                                                 <option value="0">Efectivo</option>
                                                                 <option value="1">Tarjeta</option>
@@ -581,8 +581,20 @@
                                                     </label>
 
                                                     <label style="border-color: transparent;">
-                                                        <div class="btn btn-info" id="agregar-producto" onclick="agregarInfo()" >Agregar</div>
+                                                    <div class="btn btn-info" onclick="agregarcliente();" id="btn-add-client" style="width: 50px;margin: 8px 10px;"><i style=" width: 20px;" class="fas fa-user-plus"></i></div>
+                                                              
+
+                                                    <div class="btn btn-info" id="agregar-producto" onclick="agregarInfo()" >Agregar</div>
                                                     </label>
+                                                    
+                                                    <div id="help-addclient-span" class="targeta-ayuda">
+                                                       <div class="card text-white border-info">
+                                                       <div class="card-header bg-info">Agregar un cliente</div>
+                                                       <div class="card-body bg-white text-info" >
+                                                       <p class="card-text">Con este boton pueden agregar un cliente a la base de datos</p>
+                                                       </div>
+                                                    </div> 
+                                                    </div> 
 
                                                 </div>
                                                  
@@ -713,6 +725,9 @@
     <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js"></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.min.js"></script>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.css" type="text/css">
 
     <!--<script src="src/js/agregar-info-tabla-venta.js"></script>-->
     <script src="src/js/agregar-product-temp.js"></script>

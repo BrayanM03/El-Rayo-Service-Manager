@@ -520,7 +520,7 @@ selects.forEach( select => {
             processResults: function (data) {
                 return {
                    results: data
-                };
+                }; 
               },
            
             cache: true
@@ -647,7 +647,222 @@ selects.forEach( select => {
 });
 
 
+//Helps
 
+$("#btn-add-client").hover(function() { 
+
+    $("#help-addclient-span").css("display", "block");
+    $("#help-addclient-span").css("position", "fixed");
+   // $("#help-addclient-span").css("overflow", "hidden");
+
+ },function(){
+    $("#help-addclient-span").css("display", "none");
+    })
+
+
+    function agregarcliente(){
+        Swal.fire({
+            title: "Agregar cliente",
+            showCancelButton: true,
+                cancelButtonText: 'Cerrar',
+                cancelButtonColor: '#00e059',
+                showConfirmButton: true,
+                confirmButtonText: 'Agregar', 
+                cancelButtonColor:'#ff764d',
+                focusConfirm: false,
+                iconColor : "#36b9cc",
+            html: '<form class="mt-4" id="agregar-cliente-form">'+
+            
+            '<div class="row">'+
     
+               '<div class="col-12">'+
+               '<div class="form-group">'+
+               '<label><b>Nombre:</b></label></br>'+
+               '<input class="form-control" type="text" id="nombre-cliente" name="nombre" placeholder="Nombre completo">'+
+                  '</div>'+
+                  '</div>'+
+               '</div>'+
+        
+            '<div class="row">'+
+                '<div class="col-6">'+
+                '<div class="form-group">'+
+                '<label><b>Credito</b></label>'+
+                '<select class="form-control" id="credito" name="credito">'+
+                '<option value="0">Sin credito </option>'+
+                '<option value="1">Con credito </option>'+
+                '</select>'+
+              
+        
+        
+           ' </div>'+
+            '</div>'+
+            
+            
+           '<div class="col-6">'+
+            '<div class="form-group">'+
+            '<label for="telefono"><b>Telefono:</b></label></br>'+
+            '<input type="number" class="form-control" id="telefono" name="telefono" placeholder="Telefono" autocomplete="off">'+
+            '</div>'+
+            '</div>'+
+        
+            
+                '<div class="col-7">'+
+                '<div class="form-group">'+
+                 
+                '<label><b>Correo:</b></label></br>'+
+                  '<input type="text" name="correo" id="correo" class="form-control" placeholder="Correo">'+
+            '</div>'+
+                '</div>'+
+        
+               
+        
+                '<div class="col-5">'+
+                '<div class="form-group">'+
+                '<label><b>RFC</b></label>'+
+                '<input type="text" class="form-control" id="rfc" name="rfc" placeholder="RFC">'+
+                '</div>'+
+                '</div>'+
+        
+               
+            '<div class="col-12">'+
+                '<div class="form-group">'+
+                    '<label><b>Dirección</b></label>'+
+                    '<textarea type="text" class="form-control" name="direccion" id="direccion" placeholder="Escribe la dirección del cliente">'+
+                    '</textarea>'+
+                '</div>'+
+            '</div>'+
+            '<div class="col-12">'+
+                '<div class="form-group">'+
+                    '<label><b>Mapear dirección</b></label>'+
+                    '<div id="map-id"></div>'+
+                    '<div class="alert alert-info coordenadas-agregar" id="label-coord"><strong>Cordenadas del marcador:</strong>'+
+                    ' </br>Latitud: <span id="lat-agregar"></span> </br>longitud: <span id="long-agregar"></span></div>'+
+                   // "<img id='marker' class='marker' src='./src/img/marker.svg' alt='insertar SVG con la etiqueta image'>"+
+                    
+                '</div>'+
+            '</div>'+
+        
+            '</div>'+
+        
+    
+    
+                '<div>'+
+        '</form>',
+    
+        }).then((result) =>{
+            //Agregando cliente
+            if(result.isConfirmed){
+    
+                nombre = $("#nombre-cliente").val();
+                credito = $("#credito").val();
+                telefono = $("#telefono").val();
+                correo = $("#correo").val()
+                rfc = $("#rfc").val();
+                direccion = $("#direccion").val();
+                latitud = $("#lat-agregar").text();
+                longitud = $("#long-agregar").text();
+    
+                
+                $.ajax({
+                    type: "POST",
+                    url: "./modelo/clientes/agregar-cliente.php",
+                    data: {
+                        "nombre": nombre,
+                        "credito": credito,
+                        "telefono": telefono,
+                        "correo": correo,
+                        "rfc": rfc,
+                        "direccion": direccion,
+                        "latitud": latitud,
+                        "longitud": longitud},
+                    
+                    success: function (response) {
+                       if (response == 1) {
+                        Swal.fire(
+                            "¡Registrado!",
+                            "Se agrego el cliente correctamente",
+                            "success"
+                            ).then((result) => { 
+                                if(result.isConfirmed){
+                                  
+                                }
+                               
+                                });
+                       }else if(response == 0){
+                        Swal.fire(
+                            "¡Error!",
+                            "No se puede agregar el cliente",
+                            "error"
+                            )
+                       }
+                    }
+                });
+    
+            }
+        });
+    
+    //Codigo que genera mapa
+    mapboxgl.accessToken = 'pk.eyJ1IjoiYnJheWFubTAzIiwiYSI6ImNrbnRlNTdyZzAxcXcycG84ZnRvNnJtdmoifQ.8k-_U2-Eq-CmSrH6jm8KEg';
+    
+    var mymap = new mapboxgl.Map({
+        container: 'map-id',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [-97.51302566191197,25.860074578125104],
+        zoom: 13
+        }); 
+    
+    var nav = new mapboxgl.NavigationControl();   
+    
+    mymap.addControl(
+      new MapboxGeocoder({
+          accessToken: mapboxgl.accessToken,
+          mapboxgl: mapboxgl,
+      })
+    );
+    
+    mymap.addControl(nav,"top-left");
+    mymap.addControl(new mapboxgl.FullscreenControl());
+    
+    mymap.addControl(new mapboxgl.GeolocateControl({
+        positionOptions: {
+            enableHighAccuracy: true
+        },
+        trackUserLocation: true
+    }));
+    
+    mymap.on('click', function (e) {
+    
+        $("#marker").remove();  
+            latitud = JSON.stringify(e.lngLat);
+            console.log(latitud);
+    
+            var el = document.createElement("img");
+            el.id = "marker";
+            el.src = "./src/img/marker.svg";
+    
+          
+            // make a marker for each feature and add it to the map
+            marker = new mapboxgl.Marker({
+                element: el,
+                draggable: true
+            }).setLngLat(e.lngLat).addTo(mymap);
+              /*.setPopup(
+                new mapboxgl.Popup({ offset: 25 }) // add popups
+                  .setHTML(
+                    '<h3>' +
+                      marker.properties.title +
+                      '</h3><p>' +
+                      marker.properties.description +
+                      '</p>'
+                  )
+              )*/
+    
+              $("#lat-agregar").text(e.lngLat.lat);
+              $("#long-agregar").text(e.lngLat.lng);
+              
+    
+    });
+        
+    };  
 
         
