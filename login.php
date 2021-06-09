@@ -47,7 +47,7 @@
                       </div>
         <div class="col-md-12 form-group">
          
-            <input value="Iniciar sesión" onclick="iniciarSesion();"  class="btn btn-block btn-login" placeholder="Enter your Password">
+            <input value="Iniciar sesión" type="submit" onclick="iniciarSesion();" id="iniciar-sesion" class="btn btn-block btn-login">
         </div>
     </div>
     <div class="row">
@@ -57,10 +57,10 @@
     </div>
 
 </form>
-    
 
     </div> 
 </div>
+
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="src/js/iniciar-sesion.js"></script>

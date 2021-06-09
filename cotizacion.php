@@ -454,19 +454,28 @@
 
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
+                <div class="container">
 
                      <!-- Contenido -->
-                     <div class="card" style="height: 80vh;">
-                            <h4 class="ml-auto mr-auto mt-5">Nueva cotización</h4>
+                     <div class="card" style="height: 80vh; width: auto;">
+                            <h4 class="ml-auto mr-auto mt-5" style="color:#191919;">Nueva cotización</h4>
+                            <div class="row mt-4">
+                            <div class="col">
+                            <form action=""  class="m-auto" style="border:1px solid black; width: 50%;">   
+                            <div class="form-group m-auto"  style="width: 100%;">
+                            <label for="busqueda" class="">Agregar llantas</label>
+                            <select style="width:100%" class="form-control" id="busquedaLlantas" value="" name="search"></select> 
+                            </div> 
+                            <div class="form-group mt-3"  style="width: 100%;">
+                            <label for="busqueda" class="">Cliente</label>
+                            <label for="Cantidad" class="">Cliente</label>
+                            <select style="width:40%" class="form-control" id="clientes" value="" name="clientes"></select> 
+                            <select style="width:40%" class="form-control" id="clientes" value="" name="clientes"></select> 
+                            </div> 
 
-                            <form action="">
-                                <div class="row mr-auto ml-auto">    
-                                <label for="busqueda" class="">Agregar llantas</label>
-                                <select style="width:30%" class="form-control " id="busquedaLlantas" value="" name="search"></select>
-                                </div>
                             </form>
-
+                            </div>
+                            </div>
 
                      </div>
                    

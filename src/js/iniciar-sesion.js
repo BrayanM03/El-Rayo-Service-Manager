@@ -1,6 +1,7 @@
 
     function iniciarSesion(){
-       
+
+        event.preventDefault();
 
         user = $("#user").val();
         pass = $("#password").val();
