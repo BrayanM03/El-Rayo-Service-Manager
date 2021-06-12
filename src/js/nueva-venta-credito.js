@@ -57,7 +57,6 @@ function realizarVentaCredito(){
                     '<option value="1">1 Semana</option>'+
                     '<option value="2">15 dias</option>'+
                     '<option value="3">1 mes</option>'+
-                    '<option value="4">1 año</option>'+
                     '<option value="5">Sin definir</option>'+
                     '</select>'+
                     '</div>'+

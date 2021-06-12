@@ -188,6 +188,9 @@ function agregarInfo(){
     }else if(valitationModel == false ){
       toastr.warning('Especifique un modelo', 'Alerta');
       
+    } else if(valitationPrice < 0 ){
+      toastr.warning('El precio no puede ser negativo', 'Alerta');
+      
     } else if(valitationPrice == 0 ){
       toastr.warning('Anote un precio', 'Alerta');
       

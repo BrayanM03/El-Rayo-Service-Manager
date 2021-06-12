@@ -55,27 +55,27 @@ $(document).ready(function() {
       
         var $container = $(
             "<div class='select2-result-repository clearfix' id='"+repo.id+"'>" +
-            "<div class='select2-contenedor-principal'>" +
-            "<div class='select2-result-repository__avatar'><img style='width: 50px; border-radius: 6px' src='./src/img/logos/" + repo.marca + ".jpg' /></div>" +
-              "<div class='select2-contenedor'>" +
-              "<div class='select2_modelo'></div>" +
-              "<div class='select2_description'></div>" +
-              "<div class='select2_statistics'>" +
-              "<div class='select2_marca'><i class='fa fa-star'></i> </div>" +
-                "<div class='select2_costo'><i class='fa fa-dollar-sign'></i> </div>" +
-                "<div class='select2_precio_venta'><i class='fa fa-tag'></i> </div>" +
+            "<div class='select2-contenedor-principal row' syle='display:flex;'>" +
+            "<div class='col-md-2 justify-content-center'><img class='' style='width: 50px; border-radius: 6px;' src='./src/img/logos/" + repo.marca + ".jpg' /></div>" +
+              "<div class='col-md-10 select2-contenedor'>" +
+              "<div class='select2_modelo'>Modelo "+ repo.modelo +"</div>" +
+              "<div class='select2_description'>" + repo.descripcion + "</div>" +
               "</div>" +
               "</div>" +
+              "<div class='select2_statistics' style='display:flex; border-top: 1px solid whitesmoke; padding-top:8px; justify-content:space-around; margin-top:5px;'>" +
+              "<div class='select2_marca'><i class='fa fa-star'></i> "+ repo.marca+"</div>" +
+                "<div class='select2_costo'><i class='fa fa-dollar-sign'></i> "+repo.costo+" (Costo) </div>" +
+                "<div class='select2_precio_venta'><i class='fa fa-tag'></i> "+ repo.precio +" (precio)</div>" + 
               "</div>" +
             "</div>" +
           "</div>"
         );
       
-        $container.find(".select2_modelo").text(repo.modelo);
+      /*  $container.find(".select2_modelo").text(repo.modelo);
         $container.find(".select2_description").text(repo.descripcion);
         $container.find(".select2_marca").append(repo.marca);
         $container.find(".select2_precio_venta").append(repo.precio);
-        $container.find(".select2_costo").append(repo.costo);
+        $container.find(".select2_costo").append(repo.costo);*/
 
         $(".select2-result-repository clearfix").on("click", function() { 
           alert("Llanta " + repo.marca);

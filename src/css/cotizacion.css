@@ -1,0 +1,9 @@
+.select2-result-repository{
+    border: 1px solid whitesmoke;
+    padding:10px;
+    border-radius:8px;
+    }
+
+.select2-result-repository:hover{
+    border: 1px solid whitesmoke;
+}
