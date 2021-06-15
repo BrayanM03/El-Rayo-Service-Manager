@@ -39,6 +39,7 @@
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
     <link rel="stylesheet" href="src/vendor/datatables/dataTables.bootstrap4.css">
     <link rel="stylesheet" href="src/vendor/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.css" integrity="sha512-oe8OpYjBaDWPt2VmSFR+qYOdnTjeV9QPLJUeqZyprDEQvQLJ9C5PCFclxwNuvb/GQgQngdCXzKSFltuHD3eCxA==" crossorigin="anonymous" />
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="src/vendor/bower_components/select2-bootstrap-theme/dist/select2-bootstrap.css">
     <link rel="stylesheet" href="src/css/cotizacion.css">
@@ -479,16 +480,19 @@
                             </div>
                             <div class="col-md-6">
                             <label for="Cantidad" class="">Cantidad</label> 
-                            <input style="width:100%" type="number" class="form-control" id="cantidad" value="" name="cantidad">
+                            <input style="width:100%; height:33px;" type="number" class="form-control" id="cantidad" value="" name="cantidad">
                             </div>
                              
                             </div> 
+                            <div class="form-group mt-3 row"  style="width: 100%;">
+                            <div class="btn btn-success m-auto" id="btn-agregar"onclick="agregarProducto();">Agregar</div>
+                            </div>
 
                             </form>
                             </div>
 
-                            <div class="col">
-                                <table id="pre-cotizacion" class="table table-bordered table-hover"></table>
+                            <div class="col-10 ml-auto mr-auto mt-5">
+                                <table id="pre-cotizacion" class="table table-success table-bordered table-hover"></table>
                             </div>
                             </div>
 
@@ -557,13 +561,12 @@
     <script src="src/vendor/datatables/jquery.dataTables.min.js"></script> 
     <script src="src/vendor/datatables-responsive/js/dataTables.responsive.min.js"></script>
     <script src="src/vendor/datatables/dataTables.bootstrap4.js"></script>
-    
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous"></script>
 
     <!-- Cargamos nuestro componente de React. -->
-    <script src="src/js/cotizacion.js">
- 
-    </script>
+    <script src="src/js/cotizacion.js"></script>
+    <script src="src/js/agregar-product-cotiza.js"></script>
    
 </body>
 

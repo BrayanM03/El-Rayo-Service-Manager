@@ -54,7 +54,8 @@ $(document).ready(function() {
       }
       
         var $container = $(
-            "<div class='select2-result-repository clearfix' id='"+repo.id+"'>" +
+            "<div class='select2-result-repository clearfix' desc='"+repo.descripcion+" marca='"+repo.marca +
+            " id='"+repo.marca+" costo='"+repo.costo +" id='tyre' precio='"+repo.precio+" idcode='"+repo.id+"'>" +
             "<div class='select2-contenedor-principal row' syle='display:flex;'>" +
             "<div class='col-md-2 justify-content-center'><img class='' style='width: 50px; border-radius: 6px;' src='./src/img/logos/" + repo.marca + ".jpg' /></div>" +
               "<div class='col-md-10 select2-contenedor'>" +
@@ -75,11 +76,7 @@ $(document).ready(function() {
         $container.find(".select2_description").text(repo.descripcion);
         $container.find(".select2_marca").append(repo.marca);
         $container.find(".select2_precio_venta").append(repo.precio);
-        $container.find(".select2_costo").append(repo.costo);*/
-
-        $(".select2-result-repository clearfix").on("click", function() { 
-          alert("Llanta " + repo.marca);
-         })  
+        $container.find(".select2_costo").append(repo.costo);*/ 
         //
       
         return $container;
@@ -87,10 +84,15 @@ $(document).ready(function() {
 
       function formatRepoSelection (repo) {
         //A partir de aqui puedes agregar las llantas Brayan
-        ruta = "./src/img/logos/" + repo.marca + ".jpg";
+       // ruta = "./src/img/logos/" + repo.marca + ".jpg";
         
-        $("#select2-busquedaLlantas-container").attr("codigo", repo.id);
-        $("#ancho-agregado").text(repo.ancho);
+        $("#btn-agregar").attr("idcode", repo.id);
+        $("#btn-agregar").attr("descripcion", repo.descripcion);
+        $("#btn-agregar").attr("modelo", repo.modelo);
+        $("#btn-agregar").attr("marca", repo.marca);
+        $("#btn-agregar").attr("costo", repo.costo);
+        $("#btn-agregar").attr("precio", repo.precio);
+       /* $("#ancho-agregado").text(repo.ancho);
         $("#alto-agregado").text(repo.alto);
         $("#rin-agregado").text(repo.rin);
         $("#modelo-agregado").text(repo.modelo);
@@ -99,8 +101,8 @@ $(document).ready(function() {
 
         $("#costo-agregado").text(repo.costo);
         $("#precio-agregado").text(repo.precio);
-        $("#mayoreo-agregado").text(repo.mayoreo);
-        $("#mayoreo-agregado").fadeIn(400)
+        $("#mayoreo-agregado").text(repo.mayoreo);*/
+        //$("#mayoreo-agregado").fadeIn(400)
        
 
         return repo.text || repo.descripcion;
