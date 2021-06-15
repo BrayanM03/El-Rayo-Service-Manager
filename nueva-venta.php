@@ -584,7 +584,7 @@
                                                     <div class="btn btn-info" onclick="agregarcliente();" id="btn-add-client" style="width: 50px;margin: 8px 10px;"><i style=" width: 20px;" class="fas fa-user-plus"></i></div>
                                                               
 
-                                                    <div class="btn btn-info" id="agregar-producto" onclick="agregarInfo()" >Agregar</div>
+                                                    <div class="btn btn-info" rol="<?php echo $_SESSION['rol']; ?>" sucursal="<?php echo $_SESSION['sucursal']; ?>"  id="agregar-producto" onclick="agregarInfo()" >Agregar</div>
                                                     </label>
                                                     
                                                     <div id="help-addclient-span" class="targeta-ayuda">

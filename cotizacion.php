@@ -492,7 +492,7 @@
                             </div>
 
                             <div class="col-10 ml-auto mr-auto mt-5">
-                                <table id="pre-cotizacion" class="table table-success table-bordered table-hover"></table>
+                                <table id="pre-cotizacion" class="table table-success table-bordered table-hover round_table"></table>
                             </div>
                             </div>
 

@@ -22,19 +22,32 @@ table = $('#ventas').DataTable({
     { title: "Cliente",        data: "cliente"        },
     { title: "Cantidad",       data: "cantidad"       },
     { title: "Total",          data: "total"          },
-    { title: "Estatus",        data: "estatus"        },
+    { title: "Estatus",        data: "estatus"        }, 
     { title: "Accion",
       data: null,
       className: "celda-acciones",
       render: function (row, data) {
+        rol = $("#titulo-hv").attr("rol");
+        console.log(rol);
         console.log(row.estatus);
-        if (row.estatus == "Abierta") {
-            return '<div style="display: flex"><button onclick="traerPdfCredito(' +row.folio+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br><button type="button" onclick="borrarVenta('+ row.folio +');" class="buttonBorrar btn btn-warning"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
-            
+       if(rol == "1"){
+            if (row.estatus == "Abierta") {
+                return '<div style="display: flex"><button onclick="traerPdfCredito(' +row.folio+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br><button type="button" onclick="borrarVenta('+ row.folio +');" class="buttonBorrar btn btn-warning"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
+                
+            }else{
+                return '<div style="display: flex"><button onclick="traerPdf(' +row.folio+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br><button type="button" onclick="borrarVenta('+ row.folio +');" class="buttonBorrar btn btn-warning"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
+         
+            }
         }else{
-            return '<div style="display: flex"><button onclick="traerPdf(' +row.folio+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br><button type="button" onclick="borrarVenta('+ row.folio +');" class="buttonBorrar btn btn-warning"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
-     
+            if (row.estatus == "Abierta") {
+                return '<div style="display: flex"><button onclick="traerPdfCredito(' +row.folio+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>';
+                
+            }else{
+                return '<div style="display: flex"><button onclick="traerPdf(' +row.folio+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>';
+         
+            }
         }
+        
          },
     },
   ],

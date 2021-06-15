@@ -337,7 +337,7 @@ document.addEventListener("DOMContentLoaded", function() {
  
       notificarCreditosVencidos();
       NotificationManager();
-      setInterval(NotificationManager,3000);
+      setInterval(NotificationManager,1000);
 
  })
 

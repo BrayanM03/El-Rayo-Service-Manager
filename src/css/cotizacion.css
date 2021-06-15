@@ -7,3 +7,29 @@
 .select2-result-repository:hover{
     border: 1px solid whitesmoke;
 }
+
+#pre-cotizacion tbody tr{
+    background-color: whitesmoke;
+}
+
+#pre-cotizacion {
+    border-radius: 10px;
+}
+
+.round_table {                   
+    border-collapse: separate;
+    border-spacing: 10;
+    border: 1px solid green;
+    border-radius: 15px;
+    -moz-border-radius: 20px;
+    padding: 2px;
+    -webkit-border-radius: 5px;
+}
+
+table {                   
+ border-collapse: separate;
+ border-spacing: 10;
+       
+ padding: 2px;
+}
+    

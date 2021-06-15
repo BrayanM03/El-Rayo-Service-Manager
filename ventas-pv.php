@@ -490,7 +490,7 @@
                      
                         <div class="contenedor-tit">
                         <img class="tyre-decoration-left" src="./src/img/tyre.svg" alt="insertar SVG con la etiqueta image"> 
-                        <div class="titulo-inventario">
+                        <div class="titulo-inventario" id="titulo-hv" rol="<?php echo $_SESSION["rol"] ?>">
                          <h5 style="margin: 10px 0px;">Ventas</h5>
                          <p style="color: gray;">Reporte de ventas totales</p>
                         </div>

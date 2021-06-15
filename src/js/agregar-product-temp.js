@@ -149,14 +149,26 @@ function agregarInfo(){
     valitationPrice = $("#precio").val();
     sucursalVal = $("#sucursal").val();
     cliente = $("#select2-clientes-container").attr("id-cliente");
-    
+    sucursalSession= $("#agregar-producto").attr("sucursal"); 
+    rolSession = $("#agregar-producto").attr("rol");
 
-
+    if(sucursalVal == "0"){
+      validarSuc = "Pedro";
+    }else if(sucursalVal == "1"){
+      validarSuc ="Sendero";
+    }else{
+       alert("error");
+    }
     stockLlanta0 = $("#agregar-producto").attr("stock");
     stockLlanta = parseInt(stockLlanta0);
+    console.log(sucursalVal);
+
+    
    
     //console.log(valitationQuanty);
-    if (valitationQuanty == false ) {
+    if(sucursalSession !== validarSuc && rolSession !== "1"){
+      toastr.warning('No puedes vender una llanta que no sea de tu sucursal', 'warning' );
+    }else if (valitationQuanty == false ) {
 
       toastr.warning('Necesita especificar una cantidad', 'Alerta' );
 

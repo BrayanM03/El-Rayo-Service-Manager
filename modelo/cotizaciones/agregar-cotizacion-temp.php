@@ -65,7 +65,7 @@ if(isset($_POST)){
         
     $match = "SELECT COUNT(*) totales FROM cotizacion_temp$iduser WHERE codigo = ?";
     $stmt = $con->prepare($match);
-    $stmt->bind_param('s', $id);
+    $stmt->bind_param('i', $id);
     $stmt->execute();
     $stmt->bind_result($iguales);
     $stmt->fetch();
@@ -75,17 +75,17 @@ if(isset($_POST)){
 
                 $obtenerCant = "SELECT cantidad, importe FROM cotizacion_temp$iduser WHERE codigo = ?";
                 $stmt = $con->prepare($obtenerCant);
-                $stmt->bind_param('s', $id);
+                $stmt->bind_param('i', $id);
                 $stmt->execute();
                 $stmt->bind_result($cantidadActual, $importeActual);
                 $stmt->fetch();
                 $stmt->close();
 
-              
+                $cantidad_llantas_totales = $cantidadActual + $cantidad;
                 $importeTotal = doubleval($importe) + doubleval($importeActual);
 
                 $updateQuanty = $con->prepare("UPDATE cotizacion_temp$iduser SET cantidad = ?, importe = ? WHERE codigo = ?");
-                $updateQuanty->bind_param('ids', $total, $importeTotal, $id);
+                $updateQuanty->bind_param('idi', $cantidad_llantas_totales, $importeTotal, $id);
                 $updateQuanty->execute();
                 $updateQuanty->close();
   

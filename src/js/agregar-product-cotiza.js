@@ -40,7 +40,7 @@ table = $('#pre-cotizacion').DataTable({
 
   paging: false,
   searching: false,
-  //scrollY: "auto",
+  scrollY: "264px",
   info: false,
   responsive: true,
   order: [0, "desc"],
@@ -62,12 +62,15 @@ function agregarProducto() {
     tyre_precio = $("#btn-agregar").attr("precio");
     tyre_amount = $("#cantidad").val();
     tyre_import = parseFloat(tyre_precio) * tyre_amount;
+    tyre_description = $("#btn-agregar").attr("descripcion");
 
     if(tyre_amount <= 0 ){
         toastr.warning('La cantidad no puede estar vacia, ser 0 o negativo', 'Alerta');
+    }else if(tyre_description == null){
+
+      toastr.warning('Selecciona una llanta', 'Alerta');
     }else{
         tyre_id = $("#btn-agregar").attr("idcode");
-        tyre_description = $("#btn-agregar").attr("descripcion");
         tyre_marca = $("#btn-agregar").attr("marca");
 
         $.ajax({
@@ -85,3 +88,9 @@ function agregarProducto() {
     }
 
  }
+
+function reload() {
+  table.ajax.reload();
+  }
+ 
+ setInterval( reload,3000);
