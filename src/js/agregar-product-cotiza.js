@@ -1,5 +1,7 @@
 table = $('#pre-cotizacion').DataTable({
-    
+  destroy: true,
+  serverSide: true,
+  processing: false,
     destroy: true,
     serverSide: true,
     processing: false,
@@ -33,7 +35,9 @@ table = $('#pre-cotizacion').DataTable({
       className: "celda-acciones",
       render: function (row, data) {
     
-        return '<span class="hidden-xs"></span></button><br><button type="button" onclick="borrarProductoTmp('+ row.id +"," + row.importe +');" class="borrar-articulo btn btn-danger"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
+        return '<div style="display:flex; justify-content: center; align-items:center;">'+
+        '<span class="hidden-xs"></span></button><br><button type="button" onclick="borrarProductoTmp('+ row.id +"," + row.importe +');" class="borrar-articulo btn btn-danger"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>'+
+        '</div>';
       },
     },
   ],
@@ -93,4 +97,25 @@ function reload() {
   table.ajax.reload();
   }
  
- setInterval( reload,3000);
+ setInterval( reload,1000);
+
+
+ function borrarProductoTmp(id){
+  
+
+  $.ajax({
+    type: "POST",
+    url: "./modelo/cotizaciones/borrar-cotiza-temp.php",
+    data: {"id":id},
+    success: function (response) {
+      if(response == 1){
+        toastr.success('Producto borrado', 'Listo');
+        table.ajax.reload();
+      }else{
+        toastr.error('El producto no pudo ser borrado', 'Error');
+
+      }
+      }
+      
+  });
+ }

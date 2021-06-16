@@ -41,7 +41,7 @@ if(isset($_POST)){
         break;
       
       case 1:
-      $metodo_pago = "Targeta";
+      $metodo_pago = "Tarjeta";
       break;
       
       case 2:
