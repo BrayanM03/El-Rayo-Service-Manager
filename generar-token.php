@@ -144,7 +144,7 @@
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTyres"
                     aria-expanded="true" aria-controls="collapsePages">
                     <i class="fas fa-fw fa-folder"></i>
@@ -205,7 +205,7 @@
             </li>
 
 
-            <li class="nav-item">
+           <!--  <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProvider"
                     aria-expanded="true" aria-controls="collapsePages">
                     <i class="fas fa-fw fa-user-cog"></i>
@@ -227,29 +227,17 @@
                     
                     </div>
                 </div>
-            </li>
+            </li> -->
 
 
 
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link" href="generar-token.php">
                     <i class="fas fa-fw fa-lock"></i>
                     <span>Generar token</span></a>
             </li>
             
-            <!-- Nav Item - Charts -->
-            <li class="nav-item">
-                <a class="nav-link" href="charts.html">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Charts</span></a>
-            </li>
-
-            <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Tables</span></a>
-            </li>
+        
 
             <?php 
                }else{}

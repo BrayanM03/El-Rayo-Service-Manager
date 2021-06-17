@@ -146,7 +146,7 @@
                     <i class="fas fa-fw fa-folder"></i>
                     <span>Mis llantas</span>
                 </a>
-                <div id="collapseTyres" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                <div id="collapseTyres" class="collapse show" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Sucursales:</h6>
                         <a class="collapse-item" href="inventario-pedro.php" style="display:flex; flex-direction: row; justify-content:start;">
@@ -201,7 +201,7 @@
             </li>
 
 
-            <li class="nav-item">
+         <!--    <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProvider"
                     aria-expanded="true" aria-controls="collapsePages">
                     <i class="fas fa-fw fa-user-cog"></i>
@@ -223,7 +223,7 @@
                     
                     </div>
                 </div>
-            </li>
+            </li> -->
 
 
             <!-- Nav Item - Charts -->
@@ -233,12 +233,7 @@
                     <span>Generar token</span></a>
             </li>
 
-            <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Tables</span></a>
-            </li>
+         
 
             <?php 
               }else{}  

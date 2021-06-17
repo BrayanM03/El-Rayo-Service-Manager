@@ -130,17 +130,26 @@
                 $user_jerarquia = $_SESSION["rol"];
 
                 if ($user_jerarquia == 1) {
+                   $name = "Inventario";
+                }else if($user_jerarquia ==2){
+                 $name = "Clientes y creditos";
+                }
+
+            ?>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+            <div class="sidebar-heading">
+            <?php echo $name   ?>
+            </div>
+            <?php 
+
+                if ($user_jerarquia == 1) {
                     # code...
                 
 
             ?>
-            <!-- Divider -->
-            <hr class="sidebar-divider">
 
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Inventario
-            </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
@@ -179,6 +188,12 @@
             </li>
 
 
+            <?php }
+            
+            if ($user_jerarquia == 1 || $user_jerarquia == 2) {
+            ?>
+
+
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseClients"
                     aria-expanded="true" aria-controls="collapsePages">
@@ -198,13 +213,13 @@
                             <img src="src/img/pago.svg" width="18px" /> 
                             <span style="margin-left:12px;"> Creditos vencidos</span></a> 
                         </a>
-                    
+                     
                     </div>
                 </div>
             </li>
 
 
-            <li class="nav-item">
+          <!---  <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProvider"
                     aria-expanded="true" aria-controls="collapsePages">
                     <i class="fas fa-fw fa-user-cog"></i>
@@ -226,9 +241,12 @@
                     
                     </div>
                 </div>
-            </li>
+            </li>  -->
 
-
+            <?php }
+            
+            if ($user_jerarquia == 1 ) {
+            ?>
             <!-- Nav Item - Charts -->
             <li class="nav-item">
                 <a class="nav-link" href="generar-token.php">
@@ -236,13 +254,7 @@
                     <span>Generar token</span></a>
             </li>
 
-            <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Tables</span></a>
-            </li>
-
+           
             <?php 
               }     # code...
                 

@@ -106,13 +106,13 @@
             </li>
 
             <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+            <li class="nav-item active">
+                <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                     aria-expanded="true" aria-controls="collapseUtilities">
                     <i class="fas fa-fw fa-history"></i>
                     <span>Historial</span>
                 </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+                <div id="collapseUtilities" class="collapse show" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Ordenes de:</h6>
@@ -128,25 +128,33 @@
                 </div>
             </li>
 
-            <!-- Divider -->
             <?php 
                 $user_jerarquia = $_SESSION["rol"];
 
-                if ($user_jerarquia == 1 || $user_jerarquia == 2) {
+                if ($user_jerarquia == 1) {
+                   $name = "Inventario";
+                }else if($user_jerarquia ==2){
+                 $name = "Clientes y creditos";
+                }
+
+            ?>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+            <div class="sidebar-heading">
+            <?php echo $name   ?>
+            </div>
+            <?php 
+
+                if ($user_jerarquia == 1) {
                     # code...
                 
 
             ?>
 
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Inventario
-            </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTyres"
                     aria-expanded="true" aria-controls="collapsePages">
                     <i class="fas fa-fw fa-folder"></i>
@@ -181,6 +189,12 @@
                 </div>
             </li>
 
+            
+            <?php }
+            
+            if ($user_jerarquia == 1 || $user_jerarquia == 2) {
+            ?>
+
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseClients"
@@ -207,7 +221,7 @@
             </li>
 
 
-            <li class="nav-item">
+          <!--   <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProvider"
                     aria-expanded="true" aria-controls="collapsePages">
                     <i class="fas fa-fw fa-user-cog"></i>
@@ -229,9 +243,12 @@
                     
                     </div>
                 </div>
-            </li>
+            </li> -->
 
-
+            <?php }
+            
+            if ($user_jerarquia == 1 ) {
+            ?>
             <!-- Nav Item - Charts -->
             <li class="nav-item">
                 <a class="nav-link" href="generar-token.php">
@@ -239,17 +256,12 @@
                     <span>Generar token</span></a>
             </li>
 
-            <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Tables</span></a>
-            </li>
 
-            <?php }else{ ?>
-            
-                <?php }  ?>
+            <?php 
+              }     # code...
+                
 
+            ?>
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 

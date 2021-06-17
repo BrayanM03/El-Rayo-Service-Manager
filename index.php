@@ -9,9 +9,9 @@ if (!isset($_SESSION['id_usuario'])) {
     header("Location:login.php");
 }
 
-if ($_SESSION['rol'] == 3) {
+if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
     header("Location:nueva-venta.php");
-}else{
+}
 
 
 ?>
@@ -114,36 +114,11 @@ if ($_SESSION['rol'] == 3) {
                     </div>
                 </div>
             </li>
-
-            <?php 
-                $user_jerarquia = $_SESSION["rol"];
-
-                if ($user_jerarquia == 1) {
-                   $name = "Inventario";
-                }else if($user_jerarquia ==2){
-                 $name = "Clientes y creditos";
-                }
-
-            ?>
-
-            <!-- Divider -->
+    
             <hr class="sidebar-divider">
             <div class="sidebar-heading">
-            <?php echo $name   ?>
+           Inventario
             </div>
-            <?php 
-
-                if ($user_jerarquia == 1) {
-                    # code...
-                
-
-            ?>
-
-           
-
-            <!-- Inventario -->
-            
-
             <!-- Inventario - Pages Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTyres"
@@ -180,14 +155,6 @@ if ($_SESSION['rol'] == 3) {
                 </div>
             </li>
 
-            <?php 
-                }
-
-                if ($user_jerarquia == 1 || $user_jerarquia == 2) {
-                    # code...
-                
-
-            ?>
             <!-- Clientes -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseClients"
@@ -215,7 +182,7 @@ if ($_SESSION['rol'] == 3) {
 
 
             <!-- Proveedores -->
-            <li class="nav-item">
+            <!--<li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProvider"
                     aria-expanded="true" aria-controls="collapsePages">
                     <i class="fas fa-fw fa-user-cog"></i>
@@ -237,24 +204,20 @@ if ($_SESSION['rol'] == 3) {
                     
                     </div>
                 </div>
-            </li>
-            <?php 
-                }
-
-            ?>
-
-            <!-- Token -->
-            <li class="nav-item">
+            </li>-->
+         
+ <!-- Generar tokens -->
+ <li class="nav-item">
                 <a class="nav-link" href="generar-token.php">
                     <i class="fas fa-fw fa-lock"></i>
                     <span>Generar token</span></a>
             </li>
-
-            <!-- Nav Item - Tables -->
     
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
+
+            
 
             <!-- Sidebar Toggler (Sidebar) -->
             <div class="text-center d-none d-md-inline">
@@ -468,7 +431,7 @@ if ($_SESSION['rol'] == 3) {
 
                      <!-- Page Heading -->
                      <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h3 class="h3 mb-0 text-gray-800">Bievenido al panel <?php echo $_SESSION['nombre'] ?></h3>
+                        <h3 class="h3 mb-0 text-gray-800">Bievenido al panel <?php echo $_SESSION['nombre']; ?></h3>
                         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                                 class="fas fa-download fa-sm text-white-50"></i> Generar reporte</a>
                     </div>
@@ -709,5 +672,3 @@ if ($_SESSION['rol'] == 3) {
 </body>
 
 </html>
-
-<?php }?>
