@@ -83,10 +83,21 @@ $(document).ready(function() {
       ],
       paging: true,
       searching: true,
-      scrollY: "350px",
+      scrollY: "300px",
       info: true,
+      dom: 'Blfrtip',
       responsive: true,
-      order: [9, "desc"]
+      order: [9, "desc"],
+      lengthChange: false,
+      buttons: [
+        'copy', 'csv', 'excel', 'pdf', 'print'
+    ],
+
+      language: {
+            
+        emptyTable: "No hay registros",
+        infoEmpty: "Ups!, no hay registros aun en esta categoria."
+      }
       
     });
 

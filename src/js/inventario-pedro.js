@@ -34,8 +34,13 @@ function MostrarInventarioPedro() {
       paging: true,
       searching: true,
       scrollY: "300px",
-      info: true,
+      //info: true,
+      dom: 'Blfrtip',
       responsive: true,
+      lengthChange: false,
+      buttons: [
+        'copy', 'csv', 'excel', 'pdf', 'print'
+    ],
       
       language: {
             
@@ -45,7 +50,9 @@ function MostrarInventarioPedro() {
       
     });// fin de la tabla
 
-
+    table.buttons()
+    .container()
+    .appendTo("#inventario-pedro_wrapper .col-md-6:eq(0)");
     //table.appendTo("#inventario-pedro_wrapper .col-md-6:eq(0)");
 
      //Enumerar las filas "index column"

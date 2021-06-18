@@ -31,15 +31,30 @@ function MostrarInventarioPedro() {
           },
         },
       ],
-      width: "auto",
+     
       paging: true,
       searching: true,
       scrollY: "300px",
-      info: true,
+      //info: true,
+      dom: 'Blfrtip',
       responsive: true,
-    
+      lengthChange: false,
+      buttons: [
+        'copy', 'csv', 'excel', 'pdf', 'print'
+    ],
+
+    language: {
+            
+      emptyTable: "No hay registros",
+      infoEmpty: "Ups!, no hay registros aun en esta categoria."
+    }
       
     });
+
+    //bnotoners de imporfacuion
+    table.buttons()
+    .container()
+    .appendTo("#inventario-pedro_wrapper .col-md-6:eq(0)");
 
      //Enumerar las filas "index column"
     table.on( 'order.dt search.dt', function () {
