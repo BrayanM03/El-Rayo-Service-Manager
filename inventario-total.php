@@ -100,7 +100,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="cotizacion.php">
                     <i class="fas fa-fw fa-clipboard"></i>
                     <span>Nueva cotización</span>
                 </a>
@@ -158,7 +158,7 @@
                         <a class="collapse-item" href="inventario-pedro.php" style="display:flex; flex-direction: row; justify-content:start;">
                         <i class="fas fa-fw fa-store"></i> 
                             <span style="margin-left:12px;"> Pedro Cardenas</span> </a>
-                        <a class="collapse-item" href="register.html" style="display:flex; flex-direction: row; justify-content:start;">
+                        <a class="collapse-item" href="inventario-sendero.php" style="display:flex; flex-direction: row; justify-content:start;">
                         <i class="fas fa-fw fa-store"></i>
                             <span style="margin-left:12px;"> Sendero</span> </a>
     

@@ -101,7 +101,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="cotizacion.php">
                     <i class="fas fa-fw fa-clipboard"></i>
                     <span>Nueva cotización</span>
                 </a>

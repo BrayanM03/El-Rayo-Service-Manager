@@ -575,7 +575,7 @@
 
                                                     <label class="no-editable-corto">
                                                          <span for="sucursal" >Sucursal</span>
-                                                         <select style="cursor: not-allowed; color:#696969;" id="sucursal" name="sucursal" class="select-group form-select" disabled> 
+                                                         <select style="color:#696969;" id="sucursal" name="sucursal" class="select-group form-select"> 
                                                                 <option disabled selected value></option>
                                                                 <option value="0">Pedro Cardenas</option>
                                                                 <option value="1">Sendero</option>

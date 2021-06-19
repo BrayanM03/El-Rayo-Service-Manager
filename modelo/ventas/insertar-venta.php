@@ -19,11 +19,21 @@ if(isset($_POST)){
     $fecha = date("Y-m-d"); 
   }else{
     $fecha = $_POST['fecha'];
+    
   }
+
+  if ($_POST["sucursal"] ==0) {
+    $sucursal = "Pedro";
+
+  }else if($_POST["sucursal"] == 1){
+    $sucursal = "Sendero";
+  }else{
     $sucursal = $_SESSION['sucursal'];
-    $idUser = $_SESSION['id_usuario'];
-    $cliente = $_POST["cliente"];
-    $total = $_POST["total"];
+  }
+   
+    $idUser =   $_SESSION['id_usuario'];
+    $cliente =  $_POST["cliente"];
+    $total =    $_POST["total"];
     
 
     if(isset($_POST["plazo"])){

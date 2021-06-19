@@ -32,10 +32,22 @@ table = $('#ventas').DataTable({
         console.log(row.estatus);
        if(rol == "1"){
             if (row.estatus == "Abierta") {
-                return '<div style="display: flex"><button onclick="traerPdfCredito(' +row.folio+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br><button type="button" onclick="borrarVenta('+ row.folio +');" class="buttonBorrar btn btn-warning"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
+                return '<div style="display: flex; width: auto;">'+
+                '<button onclick="traerPdfCredito(' +row.folio+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px">'+
+                '<span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>'+
+                '<button type="button" onclick="cancelarVenta('+ row.folio +');" class="buttonBorrar btn btn-primary">'+
+                '<span class="fa fa-trash"></span><span class="hidden-xs"></span></button>'+
+                '<button type="button" onclick="borrarVenta('+ row.folio +');" class="buttonBorrar btn btn-warning" style="margin-left: 8px">'+
+                '<span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
                 
             }else{
-                return '<div style="display: flex"><button onclick="traerPdf(' +row.folio+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br><button type="button" onclick="borrarVenta('+ row.folio +');" class="buttonBorrar btn btn-warning"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
+                return '<div style="display: flex; width: auto;">'+
+                '<button onclick="traerPdf(' +row.folio+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px">'+
+                '<span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>'+
+                '<button type="button" onclick="cancelarVenta('+ row.folio +');" class="buttonBorrar btn btn-primary">'+
+                '<span class="fa fa-ban"></span><span class="hidden-xs"></span></button>'+
+                '<button type="button" onclick="borrarVenta('+ row.folio +');" class="buttonBorrar btn btn-warning" style="margin-left: 8px">'+
+                '<span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';;
          
             }
         }else{
@@ -146,5 +158,18 @@ function borrarVenta(id) {
       window.open('./modelo/creditos/generar-reporte-credito.php?id='+ folio, '_blank');
   }
 
+  function cancelarVenta(id) { 
+    
+    $.ajax({
+        type: "POST",
+        url: "./modelo/ventas/cancelar-venta.php",
+        data: {"id_venta": id},
+        dataType: "dataType",
+        success: function (response) {
+            
+        }
+    });
+    
+   }
 
  

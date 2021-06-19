@@ -88,7 +88,15 @@
     margin-bottom: 2vh;
     transition: 0.15s;
     margin-left: 1vh;
+    /* cursor: pointer; */
+}
+
+.cursor-not-allowed{
     cursor: not-allowed;
+}
+
+.cursor-pointer{
+    cursor: pointer;
 }
 
 .fila3{

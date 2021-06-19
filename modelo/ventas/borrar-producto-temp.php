@@ -29,6 +29,7 @@ if ($consulta) {
 
 if(isset($_POST["reinicio"])){
     $consulta = mysqli_query($con, "DELETE FROM productos_temp$iduser");
+    print_r($_SESSION["rol"]);
 }
 
 ?>

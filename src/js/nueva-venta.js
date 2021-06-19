@@ -4,7 +4,19 @@ $.ajax({
     data: {"reinicio":"reinicio"},
    
     success: function (response) {
-        
+        var validarSuc = document.getElementById("sucursal");
+        validarSuc.setAttribute("rol", response);
+        var atributoRol =validarSuc.getAttribute("rol");
+        if(atributoRol == 1){
+            validarSuc.removeAttribute("disabled");
+            validarSuc.setAttribute("enabled", "");
+            $("#sucursal").addClass("cursor-pointer");
+        }else{
+            validarSuc.removeAttribute("disabled");
+            validarSuc.setAttribute("disabled", "");
+            $("#sucursal").addClass("cursor-not-allowed");
+            
+        }
     }
 });
 
@@ -60,6 +72,9 @@ selects.forEach( select => {
         
         
 });
+
+
+   
 
 
   
@@ -401,7 +416,7 @@ selects.forEach( select => {
             fecha = $("#fecha").val(); 
             cliente = $("#select2-clientes-container").attr("id-cliente");
             metodo_pago = $("#metodos-pago").val();  
-            
+            tienda = $("#sucursal").val();
 
             //Enviando data
 
@@ -414,6 +429,7 @@ selects.forEach( select => {
                        'cliente': cliente,
                        'metodo_pago': metodo_pago,
                        'fecha': fecha,
+                       'sucursal': tienda,
                        'total': total,
                        'tipo': 'vt-normal'},
                 dataType: "JSON",

@@ -6,7 +6,7 @@ include '../conexion.php';
 $con = $conectando->conexion(); 
 global $con;
 
-$folio = "RAY" . $_GET["id"];
+$folio = "RAY" . $_GET["id"]; 
 $idVenta = $_GET["id"];
 global $folio;
 
