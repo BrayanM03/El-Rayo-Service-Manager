@@ -1,7 +1,7 @@
 $.ajax({
     type: "POST",
     url: "./modelo/ventas/borrar-producto-temp.php",
-    data: {"reinicio":"reinicio"},
+    data: {"reinicio":"reinicio"}, 
    
     success: function (response) {
         var validarSuc = document.getElementById("sucursal");

@@ -516,10 +516,15 @@
                                                 <form id="form-punto-venta">
 
                                                 <div class="fila1">
-                                                        <label class="input-largo">
+                                                        <!-- <label class="input-largo">
                                                             <span for="search">Busqueda</span>
-                                                            <input type="text" id="search" name="search" class="input-group">
-                                                        </label> 
+                                                            <input type="text" id="search" name="search" class="input-group"> -->
+                                                           <!--  
+                                                        </label>  -->
+                                                        <select id="search" style="margin-bottom: 15px;" name="clientes" class="form-control">  -->
+                                                            
+                                                            </select>
+
                                                         <div class="contenedor-tabla oculto">
                                                                 <table class="table" id="table-llantas-mostradas">
                                                                 <thead class="table-info">
@@ -570,7 +575,7 @@
                                                     
                                                     <label class="no-editable-corto">
                                                         <span for="modelo">Modelo</span>
-                                                        <input type="text" style="cursor: not-allowed; color:#696969;" id="modelo" name="modelo" class="input-group" disabled>
+                                                        <input modelo="" type="text" style="cursor: not-allowed; color:#696969;" id="modelo" name="modelo" class="input-group" disabled>
                                                     </label>
 
                                                     <label class="no-editable-corto">
@@ -732,7 +737,6 @@
     <script src="src/vendor/datatables/dataTables.bootstrap4.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous"></script>
     
-    <script src="src/js/nueva-venta.js"></script>
     <script src="src/vendor/datatables/defaults.js"></script>
     <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
@@ -742,6 +746,7 @@
 <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.css" type="text/css">
 
     <!--<script src="src/js/agregar-info-tabla-venta.js"></script>-->
+    <script src="src/js/nueva-venta-demo.js"></script>
     <script src="src/js/agregar-product-temp.js"></script>
     <script src="src/js/generar-token.js"></script>
     <script src="src/js/nueva-venta-credito.js"></script>
