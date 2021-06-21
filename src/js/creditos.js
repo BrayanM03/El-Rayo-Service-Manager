@@ -38,11 +38,14 @@ table = $('#creditos').DataTable({
                 return '<span class="badge badge-warning">Pagando</span>';    
             break;
             case "3":
-                return '<span class="badge badge-dark">Finalizado</span>';    
+                return '<span class="badge badge-success">Finalizado</span>';    
             break;
             case "4":
               return '<span class="badge badge-danger">Vencido</span>';    
           break;
+          case "5":
+            return '<span class="badge badge-dark">Cancelada</span>';    
+        break;
             default:
                 break;
         }
@@ -129,7 +132,7 @@ function borrarCredito(id) {
               
             Swal.fire({
                 title: 'Credito eliminado',
-                html: "<span>El crfedito se eliminó con exito</span>",
+                html: "<span>El credito se eliminó con exito</span>",
                 icon: "success",
                 cancelButtonColor: '#00e059',
                 showConfirmButton: true,
@@ -244,6 +247,11 @@ function borrarCredito(id) {
                               $("#alerta").empty();
                               $("#alerta").append('<div class="alert alert-warning" role="alert">'+
                               'El abono sobrepasa el total'+
+                               '</div>');
+                            }else if(response == 6){
+                              $("#alerta").empty();
+                              $("#alerta").append('<div class="alert alert-warning" role="alert">'+
+                              'Esta venta esta cancelada, no puedes agregar mas abonos.'+
                                '</div>');
                             }else{
                               $("#alerta").empty();

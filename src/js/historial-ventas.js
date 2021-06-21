@@ -36,7 +36,7 @@ table = $('#ventas').DataTable({
                 '<button onclick="traerPdfCredito(' +row.folio+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px">'+
                 '<span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>'+
                 '<button type="button" onclick="cancelarVenta('+ row.folio +');" class="buttonBorrar btn btn-primary">'+
-                '<span class="fa fa-trash"></span><span class="hidden-xs"></span></button>'+
+                '<span class="fa fa-ban"></span><span class="hidden-xs"></span></button>'+
                 '<button type="button" onclick="borrarVenta('+ row.folio +');" class="buttonBorrar btn btn-warning" style="margin-left: 8px">'+
                 '<span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
                 
@@ -159,16 +159,84 @@ function borrarVenta(id) {
   }
 
   function cancelarVenta(id) { 
+
+    Swal.fire({
+        title: "Cancelar Venta",
+        html: '<span>¿Estas seguro de cancelar esta venta?</span>',
+        showCancelButton: true,
+        cancelButtonText: 'Cerrar',
+        cancelButtonColor: '#00e059',
+        showConfirmButton: true,
+        confirmButtonText: 'Cancelar', 
+        cancelButtonColor:'#ff764d',
+        focusConfirm: false }).then((result) => { 
+        
+            if(result.isConfirmed){  
+                
+                $.ajax({
+                    type: "POST",
+                    url: "./modelo/ventas/cancelar-venta.php",
+                    data: {"id_venta": id},
+                    success: function (response) {
+                        if(response == 0){
+
+                            Swal.fire({
+                                title: 'Error',
+                                html: "<span>La venta no se pudo cancelar</span>",
+                                icon: "error",
+                                cancelButtonColor: '#00e059',
+                                showConfirmButton: true,
+                                confirmButtonText: 'Aceptar', 
+                                cancelButtonColor:'#ff764d',
+                            }).then((result) => {  
+                
+                                if(result.isConfirmed){
+                                    table.ajax.reload(null, false);
+                                }});
+                                table.ajax.reload(null, false);
+                        }else if(response == 1){
+                            Swal.fire({
+                                title: 'Venta cancelada',
+                                html: "<span>La venta se a cancelado.</span>",
+                                icon: "success",
+                                cancelButtonColor: '#00e059',
+                                showConfirmButton: true,
+                                confirmButtonText: 'Aceptar', 
+                                cancelButtonColor:'#ff764d',
+                            }).then((result) => {  
+                
+                                if(result.isConfirmed){
+                                    table.ajax.reload(null, false);
+                                }});
+                                table.ajax.reload(null, false);
+
+                        }else if(response == 3){
+                            Swal.fire({
+                                title: 'Venta ya cancelada',
+                                html: "<span>Esta venta ya esta cancelada.</span>",
+                                icon: "warning",
+                                cancelButtonColor: '#00e059',
+                                showConfirmButton: true,
+                                confirmButtonText: 'Aceptar', 
+                                cancelButtonColor:'#ff764d',
+                            }).then((result) => {  
+                
+                                if(result.isConfirmed){
+                                    table.ajax.reload(null, false);
+                                }});
+                                table.ajax.reload(null, false);
+                        }
+                      
+                    }
+                });
+                
+
+            }
+
+        });
+
     
-    $.ajax({
-        type: "POST",
-        url: "./modelo/ventas/cancelar-venta.php",
-        data: {"id_venta": id},
-        dataType: "dataType",
-        success: function (response) {
-            
-        }
-    });
+   
     
    }
 

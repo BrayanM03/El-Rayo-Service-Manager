@@ -109,7 +109,7 @@ function realizarVentaCredito(){
                                 fecha = $("#fecha").val(); 
                                 cliente = $("#select2-clientes-container").attr("id-cliente");
                                 metodo_pago = $("#metodos-pago").val();  
-                                
+                                sucursal =$("#sucursal").val();
 
                                 //Enviando data
 
@@ -123,6 +123,7 @@ function realizarVentaCredito(){
                                         'cliente': cliente,
                                         'metodo_pago': metodo_pago,
                                         'fecha': fecha,
+                                        'sucursal': sucursal,
                                         'total': total,
                                         'tipo': "vt-credito"},
                                     dataType: "JSON",
