@@ -68,7 +68,7 @@ table = $('#ventas').DataTable({
   scrollY: "50vh",
   info: false,
   responsive: false,
-  order: [2, "desc"],
+  order: [1, "desc"],
  
   
 });

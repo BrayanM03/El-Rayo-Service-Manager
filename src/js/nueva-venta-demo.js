@@ -140,23 +140,19 @@ selects.forEach( select => {
                   "<div class='col-md-10 select2-contenedor'>" +
                   "<div class='select2_modelo'>Modelo "+ repo.Modelo +"</div>" +
                   "<div class='select2_description'>" + repo.Descripcion + "</div>" +
+                  "<span style='font-size:14px; margin-left:auto;'>"+ repo.Codigo +"<span>"+
                   "</div>" +
                   "</div>" +
                   "<div class='select2_statistics' style='display:flex; border-top: 1px solid whitesmoke; padding-top:8px; justify-content:space-around; margin-top:5px;'>" +
                   "<div class='select2_marca'><i class='fa fa-star'></i> "+ repo.Marca+"</div>" +
                     "<div class='select2_precio_venta'><i class='fa fa-dollar-sign'></i> "+ repo.precio_Venta +" (precio)</div>" + 
                     "<div class='select2_precio_venta'><i class='fa fa-store'></i> "+ repo.Sucursal +"</div>" + 
+                    "<div class='select2_precio_venta'><i class='fa fa-bullseye'></i> "+ repo.Stock +"</div>" +
                   "</div>" +
                 "</div>" +
               "</div>"
             );
-          
-          /*  $container.find(".select2_modelo").text(repo.modelo);
-            $container.find(".select2_description").text(repo.descripcion);
-            $container.find(".select2_marca").append(repo.marca);
-            $container.find(".select2_precio_venta").append(repo.precio);
-            $container.find(".select2_costo").append(repo.costo);*/ 
-            //
+       
           
             return $container;
           }
@@ -164,13 +160,35 @@ selects.forEach( select => {
           function formatRepoSelection (repo) {
             //A partir de aqui puedes agregar las llantas Brayan
            // ruta = "./src/img/logos/" + repo.marca + ".jpg";
-            
-           /*  $("#btn-agregar").attr("idcode", repo.id);
-            $("#btn-agregar").attr("descripcion", repo.Descripcion);
-            $("#btn-agregar").attr("modelo", repo.Modelo);
-            $("#btn-agregar").attr("marca", repo.Marca);
-            $("#btn-agregar").attr("sucursal", repo.Sucursal);
-            $("#btn-agregar").attr("precio", repo.precio_Venta); */
+         
+           console.log(repo.Stock);
+           if(repo.Stock <= 0){
+
+             Swal.fire({
+                title: 'Ya no quedan llantas',
+                html: "<span>La llanta: </br>"+
+                "Codigo: <strong>"+ repo.Codigo +"</strong>"+
+                " Marca: <strong>"+ repo.Marca +"</strong></br>"+
+                "Descripcion: <strong>"+ repo.Descripcion +"</strong></br>"+
+                "Se agoto del inventario, contacta a un administrador para que modifique el inventario</span>"+
+                "<img src='./src/img/sad.png' style='width:80px; margin:15px auto 8px auto;'>",
+                icon: "warning",
+                cancelButtonColor: '#00e059',
+                showConfirmButton: true,
+                confirmButtonText: 'Aceptar', 
+                cancelButtonColor:'#ff764d'
+            });
+            return repo.text;
+           
+               
+           }else{
+
+            $("#agregar-producto").attr("idcode", repo.id);
+            $("#agregar-producto").attr("descripcion", repo.Descripcion);
+            $("#agregar-producto").attr("modelo", repo.Modelo);
+            $("#agregar-producto").attr("marca", repo.Marca);
+            $("#agregar-producto").attr("precio", repo.precio_Venta);
+            $("#agregar-producto").attr("codigo", repo.Codigo);
 
             $("#modelo").attr("modelo", repo.Modelo);
             compr = $("#modelo").attr("modelo");
@@ -201,24 +219,16 @@ selects.forEach( select => {
                 $("#modelo").blur();
                 $("#description").blur();
                 $("#precio").blur();
-            }
-           
-            
 
-           /* $("#ancho-agregado").text(repo.ancho);
-            $("#alto-agregado").text(repo.alto);
-            $("#rin-agregado").text(repo.rin);
-            $("#modelo-agregado").text(repo.modelo);
-            $("#marca-agregado").text(repo.marca);
-            $(".logo-marca-agregada").attr("src", ruta);
+                return repo.text || repo.Descripcion;
+
+            }
+           }
+            
+          
+           return repo.text
     
-            $("#costo-agregado").text(repo.costo);
-            $("#precio-agregado").text(repo.precio);
-            $("#mayoreo-agregado").text(repo.mayoreo);*/
-            //$("#mayoreo-agregado").fadeIn(400)
-           
-    
-            return repo.text || repo.Descripcion;
+          
           }
 
       }

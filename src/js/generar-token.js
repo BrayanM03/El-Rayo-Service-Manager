@@ -5,9 +5,9 @@ function generarToken(){
     Swal.fire({
         title: "Ingrese el token",
         icon: 'info',
-        html: '<form>'+
+        html: 
         '<label >Ingrese el token de acceso para poder cambiar el precio de la llanta</span><br><br>'+
-        '<input id="token-validar" class="form-control" placeholder="Codigo"></form>',
+        '<input id="token-validar" class="form-control" placeholder="Codigo">',
         showCancelButton: true,
         cancelButtonText: 'Cerrar',
         cancelButtonColor: '#00e059',

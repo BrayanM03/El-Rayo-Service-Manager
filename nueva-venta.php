@@ -576,7 +576,7 @@
                                                     <label class="no-editable-corto">
                                                         <span for="modelo">Modelo</span>
                                                         <input modelo="" type="text" style="cursor: not-allowed; color:#696969;" id="modelo" name="modelo" class="input-group" disabled>
-                                                    </label>
+                                                    </label> 
 
                                                     <label class="no-editable-corto">
                                                          <span for="sucursal" >Sucursal</span>

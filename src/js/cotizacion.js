@@ -112,6 +112,7 @@ $(document).ready(function() {
         $("#btn-agregar").attr("marca", repo.marca);
         $("#btn-agregar").attr("costo", repo.costo);
         $("#btn-agregar").attr("precio", repo.precio);
+        $("#precio").val(repo.precio);
        /* $("#ancho-agregado").text(repo.ancho);
         $("#alto-agregado").text(repo.alto);
         $("#rin-agregado").text(repo.rin);
@@ -218,61 +219,7 @@ $(document).ready(function() {
 
 //Select2 para los metodos de pago:
 
-    $("#metodos-pago").select2({
-        placeholder: "Metodo de pago",
-        theme: "bootstrap",
-        templateResult: formatState,
-    });
-
-
-    function formatState (state) {
-        if (!state.id) {
-          return state.text;
-        }
-
-        switch (state.text) { 
-            case "Efectivo":
-                var $state = $(
-                    '<span><i class="fas fa-money-bill-wave"></i> '+state.text+'</span>'
-                    
-                  );
-                
-                break;
-            case "Tarjeta":
-                var $state = $(
-                    '<span><i class="fas fa-money-check"></i> '+state.text+'</span>'
-                    
-                  );
-                
-                break;
-            case "Transferencia":
-                var $state = $(
-                    '<span><i class="fas fa-university"></i> '+state.text+'</span>'
-                        
-                );
-                    
-                    break;           
-            case "Cheque":
-                var $state = $(
-                    '<span><i class="fas fa-money-check-alt"></i> '+state.text+'</span>'
-                );
-                            
-            break; 
-            
-            case "Sin definir":
-                var $state = $(
-                    '<span><i class="fas fa-question"></i> '+state.text+'</span>'
-                );
-                            
-            break; 
-
-            default:
-                break;
-        }
-
-        
-        return $state;
-      };
+   
 
    
 

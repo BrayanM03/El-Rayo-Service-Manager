@@ -1,7 +1,11 @@
+$(document).ready(function() {
+
+$.fn.dataTable.ext.errMode = 'none';
+
 table = $('#pre-cotizacion').DataTable({
-  destroy: true,
-  serverSide: true,
-  processing: false,
+  
+
+  
     destroy: true,
     serverSide: true,
     processing: false,
@@ -13,9 +17,10 @@ table = $('#pre-cotizacion').DataTable({
           numRows = table.column( 0 ).data().length;
      
       if (numRows == 0) {
-        $(".pre-venta-error").html("");
-        $("#pre-venta tbody").append('<tr><th id="empty-table" style="text-align: center;" colspan="8">Preventa vacia</th></tr>');
-        $("#pre-venta_processing").css("display","none");
+        $(".pre-cotizacion-error").html("");
+        $('#pre-cotizacion > tbody').empty();
+        $("#pre-cotizacion tbody").append('<tr><th id="empty-table" style="text-align: center;" colspan="8">Preventa vacia</th></tr>');
+        $("#pre-cotizacion_processing").css("display","none");
       }
 
         
@@ -44,7 +49,7 @@ table = $('#pre-cotizacion').DataTable({
 
   paging: false,
   searching: false,
-  scrollY: "264px",
+  //scrollY: "auto",
   info: false,
   responsive: true,
   order: [0, "desc"],
@@ -59,7 +64,7 @@ table = $('#pre-cotizacion').DataTable({
        
     } );
 } );
-
+}); 
 
 function agregarProducto() { 
 
@@ -109,8 +114,26 @@ function reload() {
     data: {"id":id},
     success: function (response) {
       if(response == 1){
-        toastr.success('Producto borrado', 'Listo');
+
+           
+      numRows = table.column( 0 ).data().length;
+     
+
+      if (numRows==1){
+       
+        table.ajax.reload(null, false);
+        $("#pre-cotizacion tbody tr").remove();
+        $(".pre-cotizacion-error").html("");
+        $(".products-grid-error").remove();
+        $("#pre-cotizacion tbody").append('<tr><th id="empty-table" style="text-align: center;" style="width: 100%" colspan="8">Sin productos</th></tr>');
+        $("#pre-cotizacion_processing").css("display","none");
+      
+      }else{
         table.ajax.reload();
+      }
+      
+        toastr.success('Producto borrado', 'Listo');
+        
       }else{
         toastr.error('El producto no pudo ser borrado', 'Error');
 
@@ -119,3 +142,4 @@ function reload() {
       
   });
  }
+

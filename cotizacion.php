@@ -490,7 +490,7 @@
                 <div class="container-fluid">
 
                      <!-- Contenido -->
-                     <div class="card" style="height: 80vh; width: auto;">
+                     <div class="card" style="height: auto; width: auto;">
                             <h4 class="ml-auto mr-auto mt-5" style="color:#191919;">Nueva cotización</h4>
                             <div class="row mt-4">
                             <div class="col-md-12">
@@ -509,9 +509,13 @@
                             <label for="Cantidad" class="">Cantidad</label> 
                             <input style="width:100%; height:33px;" type="number" class="form-control" id="cantidad" value="" name="cantidad">
                             </div>
-                             
+                            <div class="col-md-6 mt-3 mr-auto ml-auto"  onclick="generarToken();" id="precio-tok" >
+                            <label for="precio">Precio</label> 
+                            <input style="width:100%; height:33px;"type="number" class="form-control" id="precio" value="" name="precio" disabled>
+                            </div>
                             </div> 
                             <div class="form-group mt-3 row"  style="width: 100%;">
+                           
                             <div class="btn btn-success m-auto" id="btn-agregar"onclick="agregarProducto();">Agregar</div>
                             </div>
 
@@ -520,7 +524,12 @@
 
                             <div class="col-10 ml-auto mr-auto mt-5">
                                 <table id="pre-cotizacion" class="table table-success table-bordered table-hover round_table"></table>
+                                
                             </div>
+                            
+                            </div>
+                            <div class="form-group mt-3 row"  style="width: 100%;">
+                            <div class="btn btn-danger m-auto" id="btn-cotizar"onclick="agregarProducto();">Cotizar</div>
                             </div>
 
                      </div>
@@ -588,12 +597,14 @@
     <script src="src/vendor/datatables/jquery.dataTables.min.js"></script> 
     <script src="src/vendor/datatables-responsive/js/dataTables.responsive.min.js"></script>
     <script src="src/vendor/datatables/dataTables.bootstrap4.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous"></script>
 
     <!-- Cargamos nuestro componente de React. -->
     <script src="src/js/cotizacion.js"></script>
     <script src="src/js/agregar-product-cotiza.js"></script>
+    <script src="src/js/generar-token.js"></script>
    
 </body>
 

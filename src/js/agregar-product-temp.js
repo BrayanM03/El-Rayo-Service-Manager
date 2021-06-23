@@ -18,9 +18,10 @@ $(document).ready(function() {
           numRows = table.column( 0 ).data().length;
      
       if (numRows == 0) {
-        $(".pre-venta-error").html("");
-        $("#pre-venta tbody").append('<tr><th id="empty-table" style="text-align: center;" colspan="8">Preventa vacia</th></tr>');
-        $("#pre-venta_processing").css("display","none");
+       /*  $(".pre-venta-error").html("");*/
+        $('#pre-venta > tbody').empty();
+        $("#pre-venta tbody").append('<tr><th id="empty-table" style="text-align: center;" colspan="8">Sin productos</th></tr>');
+        $("#pre-venta_processing").css("display","none"); 
       }
 
         
@@ -106,11 +107,11 @@ function borrarProductoTmp(id, importe){
 
       if (numRows==1){
        
-        table.ajax.reload();
+        table.ajax.reload(null, false);
         $("#pre-venta tbody tr").remove();
         $(".pre-venta-error").html("");
         $(".products-grid-error").remove();
-        $("#pre-venta tbody").append('<tr><th id="empty-table" style="text-align: center;" style="width: 100%" colspan="8">Preventa vacia</th></tr>');
+        $("#pre-venta tbody").append('<tr><th id="empty-table" style="text-align: center;" style="width: 100%" colspan="8">Sin productos</th></tr>');
         $("#pre-venta_processing").css("display","none");
       
       }else{
@@ -152,12 +153,14 @@ function agregarInfo(){
     sucursalSession= $("#agregar-producto").attr("sucursal"); 
     rolSession = $("#agregar-producto").attr("rol");
 
-    if(sucursalVal == "0"){
+    if(sucursalVal == 0){
       validarSuc = "Pedro";
-    }else if(sucursalVal == "1"){
+     
+    }else if(sucursalVal == 1){
       validarSuc ="Sendero";
+    
     }else{
-       alert("error");
+      toastr.warning('Necesita especificar una sucursal', 'Alerta' );
     }
     stockLlanta0 = $("#agregar-producto").attr("stock");
     stockLlanta = parseInt(stockLlanta0);
@@ -168,6 +171,7 @@ function agregarInfo(){
     //console.log(valitationQuanty);
     if(sucursalSession !== validarSuc && rolSession !== "1"){
       toastr.warning('No puedes vender una llanta que no sea de tu sucursal', 'warning' );
+      console.log(sucursalVal + " " + validarSuc);
     }else if (valitationQuanty == false ) {
 
       toastr.warning('Necesita especificar una cantidad', 'Alerta' );
