@@ -35,6 +35,45 @@ function realizarVentaCredito(){
                 didOpen: function () {   
                 
                 },
+                preConfirm: (respuesta) =>{
+
+                    data = {
+    
+                      "abono":         $("#abono").val(),
+                      "restante":      $("#restante").val(),
+                      "total":         $("#importe-total").val(),
+                      
+                    };
+
+                    sbstring = data["restante"].substring(1);
+                    restant = parseInt(sbstring);
+                    console.log(restant);
+                    abono_valid = data["abono"].trim();
+    
+                    if( data["abono"] < 0){
+                     // $(".datoVacio").removeClass("datoVacio");
+                     $(".border-danger").removeClass("border-danger");
+                      $("#abono").addClass("border-danger");
+                      Swal.showValidationMessage(
+                        `El abono no puede ser negativo.`
+                      );
+                    }else if( abono_valid == ""){
+                        // $(".datoVacio").removeClass("datoVacio");
+                        $(".border-danger").removeClass("border-danger");
+                         $("#abono").addClass("border-danger");
+                         Swal.showValidationMessage(
+                           `Ingrese una cantidad.`
+                         );
+                       }else if(restant < 0){
+                     /*  $(".datoVacio").removeClass("datoVacio");*/
+                      $(".border-danger").removeClass("border-danger"); 
+                      $("#restante").addClass("border-danger");
+                      Swal.showValidationMessage(
+                        `El restante no puede ser negativo.`
+                      )
+                    }
+    
+                  },
                 html: '<form class="mt-4" id="formulario-nuevo-credito">'+
                 '<h5>Agregar nuevo registro de credito para '+ response+'</h5><br>'+
                 '<div class="row">'+
@@ -83,7 +122,7 @@ function realizarVentaCredito(){
         
                     '</form>'
                     
-                    }).then((result) =>{
+                    }).then((result) =>{ 
 
                         plazo = $("#plazo").val();
                         importe_total = $("#importe-total").val();
@@ -160,7 +199,7 @@ function realizarVentaCredito(){
                                 
                                                 if(result.isConfirmed){
                                                 //location.reload();
-                                                table.ajax.reload();
+                                                table.ajax.reload(null,false);
                                                     $("#pre-venta tbody tr").remove();
                                                     $(".pre-venta-error").html("");
                                                     $(".products-grid-error").remove();
@@ -172,7 +211,7 @@ function realizarVentaCredito(){
                                                 }else if(result.isDenied){
                         
                                                     window.open('./modelo/creditos/generar-reporte-credito.php?id='+ response, '_blank');
-                                                    table.ajax.reload();
+                                                    table.ajax.reload(null,false);
                                                     $("#pre-venta tbody tr").remove();
                                                     $(".pre-venta-error").html("");
                                                     $(".products-grid-error").remove();
@@ -183,7 +222,7 @@ function realizarVentaCredito(){
                                                 
                                                     
                                                 }else{
-                                                    table.ajax.reload();
+                                                    table.ajax.reload(null,false);
                                                     $("#pre-venta tbody tr").remove();
                                                     $(".pre-venta-error").html("");
                                                     $(".products-grid-error").remove();

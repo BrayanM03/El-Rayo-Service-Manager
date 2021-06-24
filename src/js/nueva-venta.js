@@ -453,7 +453,7 @@ selects.forEach( select => {
               
                             if(result.isConfirmed){
                                //location.reload();
-                               table.ajax.reload();
+                               table.ajax.reload(null,false);
                                 $("#pre-venta tbody tr").remove();
                                 $(".pre-venta-error").html("");
                                 $(".products-grid-error").remove();
@@ -465,7 +465,7 @@ selects.forEach( select => {
                             }else if(result.isDenied){
     
                                 window.open('./modelo/ventas/generar-reporte-venta.php?id='+ response, '_blank');
-                                table.ajax.reload();
+                                table.ajax.reload(null,false);
                                 $("#pre-venta tbody tr").remove();
                                 $(".pre-venta-error").html("");
                                 $(".products-grid-error").remove();
@@ -476,7 +476,7 @@ selects.forEach( select => {
                               
                                 
                             }else{
-                                table.ajax.reload();
+                                table.ajax.reload(null,false);
                                 $("#pre-venta tbody tr").remove();
                                 $(".pre-venta-error").html("");
                                 $(".products-grid-error").remove();

@@ -133,20 +133,22 @@ selects.forEach( select => {
           }
           
             var $container = $(
-                "<div class='select2-result-repository clearfix' desc='"+repo.Descripcion+" marca='"+repo.Marca +
+                "<div style='' class='select2-result-repository clearfix' desc='"+repo.Descripcion+" marca='"+repo.Marca +
                 "' costo='"+repo.precio_Inicial +" id='tyre"+repo.id+"' precio='"+repo.precio_Venta+" idcode='"+repo.id+"'>" +
                 "<div class='select2-contenedor-principal row' syle='display:flex;'>" +
                 "<div class='col-md-2 justify-content-center'><img class='' style='width: 50px; border-radius: 6px;' src='./src/img/logos/" + repo.Marca + ".jpg' /></div>" +
                   "<div class='col-md-10 select2-contenedor'>" +
-                  "<div class='select2_modelo'>Modelo "+ repo.Modelo +"</div>" +
-                  "<div class='select2_description'>" + repo.Descripcion + "</div>" +
-                  "<span style='font-size:14px; margin-left:auto;'>"+ repo.Codigo +"<span>"+
+                  "<div class='select2_modelo' style='font-size:14px;'>Modelo: "+ repo.Modelo +"</div>" +
+                  "<div class='select2_description' style='font-size:14px;'>" + repo.Descripcion + "</div>" +
+
+                  "<span style='font-size:14px; margin-left:80%;'><strong>"+ repo.Codigo +"</strong></span>"+
+                  "<div class='select2_precio_venta' style='margin-left:65%;''><i class='fa fa-store'></i> "+ repo.Sucursal +"</div>" + 
                   "</div>" +
                   "</div>" +
                   "<div class='select2_statistics' style='display:flex; border-top: 1px solid whitesmoke; padding-top:8px; justify-content:space-around; margin-top:5px;'>" +
                   "<div class='select2_marca'><i class='fa fa-star'></i> "+ repo.Marca+"</div>" +
                     "<div class='select2_precio_venta'><i class='fa fa-dollar-sign'></i> "+ repo.precio_Venta +" (precio)</div>" + 
-                    "<div class='select2_precio_venta'><i class='fa fa-store'></i> "+ repo.Sucursal +"</div>" + 
+                    "<div class='select2_precio_venta'><i class='fa fa-tag'></i> "+ repo.precio_Mayoreo +" (al mayoreo)</div>" +
                     "<div class='select2_precio_venta'><i class='fa fa-bullseye'></i> "+ repo.Stock +"</div>" +
                   "</div>" +
                 "</div>" +
@@ -295,7 +297,7 @@ selects.forEach( select => {
               
                             if(result.isConfirmed){
                                //location.reload();
-                               table.ajax.reload();
+                               table.ajax.reload(null,false);
                                 $("#pre-venta tbody tr").remove();
                                 $(".pre-venta-error").html("");
                                 $(".products-grid-error").remove();
@@ -307,7 +309,7 @@ selects.forEach( select => {
                             }else if(result.isDenied){
     
                                 window.open('./modelo/ventas/generar-reporte-venta.php?id='+ response, '_blank');
-                                table.ajax.reload();
+                                table.ajax.reload(null,false);
                                 $("#pre-venta tbody tr").remove();
                                 $(".pre-venta-error").html("");
                                 $(".products-grid-error").remove();
@@ -318,7 +320,7 @@ selects.forEach( select => {
                               
                                 
                             }else{
-                                table.ajax.reload();
+                                table.ajax.reload(null,false);
                                 $("#pre-venta tbody tr").remove();
                                 $(".pre-venta-error").html("");
                                 $(".products-grid-error").remove();

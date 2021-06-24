@@ -439,9 +439,9 @@ function agregarLLanta() {
             ).then((result) =>{
 
               if(result.isConfirmed){
-                 location.reload();
+                table.ajax.reload(null,false);
               }else if(result.isDenied){
-                location.reload();
+                table.ajax.reload(null,false);
               }
               });
            

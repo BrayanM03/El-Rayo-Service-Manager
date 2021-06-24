@@ -89,7 +89,7 @@ function agregarProducto() {
           
             success: function (response) {
                 
-                table.ajax.reload();
+                table.ajax.reload(null,false);
 
             }
         });
@@ -99,7 +99,7 @@ function agregarProducto() {
  }
 
 function reload() {
-  table.ajax.reload();
+  table.ajax.reload(null,false);
   }
  
  setInterval( reload,1000);
@@ -129,7 +129,7 @@ function reload() {
         $("#pre-cotizacion_processing").css("display","none");
       
       }else{
-        table.ajax.reload();
+        table.ajax.reload(null,false);
       }
       
         toastr.success('Producto borrado', 'Listo');

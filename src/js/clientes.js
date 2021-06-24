@@ -96,10 +96,10 @@ function borrarCliente(id) {
             }).then((result) => {  
 
                 if(result.isConfirmed){
-                    table.ajax.reload();
+                    table.ajax.reload(null,false);
                 }});
 
-                table.ajax.reload();
+                table.ajax.reload(null,false);
            
            }else{
             Swal.fire({
@@ -251,9 +251,9 @@ function borrarCliente(id) {
                         "success"
                         ).then((result) => { 
                             if(result.isConfirmed){
-                                table.ajax.reload();
+                                table.ajax.reload(null,false);
                             }
-                            table.ajax.reload();
+                            table.ajax.reload(null,false);
                             });
                    }else if(response == 0){
                     Swal.fire(
@@ -553,9 +553,9 @@ mymap.on('click', function (e) {
                                 "success"
                                 ).then((result) => { 
                                     if(result.isConfirmed){
-                                        table.ajax.reload();
+                                        table.ajax.reload(null,false);
                                     }
-                                    table.ajax.reload();
+                                    table.ajax.reload(null,false);
                                     });
                                
                            }else if(response == 0){

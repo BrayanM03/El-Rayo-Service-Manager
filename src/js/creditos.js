@@ -141,7 +141,7 @@ function borrarCredito(id) {
             }).then((result) => {  
 
                 if(result.isConfirmed){
-                  table.ajax.reload();
+                  table.ajax.reload(null,false);
                 }});
 
            
@@ -159,7 +159,7 @@ function borrarCredito(id) {
             }).then((result) => {  
 
                 if(result.isConfirmed){
-                  table.ajax.reload();
+                  table.ajax.reload(null,false);
                 }});
            }
         }
@@ -187,7 +187,8 @@ function borrarCredito(id) {
                   $(document).ready(function() {
 
                     restante = $("#restante").val();
-                    if(restante=="$0.00"){
+                    pagado = $("#pagado").val();
+                    if(restante=="$0.00" && pagado != "$0.00" ){
                       $("#alerta").empty();
                       $("#alerta").append('<div class="alert alert-success" role="alert">'+
                       'Credito pagado'+
@@ -234,7 +235,7 @@ function borrarCredito(id) {
 
                      function registrarAbono(id) {
                       abono_in = $("#abono-in").val();
-                      if(abono_in == null || abono_in ==0){
+                      if(abono_in == null || abono_in ==0){ 
                         alert("Ingresa una cantidad");
                       }else{
                         $.ajax({
@@ -255,7 +256,7 @@ function borrarCredito(id) {
                                '</div>');
                             }else{
                               $("#alerta").empty();
-                              tabla.ajax.reload();
+                              tabla.ajax.reload(null,false);
                               $("#pagado").val(response.pagado_nuevo);
                               $("#restante").val(response.restante_nuevo);
                             }
@@ -372,12 +373,12 @@ function borrarCredito(id) {
         
             }).then((result) =>{
 
-              table.ajax.reload();
+              table.ajax.reload(null,false);
             
             
               });
 
-              table.ajax.reload();
+              table.ajax.reload(null,false);
         }
     });
     

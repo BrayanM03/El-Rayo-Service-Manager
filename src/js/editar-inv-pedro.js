@@ -71,9 +71,9 @@ function editarInvPedro(id){
                             ).then((result) =>{
 
                             if(result.isConfirmed){
-                                table.ajax.reload();
+                                table.ajax.reload(null,false);
                             }
-                            table.ajax.reload();
+                            table.ajax.reload(null,false);
                             });
                        }else{
                         Swal.fire(
@@ -122,9 +122,9 @@ function borrarRegistro(id) {
                  "success"
                  ).then((result) => { 
             if(result.isConfirmed){
-                table.ajax.reload();
+                table.ajax.reload(null,false);
             }
-            table.ajax.reload();
+            table.ajax.reload(null,false);
             })
 
             }else{

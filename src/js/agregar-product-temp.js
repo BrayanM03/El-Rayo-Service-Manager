@@ -115,7 +115,7 @@ function borrarProductoTmp(id, importe){
         $("#pre-venta_processing").css("display","none");
       
       }else{
-        table.ajax.reload();
+        table.ajax.reload(null,false);
       }
 
       toastr.success('Producto borrado con exito', 'Correcto' );
@@ -248,7 +248,7 @@ function agregarInfo(){
             success: function (response) {
 
             if (response == 1) {
-              table.ajax.reload(); 
+              table.ajax.reload(null,false); 
               $("#empty-table").remove();
               toastr.success('Producto agregado correctamente', 'Agregado');
 
@@ -265,11 +265,11 @@ function agregarInfo(){
             }else if(response == 2){
               
               toastr.error('La cantidad que especificaste revasa el stock actual', 'Error');
-              table.ajax.reload();
+              table.ajax.reload(null,false);
               $("#empty-table").remove();
 
             }else{
-              table.ajax.reload();
+              table.ajax.reload(null,false);
               $("#empty-table").remove();
             }
              
