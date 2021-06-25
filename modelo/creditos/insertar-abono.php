@@ -17,7 +17,7 @@ if(isset($_POST)){
 
     $id_credito = $_POST["id-credito"];
     $abono = $_POST["abono"];
-    $fecha = date("Y-m-d");
+    $fecha = date("d-m-Y");
 
      //Obtenemos estatus del credito
      $obtenerStatus = "SELECT estatus FROM creditos WHERE id = ?";
