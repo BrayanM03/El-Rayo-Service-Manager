@@ -34,12 +34,13 @@
         
     
         print_r(1);
-    }
+    } 
 
 
     if (isset($_POST["comprobar-token"])) {
 
         $token_in = $_POST["comprobar-token"];
+        $new_token = $_POST["nuevo-token"];
 
         $sqlComprobartoken= $con->prepare("SELECT codigo FROM token WHERE codigo = ?");
         $sqlComprobartoken->bind_param('s', $token_in);
@@ -49,7 +50,12 @@
         $sqlComprobartoken->close();
 
         if ($token_in == $resultado) {
+           
+
+            $sqlUpdatetoken="UPDATE token SET codigo = '$new_token'";
+            $result = mysqli_query($con, $sqlUpdatetoken);
             print_r(3);
+
         }else{
             print_r(4);
         }

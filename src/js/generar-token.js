@@ -33,21 +33,46 @@ function generarToken(){
               if(result.isConfirmed){
 
                   token_validar = $("#token-validar").val();
+                  nuevoToken = Math.floor((Math.random() * (9999 - 1000) + 1000)); // Eliminar `0.`
 
                    
                                         $.ajax({
                                         type: "post",
                                         url: "./modelo/token.php",
-                                        data: {"comprobar-token" : token_validar},
+                                        data: {"comprobar-token" : token_validar, "nuevo-token": nuevoToken},
                                         dataType: "json",
                                         success: function (response) {
 
                                             if (response == 3) {
-                                                    alert("El token es correcto");
+                                                Swal.fire({
+                                                    title: 'Token correcto',
+                                                    html: "<span>Ahora puedes cambiar el precio de la llanta</br></span>",   
+                                                    icon: "success",
+                                                    cancelButtonColor: '#00e059',
+                                                    showConfirmButton: true,
+                                                    confirmButtonText: 'Aceptar', 
+                                                    cancelButtonColor:'#ff764d',
+                                                    showDenyButton: false,
+                                                    denyButtonText: 'Reporte'
+                                                });
                                                     document.getElementById('precio').disabled = false;
-                                                    $("#precio-tok").attr("onclick", "");
+                                                    $("#precio-tok").attr("onclick", ""); 
+
                                                 }else if(response == 4){
-                                                    alert("El token es incorrecto");
+
+                                                    Swal.fire({
+                                                        title: 'Token incorrecto',
+                                                        html: "<span>El token que ingresaste es incorrecto.</br></span>",
+                                                        icon: "error",
+                                                        cancelButtonColor: '#00e059',
+                                                        showConfirmButton: true,
+                                                        confirmButtonText: 'Aceptar', 
+                                                        cancelButtonColor:'#ff764d',
+                                                        showDenyButton: false,
+                                                        denyButtonText: 'Reporte'
+                                                    });
+                                                    
+                                                    
                                             }
                                     
                                         
@@ -83,17 +108,3 @@ function random() {
 
 
 
-function tokenActual() {  
-    $.ajax({
-        type: "post",
-        url: "./modelo/token.php",
-        data: "traer-token",
-        dataType: "json",
-        success: function (response) {
-            cod = response["codigo"];
-            $("#token-actual").text(cod);
-        }
-    });
-}
-
-tokenActual();

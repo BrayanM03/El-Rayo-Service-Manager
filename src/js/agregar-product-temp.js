@@ -261,6 +261,9 @@ function agregarInfo(){
                   $("#total").val(response);
                 }
               });
+              //Despues de agregar el produco a la tabla temp volvemos a activar el bloqueo por token
+              document.getElementById('precio').disabled = true;
+              $("#precio-tok").attr("onclick", "generarToken()"); 
 
             }else if(response == 2){
               
