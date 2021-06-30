@@ -389,7 +389,7 @@ selects.forEach( select => {
         language:  {
 
             inputTooShort: function () {
-                return "Busca la llanta...";
+                return "Busca un cliente...";
               },
               
             noResults: function() {
