@@ -16,7 +16,7 @@ if (!$con) {
 if (isset($_POST)) {
        
     
-    $query="SELECT ventas.id, ventas.Fecha, ventas.id_Sucursal, usuarios.nombre, clientes.Nombre_Cliente, ventas.Cantidad, ventas.Total, ventas.estatus FROM ventas INNER JOIN usuarios ON ventas.id_Usuarios = usuarios.id INNER JOIN clientes ON ventas.id_Cliente = clientes.id";
+    $query="SELECT ventas.id, ventas.Fecha, ventas.id_Sucursal, usuarios.nombre, clientes.Nombre_Cliente, ventas.Cantidad, ventas.Total, ventas.tipo, ventas.estatus FROM ventas INNER JOIN usuarios ON ventas.id_Usuarios = usuarios.id INNER JOIN clientes ON ventas.id_Cliente = clientes.id";
 
     $resultado = mysqli_query($con, $query);
 
@@ -28,10 +28,11 @@ if (isset($_POST)) {
     $cliente = $fila["Nombre_Cliente"];
     $cantidad = $fila["Cantidad"];
     $total = $fila["Total"];
+    $tipo = $fila["tipo"];
     $estatus = $fila["estatus"];
 
     $data["data"][] = array("folio" => $codigo, "fecha"=>$fecha, "sucursal" => $sucursal,
-                    "vendedor" => $vendedor, "cliente"=>$cliente, "cantidad"=>$cantidad, "total"=>$total, "estatus"=>$estatus);
+                    "vendedor" => $vendedor, "cliente"=>$cliente, "cantidad"=>$cantidad, "total"=>$total, "tipo"=>$tipo, "estatus"=>$estatus);
 
                   
 }

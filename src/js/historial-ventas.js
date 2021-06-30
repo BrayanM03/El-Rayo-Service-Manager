@@ -21,6 +21,7 @@ table = $('#ventas').DataTable({
     { title: "Vendedor",       data: "vendedor"       },
     { title: "Cliente",        data: "cliente"        },
     { title: "Cantidad",       data: "cantidad"       },
+    { title: "Tipo",           data: "tipo"       },
     { title: "Total",          data: "total"          },
     { title: "Estatus",        data: "estatus"        }, 
     { title: "Accion",
@@ -31,32 +32,44 @@ table = $('#ventas').DataTable({
         console.log(rol);
         console.log(row.estatus);
        if(rol == "1"){
-            if (row.estatus == "Abierta") {
+            if (row.tipo == "Credito") {
                 return '<div style="display: flex; width: auto;">'+
                 '<button onclick="traerPdfCredito(' +row.folio+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px">'+
                 '<span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>'+
                 '<button type="button" onclick="cancelarVenta('+ row.folio +');" class="buttonBorrar btn btn-primary">'+
                 '<span class="fa fa-ban"></span><span class="hidden-xs"></span></button>'+
-                '<button type="button" onclick="borrarVenta('+ row.folio +');" class="buttonBorrar btn btn-warning" style="margin-left: 8px">'+
+                '<button type="button" onclick="redirigirCredito('+ row.folio +');" class="buttonBorrar btn btn-info" style="margin-left: 8px">'+
+                '<span class="fa fa-share-square"></span><span class="hidden-xs"></span></button>'+
+                '<button type="button" onclick="cancelarVenta('+ row.folio +');" class="buttonBorrar btn btn-warning" style="margin-left: 8px">'+
                 '<span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
                 
-            }else{
+            }else if(row.tipo == "Normal"){
                 return '<div style="display: flex; width: auto;">'+
                 '<button onclick="traerPdf(' +row.folio+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px">'+
                 '<span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>'+
                 '<button type="button" onclick="cancelarVenta('+ row.folio +');" class="buttonBorrar btn btn-primary">'+
                 '<span class="fa fa-ban"></span><span class="hidden-xs"></span></button>'+
                 '<button type="button" onclick="borrarVenta('+ row.folio +');" class="buttonBorrar btn btn-warning" style="margin-left: 8px">'+
-                '<span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';;
+                '<span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
          
+            }else if(row.tipo == ""){
+                return '<div style="display: flex; width: auto;">'+
+                '<button onclick="traerPdf(' +row.folio+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px">'+
+                '<span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>'+
+                '<button type="button" onclick="cancelarVenta('+ row.folio +');" class="buttonBorrar btn btn-primary">'+
+                '<span class="fa fa-ban"></span><span class="hidden-xs"></span></button>'+
+                '<button type="button" onclick="borrarVenta('+ row.folio +');" class="buttonBorrar btn btn-warning" style="margin-left: 8px">'+
+                '<span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
             }
         }else{
             if (row.estatus == "Abierta") {
                 return '<div style="display: flex"><button onclick="traerPdfCredito(' +row.folio+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>';
                 
-            }else{
+            }else if(row.estatus == "Pagado"){
                 return '<div style="display: flex"><button onclick="traerPdf(' +row.folio+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>';
          
+            }else if(row.estatus == "Cancelada"){
+                
             }
         }
         
@@ -121,7 +134,7 @@ function borrarVenta(id) {
             }).then((result) => {  
 
                 if(result.isConfirmed){
-                    location.reload();
+                    table.ajax.reload(null, false);
                 }});
 
            
@@ -139,7 +152,7 @@ function borrarVenta(id) {
             }).then((result) => {  
 
                 if(result.isConfirmed){
-                    location.reload();
+                    table.ajax.reload(null, false);
                 }});
            }
         }
@@ -235,9 +248,9 @@ function borrarVenta(id) {
 
         });
 
-    
-   
-    
    }
 
- 
+
+  function redirigirCredito(id){
+       alert(id);
+   }

@@ -36,10 +36,12 @@ if(isset($_POST)){
     $total =    $_POST["total"];
     
 
-    if(isset($_POST["plazo"])){
+    if(isset($_POST["plazo"])){ 
       $estatus = "Abierta";
+      $tipo = "Credito";
     }else{
       $estatus = "Pagado";
+      $tipo = "Normal";
     }
 
     
@@ -63,7 +65,7 @@ if(isset($_POST)){
           break;
 
       case 4:
-      $metodo_pago = "Sin definir";
+      $metodo_pago = "Por definir";
       break;     
       
       default:
@@ -77,9 +79,9 @@ if(isset($_POST)){
    $info_producto_individual = $datos;
 
    
-    $queryInsertar = "INSERT INTO ventas (id, Fecha, id_Sucursal, id_Usuarios, id_Cliente, Total, estatus, metodo_pago, hora) VALUES (null,?,?,?,?,?,?,?,?)";
+    $queryInsertar = "INSERT INTO ventas (id, Fecha, id_Sucursal, id_Usuarios, id_Cliente, Total, tipo, estatus, metodo_pago, hora) VALUES (null,?,?,?,?,?,?,?,?,?)";
     $resultado = $con->prepare($queryInsertar);
-    $resultado->bind_param('ssiidsss', $fecha, $sucursal, $idUser, $cliente ,$total, $estatus, $metodo_pago, $hora);
+    $resultado->bind_param('ssiidssss', $fecha, $sucursal, $idUser, $cliente , $total, $tipo, $estatus, $metodo_pago, $hora);
     $resultado->execute();
     $resultado->close();
 

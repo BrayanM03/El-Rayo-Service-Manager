@@ -524,12 +524,7 @@
                         <img class="tyre-decoration-right" src="./src/img/tyre.svg" alt="insertar SVG con la etiqueta image">   
                         </div>
                         <div class="botones">
-                                    <a href="#" class="btn btn-success btn-icon-split" onclick="agregarCliente();">
-                                        <span class="icon text-white-50">
-                                            <i class="fas fa-user-plus"></i>
-                                        </span>
-                                        <span class="text">Agregar cliente</span>
-                                    </a>
+                                   
                                     
                       </div>
                       <table id="creditos" class="table table-striped">    

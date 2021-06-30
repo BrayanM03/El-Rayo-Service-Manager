@@ -268,7 +268,7 @@ selects.forEach( select => {
             
             $.ajax({
                 type: "POST",
-                url: "./modelo/ventas/insertar-venta.php",
+                url: "./modelo/ventas/insertar-venta.php", 
                 data: {'data': llantaData,
                        'cliente': cliente,
                        'metodo_pago': metodo_pago,

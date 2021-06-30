@@ -16,7 +16,7 @@ if (!$con) {
 if (isset($_POST)) {
        
     
-    $query="SELECT creditos.id, creditos.id_cliente, creditos.pagado, creditos.restante, creditos.total, creditos.estatus, creditos.fecha_inicio, creditos.fecha_final, creditos.plazo, clientes.Nombre_Cliente FROM creditos INNER JOIN clientes ON creditos.id_cliente = clientes.id";
+    $query="SELECT creditos.id, creditos.id_cliente, creditos.pagado, creditos.restante, creditos.total, creditos.estatus, creditos.fecha_inicio, creditos.fecha_final, creditos.plazo,creditos.id_venta, clientes.Nombre_Cliente FROM creditos INNER JOIN clientes ON creditos.id_cliente = clientes.id";
 
     $resultado = mysqli_query($con, $query);
 
@@ -30,9 +30,10 @@ if (isset($_POST)) {
     $fecha_inicio = $fila["fecha_inicio"];
     $fecha_final = $fila["fecha_final"];
     $plazo = $fila["plazo"];
+    $idventa = $fila["id_venta"];
 
     $data["data"][] = array("id" => $id, "fecha_inicial"=>$fecha_inicio,"fecha_final"=>$fecha_final, "restante" => $restante,
-                    "pagado" => $pagado, "cliente"=>$cliente, "total"=>$total, "plazo"=>$plazo, "estatus"=>$estatus);
+                    "pagado" => $pagado, "cliente"=>$cliente, "total"=>$total, "plazo"=>$plazo, "estatus"=>$estatus,"id_venta"=>$idventa);
 
                   
 }

@@ -74,6 +74,9 @@ table = $('#creditos').DataTable({
         }
         
         }      },
+        { title: "Venta",          data: null, render: function (data, type, row) { 
+          return 'RAY' + row.id_venta;
+         }          },
     { title: "Accion",
       data: null,
       className: "celda-acciones",
@@ -235,9 +238,26 @@ function borrarCredito(id) {
 
                      function registrarAbono(id) {
                       abono_in = $("#abono-in").val();
-                      if(abono_in == null || abono_in ==0){ 
-                        alert("Ingresa una cantidad");
+                      if($("#restante").val() == "$0.00"){
+                        $("#alerta").empty();
+                        $("#alerta").append('<div class="alert alert-success" role="alert">'+
+                        'El credito ya esta pagado.'+
+                         '</div>');
                       }else{
+
+                      
+                      if(abono_in == null || abono_in ==0){ 
+                        $("#alerta").empty();
+                              $("#alerta").append('<div class="alert alert-warning" role="alert">'+
+                              'Ingresa una cantidad.'+
+                               '</div>');
+                      }else if(abono_in < 0){
+                        $("#alerta").append('<div class="alert alert-warning" role="alert">'+
+                        'No puedes ingresar cantidades negativas.'+
+                         '</div>');
+                      }else{
+
+
                         $.ajax({
                           type: "POST",
                           url: "./modelo/creditos/insertar-abono.php",
@@ -266,7 +286,7 @@ function borrarCredito(id) {
                           }
                         });
                       }
-                       
+                    }
                        }
 
 
@@ -292,6 +312,7 @@ function borrarCredito(id) {
                       responsive: true,
                      });
 
+
                      tabla.on( 'order.dt search.dt', function () {
                       tabla.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
                           cell.innerHTML = i+1;
@@ -299,9 +320,21 @@ function borrarCredito(id) {
                       } );
                   } ).draw();
 
+                  if(response.estatus == "5"){
+                    
+                      
+                        $("#alerta").empty();
+                        $("#alerta").append('<div class="alert alert-danger" role="alert">'+
+                        'Esta venta esta cancelada.'+
+                         '</div>');
+                    
+                   
+                  }
+
 
                 });
                 },
+                
                 html: '<form class="mt-4" id="formulario-editar-abono">'+
             
                   '<div class="row">'+
