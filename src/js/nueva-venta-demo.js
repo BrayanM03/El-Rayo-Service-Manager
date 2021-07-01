@@ -263,8 +263,6 @@ selects.forEach( select => {
             tienda = $("#sucursal").val();
 
             //Enviando data
-
-
             
             $.ajax({
                 type: "POST",
