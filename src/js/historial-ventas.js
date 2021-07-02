@@ -175,7 +175,8 @@ function borrarVenta(id) {
 
     Swal.fire({
         title: "Cancelar Venta",
-        html: '<span>¿Estas seguro de cancelar esta venta?</span>',
+        html: '<span>¿Estas seguro de cancelar esta venta?</span><br><br>'+
+        '<div class="m-auto"><label>Motivo de la cancelación.</label><br><textarea id="motivo" name="motivo" placeholder="Escribe el motivo del porque estas cancelando esta venta." class="form-control m-auto" style="width:300px;height:80px;" ></textarea></div>',
         showCancelButton: true,
         cancelButtonText: 'Cerrar',
         cancelButtonColor: '#00e059',
@@ -184,7 +185,9 @@ function borrarVenta(id) {
         cancelButtonColor:'#ff764d',
         focusConfirm: false }).then((result) => { 
         
-            if(result.isConfirmed){  
+            if(result.isConfirmed){ 
+                motivo = $("#motivo").val();
+               // if($("#motivo").val())
                 
                 $.ajax({
                     type: "POST",

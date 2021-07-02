@@ -10,10 +10,10 @@ $folio = "RAY" . $_GET["id"];
 $idVenta = $_GET["id"];
 global $folio;
 
-$ID = $con->prepare("SELECT ventas.Fecha, ventas.id_Sucursal, ventas.id_Usuarios, clientes.Nombre_Cliente, ventas.Total, ventas.metodo_pago, ventas.hora FROM ventas INNER JOIN clientes ON ventas.id_Cliente = clientes.id WHERE ventas.id = ?");
+$ID = $con->prepare("SELECT ventas.Fecha, ventas.id_Sucursal, ventas.id_Usuarios, clientes.Nombre_Cliente, ventas.Total, ventas.tipo, ventas.estatus, ventas.metodo_pago, ventas.hora FROM ventas INNER JOIN clientes ON ventas.id_Cliente = clientes.id WHERE ventas.id = ?");
 $ID->bind_param('i', $idVenta);
 $ID->execute();
-$ID->bind_result($fecha, $sucursal, $vendedor_id, $cliente, $total, $metodo_pago, $hora );
+$ID->bind_result($fecha, $sucursal, $vendedor_id, $cliente, $total, $tipo, $estatus, $metodo_pago, $hora );
 $ID->fetch();
 $ID->close();
 
@@ -31,6 +31,8 @@ global $sucursal;
 global $vendedor_usuario;
 global $cliente;
 global $total;
+global $tipo;
+global $estatus;
 global $metodo_pago;
 global $hora;
 
@@ -101,8 +103,16 @@ function Header()
     $this->SetFont('Arial','B',20);
     $this->Cell(60,10,'Reporte de Venta',0,0,'C');
     $this->Ln(5);
+   
+    $estatus = $GLOBALS["estatus"];
     $this->SetFont('Arial','',9);
-    $this->Cell(160,10,utf8_decode($direccion),0,0,'C', false);
+    $this->Cell(25,15,'',0,0,'C');
+    $this->Cell(115,10,utf8_decode($direccion),0,0,'C', false);
+    $this->SetFont('Arial','',12);
+    $this->SetTextColor(194, 34, 16);
+    $this->Cell(50,15,$estatus,0,0,'C');
+    $this->SetTextColor(36, 35, 28);
+    $this->SetFont('Arial','',9);
     $this->Ln(4);
     $this->Cell(160,10,utf8_decode($colonia),0,0,'C', false);
     $this->Ln(4);
@@ -235,6 +245,7 @@ function cuerpoTabla(){
 
    $ejeY = 85;
     /* obtener los valores */
+    $k=1;
     while($fila = $resultado->fetch_assoc()) {
 
         $cantidad = $fila["Cantidad"];
@@ -245,31 +256,80 @@ function cuerpoTabla(){
         $importe = $fila["Importe"];
         $caracteres = mb_strlen($descripcion);
         
-        if ($caracteres < 39) {
-            $pdf->Cell(19,10,$cantidad,0,0,'C',1);
-            $pdf->MultiCell(55,10, utf8_decode($descripcion),0,'L',1);
+        if ($caracteres < 25) {
+            $pdf->Cell(10,10,$cantidad,0,0,'C',1);
+            $pdf->MultiCell(58,5, utf8_decode($descripcion),1,'L',1);
             $pdf->SetY($ejeY);
-            $ejeY = $ejeY + 11;
+            $ejeY = $ejeY + 15;
             $pdf->SetX(82);
             $pdf->Cell(40,10, utf8_decode($modelo),0,0,'C',1);
             $pdf->Cell(20,10, utf8_decode($marca),0,0,'C',1);
             $pdf->Cell(30,10,utf8_decode($precio_unitario),0,0, 'C',1);
             $pdf->Cell(30,10,utf8_decode($importe),0,0, 'C',1);
-            $pdf->Ln(11);
+            $pdf->Ln(15);
+      
+        }else if ($caracteres > 25 && $caracteres < 45) {
+            $pdf->Cell(14,10,$cantidad,0,0,'C',1);
+            $pdf->MultiCell(58,5, utf8_decode($descripcion),0,'L',1);
+            $pdf->SetY($ejeY);
+            $ejeY = $ejeY + 15;
+            $pdf->SetX(82);
+            $pdf->Cell(40,10, utf8_decode($modelo),0,0,'C',1);
+            $pdf->Cell(20,10, utf8_decode($marca),0,0,'C',1);
+            $pdf->Cell(30,10,utf8_decode($precio_unitario),0,0, 'C',1);
+            $pdf->Cell(30,10,utf8_decode($importe),0,0, 'C',1);
+            $pdf->Ln(15);
       
         }else{
-            $pdf->Cell(19,15,$cantidad,0,0,'C',1);
-            $pdf->MultiCell(55,5, utf8_decode($descripcion),0,'L',1);
+            $pdf->Cell(14,12,$cantidad,0,0,'C',1);
+            $pdf->MultiCell(58,6, utf8_decode($descripcion),0,'L',1);
             $pdf->SetY($ejeY);
-            $ejeY = $ejeY + 11;
+            $ejeY = $ejeY + 15;
             $pdf->SetX(82);
-            $pdf->Cell(40,15, utf8_decode($marca),0,0,'C',1);
-            $pdf->Cell(20,15, utf8_decode($marca),0,0,'C',1);
-            $pdf->Cell(30,15,utf8_decode($precio_unitario),0,0, 'C',1);
-            $pdf->Cell(30,15,utf8_decode($importe),0,0, 'C',1);
-            $pdf->Ln(11);
+            $pdf->Cell(40,12, utf8_decode($marca),0,0,'C',1);
+            $pdf->Cell(20,12, utf8_decode($marca),0,0,'C',1);
+            $pdf->Cell(30,12,utf8_decode($precio_unitario),0,0, 'C',1);
+            $pdf->Cell(30,12,utf8_decode($importe),0,0, 'C',1);
+            $pdf->Ln(15);
         }
-       
+
+       if($k==12){
+        $pdf->AddPage();
+        $pdf->SetFont('Times','B',12);
+        
+        $pdf->SetDrawColor(135, 134, 134);
+        $pdf->SetTextColor(36, 35, 28);
+        
+        
+        
+        //$pdf->Rect(10, 80, 189, 8, 'F');
+        $pdf->SetDrawColor(194, 34, 16);
+        $pdf->SetLineWidth(1);
+        //$pdf->Line(11,95,192,95);
+        
+        $pdf->Cell(19,8,utf8_decode("Cantidad"),0,0);  
+        $pdf->Cell(55,8,utf8_decode("Concepto"),0,0, 'C');
+        $pdf->Cell(30,8,utf8_decode("Modelo"),0,0, 'C');
+        $pdf->Cell(30,8,utf8_decode("Marca"),0,0, 'C');
+        $pdf->Cell(30,8,utf8_decode("Precio Uni"),0,0, 'C');
+        $pdf->Cell(30,8,utf8_decode("Importe"),0,0, 'C');
+        $pdf->Ln(0);
+        $pdf->Line(11,81,196,81);
+    
+        $pdf->Ln(12);
+        
+        
+        
+        $pdf->SetDrawColor(1, 1, 1);
+        $pdf->SetLineWidth(0);
+    
+        $pdf->SetFillColor(236, 236, 236);
+        
+        $pdf->SetFont('Times','',12);
+        $ejeY = 85;
+       }
+        
+       $k=$k+1;
        
     }
 
@@ -321,9 +381,14 @@ function cuerpoTabla(){
 
     $pdf->SetFont('Times','B',12);
     $pdf->Cell(189,6,'Oservaciones: ',0,0);
+    if($GLOBALS["estatus"]== "Cancelada"){
+        $observacion = "Esta venta a sido cancelada.";
+    }else{
+        $observacion ="";
+    }
     $pdf->Ln(8);
     $pdf->SetFont('Courier','',12);
-    $pdf->Cell(140,20,'',0,0,'L',1);
+    $pdf->Cell(140,20,$observacion,0,0,'L',1);
     $pdf->Ln(22);
 
     $pdf->SetTextColor(194, 34, 16);
@@ -359,3 +424,5 @@ cuerpoTabla();
 
 
 ?>
+
+
