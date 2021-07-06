@@ -45,7 +45,7 @@ if(isset($_POST)){
     }
 
     
-    $unidad = "pieza";
+   
 
     switch ($_POST["metodo_pago"]) {
       case 0:
@@ -153,18 +153,38 @@ if(isset($_POST)){
               $updateStockSendero->close();
 
              
+            }else if($subcadena == "SERV"){
+
+              $ID = $con->prepare("SELECT id FROM servicios WHERE codigo LIKE ?");
+              $ID->bind_param('s', $codigo);
+              $ID->execute();
+              $ID->bind_result($id_Servicio);
+              $ID->fetch();
+              $ID->close();
+
             }
  
-             
+             if($subcadena == "SERV"){
+              $unidad = "servicio";
+              $queryInsertar = "INSERT INTO detalle_venta (id, id_Venta, id_Llanta, Modelo, Cantidad, Unidad, precio_Unitario, Importe) VALUES (null,?,?,?,?,?,?,?)";
+              $resultado = $con->prepare($queryInsertar);
+              $resultado->bind_param('iisisdd',$id_Venta, $id_Servicio, $modelo, $cantidad, $unidad, $precio_unitario, $importe);
+              $resultado->execute();
+              $resultado->close();
+             }else{
+              $unidad = "pieza";
+              $queryInsertar = "INSERT INTO detalle_venta (id, id_Venta, id_Llanta, Modelo, Cantidad, Unidad, precio_Unitario, Importe) VALUES (null,?,?,?,?,?,?,?)";
+              $resultado = $con->prepare($queryInsertar);
+              $resultado->bind_param('iisisdd',$id_Venta, $id_Llanta, $modelo, $cantidad, $unidad, $precio_unitario, $importe);
+              $resultado->execute();
+              $resultado->close();
+             }
 
               
             
-            $queryInsertar = "INSERT INTO detalle_venta (id, id_Venta, id_Llanta, Modelo, Cantidad, Unidad, precio_Unitario, Importe) VALUES (null,?,?,?,?,?,?,?)";
-            $resultado = $con->prepare($queryInsertar);
-            $resultado->bind_param('iisisdd',$id_Venta, $id_Llanta, $modelo, $cantidad, $unidad, $precio_unitario, $importe);
-            $resultado->execute();
-            $resultado->close();
+            
 
+            //Notify system
             $iduser = $_SESSION["id_usuario"];
 
             $vaciarTabla = "TRUNCATE TABLE productos_temp$iduser";

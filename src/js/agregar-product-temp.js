@@ -3,7 +3,7 @@
 
 $(document).ready(function() {
 
-  $.fn.dataTable.ext.errMode = 'none';
+ // $.fn.dataTable.ext.errMode = 'none';
 
   table = $('#pre-venta').DataTable({
     
@@ -43,7 +43,7 @@ $(document).ready(function() {
       className: "celda-acciones",
       render: function (row, data) {
     
-        return '<span class="hidden-xs"></span></button><br><button type="button" onclick="borrarProductoTmp('+ row.id +"," + row.importe +');" class="borrar-articulo btn btn-danger"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
+        return '<button type="button" rowid="'+row.id+'" importe="'+row.importe+'" class="borrar-articulo btn btn-danger"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button>'; //onclick="borrarProductoTmp('+ row.id +"," + row.importe +');"
       },
     },
   ],
@@ -65,6 +65,45 @@ $(document).ready(function() {
        
     } );
 } );
+
+
+table.on('click', '.borrar-articulo', function() {
+  
+  let $tr = $(this).closest('tr');
+  let $id = $(this).attr("rowid");
+  let $importe = $(this).attr("importe");
+
+  $.ajax({
+    type: "POST",
+    url: "./modelo/ventas/borrar-producto-temp.php", 
+    data:{"id": $id, "borrar":"borrar"},
+    success: function(response) {
+      if(response == 1){
+          //tabla_presalida.ajax.reload(null, false);
+          // Le pedimos al DataTable que borre la fila
+          table.row($tr).remove().draw(false);
+
+          
+      toastr.success('Producto borrado con exito', 'Correcto' );
+      total = $("#total").val();
+      result =  parseInt(total) - parseInt($importe);
+      console.log(result);
+      
+      if(total == 0){
+        $("#total").val(0);
+      }else{
+        $("#total").val(result);
+      }
+      }else{
+        toastr.warning('Hubo un error al borrar el producto', 'Error' );
+      }
+
+    }
+
+  });
+
+
+});
  
 
 
@@ -90,9 +129,9 @@ toastr.options = {
   "hideMethod": "fadeOut"
 }
 
-//Borrar producto temporal
+//Borrar producto temporal - no usar funcion, ya que contiene bugs >:u
 
-function borrarProductoTmp(id, importe){
+/* function borrarProductoTmp(id, importe){
 
   $.ajax({
     type: "POST",
@@ -137,6 +176,9 @@ function borrarProductoTmp(id, importe){
   });
 
 }
+ */
+
+
 
 function agregarInfo(){
     //Funcion que se encargara de mover informacion del producto a una tabla para luego ser procesada como una venta
@@ -238,50 +280,101 @@ function agregarInfo(){
      //Esta es la funcion llanta agregada y es para agregar la llanta si es una llanta no repetida y si el contador de llantas repetidas esta en 0
       function llantaAgregada() {
 
-          $.ajax({
-            type: "POST",
-            url: "./modelo/ventas/detalle-venta-insertar.php",
-            data: {"codigo": idBotonLLanta, "descripcion": descripcion,
-                    "modelo": modelo, "cantidad": cantidad, "precio": precio,
-                    "subtotal": importes},
-            
-            success: function (response) {
+          console.log(modelo);
 
-            if (response == 1) {
-              table.ajax.reload(null,false); 
-              $("#empty-table").remove();
-              toastr.success('Producto agregado correctamente', 'Agregado');
-
-              $.ajax({
-                type: "POST",
-                url: "./modelo/ventas/sumarTotaldetalleVenta.php",
-                data: {"data":"data"},
-                success: function (response) {
-                  console.log(response);
-                  $("#total").val(response);
-                }
-              });
-              //Despues de agregar el produco a la tabla temp volvemos a activar el bloqueo por token
-              document.getElementById('precio').disabled = true;
-              $("#precio-tok").attr("onclick", "generarToken()"); 
-
-            }else if(response == 2){
+          if(modelo == "no aplica"){ //En caso de que estemos vendiendo un servicio
+            $.ajax({
+              type: "POST",
+              url: "./modelo/ventas/detalle-venta-insertar-servicio.php",
+              data: {"codigo": idBotonLLanta, "descripcion": descripcion,
+                      "modelo": modelo, "cantidad": cantidad, "precio": precio,
+                      "subtotal": importes}, 
               
-              toastr.error('La cantidad que especificaste revasa el stock actual', 'Error');
-              table.ajax.reload(null,false);
-              $("#empty-table").remove();
+              success: function (response) {
+  
+              if (response == 1) {
+                table.ajax.reload(null,false); 
+                $("#empty-table").remove();
+                toastr.success('Producto agregado correctamente', 'Agregado');
+  
+                $.ajax({
+                  type: "POST",
+                  url: "./modelo/ventas/sumarTotaldetalleVenta.php",
+                  data: {"data":"data"},
+                  success: function (response) {
+                    console.log(response);
+                    $("#total").val(response);
+                  }
+                });
+                //Despues de agregar el produco a la tabla temp volvemos a activar el bloqueo por token
+                document.getElementById('precio').disabled = true;
+                $("#precio-tok").attr("onclick", "generarToken()"); 
+  
+              }else if(response == 2){
+                
+                toastr.error('La cantidad que especificaste revasa el stock actual', 'Error');
+                table.ajax.reload(null,false);
+                $("#empty-table").remove();
+  
+              }else{
+                table.ajax.reload(null,false);
+                $("#empty-table").remove();
+              }
+               
+  
+              },
+  
+              
+            });
+  
+          }else{ //En caso de que vendamos un neumatico
+            $.ajax({
+              type: "POST",
+              url: "./modelo/ventas/detalle-venta-insertar.php",
+              data: {"codigo": idBotonLLanta, "descripcion": descripcion,
+                      "modelo": modelo, "cantidad": cantidad, "precio": precio,
+                      "subtotal": importes}, 
+              
+              success: function (response) {
+  
+              if (response == 1) {
+                table.ajax.reload(null,false); 
+                $("#empty-table").remove();
+                toastr.success('Producto agregado correctamente', 'Agregado');
+  
+                $.ajax({
+                  type: "POST",
+                  url: "./modelo/ventas/sumarTotaldetalleVenta.php",
+                  data: {"data":"data"},
+                  success: function (response) {
+                    console.log(response);
+                    $("#total").val(response);
+                  }
+                });
+                //Despues de agregar el produco a la tabla temp volvemos a activar el bloqueo por token
+                document.getElementById('precio').disabled = true;
+                $("#precio-tok").attr("onclick", "generarToken()"); 
+  
+              }else if(response == 2){
+                
+                toastr.error('La cantidad que especificaste revasa el stock actual', 'Error');
+                table.ajax.reload(null,false);
+                $("#empty-table").remove();
+  
+              }else{
+                table.ajax.reload(null,false);
+                $("#empty-table").remove();
+              }
+               
+  
+              },
+  
+              
+            });
+  
+          }
 
-            }else{
-              table.ajax.reload(null,false);
-              $("#empty-table").remove();
-            }
-             
-
-            },
-
-            
-          });
-
+         
 
 
           

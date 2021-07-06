@@ -236,104 +236,314 @@ function cuerpoTabla(){
 
     $conexion = $GLOBALS["con"];
     $id_venta = $GLOBALS["idVenta"];
-    
-    
-    $detalle = $conexion->prepare("SELECT detalle_venta.Modelo, detalle_venta.Cantidad,llantas.Descripcion, llantas.Marca, detalle_venta.precio_Unitario, detalle_venta.Importe FROM detalle_venta INNER JOIN llantas ON detalle_venta.id_llanta = llantas.id WHERE id_Venta = ?");
-    $detalle->bind_param('i', $id_venta);
-    $detalle->execute();
-    $resultado = $detalle->get_result();  
 
-   $ejeY = 85;
-    /* obtener los valores */
-    $k=1;
-    while($fila = $resultado->fetch_assoc()) {
+    $total = 0;
+    $stmt=$conexion->prepare("SELECT COUNT(*) total FROM detalle_venta INNER JOIN servicios ON detalle_venta.id_llanta = servicios.id WHERE id_Venta = ?");
+    $stmt->bind_param('i',$id_venta);
+    $stmt->execute();
+    $stmt->bind_result($total);
+    $stmt->fetch();
+    $stmt->close();
 
-        $cantidad = $fila["Cantidad"];
-        $modelo = $fila["Modelo"];
-        $descripcion = $fila["Descripcion"];
-        $marca = $fila["Marca"];
-        $precio_unitario = $fila["precio_Unitario"];
-        $importe = $fila["Importe"];
-        $caracteres = mb_strlen($descripcion);
+    if($total == 0){
+
+        $detalle = $conexion->prepare("SELECT detalle_venta.Modelo, detalle_venta.Cantidad,llantas.Descripcion, llantas.Marca, detalle_venta.precio_Unitario, detalle_venta.Importe FROM detalle_venta INNER JOIN llantas ON detalle_venta.id_llanta = llantas.id WHERE id_Venta = ?");
+        $detalle->bind_param('i', $id_venta);
+        $detalle->execute();
+        $resultado = $detalle->get_result(); 
+        //$cantRes = $detalle->nums_rows() 
+        $detalle->close();
+       $ejeY = 85;
+       
+        $k=1;
+        while($fila = $resultado->fetch_assoc()) {
+    
+            $cantidad = $fila["Cantidad"];
+            $modelo = $fila["Modelo"];
+            $descripcion = $fila["Descripcion"];
+            $marca = $fila["Marca"];
+            $precio_unitario = $fila["precio_Unitario"];
+            $importe = $fila["Importe"];
+            $caracteres = mb_strlen($descripcion);
+            
+            if ($caracteres < 25) {
+                $pdf->Cell(10,10,$cantidad,0,0,'C',1);
+                $pdf->MultiCell(58,5, utf8_decode($descripcion),1,'L',1); //$descripcion
+                $pdf->SetY($ejeY);
+                $ejeY = $ejeY + 15;
+                $pdf->SetX(82);
+                $pdf->Cell(40,10, utf8_decode($modelo),0,0,'C',1);
+                $pdf->Cell(20,10, utf8_decode($marca),0,0,'C',1);
+                $pdf->Cell(30,10,utf8_decode($precio_unitario),0,0, 'C',1);
+                $pdf->Cell(30,10,utf8_decode($importe),0,0, 'C',1);
+                $pdf->Ln(15);
+          
+            }else if ($caracteres > 25 && $caracteres < 45) {
+                $pdf->Cell(14,10,$cantidad,0,0,'C',1);
+                $pdf->MultiCell(58,5, utf8_decode($descripcion),0,'L',1);
+                $pdf->SetY($ejeY);
+                $ejeY = $ejeY + 15;
+                $pdf->SetX(82);
+                $pdf->Cell(40,10, utf8_decode($modelo),0,0,'C',1);
+                $pdf->Cell(20,10, utf8_decode($marca),0,0,'C',1);
+                $pdf->Cell(30,10,utf8_decode($precio_unitario),0,0, 'C',1);
+                $pdf->Cell(30,10,utf8_decode($importe),0,0, 'C',1);
+                $pdf->Ln(15);
+          
+            }else{
+                $pdf->Cell(14,12,$cantidad,0,0,'C',1);
+                $pdf->MultiCell(58,6, utf8_decode($descripcion),0,'L',1);
+                $pdf->SetY($ejeY);
+                $ejeY = $ejeY + 15;
+                $pdf->SetX(82);
+                $pdf->Cell(40,12, utf8_decode($marca),0,0,'C',1);
+                $pdf->Cell(20,12, utf8_decode($marca),0,0,'C',1);
+                $pdf->Cell(30,12,utf8_decode($precio_unitario),0,0, 'C',1);
+                $pdf->Cell(30,12,utf8_decode($importe),0,0, 'C',1);
+                $pdf->Ln(15);
+            }
+    
+           if($k==12){
+            $pdf->AddPage();
+            $pdf->SetFont('Times','B',12);
+            
+            $pdf->SetDrawColor(135, 134, 134);
+            $pdf->SetTextColor(36, 35, 28);
+            
+            
+            
+            //$pdf->Rect(10, 80, 189, 8, 'F');
+            $pdf->SetDrawColor(194, 34, 16);
+            $pdf->SetLineWidth(1);
+            //$pdf->Line(11,95,192,95);
+            
+            $pdf->Cell(19,8,utf8_decode("Cantidad"),0,0);  
+            $pdf->Cell(55,8,utf8_decode("Concepto"),0,0, 'C');
+            $pdf->Cell(30,8,utf8_decode("Modelo"),0,0, 'C');
+            $pdf->Cell(30,8,utf8_decode("Marca"),0,0, 'C');
+            $pdf->Cell(30,8,utf8_decode("Precio Uni"),0,0, 'C');
+            $pdf->Cell(30,8,utf8_decode("Importe"),0,0, 'C');
+            $pdf->Ln(0);
+            $pdf->Line(11,81,196,81);
         
-        if ($caracteres < 25) {
-            $pdf->Cell(10,10,$cantidad,0,0,'C',1);
-            $pdf->MultiCell(58,5, utf8_decode($descripcion),1,'L',1);
-            $pdf->SetY($ejeY);
-            $ejeY = $ejeY + 15;
-            $pdf->SetX(82);
-            $pdf->Cell(40,10, utf8_decode($modelo),0,0,'C',1);
-            $pdf->Cell(20,10, utf8_decode($marca),0,0,'C',1);
-            $pdf->Cell(30,10,utf8_decode($precio_unitario),0,0, 'C',1);
-            $pdf->Cell(30,10,utf8_decode($importe),0,0, 'C',1);
-            $pdf->Ln(15);
-      
-        }else if ($caracteres > 25 && $caracteres < 45) {
-            $pdf->Cell(14,10,$cantidad,0,0,'C',1);
-            $pdf->MultiCell(58,5, utf8_decode($descripcion),0,'L',1);
-            $pdf->SetY($ejeY);
-            $ejeY = $ejeY + 15;
-            $pdf->SetX(82);
-            $pdf->Cell(40,10, utf8_decode($modelo),0,0,'C',1);
-            $pdf->Cell(20,10, utf8_decode($marca),0,0,'C',1);
-            $pdf->Cell(30,10,utf8_decode($precio_unitario),0,0, 'C',1);
-            $pdf->Cell(30,10,utf8_decode($importe),0,0, 'C',1);
-            $pdf->Ln(15);
-      
-        }else{
-            $pdf->Cell(14,12,$cantidad,0,0,'C',1);
-            $pdf->MultiCell(58,6, utf8_decode($descripcion),0,'L',1);
-            $pdf->SetY($ejeY);
-            $ejeY = $ejeY + 15;
-            $pdf->SetX(82);
-            $pdf->Cell(40,12, utf8_decode($marca),0,0,'C',1);
-            $pdf->Cell(20,12, utf8_decode($marca),0,0,'C',1);
-            $pdf->Cell(30,12,utf8_decode($precio_unitario),0,0, 'C',1);
-            $pdf->Cell(30,12,utf8_decode($importe),0,0, 'C',1);
-            $pdf->Ln(15);
+            $pdf->Ln(12);
+            
+            
+            
+            $pdf->SetDrawColor(1, 1, 1);
+            $pdf->SetLineWidth(0);
+        
+            $pdf->SetFillColor(236, 236, 236);
+            
+            $pdf->SetFont('Times','',12);
+            $ejeY = 85;
+           }
+            
+           $k=$k+1;
+           
+        }
+    
+        
+
+
+    }else if($total > 0){ 
+
+        $detalles = $conexion->prepare("SELECT detalle_venta.Modelo, detalle_venta.Cantidad,servicios.descripcion, detalle_venta.precio_Unitario, detalle_venta.Importe FROM detalle_venta INNER JOIN servicios ON detalle_venta.id_llanta = servicios.id WHERE id_Venta = ?");
+        $detalles->bind_param('i', $id_venta);
+        $detalles->execute();
+        $resultadoServ = $detalles->get_result();
+        $detalles->close(); 
+
+        $detalle = $conexion->prepare("SELECT detalle_venta.Modelo, detalle_venta.Cantidad,llantas.Descripcion, llantas.Marca, detalle_venta.precio_Unitario, detalle_venta.Importe FROM detalle_venta INNER JOIN llantas ON detalle_venta.id_llanta = llantas.id WHERE id_Venta = ?");
+        $detalle->bind_param('i', $id_venta);
+        $detalle->execute();
+        $resultado = $detalle->get_result(); 
+        $detalle->close(); 
+
+        $ejeY = 85;
+        $k=1;
+
+        while($fila = $resultadoServ->fetch_assoc()) {
+    
+            $cantidad = $fila["Cantidad"];
+            $modelo = "N/A";
+            $descripcion = $fila["descripcion"];
+            $marca = "N/A";
+            $precio_unitario = $fila["precio_Unitario"];
+            $importe = $fila["Importe"];
+            $caracteres = mb_strlen($descripcion);
+            
+            if ($caracteres < 25) {
+                $pdf->Cell(10,10,$cantidad,0,0,'C',1);
+                $pdf->MultiCell(62,10, utf8_decode($descripcion),0,'L',1); //$descripcion
+                $pdf->SetY($ejeY);
+                $ejeY = $ejeY + 15;
+                $pdf->SetX(82);
+                $pdf->Cell(40,10, utf8_decode($modelo),0,0,'C',1);
+                $pdf->Cell(20,10, utf8_decode($marca),0,0,'C',1);
+                $pdf->Cell(30,10,utf8_decode($precio_unitario),0,0, 'C',1);
+                $pdf->Cell(30,10,utf8_decode($importe),0,0, 'C',1);
+                $pdf->Ln(15);
+          
+            }else if ($caracteres > 25 && $caracteres < 45) {
+                $pdf->Cell(14,10,$cantidad,0,0,'C',1);
+                $pdf->MultiCell(58,5, utf8_decode($descripcion),0,'L',1);
+                $pdf->SetY($ejeY);
+                $ejeY = $ejeY + 15;
+                $pdf->SetX(82);
+                $pdf->Cell(40,10, utf8_decode($modelo),0,0,'C',1);
+                $pdf->Cell(20,10, utf8_decode($marca),0,0,'C',1);
+                $pdf->Cell(30,10,utf8_decode($precio_unitario),0,0, 'C',1);
+                $pdf->Cell(30,10,utf8_decode($importe),0,0, 'C',1);
+                $pdf->Ln(15);
+          
+            }else{
+                $pdf->Cell(14,12,$cantidad,0,0,'C',1);
+                $pdf->MultiCell(58,6, utf8_decode($descripcion),0,'L',1);
+                $pdf->SetY($ejeY);
+                $ejeY = $ejeY + 15;
+                $pdf->SetX(82);
+                $pdf->Cell(40,12, utf8_decode($marca),0,0,'C',1);
+                $pdf->Cell(20,12, utf8_decode($marca),0,0,'C',1);
+                $pdf->Cell(30,12,utf8_decode($precio_unitario),0,0, 'C',1);
+                $pdf->Cell(30,12,utf8_decode($importe),0,0, 'C',1);
+                $pdf->Ln(15);
+            }
+    
+           if($k==12){
+            $pdf->AddPage();
+            $pdf->SetFont('Times','B',12);
+            
+            $pdf->SetDrawColor(135, 134, 134);
+            $pdf->SetTextColor(36, 35, 28);
+            
+            
+            
+            //$pdf->Rect(10, 80, 189, 8, 'F');
+            $pdf->SetDrawColor(194, 34, 16);
+            $pdf->SetLineWidth(1);
+            //$pdf->Line(11,95,192,95);
+            
+            $pdf->Cell(19,8,utf8_decode("Cantidad"),0,0);  
+            $pdf->Cell(55,8,utf8_decode("Concepto"),0,0, 'C');
+            $pdf->Cell(30,8,utf8_decode("Modelo"),0,0, 'C');
+            $pdf->Cell(30,8,utf8_decode("Marca"),0,0, 'C');
+            $pdf->Cell(30,8,utf8_decode("Precio Uni"),0,0, 'C');
+            $pdf->Cell(30,8,utf8_decode("Importe"),0,0, 'C');
+            $pdf->Ln(0);
+            $pdf->Line(11,81,196,81);
+        
+            $pdf->Ln(12);
+            
+            
+            
+            $pdf->SetDrawColor(1, 1, 1);
+            $pdf->SetLineWidth(0);
+        
+            $pdf->SetFillColor(236, 236, 236);
+            
+            $pdf->SetFont('Times','',12);
+            $ejeY = 85;
+           }
+            
+           $k=$k+1;
+           
         }
 
-       if($k==12){
-        $pdf->AddPage();
-        $pdf->SetFont('Times','B',12);
-        
-        $pdf->SetDrawColor(135, 134, 134);
-        $pdf->SetTextColor(36, 35, 28);
-        
-        
-        
-        //$pdf->Rect(10, 80, 189, 8, 'F');
-        $pdf->SetDrawColor(194, 34, 16);
-        $pdf->SetLineWidth(1);
-        //$pdf->Line(11,95,192,95);
-        
-        $pdf->Cell(19,8,utf8_decode("Cantidad"),0,0);  
-        $pdf->Cell(55,8,utf8_decode("Concepto"),0,0, 'C');
-        $pdf->Cell(30,8,utf8_decode("Modelo"),0,0, 'C');
-        $pdf->Cell(30,8,utf8_decode("Marca"),0,0, 'C');
-        $pdf->Cell(30,8,utf8_decode("Precio Uni"),0,0, 'C');
-        $pdf->Cell(30,8,utf8_decode("Importe"),0,0, 'C');
-        $pdf->Ln(0);
-        $pdf->Line(11,81,196,81);
+
+        while($fila = $resultado->fetch_assoc()) {
     
-        $pdf->Ln(12);
-        
-        
-        
-        $pdf->SetDrawColor(1, 1, 1);
-        $pdf->SetLineWidth(0);
+            $cantidad = $fila["Cantidad"];
+            $modelo = $fila["Modelo"];
+            $descripcion = $fila["Descripcion"];
+            $marca = $fila["Marca"];
+            $precio_unitario = $fila["precio_Unitario"];
+            $importe = $fila["Importe"];
+            $caracteres = mb_strlen($descripcion);
+            
+            if ($caracteres < 25) {
+                $pdf->Cell(10,10,$cantidad,0,0,'C',1);
+                $pdf->MultiCell(58,5, utf8_decode($descripcion),1,'L',1); //$descripcion
+                $pdf->SetY($ejeY);
+                $ejeY = $ejeY + 15;
+                $pdf->SetX(82);
+                $pdf->Cell(40,10, utf8_decode($modelo),0,0,'C',1);
+                $pdf->Cell(20,10, utf8_decode($marca),0,0,'C',1);
+                $pdf->Cell(30,10,utf8_decode($precio_unitario),0,0, 'C',1);
+                $pdf->Cell(30,10,utf8_decode($importe),0,0, 'C',1);
+                $pdf->Ln(15);
+          
+            }else if ($caracteres > 25 && $caracteres < 45) {
+                $pdf->Cell(14,10,$cantidad,0,0,'C',1);
+                $pdf->MultiCell(58,5, utf8_decode($descripcion),0,'L',1);
+                $pdf->SetY($ejeY);
+                $ejeY = $ejeY + 15;
+                $pdf->SetX(82);
+                $pdf->Cell(40,10, utf8_decode($modelo),0,0,'C',1);
+                $pdf->Cell(20,10, utf8_decode($marca),0,0,'C',1);
+                $pdf->Cell(30,10,utf8_decode($precio_unitario),0,0, 'C',1);
+                $pdf->Cell(30,10,utf8_decode($importe),0,0, 'C',1);
+                $pdf->Ln(15);
+          
+            }else{
+                $pdf->Cell(14,12,$cantidad,0,0,'C',1);
+                $pdf->MultiCell(58,6, utf8_decode($descripcion),0,'L',1);
+                $pdf->SetY($ejeY);
+                $ejeY = $ejeY + 15;
+                $pdf->SetX(82);
+                $pdf->Cell(40,12, utf8_decode($marca),0,0,'C',1);
+                $pdf->Cell(20,12, utf8_decode($marca),0,0,'C',1);
+                $pdf->Cell(30,12,utf8_decode($precio_unitario),0,0, 'C',1);
+                $pdf->Cell(30,12,utf8_decode($importe),0,0, 'C',1);
+                $pdf->Ln(15);
+            }
     
-        $pdf->SetFillColor(236, 236, 236);
+           if($k==12){
+            $pdf->AddPage();
+            $pdf->SetFont('Times','B',12);
+            
+            $pdf->SetDrawColor(135, 134, 134);
+            $pdf->SetTextColor(36, 35, 28);
+            
+            
+            
+            //$pdf->Rect(10, 80, 189, 8, 'F');
+            $pdf->SetDrawColor(194, 34, 16);
+            $pdf->SetLineWidth(1);
+            //$pdf->Line(11,95,192,95);
+            
+            $pdf->Cell(19,8,utf8_decode("Cantidad"),0,0);  
+            $pdf->Cell(55,8,utf8_decode("Concepto"),0,0, 'C');
+            $pdf->Cell(30,8,utf8_decode("Modelo"),0,0, 'C');
+            $pdf->Cell(30,8,utf8_decode("Marca"),0,0, 'C');
+            $pdf->Cell(30,8,utf8_decode("Precio Uni"),0,0, 'C');
+            $pdf->Cell(30,8,utf8_decode("Importe"),0,0, 'C');
+            $pdf->Ln(0);
+            $pdf->Line(11,81,196,81);
         
-        $pdf->SetFont('Times','',12);
-        $ejeY = 85;
-       }
+            $pdf->Ln(12);
+            
+            
+            
+            $pdf->SetDrawColor(1, 1, 1);
+            $pdf->SetLineWidth(0);
         
-       $k=$k+1;
-       
+            $pdf->SetFillColor(236, 236, 236);
+            
+            $pdf->SetFont('Times','',12);
+            $ejeY = 85;
+           }
+            
+           $k=$k+1;
+           
+        }
+
     }
 
+   // $pdf->Cell(10,10,$total,0,0,'C',1);
     
+   /*
+    */
 
     
   

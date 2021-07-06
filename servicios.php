@@ -26,29 +26,33 @@
     <meta name="author" content="">
     <link rel="shortcut icon" href="src/img/rayo.svg" />
 
-    <title>Nueva Venta</title>
+    <title>Inventario de llantas totales</title>
 
+  
     <!-- Custom fonts for this template-->
- 
-    <link rel="stylesheet" href="src/css/nueva-venta.css">
+    <link rel="stylesheet" href="src/css/inventario.css">
     <link href="src/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
-        <link href='https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css' rel='stylesheet' />
+
 
     <!-- Custom styles for this template-->
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="src/vendor/datatables/dataTables.bootstrap4.css">
     <link rel="stylesheet" href="src/vendor/datatables-responsive/css/responsive.bootstrap4.min.css">
-   
+
+  <link rel="stylesheet" href="https://nightly.datatables.net/colreorder/css/colReorder.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.css" integrity="sha512-oe8OpYjBaDWPt2VmSFR+qYOdnTjeV9QPLJUeqZyprDEQvQLJ9C5PCFclxwNuvb/GQgQngdCXzKSFltuHD3eCxA==" crossorigin="anonymous" />
+    
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="src/vendor/bower_components/select2-bootstrap-theme/dist/select2-bootstrap.css">
-
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.bootstrap4.min.css">
     <!---Librerias de estilos-->
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="src/css/menu-vertical.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.css" integrity="sha512-oe8OpYjBaDWPt2VmSFR+qYOdnTjeV9QPLJUeqZyprDEQvQLJ9C5PCFclxwNuvb/GQgQngdCXzKSFltuHD3eCxA==" crossorigin="anonymous" />
+   
 
 </head>
 
@@ -88,8 +92,8 @@
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item active">
-                <a class="nav-link" href="#">
+            <li class="nav-item">
+                <a class="nav-link" href="nueva-venta.php">
                     <i class="fas fa-fw fa-cart-plus"></i>
                     <span>Nueva venta</span>
                 </a>
@@ -125,41 +129,31 @@
                 </div>
             </li>
 
-
             <?php 
                 $user_jerarquia = $_SESSION["rol"];
-
-                if ($user_jerarquia == 1) {
-                   $name = "Inventario";
-                }else if($user_jerarquia ==2){
-                 $name = "Clientes y creditos";
-                }
-
-            ?>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-            <div class="sidebar-heading">
-            <?php echo $name   ?>
-            </div>
-            <?php 
 
                 if ($user_jerarquia == 1) {
                     # code...
                 
 
             ?>
+            <!-- Divider -->
+            <hr class="sidebar-divider">
 
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Inventario
+            </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTyres"
                     aria-expanded="true" aria-controls="collapsePages">
                     <i class="fas fa-fw fa-folder"></i>
                     <span>Mis llantas</span>
                 </a>
-                <div id="collapseTyres" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
+                <div id="collapseTyres" class="collapse show" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Sucursales:</h6>
                         <a class="collapse-item" href="inventario-pedro.php" style="display:flex; flex-direction: row; justify-content:start;">
                         <i class="fas fa-fw fa-store"></i> 
@@ -188,12 +182,6 @@
             </li>
 
 
-            <?php }
-            
-            if ($user_jerarquia == 1 || $user_jerarquia == 2) {
-            ?>
-
-
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseClients"
                     aria-expanded="true" aria-controls="collapsePages">
@@ -211,15 +199,15 @@
                             <span style="margin-left:12px;"> Creditos</span> </a>
                         <a class="collapse-item" href="forgot-password.html">
                             <img src="src/img/pago.svg" width="18px" /> 
-                            <span style="margin-left:12px;"> Creditos vencidos</span></a> 
+                            <span style="margin-left:12px;"> Creditos vencidos</span></a>
                         </a>
-                     
+                    
                     </div>
                 </div>
             </li>
 
 
-          <!---  <li class="nav-item">
+         <!--    <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProvider"
                     aria-expanded="true" aria-controls="collapsePages">
                     <i class="fas fa-fw fa-user-cog"></i>
@@ -228,10 +216,10 @@
                 <div id="collapseProvider" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Categorias:</h6>
-                        <a class="collapse-item" href="clientes.php" style="display:flex; flex-direction: row; justify-content:start;">
+                        <a class="collapse-item" href="login.html" style="display:flex; flex-direction: row; justify-content:start;">
                             <img src="src/img/tyre-invent.svg" width="18px" /> 
                             <span style="margin-left:12px;"> Clientes</span> </a>
-                        <a class="collapse-item" href="creditos.php" style="display:flex; flex-direction: row; justify-content:start;">
+                        <a class="collapse-item" href="register.html" style="display:flex; flex-direction: row; justify-content:start;">
                             <img src="src/img/salida.svg" width="18px" /> 
                             <span style="margin-left:12px;"> Creditos</span> </a>
                         <a class="collapse-item" href="forgot-password.html">
@@ -241,12 +229,9 @@
                     
                     </div>
                 </div>
-            </li>  -->
+            </li> -->
 
-            <?php }
-            
-            if ($user_jerarquia == 1 ) {
-            ?>
+
             <!-- Nav Item - Charts -->
             <li class="nav-item">
                 <a class="nav-link" href="generar-token.php">
@@ -254,10 +239,10 @@
                     <span>Generar token</span></a>
             </li>
 
-           
+         
+
             <?php 
-              }     # code...
-                
+              }else{}  
 
             ?>
 
@@ -495,191 +480,27 @@
 
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid" style="display: flex; justify-content: center; ">
+                <div class="containe" style="width:80%; margin:auto;">
 
-                     <!-- Contenido Nueva venta -->
-
-                     <div class="card" style="margin-bottom: 7vh; padding-bottom: 5vh; padding-right: 30px;">
+                     <!-- Contenido inventario -->
+                     <div class="titulo-inventario m-auto">
+                         <h5 style="margin: 10px 0px;">Stock total de llantas en existencia</h5>
+                         <p style="color: gray;">Inventario completo</p>
+                        </div>
                         
-                             <h3 class="titulo-nueva-venta">Nueva venta</h3>
-                             <p class="ml-4" id="texto-modo-venta">Modo de venta: <span style="color: green; text-shadow:#00a000 3px 0 10px;">Neumaticos</span></p>
-                         
-                         <div class="card-body">
-                            <div class="row">
+                      <div class="botones">
+                                    <a href="#" class="btn btn-success btn-icon-split" onclick="agregarLLanta();">
+                                        <span class="icon text-white-50">
+                                            <i class="fas fa-check-circle"></i>
+                                        </span>
+                                        <span class="text">Agregar llanta</span>
+                                    </a>
+                                   
+                      </div>
+                      <table id="inventario" class="table table-striped table-bordered table-hover">                   
+                     </table>
 
-                            <div class="grupo-1 col">
-                            
-                                                <div class="logo-marca-grande">
-
-                                                </div>
-
-                                                <!--Fila 1-->
-                                                <form id="form-punto-venta">
-
-                                                <div class="fila1">
-                                                        <!-- <label class="input-largo">
-                                                            <span for="search">Busqueda</span>
-                                                            <input type="text" id="search" name="search" class="input-group"> -->
-                                                           <!--  
-                                                        </label>  -->
-                                                        <div id="select-search-contain">
-                                                        <select id="search" style="margin-bottom: 15px;" name="clientes" class="form-control">  -->
-                                                            
-                                                            </select>
-                                                        </div>
-                                                        
-
-                                                        <div class="contenedor-tabla oculto">
-                                                                <table class="table" id="table-llantas-mostradas">
-                                                                <thead class="table-info">
-                                                                <tr>
-                                                                    <th>Codigo</th>
-                                                                    <th>Descripción</th>
-                                                                    <th>Modelo</th>
-                                                                    <th>Costo</th>
-                                                                    <th>Costo c/Desc</th>
-                                                                    <th>Marca</th>
-                                                                    <th>Sucursal</th>
-                                                                    <th>Stock</th>
-                                                                </tr>
-                                                                </thead> 
-                                                                <tbody class="tbody">
-                                                                </tbody> 
-                                                                </table>
-                                                        </div>
-
-                                                      
-                                                        <select id="clientes" name="clientes" class="form-control"> 
-                                                            
-                                                         </select>
-
-                                                                              
-                                                        
-
-                                                         <select id="metodos-pago" name="clientes" class="form-control"> 
-                                                                <option disabled selected value></option>
-                                                                <option value="0">Efectivo</option>
-                                                                <option value="1">Tarjeta</option>
-                                                                <option value="2">Transferencia</option>
-                                                                <option value="3">Cheque</option>
-                                                                <option value="4">Sin definir</option>
-                                                         </select>
-                                                  
-
-                                                        <label class="no-editable">
-                                                            <span for="description">Descripción</span>
-                                                            <input style="cursor: not-allowed;color:#696969;" type="text" id="description" name="description" class="input-group" disabled>
-                                                        </label>
-                                                        
-                                                </div> 
-                                                
-                                                <!--Fila 1-->
-
-                                                <div class="fila2 row">
-                                                    
-                                                    <label class="no-editable-corto">
-                                                        <span for="modelo">Modelo</span>
-                                                        <input modelo="" type="text" style="cursor: not-allowed; color:#696969;" id="modelo" name="modelo" class="input-group" disabled>
-                                                    </label> 
-
-                                                    <label class="no-editable-corto">
-                                                         <span for="sucursal" >Sucursal</span>
-                                                         <select style="color:#696969;" id="sucursal" name="sucursal" class="select-group form-select"> 
-                                                                <option disabled selected value></option>
-                                                                <option value="0">Pedro Cardenas</option>
-                                                                <option value="1">Sendero</option>
-                                                         </select>
-                                                    </label>
-
-                                                    <label class="input-corto">
-                                                        <span for="cantidad">Cantidad</span>
-                                                        <input type="number" id="cantidad" name="cantidad" class="input-group" required>
-                                                    </label>
-                                        
-                                                    <label class="input-corto precio-pointer" id="precio-tok" onclick="generarToken();">
-                                                        <span for="precio" class="precio-pointer">$ Precio</span>
-                                                        <input type="number" id="precio" name="precio" class="input-group precio-pointer" disabled>
-                                                    </label>
-
-                                                    <label style="border-color: transparent;">
-                                                    <div class="btn btn-info" flag="0" onclick="changeServicios();" id="btn-change-servicios" style="width: 45px;margin: 8px 3px;"><i class="fas fa-car"></i></div>
-                                                    <div class="btn btn-info" onclick="agregarcliente();" id="btn-add-client" style="width: 45px;margin: 8px 30px 8px 0px;"><i style=" width: 20px;" class="fas fa-user-plus"></i></div>
-                                                              
-
-                                                    <div class="btn btn-info" rol="<?php echo $_SESSION['rol']; ?>" sucursal="<?php echo $_SESSION['sucursal']; ?>"  id="agregar-producto" onclick="agregarInfo()" >Agregar</div>
-                                                    </label>
-                                                    
-                                                    <div id="help-addclient-span" class="targeta-ayuda">
-                                                       <div class="card text-white border-info">
-                                                       <div class="card-header bg-info">Agregar un cliente</div>
-                                                       <div class="card-body bg-white text-info" >
-                                                       <p class="card-text">Con este boton pueden agregar un cliente a la base de datos</p>
-                                                       </div>
-                                                    </div> 
-                                                    </div> 
-
-                                                    <div id="help-changeservice-span" class="targeta-ayuda">
-                                                       <div class="card text-white border-info">
-                                                       <div class="card-header bg-info" id="title-help-card">Modo servicios</div>
-                                                       <div class="card-body bg-white text-info" >
-                                                       <p class="card-text" id="body-help-card">Pulsa este boton para cambiar a modo venta de servicios</p>
-                                                       </div>
-                                                    </div> 
-                                                    </div> 
-
-                                                </div>
-                                                 
-                                                </form>
-                                        
-                                </div>
-
-
-                            <div class="grupo-2 col">
-
-                                <div class="fila3">
-                                            <div class="folio-fecha">
-                                                
-                                                <label>
-                                                    <span for="fecha">Fecha</span>
-                                                    <input class="form-control"  type="date" id="fecha" name="fecha" style="width: 150px;"> 
-                                                </label>
-                                            </div>  
-                                </div>
-                                    
-                                    
-                                    <div class="fila4 row">
-                                        
-                                                <table id="pre-venta" class="table table-striped table-bordered table-hover">
-                                           
-                                                </table>
-                                        
-                                        
-                                                
-                                                <div class="row" style="width: 100%; display: flex; justify-content: center; align-items: center; margin-top:25px">
-                                                    <div class="form-group" style="display: flex; align-items: center; justify-content: space-around; width: 25%;" >
-                                                        <span for="total" >Total: $</span>
-                                                        <input type="number" value="0" class="form-control" id="total" name="total" style="width:120px; margin-left:5px; display:flex; justify-content:center;" disabled> 
-                                                
-                                                    </div>
-                                                    </div>
-                                                <div class="botones-de-venta" style="margin-top: 8px;">
-                                                    <div class="btn btn-warning" onclick="limpiarTabla();" style="color: rgb(31, 28, 28); margin-right: 2vh;" id="limpiar-venta">Limpiar</div>
-                                                    <div class="btn btn-success" onclick="realizarVenta();" id="realizar-venta">Realizar venta</div>
-                                                    <div class="btn btn-primary" onclick="realizarVentaCredito();" style="margin-left: 2vh;" id="realizar-venta">Realizar venta a credito</div>
-                                                </div>   
-                                                
-                                    
-                                    </div>
-                                </div>
-
-                            </div> <!---Fin row-->
-
-                                
-                              
-                                
-                            
-                         </div>
-                     </div>
+                     
                    
 
                 </div>
@@ -720,7 +541,7 @@
                 <div class="modal-body">Seleccione "salir" para cerra su sesión actual.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
-                    <a class="btn btn-primary" href="modelo/login/cerrar-sesion.php">Salir</a>
+                    <a class="btn btn-primary" href="./modelo/login/cerrar-sesion.php">Salir</a>
                 </div>
             </div>
         </div>
@@ -741,30 +562,33 @@
 
     <!-- Page level custom scripts 
     <script src="src/js/demo/chart-area-demo.js"></script>
-    <script src="src/js/demo/chart-pie-demo.js"></script>-->
+    <script src="src/js/demo/chart-pie-demo.js"></script>--> 
 
 
     <!-- Cargamos nuestras librerias-->
-    
     <script src="src/vendor/datatables/jquery.dataTables.min.js"></script> 
+    <script src="src/vendor/datatables/defaults.js"></script>
     <script src="src/vendor/datatables-responsive/js/dataTables.responsive.min.js"></script>
+  <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+
+  <script src="https://nightly.datatables.net/colreorder/js/dataTables.colReorder.min.js"></script>
     <script src="src/vendor/datatables/dataTables.bootstrap4.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous"></script>
-    
-    <script src="src/vendor/datatables/defaults.js"></script>
-    <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js"></script>
-    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.min.js"></script>
-<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.css" type="text/css">
 
-    <!--<script src="src/js/agregar-info-tabla-venta.js"></script>-->
-    <script src="src/js/nueva-venta-demo.js"></script>
-    <script src="src/js/agregar-product-temp.js"></script>
-    <script src="src/js/generar-token.js"></script>
-    <script src="src/js/nueva-venta-credito.js"></script>
-  <!--  <script src="src/js/notificaciones.js"></script>   -->
+       <!-- Scripts para exportar archivos de tablas  -->        
+       <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.bootstrap4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>   
+     <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+     <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script> 
+     <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.colVis.min.js"></script>
+    
+    <script src="src/js/inventario-total.js"></script>
+    <script src="src/js/editar-llanta-inv-total.js"></script>
    
    
 </body>

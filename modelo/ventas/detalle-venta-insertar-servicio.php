@@ -82,37 +82,14 @@ if(isset($_POST)){
                 $stmt->bind_result($cantidadActual, $importeActual);
                 $stmt->fetch();
                 $stmt->close();
-
-                $subcadena = substr($codigo, 0, 4);
-
-                if ($subcadena == "SEND") {
-                    $suc = 2;
-                }else if($subcadena == "PEDC"){
-                 $suc = 1;
-                }
-
-                $revisarStock = "SELECT Stock FROM inventario_mat$suc WHERE Codigo = ?";
-                $res = $con->prepare($revisarStock); 
-                $res->bind_param('s', $codigo);
-                $res->execute();
-                $res->bind_result($StockActual);
-                $res->fetch();
-                $res->close();
-
-                $total = $cantidad + $cantidadActual;
+                $totalServicios = $cantidad + $cantidadActual;
                 $importeTotal = doubleval($importe) + doubleval($importeActual);
 
-                if ($total > $StockActual) {
-                    print_r(2);
-
-                }else{
-                    $updateQuanty = $con->prepare("UPDATE productos_temp$iduser SET cantidad = ?, importe = ? WHERE codigo = ?");
-                    $updateQuanty->bind_param('ids', $total, $importeTotal, $codigo);
+                $updateQuanty = $con->prepare("UPDATE productos_temp$iduser SET cantidad = ?, importe = ? WHERE codigo = ?");
+                    $updateQuanty->bind_param('ids', $totalServicios, $importeTotal, $codigo);
                     $updateQuanty->execute();
                     $updateQuanty->close();
-      
-                    print_r(1);
-                }
+                    print_r(1);          
 
              
 

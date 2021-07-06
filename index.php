@@ -143,9 +143,9 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
                         <a class="collapse-item" href="inventario-total.php" style="display:flex; flex-direction: row; justify-content:start;">
                             <img src="src/img/tyre-invent.svg" width="18px" /> 
                             <span style="margin-left:12px;"> Existencia</span> </a>
-                        <a class="collapse-item" href="register.html" style="display:flex; flex-direction: row; justify-content:start;">
-                            <img src="src/img/salida.svg" width="18px" /> 
-                            <span style="margin-left:12px;"> Vendidas</span> </a>
+                        <a class="collapse-item" href="servicios.php" style="display:flex; flex-direction: row; justify-content:start;">
+                            <i class="fas fa-car"></i>
+                            <span style="margin-left:7px;">Servicios</span> </a>
                         <a class="collapse-item" href="forgot-password.html">
                             <img src="src/img/entrada.svg" width="18px" /> 
                             <span style="margin-left:12px;"> Entradas</span></a>
