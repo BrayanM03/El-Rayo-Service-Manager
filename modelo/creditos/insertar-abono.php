@@ -18,6 +18,9 @@ if(isset($_POST)){
     $id_credito = $_POST["id-credito"];
     $abono = $_POST["abono"];
     $fecha = date("d-m-Y");
+    $hora = date("h:i a");
+    $metodo = $_POST["metodo"];
+    $usuario = $_SESSION["user"];
 
      //Obtenemos estatus del credito
      $obtenerStatus = "SELECT estatus FROM creditos WHERE id = ?";
@@ -44,10 +47,10 @@ if(isset($_POST)){
             print_r (1);
         }else{
     
-            $insertar_abono = "INSERT INTO abonos(id, id_credito, fecha, abono)
-            VALUES(null,?,?,?)";
+            $insertar_abono = "INSERT INTO abonos(id, id_credito, fecha, hora, abono, metodo_pago, usuario)
+            VALUES(null,?,?,?,?,?,?)";
             $resultado = $con->prepare($insertar_abono);                     
-            $resultado->bind_param('isd', $id_credito, $fecha, $abono);
+            $resultado->bind_param('issdss', $id_credito, $fecha, $hora, $abono, $metodo, $usuario);
             $resultado->execute();
             $resultado->close();
     

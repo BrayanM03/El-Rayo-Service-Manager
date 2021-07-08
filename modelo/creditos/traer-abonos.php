@@ -17,7 +17,7 @@ if (isset($_POST)) {
 
     if (isset($_POST["id_cred"])) {
         $id_credito = $_POST["id_cred"];
-        $query="SELECT creditos.id, creditos.id_cliente, creditos.pagado, creditos.restante, creditos.total, creditos.estatus, creditos.fecha_inicio, creditos.fecha_final, creditos.plazo, abonos.fecha, abonos.abono FROM creditos INNER JOIN abonos ON creditos.id = abonos.id_credito WHERE abonos.id_credito = $id_credito";
+        $query="SELECT creditos.id, creditos.id_cliente, creditos.pagado, creditos.restante, creditos.total, creditos.estatus, creditos.fecha_inicio, creditos.fecha_final, creditos.plazo, abonos.fecha, abonos.hora, abonos.abono, abonos.metodo_pago, abonos.usuario FROM creditos INNER JOIN abonos ON creditos.id = abonos.id_credito WHERE abonos.id_credito = $id_credito";
         $resultado = mysqli_query($con, $query);
     
         while($fila = $resultado->fetch_assoc()){
@@ -32,6 +32,9 @@ if (isset($_POST)) {
         $plazo = $fila["plazo"];
         $abono = $fila["abono"];
         $fecha_abono = $fila["fecha"];
+        $hora_abono = $fila["hora"];
+        $metodo_pago = $fila["metodo_pago"];
+        $usuario = $fila["usuario"];
     
         $sqlcliente = "SELECT Nombre_Cliente FROM clientes WHERE id = ?";
         $stmt = $con->prepare($sqlcliente);
@@ -46,7 +49,8 @@ if (isset($_POST)) {
     
     
         $data["data"][] = array("id" => $id,"id_cliente"=>$clienteid, "fecha_inicial"=>$fecha_inicio,"fecha_final"=>$fecha_final, "restante" => $restante,
-                        "pagado" => $pagado, "cliente"=>$cliente_name, "total"=>$total, "plazo"=>$plazo, "estatus"=>$estatus, "abono"=>$abono, "fecha_abono"=>$fecha_abono);
+                        "pagado" => $pagado, "cliente"=>$cliente_name, "total"=>$total, "plazo"=>$plazo, "estatus"=>$estatus, "abono"=>$abono, "fecha_abono"=>$fecha_abono,
+                    "hora_abono"=> $hora_abono, "metodo_pago"=> $metodo_pago, "usuario"=>$usuario);
     
                       
     }
@@ -54,7 +58,7 @@ if (isset($_POST)) {
     echo json_encode($data, JSON_UNESCAPED_UNICODE);  
     }else{
         $id_credito = $_POST["id_credito"];
-        $query="SELECT creditos.id, creditos.id_cliente, creditos.pagado, creditos.restante, creditos.total, creditos.estatus, creditos.fecha_inicio, creditos.fecha_final, creditos.plazo, abonos.fecha, abonos.abono FROM creditos INNER JOIN abonos ON creditos.id = abonos.id_credito WHERE abonos.id_credito = $id_credito";
+        $query="SELECT creditos.id, creditos.id_cliente, creditos.pagado, creditos.restante, creditos.total, creditos.estatus, creditos.fecha_inicio, creditos.fecha_final, creditos.plazo, abonos.fecha, abonos.hora,  abonos.abono, abonos.metodo_pago, abonos.usuario FROM creditos INNER JOIN abonos ON creditos.id = abonos.id_credito WHERE abonos.id_credito = $id_credito";
         $resultado = mysqli_query($con, $query);
     
         while($fila = $resultado->fetch_assoc()){
@@ -69,6 +73,9 @@ if (isset($_POST)) {
         $plazo = $fila["plazo"];
         $abono = $fila["abono"];
         $fecha_abono = $fila["fecha"];
+        $hora_abono = $fila["hora"];
+        $metodo_pago = $fila["metodo_pago"];
+        $usuario = $fila["usuario"];
     
         $sqlcliente = "SELECT Nombre_Cliente FROM clientes WHERE id = ?";
         $stmt = $con->prepare($sqlcliente);
@@ -83,7 +90,7 @@ if (isset($_POST)) {
     
     
         $data = array("id" => $id,"id_cliente"=>$clienteid, "fecha_inicial"=>$fecha_inicio,"fecha_final"=>$fecha_final, "restante" => $restante,
-                        "pagado" => $pagado, "cliente"=>$cliente_name, "total"=>$total, "plazo"=>$plazo, "estatus"=>$estatus, "abono"=>$abono, "fecha_abono"=>$fecha_abono);
+                        "pagado" => $pagado, "cliente"=>$cliente_name, "total"=>$total, "plazo"=>$plazo, "estatus"=>$estatus, "abono"=>$abono, "fecha_abono"=>$fecha_abono, "hora_abono"=> $hora_abono, "metodo_pago"=> $metodo_pago, "usuario"=>$usuario);
     
                       
     }

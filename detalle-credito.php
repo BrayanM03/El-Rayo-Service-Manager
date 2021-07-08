@@ -33,7 +33,7 @@
  
 	
 
-    <title>Creditos</title>
+    <title>Credito venta: </title>
 
     <!-- Custom fonts for this template-->
     <link rel="stylesheet" href="src/css/inventario.css">
@@ -62,6 +62,7 @@
     <!---Librerias de estilos-->
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="src/css/menu-vertical.css" rel="stylesheet">
+    <link href="src/css/detalle-credito.css" rel="stylesheet">
    
 
 </head>
@@ -518,8 +519,8 @@
                         <div class="contenedor-tit">
                         <img class="tyre-decoration-left" src="./src/img/tyre.svg" alt="insertar SVG con la etiqueta image"> 
                         <div class="titulo-inventario">
-                         <h5 style="margin: 10px 0px;">Creditos</h5>
-                         <p style="color: gray;">Historial de creditos</p>
+                         <h5 style="margin: 10px 0px;">Credito </h5>
+                         <p style="color: gray;">Detalle de credito para la venta </p>
                         </div>
                         <img class="tyre-decoration-right" src="./src/img/tyre.svg" alt="insertar SVG con la etiqueta image">   
                         </div>
@@ -527,8 +528,29 @@
                                    
                                     
                       </div>
-                      <table id="creditos" class="table table-striped">    
-                     </table>
+                     <!--  <table id="creditos" class="table table-striped">  </table> --> 
+                        <div class="contenedor-detalle-credito">
+                            <div class="row">
+                               <div class="col-12 col-md-4">
+                                   <div class="form-group">
+                                       <label  for="">Cliente:</label>
+                                       <input class="form-control"  type="text" id="cliente">
+                                   </div>
+                               </div>
+                               <div class="col-12 col-md-4">
+                                   <div class="form-group">
+                                       <label  for="">Cliente:</label>
+                                       <input class="form-control"  type="text" id="cliente">
+                                   </div>
+                               </div>
+                               <div class="col-12 col-md-12">
+                                   <div class="form-group">
+                                       <label  for="">Cliente:</label>
+                                       <input class="form-control"  type="text" id="cliente">
+                                   </div>
+                               </div>
+                            </div>
+                        </div>                    
                 </div>
             <!-- End of Main Content -->
   <!-- Footer -->

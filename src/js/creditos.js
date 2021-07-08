@@ -16,7 +16,7 @@ table = $('#creditos').DataTable({
     { title: "id",             data: "id", render: function(data,type,row) {
 
         return '<span>CRED'  + data +'</span>';
-        
+         
         }},
     { title: "Cliente",        data: "cliente"        },
     { title: "Fecha inicio",   data: "fecha_inicial"  },
@@ -91,7 +91,7 @@ table = $('#creditos').DataTable({
   scrollY: "50vh",
   info: false,
   responsive: false,
-  order: [2, "desc"],
+  order: [1, "desc"],
  
   
 });
@@ -183,11 +183,71 @@ function borrarCredito(id) {
         success: function (response) {
 
             Swal.fire({
-                title: "Historial de credito",
-                width: '600px', 
+                title: "Historial de credito", 
                 background: "#dcdcdc" ,
+                width:'80vw',
                 didOpen: function () {
                   $(document).ready(function() {
+
+                    //Metodos de pago select 2 
+
+                    $("#metodos_pago").select2({
+                      placeholder: "Metodo de pago",
+                      theme: "bootstrap",
+                      templateResult: formatState,
+                  });
+              
+              
+                  function formatState (state) {
+                      if (!state.id) {
+                        return state.text;
+                      }
+              
+                      switch (state.text) { 
+                          case "Efectivo":
+                              var $state = $(
+                                  '<span><i class="fas fa-money-bill-wave"></i> '+state.text+'</span>'
+                                  
+                                );
+                              
+                              break;
+                          case "Tarjeta":
+                              var $state = $(
+                                  '<span><i class="fas fa-money-check"></i> '+state.text+'</span>'
+                                  
+                                );
+                              
+                              break;
+                          case "Transferencia":
+                              var $state = $(
+                                  '<span><i class="fas fa-university"></i> '+state.text+'</span>'
+                                      
+                              );
+                                  
+                                  break;           
+                          case "Cheque":
+                              var $state = $(
+                                  '<span><i class="fas fa-money-check-alt"></i> '+state.text+'</span>'
+                              );
+                                          
+                          break; 
+                          
+                          case "Sin definir":
+                              var $state = $(
+                                  '<span><i class="fas fa-question"></i> '+state.text+'</span>'
+                              );
+                                          
+                          break; 
+              
+                          default:
+                              break;
+                      }
+              
+                      
+                      return $state;
+                    };
+
+                    //Fin select2 meotodos de pago
 
                     restante = $("#restante").val();
                     pagado = $("#pagado").val();
@@ -198,7 +258,7 @@ function borrarCredito(id) {
                        '</div>');
                     }
 
-                    $("#abonar-btn").on('click', function () {                  
+                   /*  $("#abonar-btn").on('click', function () {                  
 
                       var item = document.getElementById("chevron");
                       var chevron = $("#chevron");
@@ -232,12 +292,16 @@ function borrarCredito(id) {
                       }
 
                      }) //Termino de clickear el boton 
-
-                  
+ */
+                     $("#registrar-abono").on('click', function () { 
+                      registrarAbono(id);
+                    });
                     
 
                      function registrarAbono(id) {
-                      abono_in = $("#abono-in").val();
+                      abono_in = $("#abono").val();
+                      metodos = $("#metodos_pago :selected").val();
+                      fecha = $("#fecha").val();
                       if($("#restante").val() == "$0.00"){
                         $("#alerta").empty();
                         $("#alerta").append('<div class="alert alert-success" role="alert">'+
@@ -252,8 +316,14 @@ function borrarCredito(id) {
                               'Ingresa una cantidad.'+
                                '</div>');
                       }else if(abono_in < 0){
+                        $("#alerta").empty();
                         $("#alerta").append('<div class="alert alert-warning" role="alert">'+
                         'No puedes ingresar cantidades negativas.'+
+                         '</div>');
+                      }else if(metodos == "" || metodos == null){
+                        $("#alerta").empty();
+                        $("#alerta").append('<div class="alert alert-warning" role="alert">'+
+                        'Elige un metodo de pago.'+
                          '</div>');
                       }else{
 
@@ -261,7 +331,7 @@ function borrarCredito(id) {
                         $.ajax({
                           type: "POST",
                           url: "./modelo/creditos/insertar-abono.php",
-                          data: {"id-credito":  id, "abono": abono_in},
+                          data: {"id-credito":  id, "abono": abono_in, "metodo" : metodos, "fecha": fecha},
                           dataType: "JSON",
                           success: function (response) {
                             if(response == 1){
@@ -303,7 +373,10 @@ function borrarCredito(id) {
                     columns: [   
                       { title: "#",             data: null , width:"60px"            },
                       { title: "Abono",         data: "abono"         },
-                      { title: "fecha",         data: "fecha_abono"    }],
+                      { title: "Fecha",         data: "fecha_abono"    },
+                      { title: "Hora",          data: "hora_abono"    },
+                      { title: "Metodo",        data: "metodo_pago"   },
+                      { title: "Usuario",        data: "usuario"    }],
                       
                       paging: false,
                       searching: false,
@@ -334,8 +407,98 @@ function borrarCredito(id) {
 
                 });
                 },
+
+                html: '<div class="row">'+
+              
+                '<div class="col-12 col-md-8">'+
+              '<div class="form-group">'+
+                '<label><b>Cliente:</b></label>'+
+                '<input class="form-control" type="text" value="'+ response.cliente +'" id="cliente" name="cliente" disabled>'+
+              '</div>'+
+              '</div>'+
+                '<div class="col-12 col-md-3">'+
+                  '<div class="form-group">'+
+                    '<label><b>Fecha</b></label>'+
+                    '<input type="date" class="form-control" name="fecha" id="fecha">'+
+                  '</div>'+
+                  '</div>'+
                 
-                html: '<form class="mt-4" id="formulario-editar-abono">'+
+    '<div class="col-12 col-sm-4" >'+
+    '<form class="mt-4" id="abonos">'+
+
+
+
+        '<div class="row">'+
+
+        '<div class="col-12 col-md-12">'+
+        '<div class="form-group" id="area-solucion">'+
+        '<label><b>Total</b></label>'+
+        '<input type="text" class="form-control" value="$'+ response.total +'" name="total" id="total" placeholder="0.00" disabled>'+
+        '</div>'+
+        '</div>'+
+        
+
+        '<div class="col-12 col-md-12">'+
+        '<div class="form-group">'+
+            '<label><b>Pagado</b></label>'+
+            '<input type="text" class="form-control" value="$'+ response.pagado +'" name="pagado" id="pagado" placeholder="0.00" disabled>'+
+        '</div>'+
+        '</div>'+
+
+        '</div>'+
+        '<div class="col-12 col-md-12">'+
+        '<div class="form-group" id="area-solucion">'+
+        '<label><b>Restante</b></label>'+
+        '<input type="text" class="form-control" value="$'+ response.restante +'" name="restante" id="restante" placeholder="0.00" disabled>'+
+        '</div>'+
+        '</div>'+
+
+      
+
+
+'</form>'+
+'</div>'+
+
+
+'<div class="col-12 col-sm-7 mt-4">'+
+'<div class="row">'+
+
+'<div class="col-12 col-md-5">'+
+'<div class="form-group">'+
+    '<label><b>Abonar</b></label>'+
+    '<input type="number" class="form-control" id="abono" name="abono" placeholder="$ 00.00">'+
+    '<div class="invalid-feedback">Campo requerido.</div>'+
+'</div>'+
+'</div>'+
+'<div class="col-12 col-md-5">'+
+'<div class="form-group">'+
+    '<label><b>Metodo de pago</b></label>'+
+    '<select class="form-control" id="metodos_pago" name="metodo_pago">'+
+    '<option value="Efectivo">Efectivo</option>'+
+    '<option value="Targeta">Targeta</option>'+
+    '<option value="Transferencia">Transferencia</option>'+
+    '<option value="Cheque">Cheque</option>'+
+    '<option value="Sin definir">Sin definir</option>'+
+    '</select>'+
+    '<div class="invalid-feedback">Sobrepasaste el stock.</div>'+
+'</div>'+
+'</div>'+
+
+'<div class="col-12 col-md-2">'+
+'<div class="form-group">'+
+'<buttom class="btn btn-info" style="height:40px; margin-top:27px" name="registrar-abono" id="registrar-abono">Abonar</buttom>'+
+'</div>'+
+'</div>'+
+
+'<div class="col-12 col-md-12">'+
+'<span><table id="tabla-abonos" class="table table-primary table-hover table-striped table-bordered"></table></span>'+
+'</div>'+
+'</div>'+
+'</div>'+
+'<div id="alerta"></div>'+
+'</div>',
+                
+              /*   html: '<form class="mt-4" id="formulario-editar-abono">'+
             
                   '<div class="row">'+
                       '<div class="col-8">'+
@@ -396,7 +559,7 @@ function borrarCredito(id) {
                    '</div>'+
                    '</div>'+
             
-            '</form>',
+            '</form>', */
                 showCancelButton: true,
                 cancelButtonText: 'Cerrar',
                 cancelButtonColor: '#00e059',

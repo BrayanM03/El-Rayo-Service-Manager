@@ -64,3 +64,8 @@
 body.swal2-shown > [aria-hidden="true"] {
     filter: blur(10px);
   }
+
+
+ #tabla-abonos tbody {
+   background-color: aliceblue;
+ } 

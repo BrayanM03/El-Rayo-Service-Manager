@@ -1,0 +1,10 @@
+.contenedor-detalle-credito{
+    padding: 10px;
+    width: 80%;
+    height: 500px;
+    border: 1px solid gray;
+    border-radius: 8px;
+    background-color: white;
+    margin-bottom: 50px;
+
+}

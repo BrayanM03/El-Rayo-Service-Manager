@@ -255,5 +255,5 @@ function borrarVenta(id) {
 
 
   function redirigirCredito(id){
-       alert(id);
+    window.open('./detalle-credito.php?id='+ id, '_blank');
    }
