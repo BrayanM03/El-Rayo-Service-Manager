@@ -253,7 +253,7 @@ function cuerpoTabla(){
         $resultado = $detalle->get_result(); 
         //$cantRes = $detalle->nums_rows() 
         $detalle->close();
-       $ejeY = 85;
+        $ejeY = 85;
        
         $k=1;
         while($fila = $resultado->fetch_assoc()) {
@@ -354,7 +354,7 @@ function cuerpoTabla(){
         $resultadoServ = $detalles->get_result();
         $detalles->close(); 
 
-        $detalle = $conexion->prepare("SELECT detalle_venta.Modelo, detalle_venta.Cantidad,llantas.Descripcion, llantas.Marca, detalle_venta.precio_Unitario, detalle_venta.Importe FROM detalle_venta INNER JOIN llantas ON detalle_venta.id_llanta = llantas.id WHERE id_Venta = ?");
+        $detalle = $conexion->prepare("SELECT detalle_venta.Modelo, detalle_venta.Cantidad,llantas.Descripcion, llantas.Marca, detalle_venta.precio_Unitario, detalle_venta.Importe FROM detalle_venta INNER JOIN llantas ON detalle_venta.id_llanta = llantas.id WHERE id_Venta = ? AND detalle_venta.Modelo != 'no aplica'");
         $detalle->bind_param('i', $id_venta);
         $detalle->execute();
         $resultado = $detalle->get_result(); 
