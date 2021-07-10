@@ -146,9 +146,9 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
                         <a class="collapse-item" href="servicios.php" style="display:flex; flex-direction: row; justify-content:start;">
                             <i class="fas fa-car"></i>
                             <span style="margin-left:7px;">Servicios</span> </a>
-                        <a class="collapse-item" href="forgot-password.html">
+                        <a class="collapse-item" href="movimientos.php">
                             <img src="src/img/entrada.svg" width="18px" /> 
-                            <span style="margin-left:12px;"> Entradas</span></a>
+                            <span style="margin-left:12px;"> Movimientos</span></a>
                         </a>
                     
                     </div>

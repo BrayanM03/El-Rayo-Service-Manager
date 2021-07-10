@@ -90,7 +90,7 @@ table = $('#creditos').DataTable({
   searching: true,
   scrollY: "50vh",
   info: false,
-  responsive: false,
+  responsive: true,
   order: [1, "desc"],
  
   
@@ -109,6 +109,7 @@ $("table.dataTable thead").addClass("table-info")
 }
 
 MostrarCreditos();
+
 
 
 function borrarCredito(id) {
@@ -376,14 +377,22 @@ function borrarCredito(id) {
                       { title: "Fecha",         data: "fecha_abono"    },
                       { title: "Hora",          data: "hora_abono"    },
                       { title: "Metodo",        data: "metodo_pago"   },
-                      { title: "Usuario",        data: "usuario"    }],
+                      { title: "Usuario",        data: "usuario"    },
+                      { title: "Accion",
+                      data: null,
+                      className: "celda-acciones",
+                      render: function (row, data) {
+                    
+                        return '<div style="display: flex"><button metodo="'+ row.metodo_pago +'" fecha="'+ row.fecha_abono +'" abono="'+ row.abono +'" idrow="'+ row.id +'" type="button" class="buttonedit btn btn-primary" style="margin-right: 8px"><span class="fa fa-edit"></span><span class="hidden-xs"></span></button><br><button type="button" onclick="borrarAbono('+ row.id +');" class="buttonBorrar btn btn-danger"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
+                      },
+                    }],
                       
                       paging: false,
                       searching: false,
                       scrollY: "260px",
                       info: false,
                       responsive: true,
-                     });
+                     }); 
 
 
                      tabla.on( 'order.dt search.dt', function () {
@@ -403,6 +412,70 @@ function borrarCredito(id) {
                     
                    
                   }
+
+                  tabla.on('click', '.buttonedit', function() {
+  
+                    let $tr = $(this).closest('tr');
+                    abono = $(this).attr("abono");
+                    fecha = $(this).attr("fecha");
+                    metodo_p = $(this).attr("metodo");
+                    console.log(abono);
+
+                    $("#cuerpo_edit").append('<div class="row">'+
+                    '<div col="col-12 col-md-3">'+
+                    'Abono: <input type="text" class="form-control" value="'+ abono +'"></div>'+
+                    '<div col="col-12 col-md-3" style="margin-left:20px;">'+
+                    'Fecha: <input type="date" class="form-control" value="'+fecha+'"></div>'+
+                    '<div col="col-12 col-md-3" style="margin-left:20px;">'+
+                    'Metodo de pago: <select type="text" class="form-control" val="hola">'+
+                    '<option value="Efectivo">Efectivo</option>'+
+                    '<option value="Targeta">Targeta</option>'+
+                    '<option value="Transferencia">Transferencia</option>'+
+                    '<option value="Cheque">Cheque</option>'+
+                    '<option value="Sin definir">Sin definir</option>'+
+                    '</select></div>'+  
+                    '<div col="col-12 col-md-3">'+              
+                    '<buttom class="btn btn-info ml-2 mt-4" name="registrar-abono" id="registrar-abono">Actualizar</buttom>'+
+                    '</div>'+
+                    '</div>');
+                  /*   let $id = $(this).attr("idrow");
+                    let $importe = $(this).attr("importe"); */
+                  
+                   /*  $.ajax({
+                      type: "POST",
+                      url: "./modelo/ventas/borrar-producto-temp.php", 
+                      data:{"id": $id, "borrar":"borrar"},
+                      success: function(response) {
+                        if(response == 1){
+                            //tabla_presalida.ajax.reload(null, false);
+                            // Le pedimos al DataTable que borre la fila
+                            table.row($tr).remove().draw(false);
+                  
+                            
+                        toastr.success('Producto borrado con exito', 'Correcto' );
+                        total = $("#total").val();
+                        result =  parseInt(total) - parseInt($importe);
+                        console.log(result);
+                        
+                        if(total == 0){
+                          $("#total").val(0);
+                        }else{
+                          $("#total").val(result);
+                        }
+                        }else{
+                          toastr.warning('Hubo un error al borrar el producto', 'Error' );
+                        }
+                  
+                      }
+                  
+                    }); */
+                  
+                  
+                  });
+                   
+
+                  
+                  
 
 
                 });
@@ -425,8 +498,6 @@ function borrarCredito(id) {
                 
     '<div class="col-12 col-sm-4" >'+
     '<form class="mt-4" id="abonos">'+
-
-
 
         '<div class="row">'+
 
@@ -493,9 +564,10 @@ function borrarCredito(id) {
 '<div class="col-12 col-md-12">'+
 '<span><table id="tabla-abonos" class="table table-primary table-hover table-striped table-bordered"></table></span>'+
 '</div>'+
-'</div>'+
-'</div>'+
 '<div id="alerta"></div>'+
+'<div class="col-12 col-md-12">'+
+'<div id="cuerpo_edit" style="margin:auto;"></div>'+
+'</div>'+
 '</div>',
                 
               /*   html: '<form class="mt-4" id="formulario-editar-abono">'+
