@@ -29,6 +29,7 @@
    .animation-out{
     animation-duration: 1s;
     animation-name: slideout;
+   
    }
 
    @keyframes slidein {
