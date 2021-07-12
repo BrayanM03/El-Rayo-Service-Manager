@@ -31,7 +31,7 @@ table.dataTable thead {
     
 
 .select2-container--open {
-  z-index: 99999999999999;
+  z-index: 999999;
   }
 
   .select2_statistics{

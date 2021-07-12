@@ -70,3 +70,9 @@ body.swal2-shown > [aria-hidden="true"] {
  #tabla-abonos tbody {
    background-color: aliceblue;
  } 
+
+
+ .toastr-container{
+   z-index: 999999999999999999;
+   background-color: cadetblue;
+ }

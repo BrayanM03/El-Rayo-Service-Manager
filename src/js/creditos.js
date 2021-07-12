@@ -345,6 +345,8 @@ function borrarCredito(id) {
                               $("#alerta").append('<div class="alert alert-warning" role="alert">'+
                               'Esta venta esta cancelada, no puedes agregar mas abonos.'+
                                '</div>');
+
+                              
                             }else{
                               $("#alerta").empty();
                               tabla.ajax.reload(null,false);
@@ -474,21 +476,35 @@ function borrarCredito(id) {
                       type: "POST",
                       url: "./modelo/creditos/editar-abono.php", 
                       data:{"id": id_abono, "metodo": metodo_actualizado, "abono": abono_actualizado, "fecha": fecha_actualizada},
-                      success: function(response) {
-                        if(response == 1){
-                            //tabla_presalida.ajax.reload(null, false);
-                            // Le pedimos al DataTable que borre la fila
-                           tabla.ajax.reload(null,false);
-                           $("#cuerpo_edit").empty();
-                            
-                          $("#pagado").val(response.nuevo_pagado);
-                          
-                          $("#restante").val(response.nuevo_restante);
-                        
-                        
+                      dataType: "JSON",
+                      success: function(responses) {
+                        if(responses == 0){
+                          $("#alerta").empty();
+                          $("#alerta").append('<div class="alert alert-warning" role="alert">'+
+                          ' El abono sobrepasa la cantidad restante.'+
+                           '</div>');
+                        }else if(responses == 2){
+
+                          $("#alerta").empty();
+                          $("#alerta").append('<div class="alert alert-warning" role="alert">'+
+                          'No ingreses abonos negativos.'+
+                           '</div>');
+
                         }else{
-                          toastr.warning('Hubo un error al borrar el producto', 'Error' );
+                          $("#cuerpo_edit").empty();
+
+                          tabla.ajax.reload(null, false);
+                          pagado_response = responses.nuevo_pagado.toFixed(2);
+                          restante_response = responses.nuevo_restante.toFixed(2)
+                          $("#restante").val("$ " + restante_response)
+                          $("#pagado").val("$ " + pagado_response);
+                          $("#alerta").empty();
+                          $("#alerta").append('<div class="alert alert-success" role="alert">'+
+                          'Abono actualizado correctamente.'+
+                           '</div>');
                         }
+                      
+                      
                   
                       }
                   
