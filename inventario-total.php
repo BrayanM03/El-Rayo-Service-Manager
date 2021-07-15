@@ -172,9 +172,9 @@
                         <a class="collapse-item" href="register.html" style="display:flex; flex-direction: row; justify-content:start;">
                             <img src="src/img/salida.svg" width="18px" /> 
                             <span style="margin-left:12px;"> Vendidas</span> </a>
-                        <a class="collapse-item" href="forgot-password.html">
-                            <img src="src/img/entrada.svg" width="18px" /> 
-                            <span style="margin-left:12px;"> Entradas</span></a>
+                        <a class="collapse-item" href="movimientos.php">
+                        <img src="src/img/entrada.svg" width="18px" /> 
+                            <span style="margin-left:12px;"> Movimientos</span></a>
                         </a>
                     
                     </div>
