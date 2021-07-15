@@ -81,7 +81,7 @@ table.on('click', '.borrar-articulo', function() {
       if(response == 1){
           //tabla_presalida.ajax.reload(null, false);
           // Le pedimos al DataTable que borre la fila
-          table.row($tr).remove().draw(false);
+          table.row(this).remove().draw();
 
           
       toastr.success('Producto borrado con exito', 'Correcto' );

@@ -9,7 +9,10 @@ if (!$con) {
 
 if (!isset($_SESSION['id_usuario'])) {
     header("Location:../../login.php");
+   
 }
+
+date_default_timezone_set("America/Matamoros");
 if (isset($_POST)) {
 
 

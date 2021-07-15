@@ -121,7 +121,7 @@ function editarInvPedro(id){
                     dataType: "json",
                     success: function (response) {
                       
-                       if (response == 1) {
+                       if (response) {
                         Swal.fire(
                             "¡Correcto!",
                             "Bien, " +response.llantas_dif,
