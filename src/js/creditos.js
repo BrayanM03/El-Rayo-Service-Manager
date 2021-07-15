@@ -19,6 +19,7 @@ table = $('#creditos').DataTable({
          
         }},
     { title: "Cliente",        data: "cliente"        },
+    { title: "cod",        data: "id"        },
     { title: "Fecha inicio",   data: "fecha_inicial"  },
     { title: "Fecha final",    data: "fecha_final"    },
     { title: "Total",          data: "total"          },
@@ -91,12 +92,13 @@ table = $('#creditos').DataTable({
   scrollY: "50vh",
   info: false,
   responsive: true,
-  order: [1, "desc"],
+  order: [3, "desc"],
  
   
 });
 
-$("table.dataTable thead").addClass("table-info")
+$("table.dataTable thead").addClass("table-info");
+table.columns( [3] ).visible( false );
 
  //Enumerar las filas "index column"
  table.on( 'order.dt search.dt', function () {

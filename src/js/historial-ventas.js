@@ -20,7 +20,7 @@ table = $('#ventas').DataTable({
     { title: "Sucursal",       data: "sucursal"       },
     { title: "Vendedor",       data: "vendedor"       },
     { title: "Cliente",        data: "cliente"        },
-    { title: "Cantidad",       data: "cantidad"       },
+    { title: "ID",       data: "folio"  },
     { title: "Tipo",           data: "tipo"       },
     { title: "Total",          data: "total"          },
     { title: "Estatus",        data: "estatus"        }, 
@@ -81,10 +81,12 @@ table = $('#ventas').DataTable({
   scrollY: "50vh",
   info: false,
   responsive: false,
-  order: [1, "desc"],
+  ordering: "enable",
+  order: [6, "desc"],
  
   
 });
+table.columns( [6] ).visible( false );
 
 $("table.dataTable thead").addClass("table-info")
 
@@ -188,11 +190,11 @@ function borrarVenta(id) {
             if(result.isConfirmed){ 
                 motivo = $("#motivo").val();
                // if($("#motivo").val())
-                
+                motivo = $("#motivo").val();
                 $.ajax({
                     type: "POST",
                     url: "./modelo/ventas/cancelar-venta.php",
-                    data: {"id_venta": id},
+                    data: {"id_venta": id, "motivo_cancel": motivo},
                     success: function (response) {
                         if(response == 0){
 

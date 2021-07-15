@@ -163,7 +163,7 @@ selects.forEach( select => {
             //A partir de aqui puedes agregar las llantas Brayan
            // ruta = "./src/img/logos/" + repo.marca + ".jpg";
          
-           console.log(repo.Stock);
+           
            if(repo.Stock <= 0){
 
              Swal.fire({
@@ -191,6 +191,7 @@ selects.forEach( select => {
             $("#agregar-producto").attr("marca", repo.Marca);
             $("#agregar-producto").attr("precio", repo.precio_Venta);
             $("#agregar-producto").attr("codigo", repo.Codigo);
+            $("#agregar-producto").attr("stock", repo.Stock);
 
             $("#modelo").attr("modelo", repo.Modelo);
             compr = $("#modelo").attr("modelo");
@@ -261,6 +262,7 @@ selects.forEach( select => {
             cliente = $("#select2-clientes-container").attr("id-cliente");
             metodo_pago = $("#metodos-pago").val();  
             tienda = $("#sucursal").val();
+            comentario = $("#hacer-comentario").attr("comentario");
             
             //Enviando data
             
@@ -273,6 +275,7 @@ selects.forEach( select => {
                        'fecha': fecha,
                        'sucursal': tienda,
                        'total': total,
+                       'comentario': comentario,
                        'tipo': 'vt-normal'},
                 dataType: "JSON",
                 success: function (response) {
@@ -327,7 +330,7 @@ selects.forEach( select => {
                                 $("#total").val(0);
                             }
             
-                           
+                           $("#hacer-comentario").attr("comentario", " ");
                             });
 
                             
@@ -1042,4 +1045,28 @@ $("#btn-add-client").hover(function() {
         
     };  
 
-        
+   /*  function comentario(){
+     
+    }
+ */
+
+    $("#hacer-comentario").on("click", function () { 
+      Swal.fire({
+        title: "Comentario",
+        showCancelButton: true,
+            cancelButtonText: 'Cerrar',
+            cancelButtonColor: '#00e059',
+            showConfirmButton: true,
+            confirmButtonText: 'Agregar', 
+            cancelButtonColor:'#ff764d',
+            focusConfirm: false,
+            iconColor : "#36b9cc",
+            html:'<div class="m-auto"><label>Agregar un comentario:</label><br><textarea id="comentario" name="motivo" placeholder="Escribe un comentario sobre la venta..." class="form-control m-auto" style="width:300px;height:80px;" ></textarea></div>',
+            }).then((result) => { 
+
+             let comentario = $("#comentario").val();
+             $("#hacer-comentario").attr("comentario", comentario);
+             console.log(comentario);
+
+            });
+     })

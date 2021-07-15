@@ -19,7 +19,7 @@ if ($_SESSION["rol"]  !== "1" ) {
 
 if(isset($_POST)){
     $id_venta = $_POST["id_venta"];
-
+    $motivo = $_POST["motivo_cancel"];
     //Conseguir susucusal
 
     $obtenerSuc = "SELECT id_Sucursal FROM ventas WHERE id LIKE ?";
@@ -94,22 +94,22 @@ if(isset($_POST)){
           //Actualizamos estatus de venta normal
           if($estatus== "Pagado"){
             $newStatus = "Cancelada";
-            $editar_status= $con->prepare("UPDATE ventas SET estatus = ? WHERE id = ?");
-            $editar_status->bind_param('si', $newStatus, $id_venta);
+            $editar_status= $con->prepare("UPDATE ventas SET estatus = ?, comentario = ? WHERE id = ?");
+            $editar_status->bind_param('ssi', $newStatus, $motivo, $id_venta);
             $editar_status->execute();
             $editar_status->close();
             print_r(1);
 
           }else if($estatus == "Abierta"){
             $newStatus = "Cancelada";
-            $editar_status= $con->prepare("UPDATE ventas SET estatus = ? WHERE id = ?");
-            $editar_status->bind_param('si', $newStatus, $id_venta);
+            $editar_status= $con->prepare("UPDATE ventas SET estatus = ?, comentario = ? WHERE id = ?");
+            $editar_status->bind_param('ssi', $newStatus, $motivo, $id_venta);
             $editar_status->execute();
             $editar_status->close();
 
             $newstatuscredito = 5;
             $editar_status_credito= $con->prepare("UPDATE creditos SET estatus = ? WHERE id_venta = ?");
-            $editar_status_credito->bind_param('ii', $newstatuscredito, $id_venta);
+            $editar_status_credito->bind_param('si', $newstatuscredito, $id_venta);
             $editar_status_credito->execute();
             $editar_status_credito->close();
             print_r(1);

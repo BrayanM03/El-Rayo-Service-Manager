@@ -20,7 +20,8 @@ $(document).ready(function() {
         { title: "Modelo",         data: "modelo"         },
         { title: "Costo",          data: "costo"          },
         { title: "Precio",         data: "precio"         },
-        { title: "Precio Mayoreo", data: "mayoreo"        },
+        { title: "Precio Mayoreo", data: "mayoreo"        },   
+        { title: "id",             data: "id"        },
         {title: "Sucursal",
           data: null,
           className: "celda-select",
@@ -87,7 +88,7 @@ $(document).ready(function() {
       info: true,
       dom: 'Blfrtip',
       responsive: true,
-      order: [9, "desc"],
+      order: [7, "desc"],
       lengthChange: false,
       buttons: [
         'copy', 'csv', 'excel', 'pdf', 'print'
@@ -103,6 +104,7 @@ $(document).ready(function() {
 
     $("table.dataTable thead").addClass("table-success")
 
+    table.columns( [7] ).visible( false );
      //Enumerar las filas "index column"
      table.on( 'order.dt search.dt', function () {
         table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {

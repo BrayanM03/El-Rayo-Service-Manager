@@ -183,7 +183,7 @@ toastr.options = {
 function agregarInfo(){
     //Funcion que se encargara de mover informacion del producto a una tabla para luego ser procesada como una venta
     
-    valorCant0 = $('#cantidad').val();
+    valorCant0 = $('#cantidad').val(); 
     valorCant = parseInt(valorCant0);
     valitationQuanty = $('#cantidad')[0].checkValidity();
     valitationdescription = $("#description")[0].checkValidity();

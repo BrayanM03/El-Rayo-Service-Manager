@@ -149,7 +149,7 @@ function realizarVentaCredito(){
                                 cliente = $("#select2-clientes-container").attr("id-cliente");
                                 metodo_pago = $("#metodos-pago").val();  
                                 sucursal =$("#sucursal").val();
-
+                                comentario = $("#hacer-comentario").attr("comentario");
                                 //Enviando data
 
 
@@ -164,6 +164,7 @@ function realizarVentaCredito(){
                                         'fecha': fecha,
                                         'sucursal': sucursal,
                                         'total': total,
+                                        'comentario': comentario,
                                         'tipo': "vt-credito"},
                                     dataType: "JSON",
                                     success: function (response) {
@@ -231,7 +232,7 @@ function realizarVentaCredito(){
                                                     $("#total").val(0);
                                                 }
                                 
-                                            
+                                                $("#hacer-comentario").attr("comentario", " ");
                                                 });
 
                                                 

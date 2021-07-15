@@ -663,6 +663,7 @@
                                                     </div>
                                                     </div>
                                                 <div class="botones-de-venta" style="margin-top: 8px;">
+                                                    <div class="btn btn-danger text-white" comentario=" " style="color: rgb(31, 28, 28); margin-right: 2vh;" id="hacer-comentario"><i class="fas fa-comment-dots"></i></div>
                                                     <div class="btn btn-warning" onclick="limpiarTabla();" style="color: rgb(31, 28, 28); margin-right: 2vh;" id="limpiar-venta">Limpiar</div>
                                                     <div class="btn btn-success" onclick="realizarVenta();" id="realizar-venta">Realizar venta</div>
                                                     <div class="btn btn-primary" onclick="realizarVentaCredito();" style="margin-left: 2vh;" id="realizar-venta">Realizar venta a credito</div>

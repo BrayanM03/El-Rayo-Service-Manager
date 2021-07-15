@@ -19,6 +19,7 @@ function MostrarInventarioPedro() {
         { title: "Precio Mayoreo", data: "precio_Mayoreo" },
         { title: "Sucursal",       data: "Sucursal"       },
         { title: "Stock",          data: "Stock"          },
+        { title: "id",          data: "id"          },
         { title: "Imagen",         data: "Marca", render: function(data,type,row) {
           return '<img src="./src/img/logos/'+ data +'.jpg" style="width: 60px; border-radius: 8px">';
           }},
@@ -38,6 +39,7 @@ function MostrarInventarioPedro() {
       dom: 'Blfrtip',
       responsive: true,
       lengthChange: false,
+      order:[10, "desc"],
       buttons: [
         'copy', 'csv', 'excel', 'pdf', 'print'
     ],
@@ -54,7 +56,7 @@ function MostrarInventarioPedro() {
     .container()
     .appendTo("#inventario-pedro_wrapper .col-md-6:eq(0)");
     //table.appendTo("#inventario-pedro_wrapper .col-md-6:eq(0)");
-
+    table.columns( [10] ).visible( false );
      //Enumerar las filas "index column"
     table.on( 'order.dt search.dt', function () {
       table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {

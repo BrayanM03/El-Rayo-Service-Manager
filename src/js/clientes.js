@@ -16,6 +16,8 @@ table = $('#ventas').DataTable({
     { title: "Codigo",         data: "id", render: function(data,type,row) {
         return '<span>R'+ data +'</span>';
         }},
+        
+    { title: "id",            data: "id"         },
     { title: "Nombre",         data: "nombre"         },
     { title: "Telefono",       data: "telefono"       },
     { title: "Direccion",      data: "direccion" , width: "20%"  },
@@ -28,7 +30,7 @@ table = $('#ventas').DataTable({
         }
             
      }},
-    { title: "RFC",            data: "rfc"            },
+    { title: "RFC",            data: "rfc"        },
     { title: "Accion",
       data: null,
       className: "celda-acciones",
@@ -49,7 +51,7 @@ table = $('#ventas').DataTable({
 });
 
 $("table.dataTable thead").addClass("table-info")
-
+table.columns( [2] ).visible( false );
  //Enumerar las filas "index column"
  table.on( 'order.dt search.dt', function () {
     table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {

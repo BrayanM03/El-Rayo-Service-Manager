@@ -39,6 +39,7 @@ function MostrarInventarioPedro() {
       dom: 'Blfrtip',
       responsive: true,
       lengthChange: false,
+      order:[10, "desc"],
       buttons: [
         'copy', 'csv', 'excel', 'pdf', 'print'
     ],
@@ -55,7 +56,7 @@ function MostrarInventarioPedro() {
     table.buttons()
     .container()
     .appendTo("#inventario-pedro_wrapper .col-md-6:eq(0)");
-
+    table.columns( [10] ).visible( false );
      //Enumerar las filas "index column"
     table.on( 'order.dt search.dt', function () {
       table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {

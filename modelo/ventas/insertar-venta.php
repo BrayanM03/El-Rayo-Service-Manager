@@ -77,11 +77,12 @@ if(isset($_POST)){
     $datos = $_POST['data'];
    // $info_producto_individual = json_decode($datos);  
    $info_producto_individual = $datos;
+   $comentario = $_POST["comentario"];
 
    
-    $queryInsertar = "INSERT INTO ventas (id, Fecha, id_Sucursal, id_Usuarios, id_Cliente, Total, tipo, estatus, metodo_pago, hora) VALUES (null,?,?,?,?,?,?,?,?,?)";
+    $queryInsertar = "INSERT INTO ventas (id, Fecha, id_Sucursal, id_Usuarios, id_Cliente, Total, tipo, estatus, metodo_pago, hora, comentario) VALUES (null,?,?,?,?,?,?,?,?,?,?)";
     $resultado = $con->prepare($queryInsertar);
-    $resultado->bind_param('ssiidssss', $fecha, $sucursal, $idUser, $cliente , $total, $tipo, $estatus, $metodo_pago, $hora);
+    $resultado->bind_param('ssiidsssss', $fecha, $sucursal, $idUser, $cliente , $total, $tipo, $estatus, $metodo_pago, $hora, $comentario);
     $resultado->execute();
     $resultado->close();
 

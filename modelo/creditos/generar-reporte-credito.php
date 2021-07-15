@@ -10,10 +10,10 @@ $folio = "RAY" . $_GET["id"];
 $idVenta = $_GET["id"];
 global $folio;
 
-$ID = $con->prepare("SELECT ventas.Fecha, ventas.id_Sucursal, ventas.id_Usuarios, clientes.Nombre_Cliente, ventas.Total,  ventas.tipo, ventas.estatus, ventas.metodo_pago, ventas.hora FROM ventas INNER JOIN clientes ON ventas.id_Cliente = clientes.id WHERE ventas.id = ?");
+$ID = $con->prepare("SELECT ventas.Fecha, ventas.id_Sucursal, ventas.id_Usuarios, clientes.Nombre_Cliente, ventas.Total,  ventas.tipo, ventas.estatus, ventas.metodo_pago, ventas.hora, ventas.comentario FROM ventas INNER JOIN clientes ON ventas.id_Cliente = clientes.id WHERE ventas.id = ?");
 $ID->bind_param('i', $idVenta);
 $ID->execute();
-$ID->bind_result($fecha, $sucursal, $vendedor_id, $cliente, $total, $tipo, $estatus, $metodo_pago, $hora );
+$ID->bind_result($fecha, $sucursal, $vendedor_id, $cliente, $total, $tipo, $estatus, $metodo_pago, $hora, $comentario );
 $ID->fetch();
 $ID->close();
 
@@ -35,6 +35,7 @@ global $tipo;
 global $estatus;
 global $metodo_pago;
 global $hora;
+global $comentario;
 
 $CREDITO = $con->prepare("SELECT id, pagado, restante, fecha_inicio, fecha_final, plazo FROM creditos WHERE id_venta = ?");
 $CREDITO->bind_param('i', $idVenta);
@@ -652,13 +653,20 @@ function cuerpoTabla(){
     $pdf->Cell(189,6,'Oservaciones: ',0,0);
     $pdf->Ln(8);
     $pdf->SetFont('Courier','',12);
-    if($GLOBALS["estatus"]== "Cancelada"){
-        $observacion = "Esta venta a sido cancelada.";
+    $observacion = $GLOBALS["comentario"];
+    if($observacion == "" || $observacion == null || $observacion == " "){
+        $pdf->Ln(8);
+        $pdf->SetFont('Courier','',12);
+        $pdf->Cell(180,20,$observacion,0,0,'L',1);
+        $pdf->Ln(22);
     }else{
-        $observacion ="";
-    }
-    $pdf->Cell(140,20,$observacion,0,0,'L',1);
-    $pdf->Ln(22);
+        
+        $pdf->Ln(8);
+        $pdf->SetFont('Courier','',12);
+        $pdf->MultiCell(180,6,$observacion,0,'L',1);
+        $pdf->Ln(22);
+    };
+ 
 
     $pdf->SetTextColor(194, 34, 16);
     $pdf->SetFont('Arial','B',5);
