@@ -47,20 +47,38 @@ if (isset($_POST)) {
 
             if($stock > $stock_actual){
                 $llantas_agregadas =  $stock - $stock_actual;
-                $palabra = "se agregarón " . $llantas_agregadas;
-                $response ="Agregaste " . $llantas_agregadas . " llantas";
+                if($llantas_agregadas == 1){
+                    $palabra = "se agregó " . $llantas_agregadas . " llanta.";
+                    $response ="Agregaste " . $llantas_agregadas . " llanta.";
+                }else{
+                    $palabra = "se agregarón " . $llantas_agregadas . " llantas.";
+                    $response ="Agregaste " . $llantas_agregadas . " llantas.";
+                }
+               
+                
                 $data = array("llantas_dif" => $response);
                 echo json_encode($data, JSON_UNESCAPED_UNICODE); 
 
             }else if($stock < $stock_actual){
                 $llantas_retiradas =   $stock_actual - $stock;
-                
-                $palabra = "se retirarón " . $llantas_retiradas;
-                $response ="Retiraste " . $llantas_retiradas . " llantas";
+
+                if($llantas_retiradas == 1){
+                    $palabra = "se descontó " . $llantas_retiradas . " llanta.";
+                    $response ="Descontaste " . $llantas_retiradas . " llanta.";
+                }else{
+                    $palabra = "se descontarón " . $llantas_retiradas . " llantas.";
+                    $response ="Descontaste " . $llantas_retiradas . " llantas.";
+                }
+               
                 $data = array("llantas_dif" => $response);
                 echo json_encode($data, JSON_UNESCAPED_UNICODE); 
             }else if($stock == $stock_actual){
-                $palabra = "son iguales las cantidades, el inventario se queda igual, hay " . $stock;
+                if($stock == 1){
+                    $palabrilla = "llanta.";
+                }else{
+                    $palabrilla = "llantas.";
+                }
+                $palabra = "pero las cantidades eran iguales, por lo tanto se quedó igual el stock con un total de " . $stock . " " . $palabrilla;
                  $response ="La cantidad que ingresaste es lo mismo que hay en stock, por lo tanto se queda igual.";
                 $data= array("llantas_dif" => $response);
                 echo json_encode($data, JSON_UNESCAPED_UNICODE); 
@@ -72,7 +90,7 @@ if (isset($_POST)) {
             $fecha = date("Y-m-d");   
             $hora =date("h:i a");   
             $usuario = $_SESSION["nombre"] . " " . $_SESSION["apellidos"];
-            $descripcion_movimiento = "Se actualizo el stock del inventario de " . $sucursal . ", de la llanta " . $descripcion_llanta . ", " . $palabra . " llantas";
+            $descripcion_movimiento = "Se actualizó el stock del inventario de " . $sucursal . ", " . $palabra;
 
          //Registramos el movimiento
             $insertar_movimi = "INSERT INTO movimientos(id, descripcion, mercancia, fecha, hora, usuario)

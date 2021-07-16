@@ -2,6 +2,7 @@
     
     include 'conexion.php';
     $con= $conectando->conexion(); 
+    session_start();
 
     if (!$con) {
         echo "Problemas con la conexion";
@@ -9,6 +10,8 @@
 
     if (isset($_POST["code"]) && isset($_POST["stock"]) ) {
 
+        
+         date_default_timezone_set("America/Matamoros");
         
         
         $codigo =  $_POST["code"];
@@ -50,6 +53,35 @@
                 $resultado->bind_param('sisi', $code, $codigo, $sucursal,$stock );
                 $resultado->execute();
                 $resultado->close();
+
+                $sucursal = "Sendero";  
+                $fecha = date("Y-m-d");   
+                $hora =date("h:i a");   
+                $usuario = $_SESSION["nombre"] . " " . $_SESSION["apellidos"];
+
+                $traerdatadenew = "SELECT Descripcion FROM llantas WHERE id = ?";
+                $result = $con->prepare($traerdatadenew);
+                $result->bind_param('i',$codigo);
+                $result->execute();
+                $result->bind_result($descripcion_llanta);
+                $result->fetch();
+                $result->close(); 
+
+                if($stock==1){
+
+                    $descripcion_movimiento = "Se agregó ". $stock ." nueva llanta al inventario de " . $sucursal;
+                }else{
+
+                    $descripcion_movimiento = "Se agregarón ". $stock ." nuevas llantas al inventario de " . $sucursal;
+                }
+    
+             //Registramos el movimiento
+                $insertar_movimi = "INSERT INTO movimientos(id, descripcion, mercancia, fecha, hora, usuario)
+                VALUES(null,?,?,?,?,?)";
+                $resultado = $con->prepare($insertar_movimi);                     
+                $resultado->bind_param('sssss', $descripcion_movimiento, $descripcion_llanta, $fecha, $hora, $usuario);
+                $resultado->execute();
+                $resultado->close(); 
                 
                 print_r(1);
             }else if($total == 1){

@@ -1,5 +1,6 @@
 <?php
-    
+    session_start();
+    date_default_timezone_set("America/Matamoros");
     include 'conexion.php';
     $con= $conectando->conexion(); 
 
@@ -30,14 +31,26 @@
       );
 
       $resultado->execute();
+      $resultado->close(); 
 
-      if ($resultado->error) {
-          
-          print_r("error" . $resultado->error);
-      }else{
-        print_r(1);
+      $descripcion_movimiento = "Se agregó un nueva llanta al registro de la base de datos.";
+      $descripcion_llanta = $_POST["descripcion"];
        
-      }
+      $fecha = date("Y-m-d");   
+      $hora =date("h:i a");   
+      $usuario = $_SESSION["nombre"] . " " . $_SESSION["apellidos"];
+
+    //Registramos el movimiento
+       $insertar_movimi = "INSERT INTO movimientos(id, descripcion, mercancia, fecha, hora, usuario)
+       VALUES(null,?,?,?,?,?)";
+       $resultado = $con->prepare($insertar_movimi);                     
+       $resultado->bind_param('sssss', $descripcion_movimiento, $descripcion_llanta, $fecha, $hora, $usuario);
+       $resultado->execute();
+       $resultado->close(); 
+       
+      
+
+     print_r(1);
         
     }else{
         print_r("Error al conectar");
