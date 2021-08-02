@@ -7,7 +7,7 @@ $(document).ready(function() {
     "debug": false,
     "newestOnTop": false,
     "progressBar": true,
-    "positionClass": "toast-top-center",
+    "positionClass": "toast-bottom-right",
     "preventDuplicates": false,
     "onclick": null,
     "showDuration": "300",
@@ -18,7 +18,7 @@ $(document).ready(function() {
     "hideEasing": "linear",
     "showMethod": "fadeIn",
     "hideMethod": "fadeOut"
-  }
+  } 
 
 
     $('#busquedaLlantas').select2({
@@ -219,9 +219,133 @@ $(document).ready(function() {
 
 //Select2 para los metodos de pago:
 
-   
-
-   
-
     
 });
+
+
+$("#hacer-comentario").on("click", function () { 
+  Swal.fire({
+    title: "Comentario",
+    showCancelButton: true,
+        cancelButtonText: 'Cerrar',
+        cancelButtonColor: '#00e059',
+        showConfirmButton: true,
+        confirmButtonText: 'Agregar', 
+        cancelButtonColor:'#ff764d',
+        focusConfirm: false,
+        iconColor : "#36b9cc",
+        html:'<div class="m-auto"><label>Agregar un comentario:</label><br><textarea id="comentario" name="motivo" placeholder="Escribe un comentario sobre la cotización..." class="form-control m-auto" style="width:300px;height:80px;" ></textarea></div>',
+        }).then((result) => { 
+
+         let comentario = $("#comentario").val();
+         $("#hacer-comentario").attr("comentario", comentario);
+         console.log(comentario);
+
+        });
+ })
+
+
+//Generar la cotizacion
+
+ function generarCotizacion(){
+  cliente = $("#select2-clientes-container").attr("id-cliente");
+
+  if ( !table.data().any()){
+
+    toastr.warning('La tabla no tiene productos', 'Sin productos' ); 
+
+}else if(cliente == ""){
+  toastr.warning('Elige un cliente, porfavor', 'Sin cliente' ); 
+
+}else{
+    
+
+    llantaData = $("#pre-cotizacion").dataTable().fnGetData();
+    console.log(llantaData);
+        
+      
+    total = $("#total-cotizacion").val();
+    
+    comentario = $("#hacer-comentario").attr("comentario");
+    
+    //Enviando data
+    
+    $.ajax({
+        type: "POST",
+        url: "./modelo/cotizaciones/insertar-cotizacion.php", 
+        data: {'data': llantaData,
+               'cliente': cliente,
+               'total': total,
+               'comentario': comentario,
+              },
+        dataType: "JSON",
+        success: function (response) {
+            console.log(response);
+            if (response) {
+                Swal.fire({
+                    title: 'Cotización realizada',
+                    html: "<span>La cotización se generó con exito</br></span>"+
+                    "ID Cotización:" + response,
+                    icon: "success",
+                    cancelButtonColor: '#00e059',
+                    showConfirmButton: true,
+                    confirmButtonText: 'Aceptar', 
+                    cancelButtonColor:'#ff764d',
+                    showDenyButton: true,
+                    denyButtonText: 'Ver'
+                },
+                   
+                  ).then((result) =>{
+      
+                    if(result.isConfirmed){
+                       //location.reload();
+                       table.ajax.reload(null,false);
+                        $("#pre-cotizacion tbody tr").remove();
+                        $(".pre-cotizacion-error").html("");
+                        $(".products-grid-error").remove();
+                        $("#pre-cotizacion tbody").append('<tr><th id="empty-table" style="text-align: center;" style="width: 100%" colspan="8">Preventa vacia</th></tr>');
+                        $("#pre-cotizacion_processing").css("display","none");
+                        $("#total-cotizacion").val(0);
+                       
+
+                    }else if(result.isDenied){
+
+                        window.open('./modelo/cotizaciones/generar-reporte-cotizacion.php?id='+ response, '_blank');
+                        table.ajax.reload(null,false);
+                        $("#pre-cotizacion tbody tr").remove();
+                        $(".pre-cotizacion-error").html("");
+                        $(".products-grid-error").remove();
+                        $("#pre-cotizacion tbody").append('<tr><th id="empty-table" style="text-align: center;" style="width: 100%" colspan="8">Preventa vacia</th></tr>');
+                        $("#pre-cotizacion_processing").css("display","none");
+                        $("#total-cotizacion").val(0.00);
+                             
+                      
+                        
+                    }else{
+                        table.ajax.reload(null,false);
+                        $("#pre-cotizacion tbody tr").remove();
+                        $(".pre-cotizacion-error").html("");
+                        $(".products-grid-error").remove();
+                        $("#pre-cotizacion tbody").append('<tr><th id="empty-table" style="text-align: center;" style="width: 100%" colspan="8">Preventa vacia</th></tr>');
+                        $("#pre-cotizacion_processing").css("display","none");
+                        $("#total-cotizacion").val(0);
+                    }
+    
+                   $("#hacer-comentario").attr("comentario", " ");
+                    });
+
+                    
+            }
+            
+        }
+    }); 
+
+    
+    
+    
+
+
+}
+
+
+ }

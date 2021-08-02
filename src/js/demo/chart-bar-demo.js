@@ -27,18 +27,35 @@ function number_format(number, decimals, dec_point, thousands_sep) {
   return s.join(dec);
 }
 
-// Bar Chart Example
+function graficaBarGeneral(){
+  $("#myBarChart").remove();
+  $("#chart-bar-container").append(" <canvas id='myBarChart'></canvas>");
+  $("#titulo-graf").text("");
+  //Ganancia semanal
+$.ajax({
+  type: "POST",
+  url: "./modelo/panel/grafica-barra-ganancia-semanal.php",
+  data: "data",
+  dataType : "JSON",
+  success: function (response) {
+   ganancia_semanal = number_format(response.ganancia_semanal, 2, '.', ','); 
+   ganancia_hoy = number_format(response.ganancia_hoy, 2, '.', ','); 
+  $("#ganancia_semana").text("$" + ganancia_semanal);
+  $("#ganancia_hoy").text("$" + ganancia_hoy);
+  $("#ventas_hoy").text(response.ventas_hoy);
+    
+    // Bar Chart Example
 var ctx = document.getElementById("myBarChart");
 var myBarChart = new Chart(ctx, {
   type: 'bar',
   data: {
-    labels: ["January", "February", "March", "April", "May", "June"],
+    labels: ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"],
     datasets: [{
-      label: "Revenue",
-      backgroundColor: "#4e73df",
+      label: "Ganancia:",
+      backgroundColor: "rgb(222, 208, 11)",
       hoverBackgroundColor: "#2e59d9",
       borderColor: "#4e73df",
-      data: [4215, 5312, 6251, 7841, 9821, 14984],
+      data: [response.ganancia_lunes, response.ganancia_martes, response.ganancia_miercoles, response.ganancia_jueves, response.ganancia_viernes, response.ganancia_sabado, response.ganancia_domingo],
     }],
   },
   options: {
@@ -68,7 +85,7 @@ var myBarChart = new Chart(ctx, {
       yAxes: [{
         ticks: {
           min: 0,
-          max: 15000,
+        
           maxTicksLimit: 5,
           padding: 10,
           // Include a dollar sign in the ticks
@@ -109,3 +126,277 @@ var myBarChart = new Chart(ctx, {
     },
   }
 });
+
+
+
+  }
+});
+
+}
+
+graficaBarGeneral();
+
+function graficaBarPedroCardenas(){
+  $("#myBarChart").remove();
+  $("#chart-bar-container").append(" <canvas id='myBarChart'></canvas>");
+  $("#titulo-graf").text("(Sucursal Pedro Cardenas)");
+//Ganancia semanal
+$.ajax({
+  type: "POST",
+  url: "./modelo/panel/grafica-barra-ganancia-semanal-pedro.php",
+  data: "data",
+  dataType : "JSON",
+  success: function (response) {
+   ganancia_semanal = number_format(response.ganancia_semanal, 2, '.', ','); 
+   ganancia_hoy = number_format(response.ganancia_hoy, 2, '.', ','); 
+  $("#ganancia_semana").text("$" + ganancia_semanal);
+  $("#ganancia_hoy").text("$" + ganancia_hoy);
+    
+    // Bar Chart Example
+var ctx = document.getElementById("myBarChart");
+var myBarChart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"],
+    datasets: [{
+      label: "Ganancia:",
+      backgroundColor: "#4e73df",
+      hoverBackgroundColor: "#2e59d9",
+      borderColor: "#4e73df",
+      data: [response.ganancia_lunes, response.ganancia_martes, response.ganancia_miercoles, response.ganancia_jueves, response.ganancia_viernes, response.ganancia_sabado, response.ganancia_domingo],
+    }],
+  },
+  options: {
+    maintainAspectRatio: false,
+    layout: {
+      padding: {
+        left: 10,
+        right: 25,
+        top: 25,
+        bottom: 0
+      }
+    },
+    scales: {
+      xAxes: [{
+        time: {
+          unit: 'month'
+        },
+        gridLines: {
+          display: false,
+          drawBorder: false
+        },
+        ticks: {
+          maxTicksLimit: 6
+        },
+        maxBarThickness: 25,
+      }],
+      yAxes: [{
+        ticks: {
+          min: 0,
+          maxTicksLimit: 5,
+          padding: 10,
+          // Include a dollar sign in the ticks
+          callback: function(value, index, values) {
+            return '$' + number_format(value);
+          }
+        },
+        gridLines: {
+          color: "rgb(234, 236, 244)",
+          zeroLineColor: "rgb(234, 236, 244)",
+          drawBorder: false,
+          borderDash: [2],
+          zeroLineBorderDash: [2]
+        }
+      }],
+    },
+    legend: {
+      display: false
+    },
+    tooltips: {
+      titleMarginBottom: 10,
+      titleFontColor: '#6e707e',
+      titleFontSize: 14,
+      backgroundColor: "rgb(255,255,255)",
+      bodyFontColor: "#858796",
+      borderColor: '#dddfeb',
+      borderWidth: 1,
+      xPadding: 15,
+      yPadding: 15,
+      displayColors: false,
+      caretPadding: 10,
+      callbacks: {
+        label: function(tooltipItem, chart) {
+          var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+          return datasetLabel + ': $' + number_format(tooltipItem.yLabel);
+        }
+      }
+    },
+  }
+});
+
+
+
+  }
+});
+
+
+
+};
+
+function graficaBarSendero(){
+
+  $("#myBarChart").remove();
+  $("#chart-bar-container").append(" <canvas id='myBarChart'></canvas>");
+  $("#titulo-graf").text("(Sucursal Sendero)");
+
+  //Ganancia semanal
+  $.ajax({
+    type: "POST",
+    url: "./modelo/panel/grafica-barra-ganancia-semanal-sendero.php",
+    data: "data",
+    dataType : "JSON",
+    success: function (response) {
+     ganancia_semanal = number_format(response.ganancia_semanal, 2, '.', ','); 
+     ganancia_hoy = number_format(response.ganancia_hoy, 2, '.', ','); 
+    $("#ganancia_semana").text("$" + ganancia_semanal);
+    $("#ganancia_hoy").text("$" + ganancia_hoy);
+      
+      // Bar Chart Example
+  var ctx = document.getElementById("myBarChart");
+  var myBarChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"],
+      datasets: [{
+        label: "Ganancia:",
+        backgroundColor: "rgb(28, 200, 138)",
+        hoverBackgroundColor: "#2e59d9",
+        borderColor: "#4e73df",
+        data: [response.ganancia_lunes, response.ganancia_martes, response.ganancia_miercoles, response.ganancia_jueves, response.ganancia_viernes, response.ganancia_sabado, response.ganancia_domingo],
+      }],
+    },
+    options: {
+      maintainAspectRatio: false,
+      layout: {
+        padding: {
+          left: 10,
+          right: 25,
+          top: 25,
+          bottom: 0
+        }
+      },
+      scales: {
+        xAxes: [{
+          time: {
+            unit: 'month'
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false
+          },
+          ticks: {
+            maxTicksLimit: 6
+          },
+          maxBarThickness: 25,
+        }],
+        yAxes: [{
+          ticks: {
+            min: 0,
+            
+            maxTicksLimit: 5,
+            padding: 10,
+            // Include a dollar sign in the ticks
+            callback: function(value, index, values) {
+              return '$' + number_format(value);
+            }
+          },
+          gridLines: {
+            color: "rgb(234, 236, 244)",
+            zeroLineColor: "rgb(234, 236, 244)",
+            drawBorder: false,
+            borderDash: [2],
+            zeroLineBorderDash: [2]
+          }
+        }],
+      },
+      legend: {
+        display: false
+      },
+      tooltips: {
+        titleMarginBottom: 10,
+        titleFontColor: '#6e707e',
+        titleFontSize: 14,
+        backgroundColor:"rgb(255,255,255)",
+        bodyFontColor: "#858796",
+        borderColor: '#dddfeb',
+        borderWidth: 1,
+        xPadding: 15,
+        yPadding: 15,
+        displayColors: false,
+        caretPadding: 10,
+        callbacks: {
+          label: function(tooltipItem, chart) {
+            var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+            return datasetLabel + ': $' + number_format(tooltipItem.yLabel);
+          }
+        }
+      },
+    }
+  });
+  
+  
+  
+    }
+  });
+  
+  
+  
+  };
+  
+
+
+//
+function traerInfoRangoFecha(){
+  fecha_inicio = $("#fecha-inicio").val();
+  fecha_final = $("#fecha-final").val();
+  console.log(fecha_inicio);
+  console.log(fecha_final);
+
+  if(fecha_inicio == ""){
+    $("#fecha-inicio").addClass("is-invalid");
+    console.log("Elige una fecha inicial.");
+  }else{
+    $("#fecha-inicio").removeClass("is-invalid");
+  }
+
+  if(fecha_final == ""){
+    $("#fecha-final").addClass("is-invalid");
+    console.log("Elige una fecha final.");
+  }else{
+    $("#fecha-final").removeClass("is-invalid");
+  }
+
+  if(fecha_final != "" && fecha_inicio != ""){
+    $.ajax({
+      type: "POST",
+      url: "./modelo/panel/ganancia-rango-fechas.php",
+      data: {"fecha_inicial": fecha_inicio, "fecha_final": fecha_final},
+      dataType : "JSON",
+      success: function (response) {
+
+        
+        ganancia_rango = number_format(response.ganancia_rango, 2, '.', ',');
+        ganancia_rango_pedro = number_format(response.ganancia_rango_pedro, 2, '.', ',');
+        ganancia_rango_sendero = number_format(response.ganancia_rango_sendero, 2, '.', ',');
+
+        $("#result-ganancia-rango").text("$"  + ganancia_rango);
+        $("#result-ganancia-rango-pedro").text("$"  + ganancia_rango_pedro);
+        $("#result-ganancia-rango-sendero").text("$"  + ganancia_rango_sendero);
+      }
+    });
+  }
+ 
+
+};
+
+

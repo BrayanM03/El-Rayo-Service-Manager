@@ -23,7 +23,7 @@ if(isset($_POST)){
             $id           =            $fila["id"];
             $codigo       =        $fila["codigo"];
             $descripcion  =   $fila["descripcion"];
-          //  $modelo       =        $fila["modelo"];
+            $modelo       =        $fila["modelo"];
             $cantidad     =      $fila["cantidad"];
             $precio       =        $fila["precio"];
             $importe      =       $fila["importe"];
@@ -32,7 +32,7 @@ if(isset($_POST)){
             $data["data"][] = array("id" => $id, 
                             "codigo" => $codigo,
                             "descripcion"=>$descripcion, 
-                          //  "modelo" => $modelo, 
+                            "modelo" => $modelo, 
                             "cantidad" => $cantidad,
                             "precio"=>$precio, 
                             "importe"=>$importe);

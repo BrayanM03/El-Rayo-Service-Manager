@@ -432,6 +432,8 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
                      <!-- Page Heading -->
                      <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h3 class="h3 mb-0 text-gray-800">Bievenido al panel <?php echo $_SESSION['nombre']; ?></h3>
+                        <a href="ganancias-diarias.php" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm"><i
+                                class="fas fa-eye fa-sm text-white-50"></i> Ganancias diarias</a>
                         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                                 class="fas fa-download fa-sm text-white-50"></i> Generar reporte</a>
                     </div>
@@ -447,7 +449,7 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                 Ganancias (Este mes)</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$0,00</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="ganancias-mes-actual">$0,00</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -465,7 +467,7 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Ganancias (Anual)</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$0,00</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="ganancia-anual-actual">$0,00</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -485,7 +487,7 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
                                             </div>
                                             <div class="row no-gutters align-items-center">
                                                 <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">0</div>
+                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" id="total_ventas">0</div>
                                                 </div>
                                                 
                                             </div>
@@ -506,7 +508,7 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                                 Creditos pendientes</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="creditos_pendientes">0</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-comments fa-2x text-gray-300"></i>
@@ -534,7 +536,7 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
                                 <!-- Card Header - Dropdown -->
                                 <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Grafica de ventas</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Grafica de ventas <span id="titulo-graf"></span></h6>
                                     <div class="dropdown no-arrow">
                                         <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -543,16 +545,16 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
                                         <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
                                             aria-labelledby="dropdownMenuLink">
                                             <div class="dropdown-header">Sucursales:</div>
-                                            <a class="dropdown-item" href="#">Pedro Cardenas</a>
-                                            <a class="dropdown-item" href="#">Sendero</a>
+                                            <a class="dropdown-item" href="#" onclick="graficaAreaPedroCardenas();">Pedro Cardenas</a>
+                                            <a class="dropdown-item" href="#" onclick="graficaAreaSendero();">Sendero</a>
                                             <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Fusionar</a>
+                                            <a class="dropdown-item" href="#" onclick="graficaAreaGeneral();">Fusionar</a> 
                                         </div>
                                     </div>
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body">
-                                    <div class="chart-area">
+                                    <div class="chart-area" id="chart-area-container">
                                         <canvas id="myAreaChart"></canvas>
                                     </div>
                                 </div>
@@ -565,7 +567,7 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
                                 <!-- Card Header - Dropdown -->
                                 <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Ventas sucursales</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary" id="titulo-graf-pie">Ventas sucursales</h6>
                                     <div class="dropdown no-arrow">
                                         <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -573,17 +575,17 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
                                             aria-labelledby="dropdownMenuLink">
-                                            <div class="dropdown-header">Dropdown Header:</div>
-                                            <a class="dropdown-item" href="#">Action</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
+                                            <div class="dropdown-header">Mostrar:</div>
+                                            <a class="dropdown-item" href="#" onclick="totalVentas();">Total de ventas</a>
+                                            <a class="dropdown-item" href="#" onclick="numeroVentas();">Numero de ventas</a>
                                             <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Something else here</a>
+                                            <a class="dropdown-item" href="#" onclick="totalCreditos();">Numero de creditos</a> 
                                         </div>
                                     </div>
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body">
-                                    <div class="chart-pie pt-4 pb-2">
+                                    <div class="chart-pie pt-4 pb-2" id="chart-pie-container">
                                         <canvas id="myPieChart"></canvas>
                                     </div>
                                     <div class="mt-4 text-center small">
@@ -663,7 +665,8 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
     <!-- Page level custom scripts -->
     <script src="src/js/demo/chart-area-demo.js"></script>
     <script src="src/js/demo/chart-pie-demo.js"></script>
-    <script src="src/js/notificaciones.js"></script>
+   <!--  <script src="src/js/notificaciones.js"></script> -->
+    <script src="src/js/panel.js"></script>
 
   
  

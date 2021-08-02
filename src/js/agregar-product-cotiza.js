@@ -2,6 +2,15 @@ $(document).ready(function() {
 
 $.fn.dataTable.ext.errMode = 'none';
 
+
+$.ajax({
+  type: "POST",
+  url: "./modelo/cotizaciones/borrar-tabla-cotiza-temp.php",
+  data: {"data": "data"},
+  success: function (response) {}
+    
+});
+
 table = $('#pre-cotizacion').DataTable({
   
 
@@ -32,6 +41,7 @@ table = $('#pre-cotizacion').DataTable({
   columns: [   
     { title: "#",               data: null             },
     { title: "Descripcion",     data: "descripcion"    },
+    { title: "Modelo",          data: "modelo"    },
     { title: "Cantidad",        data: "cantidad"       },
     { title: "Precio",          data: "precio"         },
     { title: "Importe",         data: "importe"        },
@@ -41,7 +51,7 @@ table = $('#pre-cotizacion').DataTable({
       render: function (row, data) {
     
         return '<div style="display:flex; justify-content: center; align-items:center;">'+
-        '<span class="hidden-xs"></span></button><br><button type="button" onclick="borrarProductoTmp('+ row.id +"," + row.importe +');" class="borrar-articulo btn btn-danger"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>'+
+        '<span class="hidden-xs"></span></button><br><button type="button" rowid="'+ row.id +'" class="borrar-articulo btn btn-danger"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>'+
         '</div>';
       },
     },
@@ -64,11 +74,59 @@ table = $('#pre-cotizacion').DataTable({
        
     } );
 } );
+
+
+
+table.on('click', '.borrar-articulo', function() {
+  
+  let $tr = $(this).closest('tr');
+  let id = $(this).attr("rowid");
+  let $importe = $(this).attr("importe");
+
+  $.ajax({
+    type: "POST",
+    url: "./modelo/cotizaciones/borrar-cotiza-temp.php",
+    data: {"id":id},
+    success: function(response) {
+      if(response == 1){
+        $.ajax({
+          type: "POST",
+          url: "./modelo/cotizaciones/traer-importe-cotizacion.php",
+          data: "data",
+          success: function (response) {
+            $("#total-cotizacion").val(response);
+            
+            toastr.success('Producto borrado', 'Listo');
+          }
+        });
+          //tabla_presalida.ajax.reload(null, false);
+          // Le pedimos al DataTable que borre la fila
+          table.row(this).remove().draw();
+
+          
+      toastr.success('Producto borrado con exito', 'Correcto' );
+    
+      
+     
+      }else{
+        toastr.warning('Hubo un error al borrar el producto', 'Error' );
+      }
+
+    }
+
+  });
+
+
+});
+
+
 }); 
+
 
 function agregarProducto() { 
 
     tyre_precio = $("#btn-agregar").attr("precio");
+    modelo = $("#btn-agregar").attr("modelo");
     tyre_amount = $("#cantidad").val();
     tyre_import = parseFloat(tyre_precio) * tyre_amount;
     tyre_description = $("#btn-agregar").attr("descripcion");
@@ -85,11 +143,26 @@ function agregarProducto() {
         $.ajax({
             type: "POST",
             url: "./modelo/cotizaciones/agregar-cotizacion-temp.php",
-            data: {"id": tyre_id, "descripcion": tyre_description,"cantidad": tyre_amount, "marca": tyre_marca,"precio": tyre_precio, "importe": tyre_import},
+            data: {"id": tyre_id, "descripcion": tyre_description, "modelo": modelo, "cantidad": tyre_amount, "marca": tyre_marca,"precio": tyre_precio, "importe": tyre_import},
           
             success: function (response) {
-                
+
+              if (response ==1 || response == 2) {
                 table.ajax.reload(null,false);
+                $.ajax({
+                  type: "POST",
+                  url: "./modelo/cotizaciones/traer-importe-cotizacion.php",
+                  data: "data",
+                  success: function (response) {
+                    $("#total-cotizacion").val(response);
+                    
+                toastr.success('Producto agregado', 'Listo');
+                  }
+                });
+              }
+                
+               
+
 
             }
         });
@@ -102,44 +175,7 @@ function reload() {
   table.ajax.reload(null,false);
   }
  
- setInterval( reload,1000);
 
 
- function borrarProductoTmp(id){
-  
 
-  $.ajax({
-    type: "POST",
-    url: "./modelo/cotizaciones/borrar-cotiza-temp.php",
-    data: {"id":id},
-    success: function (response) {
-      if(response == 1){
-
-           
-      numRows = table.column( 0 ).data().length;
-     
-
-      if (numRows==1){
-       
-        table.ajax.reload(null, false);
-        $("#pre-cotizacion tbody tr").remove();
-        $(".pre-cotizacion-error").html("");
-        $(".products-grid-error").remove();
-        $("#pre-cotizacion tbody").append('<tr><th id="empty-table" style="text-align: center;" style="width: 100%" colspan="8">Sin productos</th></tr>');
-        $("#pre-cotizacion_processing").css("display","none");
-      
-      }else{
-        table.ajax.reload(null,false);
-      }
-      
-        toastr.success('Producto borrado', 'Listo');
-        
-      }else{
-        toastr.error('El producto no pudo ser borrado', 'Error');
-
-      }
-      }
-      
-  });
- }
-
+ 

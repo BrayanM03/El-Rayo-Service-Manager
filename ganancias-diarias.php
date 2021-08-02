@@ -1,23 +1,24 @@
 <?php
-    session_start();
+session_start();
 
-    include 'modelo/conexion.php';
-    $con= $conectando->conexion(); 
+include 'modelo/conexion.php';
+$con= $conectando->conexion(); 
 
-    if (!$con) {
-        echo "maaaaal";
-    }
 
-    if (!isset($_SESSION['id_usuario'])) {
-        header("Location:login.php");
-    }
+if (!isset($_SESSION['id_usuario'])) {
+    header("Location:login.php");
+}
 
-    
-    ?>
+if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
+    header("Location:nueva-venta.php");
+}
+
+
+?>
 
 <!DOCTYPE html>
 <html lang="es">
- 
+
 <head>
 
     <meta charset="utf-8">
@@ -37,12 +38,7 @@
 
     <!-- Custom styles for this template-->
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="src/vendor/datatables/dataTables.bootstrap4.css">
-    <link rel="stylesheet" href="src/vendor/datatables-responsive/css/responsive.bootstrap4.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.css" integrity="sha512-oe8OpYjBaDWPt2VmSFR+qYOdnTjeV9QPLJUeqZyprDEQvQLJ9C5PCFclxwNuvb/GQgQngdCXzKSFltuHD3eCxA==" crossorigin="anonymous" />
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="src/vendor/bower_components/select2-bootstrap-theme/dist/select2-bootstrap.css">
-    <link rel="stylesheet" href="src/css/cotizacion.css">
+    <link href="src/css/menu-vertical.css" rel="stylesheet">
 
 </head>
 
@@ -55,7 +51,7 @@
         <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <!-- <i class="fas fa-laugh-wink"></i>--->
                     <img style="filter: invert(100%);" width="40px" src="src/img/racing.svg"/>
@@ -67,7 +63,7 @@
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link" href="index.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Inicio</span></a>
@@ -89,7 +85,7 @@
                 </a>
             </li>
 
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="cotizacion.php">
                     <i class="fas fa-fw fa-clipboard"></i>
                     <span>Nueva cotización</span>
@@ -111,39 +107,19 @@
                             <img src="src/img/ventas.svg" width="18px" /> 
                             <span style="margin-left:12px;"> Ventas</span>
                         </a>
-                        <a class="collapse-item" href="utilities-border.html">
+                        <a class="collapse-item" href="compras-pv.php">
                             <img src="src/img/compras.svg" width="18px" /> 
                             <span style="margin-left:12px;"> Compras</span>
                         </a>
                     </div>
                 </div>
             </li>
-            <?php 
-                $user_jerarquia = $_SESSION["rol"];
-
-                if ($user_jerarquia == 1) {
-                   $name = "Inventario";
-                }else if($user_jerarquia ==2){
-                 $name = "Clientes y creditos";
-                }
-
-            ?>
-
-            <!-- Divider -->
+    
             <hr class="sidebar-divider">
             <div class="sidebar-heading">
-            <?php echo $name   ?>
+           Inventario
             </div>
-            <?php 
-
-                if ($user_jerarquia == 1) {
-                    # code...
-                
-
-            ?>
-
-          
-            <!-- Nav Item - Pages Collapse Menu -->
+            <!-- Inventario - Pages Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTyres"
                     aria-expanded="true" aria-controls="collapsePages">
@@ -151,7 +127,7 @@
                     <span>Mis llantas</span>
                 </a>
                 <div id="collapseTyres" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
+                    <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Sucursales:</h6>
                         <a class="collapse-item" href="inventario-pedro.php" style="display:flex; flex-direction: row; justify-content:start;">
                         <i class="fas fa-fw fa-store"></i> 
@@ -163,15 +139,15 @@
                     
                     </div>
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Categorias:</h6>
+                        <h6 class="collapse-header">Stock total:</h6>
                         <a class="collapse-item" href="inventario-total.php" style="display:flex; flex-direction: row; justify-content:start;">
                             <img src="src/img/tyre-invent.svg" width="18px" /> 
                             <span style="margin-left:12px;"> Existencia</span> </a>
-                        <a class="collapse-item" href="register.html" style="display:flex; flex-direction: row; justify-content:start;">
-                            <img src="src/img/salida.svg" width="18px" /> 
-                            <span style="margin-left:12px;"> Vendidas</span> </a>
+                        <a class="collapse-item" href="servicios.php" style="display:flex; flex-direction: row; justify-content:start;">
+                            <i class="fas fa-car"></i>
+                            <span style="margin-left:7px;">Servicios</span> </a>
                         <a class="collapse-item" href="movimientos.php">
-                        <img src="src/img/entrada.svg" width="18px" /> 
+                            <img src="src/img/entrada.svg" width="18px" /> 
                             <span style="margin-left:12px;"> Movimientos</span></a>
                         </a>
                     
@@ -179,13 +155,7 @@
                 </div>
             </li>
 
-            <?php }
-            
-            if ($user_jerarquia == 1 || $user_jerarquia == 2) {
-            ?>
-
-
-
+            <!-- Clientes -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseClients"
                     aria-expanded="true" aria-controls="collapsePages">
@@ -201,7 +171,7 @@
                         <a class="collapse-item" href="creditos.php" style="display:flex; flex-direction: row; justify-content:start;">
                             <img src="src/img/credito.svg" width="18px" /> 
                             <span style="margin-left:12px;"> Creditos</span> </a>
-                        <a class="collapse-item" href="movimientos.php">
+                        <a class="collapse-item" href="forgot-password.html">
                             <img src="src/img/pago.svg" width="18px" /> 
                             <span style="margin-left:12px;"> Creditos vencidos</span></a>
                         </a>
@@ -211,7 +181,8 @@
             </li>
 
 
-           <!--  <li class="nav-item">
+            <!-- Proveedores -->
+            <!--<li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProvider"
                     aria-expanded="true" aria-controls="collapsePages">
                     <i class="fas fa-fw fa-user-cog"></i>
@@ -233,28 +204,20 @@
                     
                     </div>
                 </div>
-            </li> -->
-
-
-            <?php }
-            
-            if ($user_jerarquia == 1 ) {
-            ?>
-            <!-- Nav Item - Charts -->
-            <li class="nav-item">
+            </li>-->
+         
+ <!-- Generar tokens -->
+ <li class="nav-item">
                 <a class="nav-link" href="generar-token.php">
                     <i class="fas fa-fw fa-lock"></i>
                     <span>Generar token</span></a>
             </li>
+    
 
-
-            <?php 
-              }     # code...
-                
-
-            ?>
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
+
+            
 
             <!-- Sidebar Toggler (Sidebar) -->
             <div class="text-center d-none d-md-inline">
@@ -330,58 +293,35 @@
                         <li class="nav-item dropdown no-arrow mx-1">
                             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-bell fa-fw"></i>
+                                <i class="fas fa-bell fa-fw icon-menu"></i>
                                 <!-- Counter - Alerts -->
-                                <span class="badge badge-danger badge-counter">3+</span>
+                                <span id="contador-notifi" class="badge badge-danger badge-counter">0</span>
                             </a>
+ 
                             <!-- Dropdown - Alerts -->
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="alertsDropdown">
                                 <h6 class="dropdown-header">
-                                    Alerts Center
+                                   Notificaciones
                                 </h6>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-primary">
-                                            <i class="fas fa-file-alt text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 12, 2019</div>
-                                        <span class="font-weight-bold">A new monthly report is ready to download!</span>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-success">
-                                            <i class="fas fa-donate text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 7, 2019</div>
-                                        $290.29 has been deposited into your account!
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-warning">
-                                            <i class="fas fa-exclamation-triangle text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 2, 2019</div>
-                                        Spending Alert: We've noticed unusually high spending for your account.
-                                    </div>
-                                </a>
-                                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+                                <div class="empty-notification">
+                                 <img src="src/img/undraw_Notify_re_65on.svg" alt="" width="400px">
+                                 <span>Ups, por el momento no hay nada por aqui</span> 
+                              </div>
+                              
+                              <div id="contenedor-alertas"></div>
+                              <a class="dropdown-item text-center small text-gray-500" href="#">Mostrar mas notificaciones</a>
+                             
                             </div>
                         </li>
+
+
 
                         <!-- Nav Item - Messages -->
                         <li class="nav-item dropdown no-arrow mx-1">
                             <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-envelope fa-fw"></i>
+                                <i class="fas fa-envelope fa-fw icon-menu"></i>
                                 <!-- Counter - Messages -->
                                 <span class="badge badge-danger badge-counter">7</span>
                             </a>
@@ -389,7 +329,7 @@
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="messagesDropdown">
                                 <h6 class="dropdown-header">
-                                    Message Center
+                                    Mensajes
                                 </h6>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
@@ -451,9 +391,9 @@
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline  small" style="color: aliceblue;"><?php
                                 
-                                echo $_SESSION['nombre'] . " " . $_SESSION['apellidos'];
-                            
-                            ?></span>
+                                    echo $_SESSION['nombre'] . " " . $_SESSION['apellidos'];
+                                
+                                ?></span>
                                 <img class="img-profile rounded-circle"
                                     src="src/img/undraw_profile.svg">
                             </a>
@@ -462,20 +402,20 @@
                                 aria-labelledby="userDropdown">
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Profile
+                                    Perfil
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
+                                    Configuraciones
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Activity Log
+                                    Registro de actividad
                                 </a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Logout
+                                    Salir
                                 </a>
                             </div>
                         </li>
@@ -489,68 +429,154 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
-                     <!-- Contenido -->
-                     <div class="card" style="height: auto; width: auto;">
-                            <h4 class="ml-auto mr-auto mt-5" style="color:#191919;">Nueva cotización</h4>
-                            <div class="row mt-4">
-                            <div class="col-md-12">
-                            <form action=""  class="m-auto" style="width: 50%;">   
-                            <div class="form-group m-auto"  style="width: 100%;">
-                            <label for="busquedaLlantas" class="">Agregar llantas</label>
-                            <select style="width:100%" class="form-control" id="busquedaLlantas" value="" name="search"></select> 
-                            </div> 
-                            <div class="form-group mt-3 row"  style="width: 100%;">
-                            <div class="col-md-6">
-
-                            <label for="busqueda" class="">Cliente</label>
-                            <select style="width:100%" class="form-control" id="clientes" value="" name="clientes"></select>
-                            </div>
-                            <div class="col-md-6">
-                            <label for="Cantidad" class="">Cantidad</label> 
-                            <input style="width:100%; height:33px;" type="number" class="form-control" id="cantidad" value="" name="cantidad">
-                            </div>
-                            <div class="col-md-6 mt-3 mr-auto ml-auto"  onclick="generarToken();" id="precio-tok" >
-                            <label for="precio">Precio</label> 
-                            <input style="width:100%; height:33px;"type="number" class="form-control" id="precio" value="" name="precio" disabled>
-                            </div>
-                            </div> 
-                            <div class="form-group mt-3 row"  style="width: 100%;">
-                           
-                            <div class="btn btn-success m-auto" id="btn-agregar"onclick="agregarProducto();">Agregar</div>
-                            </div>
-
-                            </form>
-                            </div>
-                            
-                            <div class="col-12 col-md-10 ml-auto mr-auto mt-5 text-center">
-                                <table id="pre-cotizacion" class="table table-success table-bordered table-hover round_table"></table>
-                                <div class="row text-center mt-3 justify-content-center align-items-center">
-                                <div class="col-12 col-md-4">
-                                    <div class="center-block">
-                                    <label for="">Total:</label>
-                                    <input type="text" id="total-cotizacion" class="form-control" placeholder="0.00" disabled>
-                                
-                                    </div>
-                                    </div>
-                            </div>
-                            </div>
-                            
-                            </div>
-                            <div class="form-group mt-3 row justify-content-center align-items-center"  style="width: 100%;">
-                            <div class="btn btn-danger text-white mr-3" comentario=" " style="color: rgb(31, 28, 28);" id="hacer-comentario"><i class="fas fa-comment-dots"></i></div>
-                            <div class="btn btn-danger" id="btn-cotizar" onclick="generarCotizacion();">Cotizar</div>
-                            </div>
-
-                     </div>
+                     <!-- Page Heading -->
+                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h3 class="h3 mb-0 text-gray-800">Metrica de ganancias</h3>
+                        <a href="index.php" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm"><i
+                                class="fas fa-hand-point-left fa-sm text-white-50"></i> Volver</a>
+                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                                class="fas fa-download fa-sm text-white-50"></i> Generar reporte</a>
+                    </div>
                    
+                            <!-- Content Row -->
+                    <div class="row mb-3">
+
+                    <div class="col-12 col-md-4">
+                            <div class="card p-5 text-center bg-whitesmoke rounded bordered">
+                                <h6>Ganancia de la semana:</h6>
+                                <h4 class="color-black" id="ganancia_semana">$</h4>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-4">
+                            <div class="card p-5 text-center bg-whitesmoke rounded bordered">
+                                <h6>Ganancia de hoy:</h6>
+                                <h4 class="color-black" id="ganancia_hoy">$</h4>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="card p-5 text-center bg-whitesmoke rounded bordered">
+                                <h6>Ventas de hoy:</h6>
+                                <h4 class="color-black" id="ventas_hoy"></h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    
 
                 </div>
+                <!-- /.container-fluid -->
+
+
+                
+                    <!-- Content Row -->
+
+                    <div class="row">
+
+                    <div class="col-12 col-xl-8 col-lg-7">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div
+                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Grafica de ventas de esta semana<span id="titulo-graf"></span></h6>
+                                    <div class="dropdown no-arrow">
+                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                            aria-labelledby="dropdownMenuLink">
+                                            <div class="dropdown-header">Sucursales:</div>
+                                            <a class="dropdown-item" href="#" onclick="graficaBarPedroCardenas();">Pedro Cardenas</a>
+                                            <a class="dropdown-item" href="#" onclick="graficaBarSendero();">Sendero</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="#" onclick="graficaBarGeneral();">Fusionar</a> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="chart-area" id="chart-bar-container">
+                                        <canvas id="myBarChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <!-- Buscador de ganacias darias -->
+                        <div class="col-xl-4 col-lg-5">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div
+                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary" id="titulo-graf-pie">Consultar rango ganancias</h6>
+                                    <div class="dropdown no-arrow">
+                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                            aria-labelledby="dropdownMenuLink">
+                                            <div class="dropdown-header">Mostrar:</div>
+                                            <a class="dropdown-item" href="#" onclick="totalVentas();">Dia en especifico</a>
+                                            <a class="dropdown-item" href="#" onclick="numeroVentas();">Numero de ventas</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="#" onclick="totalCreditos();">Rango de ganancias</a> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="chart-pie pt-4 pb-2" id="chart-pie-container">
+                                     <!--    <canvas id="myPieChart"></canvas> -->
+                                     <div class="row">
+                                         <div class="col-12 col-md-5">
+                                         <label for="">Fecha inicio</label>
+                                         <input type="date" id="fecha-inicio" class="form-control">
+                                         <div class="invalid-feedback">Elige una fecha inicial.</div>
+                                         </div>
+                                         <div class="col-12 col-md-5">
+                                         <label for="">Fecha final</label>
+                                         <input type="date" id="fecha-final" class="form-control">
+                                         <div class="invalid-feedback">Elige una fecha final.</div> 
+                                        </div>
+                                         <div class="col-12 col-md-2" style="display:flex; justify-content:center; align-items:center; margin-top:30px; height:70%;" onclick="traerInfoRangoFecha();">
+                                         <div  id="fecha-final" class="btn btn-danger"><i class="fas fa-search fa-sm"></i></div>
+                                         </div>
+                                     </div>
+                                     <div class="row text-center mt-3">
+                                         <div class="col-12 col-md-12 ">
+                                             <h6>General</h6>
+                                             <h4 id="result-ganancia-rango"></h4>
+                                         </div>
+                                         <div class="col-12 col-md-12 ">
+                                             <h6>Pedro Cardenas</h6>
+                                             <h4 class="text-primary" id="result-ganancia-rango-pedro"></h4>
+                                         </div>
+                                         <div class="col-12 col-md-12 ">
+                                             <h6>Sendero</h6>
+                                             <h4 class="text-success" id="result-ganancia-rango-sendero"></h4>
+                                         </div>
+                                     </div>
+                                     </div>
+                                  
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row" style="display: flex; justify-content: center; margin-top: 80px;">
+                        <img src="src/img/undraw_sobre_ruedas.svg" alt="" width="400px">
+                    </div>
+
+            </div>
             <!-- End of Main Content -->
   <!-- Footer -->
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; El Rayo Service Manager 2020</span><br><br>
+                        <span>Copyright &copy; El Rayo Service Manager  <?php print_r(date("Y")) ?></span><br><br>
                         <span>Edicion e integración por <a href="https://www.facebook.com/BrayanM03/">Brayan Maldonado</a></span>
                     </div>
                 </div>
@@ -561,7 +587,7 @@
         <!-- End of Content Wrapper -->
 
     </div>
-    <!-- End of Page Wrapper --> 
+    <!-- End of Page Wrapper -->
 
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
@@ -582,7 +608,7 @@
                 <div class="modal-body">Seleccione "salir" para cerra su sesión actual.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
-                    <a class="btn btn-primary" href="./modelo/login/cerrar-sesion.php">Salir</a>
+                    <a class="btn btn-primary" href="modelo/login/cerrar-sesion.php">Salir</a>
                 </div>
             </div>
         </div>
@@ -602,18 +628,12 @@
     <script src="src/vendor/chart.js/Chart.min.js"></script>
 
     <!-- Page level custom scripts -->
- 
-    <script src="src/vendor/datatables/jquery.dataTables.min.js"></script> 
-    <script src="src/vendor/datatables-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="src/vendor/datatables/dataTables.bootstrap4.js"></script>
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous"></script>
+    <script src="src/js/demo/chart-bar-demo.js"></script>
 
-    <!-- Cargamos nuestro componente de React. -->
-    <script src="src/js/cotizacion.js"></script>
-    <script src="src/js/agregar-product-cotiza.js"></script>
-    <script src="src/js/generar-token.js"></script>
+
+  
+ 
+    </script>
    
 </body>
 

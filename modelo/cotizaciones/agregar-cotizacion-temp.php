@@ -14,7 +14,7 @@ if(isset($_POST)){
 
     $id = $_POST["id"];
     $descripcion = $_POST["descripcion"];
-    //$modelo = $_POST["modelo"];
+    $modelo = $_POST["modelo"];
     $cantidad = $_POST["cantidad"];
     $precio = $_POST["precio"];
     $importe = $_POST["importe"];
@@ -32,6 +32,7 @@ if(isset($_POST)){
             id INT NOT NULL AUTO_INCREMENT,
             codigo VARCHAR(255) NOT NULL,
             descripcion VARCHAR(255),
+            modelo VARCHAR(150),
             cantidad INT,
             precio DECIMAL(10,2),
             importe DECIMAL(10,2),
@@ -42,9 +43,9 @@ if(isset($_POST)){
         if ($result2) {
             
 
-            $insertar = "INSERT INTO cotizacion_temp$iduser(id, codigo, descripcion, cantidad, precio, importe) VALUES(null,?,?,?,?,?)";
+            $insertar = "INSERT INTO cotizacion_temp$iduser(id, codigo, descripcion, modelo, cantidad, precio, importe) VALUES(null,?,?,?,?,?,?)";
             $resultado = $con->prepare($insertar);
-            $resultado->bind_param('isidd', $id, $descripcion, $cantidad, $precio ,$importe);
+            $resultado->bind_param('issidd', $id, $descripcion, $modelo, $cantidad, $precio ,$importe);
             $resultado->execute();
             $resultado->close();
 
@@ -52,8 +53,10 @@ if(isset($_POST)){
                 echo "Se creo la tabla y se insertaron los datos";
             }else{
                 echo "Se creo la tabla solamente los datos no se insertaron";
+
             }*/
 
+            print_r(1);
         }else{
             echo "Se creo puro chile";
         }
@@ -94,9 +97,9 @@ if(isset($_POST)){
 
     }else if($iguales == 0){
 
-            $insertar = "INSERT INTO cotizacion_temp$iduser(id, codigo, descripcion, cantidad, precio, importe) VALUES(null,?,?,?,?,?)";
+            $insertar = "INSERT INTO cotizacion_temp$iduser(id, codigo, descripcion, modelo, cantidad, precio, importe) VALUES(null,?,?,?,?,?,?)";
             $resultado = $con->prepare($insertar);
-            $resultado->bind_param('isidd', $id, $descripcion, $cantidad, $precio ,$importe);
+            $resultado->bind_param('issidd', $id, $descripcion, $modelo, $cantidad, $precio ,$importe);
             $resultado->execute();
             $resultado->close();
 

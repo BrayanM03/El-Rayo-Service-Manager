@@ -54,7 +54,7 @@ global $plazo;
 $formatterES = new NumberFormatter("es-ES", NumberFormatter::SPELLOUT);
 $izquierda = intval(floor($total));
 $derecha = intval(($total - floor($total)) * 100);
-$formatTotal = $formatterES->format($izquierda) . " con " . $formatterES->format($derecha) . " centavos";
+$formatTotal = $formatterES->format($izquierda) . " y " . $derecha . "/100 m.n";
 // ciento veintitrés coma cuarenta y cinco
 
 global $formatTotal;
