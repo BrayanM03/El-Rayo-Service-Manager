@@ -25,7 +25,7 @@ date_default_timezone_set("America/Matamoros");
     $Jueves = 3;
     $Viernes= 4;
     $Sabado = 5;
-    $Domingo = 6;
+    $Domingo ="6";
 
     $ganancia_lunes_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ? AND estatus <> ? AND WEEKDAY(Fecha) =?");
                $ganancia_lunes_sql->bind_param('ssss', $semana, $año, $estatus, $Lunes);
