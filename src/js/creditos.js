@@ -83,7 +83,7 @@ table = $('#creditos').DataTable({
       className: "celda-acciones",
       render: function (row, data) {
     
-        return '<div style="display: flex"><button onclick="traerCredito(' +row.id+ ');" type="button" class="buttonPDF btn btn-primary" style="margin-right: 8px"><span class="fa fa-eye"></span><span class="hidden-xs"></span></button><br><button type="button" onclick="borrarCredito('+ row.id +');" class="buttonBorrar btn btn-warning"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
+        return '<div style="display: flex"><button onclick="traerCredito(' +row.id+ ');" type="button" class="buttonPDF btn btn-primary" style="margin-right: 8px"><span class="fa fa-eye"></span><span class="hidden-xs"></span></button><br><button type="button" onclick="borrarCredito('+ row.id +');" class="buttonBorrar btn btn-warning"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button><br><button type="button" onclick="traerPdfCredito('+ row.id_venta +');" class="btn ml-2 btn-danger"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button></div>';
       },
     },
   ],
@@ -113,6 +113,9 @@ table.columns( [3] ).visible( false );
 MostrarCreditos();
 
 
+function traerPdfCredito(id){
+  window.open('./modelo/creditos/generar-reporte-credito.php?id='+ id, '_blank');
+}
 
 function borrarCredito(id) {
 
