@@ -306,6 +306,7 @@ $("#hacer-comentario").on("click", function () {
                         $("#pre-cotizacion tbody").append('<tr><th id="empty-table" style="text-align: center;" style="width: 100%" colspan="8">Preventa vacia</th></tr>');
                         $("#pre-cotizacion_processing").css("display","none");
                         $("#total-cotizacion").val(0);
+                        table.clear().draw();
                        
 
                     }else if(result.isDenied){
@@ -318,6 +319,7 @@ $("#hacer-comentario").on("click", function () {
                         $("#pre-cotizacion tbody").append('<tr><th id="empty-table" style="text-align: center;" style="width: 100%" colspan="8">Preventa vacia</th></tr>');
                         $("#pre-cotizacion_processing").css("display","none");
                         $("#total-cotizacion").val(0.00);
+                        table.clear().draw();
                              
                       
                         
@@ -329,6 +331,7 @@ $("#hacer-comentario").on("click", function () {
                         $("#pre-cotizacion tbody").append('<tr><th id="empty-table" style="text-align: center;" style="width: 100%" colspan="8">Preventa vacia</th></tr>');
                         $("#pre-cotizacion_processing").css("display","none");
                         $("#total-cotizacion").val(0);
+                        table.clear().draw();
                     }
     
                    $("#hacer-comentario").attr("comentario", " ");

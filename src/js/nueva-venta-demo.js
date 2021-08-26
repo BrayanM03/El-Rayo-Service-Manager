@@ -305,6 +305,7 @@ selects.forEach( select => {
                                 $("#pre-venta tbody").append('<tr><th id="empty-table" style="text-align: center;" style="width: 100%" colspan="8">Preventa vacia</th></tr>');
                                 $("#pre-venta_processing").css("display","none");
                                 $("#total").val(0);
+                                table.clear().draw();
                                
 
                             }else if(result.isDenied){
@@ -317,6 +318,7 @@ selects.forEach( select => {
                                 $("#pre-venta tbody").append('<tr><th id="empty-table" style="text-align: center;" style="width: 100%" colspan="8">Preventa vacia</th></tr>');
                                 $("#pre-venta_processing").css("display","none");
                                 $("#total").val(0);
+                                table.clear().draw();
                                      
                               
                                 
@@ -328,6 +330,7 @@ selects.forEach( select => {
                                 $("#pre-venta tbody").append('<tr><th id="empty-table" style="text-align: center;" style="width: 100%" colspan="8">Preventa vacia</th></tr>');
                                 $("#pre-venta_processing").css("display","none");
                                 $("#total").val(0);
+                                table.clear().draw();
                             }
             
                            $("#hacer-comentario").attr("comentario", " ");

@@ -42,13 +42,14 @@ global $metodo_pago;
 global $hora;
 global $comentario;
 
-$formatterES = new NumberFormatter("es-ES", NumberFormatter::SPELLOUT);
+$formatterES = new NumberFormatter("ES", NumberFormatter::SPELLOUT);
 $izquierda = intval(floor($total));
 $derecha = intval(($total - floor($total)) * 100);
 if($derecha == 0){
     $derecha = "00";
 }
-$formatTotal = $formatterES->format($izquierda) . " y " . $derecha . "/100 m.n";
+$formatTotalminus = $formatterES->format($izquierda) . " PESOS Y " . $derecha . "/100 M.N";
+$formatTotal = strtoupper($formatTotalminus);
 // ciento veintitrés coma cuarenta y cinco
 
 global $formatTotal;

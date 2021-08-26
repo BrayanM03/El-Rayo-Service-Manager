@@ -44,7 +44,8 @@ global $comentario;
 $formatterES = new NumberFormatter("es-ES", NumberFormatter::SPELLOUT);
 $izquierda = intval(floor($total));
 $derecha = intval(($total - floor($total)) * 100);
-$formatTotal = $formatterES->format($izquierda) . " y " . $derecha . "/100 m.n";
+$formatTotalminus = $formatterES->format($izquierda) . " y " . $derecha . "/100 m.n";
+$formatTotal = strtoupper($formatTotalminus);
 // ciento veintitrés coma cuarenta y cinco
 
 global $formatTotal;
