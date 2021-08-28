@@ -429,22 +429,23 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                 <div class="row">
-                       <div class="col-12 justify-content-center align-items-center m-auto" style="">
-                        <h3 class="text-center">Configuraciones del sistema y preferencias</h3>
+                     <div class="col-12 justify-content-center align-items-center m-auto" style="">
+                        <h3 class="text-center">Realizar corte</h3>
                        </div>
                 </div>  
                 <div class="row mt-5">
-                    <div class="col-12 justift-content-center">
-                        <div class="col-6 text-center" style="margin:auto;">
-                        <div class="list-group">
-                            <span href="#" class="list-group-item">
-                                <b>Ajustes principales</b>
+                    <div class="col-12">
+                        <div class="col-12 col-md-6" style="margin:auto;">
+                        <div class="btn btn-warning">Cerrar todo</div>
+                        <div class="list-group mt-3 col-12">
+                            <span href="" class="list-group-item d-flex justify-content-between">
+                                <b>Corte por sucursal</b><b>Ganancia hoy</b><b>Accion</b>
                             </span>
-                            <a href="#" class="list-group-item list-group-item-action">Editar mis datos de usuario (inactivo)</a>
-                            <a href="corte.php" class="list-group-item list-group-item-action">Realizar corte </a>
-                            <a href="#" class="list-group-item list-group-item-action">Hacer apertura de cajas</a>
-                            <a href="#" class="list-group-item list-group-item-action">Cerrar sesión</a>
-                            </div>             
+                            <a href="" class="list-group-item d-flex justify-content-between list-group-item-action">Sucursal Sendero:  <span>$<span id="ganancia-sendero"></span></span>
+                            <div class="btn btn-primary">Realizar corte</div></a>
+                            <a href="corte.php" class="list-group-item d-flex justify-content-between list-group-item-action">Sucursal Pedro Cardenas: <span>$<span id="ganancia-pedro"></span></span>
+                            <div class="btn btn-primary">Realizar corte</div></a>
+                        </div>             
                         </div>
                     </div>
                 </div>
@@ -516,14 +517,8 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
     <!-- Custom scripts for all pages-->
     <script src="src/js/sb-admin-2.min.js"></script>
 
-    <!-- Page level plugins -->
-    <script src="src/vendor/chart.js/Chart.min.js"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="src/js/demo/chart-area-demo.js"></script>
-    <script src="src/js/demo/chart-pie-demo.js"></script>
-   <!--  <script src="src/js/notificaciones.js"></script> -->
-    <script src="src/js/panel.js"></script>
+ 
+    <script src="src/js/cortes.js"></script>
 
   
  
