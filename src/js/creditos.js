@@ -458,7 +458,7 @@ function borrarCredito(id) {
                     '<div col="col-12 col-md-3" style="margin-left:20px;">'+
                     'Metodo de pago: <select type="text" id="metodo_p" class="form-control" val="hola">'+
                     '<option value="Efectivo">Efectivo</option>'+
-                    '<option value="Targeta">Targeta</option>'+
+                    '<option value="Tarjeta">Tarjeta</option>'+
                     '<option value="Transferencia">Transferencia</option>'+
                     '<option value="Cheque">Cheque</option>'+
                     '<option value="Sin definir">Sin definir</option>'+
@@ -600,7 +600,7 @@ function borrarCredito(id) {
     '<label><b>Metodo de pago</b></label>'+
     '<select class="form-control" id="metodos_pago" name="metodo_pago">'+
     '<option value="Efectivo">Efectivo</option>'+
-    '<option value="Targeta">Targeta</option>'+
+    '<option value="Tarjeta">Tarjeta</option>'+
     '<option value="Transferencia">Transferencia</option>'+
     '<option value="Cheque">Cheque</option>'+
     '<option value="Sin definir">Sin definir</option>'+

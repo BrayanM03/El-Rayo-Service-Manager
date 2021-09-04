@@ -10,4 +10,5 @@ $.ajax({
       $("#ganancia-pedro").text(response.ganancia_pedro); 
       console.log(response.ganancia_hoy);
     }
-});
+}); 
+

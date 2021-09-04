@@ -17,11 +17,66 @@ date_default_timezone_set("America/Matamoros");
 
   if($_POST){
 
-    
+    $tipo = "Normal";
     $estatus ="Cancelada";
     $sucursalP = "Pedro";
     $sucursalS = "Sendero";
+    $unidad = "pieza";
 
+               $traer_id = $con->prepare("SELECT id FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ? AND tipo = ? AND estatus <> ? AND WEEKDAY(Fecha) =? AND id_Sucursal =?");
+               $traer_id->bind_param('ssssss', $semana, $año, $tipo, $estatus, $hoy, $sucursalP);
+               $traer_id->execute();
+               $resultado = $traer_id->get_result();
+                $costo_acumulado = 0;
+                if($resultado->num_rows < 1){
+                    //echo "sin valores"; 
+                }else{
+                    while($fila = $resultado->fetch_assoc()){
+                    $id_venta = $fila["id"];
+                   
+
+                    $traer_idLlanta = $con->prepare("SELECT id_Llanta, Cantidad FROM `detalle_venta` WHERE id_Venta = ? AND Unidad = ?");
+                    $traer_idLlanta->bind_param('ss', $id_venta, $unidad);
+                    $traer_idLlanta->execute();
+                    $array_id_llanta = $traer_idLlanta->get_result();
+
+                    if($array_id_llanta->num_rows < 1){
+                       // echo "sin valores"; 
+                    }else{
+                        while($fila2 = $array_id_llanta->fetch_assoc()){
+
+                        $id_llanta = $fila2["id_Llanta"];
+                        $cantidad = $fila2["Cantidad"];
+                        
+                        $traer_Costo = $con->prepare("SELECT precio_Inicial FROM `llantas` WHERE id = ?");
+                        $traer_Costo->bind_param('s', $id_llanta);
+                        $traer_Costo->execute();
+                        $array_costos = $traer_Costo->get_result();
+                        if($array_costos->num_rows < 1){
+                            //echo "sin valores"; 
+                        }else{
+                            while($fila3 = $array_costos->fetch_assoc()){
+                                $costo_unitario = $fila3["precio_Inicial"];
+                                $costo_total = $costo_unitario * $cantidad;
+                                $costo_acumulado = $costo_acumulado + $costo_total;
+                                
+            
+                        }
+
+                        $traer_Costo->close();
+                        
+                    }
+                    };
+                    $traer_idLlanta->close();
+                    
+                }
+                }
+              
+               $traer_id->close();
+               
+               
+            }
+             
 
 
                $ganancia_domingo_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ? AND estatus <> ? AND WEEKDAY(Fecha) =? AND id_Sucursal =?");
@@ -33,7 +88,9 @@ date_default_timezone_set("America/Matamoros");
 
                if($ganancia_pedro == null){
                    $ganancia_pedro = 0;
-               } 
+               }else{
+                   $ganancia_pedro = $ganancia_pedro - $costo_acumulado;
+               }
 
                
                $ganancia_domingo_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ? AND estatus <> ? AND WEEKDAY(Fecha) =? AND id_Sucursal =?");
@@ -66,7 +123,7 @@ date_default_timezone_set("America/Matamoros");
             echo json_encode($data, JSON_UNESCAPED_UNICODE);
         }else{
             print_r("Sin datos");
-        }
+        } 
     
 
   }

@@ -439,12 +439,12 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
                         <div class="btn btn-warning">Cerrar todo</div>
                         <div class="list-group mt-3 col-12">
                             <span href="" class="list-group-item d-flex justify-content-between">
-                                <b>Corte por sucursal</b><b>Ganancia hoy</b><b>Accion</b>
+                                <b>Corte por sucursal</b><b>Ganancia hoy</b><b>Accion</b> 
                             </span>
                             <a href="" class="list-group-item d-flex justify-content-between list-group-item-action">Sucursal Sendero:  <span>$<span id="ganancia-sendero"></span></span>
-                            <div class="btn btn-primary">Realizar corte</div></a>
-                            <a href="corte.php" class="list-group-item d-flex justify-content-between list-group-item-action">Sucursal Pedro Cardenas: <span>$<span id="ganancia-pedro"></span></span>
-                            <div class="btn btn-primary">Realizar corte</div></a>
+                            <div class="btn btn-primary" onclick="realizarCorte();">Realizar corte</div></a>
+                            <a href="corte.php" class="list-group-item d-flex justify-content-between list-group-item-action"><span>Sucursal Pedro Cardenas:</span> <span class="mr-4">$<span id="ganancia-pedro"></span></span>
+                            <div class="btn btn-primary" onclick="realizarCorte();">Realizar corte</div></a>
                         </div>             
                         </div>
                     </div>
