@@ -505,7 +505,6 @@ selects.forEach( select => {
         return $state;
       };
 
-   
 
     
 });
@@ -1054,6 +1053,7 @@ $("#btn-add-client").hover(function() {
  */
 
     $("#hacer-comentario").on("click", function () { 
+      
       Swal.fire({
         title: "Comentario",
         showCancelButton: true,

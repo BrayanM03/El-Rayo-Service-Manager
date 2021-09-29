@@ -40,7 +40,7 @@ table = $('#ventas').DataTable({
                 '<span class="fa fa-ban"></span><span class="hidden-xs"></span></button>'+
                 '<button type="button" onclick="redirigirCredito('+ row.folio +');" class="buttonBorrar btn btn-info" style="margin-left: 8px">'+
                 '<span class="fa fa-share-square"></span><span class="hidden-xs"></span></button>'+
-                '<button type="button" onclick="cancelarVenta('+ row.folio +');" class="buttonBorrar btn btn-warning" style="margin-left: 8px">'+
+                '<button type="button" onclick="borrarVenta('+ row.folio +',2);" class="buttonBorrar btn btn-warning" style="margin-left: 8px">'+
                 '<span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
                 
             }else if(row.tipo == "Normal"){
@@ -49,7 +49,7 @@ table = $('#ventas').DataTable({
                 '<span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>'+
                 '<button type="button" onclick="cancelarVenta('+ row.folio +');" class="buttonBorrar btn btn-primary">'+
                 '<span class="fa fa-ban"></span><span class="hidden-xs"></span></button>'+
-                '<button type="button" onclick="borrarVenta('+ row.folio +');" class="buttonBorrar btn btn-warning" style="margin-left: 8px">'+
+                '<button type="button" onclick="borrarVenta('+ row.folio +',1);" class="buttonBorrar btn btn-warning" style="margin-left: 8px">'+
                 '<span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
          
             }else if(row.tipo == ""){
@@ -103,7 +103,7 @@ $("table.dataTable thead").addClass("table-info")
 MostrarVentas();
 
 
-function borrarVenta(id) {
+function borrarVenta(id, tipo) {
 
     Swal.fire({
         title: "Eliminar Venta",
@@ -121,7 +121,7 @@ function borrarVenta(id) {
     $.ajax({
         type: "post",
         url: "./modelo/ventas/borraVentaHistorial.php",
-        data: {"folio": id},
+        data: {"folio": id, "tipo": tipo},
         success: function (response) {
            if (response==1) {
               

@@ -21,6 +21,35 @@ if(isset($_POST)){
     $abono = $_POST["abono"];
     $restante = $_POST["restante"];
     $hora = date("h:i a");
+    $metodo = $_POST["metodo_pago"];
+
+    switch ($metodo) {
+        case '0':
+            $metodo_pago = "Efectivo";
+            break;
+
+            case '1':
+                $metodo_pago = "Tarjeta";
+                break;
+                
+                case '2':
+                    $metodo_pago = "Transferencia";
+                    break;
+
+                    case '3':
+                        $metodo_pago = "Cheque";
+                        break;
+
+                        case '4':
+                            $metodo_pago = "Sin definir";
+                            break;
+        
+        default:
+            # code...
+            break;
+    }
+
+    $usuario = $_SESSION["nombre"];
 
     if ($abono == 0) {
         $estatus = 0;
@@ -31,7 +60,7 @@ if(isset($_POST)){
    
 
     if($_POST["fecha"] == ""){
-        $fecha_inicio = date("d-m-Y");
+        $fecha_inicio = date("Y-m-d");
     }else{
         
         $fecha_inicio = $_POST["fecha"];
@@ -41,23 +70,23 @@ if(isset($_POST)){
 
     switch ($plazo) {
         case '1':
-            $fecha_limite = date("d-m-Y",strtotime($fecha ."+ 7 days")); 
+            $fecha_limite = date("Y-m-d",strtotime($fecha ."+ 7 days")); 
         break;
         
         case '2':
-            $fecha_limite = date("d-m-Y",strtotime($fecha ."+ 15 days")); 
+            $fecha_limite = date("Y-m-d",strtotime($fecha ."+ 15 days")); 
         break;
         
         case '3':
-            $fecha_limite = date("d-m-Y",strtotime($fecha ."+ 1 month")); 
+            $fecha_limite = date("Y-m-d",strtotime($fecha ."+ 1 month")); 
         break;
         
         case '4':
-            $fecha_limite = date("d-m-Y",strtotime($fecha ."+ 1 year")); 
+            $fecha_limite = date("Y-m-d",strtotime($fecha ."+ 1 year")); 
         break;
         
         case '5':
-            $fecha_limite = date("d-m-Y",strtotime($fecha ."+ 7 days")); 
+            $fecha_limite = date("Y-m-d",strtotime($fecha ."+ 7 days")); 
         break;
 
         default:
@@ -69,6 +98,7 @@ if(isset($_POST)){
     $resultados = mysqli_query($con, $sql);
     
     if(!$resultados){
+
       echo "no se pudo realizar la consulta";
 
     }else{
@@ -94,9 +124,9 @@ if(isset($_POST)){
         $dato =  mysqli_fetch_array($resultado2, MYSQLI_ASSOC);
         $id_credito = $dato["id"];
         
-            $queryInsertar = "INSERT INTO abonos (id, id_credito, fecha, abono) VALUES (null,?,?,?)";
+            $queryInsertar = "INSERT INTO abonos (id, id_credito, fecha, hora, abono, metodo_pago, usuario) VALUES (null,?,?,?,?,?,?)";
             $resultado = $con->prepare($queryInsertar);
-            $resultado->bind_param('isd',$id_credito,$fecha_inicio, $abono );
+            $resultado->bind_param('ssssss',$id_credito, $fecha_inicio, $hora, $abono, $metodo_pago, $usuario);
             $resultado->execute();
             $resultado->close();
     }else{

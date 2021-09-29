@@ -167,6 +167,7 @@ function realizarVentaCredito(){
                                         'comentario': comentario,
                                         'tipo': "vt-credito"},
                                     dataType: "JSON",
+                                    
                                     success: function (response) {
                                         console.log(response);
                                         if (response) {
@@ -174,7 +175,7 @@ function realizarVentaCredito(){
                                             $.ajax({
                                                 type: "POST",
                                                 url: "./modelo/creditos/nuevo-credito.php",
-                                                data: {"id_cliente": clienteid, "plazo": plazo, "importe": fimporte_total, "abono": fabono, "restante": frestante, "fecha": fecha},
+                                                data: {"id_cliente": clienteid, "metodo_pago": metodo_pago, "plazo": plazo, "importe": fimporte_total, "abono": fabono, "restante": frestante, "fecha": fecha},
                                                 //dataType: "",
                                                 success: function (response) {
                                                   console.log(response); 

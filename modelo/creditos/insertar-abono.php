@@ -17,10 +17,10 @@ if(isset($_POST)){
 
     $id_credito = $_POST["id-credito"];
     $abono = $_POST["abono"];
-    $fecha = date("d-m-Y");
+    $fecha = date("Y-m-d");
     $hora = date("h:i a");
     $metodo = $_POST["metodo"];
-    $usuario = $_SESSION["user"];
+    $usuario = $_SESSION["nombre"];
 
      //Obtenemos estatus del credito
      $obtenerStatus = "SELECT estatus FROM creditos WHERE id = ?";
@@ -44,16 +44,22 @@ if(isset($_POST)){
     
     
         if($comproba > $total){
-            print_r (1);
+            print_r(1);
         }else{
     
-            $insertar_abono = "INSERT INTO abonos(id, id_credito, fecha, hora, abono, metodo_pago, usuario)
-            VALUES(null,?,?,?,?,?,?)";
-            $resultado = $con->prepare($insertar_abono);                     
-            $resultado->bind_param('issdss', $id_credito, $fecha, $hora, $abono, $metodo, $usuario);
+            if ($comproba == $total) {
+                $estado = 1;
+            }else{
+                $estado = 0;
+            }
+            $insertar_abono = "INSERT INTO abonos(id, id_credito, fecha, hora, abono, metodo_pago, usuario, estado) VALUES(null,?,?,?,?,?,?,?)";
+            $resultado = $con->prepare($insertar_abono);  
+            $resultado->bind_param('issssss', $id_credito, $fecha, $hora, $abono, $metodo, $usuario, $estado);
             $resultado->execute();
+           
+            if ($resultado == true) {
+              
             $resultado->close();
-    
             
             $pagado_update = $pagado + $abono;
             $restante_update = $restante - $abono;
@@ -74,6 +80,7 @@ if(isset($_POST)){
             $result->fetch();
             $result->close();
     
+            //En este if actualizamos el estatus del credito en caso de que se haya pagado completamente
             if($pagado2 == $total2){
     
                 $actualizar2 = "UPDATE creditos SET estatus= 3 WHERE id = ?";
@@ -81,6 +88,22 @@ if(isset($_POST)){
                 $res2->bind_param('i', $id_credito);
                 $res2->execute();
                 $res2->close();
+
+                $actualizar2 = "SELECT id_venta FROM creditos WHERE id = ?";
+                $res2 = $con->prepare($actualizar2);
+                $res2->bind_param('i', $id_credito);
+                $res2->execute();
+                $res2->bind_result($id_venta);
+                $res2->fetch();
+                $res2->close();
+
+                $new_status = "Pagado";
+                $actualizar2 = "UPDATE ventas SET estatus = ? WHERE id = ?";
+                $res2 = $con->prepare($actualizar2);
+                $res2->bind_param('si', $new_status, $id_venta);
+                $res2->execute();
+                $res2->close();
+
     
                 $data = array("pagado_nuevo"=> $pagado2, "restante_nuevo"=>$restante2);
     
@@ -92,6 +115,12 @@ if(isset($_POST)){
             
         
             echo json_encode($data, JSON_UNESCAPED_UNICODE); 
+
+            }else{
+                echo "Error";
+                $resultado->close();
+            }
+            
     
         }
      }else if($estatus == 5){

@@ -17,7 +17,7 @@ if(isset($_POST)){
 
     $id_abono = $_POST["id"];
     $abono = $_POST["abono"];
-    $fecha = date("d-m-Y");
+    $fecha = date("Y-m-a");
     $hora = date("h:i a");
     $metodo = $_POST["metodo"];
     $usuario = $_SESSION["user"];

@@ -15,7 +15,7 @@ if(isset($_POST)){
     $rows= $query_mostrar->num_rows();
 
     if ($rows > 0 ) {
-        $query_mostrar->bind_result($id, $nombre, $apellidos, $user, $password, $cumple, $rol, $numero, $direccion, $sucursal);
+        $query_mostrar->bind_result($id, $nombre, $apellidos, $user, $password, $cumple, $rol, $numero, $direccion, $sucursal, $aperturado);
         $query_mostrar->fetch();
         $validar_pass = password_verify($contraseña, $password);
         if ($validar_pass) {
@@ -31,7 +31,7 @@ if(isset($_POST)){
             $_SESSION['numero'] = $numero;
             $_SESSION['direccion'] = $direccion;
             $_SESSION['sucursal'] = $sucursal;
-
+            $_SESSION['aperturado'] = $aperturado;
 
             print_r(1);
         }else{

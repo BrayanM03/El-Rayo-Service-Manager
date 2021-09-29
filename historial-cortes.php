@@ -28,7 +28,7 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
     <meta name="author" content="">
     <link rel="shortcut icon" href="src/img/rayo.svg" />
 
-    <title>Configuraciones - El Rayo | Service Manager</title>
+    <title>Historial de cortes - El Rayo | Service Manager</title>
 
     <!-- Custom fonts for this template-->
     <link href="src/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -39,6 +39,7 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
     <!-- Custom styles for this template-->
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="src/css/menu-vertical.css" rel="stylesheet">
+    <link rel="stylesheet" href="src/vendor/datatables/dataTables.bootstrap4.css">
 
 </head>
 
@@ -430,21 +431,36 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
                 <div class="container-fluid">
                 <div class="row">
                        <div class="col-12 justify-content-center align-items-center m-auto" style="">
-                        <h3 class="text-center">Configuraciones del sistema y preferencias</h3>
+                        <h3 class="text-center">Historial de cortes realizados</h3>
                        </div>
                 </div>  
                 <div class="row mt-5">
                     <div class="col-12 justift-content-center">
-                        <div class="col-6 text-center" style="margin:auto;">
-                        <div class="card">
-                            <span href="#" class="list-group-item">
-                                <b>Ajustes principales</b>
-                            </span>
-                            <a href="#" class="list-group-item list-group-item-action">Editar mis datos de usuario (inactivo)</a>
-                            <a href="corte.php" class="list-group-item list-group-item-action">Realizar corte </a>
-                            <a href="historial-cortes.php" class="list-group-item list-group-item-action">Historial de cortes</a>
-                            <a href="#" class="list-group-item list-group-item-action">Cerrar sesión</a>
-                            </div>             
+                        <div class="col-12text-center" style="margin:auto;">
+                        <div class="card p-3">
+                        
+                        <table class="table m-3 table-striped  table-md display" style="width:80%" id="historial-cortes">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nombre</th>
+                                    <th>Sucursal</th>
+                                    <th>Fecha</th>
+                                    <th>Hora</th>
+                                    <th>Venta total</th>
+                                    <th>Ganancia total</th>
+                                    <th>Ganancia efectivo</th>
+                                    <th>Ganancia transferencia</th>
+                                    <th>Ganancia tarjeta</th>
+                                    <th>Ganancia cheque</th>
+                                    <th>Sin definir</th>
+                                    <th>Creditos realizados</th>
+                                    <th>Ventas realizadas</th>
+                                </tr>
+                            </thead>
+                        </table>
+                               
+                        </div>             
                         </div>
                     </div>
                 </div>
@@ -516,18 +532,14 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
     <!-- Custom scripts for all pages-->
     <script src="src/js/sb-admin-2.min.js"></script>
 
-    <!-- Page level plugins -->
-    <script src="src/vendor/chart.js/Chart.min.js"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="src/js/demo/chart-area-demo.js"></script>
-    <script src="src/js/demo/chart-pie-demo.js"></script>
+    
    <!--  <script src="src/js/notificaciones.js"></script> -->
-    <script src="src/js/panel.js"></script>
+       
+   <script src="src/vendor/datatables/jquery.dataTables.min.js"></script> 
+    <script src="src/vendor/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="src/vendor/datatables/dataTables.bootstrap4.js"></script>
+    <script src="src/js/historial-cortes.js"></script>
 
-  
- 
-    </script>
    
 </body>
 

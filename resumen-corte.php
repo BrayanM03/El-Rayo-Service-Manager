@@ -11,7 +11,7 @@ if (!isset($_SESSION['id_usuario'])) {
 
 if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
     header("Location:nueva-venta.php");
-}
+} 
 
 
 ?>
@@ -28,7 +28,7 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
     <meta name="author" content="">
     <link rel="shortcut icon" href="src/img/rayo.svg" />
 
-    <title>Configuraciones - El Rayo | Service Manager</title>
+    <title>El Rayo | Service Manager</title>
 
     <!-- Custom fonts for this template-->
     <link href="src/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -39,6 +39,12 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
     <!-- Custom styles for this template-->
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="src/css/menu-vertical.css" rel="stylesheet">
+    <style>
+        .badge-primary {
+            font-size: 14px;
+            margin-left: 20px;
+        }
+    </style>
 
 </head>
 
@@ -429,22 +435,46 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                 <div class="row">
-                       <div class="col-12 justify-content-center align-items-center m-auto" style="">
-                        <h3 class="text-center">Configuraciones del sistema y preferencias</h3>
+                     <div class="col-12 justify-content-center align-items-center m-auto" style="">
+                        <h3 class="text-center">Resumen del dia para la sucursal <?php print_r($_GET["sucursal"]) ?></h3>
                        </div>
                 </div>  
                 <div class="row mt-5">
-                    <div class="col-12 justift-content-center">
-                        <div class="col-6 text-center" style="margin:auto;">
-                        <div class="card">
-                            <span href="#" class="list-group-item">
-                                <b>Ajustes principales</b>
-                            </span>
-                            <a href="#" class="list-group-item list-group-item-action">Editar mis datos de usuario (inactivo)</a>
-                            <a href="corte.php" class="list-group-item list-group-item-action">Realizar corte </a>
-                            <a href="historial-cortes.php" class="list-group-item list-group-item-action">Historial de cortes</a>
-                            <a href="#" class="list-group-item list-group-item-action">Cerrar sesión</a>
-                            </div>             
+                    <div class="col-12">
+                        <div class="row">
+                        <div class="col-12 col-md-6" style="margin:auto;">
+                        <div class="btn btn-danger">Ventas normales</div>
+                        <div class="card mt-3 col-12 d-flex justify-content-between">
+
+                                <ul class="list-group list-group-flush">
+                                <li class="list-group-item">Venta total: <span id="venta_total" class="badge badge-primary badge-pill">14</span></li>
+                                <li class="list-group-item">Ventas realizadas: <span id="ventas_realizadas" class="badge badge-primary badge-pill">14</span></li>
+                                <li class="list-group-item">Ganancia del dia: <span id="ganancia_dia" class="badge badge-primary badge-pill">14</span></li>
+                                <li class="list-group-item">Ganancia efectivo:<span id="ganancia_efectivo" class="badge badge-primary badge-pill">14</span> </li>
+                                <li class="list-group-item">Ganancia tarjeta: <span id="ganancia_tarjeta" class="badge badge-primary badge-pill">14</span></li>
+                                <li class="list-group-item">Ganancia cheque: <span id="ganancia_cheque" class="badge badge-primary badge-pill">14</span></li>
+                                <li class="list-group-item">Ganancia transferencia: <span id="ganancia_transferencia" class="badge badge-primary badge-pill">14</span></li>
+                                <li class="list-group-item">Ganancia sin definir: <span id="ganancia_sin_definir" class="badge badge-primary badge-pill">14</span></li>
+                                </ul>
+                            
+
+                        </div> 
+                        </div>
+
+                        <div class="col-12 col-md-6" style="margin:auto;">
+                        <div class="btn btn-danger">Creditos</div>
+                        <div class="card mt-3 col-12">
+
+                                <ul class="list-group list-group-flush" id="lista_creditos">
+                                <li class="list-group-item">Creditos realizados: <span id="creditos_realizados" class="badge badge-primary badge-pill">14</span></li>
+                                <li class="list-group-item">Creditos pagados: <span id="creditos_pagados" class="badge badge-primary badge-pill">14</span></li>
+                                <li class="list-group-item">Abonos realizados: <span id="abonos_realizados" class="badge badge-primary badge-pill">14</span></li>
+                                <li class="list-group-item"><strong>Pagos</strong> </li>
+                                </ul>
+                            
+
+                        </div> 
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -512,18 +542,12 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
 
     <!-- Core plugin JavaScript-->
     <script src="src/vendor/jquery-easing/jquery.easing.min.js"></script>
-
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <!-- Custom scripts for all pages-->
     <script src="src/js/sb-admin-2.min.js"></script>
 
-    <!-- Page level plugins -->
-    <script src="src/vendor/chart.js/Chart.min.js"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="src/js/demo/chart-area-demo.js"></script>
-    <script src="src/js/demo/chart-pie-demo.js"></script>
-   <!--  <script src="src/js/notificaciones.js"></script> -->
-    <script src="src/js/panel.js"></script>
+ 
+    <script src="src/js/resumen-cortes.js"></script>
 
   
  
