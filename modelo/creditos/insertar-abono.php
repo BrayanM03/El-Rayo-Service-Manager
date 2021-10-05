@@ -32,11 +32,19 @@ if(isset($_POST)){
      $stmt->close();
   
      if ($estatus !== 5) {
-        $traerdata = "SELECT pagado, restante, total FROM creditos WHERE id = ?";
+        $traerdata = "SELECT pagado, restante, total, id_venta FROM creditos WHERE id = ?";
         $result = $con->prepare($traerdata);
         $result->bind_param('i',$id_credito);
         $result->execute();
-        $result->bind_result($pagado, $restante, $total);
+        $result->bind_result($pagado, $restante, $total, $id_venta_otro);
+        $result->fetch();
+        $result->close();
+
+        $traerdata = "SELECT id_Sucursal FROM ventas WHERE id = ?";
+        $result = $con->prepare($traerdata);
+        $result->bind_param('i',$id_venta_otro);
+        $result->execute();
+        $result->bind_result($sucursal);
         $result->fetch();
         $result->close();
     
@@ -48,13 +56,13 @@ if(isset($_POST)){
         }else{
     
             if ($comproba == $total) {
-                $estado = 1;
+                $estado = 1; //Creditos pagado
             }else{
-                $estado = 0;
+                $estado = 0; //Aun sin pagar
             }
-            $insertar_abono = "INSERT INTO abonos(id, id_credito, fecha, hora, abono, metodo_pago, usuario, estado) VALUES(null,?,?,?,?,?,?,?)";
+            $insertar_abono = "INSERT INTO abonos(id, id_credito, fecha, hora, abono, metodo_pago, usuario, estado, id_Sucursal) VALUES(null,?,?,?,?,?,?,?,?)";
             $resultado = $con->prepare($insertar_abono);  
-            $resultado->bind_param('issssss', $id_credito, $fecha, $hora, $abono, $metodo, $usuario, $estado);
+            $resultado->bind_param('isssssss', $id_credito, $fecha, $hora, $abono, $metodo, $usuario, $estado, $sucursal);
             $resultado->execute();
            
             if ($resultado == true) {

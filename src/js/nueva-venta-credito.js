@@ -151,7 +151,11 @@ function realizarVentaCredito(){
                                 sucursal =$("#sucursal").val();
                                 comentario = $("#hacer-comentario").attr("comentario");
                                 //Enviando data
-
+                                if(sucursal == "0"){
+                                    sucursalNombre = "Pedro";
+                                }else if(sucursal == "1"){
+                                    sucursalNombre = "Sendero";
+                                }
 
                                 
                                 $.ajax({
@@ -175,7 +179,7 @@ function realizarVentaCredito(){
                                             $.ajax({
                                                 type: "POST",
                                                 url: "./modelo/creditos/nuevo-credito.php",
-                                                data: {"id_cliente": clienteid, "metodo_pago": metodo_pago, "plazo": plazo, "importe": fimporte_total, "abono": fabono, "restante": frestante, "fecha": fecha},
+                                                data: {"id_cliente": clienteid, "metodo_pago": metodo_pago, "sucursal": sucursalNombre, "plazo": plazo, "importe": fimporte_total, "abono": fabono, "restante": frestante, "fecha": fecha},
                                                 //dataType: "",
                                                 success: function (response) {
                                                   console.log(response); 

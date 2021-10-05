@@ -446,16 +446,28 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
                         <div class="btn btn-danger">Ventas normales</div>
                         <div class="card mt-3 col-12 d-flex justify-content-between">
 
-                                <ul class="list-group list-group-flush">
-                                <li class="list-group-item">Venta total: <span id="venta_total" class="badge badge-primary badge-pill">14</span></li>
+                                <ul id="lista-ganancias" class="list-group list-group-flush p-3">
                                 <li class="list-group-item">Ventas realizadas: <span id="ventas_realizadas" class="badge badge-primary badge-pill">14</span></li>
-                                <li class="list-group-item">Ganancia del dia: <span id="ganancia_dia" class="badge badge-primary badge-pill">14</span></li>
-                                <li class="list-group-item">Ganancia efectivo:<span id="ganancia_efectivo" class="badge badge-primary badge-pill">14</span> </li>
-                                <li class="list-group-item">Ganancia tarjeta: <span id="ganancia_tarjeta" class="badge badge-primary badge-pill">14</span></li>
-                                <li class="list-group-item">Ganancia cheque: <span id="ganancia_cheque" class="badge badge-primary badge-pill">14</span></li>
-                                <li class="list-group-item">Ganancia transferencia: <span id="ganancia_transferencia" class="badge badge-primary badge-pill">14</span></li>
-                                <li class="list-group-item">Ganancia sin definir: <span id="ganancia_sin_definir" class="badge badge-primary badge-pill">14</span></li>
-                                </ul>
+                                <a class="btn" data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne"><li id="headingOne" class="list-group-item">Venta total: <span id="venta_total" class="badge badge-primary badge-pill">14</span></li></a>
+                                <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#lista-ganancias">
+                                <li class="list-group-item list-group-item-info">Venta efectivo:<span id="venta_efectivo" class="badge badge-primary badge-pill">14</span> </li>
+                                <li class="list-group-item list-group-item-info">Venta tarjeta: <span id="venta_tarjeta" class="badge badge-primary badge-pill">14</span></li>
+                                <li class="list-group-item list-group-item-info">Venta cheque: <span id="venta_cheque" class="badge badge-primary badge-pill">14</span></li>
+                                <li class="list-group-item list-group-item-info">Venta transferencia: <span id="venta_transferencia" class="badge badge-primary badge-pill">14</span></li>
+                                <li class="list-group-item list-group-item-info">Venta sin definir: <span id="venta_sin_definir" class="badge badge-primary badge-pill">14</span></li>
+                                </div>
+                               
+                                <a class="btn" data-toggle="collapse" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo"><li id="headingTwo" class="list-group-item">Ganancia del dia: <span id="ganancia_dia" class="badge badge-primary badge-pill">14</span></li></a>
+                                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#lista-ganancias">
+                                
+                                <li class="list-group-item list-group-item-warning">Ganancia efectivo:<span id="ganancia_efectivo" class="badge badge-primary badge-pill">14</span> </li>
+                                <li class="list-group-item list-group-item-warning">Ganancia tarjeta: <span id="ganancia_tarjeta" class="badge badge-primary badge-pill">14</span></li>
+                                <li class="list-group-item list-group-item-warning">Ganancia cheque: <span id="ganancia_cheque" class="badge badge-primary badge-pill">14</span></li>
+                                <li class="list-group-item list-group-item-warning">Ganancia transferencia: <span id="ganancia_transferencia" class="badge badge-primary badge-pill">14</span></li>
+                                <li class="list-group-item list-group-item-warning">Ganancia sin definir: <span id="ganancia_sin_definir" class="badge badge-primary badge-pill">14</span></li>
+                                </div>    
+                            </ul>
+                               
                             
 
                         </div> 

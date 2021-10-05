@@ -85,7 +85,7 @@ date_default_timezone_set("America/Matamoros");
                     $creditos_pagados = 0;
                 } */
 
-                $creditos_pagados = obtenerCreditosPagados($con, $semana, $año, $hoy);
+                $creditos_pagados = obtenerCreditosPagados($con, $semana, $año, $hoy, $sucursal);
 
                 
                /*  //Obtener pagos de creditos en especifico
@@ -263,8 +263,8 @@ date_default_timezone_set("America/Matamoros");
   function obtenerClientesqueAbonaron($con, $semana, $año, $tipo, $estatus, $hoy, $sucursal, $unidad){
 
     
-    $traer_id = $con->prepare("SELECT id_credito, abono, metodo_pago FROM `abonos` WHERE WEEK(fecha) = ? AND YEAR(fecha) = ? AND WEEKDAY(fecha) =?");
-    $traer_id->bind_param('sss', $semana, $año, $hoy);
+    $traer_id = $con->prepare("SELECT id_credito, abono, metodo_pago FROM `abonos` WHERE WEEK(fecha) = ? AND YEAR(fecha) = ? AND WEEKDAY(fecha) =? AND id_Sucursal =?");
+    $traer_id->bind_param('ssss', $semana, $año, $hoy, $sucursal);
     $traer_id->execute();
     $resultado = $traer_id->get_result();
     $traer_id->close();
@@ -307,13 +307,14 @@ date_default_timezone_set("America/Matamoros");
 
   }
 
-  function obtenerCreditosPagados($con, $semana, $año, $hoy){
+  function obtenerCreditosPagados($con, $semana, $año, $hoy, $sucursal){
     $estado_pagado =1;
-    $abonosHoy = "SELECT id_credito FROM abonos WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ? AND WEEKDAY(Fecha) = ? AND estado = ?";
+    $abonosHoy = "SELECT id_credito FROM abonos WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ? AND WEEKDAY(Fecha) = ? AND estado = ?  AND id_Sucursal =?";
     $resultado =  $con->prepare($abonosHoy);
-    $resultado->bind_param("sssi", $semana, $año, $hoy, $estado_pagado);
+    $resultado->bind_param("sssis", $semana, $año, $hoy, $estado_pagado, $sucursal);
     $resultado->execute();
     $arreg = $resultado->get_result();
+    $resultado->close();
 
     if ($arreg->num_rows < 1) {
         $retorno = 0;

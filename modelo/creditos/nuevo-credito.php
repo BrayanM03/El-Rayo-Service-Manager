@@ -15,6 +15,7 @@ if (!$con) {
 
 if(isset($_POST)){
     $id_cliente = $_POST["id_cliente"];
+   $sucursal = $_POST["sucursal"];
    
     $plazo = $_POST["plazo"];
     $importe_total = $_POST["importe"];
@@ -82,7 +83,7 @@ if(isset($_POST)){
         break;
         
         case '4':
-            $fecha_limite = date("Y-m-d",strtotime($fecha ."+ 1 year")); 
+            $fecha_limite = date("Y-m-d",strtotime($fecha ."+ 1 year"));  
         break;
         
         case '5':
@@ -124,9 +125,9 @@ if(isset($_POST)){
         $dato =  mysqli_fetch_array($resultado2, MYSQLI_ASSOC);
         $id_credito = $dato["id"];
         
-            $queryInsertar = "INSERT INTO abonos (id, id_credito, fecha, hora, abono, metodo_pago, usuario) VALUES (null,?,?,?,?,?,?)";
+            $queryInsertar = "INSERT INTO abonos (id, id_credito, fecha, hora, abono, metodo_pago, usuario, id_Sucursal) VALUES (null,?,?,?,?,?,?,?)";
             $resultado = $con->prepare($queryInsertar);
-            $resultado->bind_param('ssssss',$id_credito, $fecha_inicio, $hora, $abono, $metodo_pago, $usuario);
+            $resultado->bind_param('sssssss',$id_credito, $fecha_inicio, $hora, $abono, $metodo_pago, $usuario, $sucursal);
             $resultado->execute();
             $resultado->close();
     }else{
