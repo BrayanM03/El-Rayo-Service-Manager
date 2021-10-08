@@ -39,6 +39,78 @@ date_default_timezone_set("America/Matamoros");
                 $venta_total = 0;
                 }
 
+                //Obtnener ventas totale spor metodo de pago
+
+      $efectivo = "Efectivo";      
+      $ventas_total_hoy_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ?  AND tipo = ? AND estatus = ? AND WEEKDAY(Fecha) =? AND id_Sucursal =? AND metodo_pago =?");
+      $ventas_total_hoy_sql->bind_param('sssssss', $semana, $año, $tipo, $estatus, $hoy, $sucursal, $efectivo);
+      $ventas_total_hoy_sql->execute();
+      $ventas_total_hoy_sql->bind_result($venta_total_efectivo);
+      $ventas_total_hoy_sql->fetch();
+      $ventas_total_hoy_sql->close();
+
+      if($venta_total_efectivo == null){
+       $venta_total_efectivo = 0;
+       }
+
+                //Obtnener ventas totale spor metodo de pago
+
+      $transfe = "Transferencia";      
+      $ventas_total_hoy_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ?  AND tipo = ? AND estatus = ? AND WEEKDAY(Fecha) =? AND id_Sucursal =? AND metodo_pago =?");
+      $ventas_total_hoy_sql->bind_param('sssssss', $semana, $año, $tipo, $estatus, $hoy, $sucursal, $transfe);
+      $ventas_total_hoy_sql->execute();
+      $ventas_total_hoy_sql->bind_result($venta_total_transferencia);
+      $ventas_total_hoy_sql->fetch();
+      $ventas_total_hoy_sql->close();
+
+      if($venta_total_transferencia == null){
+       $venta_total_transferencia = 0;
+       }
+
+       
+                //Obtnener ventas totale spor metodo de pago
+
+      $cheque = "Cheque";      
+      $ventas_total_hoy_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ?  AND tipo = ? AND estatus = ? AND WEEKDAY(Fecha) =? AND id_Sucursal =? AND metodo_pago =?");
+      $ventas_total_hoy_sql->bind_param('sssssss', $semana, $año, $tipo, $estatus, $hoy, $sucursal, $cheque);
+      $ventas_total_hoy_sql->execute();
+      $ventas_total_hoy_sql->bind_result($venta_total_cheque);
+      $ventas_total_hoy_sql->fetch();
+      $ventas_total_hoy_sql->close();
+
+      if($venta_total_cheque == null){
+       $venta_total_cheque = 0;
+       }
+                 //Obtnener ventas totale spor metodo de pago
+
+      $tarjeta = "Tarjeta";      
+      $ventas_total_hoy_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ?  AND tipo = ? AND estatus = ? AND WEEKDAY(Fecha) =? AND id_Sucursal =? AND metodo_pago =?");
+      $ventas_total_hoy_sql->bind_param('sssssss', $semana, $año, $tipo, $estatus, $hoy, $sucursal, $tarjeta);
+      $ventas_total_hoy_sql->execute();
+      $ventas_total_hoy_sql->bind_result($venta_total_tarjeta);
+      $ventas_total_hoy_sql->fetch();
+      $ventas_total_hoy_sql->close();
+
+      if($venta_total_tarjeta == null){
+       $venta_total_tarjeta = 0;
+       }
+
+                   //Obtnener ventas totale spor metodo de pago
+
+      $sin_definir = "Por definir";      
+      $ventas_total_hoy_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ?  AND tipo = ? AND estatus = ? AND WEEKDAY(Fecha) =? AND id_Sucursal =? AND metodo_pago =?");
+      $ventas_total_hoy_sql->bind_param('sssssss', $semana, $año, $tipo, $estatus, $hoy, $sucursal, $sin_definir);
+      $ventas_total_hoy_sql->execute();
+      $ventas_total_hoy_sql->bind_result($venta_total_sin_definir);
+      $ventas_total_hoy_sql->fetch();
+      $ventas_total_hoy_sql->close();
+
+      if($venta_total_sin_definir == null){
+       $venta_total_sin_definir = 0;
+       }
+
+
+
                 $costo_acumulado = traer_ganancia($con, $semana, $año, $tipo, $estatus, $hoy, $sucursal, $unidad);
                 $ganancia_total = $venta_total - $costo_acumulado;
 
@@ -46,7 +118,7 @@ date_default_timezone_set("America/Matamoros");
                 $ganancia_efectivo = ganancia_meotodo_pago("Efectivo", $con, $semana, $año, $tipo, $estatus, $hoy, $sucursal, $unidad);
                 $ganancia_tarjeta = ganancia_meotodo_pago("Tarjeta", $con, $semana, $año, $tipo, $estatus, $hoy, $sucursal, $unidad);
                 $ganancia_cheque = ganancia_meotodo_pago("Cheque", $con, $semana, $año, $tipo, $estatus, $hoy, $sucursal, $unidad); 
-                $ganancia_sin_definir = ganancia_meotodo_pago("Cheque", $con, $semana, $año, $tipo, $estatus, $hoy, $sucursal, $unidad);
+                $ganancia_sin_definir = ganancia_meotodo_pago("Por definir", $con, $semana, $año, $tipo, $estatus, $hoy, $sucursal, $unidad);
 
                 //Obtener total de ventas
                 $ganancia_domingo_sql = $con->prepare("SELECT COUNT(*) FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ? AND tipo = ? AND estatus = ? AND WEEKDAY(Fecha) =? AND id_Sucursal =?");
@@ -110,8 +182,10 @@ date_default_timezone_set("America/Matamoros");
             
               
                  $data = array("costo_acumulado"=> $costo_acumulado,"ganancia_total"=> $ganancia_total, "ganancia_transferencia"=> $ganancia_transferencia,
-                "ganancia_efectivo"=> $ganancia_efectivo, "numero_ventas"=>$ventas_Hoy, "venta_total"=>$venta_total,  "ganancia_tarjeta"=> $ganancia_tarjeta, 
-                "ganancia_cheque"=> $ganancia_cheque,  "ganancia_sin_definir"=> $ganancia_sin_definir, "creditos_realizados"=> $creditos_realizados, 
+                "ganancia_efectivo"=> $ganancia_efectivo, "numero_ventas"=>$ventas_Hoy, "venta_total"=>$venta_total, "venta_total_efectivo"=>$venta_total_efectivo,
+                "ganancia_tarjeta"=> $ganancia_tarjeta, "venta_total_transferencia"=>$venta_total_transferencia, "venta_total_cheque"=>$venta_total_cheque,
+                "venta_total_tarjeta"=>$venta_total_tarjeta, "venta_total_sin_definir"=>$venta_total_sin_definir,"ganancia_cheque"=> $ganancia_cheque,  
+                "ganancia_sin_definir"=> $ganancia_sin_definir, "creditos_realizados"=> $creditos_realizados, 
                 "creditos_pagados"=> $creditos_pagados, "abonos"=> $abonos, "abonos_realizados"=> $abonos_realizados);
                 
                 echo json_encode($data, JSON_UNESCAPED_UNICODE); 

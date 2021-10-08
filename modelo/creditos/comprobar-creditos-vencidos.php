@@ -105,7 +105,7 @@ date_default_timezone_set("America/Matamoros");
 
                                 $estatus_not = "Se a vencido el credito para el cliente " . $cliente;
                                 $estatus = 1; 
-                                $fecha = date("d-m-Y"); 
+                                $fecha = date("Y-m-d"); 
                                 $hora = date("h:i a");
                                 $refe = 0;  
                                 $estado_alerta = "SI";

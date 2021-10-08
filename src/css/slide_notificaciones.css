@@ -1,0 +1,16 @@
+.slide_credito{
+    width: 100%;
+    border: 1px solid gray;
+    border-radius: 8px;
+    background-color: orangered;
+    height: 120px;
+    color: whitesmoke;
+   /*  display: flex;
+    justify-content: center;
+    align-items: center; */
+}
+
+.splide__progress__bar {
+    height: 3px;
+    background: #ccc;
+  }

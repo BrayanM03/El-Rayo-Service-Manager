@@ -1,3 +1,22 @@
+
+function actualizarCreditoVencido() {
+
+  $.ajax({
+    type: "POST",
+    url: "./modelo/creditos/actualizar-estatus-creditos-vencidos.php",
+    data: "data",
+    //dataType: "dataType",
+    success: function (response) {
+      console.log(response);
+    }
+  });
+
+}
+
+actualizarCreditoVencido();
+
+
+
 function MostrarCreditos() {  
     //$.fn.dataTable.ext.errMode = 'none';
 
@@ -709,4 +728,4 @@ function borrarCredito(id) {
   }
 
 
- 
+  

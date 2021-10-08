@@ -16,7 +16,14 @@ $.ajax({
         
         //Ventas
               $("#venta_total").text("$"+ response.venta_total);
+              $("#venta_efectivo").text("$"+ response.venta_total_efectivo);
+              $("#venta_tarjeta").text("$"+ response.venta_total_tarjeta);
+           $("#venta_cheque").text("$"+ response.venta_total_cheque);
+            $("#venta_transferencia").text("$"+ response.venta_total_transferencia);
+              $("#venta_sin_definir").text("$"+ response.venta_total_sin_definir);
            $("#ventas_realizadas").text(response.numero_ventas);
+
+           //Ganancia
             $("#ganancia_dia").text("$"+ response.ganancia_total);
          $("#ganancia_efectivo").text("$"+ response.ganancia_efectivo);
              $("#ganancia_tarjeta").text("$"+ response.ganancia_tarjeta);

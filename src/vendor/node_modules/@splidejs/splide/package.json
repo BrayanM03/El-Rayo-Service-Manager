@@ -1,0 +1,101 @@
+{
+  "_from": "@splidejs/splide",
+  "_id": "@splidejs/splide@3.0.9",
+  "_inBundle": false,
+  "_integrity": "sha512-c1FIBgdzNpI1pLHp0HXXQdej084Wcf6U7I8Xtd7X1Y36cUkkfNaLP4TmsX3ByaRho/agvsqY+IV0ummGuHQ1nQ==",
+  "_location": "/@splidejs/splide",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "@splidejs/splide",
+    "name": "@splidejs/splide",
+    "escapedName": "@splidejs%2fsplide",
+    "scope": "@splidejs",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/@splidejs/splide/-/splide-3.0.9.tgz",
+  "_shasum": "830a59eff8eed83c07a92cb848b8fdf60ca76c9c",
+  "_spec": "@splidejs/splide",
+  "_where": "C:\\xampp\\htdocs\\El-Rayo-Service-Manager\\src\\vendor",
+  "author": {
+    "name": "Naotoshi Fujita"
+  },
+  "browserslist": [
+    "> 5%",
+    "ie 10"
+  ],
+  "bugs": {
+    "url": "https://github.com/Splidejs/splide/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "Splide is a lightweight, flexible and accessible slider/carousel. No dependencies, no Lighthouse errors.",
+  "devDependencies": {
+    "@babel/core": "^7.15.5",
+    "@babel/preset-env": "^7.15.6",
+    "@rollup/plugin-babel": "^5.3.0",
+    "@rollup/plugin-node-resolve": "^13.0.4",
+    "@types/jest": "^27.0.1",
+    "@typescript-eslint/eslint-plugin": "^4.31.0",
+    "@typescript-eslint/parser": "^4.31.0",
+    "autoprefixer": "^10.3.4",
+    "babel-jest": "^27.1.1",
+    "babel-loader": "^8.2.2",
+    "chokidar": "^3.5.2",
+    "cssnano": "^5.0.8",
+    "esbuild": "^0.12.26",
+    "eslint": "^7.32.0",
+    "jest": "^27.1.1",
+    "postcss": "^8.3.6",
+    "rollup": "^2.56.3",
+    "rollup-plugin-esbuild": "^4.5.0",
+    "sass": "^1.39.2",
+    "stylelint": "^13.13.1",
+    "stylelint-config-sass-guidelines": "^8.0.0",
+    "stylelint-order": "^4.1.0",
+    "stylelint-scss": "^3.20.1",
+    "ts-jest": "^27.0.5",
+    "tslib": "^2.3.1",
+    "typescript": "^4.4.2",
+    "uglify-js": "^3.14.2"
+  },
+  "homepage": "https://github.com/Splidejs/splide#readme",
+  "keywords": [
+    "splide",
+    "slider",
+    "carousel",
+    "slideshow",
+    "lightweight",
+    "touch",
+    "responsive"
+  ],
+  "license": "MIT",
+  "main": "dist/js/splide.cjs.js",
+  "module": "dist/js/splide.esm.js",
+  "name": "@splidejs/splide",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Splidejs/splide.git"
+  },
+  "scripts": {
+    "build:all": "npm run build:js && npm run build:module && npm run build:css && npm run build:types",
+    "build:css": "node scripts/build-css.js",
+    "build:js": "node scripts/build-script.js",
+    "build:module": "node scripts/build-module.js",
+    "build:types": "node scripts/clean.js && tsc --emitDeclarationOnly",
+    "check:types": "tsc --noEmit",
+    "develop": "node scripts/develop.js",
+    "eslint": "eslint src",
+    "jest": "jest --clearCache && jest",
+    "stylelint": "npx stylelint --fix ./src/css/**/*.scss"
+  },
+  "types": "dist/types/index.d.ts",
+  "version": "3.0.9"
+}
