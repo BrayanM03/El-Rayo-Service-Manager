@@ -19,8 +19,8 @@
     $fecha_hoy = date("Y-m-d");
 
     $estatusvencido = 4;
-    $res = 0.00;
-    $update = "UPDATE `creditos` SET estatus = ? WHERE restante <> ? AND fecha_final <= ?";
+    $res =0.00;
+    $update = "UPDATE `creditos` SET estatus = ? WHERE pagado <> total AND restante <> ? AND DATE(fecha_final) <= ?";
     $result = $con->prepare($update);
     $result->bind_param('sss', $estatusvencido, $res, $fecha_hoy);
     $result->execute();

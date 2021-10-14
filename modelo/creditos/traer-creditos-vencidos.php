@@ -20,7 +20,7 @@
   //Actualizamos el estatus de los credtios que ya esta vencidos
     $estatusvencido = 4;
     $res = 0.00;
-    $update = "UPDATE `creditos` SET estatus = ? WHERE restante <> ? fecha_final <= ?";
+    $update = "UPDATE `creditos` SET estatus = ? WHERE pagado <> total AND restante <> ? AND DATE(fecha_final) <= ?";
     $result = $con->prepare($update);
     $result->bind_param('sss', $estatusvencido, $res, $fecha_hoy);
     $result->execute();
@@ -52,7 +52,7 @@
         $result->fetch();
         $result->close();
 
-        $arreglo[] = array("cliente"=> $cliente, "pagado"=> $pagado, "restante"=> $restante, "fecha_inicio"=>$fecha_inicio, "fecha_final"=> $fecha_final, "id_cred"=> $id);
+        $arreglo[] = array("cliente"=> $cliente, "pagado"=> $pagado, "restante"=> $restante, "fecha_inicio"=>$fecha_inicio, "fecha_final"=> $fecha_final, "id_cred"=> $id_cred);
 
         
     }
