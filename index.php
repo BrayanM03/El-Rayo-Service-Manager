@@ -107,9 +107,9 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
                             <img src="src/img/ventas.svg" width="18px" /> 
                             <span style="margin-left:12px;"> Ventas</span>
                         </a>
-                        <a class="collapse-item" href="compras-pv.php">
+                        <a class="collapse-item" href="cotizaciones-lista.php">
                             <img src="src/img/compras.svg" width="18px" /> 
-                            <span style="margin-left:12px;"> Compras</span>
+                            <span style="margin-left:12px;">Cotizaciones</span>
                         </a>
                     </div>
                 </div>
@@ -318,15 +318,15 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
 
 
                         <!-- Nav Item - Messages -->
-                        <li class="nav-item dropdown no-arrow mx-1">
+                    <!--     <li class="nav-item dropdown no-arrow mx-1">
                             <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-envelope fa-fw icon-menu"></i>
+                                <i class="fas fa-envelope fa-fw icon-menu"></i> -->
                                 <!-- Counter - Messages -->
-                                <span class="badge badge-danger badge-counter">7</span>
-                            </a>
+                                <!-- <span class="badge badge-danger badge-counter">7</span> -->
+                            <!-- </a> -->
                             <!-- Dropdown - Messages -->
-                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                            <!-- <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="messagesDropdown">
                                 <h6 class="dropdown-header">
                                     Mensajes
@@ -380,7 +380,7 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
                                     </div>
                                 </a>
                                 <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
-                            </div>
+                            </div> -->
                         </li>
 
                         <div class="topbar-divider d-none d-sm-block"></div>

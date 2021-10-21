@@ -79,7 +79,7 @@ function realizarVentaCredito(){
                 '<div class="row">'+
                     '<div class="col-4">'+
                     '<label><b>Primer pago:</b></label></br>'+
-                    '<input id="abono" type="number" class="form-control" placeholder="$ 0.00">'+
+                    '<input id="abono" type="number" class="form-control" value="0" placeholder="$ 0.00">'+
                     '</div>'+
                     '<div class="col-4">'+
                     '<label><b>Restan:</b></label></br>'+
@@ -252,6 +252,11 @@ function realizarVentaCredito(){
                     });
 
                     abono = $("#abono");
+
+                    abono_valor = $("#abono").val();
+                    restante = importetotal - abono_valor;
+                    $("#restante").val("$" + restante);
+
                     abono.keyup(function () { 
                         abono_tecleado = $(this).val();
                         restante = parseFloat(importetotal) - parseFloat(abono_tecleado);
