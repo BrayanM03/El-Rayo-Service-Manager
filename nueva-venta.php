@@ -420,6 +420,13 @@
                              <h3 class="titulo-nueva-venta">Nueva venta</h3>
                              <p class="ml-4" id="texto-modo-venta">Modo de venta: <span style="color: green; text-shadow:#00a000 3px 0 10px;">Neumaticos</span></p>
                          </div>
+                         <?php 
+
+                            if ($_SESSION["id_usuario"] !== 10) {
+                                # code...
+                           
+
+                         ?>
                          <div class="col-12 col-md-6 text-center">
                              <span><b>Creditos vencidos</b></span>
                             <div class="splide">
@@ -436,6 +443,9 @@
                                 </div>
                             </div>
                          </div>
+                         <?php 
+                          } 
+                         ?>
                     </div> 
 
                          <div class="card-body">
