@@ -14,11 +14,10 @@
 
     
     ?>
-
 <!DOCTYPE html>
 <html lang="es">
- 
-<head>
+
+<head> 
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -26,24 +25,36 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="shortcut icon" href="src/img/rayo.svg" />
+ 
+	
 
-    <title>El Rayo | Service Manager</title>
+    <title>Historial de cotizaciones | El rayo service manager</title>
 
     <!-- Custom fonts for this template-->
+    <link rel="stylesheet" href="src/css/inventario.css">
     <link href="src/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
+
 
     <!-- Custom styles for this template-->
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="src/vendor/datatables/dataTables.bootstrap4.css">
     <link rel="stylesheet" href="src/vendor/datatables-responsive/css/responsive.bootstrap4.min.css">
+
+  <link rel="stylesheet" href="https://nightly.datatables.net/colreorder/css/colReorder.dataTables.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.css" integrity="sha512-oe8OpYjBaDWPt2VmSFR+qYOdnTjeV9QPLJUeqZyprDEQvQLJ9C5PCFclxwNuvb/GQgQngdCXzKSFltuHD3eCxA==" crossorigin="anonymous" />
+    
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="src/vendor/bower_components/select2-bootstrap-theme/dist/select2-bootstrap.css">
-    <link rel="stylesheet" href="src/css/cotizacion.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.bootstrap4.min.css">
+    <!---Librerias de estilos-->
+    <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="src/css/menu-vertical.css" rel="stylesheet">
+    <link href="src/css/tabla.css" rel="stylesheet">
+   
 
 </head>
 
@@ -56,7 +67,7 @@
         <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <!-- <i class="fas fa-laugh-wink"></i>--->
                     <img style="filter: invert(100%);" width="40px" src="src/img/racing.svg"/>
@@ -90,7 +101,7 @@
                 </a>
             </li>
 
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="cotizacion.php">
                     <i class="fas fa-fw fa-clipboard"></i>
                     <span>Nueva cotización</span>
@@ -114,7 +125,7 @@
                         </a>
                         <a class="collapse-item" href="cotizaciones-lista.php">
                             <img src="src/img/compras.svg" width="18px" /> 
-                            <span style="margin-left:12px;"> Cotizaciones</span>
+                            <span style="margin-left:12px;">Cotizaciones</span>
                         </a>
                     </div>
                 </div>
@@ -123,36 +134,27 @@
                 $user_jerarquia = $_SESSION["rol"];
 
                 if ($user_jerarquia == 1) {
-                   $name = "Inventario";
-                }else if($user_jerarquia ==2){
-                 $name = "Clientes y creditos";
-                }
-
-            ?>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-            <div class="sidebar-heading">
-            <?php echo $name   ?>
-            </div>
-            <?php 
-
-                if ($user_jerarquia == 1) {
                     # code...
                 
 
             ?>
+            <!-- Divider -->
+            <hr class="sidebar-divider">
 
-          
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Inventario
+            </div>
+
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTyres"
                     aria-expanded="true" aria-controls="collapsePages">
                     <i class="fas fa-fw fa-folder"></i>
                     <span>Mis llantas</span>
                 </a>
-                <div id="collapseTyres" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
+                <div id="collapseTyres" class="collapse show" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Sucursales:</h6>
                         <a class="collapse-item" href="inventario-pedro.php" style="display:flex; flex-direction: row; justify-content:start;">
                         <i class="fas fa-fw fa-store"></i> 
@@ -164,7 +166,7 @@
                     
                     </div>
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Categorias:</h6>
+                        <h6 class="collapse-header">Stock total:</h6>
                         <a class="collapse-item" href="inventario-total.php" style="display:flex; flex-direction: row; justify-content:start;">
                             <img src="src/img/tyre-invent.svg" width="18px" /> 
                             <span style="margin-left:12px;"> Existencia</span> </a>
@@ -172,19 +174,13 @@
                             <i class="fas fa-car"></i>
                             <span style="margin-left:7px;">Servicios</span> </a>
                         <a class="collapse-item" href="movimientos.php">
-                        <img src="src/img/entrada.svg" width="18px" /> 
+                            <img src="src/img/entrada.svg" width="18px" /> 
                             <span style="margin-left:12px;"> Movimientos</span></a>
                         </a>
                     
                     </div>
                 </div>
             </li>
-
-            <?php }
-            
-            if ($user_jerarquia == 1 || $user_jerarquia == 2) {
-            ?>
-
 
 
             <li class="nav-item">
@@ -202,7 +198,7 @@
                         <a class="collapse-item" href="creditos.php" style="display:flex; flex-direction: row; justify-content:start;">
                             <img src="src/img/credito.svg" width="18px" /> 
                             <span style="margin-left:12px;"> Creditos</span> </a>
-                        <!-- <a class="collapse-item" href="movimientos.php">
+                      <!--   <a class="collapse-item" href="forgot-password.html">
                             <img src="src/img/pago.svg" width="18px" /> 
                             <span style="margin-left:12px;"> Creditos vencidos</span></a>
                         </a> -->
@@ -237,10 +233,6 @@
             </li> -->
 
 
-            <?php }
-            
-            if ($user_jerarquia == 1 ) {
-            ?>
             <!-- Nav Item - Charts -->
             <li class="nav-item">
                 <a class="nav-link" href="generar-token.php">
@@ -248,12 +240,13 @@
                     <span>Generar token</span></a>
             </li>
 
+           
 
             <?php 
-              }     # code...
-                
+              }else{}  
 
             ?>
+
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 
@@ -339,7 +332,7 @@
                             <!-- Dropdown - Alerts -->
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="alertsDropdown">
-                                <h6 class="dropdown-header"> 
+                                <h6 class="dropdown-header">
                                    Notificaciones
                                 </h6>
                                 <div class="empty-notification">
@@ -353,7 +346,8 @@
                             </div>
                         </li>
 
-                    
+                   
+
                         <div class="topbar-divider d-none d-sm-block"></div>
 
                         <!-- Nav Item - User Information -->
@@ -397,62 +391,41 @@
                 <!-- End of Topbar -->
 
 
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
+                <!-- Begin Page Content style="display: flex; justify-content: center; align-items:center; flex-direction:column" -->
+                <div class="containe" style="width:80%; margin:auto;"> 
 
-                     <!-- Contenido -->
-                     <div class="card" style="height: auto; width: auto;">
-                            <h4 class="ml-auto mr-auto mt-5" style="color:#191919;">Nueva cotización</h4>
-                            <div class="row mt-4">
-                            <div class="col-md-12">
-                            <form action=""  class="m-auto" style="width: 50%;">   
-                            <div class="form-group m-auto"  style="width: 100%;">
-                            <label for="busquedaLlantas" class="">Agregar llantas</label>
-                            <select style="width:100%" class="form-control" id="busquedaLlantas" value="" name="search"></select> 
-                            </div> 
-                            <div class="form-group mt-3 row"  style="width: 100%;">
-                            <div class="col-md-6">
+                     <!-- Contenido inventario -->
+                     <div class="titulo-inventario m-auto">
+                         <h5 style="margin: 10px 0px;">Historial de cotizaciones</h5>
+                         <p style="color: gray;">Esta el la lista de las cotizaciones que se han generado</p>
+                        </div>
+                        
+                      <div class="botones">
+                                    <a href="cotizacion.php" class="btn btn-success btn-icon-split">
+                                        <span class="icon text-white-50">
+                                            <i class="fas fa-plus-circle"></i>
+                                        </span>
+                                        <span class="text">Nueva cotizacion</span>
+                                    </a>
+                                  
+                      </div>
+                      <table id="lista-cotizaciones"  class="table table-bordered table-hover">  
+                          <thead>
+                              <tr>
+                                  <td>#</td>
+                                  <td>Fecha</td>
+                                  <td>Usuario</td>
+                                  <td>Cliente</td>
+                                  <td>Total</td>
+                                  <td>Estatus</td>
+                                  <td>Hora</td>
+                                  <td>Comentario</td>
+                                  <td>Acción</td>
+                              </tr>
+                          </thead>                 
+                     </table>
 
-                            <label for="busqueda" class="">Cliente</label>
-                            <select style="width:100%" class="form-control" id="clientes" value="" name="clientes"></select>
-                            </div>
-                            <div class="col-md-6">
-                            <label for="Cantidad" class="">Cantidad</label> 
-                            <input style="width:100%; height:33px;" type="number" class="form-control" id="cantidad" value="" name="cantidad">
-                            </div>
-                            <div class="col-md-6 mt-3 mr-auto ml-auto"  onclick="generarToken();" id="precio-tok" >
-                            <label for="precio">Precio</label> 
-                            <input style="width:100%; height:33px;"type="number" class="form-control" id="precio" value="" name="precio" disabled>
-                            </div>
-                            </div> 
-                            <div class="form-group mt-3 row"  style="width: 100%;">
-                           
-                            <div class="btn btn-success m-auto" id="btn-agregar"onclick="agregarProducto();">Agregar</div>
-                            </div>
-
-                            </form>
-                            </div>
-                            
-                            <div class="col-12 col-md-10 ml-auto mr-auto mt-5 text-center">
-                                <table id="pre-cotizacion" class="table table-success table-bordered table-hover round_table"></table>
-                                <div class="row text-center mt-3 justify-content-center align-items-center">
-                                <div class="col-12 col-md-4">
-                                    <div class="center-block">
-                                    <label for="">Total:</label>
-                                    <input type="text" id="total-cotizacion" class="form-control" placeholder="0.00" disabled>
-                                
-                                    </div>
-                                    </div>
-                            </div>
-                            </div>
-                            
-                            </div>
-                            <div class="form-group mt-3 row justify-content-center align-items-center"  style="width: 100%;">
-                            <div class="btn btn-danger text-white mr-3" comentario="" style="color: rgb(31, 28, 28);" id="hacer-comentario"><i class="fas fa-comment-dots"></i></div>
-                            <div class="btn btn-danger" id="btn-cotizar" onclick="generarCotizacion();">Cotizar</div>
-                            </div>
-
-                     </div>
+                     
                    
 
                 </div>
@@ -461,7 +434,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; El Rayo Service Manager 2020</span><br><br>
+                        <span>Copyright &copy; El Rayo Service Manager <?php print_r(date("Y")) ?></span><br><br>
                         <span>Edicion e integración por <a href="https://www.facebook.com/BrayanM03/">Brayan Maldonado</a></span>
                     </div>
                 </div>
@@ -472,7 +445,7 @@
         <!-- End of Content Wrapper -->
 
     </div>
-    <!-- End of Page Wrapper --> 
+    <!-- End of Page Wrapper -->
 
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
@@ -512,19 +485,36 @@
     <!-- Page level plugins -->
     <script src="src/vendor/chart.js/Chart.min.js"></script>
 
-    <!-- Page level custom scripts -->
- 
+    <!-- Page level custom scripts 
+    <script src="src/js/demo/chart-area-demo.js"></script>
+    <script src="src/js/demo/chart-pie-demo.js"></script>-->
+
+
+    <!-- Cargamos nuestras librerias-->
+    
     <script src="src/vendor/datatables/jquery.dataTables.min.js"></script> 
+    <script src="src/vendor/datatables/defaults.js"></script>
     <script src="src/vendor/datatables-responsive/js/dataTables.responsive.min.js"></script>
+  <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+
+  <script src="https://nightly.datatables.net/colreorder/js/dataTables.colReorder.min.js"></script>
     <script src="src/vendor/datatables/dataTables.bootstrap4.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous"></script>
 
-    <!-- Cargamos nuestro componente de React. -->
-    <script src="src/js/cotizacion.js"></script>
-    <script src="src/js/agregar-product-cotiza.js"></script>
-    <script src="src/js/generar-token.js"></script>
+     <!-- Scripts para exportar archivos de tablas  -->        
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.bootstrap4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>   
+     <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+     <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script> 
+     <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.colVis.min.js"></script>
+    <script src="src/js/historial-cotizaciones.js"></script>
+    
+   
    
 </body>
 

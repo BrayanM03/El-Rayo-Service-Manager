@@ -405,8 +405,8 @@ function cuerpoTabla(){
 
     $pdf->SetTextColor(194, 34, 16);
     $pdf->SetFont('Arial','B',5);
-    $text = 'GARANTÍA DE UN AÑO CONTRA DEFECTO DE FABRICA A PARTIR DE ESTA FECHA';
-    $text2 = ' FAVOR DE PRESENTAR ESTE COMPROBANTE DE VENTA PARA HACER VALIDO LA GARANTÍA';
+    $text = 'COTIZACION CON PRECIO PARA ESTA FECHA EN CURSO';
+    $text2 = 'PRECIOS PUEDEN CAMBIAR POR MOTIVOS EXTERNOS';
     $pdf->Cell(189,6,utf8_decode($text),0,0,'L');
     $pdf->Ln(2);
     $pdf->Cell(189,6,utf8_decode($text2),0,0,'L');
@@ -416,7 +416,7 @@ function cuerpoTabla(){
 
     $pdf->SetTextColor(1, 1, 1);
     $pdf->SetFont('Arial','B',10);
-    $pdf->Cell(185,6,utf8_decode("Gracias por su compra"),0,0,'C');
+    $pdf->Cell(185,6,utf8_decode("Gracias por su preferencia"),0,0,'C');
     $pdf->Ln(18);
     $pdf->Line(78,268,130,268);
     $pdf->SetTextColor(1, 1, 1);

@@ -1,0 +1,9 @@
+#lista-cotizaciones thead{
+    background-color:rgb(49, 156, 199);
+    color: snow;
+}
+
+#lista-cotizaciones tbody{
+    background-color:rgb(255, 255, 255);
+    
+}

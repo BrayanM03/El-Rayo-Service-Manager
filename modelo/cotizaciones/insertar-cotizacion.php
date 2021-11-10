@@ -16,12 +16,13 @@ if(isset($_POST)){
   $fecha= date("Y-m-d");
 
     //Variables para el historial venta
-  if ($_POST['comentario'] == null) {
+  if ($_POST['comentario'] == "") {
     $comentario = "Sin comentario"; 
   }else{
     $comentario = $_POST['comentario'];
     
   }
+
 
     $sucursal = $_SESSION['sucursal'];
     $idUser =   $_SESSION['id_usuario'];
