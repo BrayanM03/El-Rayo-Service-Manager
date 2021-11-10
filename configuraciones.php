@@ -375,7 +375,7 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
                             </span>
                             <a href="#" class="list-group-item list-group-item-action">Editar mis datos de usuario (inactivo)</a>
                             <a href="lista-marcas.php" class="list-group-item list-group-item-action">Lista de marcas</a>
-                            <a href="corte.php" class="list-group-item list-group-item-action">Realizar corte </a>
+                            <a href="corte.php" class="list-group-item list-group-item-action">Realizar corte</a>
                             <a href="historial-cortes.php" class="list-group-item list-group-item-action">Historial de cortes</a>
                             <a href="#" class="list-group-item list-group-item-action">Cerrar sesión</a>
                             </div>             

@@ -7,3 +7,8 @@
     background-color:rgb(255, 255, 255);
     
 }
+
+#lista-marcas thead tr{
+    background-color:rgb(49, 156, 199);
+    color: snow;
+}

@@ -165,14 +165,14 @@
                     
                     </div>
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Stock total:</h6>
+                        <h6 class="collapse-header text-dark">Stock total:</h6>
                         <a class="collapse-item" href="inventario-total.php" style="display:flex; flex-direction: row; justify-content:start;">
                             <img src="src/img/tyre-invent.svg" width="18px" /> 
                             <span style="margin-left:12px;"> Existencia</span> </a>
                             <a class="collapse-item" href="servicios.php" style="display:flex; flex-direction: row; justify-content:start;">
                             <i class="fas fa-car"></i>
                             <span style="margin-left:7px;">Servicios</span> </a>
-                        <a class="collapse-item" href="movimientos.php">
+                        <a class="collapse-item active" href="movimientos.php">
                             <img src="src/img/entrada.svg" width="18px" /> 
                             <span style="margin-left:12px;"> Movimientos</span></a>
                         </a>

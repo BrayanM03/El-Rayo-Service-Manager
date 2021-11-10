@@ -1,5 +1,4 @@
-
-    <?php
+<?php
     session_start();
 
     include 'modelo/conexion.php';
@@ -29,36 +28,34 @@
  
 	
 
-    <title>Clientes</title>
+    <title>Agregar marca | El rayo service manager</title>
 
     <!-- Custom fonts for this template-->
     <link rel="stylesheet" href="src/css/inventario.css">
-    <link rel="stylesheet" href="src/css/historial-ventas.css">
-
     <link href="src/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
-        
-    <link href='https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css' rel='stylesheet' />
-
-        
 
 
     <!-- Custom styles for this template-->
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="src/vendor/datatables/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="src/vendor/datatables-responsive/css/responsive.bootstrap4.min.css">
+
+  <link rel="stylesheet" href="https://nightly.datatables.net/colreorder/css/colReorder.dataTables.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.css" integrity="sha512-oe8OpYjBaDWPt2VmSFR+qYOdnTjeV9QPLJUeqZyprDEQvQLJ9C5PCFclxwNuvb/GQgQngdCXzKSFltuHD3eCxA==" crossorigin="anonymous" />
     
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="src/vendor/bower_components/select2-bootstrap-theme/dist/select2-bootstrap.css">
-    <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
-    <link href="src/css/menu-vertical.css" rel="stylesheet">
-  
-
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <!---Librerias de estilos-->
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="src/css/menu-vertical.css" rel="stylesheet">
+    <link href="src/css/add-marca.css" rel="stylesheet">
+   
 
 </head>
 
@@ -129,37 +126,27 @@
                         </a>
                         <a class="collapse-item" href="cotizaciones-lista.php">
                             <img src="src/img/compras.svg" width="18px" /> 
-                            <span style="margin-left:12px;"> Cotizaciones</span>
+                            <span style="margin-left:12px;">Cotizaciones</span>
                         </a>
                     </div>
                 </div>
             </li>
-
-           
-         
             <?php 
                 $user_jerarquia = $_SESSION["rol"];
-
-                if ($user_jerarquia == 1) {
-                   $name = "Inventario";
-                }else if($user_jerarquia ==2){
-                 $name = "Clientes y creditos";
-                }
-
-            ?>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-            <div class="sidebar-heading">
-            <?php echo $name   ?>
-            </div>
-            <?php 
 
                 if ($user_jerarquia == 1) {
                     # code...
                 
 
             ?>
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Inventario
+            </div>
+
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTyres"
@@ -184,10 +171,11 @@
                         <a class="collapse-item" href="inventario-total.php" style="display:flex; flex-direction: row; justify-content:start;">
                             <img src="src/img/tyre-invent.svg" width="18px" /> 
                             <span style="margin-left:12px;"> Existencia</span> </a>
-                        <a class="collapse-item" href="servicios.php" style="display:flex; flex-direction: row; justify-content:start;">
+                            <a class="collapse-item" href="servicios.php" style="display:flex; flex-direction: row; justify-content:start;">
                             <i class="fas fa-car"></i>
                             <span style="margin-left:7px;">Servicios</span> </a>
-                        <img src="src/img/entrada.svg" width="18px" /> 
+                        <a class="collapse-item" href="movimientos.php">
+                            <img src="src/img/entrada.svg" width="18px" /> 
                             <span style="margin-left:12px;"> Movimientos</span></a>
                         </a>
                     
@@ -195,28 +183,23 @@
                 </div>
             </li>
 
-            <?php }
-            
-            if ($user_jerarquia == 1 || $user_jerarquia == 2) {
-            ?>
 
-
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseClients"
                     aria-expanded="true" aria-controls="collapsePages">
                     <i class="fas fa-fw fa-user-tag"></i>
                     <span>Mis clientes</span>
                 </a>
-                <div id="collapseClients" class="collapse show" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                <div id="collapseClients" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header text-dark">Categorias:</h6>
-                        <a class="collapse-item active" href="clientes.php" style="display:flex; flex-direction: row; justify-content:start;">
+                        <h6 class="collapse-header">Categorias:</h6>
+                        <a class="collapse-item" href="clientes.php" style="display:flex; flex-direction: row; justify-content:start;">
                             <img src="src/img/cliente.svg" width="18px" /> 
                             <span style="margin-left:12px;"> Clientes</span> </a>
                         <a class="collapse-item" href="creditos.php" style="display:flex; flex-direction: row; justify-content:start;">
                             <img src="src/img/credito.svg" width="18px" /> 
                             <span style="margin-left:12px;"> Creditos</span> </a>
-                       <!--  <a class="collapse-item" href="forgot-password.html">
+                      <!--   <a class="collapse-item" href="forgot-password.html">
                             <img src="src/img/pago.svg" width="18px" /> 
                             <span style="margin-left:12px;"> Creditos vencidos</span></a>
                         </a> -->
@@ -226,7 +209,7 @@
             </li>
 
 
-         <!--   <li class="nav-item">
+           <!--  <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProvider"
                     aria-expanded="true" aria-controls="collapsePages">
                     <i class="fas fa-fw fa-user-cog"></i>
@@ -248,12 +231,9 @@
                     
                     </div>
                 </div>
-            </li>  --->
+            </li> -->
 
-            <?php }
-            
-            if ($user_jerarquia == 1 ) {
-            ?>
+
             <!-- Nav Item - Charts -->
             <li class="nav-item">
                 <a class="nav-link" href="generar-token.php">
@@ -261,10 +241,10 @@
                     <span>Generar token</span></a>
             </li>
 
+           
 
             <?php 
-              }     # code...
-                
+              }else{}  
 
             ?>
 
@@ -353,7 +333,7 @@
                             <!-- Dropdown - Alerts -->
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="alertsDropdown">
-                                <h6 class="dropdown-header"> 
+                                <h6 class="dropdown-header">
                                    Notificaciones
                                 </h6>
                                 <div class="empty-notification">
@@ -367,7 +347,7 @@
                             </div>
                         </li>
 
-                       
+                   
 
                         <div class="topbar-divider d-none d-sm-block"></div>
 
@@ -409,33 +389,74 @@
                     </ul>
 
                 </nav>
-                <!-- End of Topbar --> 
+                <!-- End of Topbar -->
 
 
-                <!-- Begin Page Content -->
-                <div class="container-fluid" style="display: flex; justify-content: center; align-items:center; flex-direction:column">
+                <!-- Begin Page Content style="display: flex; justify-content: center; align-items:center; flex-direction:column" -->
+                <div class="containe" style="width:80%; margin:auto;"> 
 
                      <!-- Contenido inventario -->
-                     
-                        <div class="contenedor-tit">
-                        <img class="tyre-decoration-left" src="./src/img/tyre.svg" alt="insertar SVG con la etiqueta image"> 
-                        <div class="titulo-inventario">
-                         <h5 style="margin: 10px 0px;">Clientes</h5>
-                         <p style="color: gray;">Registro de clientes</p>
+                     <div class="titulo-inventario m-auto">
+                         <h5 style="margin: 10px 0px;">Agregar nueva marca</h5>
+                         <p style="color: gray;"></p>
                         </div>
-                        <img class="tyre-decoration-right" src="./src/img/tyre.svg" alt="insertar SVG con la etiqueta image">   
-                        </div>
-                        <div class="botones">
-                                    <a href="#" class="btn btn-success btn-icon-split" onclick="agregarCliente();">
+                        
+                      <div class="botones">
+                                    <a href="lista-marcas.php" class="btn btn-success btn-icon-split">
                                         <span class="icon text-white-50">
-                                            <i class="fas fa-user-plus"></i>
+                                        <i class="fas fa-arrow-circle-left"></i>
                                         </span>
-                                        <span class="text">Agregar cliente</span>
+                                        <span class="text">Regresar</span>
                                     </a>
-                                    
+                                  
                       </div>
-                      <table id="ventas" class="table table-striped">    
-                     </table>
+                      <div class="row justify-content-center">
+                          
+                            <div class="col-12 col-md-7">
+                            <div class="card mb-4 p-3">                  
+                            <div class="form-group text-center">
+                                    <label for="nombre-marca"><b>Nombre</b></label>
+                                    <input class="form-control" type="text" id="nombre-marca" placeholder="Escribe el nombre de la marca que desees agregar">
+                            </div>
+
+                            <div class="row justify-content-center">
+                                <div class="col-12 col-md-3 mt-5">
+                                    <div class="add-images">
+                                        <img src="./src/img/add.png" style="width:40px"></img><br>
+                                        <span class="span-add-image text-center">Agregar logo</span>
+                                    </div>
+                                    <input type="file" id="imagen-marca" name="imagen-auto[]" accept="image/jpeg" style="display:none">       
+                                </div>
+                                </div>
+                                     <!--    //Area del preoload -->
+                            <div class="row justify-content-center">
+                                <div class="col-12 col-md-12">
+                                    <!-- //Contenedor del previsualizador de imagenes -->
+                                    <div id="preview-images" class="mt-3">        
+                                    </div>
+
+                                    <div class="preload">
+                                        <img src="./src/img/preload.gif" style="width:70px;" alt="preload"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row justify-content-center">
+                                <div class="col-12 col-md-3 mt-5">
+                                    <div class="add-vehicle">
+                                        <div class="btn btn-outline-danger disabled" id="btn-agregar-marca">Agregar marca</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+
+                            </div>
+                        </div>   
+                      </div>
+
+                     
+                   
+
                 </div>
             <!-- End of Main Content -->
   <!-- Footer -->
@@ -499,37 +520,30 @@
 
 
     <!-- Cargamos nuestras librerias-->
-
     
     <script src="src/vendor/datatables/jquery.dataTables.min.js"></script> 
+    <script src="src/vendor/datatables/defaults.js"></script>
     <script src="src/vendor/datatables-responsive/js/dataTables.responsive.min.js"></script>
+  <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+
+  <script src="https://nightly.datatables.net/colreorder/js/dataTables.colReorder.min.js"></script>
     <script src="src/vendor/datatables/dataTables.bootstrap4.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script src="src/vendor/datatables/defaults.js"></script>
-    <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    
-    <script src="https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js"></script>
-    <script src="src/js/clientes.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-     <!-- Make sure you put this AFTER Leaflet's CSS -->
-   
-   
-     <!-- Load the `mapbox-gl-geocoder` plugin. -->
-<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.min.js"></script>
-<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.css" type="text/css">
- <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-   integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-   crossorigin=""></script>
-   <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
 
-   <script src="src/js/mapear.js"></script>
+     <!-- Scripts para exportar archivos de tablas  -->        
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.bootstrap4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>   
+     <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+     <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script> 
+     <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.colVis.min.js"></script>
+    <script src="src/js/marca-preload.js"></script>
+    
    
-   <!-- <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBDaeWicvigtP9xPv919E-RNoxfvC-Hqik"></script>
-    --->
    
 </body>
 

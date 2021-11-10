@@ -116,7 +116,7 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Ordenes de:</h6>
-                        <a class="collapse-item" href="ventas-pv.php">
+                        <a class="collapse-item active" href="ventas-pv.php">
                             <img src="src/img/ventas.svg" width="18px" /> 
                             <span style="margin-left:12px;"> Ventas</span>
                         </a>

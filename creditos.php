@@ -220,11 +220,11 @@
                 </a>
                 <div id="collapseClients" class="collapse show" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Categorias:</h6>
+                        <h6 class="collapse-header text-dark">Categorias:</h6>
                         <a class="collapse-item" href="clientes.php" style="display:flex; flex-direction: row; justify-content:start;">
                             <img src="src/img/cliente.svg" width="18px" /> 
                             <span style="margin-left:12px;"> Clientes</span> </a>
-                        <a class="collapse-item" href="register.html" style="display:flex; flex-direction: row; justify-content:start;">
+                        <a class="collapse-item active" href="creditos.php" style="display:flex; flex-direction: row; justify-content:start;">
                             <img src="src/img/credito.svg" width="18px" /> 
                             <span style="margin-left:12px;"> Creditos</span> </a>
                         

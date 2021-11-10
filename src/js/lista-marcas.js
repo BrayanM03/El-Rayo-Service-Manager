@@ -1,54 +1,55 @@
-function MostrarCotizaciones() {  
+function MostrarMarcas() {  
     // $.fn.dataTable.ext.errMode = 'none';
  
- table = $('#lista-cotizaciones').DataTable({
+ table = $('#lista-marcas').DataTable({
      
      "processing": true,
      "serverSide": true,
-      "ajax": './modelo/cotizaciones/server_processing.php', 
+      "ajax": './modelo/marcas/server_processing.php', 
       "responsive": true,
       columns: [   
-        { title: "#",              data: null    },
-        { title: "Fecha",          data: 1       },
-        { title: "Usuario",        data: 2       },
-        { title: "Cliente",        data: 3       },
-        { title: "Total",          data: 4       },
-        { title: "Estatus",        data: 5       },
-        { title: "Hora",           data: 6       },
-        { title: "Comentario",     data: 7       },
-        { title: "Accion",     data: null, render: function (data) {  
-            var folio = data[0]
+        { title: "#",               data: null    },
+        { title: "Nombre",          data: 1       },
+        { title: "Logo",            data: null, width: "100px", render: function (data) {  
+            var logo = data[2]
            
-            return "<div class='btn btn-danger m-2' onclick='abrir("+ folio +")'><i class='fas fa-file-pdf'></i></div>"+
-            "<div class='btn btn-primary' onclick='elimnarCotizacion("+ folio +")'><i class='fas fa-trash-alt'></i></div>"}
-        }]
+            return "<img style='width: 100px; margin:auto;' src='./src/img/logos/"+ logo +".jpg'></img>"}
+        },
+        { title: "Accion",     data: null, render: function (data) {  
+            var id_marca = data[0]
+           
+            return "<div class='btn btn-primary' onclick='elimnarMarca("+ id_marca +")'><i class='fas fa-trash-alt'></i></div>"}
+        }],
+        scrollY: "300px",
  });
 
 
-
- table.on( 'draw.dt', function () {
-    var PageInfo = $('#lista-cotizaciones').DataTable().page.info();
+//Colocal indice en columna contador
+table.on( 'draw.dt', function () {
+    var PageInfo = $('#lista-marcas').DataTable().page.info();
          table.column(0, { page: 'current' }).nodes().each( function (cell, i) {
             cell.innerHTML = i + 1 + PageInfo.start;
         } );
     } );
 
+
+    table.on( 'shown.bs.tab', function (e) {
+        $($.fn.dataTable.tables( true ) ).css('width', '100%');
+        $($.fn.dataTable.tables( true ) ).DataTable().columns.adjust().draw();
+    } );
+
  }
  
- MostrarCotizaciones();
+ MostrarMarcas();
 
- function abrir(folio) {
-    window.open('./modelo/cotizaciones/generar-reporte-cotizacion.php?id='+ folio, '_blank');
-}
-
-function elimnarCotizacion(folio) { 
+function elimnarMarca(id_marca) { 
 
     Swal.fire({
         imageUrl: './src/img/alert.png',
         imageWidth: 90,
         imageHeight: 90,
-        title: "Eliminar cotización",
-        html: '<span>¿Estas seguro de eliminar esta cotización?</span>',
+        title: "Eliminar marca",
+        html: '<span>¿Estas seguro de eliminar esta marca?</span>',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
         cancelButtonColor: '#00e059',
@@ -61,14 +62,14 @@ function elimnarCotizacion(folio) {
 
                 $.ajax({
                     type: "POST",
-                    url: "./modelo/cotizaciones/borrar-cotizacion.php",
-                    data: {"folio":folio},
+                    url: "./modelo/marcas/borrar-marca.php",
+                    data: {"id_marca":id_marca},
                     //dataType: "JSON",
                     success: function (response) {
                       if(response == 1){
                         Swal.fire({
-                            title: 'Cotización eliminada',
-                            html: "<span>La cotización se elimino con exito</span>",
+                            title: 'Marca eliminada',
+                            html: "<span>La marca se elimino con exito</span>",
                             icon: "success",
                             cancelButtonColor: '#00e059',
                             showConfirmButton: true,
