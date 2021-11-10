@@ -116,47 +116,63 @@ $(".add-images").on("click", function () {
 
            e.preventDefault();
            //Activamos el preload
-           preload.classList.add('activate-preload');
+           
 
            var marca = document.getElementById('nombre-marca').value;
            
+        if(marca == "" || marca == null){
 
-           formData.append('marca', marca);
+            Swal.fire({
+                title: '¡Hey! te falto algo...',
+                html: "<span>Escribe el nombre de la marca</span>",
+                icon: "warning",
+                cancelButtonColor: '#00e059',
+                showConfirmButton: true,
+                confirmButtonText: 'Aceptar', 
+                cancelButtonColor:'#ff764d',
+            })
 
-           fetch('./modelo/marcas/subir_marca.php', {
-               method: 'POST',
-               body: formData
-           }).then(function (response) { 
-               return response.json();
-            }).then(function (data) { 
-                preload.classList.remove('activate-preload');
-                clearFormDataAndThumbnails();
-                if(data.type == 1){
+        }else{
+            preload.classList.add('activate-preload');
+            formData.append('marca', marca);
 
-                    $(".add-images").append('<div class="add-images">'+
-                '<img src="./src/img/add.png" style="width:40px"></img><br>'+
-                '<span class="span-add-image text-center">Agregar logo</span>'+
-                '</div>');
+            fetch('./modelo/marcas/subir_marca.php', {
+                method: 'POST',
+                body: formData
+            }).then(function (response) { 
+                return response.json();
+             }).then(function (data) { 
+                 preload.classList.remove('activate-preload');
+                 clearFormDataAndThumbnails();
+                 if(data.type == 1){
+ 
+                     $(".add-images").append('<div class="add-images">'+
+                 '<img src="./src/img/add.png" style="width:40px"></img><br>'+
+                 '<span class="span-add-image text-center">Agregar logo</span>'+
+                 '</div>');
+ 
+                 }
+                 
+                 document.getElementById('nombre-marca').value = "";
+ 
+                 Swal.fire({
+                     title: 'Marca agregada',
+                     html: "<span>La marca se agregó con exito</span>",
+                     icon: "success",
+                     cancelButtonColor: '#00e059',
+                     showConfirmButton: true,
+                     confirmButtonText: 'Aceptar', 
+                     cancelButtonColor:'#ff764d',
+                 })
+ 
+                 console.log(data);
+              }).catch(function (err) { 
+                  console.log(err);
+               })
 
-                }
-                
-                document.getElementById('nombre-marca').value = "";
-
-                Swal.fire({
-                    title: 'Marca agregada',
-                    html: "<span>La marca se agregó con exito</span>",
-                    icon: "success",
-                    cancelButtonColor: '#00e059',
-                    showConfirmButton: true,
-                    confirmButtonText: 'Aceptar', 
-                    cancelButtonColor:'#ff764d',
-                })
-
-                console.log(data);
-             }).catch(function (err) { 
-                 console.log(err);
-              })
-
+               
+        }
+          
         });
 
 

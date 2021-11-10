@@ -444,7 +444,7 @@
                             <div class="row justify-content-center">
                                 <div class="col-12 col-md-3 mt-5">
                                     <div class="add-vehicle">
-                                        <div class="btn btn-outline-danger disabled" id="btn-agregar-marca">Agregar marca</div>
+                                        <div class="btn btn-outline-danger" id="btn-agregar-marca">Agregar marca</div>
                                     </div>
                                 </div>
                             </div>

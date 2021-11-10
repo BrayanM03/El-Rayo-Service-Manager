@@ -8,14 +8,14 @@ function MostrarMarcas() {
       "ajax": './modelo/marcas/server_processing.php', 
       "responsive": true,
       columns: [   
-        { title: "#",               data: null    },
+        { title: "#",               data: null , width: "20px",   },
         { title: "Nombre",          data: 1       },
         { title: "Logo",            data: null, width: "100px", render: function (data) {  
             var logo = data[2]
            
             return "<img style='width: 100px; margin:auto;' src='./src/img/logos/"+ logo +".jpg'></img>"}
         },
-        { title: "Accion",     data: null, render: function (data) {  
+        { title: "Accion",    width: "30px",  data: null, render: function (data) {  
             var id_marca = data[0]
            
             return "<div class='btn btn-primary' onclick='elimnarMarca("+ id_marca +")'><i class='fas fa-trash-alt'></i></div>"}
@@ -37,6 +37,8 @@ table.on( 'draw.dt', function () {
         $($.fn.dataTable.tables( true ) ).css('width', '100%');
         $($.fn.dataTable.tables( true ) ).DataTable().columns.adjust().draw();
     } );
+
+    
 
  }
  
