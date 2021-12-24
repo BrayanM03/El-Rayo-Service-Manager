@@ -649,6 +649,20 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
         </div>
     </div>
 
+    <script>
+
+        $.ajax({
+            type: "./modelo/",
+            url: "url",
+            data: "data",
+            dataType: "dataType",
+            success: function (response) {
+                
+            }
+        });
+
+    </script>
+
     <!-- Bootstrap core JavaScript-->
     <script src="src/vendor/jquery/jquery.min.js"></script>
     <script src="src/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

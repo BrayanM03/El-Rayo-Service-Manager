@@ -26,7 +26,7 @@ date_default_timezone_set("America/Matamoros");
 
   if($_POST){
 
-    //Obtener ganancia
+    //Obtener ganancia 
 
       $ventas_total_hoy_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ?  AND tipo = ? AND estatus = ? AND WEEKDAY(Fecha) =? AND id_Sucursal =?");
                $ventas_total_hoy_sql->bind_param('ssssss', $semana, $año, $tipo, $estatus, $hoy, $sucursal);
@@ -37,6 +37,8 @@ date_default_timezone_set("America/Matamoros");
 
                if($venta_total == null){
                 $venta_total = 0;
+                }else{
+                    $venta_total = round($venta_total, 2);
                 }
 
                 //Obtnener ventas totale spor metodo de pago
@@ -51,6 +53,8 @@ date_default_timezone_set("America/Matamoros");
 
       if($venta_total_efectivo == null){
        $venta_total_efectivo = 0;
+       }else{
+           $venta_total_efectivo = round($venta_total_efectivo, 2);
        }
 
                 //Obtnener ventas totale spor metodo de pago
@@ -65,6 +69,8 @@ date_default_timezone_set("America/Matamoros");
 
       if($venta_total_transferencia == null){
        $venta_total_transferencia = 0;
+       }else{
+           $venta_total_transferencia =round($venta_total_transferencia, 2);
        }
 
        
@@ -80,6 +86,8 @@ date_default_timezone_set("America/Matamoros");
 
       if($venta_total_cheque == null){
        $venta_total_cheque = 0;
+       }else{
+           $venta_total_cheque = round($venta_total_cheque, 2);
        }
                  //Obtnener ventas totale spor metodo de pago
 
@@ -93,6 +101,8 @@ date_default_timezone_set("America/Matamoros");
 
       if($venta_total_tarjeta == null){
        $venta_total_tarjeta = 0;
+       }else{
+           $venta_total_tarjeta = round($venta_total_tarjeta, 2);
        }
 
                    //Obtnener ventas totale spor metodo de pago
@@ -107,6 +117,8 @@ date_default_timezone_set("America/Matamoros");
 
       if($venta_total_sin_definir == null){
        $venta_total_sin_definir = 0;
+       }else{
+           $venta_total_sin_definir = round($venta_total_sin_definir, 2);
        }
 
 
@@ -249,14 +261,14 @@ date_default_timezone_set("America/Matamoros");
      }
      }
 
-
+     $costo_acumulado = round($costo_acumulado, 2);
      return $costo_acumulado;
 
    
     
  }
   }
-
+  
   function ganancia_meotodo_pago($metodo, $con, $semana, $año, $tipo, $estatus, $hoy, $sucursal, $unidad){
       
   
@@ -265,12 +277,17 @@ date_default_timezone_set("America/Matamoros");
     $traer_id->bind_param('sssssss', $semana, $año, $tipo, $estatus, $hoy, $sucursal, $metodo);
     $traer_id->execute();
     $resultado = $traer_id->get_result();
-     $costo_acumulado = 0;
+   
+     $totalGananciaServicio = 0;
+     $costo_metodo = 0;
+    
      if($resultado->num_rows < 1){
          //echo "sin valores"; 
          return 0;
          $traer_id->close();
      }else{
+
+        $costo_acumulado = 0;
          while($fila = $resultado->fetch_assoc()){
          $id_venta = $fila["id"];
 
@@ -280,27 +297,43 @@ date_default_timezone_set("America/Matamoros");
          $array_id_llanta = $traer_idLlanta->get_result();
 
          if($array_id_llanta->num_rows < 1){
-            // echo "sin valores";    
-            
-            $costo_metodo = 0;
+           
+                            $servicio = "servicio";
+                            $traer_servicio = $con->prepare("SELECT * FROM `detalle_venta` WHERE id_Venta = ? AND Unidad = ?");
+                            $traer_servicio->bind_param('ss', $id_venta, $servicio);
+                            $traer_servicio->execute();
+                            $array_servicio = $traer_servicio->get_result();
+                            
+                            if($array_servicio->num_rows < 1){
+
+                            }else{
+                                while($row = $array_servicio->fetch_assoc()){
+                                $importe = $row["Importe"];
+                                $totalGananciaServicio = $totalGananciaServicio + $importe;
+                                }
+                            }
          }else{
              while($fila2 = $array_id_llanta->fetch_assoc()){
-
+               
              $id_llanta = $fila2["id_Llanta"];
              $cantidad = $fila2["Cantidad"];
+            
+            
              
              $traer_Costo = $con->prepare("SELECT precio_Inicial FROM `llantas` WHERE id = ?");
              $traer_Costo->bind_param('s', $id_llanta);
              $traer_Costo->execute();
              $array_costos = $traer_Costo->get_result();
              if($array_costos->num_rows < 1){
-                 //echo "sin valores"; 
+                 
              }else{
+               
                  while($fila3 = $array_costos->fetch_assoc()){
+
                      $costo_unitario = $fila3["precio_Inicial"];
                      $costo_total = $costo_unitario * $cantidad;
-                     $costo_metodo = $costo_acumulado + $costo_total;
-                    
+                     $costo_acumulado = $costo_acumulado + $costo_total;
+                   
  
              }
 
@@ -326,9 +359,19 @@ date_default_timezone_set("America/Matamoros");
     if($venta_total_metodo == null){
         $venta_total_metodo = 0;
     }
+    
   
-    $ganancia_metodo = $venta_total_metodo - $costo_metodo;
-    return $ganancia_metodo;
+    $ganancia_metodo = $venta_total_metodo - $costo_acumulado;
+    $ganancia_metodo_ok = round($ganancia_metodo, 2);
+    return $ganancia_metodo_ok;
+
+    /* if ($costo_metodo == 0) {
+        return $totalGananciaServicio;
+        
+    }else{
+        $ganancia_metodo = $venta_total_metodo - $costo_metodo;
+        return $ganancia_metodo;
+    }  */
     
  }
   }

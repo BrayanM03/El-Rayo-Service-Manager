@@ -55,7 +55,7 @@ date_default_timezone_set("America/Matamoros");
                 $ganancia_domingo_sql->bind_result($creditos_realizados);
                 $ganancia_domingo_sql->fetch();
                 $ganancia_domingo_sql->close();
-
+ 
                 if($creditos_realizados == null){
                     $creditos_realizados = 0;
                 }

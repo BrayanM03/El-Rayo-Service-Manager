@@ -83,7 +83,7 @@ selects.forEach( select => {
         $('#search').select2({
             placeholder: "Selecciona una llanta",
             theme: "bootstrap",
-            minimumInputLength: 1,
+            minimumInputLength: 0,
             ajax: {
                 url: "./modelo/ventas/buscar-llantas-nueva-venta.php",
                 type: "post",
@@ -91,7 +91,13 @@ selects.forEach( select => {
                 delay: 250,
     
                 data: function (params) {
+                
+                 if(params.term == undefined){
+                  params.term = "";
+                }
+
                  return {
+                   
                    searchTerm: params.term // search term
                    
                  };

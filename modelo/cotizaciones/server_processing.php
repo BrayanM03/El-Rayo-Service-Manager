@@ -36,7 +36,7 @@ $columns = array(
 	array( 'db' => 'Total', 'dt' => 4 ),
 	array( 'db' => 'estatus',  'dt' => 5 ),
 	array( 'db' => 'hora',   'dt' => 6 ),
-	array( 'db' => 'comentario',     'dt' => 7 )
+	array( 'db' => 'comentario', 'dt' => 7 )
 /* 	array(
 		'db'        => 'start_date',
 		'dt'        => 4,
@@ -69,7 +69,7 @@ $sql_details = array(
 
 require( '../cortes/ssp.class.php' );
 
-echo json_encode(
+print_r(
 	SSP::simple( $_GET, $sql_details, $table, $primaryKey, $columns )
 );
 
