@@ -7,9 +7,11 @@
         echo "maaaaal";
     }
 
+    $id_sucursal = $_POST["id_sucursal"];
+
     
-    $sqlTraerInventario="SELECT * FROM llantas l INNER JOIN inventario_mat1 pedro
-    ON pedro.id_Llanta = l.id ";
+    $sqlTraerInventario="SELECT * FROM llantas l INNER JOIN inventario inv
+    ON inv.id_Llanta = l.id WHERE id_sucursal = $id_sucursal";
 
     $result = mysqli_query($con, $sqlTraerInventario);
     while ($datas=mysqli_fetch_assoc($result)){

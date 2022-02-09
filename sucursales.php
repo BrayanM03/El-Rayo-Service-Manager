@@ -9,7 +9,7 @@ if (!isset($_SESSION['id_usuario'])) {
     header("Location:login.php");
 }
 
-if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
+if ($_SESSION['user'] !==  "brayanm03") {
     header("Location:nueva-venta.php");
 }
 
@@ -28,7 +28,7 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
     <meta name="author" content="">
     <link rel="shortcut icon" href="src/img/rayo.svg" />
 
-    <title>Historial de cortes - El Rayo | Service Manager</title>
+    <title>Configuraciones - El Rayo | Service Manager</title>
 
     <!-- Custom fonts for this template-->
     <link href="src/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -39,8 +39,7 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
     <!-- Custom styles for this template-->
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="src/css/menu-vertical.css" rel="stylesheet">
-    <link rel="stylesheet" href="src/vendor/datatables/dataTables.bootstrap4.css">
-
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body id="page-top"> 
@@ -49,11 +48,9 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
     <div id="wrapper">
 
         <!-- Sidebar -->
-        
         <?php 
             require_once 'sidebar.php'
         ?>
-        
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
@@ -139,6 +136,8 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
 
 
 
+                    
+
                         <div class="topbar-divider d-none d-sm-block"></div>
 
                         <!-- Nav Item - User Information -->
@@ -183,39 +182,91 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
 
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
-                <div class="row">
-                       <div class="col-12 justify-content-center align-items-center m-auto" style="">
-                        <h3 class="text-center">Historial de cortes realizados</h3>
+                <div class="f">
+                <div class="row justify-content-center">
+                       <div class="col-12 col-md-3 text-center">
+                        <h3>Sucursales del sistema</h3>
                        </div>
                 </div>  
+
+                <div class="row mt-3 justify-content-center">
+                    <div class="col-12 col-md-2 text-center">
+                        <div class="btn btn-info" onclick="addSucursal();">Agregar sucursal</div>
+                    </div>
+                </div>
                 <div class="row mt-5">
                     <div class="col-12 justift-content-center">
-                        <div class="col-12text-center" style="margin:auto;">
-                        <div class="card p-3">
-                        
-                        <table class="table m-3 table-striped  table-md display" style="width:80%" id="historial-cortes">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th>#</th>
-                                    <th>Nombre</th>
-                                    <th>Sucursal</th>
-                                    <th>Fecha</th>
-                                    <th>Hora</th>
-                                    <th>Venta total</th>
-                                    <th>Ganancia total</th>
-                                    <th>Ganancia efectivo</th>
-                                    <th>Ganancia transferencia</th>
-                                    <th>Ganancia tarjeta</th>
-                                    <th>Ganancia cheque</th>
-                                    <th>Sin definir</th>
-                                    <th>Creditos realizados</th>
-                                    <th>Ventas realizadas</th>
-                                </tr>
-                            </thead>
-                        </table>
-                               
-                        </div>             
+                        <div class="col-10 text-center" style="margin:auto;">
+                        <div class="card">
+                            <span href="#" class="list-group-item" style="background-color:#FFBF00; color:white;">
+                                <b>Sucursales activas</b>
+                            </span>
+                            <span class="list-group-item">
+                                <div class="row">
+                                    <div class="col-12 col-md-1">
+                                        <b>id</b>
+                                    </div>
+                                    <div class="col-12 col-md-3">
+                                    <b> Nombre</b>
+                                    </div>
+                                    <div class="col-12 col-md-4">
+                                    <b>Dirección</b>
+                                    </div>
+                                    <div class="col-12 col-md-2">
+                                    <b>Telefono</b>
+                                    </div>
+                                    <div class="col-12 col-md-2">
+                                    <b>Accion</b>
+                                    </div>
+                                </div>
+                            </span>
+
+                            <?php
+                                $traer="SELECT COUNT(*) FROM sucursal";
+                                $res= $con->prepare($traer);
+                                $res->execute();
+                                $res->bind_result($tot);
+                                $res->fetch();
+                                $res->close();
+
+                                if($tot > 0){
+
+                                    $query = "SELECT * FROM sucursal";
+                                    $resp = mysqli_query($con, $query);
+
+                                    while ($fila = $resp->fetch_assoc()) {
+                                        $id = $fila["id"];
+                                        $nombre_suc = $fila["nombre"];
+                                        $direccion =$fila["Direccion"];
+                                        $telefono = $fila["Telefono"];
+
+                                        echo '
+                                        <span class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-12 col-md-1">
+                                           <b> '.$id.'</b>
+                                            </div>
+                                            <div class="col-12 col-md-3">
+                                            '.$nombre_suc.'
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                            '.$direccion.'
+                                            </div>
+                                            <div class="col-12 col-md-2">
+                                            '.$telefono.'
+                                            </div>
+                                            <div class="col-12 col-md-2">
+                                            <i class="fas fa-edit"></i>
+                                            <i class="fas fa-trash-alt"></i>
+                                            </div>
+                                        </div>
+                                    </span>';
+
+                                    }
+
+                                }
+                            ?>
+                           </div>             
                         </div>
                     </div>
                 </div>
@@ -287,14 +338,16 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
     <!-- Custom scripts for all pages-->
     <script src="src/js/sb-admin-2.min.js"></script>
 
-    
-   <!--  <script src="src/js/notificaciones.js"></script> -->
-       
-   <script src="src/vendor/datatables/jquery.dataTables.min.js"></script> 
-    <script src="src/vendor/datatables-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="src/vendor/datatables/dataTables.bootstrap4.js"></script>
-    <script src="src/js/historial-cortes.js"></script>
+    <!-- Page level plugins -->
+    <script src="src/vendor/chart.js/Chart.min.js"></script>
+    <script src="src/js/agregar-sucursal.js"></script>
 
+   
+ 
+
+  
+ 
+    </script>
    
 </body>
 

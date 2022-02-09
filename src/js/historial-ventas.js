@@ -29,8 +29,7 @@ table = $('#ventas').DataTable({
       className: "celda-acciones",
       render: function (row, data) {
         rol = $("#titulo-hv").attr("rol");
-        console.log(rol);
-        console.log(row.estatus);
+        
        if(rol == "1"){
             if (row.tipo == "Credito") {
                 return '<div style="display: flex; width: auto;">'+

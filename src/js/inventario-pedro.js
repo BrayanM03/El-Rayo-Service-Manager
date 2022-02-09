@@ -1,10 +1,11 @@
-function MostrarInventarioPedro() { 
+function MostrarInventarioPedro(id_sucursal) { 
   
-    table = $('#inventario-pedro').DataTable({
+    table = $('#inventario-pedro').DataTable({ 
       
       
         ajax: {
             method: "POST",
+            data: {"id_sucursal": id_sucursal},
             url: "./modelo/traerInventario.php"
         },  
   
@@ -70,7 +71,7 @@ function MostrarInventarioPedro() {
  }
 
 
- MostrarInventarioPedro();
+ MostrarInventarioPedro(2);
 
 /**/
 
