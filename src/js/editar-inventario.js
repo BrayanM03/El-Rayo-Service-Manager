@@ -1,13 +1,13 @@
 
-function editarInvPedro(id){
+function editarStock(id, id_sucursal){
     //codigo_llanta = $(id).attr("id");
   
    // alert("El codigo de la llanta es " + codigo_llanta);
 
    $.ajax({
        type: "POST",
-       url: "./modelo/editar-llanta-pedro.php", 
-       data: {codigo: id},
+       url: "./modelo/inventarios/traer-stock.php", 
+       data: {codigo: id, sucursal_id: id_sucursal},
        dataType: "json",
        success: function (response) {
            
@@ -114,9 +114,10 @@ function editarInvPedro(id){
 
                 $.ajax({
                     type: "POST",
-                    url: "./modelo/actualizar-stock-inv-pedro.php",
+                    url: "./modelo/inventarios/actualizar-stock.php",
                     data: {codigo      : id,
-                           stock       : stock_para_editar
+                           stock       : stock_para_editar,
+                           sucursal_id : id_sucursal
                          },
                     dataType: "json",
                     success: function (response) {
@@ -153,7 +154,7 @@ function editarInvPedro(id){
 };
 
 
-function borrarRegistro(id) { 
+function borrarRegistro(id, sucursal_id) { 
     Swal.fire({
         title: "Eliminar llanta",
         html: '<span>¿Estas seguro de eliminar esta llanta?</span>',
@@ -167,8 +168,8 @@ function borrarRegistro(id) {
             if(result.isConfirmed){
     $.ajax({
         type: "POST",
-        url: "./modelo/borrar-llanta-inv-pedro.php",
-        data: {codigo: id},
+        url: "./modelo/inventarios/borrar-llanta-inventario.php",
+        data: {codigo: id, sucursal_id : sucursal_id},
         success: function (response) {
 
             

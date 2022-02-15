@@ -22,14 +22,15 @@ if(isset($_POST)){
     
   }
 
-  if ($_POST["sucursal"] ==0) {
-    $sucursal = "Pedro";
+  $id_sucursal = $_POST["sucursal"];
 
-  }else if($_POST["sucursal"] == 1){
-    $sucursal = "Sendero";
-  }else{
-    $sucursal = $_SESSION['sucursal'];
-  }
+  $querySuc = "SELECT nombre FROM sucursal WHERE id =?";
+  $resp=$con->prepare($querySuc);
+  $resp->bind_param('i', $id_sucursal);
+  $resp->execute();
+  $resp->bind_result($sucursal);
+  $resp->fetch();
+  $resp->close();
    
     $idUser =   $_SESSION['id_usuario'];
     $cliente =  $_POST["cliente"];
@@ -78,11 +79,11 @@ if(isset($_POST)){
    // $info_producto_individual = json_decode($datos);  
    $info_producto_individual = $datos;
    $comentario = $_POST["comentario"];
-
+    
    
-    $queryInsertar = "INSERT INTO ventas (id, Fecha, id_Sucursal, id_Usuarios, id_Cliente, Total, tipo, estatus, metodo_pago, hora, comentario) VALUES (null,?,?,?,?,?,?,?,?,?,?)";
+    $queryInsertar = "INSERT INTO ventas (id, Fecha, sucursal, id_sucursal, id_Usuarios, id_Cliente, Total, tipo, estatus, metodo_pago, hora, comentario) VALUES (null,?,?,?,?,?,?,?,?,?,?,?)";
     $resultado = $con->prepare($queryInsertar);
-    $resultado->bind_param('ssiidsssss', $fecha, $sucursal, $idUser, $cliente , $total, $tipo, $estatus, $metodo_pago, $hora, $comentario);
+    $resultado->bind_param('ssiisdsssss', $fecha, $sucursal, $id_sucursal, $idUser, $cliente , $total, $tipo, $estatus, $metodo_pago, $hora, $comentario);
     $resultado->execute();
     $resultado->close();
 
@@ -118,43 +119,7 @@ if(isset($_POST)){
             $subcadena = substr($codigo, 0, 4);
 
 
-            if ($subcadena == "SEND") {
-               
-              
-               $ID = $con->prepare("SELECT id_Llanta, Stock FROM inventario_mat2 sendero INNER JOIN llantas ON sendero.id_Llanta = llantas.id WHERE Codigo LIKE ?");
-               $ID->bind_param('s', $codigo);
-               $ID->execute();
-               $ID->bind_result($id_Llanta, $stockActual);
-               $ID->fetch();
-               $ID->close();
-
-               $resultStock = $stockActual - $cantidad;
-
-              $updateStockSendero = $con->prepare("UPDATE inventario_mat2 SET Stock = ? WHERE id_Llanta = ?");
-              $updateStockSendero->bind_param('ii', $resultStock, $id_Llanta);
-              $updateStockSendero->execute();
-              $updateStockSendero->close();
-
-               
-
-
-            }else if($subcadena == "PEDC"){
-              $ID = $con->prepare("SELECT id_Llanta, Stock FROM inventario_mat1 pedro INNER JOIN llantas ON pedro.id_Llanta = llantas.id WHERE Codigo LIKE ?");
-              $ID->bind_param('s', $codigo);
-              $ID->execute();
-              $ID->bind_result($id_Llanta, $stockActual);
-              $ID->fetch();
-              $ID->close();
-
-              $resultStock = $stockActual - $cantidad;
-
-              $updateStockSendero = $con->prepare("UPDATE inventario_mat1 SET Stock = ? WHERE id_Llanta = ?");
-              $updateStockSendero->bind_param('ii', $resultStock, $id_Llanta);
-              $updateStockSendero->execute();
-              $updateStockSendero->close();
-
-             
-            }else if($subcadena == "SERV"){
+            if($subcadena == "SERV"){
 
               $ID = $con->prepare("SELECT id FROM servicios WHERE codigo LIKE ?");
               $ID->bind_param('s', $codigo);
@@ -163,6 +128,20 @@ if(isset($_POST)){
               $ID->fetch();
               $ID->close();
 
+            }else{
+              $ID = $con->prepare("SELECT id_Llanta, Stock FROM inventario WHERE Codigo = ?");
+              $ID->bind_param('s', $codigo);
+              $ID->execute();
+              $ID->bind_result($id_Llanta, $stockActual);
+              $ID->fetch();
+              $ID->close();
+
+              $resultStock = $stockActual - $cantidad;
+
+             $updateStockSendero = $con->prepare("UPDATE inventario SET Stock = ? WHERE Codigo = ?");
+             $updateStockSendero->bind_param('is', $resultStock, $codigo);
+             $updateStockSendero->execute();
+             $updateStockSendero->close();
             }
  
              if($subcadena == "SERV"){

@@ -15,7 +15,18 @@ if (!$con) {
 
 if(isset($_POST)){
     $id_cliente = $_POST["id_cliente"];
-   $sucursal = $_POST["sucursal"];
+   $id_sucursal = $_POST["sucursal_id"];
+
+
+  $id_sucursal = $_POST["sucursal_id"];
+
+  $querySuc = "SELECT nombre FROM sucursal WHERE id =?";
+  $resp=$con->prepare($querySuc);
+  $resp->bind_param('i', $id_sucursal);
+  $resp->execute();
+  $resp->bind_result($sucursal);
+  $resp->fetch();
+  $resp->close();
    
     $plazo = $_POST["plazo"];
     $importe_total = $_POST["importe"];
@@ -125,9 +136,9 @@ if(isset($_POST)){
         $dato =  mysqli_fetch_array($resultado2, MYSQLI_ASSOC);
         $id_credito = $dato["id"];
         
-            $queryInsertar = "INSERT INTO abonos (id, id_credito, fecha, hora, abono, metodo_pago, usuario, id_Sucursal) VALUES (null,?,?,?,?,?,?,?)";
+            $queryInsertar = "INSERT INTO abonos (id, id_credito, fecha, hora, abono, metodo_pago, usuario, sucursal, id_sucursal) VALUES (null,?,?,?,?,?,?,?,?)";
             $resultado = $con->prepare($queryInsertar);
-            $resultado->bind_param('sssssss',$id_credito, $fecha_inicio, $hora, $abono, $metodo_pago, $usuario, $sucursal);
+            $resultado->bind_param('ssssssss',$id_credito, $fecha_inicio, $hora, $abono, $metodo_pago, $usuario, $sucursal, $id_sucursal);
             $resultado->execute();
             $resultado->close();
     }else{

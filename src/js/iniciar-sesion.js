@@ -40,7 +40,7 @@
                         alerta.removeClass("hidden");
                         
                     }else if(response == 1){
-                        window.location = "./index.php";;
+                        window.location = "./index.php?nav=inicio";;
                     }else if(response == 2){
                         alerta = $("#alerta");
                         alerta.removeClass();

@@ -1,7 +1,16 @@
-function MostrarInventarioPedro(id_sucursal) { 
+function MostrarInventario(id_sucursal) { 
   
-    table = $('#inventario-pedro').DataTable({ 
-      
+  
+    $.ajax({
+      type: "POST",
+      url: "./modelo/inventarios/traer-dato-sucursal.php",
+      data: {"id_suc": id_sucursal},
+      success: function (response) {
+        $("#sucursal_name").text(response);
+      }
+    });
+
+    table = $('#inventario-pedro').DataTable({   
       
         ajax: {
             method: "POST",
@@ -28,8 +37,8 @@ function MostrarInventarioPedro(id_sucursal) {
           data: null,
           className: "celda-acciones",
           render: function (row) { 
-            console.log(row);
-            return '<div style="display: flex"><button type="button" onclick="editarInvPedro('+row.id_Llanta+');" id="'+row.id_Llanta+'" class="buttonEditar btn btn-warning" style="margin-right: 8px"><span class="fa fa-edit"></span><span class="hidden-xs"></span></button><br><button type="button" onclick="borrarRegistro('+row.id_Llanta+');" id="'+row.id_Llanta+'" class="buttonBorrar btn btn-danger"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
+            
+            return '<div style="display: flex"><button type="button" onclick="editarStock('+row.id_Llanta+','+ id_sucursal +');" id="'+row.id_Llanta+'" class="buttonEditar btn btn-warning" style="margin-right: 8px"><span class="fa fa-edit"></span><span class="hidden-xs"></span></button><br><button type="button" onclick="borrarRegistro('+row.id_Llanta+','+ id_sucursal +');" id="'+row.id_Llanta+'" class="buttonBorrar btn btn-danger"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
           },
         },
       ],
@@ -69,9 +78,9 @@ function MostrarInventarioPedro(id_sucursal) {
 
     
  }
+ let sucursal_id = getParameterByName('id');
 
-
- MostrarInventarioPedro(2);
+ MostrarInventario(sucursal_id);
 
 /**/
 
@@ -264,11 +273,12 @@ function agregarLLanta() {
     if(result.isConfirmed){
 
       code = $("#select2-busquedaLlantas-container").attr("codigo");
+      console.log(code);
       cantidad = $("#cantidad").val();
       $.ajax({
         type: "POST",
-        url: "./modelo/agregar-llanta-inv-pedro.php",
-        data: {"code": code, "stock": cantidad},
+        url: "./modelo/inventarios/agregar-llanta-inventario.php",
+        data: {"code": code, "stock": cantidad, "sucursal_id": sucursal_id},
         //dataType: "dataType",
         success: function (response) {
           
@@ -327,5 +337,15 @@ function agregarLLanta() {
   
 }
 
+/**
+ * @param String name
+ * @return String
+ */
+ function getParameterByName(name) {
+  name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+  var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+  results = regex.exec(location.search);
+  return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
 
 

@@ -148,14 +148,10 @@ function realizarVentaCredito(){
                                 fecha = $("#fecha").val(); 
                                 cliente = $("#select2-clientes-container").attr("id-cliente");
                                 metodo_pago = $("#metodos-pago").val();  
-                                sucursal =$("#sucursal").val();
+                                sucursal_id =$("#sucursal").val();
                                 comentario = $("#hacer-comentario").attr("comentario");
                                 //Enviando data
-                                if(sucursal == "0"){
-                                    sucursalNombre = "Pedro";
-                                }else if(sucursal == "1"){
-                                    sucursalNombre = "Sendero";
-                                }
+                                
 
                                 
                                 $.ajax({
@@ -166,7 +162,7 @@ function realizarVentaCredito(){
                                         'cliente': cliente,
                                         'metodo_pago': metodo_pago,
                                         'fecha': fecha,
-                                        'sucursal': sucursal,
+                                        'sucursal' : sucursal_id,
                                         'total': total,
                                         'comentario': comentario,
                                         'tipo': "vt-credito"},
@@ -179,7 +175,7 @@ function realizarVentaCredito(){
                                             $.ajax({
                                                 type: "POST",
                                                 url: "./modelo/creditos/nuevo-credito.php",
-                                                data: {"id_cliente": clienteid, "metodo_pago": metodo_pago, "sucursal": sucursalNombre, "plazo": plazo, "importe": fimporte_total, "abono": fabono, "restante": frestante, "fecha": fecha},
+                                                data: {"id_cliente": clienteid, "metodo_pago": metodo_pago, "sucursal_id": sucursal_id, "plazo": plazo, "importe": fimporte_total, "abono": fabono, "restante": frestante, "fecha": fecha},
                                                 //dataType: "",
                                                 success: function (response) {
                                                   console.log(response); 

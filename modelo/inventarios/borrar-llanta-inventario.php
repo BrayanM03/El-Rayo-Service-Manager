@@ -1,20 +1,25 @@
 <?php
 session_start();
 date_default_timezone_set("America/Matamoros");
-include 'conexion.php';
+include '../conexion.php';
 $con= $conectando->conexion(); 
 
 if (!$con) {
     echo "maaaaal";
 }
 
+if (!isset($_SESSION['id_usuario'])) {
+    header("Location:../../login.php");
+}
+
 if (isset($_POST)) {
 
 
         $codigo = $_POST["codigo"];
+        $sucursal_id = $_POST["sucursal_id"];
     
-         $editar_llanta= $con->prepare("DELETE FROM inventario_mat1 WHERE id_Llanta = ?");
-         $editar_llanta->bind_param('i', $codigo);
+         $editar_llanta= $con->prepare("DELETE FROM inventario WHERE id_Llanta = ? AND id_sucursal = ?");
+         $editar_llanta->bind_param('ii', $codigo, $sucursal_id);
          $editar_llanta->execute();
          $editar_llanta->close();
 
@@ -26,7 +31,13 @@ if (isset($_POST)) {
          $result->fetch();
          $result->close(); 
 
-        $sucursal = "Pedro Cardenas";  
+         $sql = "SELECT nombre FROM sucursal WHERE id= ?";
+         $res = $con->prepare($sql);
+         $res->bind_param('s', $sucursal_id);
+         $res->execute();
+         $res->bind_result($sucursal);
+         $res->fetch();
+         $res->close(); 
         $descripcion_movimiento = "Se eliminó una llanta del inventario fisico de " . $sucursal;
 
        

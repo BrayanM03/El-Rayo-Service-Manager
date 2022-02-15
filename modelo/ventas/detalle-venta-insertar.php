@@ -83,15 +83,9 @@ if(isset($_POST)){
                 $stmt->fetch();
                 $stmt->close();
 
-                $subcadena = substr($codigo, 0, 4);
+                
 
-                if ($subcadena == "SEND") {
-                    $suc = 2;
-                }else if($subcadena == "PEDC"){
-                 $suc = 1;
-                }
-
-                $revisarStock = "SELECT Stock FROM inventario_mat$suc WHERE Codigo = ?";
+                $revisarStock = "SELECT Stock FROM inventario WHERE Codigo = ?";
                 $res = $con->prepare($revisarStock); 
                 $res->bind_param('s', $codigo);
                 $res->execute();

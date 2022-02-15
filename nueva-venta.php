@@ -315,8 +315,33 @@
                                                          <span for="sucursal" >Sucursal</span>
                                                          <select style="color:#696969;" id="sucursal" name="sucursal" class="select-group form-select"> 
                                                                 <option disabled selected value></option>
-                                                                <option value="0">Pedro Cardenas</option>
-                                                                <option value="1">Sendero</option>
+                                                                <!-- <option value="0">Pedro Cardenas</option>
+                                                                <option value="1">Sendero</option>  -->
+
+                                                                <?php
+            
+                                                                $querySuc = "SELECT COUNT(*) FROM sucursal";
+                                                                $resp=$con->prepare($querySuc);
+                                                                $resp->execute();
+                                                                $resp->bind_result($total_suc);
+                                                                $resp->fetch();
+                                                                $resp->close();
+
+                                                                if($total_suc>0){
+                                                                    $querySuc = "SELECT * FROM sucursal";
+                                                                    $resp = mysqli_query($con, $querySuc);
+
+                                                                    
+
+                                                                    while ($row = $resp->fetch_assoc()){
+                                                                        $suc_identificador = $row['id'];
+                                                                        $nombre = $row['nombre'];
+                                                                        echo '<option value='.$suc_identificador .'>'.$nombre.'</option>';
+                                                                        }
+                                                                }
+                                                            
+                                                            ?>
+
                                                          </select>
                                                     </label>
 
@@ -335,7 +360,7 @@
                                                     <div class="btn btn-info" onclick="agregarcliente();" id="btn-add-client" style="width: 45px;margin: 8px 30px 8px 0px;"><i style=" width: 20px;" class="fas fa-user-plus"></i></div>
                                                               
 
-                                                    <div class="btn btn-info" rol="<?php echo $_SESSION['rol']; ?>" sucursal="<?php echo $_SESSION['sucursal']; ?>"  id="agregar-producto" onclick="agregarInfo()" >Agregar</div>
+                                                    <div class="btn btn-info" rol="<?php echo $_SESSION['rol']; ?>" sucursal="<?php echo $_SESSION['sucursal']; ?>"  id_sucursal="<?php echo $_SESSION['id_sucursal']; ?>" id="agregar-producto" onclick="agregarInfo()" >Agregar</div>
                                                     </label>
                                                     
                                                     <div id="help-addclient-span" class="targeta-ayuda">
@@ -491,7 +516,7 @@
 
     <!--<script src="src/js/agregar-info-tabla-venta.js"></script>-->
     <script src="src/vendor/node_modules/@splidejs/splide/dist/js/splide.min.js"></script>
-    <script src="src/js/nueva-venta-demo.js"></script>
+    <script src="src/js/nueva-venta.js"></script>
     <script src="src/js/agregar-product-temp.js"></script>
     <script src="src/js/generar-token.js"></script>
     <script src="src/js/nueva-venta-credito.js"></script>

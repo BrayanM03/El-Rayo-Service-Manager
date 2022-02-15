@@ -10,7 +10,7 @@ if (!isset($_SESSION['id_usuario'])) {
 }
 
 if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
-    header("Location:nueva-venta.php");
+    header("Location:nueva-venta.php?nav=inicio");
 }
 
 

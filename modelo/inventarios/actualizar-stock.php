@@ -1,6 +1,6 @@
 <?php
  session_start();
-include 'conexion.php';
+include '../conexion.php';
 $con= $conectando->conexion(); 
 
 if (!$con) {
@@ -11,28 +11,28 @@ if (!isset($_SESSION['id_usuario'])) {
     header("Location:../../login.php");
 }
 date_default_timezone_set("America/Matamoros");
+
 if (isset($_POST)) {
 
 
         $codigo = $_POST["codigo"];
-
+        $sucursal_id = $_POST["sucursal_id"];
         $stock  = $_POST["stock"];
-
-            //Traer stock  actual
-            $traerstockactual = "SELECT Stock FROM inventario_mat1 WHERE id_Llanta = ?";
+        
+           //Traer stock  actual
+            $traerstockactual = "SELECT id, Stock FROM inventario WHERE id_Llanta = ? AND id_sucursal = ?";
             $result = $con->prepare($traerstockactual);
-            $result->bind_param('i',$codigo);
+            $result->bind_param('ss',$codigo, $sucursal_id);
             $result->execute();
-            $result->bind_result($stock_actual);
+            $result->bind_result($this_tyre, $stock_actual);
             $result->fetch();
             $result->close();
 
             
         
-       
             //Actualizamos stock de la llanta
-            $editar_llanta= $con->prepare("UPDATE inventario_mat1 SET Stock = ? WHERE id_Llanta = ?");
-            $editar_llanta->bind_param('ii', $stock, $codigo);
+            $editar_llanta= $con->prepare("UPDATE inventario SET Stock = ? WHERE id = ?");
+            $editar_llanta->bind_param('ii', $stock, $this_tyre);
             $editar_llanta->execute();
             $editar_llanta->close();
 
@@ -86,7 +86,14 @@ if (isset($_POST)) {
             }
                 
          
-            $sucursal = "Pedro Cardenas";  
+            $traerSuc = "SELECT nombre FROM sucursal WHERE id=?";
+            $r = $con->prepare($traerSuc);
+            $r->bind_param('i', $sucursal_id);
+            $r->execute();
+            $r->bind_result($sucursal);
+            $r->fetch();
+            $r->close();
+
             $fecha = date("Y-m-d");   
             $hora =date("h:i a");   
             $usuario = $_SESSION["nombre"] . " " . $_SESSION["apellidos"];
@@ -98,10 +105,9 @@ if (isset($_POST)) {
             $resultado = $con->prepare($insertar_movimi);                     
             $resultado->bind_param('sssss', $descripcion_movimiento, $descripcion_llanta, $fecha, $hora, $usuario);
             $resultado->execute();
-            $resultado->close(); 
+            $resultado->close();  
          
        
-
 
 
 }else{
