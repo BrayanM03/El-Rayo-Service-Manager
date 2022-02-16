@@ -15,10 +15,7 @@ if (!$con) {
 
 if(isset($_POST)){
     $id_cliente = $_POST["id_cliente"];
-   $id_sucursal = $_POST["sucursal_id"];
-
-
-  $id_sucursal = $_POST["sucursal_id"];
+   $id_sucursal = $_POST["sucursal_id"]; 
 
   $querySuc = "SELECT nombre FROM sucursal WHERE id =?";
   $resp=$con->prepare($querySuc);

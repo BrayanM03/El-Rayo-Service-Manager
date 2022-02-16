@@ -20,6 +20,7 @@ $claseServicios = "";
 $claseMovimientos = "";
 
 
+
 switch ($flag) {
         case 'inicio':
         $claseInicio = "active";

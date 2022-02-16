@@ -193,29 +193,15 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
                 <div class="row mt-5">
                     <div class="col-12 justift-content-center">
                         <div class="col-6 text-center" style="margin:auto;">
-                        <div class="card">
-                            <span href="#" class="list-group-item">
-                                <b>Ajustes principales</b>
-                            </span>
-                            <a href="#" class="list-group-item list-group-item-action">Editar mis datos de usuario (inactivo)</a>
-                            <a href="lista-marcas.php" class="list-group-item list-group-item-action">Lista de marcas</a>
-                            <a href="corte.php" class="list-group-item list-group-item-action">Realizar corte</a>
-                            <a href="historial-cortes.php" class="list-group-item list-group-item-action">Historial de cortes</a>
-                            <?php 
-                                if($_SESSION['user'] =="brayanm03"){
-                            ?>
-                            <span href="#" class="list-group-item">
-                            <b>Ajustes de sucursales</b>
-                            </span>
-                                
-                            <a href="sucursales.php" class="list-group-item list-group-item-action">Agregar sucursal</a>
-                               <?php 
-                                }
-                                ?>
-                         
 
-                            <a href="#" class="list-group-item list-group-item-action">Cerrar sesión</a>
-                            </div>             
+                        <!---Panel de ajustes--->
+
+                        <?php 
+                        
+                            include 'panel-ajustes.php';
+
+                        ?>
+
                         </div>
                     </div>
                 </div>

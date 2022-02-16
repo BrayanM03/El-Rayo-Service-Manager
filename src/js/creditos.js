@@ -44,7 +44,6 @@ table = $('#creditos').DataTable({
     { title: "Total",          data: "total"          },
     { title: "Restante",       data: "restante"       },
     { title: "Pagado",         data: "pagado"         },
-    { title: "Total",          data: "total"          },
     { title: "Estatus",        data: "estatus", render: function(data,type,row) {
         switch (data) {
           case "0":
@@ -198,7 +197,7 @@ function borrarCredito(id) {
   }
 
 
-  function traerCredito(id){
+  function traerCredito(id){ 
 
     $.ajax({
         type: "post",
