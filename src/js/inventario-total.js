@@ -26,12 +26,21 @@ $(document).ready(function() {
           data: null,
           className: "celda-select",
           render: function (row, meta) {
-            //console.log(meta.index)
-            return '<select class="select-sucursal form-control" id="select'+ row.id +'" codigo="'+ row.id +'">'+
-            '<option value="total">Total</option> '+
-            '<option value="pedro">Pedro Cardenas</option> '+
-            '<option value="sendero">Sendero</option> '+
-            '</select>';
+            //console.log(meta.index  
+            sucursales = row.sucursales;
+            options = "";
+            sucursales.forEach(element => {
+                  id_suc = element["id"];
+                  nombre = element["nombre"];
+                  options += '<option value="'+ id_suc +'">'+ nombre +'</option>';
+                  
+            });
+                
+            return'<select class="select-sucursal form-control" id="select'+ row.id +'" codigo="'+ row.id +'">'+
+                '<option value="total">Total</option> '+
+                options+
+                '</select>'; 
+           
           },
         },
         {title: "Stock",

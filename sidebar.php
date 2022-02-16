@@ -90,7 +90,7 @@ switch ($flag) {
 
 <!-- Nav Item - Dashboard -->
 <li class="nav-item <?php echo $claseInicio;?>">
-    <a class="nav-link" href="index.php?nav=inicio">
+    <a class="nav-link" href="index.php?id=0&nav=inicio">
         <i class="fas fa-fw fa-tachometer-alt"></i>
         <span>Inicio</span></a>
 </li>
@@ -105,14 +105,14 @@ switch ($flag) {
 
 <!-- Nav Item - Pages Collapse Menu -->
 <li class="nav-item <?php echo $claseNuevaVenta ?>">
-    <a class="nav-link" href="nueva-venta.php?nav=nueva_venta">
+    <a class="nav-link" href="nueva-venta.php?id=0&nav=nueva_venta">
         <i class="fas fa-fw fa-cart-plus"></i>
         <span>Nueva venta</span>
     </a>
 </li>
 
 <li class="nav-item <?php echo $claseNuevaCotizacion ?>">
-    <a class="nav-link" href="cotizacion.php?nav=nueva_cotizacion">
+    <a class="nav-link" href="cotizacion.php?id=0&nav=nueva_cotizacion">
         <i class="fas fa-fw fa-clipboard"></i>
         <span>Nueva cotización</span>
     </a>
@@ -129,11 +129,11 @@ switch ($flag) {
         data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Ordenes de:</h6>
-            <a class="collapse-item <?php echo $claseVentas ?>" href="ventas-pv.php?nav=ventas">
+            <a class="collapse-item <?php echo $claseVentas ?>" href="ventas-pv.php?id=0&nav=ventas">
                 <img src="src/img/ventas.svg" width="18px" /> 
                 <span style="margin-left:12px;"> Ventas</span>
             </a>
-            <a class="collapse-item <?php echo $claseCotizaciones ?>" href="cotizaciones-lista.php?nav=cotizaciones">
+            <a class="collapse-item <?php echo $claseCotizaciones ?>" href="cotizaciones-lista.php?id=0&nav=cotizaciones">
                 <img src="src/img/compras.svg" width="18px" /> 
                 <span style="margin-left:12px;"> Cotizaciones</span>
             </a>
@@ -201,9 +201,10 @@ switch ($flag) {
                         $class_suc = "active";
                          }else{
                         $class_suc = "";
+                        
                         }
                         $nombre = $row['nombre'];
-                        echo '<a class="collapse-item '.$class_suc .'" href="inventario.php?id='.$suc_identificador .'&nav=inv" style="display:flex; flex-direction: row; justify-content:start;">
+                        echo '<a class="collapse-item '.$class_suc .'" href="inventario.php?id='. $suc_identificador .'&nav=inv" style="display:flex; flex-direction: row; justify-content:start;">
                         <i class="fas fa-fw fa-store"></i> 
                             <span style="margin-left:12px;">'.$nombre.'</span></a>';
                         }
@@ -224,13 +225,13 @@ switch ($flag) {
         </div>
         <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Stock total:</h6>
-            <a class="collapse-item <?php echo $claseExistencia ?>" href="inventario-total.php?nav=existencia" style="display:flex; flex-direction: row; justify-content:start;">
+            <a class="collapse-item <?php echo $claseExistencia ?>" href="inventario-total.php?id=0&nav=existencia" style="display:flex; flex-direction: row; justify-content:start;">
                 <img src="src/img/tyre-invent.svg" width="18px" /> 
                 <span style="margin-left:12px;"> Existencia</span> </a>
-                <a class="collapse-item <?php echo $claseServicios ?>" href="servicios.php?nav=servicios" style="display:flex; flex-direction: row; justify-content:start;">
+                <a class="collapse-item <?php echo $claseServicios ?>" href="servicios.php?id=0&nav=servicios" style="display:flex; flex-direction: row; justify-content:start;">
                 <i class="fas fa-car"></i>
                 <span style="margin-left:7px;">Servicios</span> </a>
-            <a class="collapse-item <?php echo $claseMovimientos ?>" href="movimientos.php?nav=movimientos">
+            <a class="collapse-item <?php echo $claseMovimientos ?>" href="movimientos.php?id=0&nav=movimientos">
             <img src="src/img/entrada.svg" width="18px" /> 
                 <span style="margin-left:12px;"> Movimientos</span></a>
             </a>
@@ -255,10 +256,10 @@ if ($user_jerarquia == 1 || $user_jerarquia == 2) {
     <div id="collapseClients" class="collapse <?php echo $showClientes ?>" aria-labelledby="headingPages" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Categorias:</h6>
-            <a class="collapse-item <?php echo $claseClientes ?>" href="clientes.php?nav=clientes" style="display:flex; flex-direction: row; justify-content:start;">
+            <a class="collapse-item <?php echo $claseClientes ?>" href="clientes.php?id=0&nav=clientes" style="display:flex; flex-direction: row; justify-content:start;">
                 <img src="src/img/cliente.svg" width="18px" /> 
                 <span style="margin-left:12px;"> Clientes</span> </a>
-            <a class="collapse-item <?php echo $claseCreditos ?>" href="creditos.php?nav=creditos" style="display:flex; flex-direction: row; justify-content:start;">
+            <a class="collapse-item <?php echo $claseCreditos ?>" href="creditos.php?id=0&nav=creditos" style="display:flex; flex-direction: row; justify-content:start;">
                 <img src="src/img/credito.svg" width="18px" /> 
                 <span style="margin-left:12px;"> Creditos</span> </a>
            <!--  <a class="collapse-item" href="forgot-password.html">
@@ -301,7 +302,7 @@ if ($user_jerarquia == 1 ) {
 ?>
 <!-- Nav Item - Charts -->
 <li class="nav-item <?php echo $claseToken ?>">
-    <a class="nav-link" href="generar-token.php?nav=token">
+    <a class="nav-link" href="generar-token.php?id=0&nav=token">
         <i class="fas fa-fw fa-lock"></i>
         <span>Generar token</span></a>
 </li>

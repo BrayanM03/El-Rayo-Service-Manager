@@ -24,7 +24,7 @@
             console.log(datos);
             $.ajax({
                 type: "POST",
-                url: "./modelo/login/iniciar-sesion.php",
+                url: "./modelo/login/iniciar-sesion.php?",
                 data: datos,
                
                 success: function (response) {
@@ -40,7 +40,7 @@
                         alerta.removeClass("hidden");
                         
                     }else if(response == 1){
-                        window.location = "./index.php?nav=inicio";;
+                        window.location = "./index.php?id=0&nav=inicio";;
                     }else if(response == 2){
                         alerta = $("#alerta");
                         alerta.removeClass();

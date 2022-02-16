@@ -10,10 +10,10 @@ $folio = "RAY" . $_GET["id"];
 $idVenta = $_GET["id"];
 global $folio;
 
-$ID = $con->prepare("SELECT ventas.Fecha, ventas.id_Sucursal, ventas.id_Usuarios, clientes.Nombre_Cliente, ventas.Total, ventas.tipo, ventas.estatus, ventas.metodo_pago, ventas.hora, ventas.comentario FROM ventas INNER JOIN clientes ON ventas.id_Cliente = clientes.id WHERE ventas.id = ?");
+$ID = $con->prepare("SELECT ventas.Fecha, ventas.id_sucursal, ventas.id_Usuarios, clientes.Nombre_Cliente, ventas.Total, ventas.tipo, ventas.estatus, ventas.metodo_pago, ventas.hora, ventas.comentario FROM ventas INNER JOIN clientes ON ventas.id_Cliente = clientes.id WHERE ventas.id = ?");
 $ID->bind_param('i', $idVenta);
 $ID->execute();
-$ID->bind_result($fecha, $sucursal, $vendedor_id, $cliente, $total, $tipo, $estatus, $metodo_pago, $hora, $comentario );
+$ID->bind_result($fecha, $ide_sucursal, $vendedor_id, $cliente, $total, $tipo, $estatus, $metodo_pago, $hora, $comentario );
 $ID->fetch();
 $ID->close();
 
@@ -30,8 +30,27 @@ $ID->close();
 
 $vendedor_usuario = $vendedor_name . " " . $vendedor_apellido;
 
+//Trayendo datos de la sucursal
+$ID = $con->prepare("SELECT nombre, calle, numero, colonia, ciudad, estado, pais, Telefono, RFC, CP  FROM sucursal WHERE id = ?");
+$ID->bind_param('i', $ide_sucursal);
+$ID->execute();
+$ID->bind_result($sucursal, $calle_suc, $numero_suc, $colonia_suc, $ciudad_suc, $estado_suc, $pais_suc, $telefono_suc, $rfc_suc, $cp_suc);
+$ID->fetch();
+$ID->close();
+
+
+
 global $fecha;
 global $sucursal;
+global $calle_suc;
+global $numero_suc;
+global $colonia_suc;
+global $ciudad_suc;
+global $estado_suc;
+global $pais_suc;
+global $telefono_suc;
+global $rfc_suc;
+global $cp_suc;
 global $vendedor_usuario;
 global $cliente;
 global $total;
@@ -76,19 +95,25 @@ function Header()
 
 
 {
-    if($GLOBALS["sucursal"] == "Pedro"){
-        $direccion = "Avenida Pedro Cardenas KM5 No.207";
-        $colonia = "Col. Francisco Castellanos";
-        $telefono = "8688244404";
-        $rfc = "SARK9104063L6";
-
+   
         
-   }else if($GLOBALS["sucursal"] == "Sendero"){
-    $direccion = "Av. Sendero Nacional";
-    $colonia = "Kilometro 50";
-    $telefono = "868 127 5833";
-    $rfc = "REFR971218619";
-   }
+        $calle = $GLOBALS["calle_suc"];
+        $numero = $GLOBALS["numero_suc"];
+        $colonia = $GLOBALS["colonia_suc"];
+        $ciudad = $GLOBALS["ciudad_suc"];
+        $estado = $GLOBALS["estado_suc"];
+        $pais = $GLOBALS["pais_suc"];
+        $telefono = $GLOBALS["telefono_suc"];
+        $rfc = $GLOBALS["rfc_suc"];
+        $cp = $GLOBALS["cp_suc"];
+
+        if($numero == 0 || $numero == null){
+            $numero = "";
+        }
+
+        $top_direction = $calle . " " . $numero . " " ;
+        $middle_direction = $colonia;
+        $middle_direction_2 = $ciudad . " " . $estado . " " . $pais;
 
     // Logo
     $this->Image('../../src/img/logo.jpg',20,10,25);
@@ -113,16 +138,16 @@ function Header()
     $estatus = $GLOBALS["estatus"];
     $this->SetFont('Arial','',9);
     $this->Cell(25,15,'',0,0,'C');
-    $this->Cell(115,10,utf8_decode($direccion),0,0,'C', false);
+    $this->Cell(115,10,utf8_decode($top_direction),0,0,'C', false);
     $this->SetFont('Arial','',12);
     $this->SetTextColor(194, 34, 16);
     $this->Cell(50,15,$estatus,0,0,'C');
     $this->SetTextColor(36, 35, 28);
     $this->SetFont('Arial','',9);
     $this->Ln(4);
-    $this->Cell(160,10,utf8_decode($colonia),0,0,'C', false);
+    $this->Cell(160,10,utf8_decode($middle_direction),0,0,'C', false);
     $this->Ln(4);
-    $this->Cell(160,10,utf8_decode("H. Matamoros Tam"),0,0,'C', false);
+    $this->Cell(160,10,utf8_decode($middle_direction_2),0,0,'C', false);
     $this->Ln(4);
     $this->Cell(160,10,utf8_decode("RFC: " .$rfc),0,0,'C', false);
     $this->Ln(4);

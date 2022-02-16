@@ -470,15 +470,7 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
 
     <script>
 
-        $.ajax({
-            type: "./modelo/",
-            url: "url",
-            data: "data",
-            dataType: "dataType",
-            success: function (response) {
-                
-            }
-        });
+       
 
     </script>
 
