@@ -16,13 +16,23 @@ function totalVentas(){
     dataType: "JSON",
     success: function (response) {
   
+      nombres = [];
+      ganancia = [];
+
+      response.forEach(element => {
+        nombre_sucursal = element.sucursal;
+        venta_total = element.venta_total;
+        nombres.push(nombre_sucursal);
+        ganancia.push(venta_total);
+      });
+console.log(nombres);
       var ctx = document.getElementById("myPieChart");
-  var myPieChart = new Chart(ctx, {
+    var myPieChart = new Chart(ctx, {
     type: 'doughnut',
     data: {
-      labels: ["Pedro Cardenas", "Sendero"],
+      labels: nombres,
       datasets: [{
-        data: [response.ganancia_pedro,response.ganancia_sendero],
+        data: ganancia,
         backgroundColor: ['#4e73df', '#1cc88a'],
         hoverBackgroundColor: ['#2e59d9', '#17a673'],
         hoverBorderColor: "rgba(234, 236, 244, 1)",

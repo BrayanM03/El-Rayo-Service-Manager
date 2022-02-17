@@ -14,7 +14,7 @@
                             <b>Ajustes de sucursales</b>
                             </span>
                                 
-                            <a href="sucursales.php" class="list-group-item list-group-item-action">Agregar sucursal</a>
+                            <a href="sucursales.php?id=0&nav=sucursales" class="list-group-item list-group-item-action">Agregar sucursal</a>
                                <?php 
                                 }
                                 ?>

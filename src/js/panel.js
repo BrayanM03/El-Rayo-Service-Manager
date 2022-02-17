@@ -1,5 +1,5 @@
 
- function ganacias() { 
+ function ganancias() { 
 
     $.ajax({
         type: "POST",
@@ -23,7 +23,7 @@
     
   }
  
- ganacias();
+ ganancias();
 
  function number_format_js(number, decimals, dec_point, thousands_point) {
 

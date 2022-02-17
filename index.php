@@ -223,7 +223,7 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Perfil
                                 </a>
-                                <a class="dropdown-item" href="configuraciones.php">
+                                <a class="dropdown-item" href="configuraciones.php?id=0&nav=configuraciones">
                                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Configuraciones
                                 </a>
@@ -408,6 +408,7 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
                                         <canvas id="myPieChart"></canvas>
                                     </div>
                                     <div class="mt-4 text-center small">
+                                        
                                         <span class="mr-2">
                                             <i class="fas fa-circle text-primary"></i> Pedro Cardenas
                                         </span>

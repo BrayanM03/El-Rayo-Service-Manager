@@ -159,7 +159,7 @@ if ($_SESSION['user'] !==  "brayanm03") {
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Perfil
                                 </a>
-                                <a class="dropdown-item" href="configuraciones.php">
+                                <a class="dropdown-item" href="configuraciones.php?id=0&nav=configuraciones">
                                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Configuraciones
                                 </a>
@@ -237,8 +237,20 @@ if ($_SESSION['user'] !==  "brayanm03") {
                                     while ($fila = $resp->fetch_assoc()) {
                                         $id = $fila["id"];
                                         $nombre_suc = $fila["nombre"];
-                                        $direccion =$fila["Direccion"];
-                                        $telefono = $fila["Telefono"];
+                                        $calle = $fila["calle"];
+                                        $numero =$fila["numero"];
+                                        $colonia = $fila["colonia"];
+                                        $ciudad = $fila["ciudad"];
+                                        $estado = $fila["estado"];
+                                        $pais = $fila["pais"];
+                                        $telefono = $fila["telefono"];
+                                        $rfc = $fila["RFC"];
+                                        $cp = $fila["CP"];
+                                        $corte = $fila["corte"];
+
+                                        $direccion = $calle . " " . $numero . " " . $colonia . " " . $ciudad . " " . $estado . " " . $pais . " " .$cp;
+
+
 
                                         echo '
                                         <span class="list-group-item">

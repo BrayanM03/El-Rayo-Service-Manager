@@ -16,26 +16,52 @@ date_default_timezone_set("America/Matamoros");
   if($_POST){
     $estatus ="Cancelada";
     $suc_pedro = "Pedro";
-    $ganancia_pedro_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE id_Sucursal = ? AND YEAR(Fecha) = ? AND estatus <> ?");
-    $ganancia_pedro_sql->bind_param('sss', $suc_pedro, $año, $estatus);
-    $ganancia_pedro_sql->execute();
-    $ganancia_pedro_sql->bind_result($ganancia_pedro);
-    $ganancia_pedro_sql->fetch();
-    $ganancia_pedro_sql->close();
 
-    $suc_sendero = "Sendero";
-    $ganancia_pedro_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE id_Sucursal = ? AND YEAR(Fecha) = ? AND estatus <> ?");
-    $ganancia_pedro_sql->bind_param('sss', $suc_sendero, $año, $estatus);
-    $ganancia_pedro_sql->execute();
-    $ganancia_pedro_sql->bind_result($ganancia_sendero);
-    $ganancia_pedro_sql->fetch();
-    $ganancia_pedro_sql->close();
+    $traer="SELECT COUNT(*) FROM sucursal";
+    $res= $con->prepare($traer);
+    $res->execute();
+    $res->bind_result($tot);
+    $res->fetch();
+    $res->close();
 
-    $data = array("ganancia_pedro" => $ganancia_pedro, "ganancia_sendero" => $ganancia_sendero);
+    $ventas_totales = [];
+    if($tot > 0){
+
+        $query = "SELECT * FROM sucursal";
+        $resp = mysqli_query($con, $query);
+
+        while ($fila = $resp->fetch_assoc()) {
+            $id = $fila["id"];
+            $nombre_suc = $fila["nombre"];
+
+            $ganancia_pedro_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE id_sucursal = ? AND YEAR(Fecha) = ? AND estatus <> ?");
+            $ganancia_pedro_sql->bind_param('sss', $id, $año, $estatus);
+            $ganancia_pedro_sql->execute();
+            $ganancia_pedro_sql->bind_result($ventas);
+            $ganancia_pedro_sql->fetch();
+            $ganancia_pedro_sql->close();
+
+            if($ventas == null){
+                $ventas =0;
+            }else{
+                $ventas = floatval($ventas);
+            }
+            $ventas_totales[] = array("sucursal" => $nombre_suc, "venta_total" => $ventas);
+
+        }
+
+    }
+
+
+    
+
+  
+
+    
         
 
-        if (isset($data)) {
-            echo json_encode($data, JSON_UNESCAPED_UNICODE);
+        if (isset($ventas_totales)) {
+            echo json_encode($ventas_totales, JSON_UNESCAPED_UNICODE);
         }else{
             print_r("Sin datos");
         }
