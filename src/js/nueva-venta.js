@@ -257,6 +257,8 @@ selects.forEach( select => {
 
         }else{
             
+            $("#realizar-venta").addClass("disabled");;
+            $("#realizar-venta").text("Espere...");
 
             llantaData = $("#pre-venta").dataTable().fnGetData();
             console.log(llantaData);
@@ -296,6 +298,7 @@ selects.forEach( select => {
                             confirmButtonText: 'Aceptar', 
                             cancelButtonColor:'#ff764d',
                             showDenyButton: true,
+                            allowOutsideClick: false,
                             denyButtonText: 'Reporte'
                         },
                            
@@ -311,6 +314,9 @@ selects.forEach( select => {
                                 $("#pre-venta_processing").css("display","none");
                                 $("#total").val(0);
                                 table.clear().draw();
+
+                                $("#realizar-venta").removeClass("disabled");
+                                $("#realizar-venta").text("Realizar venta");
                                
 
                             }else if(result.isDenied){
@@ -324,6 +330,10 @@ selects.forEach( select => {
                                 $("#pre-venta_processing").css("display","none");
                                 $("#total").val(0);
                                 table.clear().draw();
+
+
+                                $("#realizar-venta").removeClass("disabled");
+                                $("#realizar-venta").text("Realizar venta");
                                      
                               
                                 
@@ -336,6 +346,10 @@ selects.forEach( select => {
                                 $("#pre-venta_processing").css("display","none");
                                 $("#total").val(0);
                                 table.clear().draw();
+
+
+                                $("#realizar-venta").removeClass("disabled");
+                                $("#realizar-venta").text("Realizar venta");
                             }
             
                            $("#hacer-comentario").attr("comentario", " ");

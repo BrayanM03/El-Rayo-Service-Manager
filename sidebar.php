@@ -78,7 +78,7 @@ switch ($flag) {
 <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
 
 <!-- Sidebar - Brand -->
-<a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
+<a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php?id=0&nav=inicio">
     <div class="sidebar-brand-icon rotate-n-15">
         <!-- <i class="fas fa-laugh-wink"></i>--->
         <img style="filter: invert(100%);" width="40px" src="src/img/racing.svg"/>

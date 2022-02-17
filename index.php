@@ -407,15 +407,7 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
                                     <div class="chart-pie pt-4 pb-2" id="chart-pie-container">
                                         <canvas id="myPieChart"></canvas>
                                     </div>
-                                    <div class="mt-4 text-center small">
-                                        
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-primary"></i> Pedro Cardenas
-                                        </span>
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-success"></i> Sendero
-                                        </span>
-                                        
+                                    <div class="mt-4 text-center small" id="store-tags">
                                     </div>
                                 </div>
                             </div>

@@ -14,18 +14,31 @@ function totalVentas(){
     url: "./modelo/panel/grafica-pastel.php", 
     data: {"data":"data"},
     dataType: "JSON",
-    success: function (response) {
+    success: function (response) { 
   
       nombres = [];
       ganancia = [];
-
+      colores_back = [];
+      colores_hover = [];
+      $("#store-tags").empty();
       response.forEach(element => {
         nombre_sucursal = element.sucursal;
         venta_total = element.venta_total;
+        color_back = element.color_back;
+        color_hover = element.color_hover;
+
+  
+        $("#store-tags").append('<span class="mr-2">'+
+          '<i class="fas fa-circle" style="color:'+ color_back+'"></i>' + nombre_sucursal + 
+          '</span>');
+
         nombres.push(nombre_sucursal);
         ganancia.push(venta_total);
+        colores_back.push(color_back);
+        colores_hover.push(color_hover);
       });
-console.log(nombres);
+
+
       var ctx = document.getElementById("myPieChart");
     var myPieChart = new Chart(ctx, {
     type: 'doughnut',
@@ -33,8 +46,8 @@ console.log(nombres);
       labels: nombres,
       datasets: [{
         data: ganancia,
-        backgroundColor: ['#4e73df', '#1cc88a'],
-        hoverBackgroundColor: ['#2e59d9', '#17a673'],
+        backgroundColor: colores_back,
+        hoverBackgroundColor: colores_hover,
         hoverBorderColor: "rgba(234, 236, 244, 1)",
       }],
     },
@@ -79,17 +92,40 @@ function numeroVentas(){
     url: "./modelo/panel/grafica-pastel-numero-ventas.php", 
     data: {"data":"data"},
     dataType: "JSON",
-    success: function (response) {
+    success: function (responses) {
+
+      nombres = [];
+      totales = [];
+      colores_back = [];
+      colores_hover = [];
+
+      $("#store-tags").empty();
+      responses.forEach(element => {
+        nombre_sucursal = element.sucursal;
+        venta_total = element.numero_ventas;
+        color_back = element.color_back;
+        color_hover = element.color_hover;
+
+        $("#store-tags").append('<span class="mr-2">'+
+          '<i class="fas fa-circle" style="color:'+ color_back+'"></i>' + nombre_sucursal + 
+          '</span>');
+
+        nombres.push(nombre_sucursal);
+        totales.push(venta_total);
+        colores_back.push(color_back);
+        colores_hover.push(color_hover);
+      });
+
   
       var ctx = document.getElementById("myPieChart");
   var myPieChart = new Chart(ctx, {
     type: 'doughnut',
     data: {
-      labels: ["Pedro Cardenas", "Sendero"],
+      labels: nombres,
       datasets: [{
-        data: [response.numero_ventas_pedro,response.numero_ventas_sendero],
-        backgroundColor: ['#4e73df', '#1cc88a'],
-        hoverBackgroundColor: ['#2e59d9', '#17a673'],
+        data: totales,
+        backgroundColor: colores_back,
+        hoverBackgroundColor: colores_hover,
         hoverBorderColor: "rgba(234, 236, 244, 1)",
       }],
     },
@@ -123,6 +159,7 @@ function numeroVentas(){
 // Pie Chart Example
 function totalCreditos(){
 
+  
   $("#myPieChart").remove();
   $("#chart-pie-container").append("<canvas id='myPieChart'></canvas>");
   $("#titulo-graf-pie").text("Numero ventas por sucursal");
@@ -133,16 +170,39 @@ function totalCreditos(){
     data: {"data":"data"},
     dataType: "JSON",
     success: function (response) {
+
+      nombres = [];
+      totales = [];
+      colores_back = [];
+      colores_hover = [];
+
+      $("#store-tags").empty();
+      response.forEach(element => {
+        nombre_sucursal = element.sucursal;
+        cred_total = element.total_cred;
+        color_back = element.color_back;
+        color_hover = element.color_hover;
+
+        $("#store-tags").append('<span class="mr-2">'+
+          '<i class="fas fa-circle" style="color:'+ color_back+'"></i>' + nombre_sucursal + 
+          '</span>');
+
+        nombres.push(nombre_sucursal);
+        totales.push(cred_total);
+        colores_back.push(color_back);
+        colores_hover.push(color_hover);
+      });
+
   
       var ctx = document.getElementById("myPieChart");
   var myPieChart = new Chart(ctx, {
     type: 'doughnut',
     data: {
-      labels: ["Pedro Cardenas", "Sendero"],
+      labels: nombres,
       datasets: [{
-        data: [response.creditos_pedro,response.creditos_sendero],
-        backgroundColor: ['#4e73df', '#1cc88a'],
-        hoverBackgroundColor: ['#2e59d9', '#17a673'],
+        data: totales,
+        backgroundColor: colores_back,
+        hoverBackgroundColor: colores_hover,
         hoverBorderColor: "rgba(234, 236, 244, 1)",
       }],
     },

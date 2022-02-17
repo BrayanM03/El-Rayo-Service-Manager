@@ -15,7 +15,6 @@ date_default_timezone_set("America/Matamoros");
 
   if($_POST){
     $estatus ="Cancelada";
-    $suc_pedro = "Pedro";
 
     $traer="SELECT COUNT(*) FROM sucursal";
     $res= $con->prepare($traer);
@@ -46,7 +45,19 @@ date_default_timezone_set("America/Matamoros");
             }else{
                 $ventas = floatval($ventas);
             }
-            $ventas_totales[] = array("sucursal" => $nombre_suc, "venta_total" => $ventas);
+
+            $tarer_colores = $con->prepare("SELECT color_out, color_hover FROM `colores_sucursales` WHERE id_suc = ?");
+            $tarer_colores->bind_param('i', $id);
+            $tarer_colores->execute();
+            $tarer_colores->bind_result($background, $hover);
+            $tarer_colores->fetch();
+            $tarer_colores->close();
+
+            $ventas_totales[] = array("id"=>$id,
+                                      "sucursal" => $nombre_suc, 
+                                      "venta_total" => $ventas,
+                                      "color_back"=>$background,
+                                      "color_hover"=>$hover);
 
         }
 
