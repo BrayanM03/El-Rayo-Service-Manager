@@ -30,8 +30,8 @@ date_default_timezone_set("America/Matamoros");
     $noviembre = '11';
     $diciembre = '12';
 
-    $suc = "Sendero";
-    $ganancia_mes_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE MONTH(Fecha) = ? AND YEAR(Fecha) = ? AND id_Sucursal = ? AND estatus <> ?");
+    $suc = $_POST["id_suc"];
+    $ganancia_mes_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE MONTH(Fecha) = ? AND YEAR(Fecha) = ? AND id_sucursal = ? AND estatus <> ?");
                $ganancia_mes_sql->bind_param('ssss', $enero, $año, $suc, $estatus);
                $ganancia_mes_sql->execute();
                $ganancia_mes_sql->bind_result($ganancia_ene);
@@ -42,7 +42,7 @@ date_default_timezone_set("America/Matamoros");
                    $ganancia_ene = 0;
                } 
 
-               $ganancia_mes_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE MONTH(Fecha) = ? AND YEAR(Fecha) = ? AND id_Sucursal = ? AND estatus <> ?");
+               $ganancia_mes_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE MONTH(Fecha) = ? AND YEAR(Fecha) = ? AND id_sucursal = ? AND estatus <> ?");
                $ganancia_mes_sql->bind_param('ssss', $febrero, $año, $suc, $estatus);
                $ganancia_mes_sql->execute();
                $ganancia_mes_sql->bind_result($ganancia_feb);
@@ -53,7 +53,7 @@ date_default_timezone_set("America/Matamoros");
                    $ganancia_feb = 0;
                } 
 
-               $ganancia_mes_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE MONTH(Fecha) = ? AND YEAR(Fecha) = ? AND id_Sucursal = ? AND estatus <> ?");
+               $ganancia_mes_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE MONTH(Fecha) = ? AND YEAR(Fecha) = ? AND id_sucursal = ? AND estatus <> ?");
                $ganancia_mes_sql->bind_param('ssss', $marzo, $año, $suc, $estatus);
                $ganancia_mes_sql->execute();
                $ganancia_mes_sql->bind_result($ganancia_mar);
@@ -64,7 +64,7 @@ date_default_timezone_set("America/Matamoros");
                    $ganancia_mar = 0;
                } 
 
-               $ganancia_mes_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE MONTH(Fecha) = ? AND YEAR(Fecha) = ? AND id_Sucursal = ? AND estatus <> ?");
+               $ganancia_mes_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE MONTH(Fecha) = ? AND YEAR(Fecha) = ? AND id_sucursal = ? AND estatus <> ?");
                $ganancia_mes_sql->bind_param('ssss', $abril, $año, $suc, $estatus);
                $ganancia_mes_sql->execute();
                $ganancia_mes_sql->bind_result($ganancia_abr);
@@ -75,7 +75,7 @@ date_default_timezone_set("America/Matamoros");
                    $ganancia_abr = 0;
                } 
 
-               $ganancia_mes_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE MONTH(Fecha) = ? AND YEAR(Fecha) = ? AND id_Sucursal = ? AND estatus <> ?");
+               $ganancia_mes_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE MONTH(Fecha) = ? AND YEAR(Fecha) = ? AND id_sucursal = ? AND estatus <> ?");
                $ganancia_mes_sql->bind_param('ssss', $mayo, $año, $suc, $estatus);
                $ganancia_mes_sql->execute();
                $ganancia_mes_sql->bind_result($ganancia_may);
@@ -86,7 +86,7 @@ date_default_timezone_set("America/Matamoros");
                    $ganancia_may = 0;
                } 
 
-               $ganancia_mes_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE MONTH(Fecha) = ? AND YEAR(Fecha) = ? AND id_Sucursal = ? AND estatus <> ?");
+               $ganancia_mes_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE MONTH(Fecha) = ? AND YEAR(Fecha) = ? AND id_sucursal = ? AND estatus <> ?");
                $ganancia_mes_sql->bind_param('ssss', $junio, $año, $suc, $estatus);
                $ganancia_mes_sql->execute();
                $ganancia_mes_sql->bind_result($ganancia_jun);
@@ -97,7 +97,7 @@ date_default_timezone_set("America/Matamoros");
                    $ganancia_jun = 0;
                } 
 
-               $ganancia_mes_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE MONTH(Fecha) = ? AND YEAR(Fecha) = ? AND id_Sucursal = ? AND estatus <> ?");
+               $ganancia_mes_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE MONTH(Fecha) = ? AND YEAR(Fecha) = ? AND id_sucursal = ? AND estatus <> ?");
                $ganancia_mes_sql->bind_param('ssss', $julio, $año, $suc, $estatus);
                $ganancia_mes_sql->execute();
                $ganancia_mes_sql->bind_result($ganancia_jul);
@@ -108,7 +108,7 @@ date_default_timezone_set("America/Matamoros");
                    $ganancia_jul = 0;
                } 
 
-               $ganancia_mes_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE MONTH(Fecha) = ? AND YEAR(Fecha) = ? AND id_Sucursal = ? AND estatus <> ?");
+               $ganancia_mes_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE MONTH(Fecha) = ? AND YEAR(Fecha) = ? AND id_sucursal = ? AND estatus <> ?");
                $ganancia_mes_sql->bind_param('ssss', $agosto, $año, $suc, $estatus);
                $ganancia_mes_sql->execute();
                $ganancia_mes_sql->bind_result($ganancia_ago);
@@ -119,7 +119,7 @@ date_default_timezone_set("America/Matamoros");
                    $ganancia_ago = 0;
                } 
 
-               $ganancia_mes_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE MONTH(Fecha) = ? AND YEAR(Fecha) = ? AND id_Sucursal = ? AND estatus <> ?");
+               $ganancia_mes_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE MONTH(Fecha) = ? AND YEAR(Fecha) = ? AND id_sucursal = ? AND estatus <> ?");
                $ganancia_mes_sql->bind_param('ssss', $septiembre, $año, $suc, $estatus);
                $ganancia_mes_sql->execute();
                $ganancia_mes_sql->bind_result($ganancia_sep);
@@ -130,7 +130,7 @@ date_default_timezone_set("America/Matamoros");
                    $ganancia_sep = 0;
                } 
 
-               $ganancia_mes_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE MONTH(Fecha) = ? AND YEAR(Fecha) = ? AND id_Sucursal = ? AND estatus <> ?");
+               $ganancia_mes_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE MONTH(Fecha) = ? AND YEAR(Fecha) = ? AND id_sucursal = ? AND estatus <> ?");
                $ganancia_mes_sql->bind_param('ssss', $octubre, $año, $suc, $estatus);
                $ganancia_mes_sql->execute();
                $ganancia_mes_sql->bind_result($ganancia_oct);
@@ -141,7 +141,7 @@ date_default_timezone_set("America/Matamoros");
                    $ganancia_oct = 0;
                } 
 
-               $ganancia_mes_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE MONTH(Fecha) = ? AND YEAR(Fecha) = ? AND id_Sucursal = ? AND estatus <> ?");
+               $ganancia_mes_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE MONTH(Fecha) = ? AND YEAR(Fecha) = ? AND id_sucursal = ? AND estatus <> ?");
                $ganancia_mes_sql->bind_param('ssss', $noviembre, $año, $suc, $estatus);
                $ganancia_mes_sql->execute();
                $ganancia_mes_sql->bind_result($ganancia_nov);
@@ -153,7 +153,7 @@ date_default_timezone_set("America/Matamoros");
                } 
 
 
-               $ganancia_mes_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE MONTH(Fecha) = ? AND YEAR(Fecha) = ? AND id_Sucursal = ? AND estatus <> ?");
+               $ganancia_mes_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE MONTH(Fecha) = ? AND YEAR(Fecha) = ? AND id_sucursal = ? AND estatus <> ?");
                $ganancia_mes_sql->bind_param('ssss', $diciembre, $año, $suc, $estatus);
                $ganancia_mes_sql->execute();
                $ganancia_mes_sql->bind_result($ganancia_dic);

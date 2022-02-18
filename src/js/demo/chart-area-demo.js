@@ -40,7 +40,7 @@ function graficaAreaGeneral() {
     dataType: "JSON",
     success: function (response) {
   
-      var ctx = document.getElementById("myAreaChart");
+      var ctx = document.getElementById("myAreaChart"); 
   var myLineChart = new Chart(ctx, {
     type: 'line',
     data: {
@@ -137,16 +137,18 @@ function graficaAreaGeneral() {
 graficaAreaGeneral();
 
 
-function graficaAreaPedroCardenas(){
+function graficaAreaPorSucursal(id_suc, backColor, hoverColor, sweetColor, nombreSucursal){
+
+console.log(backColor);
   $("#myAreaChart").remove();
   $("#chart-area-container").append("<canvas id='myAreaChart'></canvas>");
-  $("#titulo-graf").text("(Sucursal Pedro Cardenas)");
+  $("#titulo-graf").text("(Sucursal "+ nombreSucursal +")");
 
 // Area Chart Example
 $.ajax({
   type: "POST",
-  url: "./modelo/panel/grafica-area-pedro.php",
-  data: {"data":"data"},
+  url: "./modelo/panel/grafica-area-sucursal.php",
+  data: {"id_suc":id_suc},
   dataType: "JSON",
   success: function (response) {
 
@@ -158,11 +160,11 @@ var myLineChart = new Chart(ctx, {
     datasets: [{
       label: "Ganancias",
       lineTension: 0.3,
-      backgroundColor: "rgba(78, 115, 223, 0.05)",
-      borderColor: "rgba(78, 115, 223, 1)",
+      backgroundColor: sweetColor,//,
+      borderColor: backColor,//"rgba(78, 115, 223, 1)",
       pointRadius: 3,
-      pointBackgroundColor: "rgba(78, 115, 223, 1)",
-      pointBorderColor: "rgba(78, 115, 223, 1)",
+      pointBackgroundColor: hoverColor,//"rgba(78, 115, 223, 1)",
+      pointBorderColor: hoverColor,//"rgba(78, 115, 223, 1)",
       pointHoverRadius: 3,
       pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
       pointHoverBorderColor: "rgba(78, 115, 223, 1)",
@@ -244,7 +246,7 @@ var myLineChart = new Chart(ctx, {
 
 };
 
-function graficaAreaSendero(){
+/* function graficaAreaSendero(){
 
   $("#myAreaChart").remove();
   $("#chart-area-container").append(" <canvas id='myAreaChart'></canvas>");
@@ -350,4 +352,4 @@ function graficaAreaSendero(){
     }
   });
   
-  };
+  }; */
