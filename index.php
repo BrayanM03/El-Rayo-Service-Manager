@@ -251,10 +251,10 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
                      <!-- Page Heading -->
                      <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h3 class="h3 mb-0 text-gray-800">Bievenido al panel <?php echo $_SESSION['nombre']; ?></h3>
-                        <a href="ganancias-diarias.php" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm"><i
+                        <a href="ganancias-diarias.php?id=0&nav=ganancias_diarias" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm"><i
                                 class="fas fa-eye fa-sm text-white-50"></i> Ganancias diarias</a>
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                class="fas fa-download fa-sm text-white-50"></i> Generar reporte</a>
+                        <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                                class="fas fa-download fa-sm text-white-50"></i> Generar reporte</a> -->
                     </div>
                    
                             <!-- Content Row -->

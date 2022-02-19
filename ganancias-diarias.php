@@ -242,8 +242,39 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
                                         <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
                                             aria-labelledby="dropdownMenuLink">
                                             <div class="dropdown-header">Sucursales:</div>
-                                            <a class="dropdown-item" href="#" onclick="graficaBarPedroCardenas();">Pedro Cardenas</a>
-                                            <a class="dropdown-item" href="#" onclick="graficaBarSendero();">Sendero</a>
+                                            <?php
+                                                    
+                                                    $querySuc = "SELECT COUNT(*) FROM sucursal";
+                                                    $resp=$con->prepare($querySuc);
+                                                    $resp->execute();
+                                                    $resp->bind_result($total_suc);
+                                                    $resp->fetch();
+                                                    $resp->close();
+
+                                                    if($total_suc>0){
+                                                        $querySuc = "SELECT * FROM sucursal";
+                                                        $resp = mysqli_query($con, $querySuc);
+
+                                                        while ($row = $resp->fetch_assoc()){
+                                                            $suc_identificador = $row['id'];
+                                                            $nombre = $row['nombre'];
+
+                                                            $tarer_colores = $con->prepare("SELECT color_out, color_hover, color_sweet FROM `colores_sucursales` WHERE id_suc = ?");
+                                                            $tarer_colores->bind_param('i', $suc_identificador);
+                                                            $tarer_colores->execute();
+                                                            $tarer_colores->bind_result($background, $hover, $sweet);
+                                                            $tarer_colores->fetch();
+                                                            $tarer_colores->close();
+                                                        
+                                                         
+                                                           
+                                                            echo '<a class="dropdown-item" href="#" onclick="graficaBarPorSucursal('.$suc_identificador.', `'. $background .'`, `'. $hover .'`,  `'. $sweet .'`,  `'. $nombre .'`);">'.$nombre.'</a>';
+                                                            }
+                                                    }
+                                                
+                                                ?>
+                                            <!-- <a class="dropdown-item" href="#" onclick="graficaBarPedroCardenas();">Pedro Cardenas</a> 
+                                            <a class="dropdown-item" href="#" onclick="graficaBarSendero();">Sendero</a> -->
                                             <div class="dropdown-divider"></div>
                                             <a class="dropdown-item" href="#" onclick="graficaBarGeneral();">Fusionar</a> 
                                         </div>

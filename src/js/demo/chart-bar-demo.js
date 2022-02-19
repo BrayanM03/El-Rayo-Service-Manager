@@ -136,7 +136,7 @@ var myBarChart = new Chart(ctx, {
 
 graficaBarGeneral();
 
-function graficaBarPedroCardenas(){
+function graficaBarPorSucursal(id_suc, background, hover, sweet, ){
   $("#myBarChart").remove();
   $("#chart-bar-container").append(" <canvas id='myBarChart'></canvas>");
   $("#titulo-graf").text("(Sucursal Pedro Cardenas)");
