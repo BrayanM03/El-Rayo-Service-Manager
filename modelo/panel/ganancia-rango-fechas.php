@@ -31,33 +31,44 @@ date_default_timezone_set("America/Matamoros");
         $ganancia_rango = 0;
     } 
 
-    $suc = "Pedro";
-    $ganancia_rango_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE YEAR(Fecha) = ? AND Fecha BETWEEN ? AND ? AND estatus <> ? AND id_Sucursal =?");
+    
+
+  $querySuc = "SELECT COUNT(*) FROM sucursal";
+  $resp=$con->prepare($querySuc);
+  $resp->execute();
+  $resp->bind_result($total_suc);
+  $resp->fetch();
+  $resp->close();
+
+  if($total_suc>0){
+      $querySuc = "SELECT * FROM sucursal";
+      $resp = mysqli_query($con, $querySuc);
+
+      $ganancia_por_suc = [];
+
+      while ($row = $resp->fetch_assoc()){
+          $suc= $row['id'];
+          $nombre = $row['nombre'];
+
+          
+    $ganancia_rango_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE YEAR(Fecha) = ? AND Fecha BETWEEN ? AND ? AND estatus <> ? AND id_sucursal =?");
     $ganancia_rango_sql->bind_param('sssss', $año, $fecha_inicial, $fecha_final, $estatus, $suc);
     $ganancia_rango_sql->execute();
-    $ganancia_rango_sql->bind_result($ganancia_rango_pedro);
+    $ganancia_rango_sql->bind_result($ganancia_rango_suc);
     $ganancia_rango_sql->fetch();
     $ganancia_rango_sql->close();
 
     
-    if($ganancia_rango_pedro == null){
-      $ganancia_rango_pedro = 0;
+    if($ganancia_rango_suc == null){
+      $ganancia_rango_suc = 0;
   } 
 
-    $suc = "Sendero";
-    $ganancia_rango_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE YEAR(Fecha) = ? AND Fecha BETWEEN ? AND ? AND estatus <> ? AND id_Sucursal =?");
-    $ganancia_rango_sql->bind_param('sssss', $año, $fecha_inicial, $fecha_final, $estatus, $suc);
-    $ganancia_rango_sql->execute();
-    $ganancia_rango_sql->bind_result($ganancia_rango_sendero);
-    $ganancia_rango_sql->fetch();
-    $ganancia_rango_sql->close();
-
-    if($ganancia_rango_sendero == null){
-        $ganancia_rango_sendero = 0;
-    } 
-
+       $ganancia_por_suc[] = array("id"=>$suc, "nombre"=>$nombre, "ganancia"=>$ganancia_rango_suc);
+         
+          }
+  }
     
-    $data = array("ganancia_rango" => $ganancia_rango, "ganancia_rango_pedro" => $ganancia_rango_pedro, "ganancia_rango_sendero"=> $ganancia_rango_sendero);
+    $data = array("ganancia_rango" => $ganancia_rango, "ganancia_suc" => $ganancia_por_suc);
 
 
 if (isset($data)) {

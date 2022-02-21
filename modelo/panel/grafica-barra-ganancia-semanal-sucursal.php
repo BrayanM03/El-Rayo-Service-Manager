@@ -26,9 +26,9 @@ date_default_timezone_set("America/Matamoros");
     $Viernes= 4;
     $Sabado = 5;
     $Domingo = 6;
-    $suc = "Sendero"; 
+    $suc = $_POST["id_suc"]; 
 
-    $ganancia_lunes_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ? AND estatus <> ? AND WEEKDAY(Fecha) =? AND id_Sucursal = ?");
+    $ganancia_lunes_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ? AND estatus <> ? AND WEEKDAY(Fecha) =? AND id_sucursal = ?");
                $ganancia_lunes_sql->bind_param('sssss', $semana, $año, $estatus, $Lunes, $suc);
                $ganancia_lunes_sql->execute();
                $ganancia_lunes_sql->bind_result($ganancia_Lunes);
@@ -41,7 +41,7 @@ date_default_timezone_set("America/Matamoros");
 
 
 
-               $ganancia_martes_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ? AND estatus <> ? AND WEEKDAY(Fecha) =? AND id_Sucursal = ?");
+               $ganancia_martes_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ? AND estatus <> ? AND WEEKDAY(Fecha) =? AND id_sucursal = ?");
                $ganancia_martes_sql->bind_param('sssss', $semana, $año, $estatus, $Martes, $suc);
                $ganancia_martes_sql->execute();
                $ganancia_martes_sql->bind_result($ganancia_Martes);
@@ -54,7 +54,7 @@ date_default_timezone_set("America/Matamoros");
 
                
 
-               $ganancia_miercoles_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ? AND estatus <> ? AND WEEKDAY(Fecha) =? AND id_Sucursal = ?");
+               $ganancia_miercoles_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ? AND estatus <> ? AND WEEKDAY(Fecha) =? AND id_sucursal = ?");
                $ganancia_miercoles_sql->bind_param('sssss', $semana, $año, $estatus, $Miercoles, $suc);
                $ganancia_miercoles_sql->execute();
                $ganancia_miercoles_sql->bind_result($ganancia_Miercoles);
@@ -65,7 +65,7 @@ date_default_timezone_set("America/Matamoros");
                    $ganancia_Miercoles = 0;
                } 
 
-               $ganancia_jueves_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ? AND estatus <> ? AND WEEKDAY(Fecha) =? AND id_Sucursal = ?");
+               $ganancia_jueves_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ? AND estatus <> ? AND WEEKDAY(Fecha) =? AND id_sucursal = ?");
                $ganancia_jueves_sql->bind_param('sssss', $semana, $año, $estatus, $Jueves, $suc);
                $ganancia_jueves_sql->execute();
                $ganancia_jueves_sql->bind_result($ganancia_Jueves);
@@ -77,7 +77,7 @@ date_default_timezone_set("America/Matamoros");
                } 
 
 
-               $ganancia_viernes_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ? AND estatus <> ? AND WEEKDAY(Fecha) =? AND id_Sucursal = ?");
+               $ganancia_viernes_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ? AND estatus <> ? AND WEEKDAY(Fecha) =? AND id_sucursal = ?");
                $ganancia_viernes_sql->bind_param('sssss', $semana, $año, $estatus, $Viernes, $suc);
                $ganancia_viernes_sql->execute();
                $ganancia_viernes_sql->bind_result($ganancia_Viernes);
@@ -89,7 +89,7 @@ date_default_timezone_set("America/Matamoros");
                } 
 
 
-               $ganancia_sabado_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ? AND estatus <> ? AND WEEKDAY(Fecha) =? AND id_Sucursal = ?");
+               $ganancia_sabado_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ? AND estatus <> ? AND WEEKDAY(Fecha) =? AND id_sucursal = ?");
                $ganancia_sabado_sql->bind_param('sssss', $semana, $año, $estatus, $Sabado, $suc);
                $ganancia_sabado_sql->execute();
                $ganancia_sabado_sql->bind_result($ganancia_Sabado);
@@ -101,7 +101,7 @@ date_default_timezone_set("America/Matamoros");
                } 
 
 
-               $ganancia_domingo_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ? AND estatus <> ? AND WEEKDAY(Fecha) =? AND id_Sucursal = ?");
+               $ganancia_domingo_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ? AND estatus <> ? AND WEEKDAY(Fecha) =? AND id_sucursal = ?");
                $ganancia_domingo_sql->bind_param('sssss', $semana, $año, $estatus, $Domingo, $suc);
                $ganancia_domingo_sql->execute();
                $ganancia_domingo_sql->bind_result($ganancia_Domingo);
@@ -113,7 +113,7 @@ date_default_timezone_set("America/Matamoros");
                } 
 
                
-               $ganancia_domingo_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ? AND estatus <> ? AND id_Sucursal = ?");
+               $ganancia_domingo_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ? AND estatus <> ? AND id_sucursal = ?");
                $ganancia_domingo_sql->bind_param('ssss', $semana, $año, $estatus, $suc);
                $ganancia_domingo_sql->execute();
                $ganancia_domingo_sql->bind_result($ganancia_Semanal);
@@ -124,7 +124,7 @@ date_default_timezone_set("America/Matamoros");
                    $ganancia_Semanal = 0;
                } 
 
-               $ganancia_domingo_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ? AND estatus <> ? AND WEEKDAY(Fecha) =? AND id_Sucursal = ?");
+               $ganancia_domingo_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ? AND estatus <> ? AND WEEKDAY(Fecha) =? AND id_sucursal = ?");
                $ganancia_domingo_sql->bind_param('sssss', $semana, $año, $estatus, $hoy, $suc);
                $ganancia_domingo_sql->execute();
                $ganancia_domingo_sql->bind_result($ganancia_Hoy);
@@ -136,8 +136,26 @@ date_default_timezone_set("America/Matamoros");
                } 
 
 
-               $data = array("ganancia_lunes" => $ganancia_Lunes, "ganancia_martes" => $ganancia_Martes, "ganancia_miercoles" => $ganancia_Miercoles,
-               "ganancia_jueves" => $ganancia_Jueves, "ganancia_viernes" => $ganancia_Viernes,"ganancia_sabado" => $ganancia_Sabado, "ganancia_domingo" => $ganancia_Domingo, "ganancia_semanal" => $ganancia_Semanal, "ganancia_hoy"=> $ganancia_Hoy);
+               $tarer_colores = $con->prepare("SELECT color_out, color_hover, color_sweet FROM `colores_sucursales` WHERE id_suc = ?");
+               $tarer_colores->bind_param('i', $suc);
+               $tarer_colores->execute();
+               $tarer_colores->bind_result($background, $hover, $sweet);
+               $tarer_colores->fetch();
+               $tarer_colores->close();
+
+
+               $data = array("ganancia_lunes" => $ganancia_Lunes, 
+               "ganancia_martes" => $ganancia_Martes, 
+               "ganancia_miercoles" => $ganancia_Miercoles,
+               "ganancia_jueves" => $ganancia_Jueves, 
+               "ganancia_viernes" => $ganancia_Viernes,
+               "ganancia_sabado" => $ganancia_Sabado, 
+               "ganancia_domingo" => $ganancia_Domingo, 
+               "ganancia_semanal" => $ganancia_Semanal, 
+               "ganancia_hoy"=> $ganancia_Hoy,
+               "background"=>$background,
+               "hover"=>$hover,
+               "sweet"=>$sweet);
         
 
         if (isset($data)) {

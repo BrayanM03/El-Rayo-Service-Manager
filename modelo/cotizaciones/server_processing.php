@@ -69,7 +69,7 @@ $sql_details = array(
 
 require( '../cortes/ssp.class.php' );
 
-print_r(
+echo json_encode(
 	SSP::simple( $_GET, $sql_details, $table, $primaryKey, $columns )
 );
 

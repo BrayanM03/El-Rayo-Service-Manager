@@ -235,6 +235,6 @@ function comprobarCortes(){
 
 function resumenCorte(sucu){
 
-  window.open('./resumen-corte.php?sucursal='+ sucu);
+  window.open('./resumen-corte.php?id=0&nav=resumen_corte&sucursal='+ sucu);
 
 }

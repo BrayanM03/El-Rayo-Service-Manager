@@ -187,7 +187,7 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
                      <!-- Page Heading -->
                      <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h3 class="h3 mb-0 text-gray-800">Metrica de ganancias</h3>
-                        <a href="index.php" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm"><i
+                        <a href="index.php?id=0&nav=inicio" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm"><i
                                 class="fas fa-hand-point-left fa-sm text-white-50"></i> Volver</a>
                         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                                 class="fas fa-download fa-sm text-white-50"></i> Generar reporte</a>
@@ -314,7 +314,7 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body">
-                                    <div class="chart-pie pt-4 pb-2" id="chart-pie-container">
+                                    <div class="chart-pie pt-4" style="height:300px;" id="chart-pie-container">
                                      <!--    <canvas id="myPieChart"></canvas> -->
                                      <div class="row">
                                          <div class="col-12 col-md-5">
@@ -336,14 +336,42 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
                                              <h6>General</h6>
                                              <h4 id="result-ganancia-rango"></h4>
                                          </div>
-                                         <div class="col-12 col-md-12 ">
+
+                                         <?php
+
+                                        if($total_suc>0){
+                                            $querySuc = "SELECT * FROM sucursal";
+                                            $resp = mysqli_query($con, $querySuc);
+
+                                            while ($row = $resp->fetch_assoc()){
+                                                $suc_identificador = $row['id'];
+                                                $nombre = $row['nombre'];
+
+                                                $tarer_colores = $con->prepare("SELECT color_out, color_hover, color_sweet FROM `colores_sucursales` WHERE id_suc = ?");
+                                                $tarer_colores->bind_param('i', $suc_identificador);
+                                                $tarer_colores->execute();
+                                                $tarer_colores->bind_result($background, $hover, $sweet);
+                                                $tarer_colores->fetch();
+                                                $tarer_colores->close();
+                                            
+                                            
+                                            
+                                                echo '<div class="col-12 col-md-12" ><h6>'.$nombre.'</h6><h4 class="text-primary" id="result-ganancia-rango-'. $suc_identificador .'"></h4></div>';
+                                                }
+                                        }
+
+
+
+                                        ?>
+
+                                         <!-- <div class="col-12 col-md-12 "> 
                                              <h6>Pedro Cardenas</h6>
                                              <h4 class="text-primary" id="result-ganancia-rango-pedro"></h4>
                                          </div>
                                          <div class="col-12 col-md-12 ">
                                              <h6>Sendero</h6>
                                              <h4 class="text-success" id="result-ganancia-rango-sendero"></h4>
-                                         </div>
+                                         </div> -->
                                      </div>
                                      </div>
                                   

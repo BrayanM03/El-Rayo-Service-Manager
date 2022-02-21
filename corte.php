@@ -196,12 +196,40 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
                             <span href="" class="list-group-item d-flex justify-content-between">
                                 <b>Corte por sucursal</b><b>Ganancia hoy</b><b>Botones de accion</b> 
                             </span>
+
+                            <?php
+                                                    
+                                                    $querySuc = "SELECT COUNT(*) FROM sucursal";
+                                                    $resp=$con->prepare($querySuc);
+                                                    $resp->execute();
+                                                    $resp->bind_result($total_suc);
+                                                    $resp->fetch();
+                                                    $resp->close();
+
+                                                    if($total_suc>0){
+                                                        $querySuc = "SELECT * FROM sucursal";
+                                                        $resp = mysqli_query($con, $querySuc);
+
+                                                        while ($row = $resp->fetch_assoc()){
+                                                            $suc_identificador = $row['id'];
+                                                            $nombre = $row['nombre'];
+                                                        
+                                                         
+                                                           
+                                                            echo '<a href="#" class="list-group-item d-flex justify-content-between list-group-item-action">Sucursal '. $nombre .':  <span>$<span id="ganancia-sendero"></span></span>
+                                                            <div><div class="btn btn-primary" id="corte-btn-sendero" onclick="realizarCorte('. $suc_identificador .');">Realizar corte</div>
+                                                            <div class="btn btn-info" id="corte-btn-sendero" onclick="resumenCorte('. $suc_identificador .');">Ver </div></div></a>';
+                                                        }
+                                                    }
+                                                
+                                                ?>
+<!-- 
                             <a href="#" class="list-group-item d-flex justify-content-between list-group-item-action">Sucursal Sendero:  <span>$<span id="ganancia-sendero"></span></span>
                             <div><div class="btn btn-primary" id="corte-btn-sendero" onclick="realizarCorte('Sendero');">Realizar corte</div>
                             <div class="btn btn-info" id="corte-btn-sendero" onclick="resumenCorte('Sendero');">Ver </div></div></a>
                             <a href="#" class="list-group-item d-flex justify-content-between list-group-item-action"><span>Sucursal Pedro Cardenas:</span> <span class="mr-4">$<span id="ganancia-pedro"></span></span>
                             <div><div class="btn btn-primary" id="corte-btn-pedro" onclick="realizarCorte('Pedro');">Realizar corte</div>
-                            <div class="btn btn-info" id="corte-btn-sendero" onclick="resumenCorte('Pedro');">Ver </div></div></a>
+                            <div class="btn btn-info" id="corte-btn-sendero" onclick="resumenCorte('Pedro');">Ver </div></div></a> -->
                         </div>             
                         </div>
                     </div>

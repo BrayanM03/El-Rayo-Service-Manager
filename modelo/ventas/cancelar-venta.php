@@ -22,19 +22,13 @@ if(isset($_POST)){
     $motivo = $_POST["motivo_cancel"];
     //Conseguir susucusal
 
-    $obtenerSuc = "SELECT id_Sucursal FROM ventas WHERE id LIKE ?";
+    $obtenerSuc = "SELECT id_sucursal FROM ventas WHERE id LIKE ?";
     $stmt = $con->prepare($obtenerSuc);
     $stmt->bind_param('i', $id_venta);
     $stmt->execute();
     $stmt->bind_result($sucursal);
     $stmt->fetch(); 
     $stmt->close();
-
-    if($sucursal == "Pedro"){
-        $tabla_suc = "1";
-    }else if($sucursal == "Sendero"){
-        $tabla_suc = "2";
-    }
 
     //Obtenemos estatus de la venta
     $obtenerStatus = "SELECT estatus FROM ventas WHERE id = ?";
@@ -76,9 +70,9 @@ if(isset($_POST)){
          
 
         //Cotejamos las cantidad para luego sumarlas  
-        $obtenerStock = "SELECT Stock FROM inventario_mat$tabla_suc WHERE id_Llanta LIKE ?";
+        $obtenerStock = "SELECT Stock FROM inventario WHERE id_Llanta LIKE ? AND id_sucursal = ?";
         $stmt = $con->prepare($obtenerStock);
-        $stmt->bind_param('i', $id_llanta);
+        $stmt->bind_param('ii', $id_llanta, $sucursal);
         $stmt->execute();
         $stmt->bind_result($stock_actual);
         $stmt->fetch(); 
@@ -86,8 +80,8 @@ if(isset($_POST)){
         
         $cantidad_total = $cantidad + $stock_actual;
 
-          $editar_llanta= $con->prepare("UPDATE inventario_mat$tabla_suc SET Stock = ? WHERE id_Llanta = ?");
-          $editar_llanta->bind_param('ii', $cantidad_total, $id_llanta);
+          $editar_llanta= $con->prepare("UPDATE inventario SET Stock = ? WHERE id_Llanta = ? AND id_sucursal = ?");
+          $editar_llanta->bind_param('iii', $cantidad_total, $id_llanta, $sucursal);
           $editar_llanta->execute();
           $editar_llanta->close();
 

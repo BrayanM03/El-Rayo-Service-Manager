@@ -136,15 +136,16 @@ var myBarChart = new Chart(ctx, {
 
 graficaBarGeneral();
 
-function graficaBarPorSucursal(id_suc, background, hover, sweet, ){
+function graficaBarPorSucursal(id_suc, background, hover, sweet){
   $("#myBarChart").remove();
   $("#chart-bar-container").append(" <canvas id='myBarChart'></canvas>");
   $("#titulo-graf").text("(Sucursal Pedro Cardenas)");
+
 //Ganancia semanal
 $.ajax({
   type: "POST",
-  url: "./modelo/panel/grafica-barra-ganancia-semanal-pedro.php",
-  data: "data",
+  url: "./modelo/panel/grafica-barra-ganancia-semanal-sucursal.php",
+  data: {"id_suc": id_suc},
   dataType : "JSON",
   success: function (response) {
    ganancia_semanal = number_format(response.ganancia_semanal, 2, '.', ','); 
@@ -160,9 +161,9 @@ var myBarChart = new Chart(ctx, {
     labels: ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"],
     datasets: [{
       label: "Ganancia:",
-      backgroundColor: "#4e73df",
-      hoverBackgroundColor: "#2e59d9",
-      borderColor: "#4e73df",
+      backgroundColor: response.sweet,
+      hoverBackgroundColor: response.hover,
+      borderColor: response.background,
       data: [response.ganancia_lunes, response.ganancia_martes, response.ganancia_miercoles, response.ganancia_jueves, response.ganancia_viernes, response.ganancia_sabado, response.ganancia_domingo],
     }],
   },
@@ -243,116 +244,6 @@ var myBarChart = new Chart(ctx, {
 
 };
 
-function graficaBarSendero(){
-
-  $("#myBarChart").remove();
-  $("#chart-bar-container").append(" <canvas id='myBarChart'></canvas>");
-  $("#titulo-graf").text("(Sucursal Sendero)");
-
-  //Ganancia semanal
-  $.ajax({
-    type: "POST",
-    url: "./modelo/panel/grafica-barra-ganancia-semanal-sendero.php",
-    data: "data",
-    dataType : "JSON",
-    success: function (response) {
-     ganancia_semanal = number_format(response.ganancia_semanal, 2, '.', ','); 
-     ganancia_hoy = number_format(response.ganancia_hoy, 2, '.', ','); 
-    $("#ganancia_semana").text("$" + ganancia_semanal);
-    $("#ganancia_hoy").text("$" + ganancia_hoy);
-      
-      // Bar Chart Example
-  var ctx = document.getElementById("myBarChart");
-  var myBarChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"],
-      datasets: [{
-        label: "Ganancia:",
-        backgroundColor: "rgb(28, 200, 138)",
-        hoverBackgroundColor: "#2e59d9",
-        borderColor: "#4e73df",
-        data: [response.ganancia_lunes, response.ganancia_martes, response.ganancia_miercoles, response.ganancia_jueves, response.ganancia_viernes, response.ganancia_sabado, response.ganancia_domingo],
-      }],
-    },
-    options: {
-      maintainAspectRatio: false,
-      layout: {
-        padding: {
-          left: 10,
-          right: 25,
-          top: 25,
-          bottom: 0
-        }
-      },
-      scales: {
-        xAxes: [{
-          time: {
-            unit: 'month'
-          },
-          gridLines: {
-            display: false,
-            drawBorder: false
-          },
-          ticks: {
-            maxTicksLimit: 6
-          },
-          maxBarThickness: 25,
-        }],
-        yAxes: [{
-          ticks: {
-            min: 0,
-            
-            maxTicksLimit: 5,
-            padding: 10,
-            // Include a dollar sign in the ticks
-            callback: function(value, index, values) {
-              return '$' + number_format(value);
-            }
-          },
-          gridLines: {
-            color: "rgb(234, 236, 244)",
-            zeroLineColor: "rgb(234, 236, 244)",
-            drawBorder: false,
-            borderDash: [2],
-            zeroLineBorderDash: [2]
-          }
-        }],
-      },
-      legend: {
-        display: false
-      },
-      tooltips: {
-        titleMarginBottom: 10,
-        titleFontColor: '#6e707e',
-        titleFontSize: 14,
-        backgroundColor:"rgb(255,255,255)",
-        bodyFontColor: "#858796",
-        borderColor: '#dddfeb',
-        borderWidth: 1,
-        xPadding: 15,
-        yPadding: 15,
-        displayColors: false,
-        caretPadding: 10,
-        callbacks: {
-          label: function(tooltipItem, chart) {
-            var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-            return datasetLabel + ': $' + number_format(tooltipItem.yLabel);
-          }
-        }
-      },
-    }
-  });
-  
-  
-  
-    }
-  });
-  
-  
-  
-  };
-  
 
 
 //
@@ -386,12 +277,23 @@ function traerInfoRangoFecha(){
 
         
         ganancia_rango = number_format(response.ganancia_rango, 2, '.', ',');
+
+        ganancias_sucursales = response.ganancia_suc;
+
+        ganancias_sucursales.forEach(element => {
+          
+          console.log(element);
+          let id_sucursal = element.id;
+        $("#result-ganancia-rango-"+id_sucursal).text("$"  + element.ganancia);
+          //ganancia_rango_pedro = number_format(response.ganancia_rango_pedro, 2, '.', ',');
+
+        });/* 
         ganancia_rango_pedro = number_format(response.ganancia_rango_pedro, 2, '.', ',');
         ganancia_rango_sendero = number_format(response.ganancia_rango_sendero, 2, '.', ',');
 
         $("#result-ganancia-rango").text("$"  + ganancia_rango);
         $("#result-ganancia-rango-pedro").text("$"  + ganancia_rango_pedro);
-        $("#result-ganancia-rango-sendero").text("$"  + ganancia_rango_sendero);
+        $("#result-ganancia-rango-sendero").text("$"  + ganancia_rango_sendero); */
       }
     });
   }

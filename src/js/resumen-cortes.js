@@ -12,7 +12,7 @@ $.ajax({
     url: "./modelo/cortes/resumen-corte.php",
     data: {"sucursal": sucursal},
     dataType: "JSON",
-    success: function (response) {
+    success: function (response) { 
         
         //Ventas
               $("#venta_total").text("$"+ response.venta_total);

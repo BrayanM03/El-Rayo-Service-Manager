@@ -17,7 +17,7 @@ table = $('#ventas').DataTable({
         return '<span>RAY'+ data +'</span>';
         }},
     { title: "Fecha",          data: "fecha"          },
-    { title: "Sucursal",       data: "sucursal"       },
+    { title: "Sucursal",       data: "nombre_suc"       }, 
     { title: "Vendedor",       data: "vendedor"       },
     { title: "Cliente",        data: "cliente"        },
     { title: "ID",       data: "folio"  },

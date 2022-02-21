@@ -5,7 +5,7 @@ function MostrarCotizaciones() {
      
      "processing": true,
      "serverSide": true,
-      "ajax": './modelo/ventas/cotizaciones/server_processing.php', 
+      "ajax": './modelo/cotizaciones/server_processing.php', 
       "responsive": true,
       columns: [   
         { title: "#",              data: null    },
