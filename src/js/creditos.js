@@ -546,6 +546,7 @@ function borrarCredito(id) {
                   });
                    
 
+                
                   
                   
 
@@ -727,4 +728,16 @@ function borrarCredito(id) {
   }
 
 
-  
+  function borrarAbono(id_abono){
+    $.ajax({
+      type: "post",
+      url: "./modelo/creditos/borrar-abono.php",
+      data: {"id_abono": id_abono},
+      dataType: "JSON",
+      success: function (response) {
+
+        tabla.ajax.reload(null, false);
+
+      }
+    });
+  }

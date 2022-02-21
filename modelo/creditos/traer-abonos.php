@@ -4,6 +4,7 @@
 session_start();
 include '../conexion.php';
 $con= $conectando->conexion(); 
+date_default_timezone_set("America/Matamoros");
 
 if (!isset($_SESSION['id_usuario'])) {
     header("Location:../../login.php");
@@ -13,10 +14,29 @@ if (!$con) {
     echo "maaaaal";
 }
 
+
+$fecha = date("Y-m-d");
+$hora = date("h:i a");
+$metodo ="Sin definir";
+$usuario = $_SESSION["nombre"];
+$sucursal_user = $_SESSION["sucursal"];
+$id_sucursal = $_SESSION['id_sucursal'];
+
 if (isset($_POST)) {
 
     if (isset($_POST["id_cred"])) {
+
         $id_credito = $_POST["id_cred"];
+       /*
+        $comprobar = "SELECT COUNT(*) FROM abonos WHERE id_credito= ?";
+        $r = $con->prepare($comprobar);
+        $r->bind_param("i", $id_credito);
+        $r->execute();
+        $r->bind_result($abonos_enc);
+        $r->fetch();
+        $r->close(); */
+
+
         $query="SELECT creditos.id, creditos.id_cliente, creditos.pagado, creditos.restante, creditos.total, creditos.estatus, creditos.fecha_inicio, creditos.fecha_final, creditos.plazo, abonos.id , abonos.fecha, abonos.hora, abonos.abono, abonos.metodo_pago, abonos.usuario FROM creditos INNER JOIN abonos ON creditos.id = abonos.id_credito WHERE abonos.id_credito = $id_credito";
         $resultado = mysqli_query($con, $query);
     
@@ -56,10 +76,31 @@ if (isset($_POST)) {
                       
     }
     print_r($fila);
+    
     echo json_encode($data, JSON_UNESCAPED_UNICODE);  
     }else{
 
         $id_credito = $_POST["id_credito"];
+        
+        $comprobar = "SELECT COUNT(*) FROM abonos WHERE id_credito= ?";
+        $r = $con->prepare($comprobar);
+        $r->bind_param("i", $id_credito);
+        $r->execute();
+        $r->bind_result($abonos_enc);
+        $r->fetch();
+        $r->close();
+
+        if($abonos_enc == 0){
+            $estado = 0;
+            $nuevo_pagado = 0;
+            $metodo = "Sin definir";
+            $sql = "INSERT INTO abonos(id, id_credito, fecha, hora, abono, metodo_pago, usuario, estado, sucursal, id_sucursal) VALUES(null,?,?,?,?,?,?,?,?,?)";
+            $res = $con->prepare($sql);
+            $res->bind_param('issssssss', $id_credito, $fecha, $hora, $nuevo_pagado, $metodo, $usuario, $estado, $sucursal_user, $id_sucursal);
+            $res->execute();
+            $res->close();
+        }
+
         $query="SELECT creditos.id, creditos.id_cliente, creditos.pagado, creditos.restante, creditos.total, creditos.estatus, creditos.fecha_inicio, creditos.fecha_final, creditos.plazo, abonos.id , abonos.fecha, abonos.hora,  abonos.abono, abonos.metodo_pago, abonos.usuario, abonos.sucursal FROM creditos INNER JOIN abonos ON creditos.id = abonos.id_credito WHERE abonos.id_credito = $id_credito";
         
         $resultado = mysqli_query($con, $query);
@@ -99,7 +140,7 @@ if (isset($_POST)) {
     
                       
     }
-    print_r($fila);
+    print_r($fila); 
     echo json_encode($data, JSON_UNESCAPED_UNICODE);   
     }
 
