@@ -47,7 +47,9 @@
                       </div>
         <div class="col-md-12 form-group">
          
-            <input value="Iniciar sesión" type="submit" onclick="iniciarSesion();" id="iniciar-sesion" class="btn btn-block btn-login">
+            <div type="submit" onclick="iniciarSesion();" id="iniciar-sesion" class="btn btn-block btn-login">
+            Iniciar sesión
+            </div>
         </div>
     </div>
     <div class="row">
@@ -63,6 +65,7 @@
 
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://kit.fontawesome.com/31a28ea63e.js" crossorigin="anonymous"></script>
 <script src="src/js/iniciar-sesion.js"></script>
 </body>
 </html>

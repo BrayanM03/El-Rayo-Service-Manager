@@ -28,7 +28,7 @@ date_default_timezone_set("America/Matamoros");
 
 
 
-      $ventas_total_hoy_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ? AND estatus = ? AND WEEKDAY(Fecha) =? AND id_Sucursal =?");
+      $ventas_total_hoy_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ? AND estatus = ? AND WEEKDAY(Fecha) =? AND id_sucursal =?");
                $ventas_total_hoy_sql->bind_param('sssss', $semana, $año, $estatus, $hoy, $sucursal);
                $ventas_total_hoy_sql->execute();
                $ventas_total_hoy_sql->bind_result($venta_total);
@@ -49,7 +49,8 @@ date_default_timezone_set("America/Matamoros");
                 $ganancia_sin_definir = ganancia_meotodo_pago("Cheque", $con, $semana, $año, $tipo, $estatus, $hoy, $sucursal, $unidad);
 
                 //Obtener total de creditos realizados
-                $ganancia_domingo_sql = $con->prepare("SELECT COUNT(*) FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ? AND tipo = ? AND WEEKDAY(Fecha) = ? AND id_Sucursal =?");
+                $tipoCred = "Credito";
+                $ganancia_domingo_sql = $con->prepare("SELECT COUNT(*) FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ? AND tipo = ? AND WEEKDAY(Fecha) = ? AND id_sucursal =?");
                 $ganancia_domingo_sql->bind_param('sssss', $semana,  $año,  $tipoCred, $hoy, $sucursal);
                 $ganancia_domingo_sql->execute();
                 $ganancia_domingo_sql->bind_result($creditos_realizados);
@@ -61,7 +62,7 @@ date_default_timezone_set("America/Matamoros");
                 }
 
                  //Obtener total de ventas realizados
-                $ventas_total_hoy_sql = $con->prepare("SELECT COUNT(*) FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ? AND estatus = ? AND WEEKDAY(Fecha) =? AND id_Sucursal =?");
+                $ventas_total_hoy_sql = $con->prepare("SELECT COUNT(*) FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ? AND estatus = ? AND WEEKDAY(Fecha) =? AND id_sucursal =?");
                $ventas_total_hoy_sql->bind_param('sssss', $semana, $año, $estatus, $hoy, $sucursal);
                $ventas_total_hoy_sql->execute();
                $ventas_total_hoy_sql->bind_result($ventas_realizadas);
@@ -71,37 +72,35 @@ date_default_timezone_set("America/Matamoros");
                if($venta_total == null){
                 $venta_total = 0;
                 }
-               
+
+
+                //Consultamos la apertura de datos
+                $traer_apertura = $con->prepare("SELECT apertura FROM sucursal WHERE id =?");
+                $traer_apertura->bind_param('i',$sucursal);
+                $traer_apertura->execute();
+                $traer_apertura->bind_result($apertura);
+                $traer_apertura->fetch();
+                $traer_apertura->close();
+               $apertura = floatval($apertura);
             
                 //Insertamos la informacion en la tabla de historial de cortes
-                $query = "INSERT INTO cortes (id, usuario, id_sucursal, fecha, hora, total_venta, total_ganancia, ganancia_transferencia, ganancia_efectivo, ganancia_tarjeta, ganancia_cheque, ganancia_sin_definir, creditos_realizados, ventas_realizadas) VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                $query = "INSERT INTO cortes (id, usuario, id_sucursal, fecha, hora, total_venta, total_ganancia, ganancia_transferencia, ganancia_efectivo, ganancia_tarjeta, ganancia_cheque, ganancia_sin_definir, creditos_realizados, ventas_realizadas, apertura) VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                 $resultado = $con->prepare($query);
-                $resultado->bind_param('sssssssssssss', $id_usuario, $sucursal, $fecha, $hora, $venta_total, $ganancia_total, $ganancia_transferencia, $ganancia_efectivo, $ganancia_tarjeta, $ganancia_cheque, $ganancia_sin_definir, $creditos_realizados, $ventas_realizadas);
+                $resultado->bind_param('sssssssssssssd', $id_usuario, $sucursal, $fecha, $hora, $venta_total, $ganancia_total, $ganancia_transferencia, $ganancia_efectivo, $ganancia_tarjeta, $ganancia_cheque, $ganancia_sin_definir, $creditos_realizados, $ventas_realizadas, $apertura);
                 $resultado->execute();
                 $resultado->close(); 
 
-                switch ($sucursal) {
-                    case 'Pedro':
-                       $id_sucursal = 1;
-                        break;
-                    
-                        case 'Sendero':
-                            $id_sucursal = 2;
-                             break;
-                    default:
-                        # code...
-                        break;
-                }
+               
 
                 $query = "UPDATE sucursal SET corte = 1 WHERE id =?";
                 $resultado = $con->prepare($query);
-                $resultado->bind_param('s', $id_sucursal);
+                $resultado->bind_param('s', $sucursal);
                 $resultado->execute();
                 $resultado->close(); 
 
                 $query = "UPDATE sucursal SET apertura = 0 WHERE id =?";
                 $resultado = $con->prepare($query);
-                $resultado->bind_param('s', $id_sucursal);
+                $resultado->bind_param('s', $sucursal);
                 $resultado->execute();
                 $resultado->close(); 
                 
@@ -112,7 +111,7 @@ date_default_timezone_set("America/Matamoros");
                 echo json_encode($data, JSON_UNESCAPED_UNICODE);  */
     
 
-  }
+  }//puto
 
 
   //Funciones para calcular la ganancia
@@ -121,7 +120,7 @@ date_default_timezone_set("America/Matamoros");
       
     
 
-    $traer_id = $con->prepare("SELECT id FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ? AND tipo = ? AND estatus = ? AND WEEKDAY(Fecha) =? AND id_Sucursal =?");
+    $traer_id = $con->prepare("SELECT id FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ? AND tipo = ? AND estatus = ? AND WEEKDAY(Fecha) =? AND id_sucursal =?");
     $traer_id->bind_param('ssssss', $semana, $año, $tipo, $estatus, $hoy, $sucursal);
     $traer_id->execute();
     $resultado = $traer_id->get_result();
@@ -182,7 +181,7 @@ date_default_timezone_set("America/Matamoros");
       
   
 
-    $traer_id = $con->prepare("SELECT id FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ? AND tipo = ? AND estatus = ? AND WEEKDAY(Fecha) =? AND id_Sucursal =? AND metodo_pago = ?");
+    $traer_id = $con->prepare("SELECT id FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ? AND tipo = ? AND estatus = ? AND WEEKDAY(Fecha) =? AND id_sucursal =? AND metodo_pago = ?");
     $traer_id->bind_param('sssssss', $semana, $año, $tipo, $estatus, $hoy, $sucursal, $metodo);
     $traer_id->execute();
     $resultado = $traer_id->get_result();
@@ -237,7 +236,7 @@ date_default_timezone_set("America/Matamoros");
     $traer_id->close();
 
     $venta_total_metodo =0;
-    $ventas_total_hoy_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ? AND estatus = ? AND WEEKDAY(Fecha) =? AND id_Sucursal =?  AND metodo_pago = ?");
+    $ventas_total_hoy_sql = $con->prepare("SELECT SUM(Total) FROM `ventas` WHERE WEEK(Fecha) = ? AND YEAR(Fecha) = ? AND estatus = ? AND WEEKDAY(Fecha) =? AND id_sucursal =?  AND metodo_pago = ?");
     $ventas_total_hoy_sql->bind_param('ssssss', $semana, $año, $estatus, $hoy, $sucursal, $metodo);
     $ventas_total_hoy_sql->execute();
     $ventas_total_hoy_sql->bind_result($venta_total_metodo);

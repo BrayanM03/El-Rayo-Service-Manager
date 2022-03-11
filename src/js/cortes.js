@@ -2,15 +2,31 @@
 
 $.ajax({
     type: "POST",
-    url: "./modelo/cortes/ventas-sucursal-hoy.php",
-    data: "data",
+    url: "./modelo/cortes/ganancias_hoy.php",
+    data: "data", 
     dataType: "JSON",
     success: function (response) {
-      $("#ganancia-sendero").text(response.ganancia_sendero);
-      $("#ganancia-pedro").text(response.ganancia_pedro); 
+      response.forEach(element => {
+        let id_sucursal = element.id;
+        let venta = element.venta_hoy;
+        let ganancia = element.ganancia_hoy;
+
+        venta = round(venta);
+        ganancia = round(ganancia);
+       
+        $("#ventas_"+id_sucursal).text(venta);
+        $("#ganancia_"+id_sucursal).text(ganancia);;
+        
+      });
      
     }
 }); 
+
+function round(num) {
+  var m = Number((Math.abs(num) * 100).toPrecision(15));
+  return Math.round(m) / 100 * Math.sign(num);
+}
+
 
 comprobarCortes();
 
@@ -37,7 +53,7 @@ function realizarCorte(id_sucursal){
               cancelButtonColor:'#ff764d',
               focusConfirm: false,
               iconColor : "#36b9cc",
-              html:'Realiza una apertura de sucursal para inciar el corte.',
+              html:'Realiza una apertura de sucursal para iniciar el corte.',
               }).then((result)=>{
                 if (result.isConfirmed) {
                   
@@ -76,24 +92,12 @@ function realizarCorte(id_sucursal){
                                         focusConfirm: false,
                                         iconColor : "#36b9cc",
                                         html:'<span>La apertura se realizo con exito.</span>',
-                                        })
-                                  
+                                        });
+
+                                       
+                               $("#btn_estatus_corte_"+id_sucursal).removeClass().addClass("btn btn-primary m-1").empty().append("Realizar corte");
 
 
-                                  switch (id_sucursal) {
-                                    case "Pedro":
-                                      $("#corte-btn-pedro").removeClass("btn-success");
-                                      $("#corte-btn-pedro").addClass("btn-primary").text("Realizar corte");
-                                      break;
-        
-                                      case "Sendero":
-                                        $("#corte-btn-sendero").removeClass("btn-success");
-                                        $("#corte-btn-sendero").addClass("btn-primary").text("Realizar corte");
-                                        break;
-                                  
-                                    default:
-                                      break;
-                                  }
                                 }
                               }
                             });
@@ -114,7 +118,7 @@ function realizarCorte(id_sucursal){
               cancelButtonColor:'#ff764d',
               focusConfirm: false,
               iconColor : "#36b9cc",
-              html:'<div class="m-auto"><label>El corte establecera en $0.00 la apertura de las cajas</label></div>',
+              html:'<div class="m-auto"><label>El corte se guardara en el historial de cortes</label></div>',
               }).then((result) => { 
                 if (result.isConfirmed) {
                   $.ajax({
@@ -139,38 +143,17 @@ function realizarCorte(id_sucursal){
                               html:'<span>El corte se realizó con exito, todo en orden</span>',
                               }).then((resultado) => { 
                       
-                              if (resultado.isConfirmed || resultado.isDenied) {
-                                switch (id_sucursal) {
-                                  case "Pedro":
-                                    $("#corte-btn-pedro").removeClass("btn-primary");
-                                    $("#corte-btn-pedro").addClass("btn-success").text("Realizado");
-                                    break;
-      
-                                    case "Sendero":
-                                      $("#corte-btn-sendero").removeClass("btn-primary");
-                                      $("#corte-btn-sendero").addClass("btn-success").text("Realizado");
-                                      break;
+                              if (resultado.isConfirmed) {
                                 
-                                  default:
-                                    break;
-                                }
-                                
+                                $("#btn_estatus_corte_"+id_sucursal).removeClass().addClass("btn btn-success m-1").empty().append("Realizado");
+                                window.location.href = `resumen-corte.php?id=0&nav=resumen_corte&sucursal=${id_sucursal}`;
+
+                              }else if(resultado.isDenied){
+                                $("#btn_estatus_corte_"+id_sucursal).removeClass().addClass("btn btn-success m-1").empty().append("Realizado");
+                               
                               }else{
-      
-                                switch (id_sucursal) {
-                                  case "Pedro":
-                                    $("#corte-btn-pedro").removeClass("btn-primary");
-                                    $("#corte-btn-pedro").addClass("btn-success").text("Realizado");
-                                    break;
-      
-                                    case "Sendero":
-                                      $("#corte-btn-sendero").removeClass("btn-primary");
-                                      $("#corte-btn-sendero").addClass("btn-success").text("Realizado");
-                                      break;
                                 
-                                  default:
-                                    break;
-                                }
+                                $("#btn_estatus_corte_"+id_sucursal).removeClass().addClass("btn btn-success m-1").empty().append("Realizado");
                                 
                               }
                            
@@ -209,22 +192,13 @@ function comprobarCortes(){
            id = Element.id;
            corte = Element.corte;
 
-           if (id ==1) {
-             if (corte ==1) {
-            $("#corte-btn-pedro").removeClass("btn-primary");
-            $("#corte-btn-pedro").addClass("btn-success");
-            $("#corte-btn-pedro").text("Realizado");
-            
-             }
-           }else if(id = 2){
-             if (corte == 1) {
-               
-            $("#corte-btn-sendero").removeClass("btn-primary");
-            $("#corte-btn-sendero").addClass("btn-success");
-            $("#corte-btn-sendero").text("Realizado");
-               
-             }
+           console.log("Suc " + id + " corte: " + corte);
+           if(corte == 2){
+            $("#btn_estatus_corte_"+id).removeClass().addClass("btn btn-primary m-1").empty().append("Realizar corte");
+           }else{
+           $("#btn_estatus_corte_"+id).removeClass().addClass("btn btn-success m-1").empty().append("Realizado");
            }
+           
         });
 
     }

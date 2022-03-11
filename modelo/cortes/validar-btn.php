@@ -9,28 +9,16 @@ if (!isset($_SESSION['id_usuario'])) {
 
 $sucursal = $_POST["sucursal"];
 
-switch ($sucursal) {
-    case 'Pedro':
-        $id_sucursal = 1;
-        break;
-    
-        case 'Sendero':
-            $id_sucursal = 2;
-            break;
-        
-    default:
-        # code...
-        break;
-}
-
 $comprobar = $con->prepare("SELECT corte FROM `sucursal` WHERE id =?");
-               $comprobar->bind_param('s', $id_sucursal);
+               $comprobar->bind_param('s', $sucursal);
                $comprobar->execute();
                $comprobar->bind_result($valor_cort);
                $comprobar->fetch();
                $comprobar->close();
 
-               print_r($valor_cort);
+               
+               echo $valor_cort;
+               
             
 
 ?>

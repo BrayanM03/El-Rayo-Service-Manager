@@ -13,27 +13,42 @@ $.ajax({
     data: {"sucursal": sucursal},
     dataType: "JSON",
     success: function (response) { 
+
+        r_venta_total = round(response.venta_total);
+        r_venta_total_efectivo = round(response.venta_total_efectivo);
+        r_venta_total_tarjeta = round(response.venta_total_tarjeta);
+        r_venta_total_cheque = round(response.venta_total_cheque);
+        r_venta_total_transferencia = round(response.venta_total_transferencia);
+        r_venta_total_sin_definir = round(response.venta_total_sin_definir);
+
+        r_ganancia_total = round(response.ganancia_total);
+        r_ganancia_efectivo = round(response.ganancia_efectivo);
+        r_ganancia_tarjeta = round(response.ganancia_tarjeta);
+        r_ganancia_cheque = round(response.ganancia_cheque);
+        r_ganancia_transferencia = round(response.ganancia_transferencia);
+        r_ganancia_sin_definir = round(response.ganancia_sin_definir);
+
         
         //Ventas
-              $("#venta_total").text("$"+ response.venta_total);
-              $("#venta_efectivo").text("$"+ response.venta_total_efectivo);
-              $("#venta_tarjeta").text("$"+ response.venta_total_tarjeta);
-           $("#venta_cheque").text("$"+ response.venta_total_cheque);
-            $("#venta_transferencia").text("$"+ response.venta_total_transferencia);
-              $("#venta_sin_definir").text("$"+ response.venta_total_sin_definir);
+              $("#venta_total").text("$"+ r_venta_total);
+              $("#venta_efectivo").text("$"+ r_venta_total_efectivo);
+              $("#venta_tarjeta").text("$"+ r_venta_total_tarjeta);
+           $("#venta_cheque").text("$"+ r_venta_total_cheque);
+            $("#venta_transferencia").text("$"+ r_venta_total_transferencia);
+              $("#venta_sin_definir").text("$"+ r_venta_total_sin_definir);
            $("#ventas_realizadas").text(response.numero_ventas);
 
            //Ganancia
-            $("#ganancia_dia").text("$"+ response.ganancia_total);
-         $("#ganancia_efectivo").text("$"+ response.ganancia_efectivo);
-             $("#ganancia_tarjeta").text("$"+ response.ganancia_tarjeta);
-          $("#ganancia_cheque").text("$"+ response.ganancia_cheque);
-           $("#ganancia_transferencia").text("$"+ response.ganancia_transferencia);
-             $("#ganancia_sin_definir").text("$"+ response.ganancia_sin_definir);
+            $("#ganancia_dia").text("$"+ r_ganancia_total);
+         $("#ganancia_efectivo").text("$"+ r_ganancia_efectivo);
+             $("#ganancia_tarjeta").text("$"+ r_ganancia_tarjeta);
+          $("#ganancia_cheque").text("$"+ r_ganancia_cheque);
+           $("#ganancia_transferencia").text("$"+ r_ganancia_transferencia);
+             $("#ganancia_sin_definir").text("$"+ r_ganancia_sin_definir);
 
             //Creditos
 
-            $("#creditos_realizados").text(  response.creditos_realizados);
+            $("#creditos_realizados").text( response.creditos_realizados);
             $("#creditos_pagados").text(response.creditos_pagados);
             $("#abonos_realizados").text(response.abonos_realizados);
 
@@ -46,3 +61,9 @@ $.ajax({
 
     }
 });
+
+
+function round(num) {
+    var m = Number((Math.abs(num) * 100).toPrecision(15));
+    return Math.round(m) / 100 * Math.sign(num);
+  }

@@ -1,6 +1,10 @@
 
     function iniciarSesion(){
 
+        $("#iniciar-sesion").empty().append(`
+        <i class="fa-solid fa-spinner fa-spin"></i> Iniciando sesión
+        `);
+
         event.preventDefault();
 
         user = $("#user").val();
@@ -38,6 +42,10 @@
                         label.html("<i class='fas fa-exclamation-circle'></i> Contraseña incorrecta")
                         alerta = $("#mensaje-sesion");
                         alerta.removeClass("hidden");
+
+                        $("#iniciar-sesion").empty().append(`
+                        Iniciar sesión
+                        `);
                         
                     }else if(response == 1){
                         window.location = "./index.php?id=0&nav=inicio";;
@@ -52,6 +60,10 @@
                         alerta = $("#mensaje-sesion");
                         alerta.removeClass("hidden");
                     }
+
+                    $("#iniciar-sesion").empty().append(`
+                        Iniciar sesión
+                        `);
                 }
             });
 

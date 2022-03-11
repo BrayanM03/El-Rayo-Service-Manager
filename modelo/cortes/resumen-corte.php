@@ -23,7 +23,7 @@ date_default_timezone_set("America/Matamoros");
   $unidad = "pieza";
 
   $id_usuario = $_SESSION['id_usuario'];
-
+ 
   if($_POST){
 
     //Obtener ganancia 

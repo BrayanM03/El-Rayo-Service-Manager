@@ -190,11 +190,25 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
                 </div>  
                 <div class="row mt-5">
                     <div class="col-12">
-                        <div class="col-12 col-md-6" style="margin:auto;">
+                        <div class="col-12 col-md-10" style="margin:auto;">
                         <div class="btn btn-warning">Cerrar todo</div>
                         <div class="list-group mt-3 col-12">
-                            <span href="" class="list-group-item d-flex justify-content-between">
-                                <b>Corte por sucursal</b><b>Ganancia hoy</b><b>Botones de accion</b> 
+                            <span href="" class="list-group-item">
+                                <div class="row">
+                                    <div class="col-12 col-md-3">
+                                      <b>Sucursal</b>
+                                    </div>
+                                    <div class="col-12 col-md-3">
+                                      <b>Ventas hoy</b>
+                                    </div>
+                                    <div class="col-12 col-md-3">
+                                      <b>Ganancia hoy</b>
+                                    </div>
+                                    <div class="col-12 col-md-3">
+                                      <b>Botones de accion</b> 
+                                    </div>
+                                </div>
+                                
                             </span>
 
                             <?php
@@ -216,9 +230,22 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
                                                         
                                                          
                                                            
-                                                            echo '<a href="#" class="list-group-item d-flex justify-content-between list-group-item-action">Sucursal '. $nombre .':  <span>$<span id="ganancia-sendero"></span></span>
-                                                            <div><div class="btn btn-primary" id="corte-btn-sendero" onclick="realizarCorte('. $suc_identificador .');">Realizar corte</div>
-                                                            <div class="btn btn-info" id="corte-btn-sendero" onclick="resumenCorte('. $suc_identificador .');">Ver </div></div></a>';
+                                                            echo '<a href="#" class="list-group-item list-group-item-action">'.
+                                                                    '<div class="row">'.
+                                                                        '<div class="col-12 col-md-3">'.
+                                                                            'Sucursal '. $nombre    .             
+                                                                        '</div>'.
+                                                                        '<div class="col-12 col-md-3">'.
+                                                                            '<span>$<span id="ventas_'.$suc_identificador.'"></span></span>'.            
+                                                                        '</div>'.
+                                                                        '<div class="col-12 col-md-3">'.
+                                                                            '<span>$<span id="ganancia_'.$suc_identificador.'"></span></span>'.                 
+                                                                        '</div>'.
+                                                                        '<div class="col-12 col-md-3">'.
+                                                                           '<div class="btn btn-primary mr-2" id="btn_estatus_corte_'. $suc_identificador.'" onclick="realizarCorte('. $suc_identificador .');">Realizar corte</div>'.  
+                                                                           '<div class="btn btn-info" onclick="resumenCorte('. $suc_identificador .');">Ver </div>'  .         
+                                                                        '</div>'.
+                                                                    '</div></a>';
                                                         }
                                                     }
                                                 
