@@ -88,8 +88,8 @@ global $fecha_final;
 global $plazo;
 
 $formatterES = new NumberFormatter("es-ES", NumberFormatter::SPELLOUT);
-$izquierda = intval(floor($total));
-$derecha = intval(($total - floor($total)) * 100);
+$izquierda = intval(floor($abono_recibido));
+$derecha = intval(($abono_recibido - floor($abono_recibido)) * 100);
 $formatTotalminus = $formatterES->format($izquierda) . " y " . $derecha . "/100 m.n";
 $formatTotal = strtoupper($formatTotalminus);
 // ciento veintitrés coma cuarenta y cinco
@@ -309,7 +309,7 @@ function Header()
     $this->Ln(15);
     $this->SetFont('Arial','B',10);
     //$this->Cell(30,10,"'",0,0, 'C');
-    $this->Cell(101,10,"Llantas y Servicios 'EL Rayo'",0,0, 'L');
+    $this->Cell(108.3,10,"Llantas y Servicios 'EL Rayo'",0,0, 'L');
     $this->SetFont('Exo2-Bold','B',12);
     $this->Cell(60,10,utf8_decode('Reporte de abono'),0,0,'C');
     $this->Ln(5);
@@ -555,7 +555,8 @@ function cuerpoTabla(){
         $resultado = $detalle->get_result(); 
         $detalle->close(); 
 
-        $ejeY = 85;
+        $pdf->SetFillColor(255,255,255);
+        $ejeY = 114.7;
         $k=1;
 
         while($fila = $resultadoServ->fetch_assoc()) {
@@ -569,39 +570,39 @@ function cuerpoTabla(){
             $caracteres = mb_strlen($descripcion);
             
             if ($caracteres < 25) {
-                $pdf->Cell(10,10,$cantidad,0,0,'C',1);
-                $pdf->MultiCell(62,10, utf8_decode($descripcion.' h' . $caracteres),0,'L',1); //$descripcion
+                $pdf->Cell(19,10,$cantidad,0,0,'C',1);
+                $pdf->MultiCell(48,10, utf8_decode($descripcion),0,0,'L',1); //$descripcion
                 $pdf->SetY($ejeY);
-                $ejeY = $ejeY + 15;
-                $pdf->SetX(82);
-                $pdf->Cell(40,10, utf8_decode($modelo),0,0,'C',1);
-                $pdf->Cell(20,10, utf8_decode($marca),0,0,'C',1);
-                $pdf->Cell(30,10,utf8_decode($precio_unitario),0,0, 'C',1);
-                $pdf->Cell(30,10,utf8_decode($importe),0,0, 'C',1);
+                $ejeY = $ejeY + 13;
+                $pdf->SetX(77);
+                $pdf->Cell(41,10, utf8_decode($modelo),0,0,'L',1);
+                $pdf->Cell(28,10, utf8_decode($marca),0,0,'L',1);
+                $pdf->Cell(23,10,utf8_decode($precio_unitario),0,0, 'L',1);
+                $pdf->Cell(30,10,utf8_decode($importe),0,0, 'L',1);
                 $pdf->Ln(15);
           
             }else if ($caracteres > 25 && $caracteres < 45) {
-                $pdf->Cell(14,10,$cantidad,0,0,'C',1);
-                $pdf->MultiCell(58,5, utf8_decode($descripcion.' h' . $caracteres),0,'L',1);
+                $pdf->Cell(19,10,$cantidad,0,0,'C',1);
+                $pdf->MultiCell(58,5, utf8_decode($descripcion),0,'L',1);
                 $pdf->SetY($ejeY);
                 $ejeY = $ejeY + 15;
-                $pdf->SetX(82);
-                $pdf->Cell(40,10, utf8_decode($modelo),0,0,'C',1);
-                $pdf->Cell(20,10, utf8_decode($marca),0,0,'C',1);
-                $pdf->Cell(30,10,utf8_decode($precio_unitario),0,0, 'C',1);
-                $pdf->Cell(30,10,utf8_decode($importe),0,0, 'C',1);
+                $pdf->SetX(77);
+                $pdf->Cell(41,10, utf8_decode($modelo),0,0,'L',1);
+                $pdf->Cell(28,10, utf8_decode($marca),0,0,'L',1);
+                $pdf->Cell(23,10,utf8_decode($precio_unitario),0,0, 'L',1);
+                $pdf->Cell(30,10,utf8_decode($importe),0,0, 'L',1);
                 $pdf->Ln(15);
           
             }else{
-                $pdf->Cell(14,12,$cantidad,0,0,'C',1);
+                $pdf->Cell(19,12,$cantidad,0,0,'C',1);
                 $pdf->MultiCell(58,6, utf8_decode($descripcion),0,'L',1);
                 $pdf->SetY($ejeY);
                 $ejeY = $ejeY + 15;
-                $pdf->SetX(82);
-                $pdf->Cell(40,12, utf8_decode($modelo),0,0,'C',1);
-                $pdf->Cell(20,12, utf8_decode($marca),0,0,'C',1);
-                $pdf->Cell(30,12,utf8_decode($precio_unitario),0,0, 'C',1);
-                $pdf->Cell(30,12,utf8_decode($importe),0,0, 'C',1);
+                $pdf->SetX(77);
+                $pdf->Cell(41,12, utf8_decode($modelo),0,0,'C',1);
+                $pdf->Cell(28,12, utf8_decode($marca),0,0,'C',1);
+                $pdf->Cell(23,12,utf8_decode($precio_unitario),0,0, 'C',1);
+                $pdf->Cell(30,12,utf8_decode($importe),0,0, 'L',1);
                 $pdf->Ln(15);
             }
     
@@ -657,38 +658,40 @@ function cuerpoTabla(){
             $caracteres = mb_strlen($descripcion);
             
             if ($caracteres < 25) {
-                $pdf->Cell(10,10,$cantidad,0,0,'C',1);
-                $pdf->MultiCell(58,5, utf8_decode($descripcion),1,'L',1); //$descripcion
+              
+                $pdf->Cell(19,10,$cantidad,0,0,'C',1);
+                $pdf->MultiCell(48,5, utf8_decode($descripcion),0,1,'L',1); //$descripcion
                 $pdf->SetY($ejeY);
                 $ejeY = $ejeY + 15;
-                $pdf->SetX(82);
-                $pdf->Cell(40,10, utf8_decode($modelo),0,0,'C',1);
-                $pdf->Cell(20,10, utf8_decode($marca),0,0,'C',1);
-                $pdf->Cell(30,10,utf8_decode($precio_unitario),0,0, 'C',1);
+                $pdf->SetX(77);
+                $pdf->Cell(41,10, utf8_decode($modelo),0,0,'C',1);
+                $pdf->Cell(28,10, utf8_decode($marca),0,0,'C',1);
+                $pdf->Cell(23,10,utf8_decode($precio_unitario),0,0, 'C',1);
                 $pdf->Cell(30,10,utf8_decode($importe),0,0, 'C',1);
                 $pdf->Ln(15);
           
             }else if ($caracteres > 25 && $caracteres < 45) {
-                $pdf->Cell(14,10,$cantidad,0,0,'C',1);
-                $pdf->MultiCell(58,5, utf8_decode($descripcion),0,'L',1);
+                
+                $pdf->Cell(19,10,$cantidad,0,0,'C',1);
+                $pdf->MultiCell(48,5, utf8_decode($descripcion),0,0,'L',1);
                 $pdf->SetY($ejeY);
                 $ejeY = $ejeY + 15;
-                $pdf->SetX(82);
-                $pdf->Cell(40,10, utf8_decode($modelo),0,0,'C',1);
-                $pdf->Cell(20,10, utf8_decode($marca),0,0,'C',1);
-                $pdf->Cell(30,10,utf8_decode($precio_unitario),0,0, 'C',1);
-                $pdf->Cell(30,10,utf8_decode($importe),0,0, 'C',1);
+                $pdf->SetX(77);
+                $pdf->Cell(41,10, utf8_decode($modelo),0,0,'L',1);
+                $pdf->Cell(28,10, utf8_decode($marca),0,0,'L',1);
+                $pdf->Cell(23,10,utf8_decode($precio_unitario),0,0, 'L',1);
+                $pdf->Cell(30,10,utf8_decode($importe),0,0, 'L',1);
                 $pdf->Ln(15);
           
             }else{
-                $pdf->Cell(14,12,$cantidad,0,0,'C',1);
+                $pdf->Cell(19,12,$cantidad,0,0,'C',1);
                 $pdf->MultiCell(58,6, utf8_decode($descripcion),0,'L',1);
                 $pdf->SetY($ejeY);
                 $ejeY = $ejeY + 15;
-                $pdf->SetX(82);
-                $pdf->Cell(40,12, utf8_decode($marca),0,0,'C',1);
-                $pdf->Cell(20,12, utf8_decode($marca),0,0,'C',1);
-                $pdf->Cell(30,12,utf8_decode($precio_unitario),0,0, 'C',1);
+                $pdf->SetX(77);
+                $pdf->Cell(41,12, utf8_decode($marca),0,0,'C',1);
+                $pdf->Cell(28,12, utf8_decode($marca),0,0,'C',1);
+                $pdf->Cell(23,12,utf8_decode($precio_unitario),0,0, 'C',1);
                 $pdf->Cell(30,12,utf8_decode($importe),0,0, 'C',1);
                 $pdf->Ln(15);
             }
@@ -735,7 +738,12 @@ function cuerpoTabla(){
 
 
 /*CAMBIOSSSSSSSSSSSSSSSSS */
-       
+    $pdf->SetDrawColor(218, 223, 230);
+    $nueva_altura = $ejeY - 100.6;
+    $pdf->RoundedRect(9.9, 113, 188, $nueva_altura, 2, '34', '');
+    $pdf->SetDrawColor(253, 144, 138);
+    $pdf->SetLineWidth(0.5);
+    $pdf->Line(10,113,198,113);
         
     }
 
@@ -766,29 +774,41 @@ function cuerpoTabla(){
             # code...
             break;
     }
+
+    $pdf->SetFont('Arial','',11);
+    $pdf->Cell(29,6,"Plazo",0,0,'C',1);
+    $pdf->Cell(49,6,"Fecha inicio" ,0,0,'C',1);
+    $pdf->Cell(50,6,"Fecha vencimiento" ,0,0,'C',1);
+    $pdf->Ln(6);
     $pdf->SetFont('Courier','',12);
     $pdf->Cell(29,6,$plazos,0,0,'C',1);
     $pdf->Cell(49,6,$GLOBALS["fecha_inicio"] ,0,0,'C',1);
     $pdf->Cell(50,6,$GLOBALS["fecha_final"] ,0,0,'C',1);
    
   
-    $pdf->Ln(10);
+    $pdf->Ln(15);
+    $pdf->SetFont('Exo2-Bold','B',11);
+    $pdf->Cell(50,6,"Abono con letra:",0,0,'L',1);
+    $pdf->Ln(7);
+    $pdf->SetFont('Courier','B',11);
+    $pdf->Cell(150,6,$GLOBALS["formatTotal"],0,0,'L',1);
+    $pdf->Ln(15);
 
     $pdf->SetFont('Exo2-Bold','B',12);
     //Subtotal
     $pdf->Cell(132,6,'Condiciones y comentarios',0,0);
     $pdf->SetFont('Exo2-Bold','B',10);
-   /*  $pdf->Cell(30,6,'Total',0,0, 'R');
-    $pdf->SetTextColor(1, 1, 1);
-    $pdf->SetFont('Arial','',10);
-    $pdf->Cell(10,6,"$",0,0, 'L',1);
-    $total = number_format($GLOBALS["total"],2);
-    $pdf->Cell(15,6,$total,0,0, 'R',1); */
+  
     $pdf->Ln(6.5);
     $pdf->SetFont('Arial','',10);
     //Subtotal
     /* $pdf->Cell(132,6, utf8_decode($GLOBALS["comentario"]),0,0); */
+    $pdf->Ln(4.5);
     $pdf->MultiCell(70,6, utf8_decode($GLOBALS["comentario"]),0,0,'L',0);
+    $pdf->Ln(4.5);
+    $pdf->SetFont('Arial','',8);
+    $pdf->MultiCell(150,3, utf8_decode("GARANTÍA DE UN AÑO CONTRA DEFECTO DE FABRICA A PARTIR DE ESTA FECHA
+    FAVOR DE PRESENTAR ESTE COMPROBANTE DE VENTA PARA HACER VALIDO LA GARANTÍA"),0,0,'C',0);
     
     $ejeY = $ejeY +17;
     $pdf->SetY($ejeY);
@@ -832,12 +852,10 @@ function cuerpoTabla(){
     $total = number_format($GLOBALS["total"],2);
     $pdf->Cell(10,6,"$",0,0, 'L',1);
     $pdf->Cell(15,6,$total,0,0, 'R',1);
-    $pdf->Ln(6.5);
-
-    $pdf->Ln(30);
+    $pdf->Ln(58);
     $pdf->SetTextColor(1, 1, 1);
     $pdf->SetFont('Arial','',10);
-    $pdf->Cell(193,6,utf8_decode("Le envío un saludo cordial"),0,0,'C'); 
+    $pdf->Cell(193,6,utf8_decode("Recibido"),0,0,'C'); 
     $pdf->Ln(7);
     $pdf->SetFont('Arial','B',11);
     
