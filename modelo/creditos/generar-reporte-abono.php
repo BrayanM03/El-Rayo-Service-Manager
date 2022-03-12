@@ -8,14 +8,29 @@ global $con;
 
 $folio = "RAY" . $_GET["id"];
 $idVenta = $_GET["id"];
+$idCredito = $_GET["id_credito"];
+$idAbono = $_GET["id_abono"];
 global $folio;
 
 $ID = $con->prepare("SELECT ventas.Fecha, ventas.id_sucursal, ventas.id_Usuarios, clientes.Nombre_Cliente, ventas.Total,  ventas.tipo, ventas.estatus, ventas.metodo_pago, ventas.hora, ventas.comentario FROM ventas INNER JOIN clientes ON ventas.id_Cliente = clientes.id WHERE ventas.id = ?");
 $ID->bind_param('i', $idVenta);
 $ID->execute();
-$ID->bind_result($fecha, $id_sucursal, $vendedor_id, $cliente, $total, $tipo, $estatus, $metodo_pago, $hora, $comentario );
+$ID->bind_result($fecha, $sucursal, $vendedor_id, $cliente, $total, $tipo, $estatus, $metodo_pago, $hora, $comentario );
 $ID->fetch();
 $ID->close();
+
+$ab = $con->prepare("SELECT fecha, hora, abono, metodo_pago, usuario FROM abonos WHERE id=?");
+$ab->bind_param("s", $idAbono);
+$ab->execute();
+$ab->bind_result($fecha_abono, $hora_abono, $abono_recibido, $metodo_pago_abono, $usuario_abono);
+$ab->fetch();
+$ab->close();
+
+global $fecha_abono;
+global $hora_abono;
+global $metodo_pago_abono;
+global $usuario_abono;
+global $abono_recibido;
 
 $ID = $con->prepare("SELECT nombre, apellidos FROM usuarios WHERE id = ?");
 $ID->bind_param('i', $vendedor_id);
@@ -29,7 +44,7 @@ $vendedor_usuario = $vendedor_name . " " . $vendedor_apellido;
 
 //Trayendo datos de la sucursal
 $ID = $con->prepare("SELECT nombre, calle, numero, colonia, ciudad, estado, pais, Telefono, RFC, CP  FROM sucursal WHERE id = ?");
-$ID->bind_param('i', $id_sucursal);
+$ID->bind_param('i', $sucursal);
 $ID->execute();
 $ID->bind_result($sucursal, $calle_suc, $numero_suc, $colonia_suc, $ciudad_suc, $estado_suc, $pais_suc, $telefono_suc, $rfc_suc, $cp_suc);
 $ID->fetch();

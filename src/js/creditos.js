@@ -101,7 +101,7 @@ table = $('#creditos').DataTable({
       className: "celda-acciones",
       render: function (row, data) {
     
-        return '<div style="display: flex"><button onclick="traerCredito(' +row.id+ ');" type="button" class="buttonPDF btn btn-primary" style="margin-right: 8px"><span class="fa fa-eye"></span><span class="hidden-xs"></span></button><br><button type="button" onclick="borrarCredito('+ row.id +');" class="buttonBorrar btn btn-warning"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button><br><button type="button" onclick="traerPdfCredito('+ row.id_venta +');" class="btn ml-2 btn-danger"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button></div>';
+        return '<div style="display: flex"><button onclick="traerCredito(' +row.id+ ', '+ row.id_venta +');" type="button" class="buttonPDF btn btn-primary" style="margin-right: 8px"><span class="fa fa-eye"></span><span class="hidden-xs"></span></button><br><button type="button" onclick="borrarCredito('+ row.id +');" class="buttonBorrar btn btn-warning"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button><br><button type="button" onclick="traerPdfCredito('+ row.id_venta +');" class="btn ml-2 btn-danger"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button></div>';
       },
     },
   ],
@@ -197,7 +197,7 @@ function borrarCredito(id) {
   }
 
 
-  function traerCredito(id){ 
+  function traerCredito(id, id_venta){ 
 
     $.ajax({
         type: "post",
@@ -406,9 +406,11 @@ function borrarCredito(id) {
                       { title: "Accion",
                       data: null,
                       className: "celda-acciones",
-                      render: function (row, data) {
-                    
-                        return '<div style="display: flex"><button metodo="'+ row.metodo_pago +'" fecha="'+ row.fecha_abono +'" abono="'+ row.abono +'" abono_id="'+ row.abono_id +'" idrow="'+ row.id +'" type="button" class="buttonedit btn btn-primary" style="margin-right: 8px"><span class="fa fa-edit"></span><span class="hidden-xs"></span></button><br><button type="button" onclick="borrarAbono('+ row.id +');" class="buttonBorrar btn btn-danger"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
+                      render: function (row, data,index) {
+                        sort = $(".sorting_1").text();
+                    console.log(index);
+                        return '<div style="display: flex"><button metodo="'+ row.metodo_pago +'" fecha="'+ row.fecha_abono +'" abono="'+ row.abono +'" abono_id="'+ row.abono_id +'" idrow="'+ row.id +'" type="button" class="buttonedit btn btn-primary" style="margin-right: 8px"><span class="fa fa-edit"></span><span class="hidden-xs"></span></button><br><button type="button" onclick="borrarAbono('+ row.id +');" class="buttonBorrar btn btn-danger"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button>'+
+                        '<div class="btn btn-danger ml-1" onclick="pdfAbono('+ row.id +', '+ id +', '+ id_venta +')"><i class="fas fa-file-pdf"></i></div></div>';
                       },
                     }],
                       
@@ -618,11 +620,11 @@ function borrarCredito(id) {
 '<div class="form-group">'+
     '<label><b>Metodo de pago</b></label>'+
     '<select class="form-control" id="metodos_pago" name="metodo_pago">'+
-    '<option value="Efectivo">Efectivo</option>'+
-    '<option value="Tarjeta">Tarjeta</option>'+
-    '<option value="Transferencia">Transferencia</option>'+
-    '<option value="Cheque">Cheque</option>'+
-    '<option value="Sin definir">Sin definir</option>'+
+        '<option value="Efectivo">Efectivo</option>'+
+        '<option value="Tarjeta">Tarjeta</option>'+
+        '<option value="Transferencia">Transferencia</option>'+
+        '<option value="Cheque">Cheque</option>'+
+        '<option value="Sin definir">Sin definir</option>'+
     '</select>'+
     '<div class="invalid-feedback">Sobrepasaste el stock.</div>'+
 '</div>'+
@@ -740,4 +742,10 @@ function borrarCredito(id) {
 
       }
     });
+  }
+
+
+  function pdfAbono(id_abono, id_credito, id_venta){
+
+    window.open("./modelo/creditos/reporte-abono-test.php?id="+id_venta + "&id_credito="+ id_credito + "&id_abono="+ id_abono, '_blank');
   }
