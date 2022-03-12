@@ -57,6 +57,11 @@ switch ($flag) {
         $claseMovimientos = "active";
         $showMisLlantas = "show";
         break;
+        case 'cambios':
+            $claseCambios = "active";
+            $showMisLlantas = "show";
+            break;
+
         case 'clientes':
         $claseCustomer = "active";    
         $claseClientes = "active";
@@ -70,6 +75,7 @@ switch ($flag) {
         case 'token':
         $claseToken = "active";
         break;
+      
     default:
     $clase = "";
         break;
@@ -236,6 +242,9 @@ switch ($flag) {
             <img src="src/img/entrada.svg" width="18px" /> 
                 <span style="margin-left:12px;"> Movimientos</span></a>
             </a>
+            <a class="collapse-item <?php echo $claseCambios ?>" href="cambio_inventario.php?id=0&nav=cambios" style="display:flex; flex-direction: row; justify-content:start;">
+            <i class="fas fa-people-carry"></i>
+                <span style="margin-left:7px;">Mover mercancia</span> </a>
         
         </div>
     </div>

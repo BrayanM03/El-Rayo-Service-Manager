@@ -63,8 +63,10 @@ function editarStock(id, id_sucursal){
                '<div class="row">'+
                '<div class="col-12">'+
                '<div class="form-group">'+
-                    '<label>Stock</label>'+
-                    '<input type="number" id="stock-ind" class="form-control" value="'+ response.stock +'">' + 
+                    '<label>Stock actual</label>'+
+                    '<input type="number" id="stock-act" class="form-control" value="'+ response.stock +'" disabled>' +
+                    '<label>Ingresa las llantas a agregar</label>'+
+                    '<input type="number" id="stock-ind" class="form-control">' + 
                     '<div class="invalid-feedback">No se pueden ingresar numeros negativos</div>'+
                     
                   '</div>'+
@@ -106,7 +108,7 @@ function editarStock(id, id_sucursal){
 
             if(result.isConfirmed){
 
-                
+                stock_actual       = $("#stock-act").val();
                 stock_para_editar       = $("#stock-ind").val();
               
 
@@ -117,6 +119,7 @@ function editarStock(id, id_sucursal){
                     url: "./modelo/inventarios/actualizar-stock.php",
                     data: {codigo      : id,
                            stock       : stock_para_editar,
+                           stock_actual : stock_actual,
                            sucursal_id : id_sucursal
                          },
                     dataType: "json",
@@ -125,7 +128,7 @@ function editarStock(id, id_sucursal){
                        if (response) {
                         Swal.fire(
                             "¡Correcto!",
-                            "Bien, " +response.llantas_dif,
+                            "Bien, " +response.llantas_agregadas,
                             "success"
                             ).then((result) =>{
 

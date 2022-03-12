@@ -18,13 +18,15 @@ if (isset($_POST)) {
         $codigo = $_POST["codigo"];
         $sucursal_id = $_POST["sucursal_id"];
         $stock  = $_POST["stock"];
+        $stock_actual  = $_POST["stock_actual"];
+        $stock_total = $stock_actual + $stock;
         
            //Traer stock  actual
             $traerstockactual = "SELECT id, Stock FROM inventario WHERE id_Llanta = ? AND id_sucursal = ?";
             $result = $con->prepare($traerstockactual);
             $result->bind_param('ss',$codigo, $sucursal_id);
             $result->execute();
-            $result->bind_result($this_tyre, $stock_actual);
+            $result->bind_result($this_tyre, $stock_actual_s);
             $result->fetch();
             $result->close();
 
@@ -32,7 +34,7 @@ if (isset($_POST)) {
         
             //Actualizamos stock de la llanta
             $editar_llanta= $con->prepare("UPDATE inventario SET Stock = ? WHERE id = ?");
-            $editar_llanta->bind_param('ii', $stock, $this_tyre);
+            $editar_llanta->bind_param('ii', $stock_total, $this_tyre);
             $editar_llanta->execute();
             $editar_llanta->close();
 
@@ -45,8 +47,8 @@ if (isset($_POST)) {
             $result->fetch();
             $result->close(); 
 
-            if($stock > $stock_actual){
-                $llantas_agregadas =  $stock - $stock_actual;
+            
+                $llantas_agregadas =  $stock;
                 if($llantas_agregadas == 1){
                     $palabra = "se agregó " . $llantas_agregadas . " llanta.";
                     $response ="Agregaste " . $llantas_agregadas . " llanta.";
@@ -56,34 +58,8 @@ if (isset($_POST)) {
                 }
                
                 
-                $data = array("llantas_dif" => $response);
+                $data = array("llantas_agregadas" => $response);
                 echo json_encode($data, JSON_UNESCAPED_UNICODE); 
-
-            }else if($stock < $stock_actual){
-                $llantas_retiradas =   $stock_actual - $stock;
-
-                if($llantas_retiradas == 1){
-                    $palabra = "se descontó " . $llantas_retiradas . " llanta.";
-                    $response ="Descontaste " . $llantas_retiradas . " llanta.";
-                }else{
-                    $palabra = "se descontarón " . $llantas_retiradas . " llantas.";
-                    $response ="Descontaste " . $llantas_retiradas . " llantas.";
-                }
-               
-                $data = array("llantas_dif" => $response);
-                echo json_encode($data, JSON_UNESCAPED_UNICODE); 
-            }else if($stock == $stock_actual){
-                if($stock == 1){
-                    $palabrilla = "llanta.";
-                }else{
-                    $palabrilla = "llantas.";
-                }
-                $palabra = "pero las cantidades eran iguales, por lo tanto se quedó igual el stock con un total de " . $stock . " " . $palabrilla;
-                 $response ="La cantidad que ingresaste es lo mismo que hay en stock, por lo tanto se queda igual.";
-                $data= array("llantas_dif" => $response);
-                echo json_encode($data, JSON_UNESCAPED_UNICODE); 
-                
-            }
                 
          
             $traerSuc = "SELECT nombre FROM sucursal WHERE id=?";
