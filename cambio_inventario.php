@@ -9,13 +9,9 @@ if (!isset($_SESSION['id_usuario'])) {
     header("Location:login.php");
 }
 
-if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2 ) {
+if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
     header("Location:nueva-venta.php");
-}
-
-if ($_SESSION['rol'] == 4) {
-    header("Location:inventario.php?id=1&nav=inv");
-}
+} 
 
 
 ?>
@@ -32,17 +28,39 @@ if ($_SESSION['rol'] == 4) {
     <meta name="author" content="">
     <link rel="shortcut icon" href="src/img/rayo.svg" />
 
-    <title>Configuraciones - El Rayo | Service Manager</title>
+    <title>El Rayo | Service Manager</title>
 
     <!-- Custom fonts for this template-->
     <link href="src/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
-
+        <link rel="stylesheet" href="src/vendor/bower_components/select2-bootstrap-theme/dist/select2-bootstrap.css">
     <!-- Custom styles for this template-->
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="src/css/menu-vertical.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.css" integrity="sha512-oe8OpYjBaDWPt2VmSFR+qYOdnTjeV9QPLJUeqZyprDEQvQLJ9C5PCFclxwNuvb/GQgQngdCXzKSFltuHD3eCxA==" crossorigin="anonymous" />
+
+    <style>
+        /* .select2-results{
+            border: 1px solid red;
+        }
+        .select2-results {
+            height: 900px !important;
+        }
+        .select2-results__options{
+            height: 500px !important;
+            overflow: hidden !important;
+        } */
+        
+
+        .toastr-container{
+         z-index: 999999999999999999;
+         background-color: green;
+         }
+
+    </style>
+
 
 </head>
 
@@ -52,11 +70,10 @@ if ($_SESSION['rol'] == 4) {
     <div id="wrapper">
 
         <!-- Sidebar -->
-
+       
         <?php 
             require_once 'sidebar.php'
         ?>
-       
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
@@ -142,8 +159,7 @@ if ($_SESSION['rol'] == 4) {
 
 
 
-                    
-
+                       
                         <div class="topbar-divider d-none d-sm-block"></div>
 
                         <!-- Nav Item - User Information -->
@@ -189,26 +205,146 @@ if ($_SESSION['rol'] == 4) {
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-                <div class="row">
-                       <div class="col-12 justify-content-center align-items-center m-auto" style="">
-                        <h3 class="text-center">Configuraciones del sistema y preferencias</h3>
-                       </div>
-                </div>  
-                <div class="row mt-5">
-                    <div class="col-12 justift-content-center">
-                        <div class="col-6 text-center" style="margin:auto;">
+               
+                    <div class="row justify-content-center">
+                        <div class="col-12 col-md-5">
+                            <div class="card">
+                                <div class="row mt-4">
+                                    <div class="col-12 col-md-12 text-center">
+                                        <h5><b>Mover una llanta</b></h5>  
+                                    </div>
+                                </div>
+                                <div class="row justify-content-center mt-4">
+                                    <div class="col-12 col-md-10 text-center">
+                                        <label>Mover desde:</label> 
+                                        <select class="form-control" id="ubicacion">
+                                            <option value="0">Selecciona una sucursal</option>
+                                        <?php
+            
+                                        $querySucu = "SELECT COUNT(*) FROM sucursal";
+                                        $resps=$con->prepare($querySucu);
+                                        $resps->execute();
+                                        $resps->bind_result($total_sucu);
+                                        $resps->fetch();
+                                        $resps->close();
+                                        
+                                        if($total_sucu>0){
+                                            $querySuc = "SELECT * FROM sucursal";
+                                            $respon = mysqli_query($con, $querySuc);
+                                          
+                                            
 
-                        <!---Panel de ajustes--->
+                                            while ($rows = $respon->fetch_assoc()){
+                                                $suc_identificador = $rows['id'];
+                                                $nombre_suc = $rows['nombre'];
+                                                
+                                                echo "<option value='". $suc_identificador."'>".$nombre_suc."</option>";
+                                                }
+                                        }
+                                    
+                                    ?>
+                                        </select> 
+                                    </div>
+                                </div>
 
-                        <?php 
-                        
-                            include 'panel-ajustes.php';
+                                <div class="row justify-content-center mt-3">
+                                    <div class="col-12 col-md-10 text-center">
+                                        <label for="buscador">Selecciona la llanta que moveras</label>
+                                        <select  class="form-control" id="buscador" disabled></select>
+                                    </div>
+                                </div>
 
-                        ?>
+                                <div class="row justify-content-center mt-3">
 
+                                     <div class="col-12 col-md-3 text-center">
+                                        <label for="stock">Stock actual</label>
+                                        <input type="number" placeholder="0" class="form-control" id="stock_actual" disabled> 
+                                    </div>
+                                    
+
+                                    <div class="col-12 col-md-7 text-center">
+                                        <label for="stock">¿Cuantas llantas vas a mover?</label>
+                                        <input type="number" placeholder="0" class="form-control" id="stock" onkeyup="comprobarStock()" onchange="comprobarStock()" valido disabled>
+                                        <div class="invalid-feedback" id="label-validator">
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row justify-content-center mt-3">
+                                    <div class="col-12 col-md-10 text-center">
+                                        <label for="destino">Mover hacia: </label>
+                                        <select name="destino" class="form-control" id="destino">
+                                            <option value="0">Selecciona una sucursal</option>
+                                        <?php
+            
+                                            $querySucu = "SELECT COUNT(*) FROM sucursal";
+                                            $resps=$con->prepare($querySucu);
+                                            $resps->execute();
+                                            $resps->bind_result($total_sucu);
+                                            $resps->fetch();
+                                            $resps->close();
+                                            
+                                            if($total_sucu>0){
+                                                $querySuc = "SELECT * FROM sucursal";
+                                                $respon = mysqli_query($con, $querySuc);
+                                            
+                                                
+
+                                                while ($rows = $respon->fetch_assoc()){
+                                                    $suc_identificador = $rows['id'];
+                                                    $nombre_suc = $rows['nombre'];
+                                                    
+                                                    echo "<option value='". $suc_identificador."'>".$nombre_suc."</option>";
+                                                    }
+                                            }
+                                        
+                                        ?>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                
+
+                                <div class="row justify-content-center mt-3 mb-3">
+                                    <div class="col-12 col-md-10 text-center">
+                                            <div class="btn btn-primary disabled" onclick="todas();" id="btn-mover" id_usuario="<?php echo $_SESSION['id_usuario']; ?>" disabled>Agregar a la lista</div>
+                                    </div>    
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
+
+                    <div class="row mt-4 justify-content-center">
+                        <div class="col-12 col-md-8">
+                            <div class="card">
+                                <div class="card-header text-center">
+                                    <span>Se moveran las siguientes llantas:</span>
+                                </div>
+                            <div class="list-group" style="background-color: #32bacd">
+                                <a href="#" class="list-group-item active">
+                                    <div class="row">
+                                        <div class="col-12 col-md-1">#</div>
+                                        <div class="col-12 col-md-4">Llanta</div>
+                                        <div class="col-12 col-md-2">Ubicación</div>
+                                        <div class="col-12 col-md-2">Destino</div>
+                                        <div class="col-12 col-md-2">Cantidad</div>
+                                        <div class="col-12 col-md-1"></div>
+                                    </div>
+                                </a>
+                                <div id="cuerpo_detalle_cambio">
+
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row m-4 justify-content-center">
+                        <div class="col-12 col-md-8 text-center">
+                            <div class="btn btn-success" id="btn-mov" onclick="realizarMovimiento(<?php echo $_SESSION['id_usuario']; ?>);">Realizar el movimiento</div>
+                        </div>
+                    </div>
                      
 
                 </div>
@@ -273,16 +409,19 @@ if ($_SESSION['rol'] == 4) {
 
     <!-- Core plugin JavaScript-->
     <script src="src/vendor/jquery-easing/jquery.easing.min.js"></script>
-
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <!-- Custom scripts for all pages-->
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous"></script>
+    <script src="src/js/maximize-select2-height.js"></script>
+
     <script src="src/js/sb-admin-2.min.js"></script>
 
-    <!-- Page level plugins -->
-    <script src="src/vendor/chart.js/Chart.min.js"></script>
+ 
+    <script src="src/js/buscador-llantas-por-sucursal.js"></script>
 
-
-
-  
  
     </script>
    

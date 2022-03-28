@@ -76,7 +76,8 @@ selects.forEach( select => {
 
    
 
-
+let id_sucursal_session= $("#content").attr("sucursal_session_id");
+let id_rol_session= $("#content").attr("rol_session_id"); 
   
     function buscar() {
         
@@ -95,10 +96,13 @@ selects.forEach( select => {
                  if(params.term == undefined){
                   params.term = "";
                 }
-
+                params.id_sucursal = id_sucursal_session;
+                params.rol = id_rol_session;
+              
                  return {
-                   
-                   searchTerm: params.term // search term
+                   searchTerm: params.term, // search term
+                   id_sucursal: params.id_sucursal,
+                   rol: params.rol
                    
                  };
                 },
@@ -207,7 +211,7 @@ selects.forEach( select => {
                 $("#modelo").focus().val(repo.Modelo);
                 $("#precio").focus().val(repo.precio_Venta);
                 $("#tyre"+repo.id).on("click", function () { 
-                    alert("Hola");
+                    /* alert("Hola"); */
                  });
 
 
@@ -317,6 +321,8 @@ selects.forEach( select => {
 
                                 $("#realizar-venta").removeClass("disabled");
                                 $("#realizar-venta").text("Realizar venta");
+
+                                borrarFormulario();
                                
 
                             }else if(result.isDenied){
@@ -335,7 +341,7 @@ selects.forEach( select => {
                                 $("#realizar-venta").removeClass("disabled");
                                 $("#realizar-venta").text("Realizar venta");
                                      
-                              
+                                borrarFormulario();
                                 
                             }else{
                                 table.ajax.reload(null,false);
@@ -350,6 +356,8 @@ selects.forEach( select => {
 
                                 $("#realizar-venta").removeClass("disabled");
                                 $("#realizar-venta").text("Realizar venta");
+
+                                borrarFormulario();
                             }
             
                            $("#hacer-comentario").attr("comentario", " ");
@@ -552,6 +560,17 @@ $("#btn-add-client").hover(function() {
         $("#help-changeservice-span").css("display", "none");
         });
 
+
+        $("#btn-busqueda-llanta").hover(function() { 
+
+          $("#help-searchtyre-span").css("display", "block");
+          $("#help-searchtyre-span").css("position", "fixed");
+         // $("#help-addclient-span").css("overflow", "hidden");
+      
+       },function(){
+          $("#help-searchtyre-span").css("display", "none");
+          });
+
 //Alternar entre servicios y productos
     function changeServicios(){
 
@@ -699,7 +718,7 @@ $("#btn-add-client").hover(function() {
             $('#search').select2({
                 placeholder: "Selecciona una llanta",
                 theme: "bootstrap",
-                minimumInputLength: 1,
+                minimumInputLength: 0,
                 ajax: {
                     url: "./modelo/ventas/buscar-llantas-nueva-venta.php",
                     type: "post",
@@ -707,10 +726,19 @@ $("#btn-add-client").hover(function() {
                     delay: 250,
         
                     data: function (params) {
-                     return {
-                       searchTerm: params.term // search term
-                       
-                     };
+                      if(params.term == undefined){
+                        params.term = "";
+                      }
+                      console.log(params);
+                      params.id_sucursal = id_sucursal_session;
+                      params.rol = id_rol_session;
+                    
+                       return {
+                         searchTerm: params.term, // search term
+                         id_sucursal: params.id_sucursal,
+                         rol: params.rol
+                         
+                       };
                     },
                     processResults: function (data) {
                         return {
@@ -779,7 +807,6 @@ $("#btn-add-client").hover(function() {
                 //A partir de aqui puedes agregar las llantas Brayan
                // ruta = "./src/img/logos/" + repo.marca + ".jpg";
              
-               console.log(repo.Stock);
                if(repo.Stock <= 0){
     
                  Swal.fire({
@@ -1084,4 +1111,28 @@ $("#btn-add-client").hover(function() {
              console.log(comentario);
 
             });
-     })
+     });
+
+
+
+     function borrarFormulario(){
+       $("#search").empty();
+       $("#clientes").empty();
+       $("#metodos-pago").val('').trigger('change') ;
+       $("#description").val("");
+       $("#modelo").val("");
+       $("#cantidad").val("");
+       $("#precio").val("");
+       let btn_box = $("#agregar-producto");
+       btn_box.attr("sucursal", "");
+       btn_box.attr("id_sucursal", "");
+       btn_box.attr("id_code", "");
+       btn_box.attr("descripcion", "");
+       btn_box.attr("modelo", "");
+       btn_box.attr("marca", "");
+       btn_box.attr("precio", "");
+       btn_box.attr("codigo", "");
+       btn_box.attr("stock", "");
+
+
+     }

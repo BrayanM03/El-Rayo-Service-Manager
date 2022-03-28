@@ -32,8 +32,7 @@
  
     <link rel="stylesheet" href="src/css/nueva-venta.css">
     <link href="src/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
         <link href='https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css' rel='stylesheet' />
 
     <!-- Custom styles for this template-->
@@ -49,11 +48,14 @@
     <!---Librerias de estilos-->
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="src/css/menu-vertical.css" rel="stylesheet">
-    <link href="src/css/splide-core.min.css" rel="stylesheet">
     <link href="src/css/slide_notificaciones.css" rel="stylesheet">
      
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.css" integrity="sha512-oe8OpYjBaDWPt2VmSFR+qYOdnTjeV9QPLJUeqZyprDEQvQLJ9C5PCFclxwNuvb/GQgQngdCXzKSFltuHD3eCxA==" crossorigin="anonymous" />
-
+<style>
+   /*  .card,.grupo-2, #content, .sticky-footer{
+        background-color: rgb(21, 20, 27);
+    } */
+</style>
 </head>
 
 <body id="page-top"> 
@@ -72,7 +74,7 @@
         <div id="content-wrapper" class="d-flex flex-column">
 
             <!-- Main Content -->
-            <div id="content">
+            <div id="content" sucursal_session_id= "<?php echo $_SESSION['id_sucursal']; ?>" rol_session_id="<?php echo $_SESSION['rol']?>">
 
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-info bg-info topbar mb-4 static-top shadow">
@@ -356,12 +358,22 @@
                                                     </label>
 
                                                     <label style="border-color: transparent;">
+                                                    <div class="btn btn-info" onclick="busqueda();" id="btn-busqueda-llanta" style="width: 45px;margin: 8px 3px;"><i class="fas fa-search"></i></div>
                                                     <div class="btn btn-info" flag="0" onclick="changeServicios();" id="btn-change-servicios" style="width: 45px;margin: 8px 3px;"><i class="fas fa-car"></i></div>
                                                     <div class="btn btn-info" onclick="agregarcliente();" id="btn-add-client" style="width: 45px;margin: 8px 30px 8px 0px;"><i style=" width: 20px;" class="fas fa-user-plus"></i></div>
                                                               
 
                                                     <div class="btn btn-info" rol="<?php echo $_SESSION['rol']; ?>" sucursal="<?php echo $_SESSION['sucursal']; ?>"  id_sucursal="<?php echo $_SESSION['id_sucursal']; ?>" id="agregar-producto" onclick="agregarInfo()" >Agregar</div>
                                                     </label>
+
+                                                    <div id="help-searchtyre-span" class="targeta-ayuda">
+                                                       <div class="card text-white border-info">
+                                                       <div class="card-header bg-info">Busqueda avanzada</div>
+                                                       <div class="card-body bg-white text-info" >
+                                                       <p class="card-text">Con este boton puedes revisar la disponibilidad de una llanta en otras sucursales</p>
+                                                       </div>
+                                                    </div> 
+                                                    </div> 
                                                     
                                                     <div id="help-addclient-span" class="targeta-ayuda">
                                                        <div class="card text-white border-info">
@@ -440,7 +452,7 @@
                 </div>
             <!-- End of Main Content -->
   <!-- Footer -->
-            <footer class="sticky-footer bg-white">
+            <footer class="sticky-footer">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
                         <span>Copyright &copy; El Rayo Service Manager <?php print_r(date("Y")) ?></span><br><br>
@@ -521,6 +533,7 @@
     <script src="src/js/generar-token.js"></script>
     <script src="src/js/nueva-venta-credito.js"></script>
     <script src="src/js/splide_notifications.js"></script>
+    <script src="src/js/consultar-llanta-nv.js"></script>
   <!--  <script src="src/js/notificaciones.js"></script>   -->
    
    

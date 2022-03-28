@@ -125,7 +125,7 @@ table.on('click', '.borrar-articulo', function() {
 
 function agregarProducto() { 
 
-    tyre_precio = $("#btn-agregar").attr("precio");
+    tyre_precio = $("#precio").val();
     modelo = $("#btn-agregar").attr("modelo");
     tyre_amount = $("#cantidad").val();
     tyre_import = parseFloat(tyre_precio) * tyre_amount;

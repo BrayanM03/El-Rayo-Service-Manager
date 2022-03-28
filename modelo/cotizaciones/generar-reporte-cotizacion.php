@@ -42,16 +42,16 @@ global $metodo_pago;
 global $hora;
 global $comentario;
 
-$formatterES = new NumberFormatter("ES", NumberFormatter::SPELLOUT);
+/* $formatterES = new NumberFormatter("ES", NumberFormatter::SPELLOUT);
 $izquierda = intval(floor($total));
 $derecha = intval(($total - floor($total)) * 100);
 if($derecha == 0){
     $derecha = "00";
 }
 $formatTotalminus = $formatterES->format($izquierda) . " PESOS Y " . $derecha . "/100 M.N";
-$formatTotal = strtoupper($formatTotalminus);
+$formatTotal = strtoupper($formatTotalminus); */
 // ciento veintitrés coma cuarenta y cinco
-
+$formatTotal = "test";
 global $formatTotal;
 /*
 $detalle = $con->prepare("SELECT detalle_venta.Cantidad,llantas.Descripcion, llantas.Marca, detalle_venta.precio_Unitario, detalle_venta.Importe FROM detalle_venta INNER JOIN llantas ON detalle_venta.id_llanta = llantas.id WHERE id_Venta = ?");

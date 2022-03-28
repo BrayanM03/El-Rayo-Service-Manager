@@ -16,7 +16,7 @@
       $query = "INSERT INTO llantas (Ancho, Proporcion, Diametro, Descripcion, Marca, Modelo, precio_Inicial, precio_Venta, precio_Mayoreo, Fecha) VALUES (?,?,?,?,?,?,?,?,?,?)";
       $resultado = $con->prepare($query);
       $resultado->bind_param(
-          'iissssssss',
+          'ssssssssss',
           $_POST['ancho'],
           $_POST['alto'],
           $_POST['rin'],

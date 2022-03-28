@@ -89,14 +89,14 @@ switch ($flag) {
         <!-- <i class="fas fa-laugh-wink"></i>--->
         <img style="filter: invert(100%);" width="40px" src="src/img/racing.svg"/>
     </div>
-    <div class="sidebar-brand-text mx-3">El Rayo<sup style="font-size:12px; margin-left:5px;">app</sup></div>
+    <div class="sidebar-brand-text mx-3" id="emp-title" sesion_rol="<?php echo $_SESSION["rol"]; ?>">El Rayo<sup style="font-size:12px; margin-left:5px;">app</sup></div>
 </a>
 
 <!-- Divider -->
 <hr class="sidebar-divider my-0">
 
 <!-- Nav Item - Dashboard -->
-<li class="nav-item <?php echo $claseInicio;?>">
+<li class="nav-item <?php echo $claseInicio;?> rol-4">
     <a class="nav-link" href="index.php?id=0&nav=inicio">
         <i class="fas fa-fw fa-tachometer-alt"></i>
         <span>Inicio</span></a>
@@ -106,19 +106,19 @@ switch ($flag) {
 <hr class="sidebar-divider">
 
 <!-- Heading -->
-<div class="sidebar-heading">
+<div class="sidebar-heading rol-4">
     Punto de venta
 </div>
 
 <!-- Nav Item - Pages Collapse Menu -->
-<li class="nav-item <?php echo $claseNuevaVenta ?>">
+<li class="nav-item <?php echo $claseNuevaVenta ?> rol-4">
     <a class="nav-link" href="nueva-venta.php?id=0&nav=nueva_venta">
         <i class="fas fa-fw fa-cart-plus"></i>
         <span>Nueva venta</span>
     </a>
 </li>
 
-<li class="nav-item <?php echo $claseNuevaCotizacion ?>">
+<li class="nav-item <?php echo $claseNuevaCotizacion ?> rol-4">
     <a class="nav-link" href="cotizacion.php?id=0&nav=nueva_cotizacion">
         <i class="fas fa-fw fa-clipboard"></i>
         <span>Nueva cotización</span>
@@ -126,7 +126,7 @@ switch ($flag) {
 </li>
 
 <!-- Nav Item - Utilities Collapse Menu -->
-<li class="nav-item <?php echo $claseHistorial ?>">
+<li class="nav-item <?php echo $claseHistorial ?> rol-4">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
         aria-expanded="true" aria-controls="collapseUtilities">
         <i class="fas fa-fw fa-history"></i>
@@ -169,7 +169,7 @@ switch ($flag) {
 </div>
 <?php 
 
-    if ($user_jerarquia == 1) {
+    if ($user_jerarquia == 1 || $user_jerarquia == 4) {
         # code...
     
 
@@ -230,7 +230,7 @@ switch ($flag) {
 
         
         </div>
-        <div class="bg-white py-2 collapse-inner rounded">
+        <div class="bg-white py-2 collapse-inner rounded rol-4">
             <h6 class="collapse-header">Stock total:</h6>
             <a class="collapse-item <?php echo $claseExistencia ?>" href="inventario-total.php?id=0&nav=existencia" style="display:flex; flex-direction: row; justify-content:start;">
                 <img src="src/img/tyre-invent.svg" width="18px" /> 
@@ -257,7 +257,7 @@ if ($user_jerarquia == 1 || $user_jerarquia == 2) {
 ?>
 
 
-<li class="nav-item <?php echo $claseCustomer ?>">
+<li class="nav-item <?php echo $claseCustomer ?> rol-4">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseClients"
         aria-expanded="true" aria-controls="collapsePages">
         <i class="fas fa-fw fa-user-tag"></i>
@@ -311,7 +311,7 @@ if ($user_jerarquia == 1 || $user_jerarquia == 2) {
 if ($user_jerarquia == 1 ) {
 ?>
 <!-- Nav Item - Charts -->
-<li class="nav-item <?php echo $claseToken ?>">
+<li class="nav-item <?php echo $claseToken ?> rol-4">
     <a class="nav-link" href="generar-token.php?id=0&nav=token">
         <i class="fas fa-fw fa-lock"></i>
         <span>Generar token</span></a>

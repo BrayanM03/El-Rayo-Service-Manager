@@ -357,6 +357,10 @@ body.swal2-shown > [aria-hidden="true"] {
     
   }
 
+  #help-searchtyre-span{
+      display:none;
+  }
+
   .targeta-ayuda{
       transition: all;
       animation: aparecer .5s;

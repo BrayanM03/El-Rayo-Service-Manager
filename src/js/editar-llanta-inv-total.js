@@ -29,7 +29,7 @@ function editarRegistro(id){
                 '<div class="col-4">'+
                 '<div class="form-group">'+
                 '<label for="ancho"><b>Ancho:</b></label></br>'+
-                '<input type="number" class="form-control" id="ancho" value="'+ response.ancho+'" name="ancho" placeholder="Ancho" autocomplete="off">'+
+                '<input type="number" class="form-control" id="ancho" value="'+ response.ancho+'" name="ancho" placeholder="Ancho" autocomplete="off" step="0.1">'+
         
         
            ' </div>'+
@@ -39,7 +39,7 @@ function editarRegistro(id){
            '<div class="col-4">'+
             '<div class="form-group">'+
             '<label><b>Alto:</b></label></br>'+
-            '<input type="number" name="alto" id="alto" value="'+ response.alto+'" class="form-control" placeholder="Proporcion">'+
+            '<input type="number" name="alto" id="alto" value="'+ response.alto+'" class="form-control" placeholder="Proporcion" step="0.1">'+
             '</div>'+
             '</div>'+
         
@@ -47,7 +47,7 @@ function editarRegistro(id){
                 '<div class="col-4">'+
                 '<div class="form-group">'+
                 '<label><b>Rin</b></label>'+
-                '<input type="text" class="form-control" value="'+ response.rin+'" id="rin" name="rin" placeholder="Diametro">'+
+                '<input type="number" class="form-control" value="'+ response.rin+'" id="rin" name="rin" placeholder="Diametro" step="0.1">'+
             '</div>'+
                 '</div>'+
         
@@ -217,12 +217,15 @@ function editarRegistro(id){
                 mayorista   = $("#mayorista").val();
                 descripcion = $("#descripcion").val();
 
-                
+                ancho = parseFloat(ancho);
+                alto = parseFloat(alto);
+                rin = parseFloat(rin);
+
 
                 $.ajax({
                     type: "POST",
                     url: "./modelo/actualizar-llanta-inv-total.php",
-                    data: {codigo      : response.id,
+                    data: {codigo      : response.id, 
                            marca       : marca,
                            ancho       : ancho,
                            alto        : alto,

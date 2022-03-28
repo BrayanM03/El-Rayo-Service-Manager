@@ -184,14 +184,14 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                 <div class="row">
-                     <div class="col-12 justify-content-center align-items-center m-auto" style="">
+                     <div class="col-12 justify-content-center align-items-center m-auto">
                         <h3 class="text-center">Realizar corte</h3>
                        </div>
                 </div>  
                 <div class="row mt-5">
                     <div class="col-12">
                         <div class="col-12 col-md-10" style="margin:auto;">
-                        <div class="btn btn-warning">Cerrar todo</div>
+                        <!-- <div class="btn btn-warning">Cerrar todo</div> -->
                         <div class="list-group mt-3 col-12">
                             <span href="" class="list-group-item">
                                 <div class="row">

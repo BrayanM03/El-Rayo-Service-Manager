@@ -28,7 +28,7 @@
  
 	
 
-    <title>Inventario Pedro Cardenas</title>
+    <title>Inventario </title>
 
     <!-- Custom fonts for this template-->
     <link rel="stylesheet" href="src/css/inventario.css">
@@ -44,7 +44,6 @@
     <link rel="stylesheet" href="src/vendor/datatables-responsive/css/responsive.bootstrap4.min.css">
 
   <link rel="stylesheet" href="https://nightly.datatables.net/colreorder/css/colReorder.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.css" integrity="sha512-oe8OpYjBaDWPt2VmSFR+qYOdnTjeV9QPLJUeqZyprDEQvQLJ9C5PCFclxwNuvb/GQgQngdCXzKSFltuHD3eCxA==" crossorigin="anonymous" />
     
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="src/vendor/bower_components/select2-bootstrap-theme/dist/select2-bootstrap.css">
@@ -53,8 +52,15 @@
     <!---Librerias de estilos-->
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="src/css/menu-vertical.css" rel="stylesheet">
-   
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.css" integrity="sha512-oe8OpYjBaDWPt2VmSFR+qYOdnTjeV9QPLJUeqZyprDEQvQLJ9C5PCFclxwNuvb/GQgQngdCXzKSFltuHD3eCxA==" crossorigin="anonymous" />
 
+   
+<style>
+     .toastr-container{
+         z-index: 999999999999999999;
+         background-color: green;
+         }
+</style>
 </head>
 
 <body id="page-top"> 
@@ -212,6 +218,51 @@
                                     </a>
                                   
                       </div>
+                    <div class="row mb-3" style="display:flex; align-items:end;">
+                        <div class="col-12 col-md-3">
+                             <label for="ancho">Ancho</label>
+                             <select name="" class="form-control" id="ancho" onclick="getMedidas('ancho');">
+                                 <option value="No aplica">Selecciona un ancho</option>
+                             
+                             </select>
+                        </div>
+                        <div class="col-12 col-md-2">
+                             <label for="proporcion">Perfil</label>
+                             <select name="" class="form-control" id="proporcion" onclick="getMedidas('proporcion');">
+                                 <option value="No aplica">Selecciona una proporcion</option>
+                             </select>
+                        </div>
+                        <div class="col-12 col-md-2">
+                             <label for="diametro">Diametro</label>
+                             <select name="" class="form-control" id="diametro" onclick="getMedidas('diametro');">
+                                  <option value="No aplica">Selecciona un diametro</option>
+                             </select>
+                        </div>
+                        <div class="col-12 col-md-2">
+                             <a href="#" class="btn btn-info btn-icon-split"  id="search-by-filter" onclick="buscarLlanta();">
+                                        <span class="icon text-white-50">
+                                            <i class="fas fa-search"></i>
+                                        </span>
+                                        <span class="text">Buscar</span>
+                            </a>
+                        </div>
+                        <div class="col-12 col-md-1 ml-3">
+                             <a href="#" class="btn btn-info btn-icon-split" id="reset" onclick="reload();"> 
+                                        <span class="icon text-white-50">
+                                        <i class="fas fa-sync-alt"></i>                                        </span>
+                                        <span class="text">Reset</span>
+                            </a>
+                        </div>
+                        <div class="col-12 col-md-1 ml-3">
+                             <a href="#" class="btn btn-info btn-icon-split"  id="btn_information" onclick="informacion();">
+                                        <span class="icon text-white-50">
+                                        <i class="fas fa-info"></i>
+                                        </span>
+                                        <span class="text">Info</span>
+                            </a>
+                        </div>
+                    </div>
+
                       <table id="inventario-pedro"  class="table table-striped table-bordered table-hover">                   
                      </table>
 
@@ -304,6 +355,7 @@
      <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.colVis.min.js"></script>
     <script src="src/js/inventario.js"></script>
     <script src="src/js/editar-inventario.js"></script>
+    <script src="src/js/buscar-llanta.js"></script>
    
    
 </body>

@@ -12,6 +12,14 @@
         header("Location:login.php");
     }
 
+    if (!isset($_SESSION['id_usuario'])) {
+        header("Location:login.php");
+    }
+    
+    if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
+        header("Location:nueva-venta.php?nav=inicio");
+    }
+
     
     ?>
 <!DOCTYPE html>

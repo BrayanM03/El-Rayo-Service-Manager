@@ -14,12 +14,27 @@ date_default_timezone_set("America/Matamoros");
 
 if (isset($_POST)) {
 
-
+        $tipo = $_POST["tipo"];
         $codigo = $_POST["codigo"];
         $sucursal_id = $_POST["sucursal_id"];
         $stock  = $_POST["stock"];
         $stock_actual  = $_POST["stock_actual"];
         $stock_total = $stock_actual + $stock;
+
+        if ($tipo == "aumentar") {
+            # code...
+        $stock_total = $stock_actual + $stock;
+        $palabra_singular = "Se agregó ";
+        $response_singular = "Agregaste ";
+        $palabra_plural = "Se agregarón ";
+        $response_plural = "Agregaste ";
+        }else if ($tipo == "reducir"){
+        $stock_total = $stock_actual - $stock;
+        $palabra_singular = "Se retiró ";
+        $response_singular = "Retiraste ";
+        $palabra_plural = "Se retirarón ";
+        $response_plural = "Retiraste ";
+        }
         
            //Traer stock  actual
             $traerstockactual = "SELECT id, Stock FROM inventario WHERE id_Llanta = ? AND id_sucursal = ?";
@@ -50,11 +65,11 @@ if (isset($_POST)) {
             
                 $llantas_agregadas =  $stock;
                 if($llantas_agregadas == 1){
-                    $palabra = "se agregó " . $llantas_agregadas . " llanta.";
-                    $response ="Agregaste " . $llantas_agregadas . " llanta.";
+                    $palabra = "se ". $palabra_singular . $llantas_agregadas . " llanta.";
+                    $response =$response_singular . $llantas_agregadas . " llanta.";
                 }else{
-                    $palabra = "se agregarón " . $llantas_agregadas . " llantas.";
-                    $response ="Agregaste " . $llantas_agregadas . " llantas.";
+                    $palabra = "se ". $palabra_plural . $llantas_agregadas . " llantas.";
+                    $response =$response_plural . $llantas_agregadas . " llantas.";
                 }
                
                 

@@ -1,8 +1,6 @@
 $(document).ready(function() {
 
 
-
-  
     table = $('#inventario').DataTable({
       
       
@@ -146,7 +144,7 @@ function agregarLLanta() {
         '<div class="col-4">'+
         '<div class="form-group">'+
         '<label for="ancho"><b>Ancho:</b></label></br>'+
-        '<input type="number" class="form-control" id="ancho"  name="ancho" placeholder="Ancho" autocomplete="off">'+
+        '<input type="number" class="form-control" id="ancho"  name="ancho" placeholder="Ancho" autocomplete="off" step="0.1">'+
 
 
    ' </div>'+
@@ -156,7 +154,7 @@ function agregarLLanta() {
    '<div class="col-4">'+
     '<div class="form-group">'+
     '<label><b>Alto:</b></label></br>'+
-    '<input type="number" name="alto" id="alto" class="form-control" placeholder="Proporcion">'+
+    '<input type="number" name="alto" id="alto" class="form-control" placeholder="Proporcion" step="0.1">'+
     '</div>'+
     '</div>'+
 
@@ -164,7 +162,7 @@ function agregarLLanta() {
         '<div class="col-4">'+
         '<div class="form-group">'+
         '<label><b>Rin</b></label>'+
-        '<input type="text" class="form-control"  id="rin" name="rin" placeholder="Diametro">'+
+        '<input type="number" class="form-control"  id="rin" name="rin" placeholder="Diametro" step="0.1">'+
     '</div>'+
         '</div>'+
 

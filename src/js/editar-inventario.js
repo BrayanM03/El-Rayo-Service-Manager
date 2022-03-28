@@ -49,6 +49,14 @@ function editarStock(id, id_sucursal){
                         
                     }
                  });
+
+                 $("#tipo").on("change", function() {
+                    if($(this).val() == "aumentar"){
+                        $("#label-movi").text("Ingresa las llantas a agregar");
+                    }else if($(this).val() == "reducir"){
+                        $("#label-movi").text("Ingresa las llantas a retirar");    
+                    }
+                 });
             },
             html: '<form class="mt-4" id="agregar-llanta-inv-total">'+
         
@@ -65,7 +73,12 @@ function editarStock(id, id_sucursal){
                '<div class="form-group">'+
                     '<label>Stock actual</label>'+
                     '<input type="number" id="stock-act" class="form-control" value="'+ response.stock +'" disabled>' +
-                    '<label>Ingresa las llantas a agregar</label>'+
+                    '<label>Tipo de operación</label>'+
+                    '<select class="form-control mb-2" id="tipo">'+
+                        '<option value="aumentar">Aumentar stock</option>'+
+                        '<option value="reducir">Reducir stock</option>'+
+                    '</select>'+   
+                    '<label id="label-movi">Ingresa las llantas a agregar</label>'+
                     '<input type="number" id="stock-ind" class="form-control">' + 
                     '<div class="invalid-feedback">No se pueden ingresar numeros negativos</div>'+
                     
@@ -110,9 +123,8 @@ function editarStock(id, id_sucursal){
 
                 stock_actual       = $("#stock-act").val();
                 stock_para_editar       = $("#stock-ind").val();
+                type = $("#tipo").val();
               
-
-                
 
                 $.ajax({
                     type: "POST",
@@ -120,7 +132,8 @@ function editarStock(id, id_sucursal){
                     data: {codigo      : id,
                            stock       : stock_para_editar,
                            stock_actual : stock_actual,
-                           sucursal_id : id_sucursal
+                           sucursal_id : id_sucursal,
+                           tipo : type
                          },
                     dataType: "json",
                     success: function (response) {

@@ -16,6 +16,11 @@ if (isset($_POST)) {
          $editar_llanta->bind_param('i', $codigo);
          $editar_llanta->execute();
          $editar_llanta->close();
+
+         $editar_llanta= $con->prepare("DELETE FROM inventario WHERE id = ?");
+         $editar_llanta->bind_param('i', $codigo);
+         $editar_llanta->execute();
+         $editar_llanta->close();
          
         if($editar_llanta){
             print_r(1);

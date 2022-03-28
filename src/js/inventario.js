@@ -1,12 +1,21 @@
 function MostrarInventario(id_sucursal) { 
   
-  
+    let user_sesion = $("#emp-title").attr("sesion_rol");
+    user_sesion = parseInt(user_sesion);
+    if(user_sesion == 4){
+      visible_value = false;
+      ocultarSidebar();
+    }else{
+      visible_value = true;
+    }
+
     $.ajax({
       type: "POST",
       url: "./modelo/inventarios/traer-dato-sucursal.php",
       data: {"id_suc": id_sucursal},
       success: function (response) {
         $("#sucursal_name").text(response);
+        document.title = "Inventario de "+response;
       }
     });
 
@@ -15,27 +24,30 @@ function MostrarInventario(id_sucursal) {
         ajax: {
             method: "POST",
             data: {"id_sucursal": id_sucursal},
-            url: "./modelo/traerInventario.php"
+            url: "./modelo/traerInventario.php" 
         },  
   
       columns: [   
         { title: "#",              data: null             },
         { title: "Codigo",         data: "Codigo"         },
+        {title: 'Ancho',           data: "Ancho",      visible: false },
+        {title: 'Proporcion',      data: "Proporcion", visible: false },
+        {title: 'Diametro',        data: "Diametro",   visible: false },
         { title: "Descripcion",    data: "Descripcion"    },
         { title: "Marca",          data: "Marca"          },
         { title: "Modelo",         data: "Modelo"         },
-        { title: "Costo",          data: "precio_Inicial" },
-        { title: "Precio",         data: "precio_Venta"   },
-        { title: "Precio Mayoreo", data: "precio_Mayoreo" },
+        { title: "Costo",          data: "precio_Inicial", visible: visible_value},
+        { title: "Precio",         data: "precio_Venta",   visible: visible_value},
+        { title: "Mayoreo",        data: "precio_Mayoreo", visible: visible_value},
         { title: "Sucursal",       data: "Sucursal"       },
         { title: "Stock",          data: "Stock"          },
-        { title: "id",          data: "id"          },
         { title: "Imagen",         data: "Marca", render: function(data,type,row) {
           return '<img src="./src/img/logos/'+ data +'.jpg" style="width: 60px; border-radius: 8px">';
           }},
         {
           data: null,
           className: "celda-acciones",
+          visible: visible_value,
           render: function (row) { 
             
             return '<div style="display: flex"><button type="button" onclick="editarStock('+row.id_Llanta+','+ id_sucursal +');" id="'+row.id_Llanta+'" class="buttonEditar btn btn-warning" style="margin-right: 8px"><span class="fa fa-edit"></span><span class="hidden-xs"></span></button><br><button type="button" onclick="borrarRegistro('+row.id_Llanta+','+ id_sucursal +');" id="'+row.id_Llanta+'" class="buttonBorrar btn btn-danger"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
@@ -349,3 +361,7 @@ function agregarLLanta() {
 }
 
 
+
+function ocultarSidebar(){
+  $(".rol-4").addClass("d-none");
+};

@@ -13,6 +13,9 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
     header("Location:nueva-venta.php?nav=inicio");
 }
 
+if ($_SESSION['rol'] == 4) {
+    header("Location:inventario.php?id=1&nav=inv");
+}
 
 ?>
 

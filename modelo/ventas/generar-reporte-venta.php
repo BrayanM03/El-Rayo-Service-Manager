@@ -59,14 +59,14 @@ global $estatus;
 global $metodo_pago;
 global $hora;
 global $comentario;
-
+/* 
 $formatterES = new NumberFormatter("es-ES", NumberFormatter::SPELLOUT);
 $izquierda = intval(floor($total));
 $derecha = intval(($total - floor($total)) * 100);
 $formatTotalminus = $formatterES->format($izquierda) . " y " . $derecha . "/100 m.n";
 $formatTotal = strtoupper($formatTotalminus);
-// ciento veintitrés coma cuarenta y cinco
-
+// ciento veintitrés coma cuarenta y cinco */
+$formatTotal = "Hola";
 global $formatTotal;
 /*
 $detalle = $con->prepare("SELECT detalle_venta.Cantidad,llantas.Descripcion, llantas.Marca, detalle_venta.precio_Unitario, detalle_venta.Importe FROM detalle_venta INNER JOIN llantas ON detalle_venta.id_llanta = llantas.id WHERE id_Venta = ?");
