@@ -363,5 +363,9 @@ function agregarLLanta() {
 
 
 function ocultarSidebar(){
-  $(".rol-4").addClass("d-none");
+  let sesion = $("#emp-title").attr("sesion_rol");
+  if(sesion == 4){
+    $(".rol-4").addClass("d-none");
+
+  }
 };
