@@ -53,6 +53,9 @@
    
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="src/css/menu-vertical.css" rel="stylesheet">
+    <link rel="stylesheet" href="src/css/paginacionjs.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.css" integrity="sha512-oe8OpYjBaDWPt2VmSFR+qYOdnTjeV9QPLJUeqZyprDEQvQLJ9C5PCFclxwNuvb/GQgQngdCXzKSFltuHD3eCxA==" crossorigin="anonymous" />
+
 </head>
 
 <body id="page-top"> 
@@ -193,28 +196,91 @@
 
  
                 <!-- Begin Page Content -->
-                <div class="container-fluid" style="display: flex; justify-content: center; align-items:center; flex-direction:column">
+                <div class="container-fluid">
 
                      <!-- Contenido inventario -->
-                     
-                        <div class="contenedor-tit">
-                        <img class="tyre-decoration-left" src="./src/img/tyre.svg" alt="insertar SVG con la etiqueta image"> 
+                     <div class="row justify-content-center">
+                        <div class="contenedor-tit col-md-3 text-center"> 
                         <div class="titulo-inventario" id="titulo-hv" rol="<?php echo $_SESSION["rol"] ?>">
-                         <h5 style="margin: 10px 0px;">Ventas</h5>
-                         <p style="color: gray;">Reporte de ventas totales</p>
+                         <h5 style="margin: 10px 0px;">Sistema de busqueda</h5>
+                         <p style="color: gray;">Elige un filtro de busqueda de Ventas totales</p>
+                        </div>  
                         </div>
-                        <img class="tyre-decoration-right" src="./src/img/tyre.svg" alt="insertar SVG con la etiqueta image">   
-                        </div>
+                    </div>
 
-                        <div class="row">
-                            <div class="col-12 cold-md-12">
-                                <a href="busqueda-avanzada-ventas.php">
-                                    <div class="btn btn-info">Busqueda avanzada</div>
-                                </a>
+                        <div class="row justify-content-center mb-3">
+                            <div class="col-12 col-md-5">
+                                    <label for="filtro">Elegir filtro de busqueda</label>
+                                    <select class="form-control" id="filtro" name="filtro" onchange="setFilters()">
+                                        <option value="no aplica">Selecciona un filtro de busqueda</option>
+                                        <option value="sucursal">Por sucursal</option>
+                                        <option value="vendedor">Por vendedor</option>
+                                        <option value="cliente">Por cliente</option>
+                                        <option value="medidas">Por medidas</option>
+                                    </select>
                             </div>
                         </div>
+
+                        <div class="filters-area m-3"></div>
+
+
+                        <div class="row">
+                            <div class="col-12 col-md-12">
+                                <div class="list-group">
+                                        <a href="#" class="list-group-item list-group-item-action active">
+                                            <div class="row">
+                                                <div class="col-12 col-md-1">#</div>
+                                                <div class="col-12 col-md-1">Folio</div>
+                                                <div class="col-12 col-md-1">Fecha</div>
+                                                <div class="col-12 col-md-1">Sucursak</div>
+                                                <div class="col-12 col-md-2">Vendedor</div>
+                                                <div class="col-12 col-md-3">Cliente</div>
+                                                <div class="col-12 col-md-1">Tipo</div>
+                                                <div class="col-12 col-md-1">Total</div>
+                                                <div class="col-12 col-md-1">Estatus</div>
+                                            </div>
+                                        </a>
+                                        <div class="resultados" style="background-color:white">
+                                            <a href="#" class="list-group-item list-group-item-action">
+                                            <div class="row">
+                                                <div class="col-12 col-md-12 text-center">Sin datos</div>
+                                            </div>
+                                            </a>
+                                           
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-12 cold-md-12 d-flex justify-content-center">
+                            <div id="pagination-container"></div>
+                            <!-- <nav aria-label="Page navigation example">
+                                <ul class="pagination">
+                                    <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                        <span class="sr-only">Anterior</span>
+                                    </a>
+                                    </li>
+
+                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                    
+
+                                    <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                        <span class="sr-only">Siguiente</span>
+                                    </a>
+                                    </li>
+                                </ul>
+                            </nav> -->
+                            </div>
+                        </div>
+                      
                      
-                      <table id="ventas" class="table table-striped table-bordered table-hover">                   
+                          
+                                        
                      </table>
 
                      
@@ -292,7 +358,8 @@
     <script src="src/vendor/datatables/defaults.js"></script>
     <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="src/js/historial-ventas.js"></script>
+    <script src="https://pagination.js.org/dist/2.1.5/pagination.js"></script>
+    <script src="src/js/busqueda-avanzada.js"></script>
    
    
 </body>

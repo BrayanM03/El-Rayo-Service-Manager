@@ -126,7 +126,7 @@ switch ($flag) {
 </li>
 
 <!-- Nav Item - Utilities Collapse Menu -->
-<li class="nav-item <?php echo $claseHistorial ?> rol-4">
+<li class="nav-item <?php echo $claseHistorial ?>">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
         aria-expanded="true" aria-controls="collapseUtilities">
         <i class="fas fa-fw fa-history"></i>
@@ -140,7 +140,7 @@ switch ($flag) {
                 <img src="src/img/ventas.svg" width="18px" /> 
                 <span style="margin-left:12px;"> Ventas</span>
             </a>
-            <a class="collapse-item <?php echo $claseCotizaciones ?>" href="cotizaciones-lista.php?id=0&nav=cotizaciones">
+            <a class="collapse-item <?php echo $claseCotizaciones ?> rol-4" href="cotizaciones-lista.php?id=0&nav=cotizaciones">
                 <img src="src/img/compras.svg" width="18px" /> 
                 <span style="margin-left:12px;"> Cotizaciones</span>
             </a>

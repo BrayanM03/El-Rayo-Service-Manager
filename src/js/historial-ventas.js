@@ -1,6 +1,6 @@
 function MostrarVentas() {  
     $.fn.dataTable.ext.errMode = 'none';
-
+    ocultarSidebar();
 table = $('#ventas').DataTable({
       
     serverSide: false,
@@ -258,3 +258,9 @@ function borrarVenta(id, tipo) {
   function redirigirCredito(id){
     window.open('./detalle-credito.php?id='+ id, '_blank');
    }
+
+
+
+function ocultarSidebar(){
+    $(".rol-4").addClass("d-none");
+  };

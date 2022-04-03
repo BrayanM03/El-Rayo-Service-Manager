@@ -73,4 +73,23 @@
     
        
     }
-    
+
+
+ 
+    $("#user").keypress(function(e) {
+        //no recuerdo la fuente pero lo recomiendan para
+        //mayor compatibilidad entre navegadores.
+        var code = (e.keyCode ? e.keyCode : e.which);
+        if(code==13){
+            iniciarSesion();
+        }
+    });
+
+      $("#password").keypress(function(e) {
+        //no recuerdo la fuente pero lo recomiendan para
+        //mayor compatibilidad entre navegadores.
+        var code = (e.keyCode ? e.keyCode : e.which);
+        if(code==13){
+            iniciarSesion();
+        }
+    });
