@@ -18,7 +18,47 @@ if(isset($_POST)){
 
 
     $id_usuario = $_POST["id_usuario"];
+    $sucursal_id = $_SESSION["id_sucursal"];
     $tipo = 1;
+
+    $traerusuario = "SELECT nombre, apellidos FROM usuarios WHERE id = ?";
+    $result = $con->prepare($traerusuario);
+    $result->bind_param('s', $id_usuario);
+    $result->execute();
+    $result->bind_result($nombre_usuario, $apellidos_usuario);
+    $result->fetch();
+    $result->close();
+    $nombre_completo_usuario = $nombre_usuario . " ". $apellidos_usuario;
+
+    $traercantidad = "SELECT SUM(cantidad) FROM detalle_cambio  WHERE id_usuario = ?";
+    $result = $con->prepare($traercantidad);
+    $result->bind_param('s', $id_usuario);
+    $result->execute();
+    $result->bind_result($total_llantas);
+    $result->fetch();
+    $result->close();
+    
+     $descripcion_movimiento = "Se realizo el movimiento de ". $total_llantas . " llanta(s)";
+      $insertar = "INSERT INTO movimientos(id, 
+                                                     descripcion, 
+                                                     mercancia, 
+                                                     fecha, 
+                                                     hora, 
+                                                     usuario,
+                                                     tipo, sucursal) VALUES(null, ?,?,?,?,?,?,?)";
+                $result = $con->prepare($insertar);
+                $result->bind_param('sssssss',$descripcion_movimiento, $total_llantas,
+                                                $fecha, $hora, $nombre_completo_usuario, $tipo, $sucursal_id);
+                                                
+                $result->execute();
+                $result->close();
+
+                //LAST ID
+                $rs = mysqli_query($con, "SELECT MAX(id) AS id FROM movimientos");
+                if ($rowss = mysqli_fetch_row($rs)) {
+                $id_movimiento = trim($rowss[0]);
+                }
+
     
     $traer_cambios= mysqli_query($con, "SELECT * FROM detalle_cambio WHERE id_usuario = $id_usuario");
     while ($rows = $traer_cambios->fetch_assoc()) {
@@ -27,15 +67,6 @@ if(isset($_POST)){
         $id_destino = $rows["id_destino"];
         $cantidad = $rows["cantidad"];
         $id_usuario = $rows["id_usuario"];
-
-        $traerusuario = "SELECT nombre, apellidos FROM usuarios WHERE id = ?";
-        $result = $con->prepare($traerusuario);
-        $result->bind_param('s', $id_usuario);
-        $result->execute();
-        $result->bind_result($nombre_usuario, $apellidos_usuario);
-        $result->fetch();
-        $result->close();
-
 
         //Comprobar si esa llanta se encuentra en el inventario destino
         $comprobar = "SELECT COUNT(*) FROM inventario WHERE id_sucursal = ? AND id_Llanta = ?";
@@ -110,11 +141,12 @@ if(isset($_POST)){
                 $result->execute();
                 $result->close();
 
-                $descripcion_movimiento = "Se realizó movimiento de ". $cantidad . " item(s)  de sucursal " . $nombre_sucursal_remitente .
+               /*  $descripcion_movimiento = "Se realizó movimiento de ". $cantidad . " item(s)  de sucursal " . $nombre_sucursal_remitente .
                 " hacia ". $nombre_sucursal_destino .  " el dia ". $fecha. " a las " . $hora;
                 $nombre_completo_usuario = $nombre_usuario . " ". $apellidos_usuario;
+ */
                 //Registrando el movimiento
-                $insertar = "INSERT INTO movimientos(id, 
+               /*  $insertar = "INSERT INTO movimientos(id, 
                                                      descripcion, 
                                                      mercancia, 
                                                      fecha, 
@@ -129,10 +161,19 @@ if(isset($_POST)){
                                                 $nombre_sucursal_remitente,
                                                 $nombre_sucursal_destino, $tipo);
                 $result->execute();
+                $result->close(); */
+                $insertar = "INSERT INTO historial_detalle_cambio(id, 
+                id_llanta, 
+                id_ubicacion, 
+                id_destino, 
+                cantidad, 
+                id_usuario,
+                id_movimiento) VALUES(null, ?,?,?,?,?,?)";
+                $result = $con->prepare($insertar);
+                $result->bind_param('ssssss',$id_llanta, $id_ubicacion, $id_destino, $cantidad, $id_usuario, $id_movimiento);
+                $result->execute();
                 $result->close();
-
             }
-
 
         }else{
 
@@ -181,11 +222,11 @@ if(isset($_POST)){
                 $result->close();
 
                 //insertando moviemitno
-                $descripcion_movimiento = "Se realizó movimiento de ". $cantidad . " item(s)  de sucursal " . $nombre_sucursal_remitente .
+               /*  $descripcion_movimiento = "Se realizó movimiento de ". $cantidad . " item(s)  de sucursal " . $nombre_sucursal_remitente .
                 " hacia ". $nombre_sucursal_destino .  " el dia ". $fecha. " a las " . $hora;
-                $nombre_completo_usuario = $nombre_usuario . " ". $apellidos_usuario;
+                $nombre_completo_usuario = $nombre_usuario . " ". $apellidos_usuario; */
                 //Registrando el movimiento
-                $insertar = "INSERT INTO movimientos(id, 
+               /*  $insertar = "INSERT INTO movimientos(id, 
                                                      descripcion, 
                                                      mercancia, 
                                                      fecha, 
@@ -199,6 +240,19 @@ if(isset($_POST)){
                                                 $fecha, $hora, $nombre_completo_usuario,
                                                 $nombre_sucursal_remitente,
                                                 $nombre_sucursal_destino, $tipo);
+                                                
+                $result->execute();
+                $result->close(); */
+
+                $insertar = "INSERT INTO historial_detalle_cambio(id, 
+                id_llanta, 
+                id_ubicacion, 
+                id_destino, 
+                cantidad, 
+                id_usuario,
+                id_movimiento) VALUES(null, ?,?,?,?,?,?)";
+                $result = $con->prepare($insertar);
+                $result->bind_param('ssssss',$id_llanta, $id_ubicacion, $id_destino, $cantidad, $id_usuario, $id_movimiento);
                 $result->execute();
                 $result->close();
 
@@ -209,15 +263,9 @@ if(isset($_POST)){
       
         
     }
-    
+ 
 
-    $traercantidad = "SELECT SUM(cantidad) FROM detalle_cambio  WHERE id_usuario = ?";
-    $result = $con->prepare($traercantidad);
-    $result->bind_param('s', $id_usuario);
-    $result->execute();
-    $result->bind_result($total_llantas);
-    $result->fetch();
-    $result->close();
+   
 
     print_r($total_llantas);
 

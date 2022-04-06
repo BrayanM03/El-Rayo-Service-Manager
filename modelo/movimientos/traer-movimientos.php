@@ -18,15 +18,18 @@ if (isset($_POST)) {
 
     while($fila = $resultado->fetch_assoc()){
     $id= $fila["id"];
+    $id = intval($id);
     $descripcion = $fila["descripcion"];
     $mercancia = $fila["mercancia"];
     $fecha = $fila["fecha"];
     $hora = $fila["hora"];
     $usuario = $fila["usuario"];
+    $tipo = $fila["tipo"];
+    $tipo = intval($tipo);
   
 
     $data["data"][] = array("id" => $id, "descripcion"=>$descripcion, "mercancia" => $mercancia,
-                    "fecha" => $fecha, "hora"=>$hora, "usuario"=>$usuario);
+                    "fecha" => $fecha, "hora"=>$hora, "usuario"=>$usuario, "tipo"=> $tipo);
 
                   
 }
