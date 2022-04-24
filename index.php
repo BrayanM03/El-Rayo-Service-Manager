@@ -9,7 +9,7 @@ if (!isset($_SESSION['id_usuario'])) {
     header("Location:login.php");
 }
 
-if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
+if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2 || $_SESSION['id_usuario'] == 7) {
     header("Location:nueva-venta.php?nav=inicio");
 }
 

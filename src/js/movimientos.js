@@ -14,7 +14,7 @@ table = $('#movimientos').DataTable({
   columns: [   
     { title: "#",              data: null             },
     { title: "descripcion",    data: "descripcion", width: "30%"},
-    { title: "mercancia",      data: "mercancia", visible:false},
+    { title: "mercancia",      data: "mercancia", visible:true},
     { title: "fecha",          data: "fecha" },
     { title: "hora",           data: "hora"},
     { title: "id",           data: "id"},
@@ -23,7 +23,7 @@ table = $('#movimientos').DataTable({
       data: null,
       className: "celda-acciones",
       render: function (row, data) {
-        if(row.tipo == 1){
+        if(row.tipo == 1 || row.tipo ==2 || row.tipo ==3 || row.tipo ==4){
 
           return `<div class="btn btn-danger" onclick="remisionSalida(${row.id})"><i class="fas fa-file-pdf"></i><div>`;
         }else{

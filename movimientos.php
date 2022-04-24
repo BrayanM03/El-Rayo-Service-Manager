@@ -292,7 +292,16 @@
      <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script> 
      <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.colVis.min.js"></script>
     <script src="src/js/movimientos.js"></script>
-   
+    <script>
+ocultarSidebar();
+function ocultarSidebar(){
+  let sesion = $("#emp-title").attr("sesion_rol");
+  if(sesion == 4){
+    $(".rol-4").addClass("d-none");
+
+  }
+};
+   </script>
    
 </body>
 

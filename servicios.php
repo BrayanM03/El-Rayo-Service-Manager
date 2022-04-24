@@ -315,7 +315,16 @@ if (!isset($_SESSION['id_usuario'])) {
 
         <script src="src/js/inventario-servicios.js"></script>
         <script src="src/js/editar-servicio.js"></script>
+        <script>
+ocultarSidebar();
+function ocultarSidebar(){
+  let sesion = $("#emp-title").attr("sesion_rol");
+  if(sesion == 4){
+    $(".rol-4").addClass("d-none");
 
+  }
+};
+   </script>
 
 </body>
 

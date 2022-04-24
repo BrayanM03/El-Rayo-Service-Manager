@@ -61,6 +61,7 @@ if(isset($_POST)){
 
     
     $traer_cambios= mysqli_query($con, "SELECT * FROM detalle_cambio WHERE id_usuario = $id_usuario");
+    $mercancia ="";
     while ($rows = $traer_cambios->fetch_assoc()) {
         $id_llanta = $rows["id_llanta"];
         $id_ubicacion = $rows["id_ubicacion"];
@@ -85,6 +86,7 @@ if(isset($_POST)){
         $result->bind_result($llanta_descripcion);
         $result->fetch();
         $result->close();
+        $mercancia = $mercancia . ", " . $llanta_descripcion . ", ";
 
         //Trayendo codigo y nombre de sucursal destino
         $comprobar = "SELECT code, nombre FROM sucursal WHERE id = ?";
@@ -107,6 +109,7 @@ if(isset($_POST)){
         $acumulado = 0;
         if($total1 == 0){
 
+            //Tryendo el stock actual de la sucursal remitente
             $comprobar = "SELECT Stock FROM inventario WHERE id_sucursal = ? AND id_Llanta = ?";
             $result = $con->prepare($comprobar);
             $result->bind_param('ss', $id_ubicacion, $id_llanta);
@@ -134,7 +137,7 @@ if(isset($_POST)){
                 $result->close();
 
 
-                //Actualizando sucursal destino
+                //Actualizando el stock restante de la sucursal remitente
                 $update = "UPDATE inventario SET Stock = ? WHERE id_sucursal = ? AND id_Llanta = ?";
                 $result = $con->prepare($update);
                 $result->bind_param('sss', $cantidad_restante, $id_ubicacion, $id_llanta);
@@ -176,8 +179,10 @@ if(isset($_POST)){
             }
 
         }else{
-
-
+            /*Para el siguiente codigo la llanta se encuentra en la sucursal destino y lo que haremos sera actualizar el stock de
+            la llanta */
+  
+            //Tryendo el stock actual de la sucursal remitente
             $comprobar = "SELECT Stock FROM inventario WHERE id_sucursal = ? AND id_Llanta = ?";
             $result = $con->prepare($comprobar);
             $result->bind_param('ss', $id_ubicacion, $id_llanta);
@@ -250,9 +255,11 @@ if(isset($_POST)){
                 id_destino, 
                 cantidad, 
                 id_usuario,
-                id_movimiento) VALUES(null, ?,?,?,?,?,?)";
+                id_movimiento,
+                stock_actual,
+                stock_anterior) VALUES(null, ?,?,?,?,?,?,?,?)";
                 $result = $con->prepare($insertar);
-                $result->bind_param('ssssss',$id_llanta, $id_ubicacion, $id_destino, $cantidad, $id_usuario, $id_movimiento);
+                $result->bind_param('ssssssss',$id_llanta, $id_ubicacion, $id_destino, $cantidad, $id_usuario, $id_movimiento, $stock_actual, $stock_anterior);
                 $result->execute();
                 $result->close();
 
@@ -263,9 +270,13 @@ if(isset($_POST)){
       
         
     }
- 
 
-   
+    $update = "UPDATE movimientos SET mercancia = ? WHERE id = ?";
+    $respp = $con->prepare($update);
+    $respp->bind_param('ss', $mercancia, $id_movimiento);
+    $respp->execute();
+    $respp->close();
+ 
 
     print_r($total_llantas);
 

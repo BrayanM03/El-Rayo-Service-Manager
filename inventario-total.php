@@ -310,7 +310,16 @@
     
     <script src="src/js/inventario-total.js"></script>
     <script src="src/js/editar-llanta-inv-total.js"></script>
-   
+   <script>
+ocultarSidebar();
+function ocultarSidebar(){
+  let sesion = $("#emp-title").attr("sesion_rol");
+  if(sesion == 4){
+    $(".rol-4").addClass("d-none");
+
+  }
+};
+   </script>
    
 </body>
 

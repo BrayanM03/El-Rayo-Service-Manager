@@ -198,13 +198,13 @@ function Header()
       $rfc = $GLOBALS["rfc_suc"];
       $cp = $GLOBALS["cp_suc"];
 
+
       $id_mov = $GLOBALS["id_mov"];
       $descripcion_mov= $GLOBALS["descripcion_mov"]; 
       $cantidad_movida= $GLOBALS["cantidad_movida"];
       $fecha_mov= $GLOBALS["fecha_mov"];
       $hora_mov= $GLOBALS["hora_mov"];
       $usuario=$GLOBALS["usuario"];
-       $tipo=$GLOBALS["tipo"];
 
 
       if($numero == 0 || $numero == null){
@@ -251,7 +251,35 @@ function Header()
     //$this->Cell(30,10,"'",0,0, 'C');
     $this->Cell(108.3,10,"Llantas y Servicios 'EL Rayo'",0,0, 'L');
     $this->SetFont('Exo2-Bold','B',12);
-    $this->Cell(60,10,utf8_decode('Remisión de salida'),0,0,'C');
+    //Seteando titulo
+    $tipo_remision = $GLOBALS["tipo"];
+    $tipo_remision = intval($tipo_remision);
+    switch ($tipo_remision) {
+        case 1:
+            $titulo_remision ="Remisión de salida";
+        break;
+
+        case 2:
+            $titulo_remision ="Remisión de entrada";
+        break;
+
+        case 3:
+            $titulo_remision ="Actualización de stock";
+        break;
+
+        case 4:
+            $titulo_remision ="Ingreso de llanta al catalogo";
+        break;
+
+        
+        default:
+        $titulo_remision =$tipo_remision;
+        break;
+    }
+    global $tipo_remision;
+
+    
+    $this->Cell(60,10,utf8_decode($titulo_remision),0,0,'C');
     $this->Ln(5);
    
     $estatus = "Reporte";
@@ -259,7 +287,7 @@ function Header()
     $this->Cell(32,10,utf8_decode($direccion . " "),0,0,'L', false);
     $this->Cell(88,10,utf8_decode($colonia . ", " . $cp),0,0,'L', false);
     $this->SetFont('Arial','B',9);
-    $this->Cell(25,10,utf8_decode("Fecha abono: "),0,0,'L', false);
+    $this->Cell(25,10,utf8_decode("Fecha emisión: "),0,0,'L', false);
     $this->SetFont('Arial','',9);
     $this->Cell(50,10,utf8_decode($fecha_mov),0,0,'L', false);
     $this->Ln(4);
@@ -269,7 +297,7 @@ function Header()
     $this->Cell(18,10,utf8_decode($estado.","),0,0,'L', false);
     $this->Cell(81,10,utf8_decode($pais),0,0,'L', false);
     $this->SetFont('Arial','B',9);
-    $this->Cell(25,10,utf8_decode("Hora abono: "),0,0,'L', false);
+    $this->Cell(25,10,utf8_decode("Hora emisión: "),0,0,'L', false);
     $this->SetFont('Arial','',9);
     $this->Cell(50,10,utf8_decode($hora_mov),0,0,'L', false);
     $this->Ln(4);
@@ -298,31 +326,31 @@ function Header()
     $this->Ln(10);
     
     $this->SetFont('Exo2-Bold','B',12);
-    $this->Cell(50,10,utf8_decode("Receptor"),0,0,'L', false);
+    $this->Cell(50,10,utf8_decode("Movimiento:"),0,0,'L', false);
     $this->Ln(12);
     $this->SetDrawColor(253,144,138);
-    $this->SetFillColor(235, 238, 242);
-    //RoundedRect($left, $top, $width, $height, $radius, $corners = '1234', $style = '')
-    $this->RoundedRect(10, 71, 186, 26, 2, '34', 'DF');
-   
+    $this->SetFillColor(255,255,255);//(235, 238, 242);
+    
+
+    $H1 = $this->GetY();
     $this->SetFont('Arial','B',10);
     $this->Cell(3,3,'',0,0,'L', false);
     $this->Cell(48,3,utf8_decode("Descripcion: "),0,0,'L', false);
     $this->SetFont('Arial','',10);
-    $this->Cell(30,3,utf8_decode($descripcion_mov),0,0,'L', false);
+    $this->MultiCell(130,3,utf8_decode($descripcion_mov),0,0,'L', false); //$descripcion_mov
     $this->Ln(5);
     $this->SetFont('Arial','B',10);
     $this->Cell(3,3,'',0,0,'L', false);
     $this->Cell(47.5,3,utf8_decode("Llantas movidas: "),0,0,'L', false);
     $this->SetFont('Arial','',10);
-    $this->Cell(30,3,utf8_decode($cantidad_movida),0,0,'L', false);
+    $this->Multicell(130,3,utf8_decode($cantidad_movida),0,0,'L', false);
     $this->Ln(5);
     $this->SetFont('Arial','B',10);
     $this->Cell(3,3,'',0,0,'L', false);
-    $this->Cell(47.5,3,utf8_decode("Usuario: "),0,0,'L', false);
+    $this->Cell(47.5,3,utf8_decode("Usuario:"),0,0,'L', false);
     $this->SetFont('Arial','',10);
     $this->Cell(30,3,utf8_decode($usuario),0,0,'L', false);
-    $this->Ln(20);
+    $this->Ln(11);
    /*  $this->SetFont('Arial','B',10);
     $this->Cell(3,3,'',0,0,'L', false);
     $this->Cell(47.5,3,utf8_decode("Direccion: "),0,0,'L', false);
@@ -330,7 +358,11 @@ function Header()
     $this->Cell(30,3,utf8_decode($direccion_cliente),0,0,'L', false);
     $this->Ln(15); */
 
-
+    $altura = $this->GetY();
+    $nH = $altura - $H1;
+   //RoundedRect($left, $top, $width, $height, $radius, $corners = '1234', $style = '')
+   $this->RoundedRect(10, 71, 186, $nH, 2, '34');
+   $this->Ln(6);
 
 
 }
@@ -358,8 +390,6 @@ function Footer()
 
 
  
-
-
 }
 
 // Creación del objeto de la clase heredada
@@ -380,9 +410,11 @@ function cuerpoTabla(){
     $pdf->Cell(30,8,utf8_decode("Destino"),0,0, 'L');
     $pdf->Ln(0);
     //$pdf->Line(11,81,196,81);
+    $line_height =$pdf->GetY();
+    $line_height = $line_height +8.2;
+    $pdf->Ln(11);
     
-    $pdf->Ln(10);
-    
+    $tipo_remision = $GLOBALS["tipo"];
     
     
     $pdf->SetDrawColor(1, 1, 1);
@@ -406,7 +438,7 @@ function cuerpoTabla(){
     
         
        
-    echo "Error al consultar el movimeinto";
+    echo "Error al consultar el movimiento";
 
     }else if($total > 0){ 
 
@@ -418,7 +450,7 @@ function cuerpoTabla(){
 
 
         $pdf->SetFillColor(255,255,255);
-        $ejeY = 114.7;
+        $ejeY = $line_height;
         $k=1;
 
       
@@ -437,23 +469,31 @@ function cuerpoTabla(){
             $tyre->fetch();
             $tyre->close();
 
+            if($tipo_remision == 4){
+                $nombre_ubicacion = "NA";
+                $nombre_destino = "NA";
+            }else{
+                $nombre_ubicacion ="";
+                $sucu_ubi=$conexion->prepare("SELECT nombre FROM sucursal WHERE id= ?");
+                $sucu_ubi->bind_param('i',$id_ubicacion);
+                $sucu_ubi->execute();
+                $sucu_ubi->bind_result($nombre_ubicacion);
+                $sucu_ubi->fetch();
+                $sucu_ubi->close();
+    
+    
+                $nombre_destino ="";
+                $sucu_dest=$conexion->prepare("SELECT nombre FROM sucursal WHERE id= ?");
+                $sucu_dest->bind_param('i',$id_destino);
+                $sucu_dest->execute();
+                $sucu_dest->bind_result($nombre_destino);
+                $sucu_dest->fetch();
+                $sucu_dest->close();
+            }
 
-            $nombre_ubicacion ="";
-            $sucu_ubi=$conexion->prepare("SELECT nombre FROM sucursal WHERE id= ?");
-            $sucu_ubi->bind_param('i',$id_ubicacion);
-            $sucu_ubi->execute();
-            $sucu_ubi->bind_result($nombre_ubicacion);
-            $sucu_ubi->fetch();
-            $sucu_ubi->close();
+          
 
-
-            $nombre_destino ="";
-            $sucu_dest=$conexion->prepare("SELECT nombre FROM sucursal WHERE id= ?");
-            $sucu_dest->bind_param('i',$id_destino);
-            $sucu_dest->execute();
-            $sucu_dest->bind_result($nombre_destino);
-            $sucu_dest->fetch();
-            $sucu_dest->close();
+            
 
           $caracteres = mb_strlen($descripcion_llanta);
             
@@ -540,14 +580,15 @@ function cuerpoTabla(){
 /*CAMBIOSSSSSSSSSSSSSSSSS */
     $pdf->SetDrawColor(218, 223, 230);
     $nueva_altura = $ejeY - 100.6;
-    $pdf->RoundedRect(9.9, 113, 188, $nueva_altura, 2, '34', '');
+    //Dibujando cuadro de detalle gris y linea narjando divisora
+    $pdf->RoundedRect(9.9, $line_height, 188, $nueva_altura, 2, '34', '');
     $pdf->SetDrawColor(253, 144, 138);
     $pdf->SetLineWidth(0.5);
-    $pdf->Line(10,113,198,113);
+    $pdf->Line(10,$line_height,198,$line_height);
         
     }
 
-    $pdf->Ln(20);
+    $pdf->Ln(26);
 
   
     $pdf->SetFont('Exo2-Bold','B',12);

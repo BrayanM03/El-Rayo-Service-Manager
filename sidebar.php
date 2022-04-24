@@ -230,7 +230,7 @@ switch ($flag) {
 
         
         </div>
-        <div class="bg-white py-2 collapse-inner rounded rol-4">
+        <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Stock total:</h6>
             <a class="collapse-item <?php echo $claseExistencia ?>" href="inventario-total.php?id=0&nav=existencia" style="display:flex; flex-direction: row; justify-content:start;">
                 <img src="src/img/tyre-invent.svg" width="18px" /> 

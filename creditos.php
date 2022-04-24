@@ -219,9 +219,9 @@
                         <img class="tyre-decoration-right" src="./src/img/tyre.svg" alt="insertar SVG con la etiqueta image">   
                         </div>
                         <div class="botones">
-                                   
-                                    
-                      </div>
+                            <a href="modelo/creditos/excel-creditos-vencidos.php"><div class="btn btn-success"><i class="fas fa-file-excel"></i> | Reporte de creditos vencidos</div></a>         
+                        </div>
+
                       <table id="creditos" class="table table-striped">    
                      </table>
                 </div>

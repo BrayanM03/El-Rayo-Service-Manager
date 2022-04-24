@@ -1,10 +1,10 @@
 function MostrarInventario(id_sucursal) { 
-  
+  ocultarSidebar();
     let user_sesion = $("#emp-title").attr("sesion_rol");
     user_sesion = parseInt(user_sesion);
-    if(user_sesion == 4){
+    if(user_sesion == "No aplicar por el momento programador"){
       visible_value = false;
-      ocultarSidebar();
+     
     }else{
       visible_value = true;
     }

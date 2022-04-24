@@ -421,7 +421,16 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
 
  
     <script src="src/js/buscador-llantas-por-sucursal.js"></script>
+    <script>
+ocultarSidebar();
+function ocultarSidebar(){
+  let sesion = $("#emp-title").attr("sesion_rol");
+  if(sesion == 4){
+    $(".rol-4").addClass("d-none");
 
+  }
+};
+   </script>
  
     </script>
    
