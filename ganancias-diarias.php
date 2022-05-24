@@ -39,7 +39,17 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
     <!-- Custom styles for this template-->
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="src/css/menu-vertical.css" rel="stylesheet">
+    <style>
+        .my-validation-message::before {
+        display: none;
+        }
 
+        .my-validation-message i {
+        margin: 0 .4em;
+        color: #f27474;
+        font-size: 1.4em;
+        }
+    </style>
 </head>
 
 <body id="page-top"> 
@@ -189,7 +199,7 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
                         <h3 class="h3 mb-0 text-gray-800">Metrica de ganancias</h3>
                         <a href="index.php?id=0&nav=inicio" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm"><i
                                 class="fas fa-hand-point-left fa-sm text-white-50"></i> Volver</a>
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" onclick="ejecutarPanelReporteVentas();"><i
                                 class="fas fa-download fa-sm text-white-50"></i> Generar reporte</a>
                     </div>
                    
@@ -440,9 +450,11 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
 
     <!-- Page level plugins -->
     <script src="src/vendor/chart.js/Chart.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Page level custom scripts -->
     <script src="src/js/demo/chart-bar-demo.js"></script>
+    <script src="src/js/panel_descarga_reporte_ventas.js"></script>
 
 
   

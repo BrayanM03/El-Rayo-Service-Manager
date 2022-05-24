@@ -100,9 +100,15 @@ table = $('#creditos').DataTable({
       data: null,
       className: "celda-acciones",
       render: function (row, data) {
-    
+        id_sesion = $("#emp-title").attr("sesion_id");
+
+        if(id_sesion == "5" || id_sesion == "6"){ //Esta configuracion es especifica para el usuario de Mario y Amita se debe en un furturo hacer mas dinamico
+          return '<div style="display: flex"><button type="button" onclick="traerPdfCredito('+ row.id_venta +');" class="btn ml-2 btn-danger"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button></div>';
+      }else{
         return '<div style="display: flex"><button onclick="traerCredito(' +row.id+ ', '+ row.id_venta +');" type="button" class="buttonPDF btn btn-primary" style="margin-right: 8px"><span class="fa fa-eye"></span><span class="hidden-xs"></span></button><br><button type="button" onclick="borrarCredito('+ row.id +');" class="buttonBorrar btn btn-warning"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button><br><button type="button" onclick="traerPdfCredito('+ row.id_venta +');" class="btn ml-2 btn-danger"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button></div>';
-      },
+
+      }
+    },
     },
   ],
   paging: true,

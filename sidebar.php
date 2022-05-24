@@ -89,7 +89,7 @@ switch ($flag) {
         <!-- <i class="fas fa-laugh-wink"></i>--->
         <img style="filter: invert(100%);" width="40px" src="src/img/racing.svg"/>
     </div>
-    <div class="sidebar-brand-text mx-3" id="emp-title" sesion_rol="<?php echo $_SESSION["rol"]; ?>">El Rayo<sup style="font-size:12px; margin-left:5px;">app</sup></div>
+    <div class="sidebar-brand-text mx-3" id="emp-title" sesion_id="<?php echo $_SESSION["id_usuario"]; ?>" sesion_rol="<?php echo $_SESSION["rol"]; ?>">El Rayo<sup style="font-size:12px; margin-left:5px;">app</sup></div>
 </a>
 
 <!-- Divider -->

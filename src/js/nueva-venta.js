@@ -1124,8 +1124,8 @@ $("#btn-add-client").hover(function() {
        $("#cantidad").val("");
        $("#precio").val("");
        let btn_box = $("#agregar-producto");
-       btn_box.attr("sucursal", "");
-       btn_box.attr("id_sucursal", "");
+       /* btn_box.attr("sucursal", "");
+       btn_box.attr("id_sucursal", ""); */
        btn_box.attr("id_code", "");
        btn_box.attr("descripcion", "");
        btn_box.attr("modelo", "");

@@ -66,7 +66,7 @@
 
     <!-- Page Wrapper -->
     <div id="wrapper">
-
+ 
         <!-- Sidebar -->
         <?php 
             require_once 'sidebar.php'
