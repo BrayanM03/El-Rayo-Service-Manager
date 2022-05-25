@@ -19,13 +19,14 @@ if($_POST){
     $direccion = $_POST["direccion"];   
     $latitud   = $_POST["latitud"];  
     $longitud  = $_POST["longitud"];
+    $asesor    = $_POST["asesor"];
 
    
 
     
-    $update_cliente = "UPDATE clientes SET Nombre_Cliente = ?, Telefono = ?, Direccion = ?, Correo = ?, Credito = ?, RFC = ?, Latitud = ?, Longitud = ? WHERE id = ?";
+    $update_cliente = "UPDATE clientes SET Nombre_Cliente = ?, Telefono = ?, Direccion = ?, Correo = ?, Credito = ?, RFC = ?, Latitud = ?, Longitud = ?, id_asesor = ? WHERE id = ?";
     $resultado = $con->prepare($update_cliente);
-    $resultado->bind_param('sissssssi', $nombre, $telefono, $direccion, $correo, $credito, $rfc, $latitud, $longitud, $id);
+    $resultado->bind_param('sisssssssi', $nombre, $telefono, $direccion, $correo, $credito, $rfc, $latitud, $longitud, $asesor, $id);
     $resultado->execute();
     
     if ($resultado) {

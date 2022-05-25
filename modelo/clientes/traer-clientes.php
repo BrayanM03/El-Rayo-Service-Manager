@@ -24,10 +24,11 @@ if (isset($_POST)) {
     $correo = $fila["Correo"];
     $credito = $fila["Credito"];
     $rfc = $fila["RFC"];
+    $id_asesor = $fila["id_asesor"];
   
 
     $data["data"][] = array("id" => $id, "nombre"=>$nombre, "telefono" => $telefono,
-                    "direccion" => $direccion, "correo"=>$correo, "credito"=>$credito,   "rfc"=>$rfc);
+                    "direccion" => $direccion, "correo"=>$correo, "credito"=>$credito, "rfc"=>$rfc, "id_asesor"=>$id_asesor);
 
                   
 }

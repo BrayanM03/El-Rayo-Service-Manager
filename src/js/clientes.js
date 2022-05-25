@@ -187,7 +187,7 @@ function borrarCliente(id) {
              
             '<label><b>Correo:</b></label></br>'+
               '<input type="text" name="correo" id="correo" class="form-control" placeholder="Correo">'+
-        '</div>'+
+            '</div>'+
             '</div>'+
     
            
@@ -199,6 +199,13 @@ function borrarCliente(id) {
             '</div>'+
             '</div>'+
     
+            '<div class="col-12">'+
+            '<div class="form-group">'+
+            '<label><b>Asesor</b></label>'+
+            '<select class="form-control" id="asesor" name="asesor">'+
+            '</select>'+
+            '</div>'+
+            '</div>'+
            
         '<div class="col-12">'+
             '<div class="form-group">'+
@@ -225,6 +232,25 @@ function borrarCliente(id) {
             '<div>'+
     '</form>',
 
+    didOpen: function(){
+        $("#asesor").empty().append("<option value='nulo'>Selecciona una vendedor</option>");
+
+            $.ajax({
+                type: "POST",
+                url: "./modelo/busqueda/traer-usuarios.php",
+                data: "data",
+                dataType: "JSON",
+                success: function (response) {
+                    response.forEach(element => {
+                       
+                    $("#asesor").append(`
+                    <option value="${element.id}">${element.nombre}</option>
+                    `); 
+                    });
+                }
+                });
+    }
+
     }).then((result) =>{
         //Agregando cliente
         if(result.isConfirmed){
@@ -237,7 +263,7 @@ function borrarCliente(id) {
             direccion = $("#direccion").val();
             latitud = $("#lat-agregar").text();
             longitud = $("#long-agregar").text();
-
+            asesor = $("#asesor").val();
             
             $.ajax({
                 type: "POST",
@@ -250,7 +276,8 @@ function borrarCliente(id) {
                     "rfc": rfc,
                     "direccion": direccion,
                     "latitud": latitud,
-                    "longitud": longitud},
+                    "longitud": longitud,
+                    "asesor": asesor},
                 
                 success: function (response) {
                    if (response == 1) {
@@ -497,6 +524,14 @@ mymap.on('click', function (e) {
                     '<input type="text" class="form-control" value="'+ response.rfc +'" id="rfc" name="rfc" placeholder="RFC">'+
                     '</div>'+
                     '</div>'+
+
+                    '<div class="col-12">'+
+                        '<div class="form-group">'+
+                        '<label><b>Asesor</b></label>'+
+                        '<select class="form-control" id="asesor" name="asesor">'+
+                        '</select>'+
+                        '</div>'+
+                    '</div>'+
             
                    
                 '<div class="col-12">'+
@@ -520,9 +555,29 @@ mymap.on('click', function (e) {
                 '</div>'+
                     '<div>'+
             '</form>',
-            didOpen: function () { 
-                
-            },
+            didOpen: function(){
+                $("#asesor").empty().append("<option value='nulo'>Selecciona una vendedor</option>");
+        
+                    $.ajax({
+                        type: "POST",
+                        url: "./modelo/busqueda/traer-usuarios.php",
+                        data: "data",
+                        dataType: "JSON",
+                        success: function (respuesta) {
+                            respuesta.forEach(element => {
+                               
+                            $("#asesor").append(`
+                            <option value="${element.id}">${element.nombre}</option>
+                            `); 
+                            });
+
+
+                      id_ases = parseInt(response.asesor);
+                      document.getElementById("asesor").value = id_ases;
+                        }
+                        });
+
+            }
         
             }).then((result) =>{
                 //Agregando cliente
@@ -536,8 +591,7 @@ mymap.on('click', function (e) {
                     direccion = $("#direccion").val();
                     latitud = $("#latitud-editar").text();
                     longitud = $("#longitud-editar").text();
-                    console.log(latitud);
-                    console.log(longitud);
+                    asesor = $("#asesor").val();
         
                     
                     $.ajax({
@@ -552,12 +606,13 @@ mymap.on('click', function (e) {
                             "rfc": rfc,
                             "direccion": direccion,
                             "latitud": latitud,
-                            "longitud": longitud},
+                            "longitud": longitud,
+                            "asesor": asesor},
                         
                         success: function (response) {
                            if (response == 1) {
                             Swal.fire(
-                                "¡Registrado!",
+                                "¡Actualizado!",
                                 "Se actualizó el cliente correctamente",
                                 "success"
                                 ).then((result) => { 
@@ -569,7 +624,7 @@ mymap.on('click', function (e) {
                                
                            }else if(response == 0){
                             Swal.fire(
-                                "¡Correcto!",
+                                "¡Ups!",
                                 "No se pudo actualizar el cliente",
                                 "error"
                                 )

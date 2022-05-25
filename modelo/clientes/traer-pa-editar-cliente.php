@@ -33,10 +33,11 @@ if($_POST){
          $rfc = $fila["RFC"];
          $latitud = $fila["Latitud"];
          $longitud = $fila["Longitud"];
+         $asesor = $fila["id_asesor"];
          
 
          $data = array("id" => $id, "nombre" => $nombre, "telefono" => $telefono, "direccion" => $direccion,
-                        "correo"=> $correo, "credito" => $credito, "rfc" => $rfc, "latitud" => $latitud, "longitud" => $longitud);
+                        "correo"=> $correo, "credito" => $credito, "rfc" => $rfc, "latitud" => $latitud, "longitud" => $longitud, "asesor"=> $asesor);
      
          echo json_encode($data, JSON_UNESCAPED_UNICODE);
   

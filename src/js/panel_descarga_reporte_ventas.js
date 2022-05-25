@@ -10,6 +10,9 @@ function ejecutarPanelReporteVentas(){
                 dataType: "JSON",
                 success: function (response) {
                     
+                    $("#sucursal").append(`
+                        <option value="all">Todas las plazas</option>
+                    `); 
                     response.forEach(element => {
                        
                     $("#sucursal").append(`
@@ -55,7 +58,11 @@ function ejecutarPanelReporteVentas(){
         if(response.isConfirmed){
 
         id_sucursal = $("#sucursal").val();
-        window.open("./modelo/panel/excel-ventas-diarias.php?fecha="+fecha + "&id_sucursal="+ id_sucursal);
+        if(id_sucursal == "all"){
+            window.open("./modelo/panel/excel-ventas-diarias-all.php?fecha="+fecha + "&id_sucursal="+ id_sucursal);
+        }else{
+            window.open("./modelo/panel/excel-ventas-diarias.php?fecha="+fecha + "&id_sucursal="+ id_sucursal);
+        }
   
         }
     });

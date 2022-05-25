@@ -19,13 +19,13 @@ if($_POST){
     $direccion = $_POST["direccion"];   
     $latitud   = $_POST["latitud"];  
     $longitud  = $_POST["longitud"];
-
+    $asesor = $_POST["asesor"];
    
 
     
-    $insertar_cliente = "INSERT INTO clientes(id, Nombre_Cliente, Telefono, Direccion, Correo, Credito, RFC, Latitud, Longitud) VALUES(null, ?,?,?,?,?,?,?,?)";
+    $insertar_cliente = "INSERT INTO clientes(id, Nombre_Cliente, Telefono, Direccion, Correo, Credito, RFC, Latitud, Longitud, id_asesor) VALUES(null, ?,?,?,?,?,?,?,?,?)";
     $resultado = $con->prepare($insertar_cliente);
-    $resultado->bind_param('sissssss', $nombre, $telefono, $direccion, $correo, $credito, $rfc, $latitud, $longitud);
+    $resultado->bind_param('sisssssss', $nombre, $telefono, $direccion, $correo, $credito, $rfc, $latitud, $longitud, $asesor);
     $resultado->execute();
     
     if ($resultado) {
