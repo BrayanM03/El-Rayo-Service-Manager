@@ -913,7 +913,7 @@ $("#btn-add-client").hover(function() {
                 '<option value="1">Con credito </option>'+
                 '</select>'+
               
-        
+         
         
            ' </div>'+
             '</div>'+
@@ -943,6 +943,14 @@ $("#btn-add-client").hover(function() {
                 '<input type="text" class="form-control" id="rfc" name="rfc" placeholder="RFC">'+
                 '</div>'+
                 '</div>'+
+
+                '<div class="col-12">'+
+            '<div class="form-group">'+
+            '<label><b>Asesor</b></label>'+
+            '<select class="form-control" id="asesor" name="asesor">'+
+            '</select>'+
+            '</div>'+
+            '</div>'+
         
                
             '<div class="col-12">'+
@@ -969,7 +977,24 @@ $("#btn-add-client").hover(function() {
     
                 '<div>'+
         '</form>',
-    
+        didOpen: function(){
+          $("#asesor").empty().append("<option value='nulo'>Selecciona una vendedor</option>");
+  
+              $.ajax({
+                  type: "POST",
+                  url: "./modelo/busqueda/traer-usuarios.php",
+                  data: "data",
+                  dataType: "JSON",
+                  success: function (response) {
+                      response.forEach(element => {
+                         
+                      $("#asesor").append(`
+                      <option value="${element.id}">${element.nombre}</option>
+                      `); 
+                      });
+                  }
+                  });
+      }
         }).then((result) =>{
             //Agregando cliente
             if(result.isConfirmed){
@@ -982,7 +1007,8 @@ $("#btn-add-client").hover(function() {
                 direccion = $("#direccion").val();
                 latitud = $("#lat-agregar").text();
                 longitud = $("#long-agregar").text();
-    
+                asesor = $("#asesor").val();
+
                 
                 $.ajax({
                     type: "POST",
@@ -995,7 +1021,8 @@ $("#btn-add-client").hover(function() {
                         "rfc": rfc,
                         "direccion": direccion,
                         "latitud": latitud,
-                        "longitud": longitud},
+                        "longitud": longitud,
+                        "asesor": asesor},
                     
                     success: function (response) {
                        if (response == 1) {
