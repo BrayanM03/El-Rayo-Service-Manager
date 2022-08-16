@@ -212,7 +212,7 @@ function borrarVenta(id, tipo) {
                                 }});
                                 table.ajax.reload(null, false);
                         }else if(response == 1 || response ==11){
-                            Swal.fire({
+                            Swal.fire({ 
                                 title: 'Venta cancelada',
                                 html: "<span>La venta se a cancelado.</span>",
                                 icon: "success",
