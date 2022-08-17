@@ -21,6 +21,14 @@
     $estatusvencido = 4;
     $res =0.00;
 
+    $select = "SELECT creditos.id, creditos.id_venta, ventas.estatus, creditos.estatus AS 'estatus_vencido' FROM creditos INNER JOIN ventas ON creditos.id_venta = ventas.id WHERE ventas.estatus <> 'Abierta' AND creditos.estatus = 4";
+    $result = mysqli_query($con, $select);
+    while ($row = $result->fetch_assoc()) {
+        $id_credito = $row['id'];
+        $data[] = $row;
+        
+    }
+
     //Codifo para cancelar credito con ventas canceladas
      /*  $treaer = mysqli_query($con, "SELECT * FROM ventas WHERE estatus = 'Cancelada'");
 
@@ -52,11 +60,11 @@
  */
       echo json_encode($data, JSON_UNESCAPED_UNICODE);
 
-    $update = "UPDATE creditos SET estatus = ? WHERE estatus <> 5 AND pagado <> total AND restante <> ? AND fecha_final <= ?";
+    /* $update = "UPDATE creditos SET estatus = ? WHERE estatus <> 5 AND pagado <> total AND restante <> ? AND fecha_final <= ?";
     $result = $con->prepare($update);
     $result->bind_param('sss', $estatusvencido, $res, $fecha_hoy);
     $result->execute();
-    $result->close();
+    $result->close(); */
    
 
     ?>
