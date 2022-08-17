@@ -22,7 +22,7 @@
     $res =0.00;
 
     //Codifo para cancelar credito con ventas canceladas
-    /*   $treaer = mysqli_query($con, "SELECT * FROM ventas WHERE estatus = 'Cancelada'");
+     /*  $treaer = mysqli_query($con, "SELECT * FROM ventas WHERE estatus = 'Cancelada'");
 
       while ($fila = $treaer->fetch_assoc()){
           $id_vent = $fila["id"];
@@ -49,8 +49,8 @@
           }
 
       } 
-
-      echo json_encode($data, JSON_UNESCAPED_UNICODE);*/
+ */
+      echo json_encode($data, JSON_UNESCAPED_UNICODE);
 
     $update = "UPDATE creditos SET estatus = ? WHERE estatus <> 5 AND pagado <> total AND restante <> ? AND fecha_final <= ?";
     $result = $con->prepare($update);
