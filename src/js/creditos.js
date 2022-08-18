@@ -54,7 +54,7 @@ table = $('#creditos').DataTable({
                 return '<span class="badge badge-info">Primer abono</span>';    
             break;
             case "2":
-                return '<span class="badge badge-warning">Pagando</span>';    
+                return '<span class="badge badge-warning">Pagando</span>';     
             break;
             case "3":
                 return '<span class="badge badge-success">Finalizado</span>';    
