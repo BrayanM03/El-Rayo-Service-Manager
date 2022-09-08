@@ -20,18 +20,18 @@
 
     $estatusvencido = 4;
     $res =0.00;
-    $abierta = 'Abierta';
-
+    $abierta = "Abierta";
+    
     $update = "UPDATE creditos SET estatus = ? WHERE estatus <> 5 AND pagado <> total AND restante <> ? AND fecha_final <= ?";
     $result = $con->prepare($update);
     $result->bind_param('sss', $estatusvencido, $res, $fecha_hoy);
     $result->execute();
-    $result->close();
+    $result->close(); 
 
-    $consulta = "SELECT COUNT(*) FROM creditos INNER JOIN ventas ON creditos.id_venta = ventas.id WHERE ventas.estatus <> ? AND creditos.estatus = ?";
+    $consulta = "SELECT COUNT(*) FROM creditos INNER JOIN ventas ON creditos.id_venta = ventas.id WHERE ventas.estatus <> 'Abierta' AND creditos.estatus = 4";
     
     $totr = $con->prepare($consulta);
-    $totr->bind_param('ii', $abierta, $estatusvencido);
+    //$totr->bind_param('ii', $abierta, $estatusvencido);
     $totr->execute();
     $totr->bind_result($tot);
     $totr->fetch();
@@ -49,7 +49,7 @@
     if($tot == 0) {
         $data = array( "mensaje"=> "No se encontraron reportes cancelados en ventas pero vencidos en creditos", "OK"=>false);
     }else{
-        $select = "SELECT creditos.id, creditos.id_venta, ventas.estatus AS venta_estatus, creditos.estatus AS 'estatus_vencido' FROM creditos INNER JOIN ventas ON creditos.id_venta = ventas.id WHERE ventas.estatus <> 'Abierta' AND creditos.estatus = 4";
+        $select = "SELECT creditos.id, creditos.id_venta, ventas.estatus AS 'venta_estatus', creditos.estatus AS 'estatus_vencido' FROM creditos INNER JOIN ventas ON creditos.id_venta = ventas.id WHERE ventas.estatus <> 'Abierta' AND creditos.estatus = 4";
         //$select = "SELECT ventas.id AS venta_id, ventas.estatus AS venta_estatus, creditos.estatus AS credito_estatus FROM creditos INNER JOIN ventas ON creditos.id_venta = ventas.id WHERE ventas.estatus <> 'Pagado' AND creditos.estatus = 3";
         $result = mysqli_query($con, $select);
         while ($row = $result->fetch_assoc()) {
@@ -106,8 +106,6 @@
       echo json_encode($RESPONSE, JSON_UNESCAPED_UNICODE);
 
     
-
-   
    
 
     ?>
