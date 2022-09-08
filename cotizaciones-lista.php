@@ -302,8 +302,8 @@
     <script src="src/vendor/datatables-responsive/js/dataTables.responsive.min.js"></script>
   <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
 
-  <script src="https://nightly.datatables.net/colreorder/js/dataTables.colReorder.min.js"></script>
-    <script src="src/vendor/datatables/dataTables.bootstrap4.js"></script>
+<!--   <script src="https://nightly.datatables.net/colreorder/js/dataTables.colReorder.min.js"></script>
+ -->    <script src="src/vendor/datatables/dataTables.bootstrap4.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
