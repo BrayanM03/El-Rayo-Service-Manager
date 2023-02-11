@@ -18,6 +18,7 @@ $claseMisLlantas = "";
 $claseExistencia = "";
 $claseServicios = "";
 $claseMovimientos = "";
+$user_jerarquia = $_SESSION["rol"];
 
 
 
@@ -150,7 +151,7 @@ switch ($flag) {
 
 
 <?php 
-    $user_jerarquia = $_SESSION["rol"];
+
 
     if ($user_jerarquia == 1) {
        $name = "Inventario";
@@ -169,7 +170,7 @@ switch ($flag) {
 </div>
 <?php 
 
-    if ($user_jerarquia == 1 || $user_jerarquia == 4) {
+    if ($user_jerarquia == 1 || $user_jerarquia == 4 || $user_jerarquia == 2) {
         # code...
     
 
@@ -178,59 +179,63 @@ switch ($flag) {
 
 <!-- Nav Item - Pages Collapse Menu -->
 <li class="nav-item <?php echo $claseMisLlantas?>">
+
+       
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTyres"
         aria-expanded="true" aria-controls="collapsePages">
         <i class="fas fa-fw fa-folder"></i>
         <span>Mis llantas</span>
     </a>
+    
     <div id="collapseTyres" class="collapse <?php echo $showMisLlantas?>" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+    
+    <?php 
+if ($user_jerarquia == 1 || $user_jerarquia == 4) {
+    ?>
     <div class="bg-white py-2 collapse-inner rounded">
     
             <?php
-            
-                $querySuc = "SELECT COUNT(*) FROM sucursal";
-                $resp=$con->prepare($querySuc);
-                $resp->execute();
-                $resp->bind_result($total_suc);
-                $resp->fetch();
-                $resp->close();
 
-                if($total_suc>0){
-                    $querySuc = "SELECT * FROM sucursal";
-                    $resp = mysqli_query($con, $querySuc);
+        $querySuc = "SELECT COUNT(*) FROM sucursal";
+    $resp=$con->prepare($querySuc);
+    $resp->execute();
+    $resp->bind_result($total_suc);
+    $resp->fetch();
+    $resp->close();
 
-                    
+    if ($total_suc>0) {
+        $querySuc = "SELECT * FROM sucursal";
+        $resp = mysqli_query($con, $querySuc);
 
-                    while ($row = $resp->fetch_assoc()){
-                        $suc_identificador = $row['id'];
-                        $esta_suc = $_GET["id"];
-                       if($esta_suc == $suc_identificador){
-                        $class_suc = "active";
-                         }else{
-                        $class_suc = "";
-                        
-                        }
-                        $nombre = $row['nombre'];
-                        echo '<a class="collapse-item '.$class_suc .'" href="inventario.php?id='. $suc_identificador .'&nav=inv" style="display:flex; flex-direction: row; justify-content:start;">
+
+
+        while ($row = $resp->fetch_assoc()) {
+            $suc_identificador = $row['id'];
+            $esta_suc = $_GET["id"];
+            if ($esta_suc == $suc_identificador) {
+                $class_suc = "active";
+            } else {
+                $class_suc = "";
+            }
+            $nombre = $row['nombre'];
+            echo '<a class="collapse-item '.$class_suc .'" href="inventario.php?id='. $suc_identificador .'&nav=inv" style="display:flex; flex-direction: row; justify-content:start;">
                         <i class="fas fa-fw fa-store"></i> 
                             <span style="margin-left:12px;">'.$nombre.'</span></a>';
-                        }
-                }
-            
-            ?>
+        }
+    }
 
-    
-            <!-- <h6 class="collapse-header">Sucursales:</h6>
-            <a class="collapse-item" href="inventario-pedro.php" style="display:flex; flex-direction: row; justify-content:start;">
-            <i class="fas fa-fw fa-store"></i> 
-                <span style="margin-left:12px;"> Pedro Cardenas</span> </a>
-            <a class="collapse-item" href="inventario-sendero.php" style="display:flex; flex-direction: row; justify-content:start;">
-            <i class="fas fa-fw fa-store"></i>
-                <span style="margin-left:12px;"> Sendero</span> </a> -->
+    ?>
 
         
         </div>
+
+        <?php 
+            }
+            ?>
         <div class="bg-white py-2 collapse-inner rounded">
+        <?php 
+            if ($user_jerarquia == 1 || $user_jerarquia == 4){
+            ?>
             <h6 class="collapse-header">Stock total:</h6>
             <a class="collapse-item <?php echo $claseExistencia ?>" href="inventario-total.php?id=0&nav=existencia" style="display:flex; flex-direction: row; justify-content:start;">
                 <img src="src/img/tyre-invent.svg" width="18px" /> 
@@ -238,6 +243,10 @@ switch ($flag) {
                 <a class="collapse-item <?php echo $claseServicios ?>" href="servicios.php?id=0&nav=servicios" style="display:flex; flex-direction: row; justify-content:start;">
                 <i class="fas fa-car"></i>
                 <span style="margin-left:7px;">Servicios</span> </a>
+            <?php
+            } 
+            
+            ?>
             <a class="collapse-item <?php echo $claseMovimientos ?>" href="movimientos.php?id=0&nav=movimientos">
             <img src="src/img/entrada.svg" width="18px" /> 
                 <span style="margin-left:12px;"> Movimientos</span></a>
@@ -308,10 +317,10 @@ if ($user_jerarquia == 1 || $user_jerarquia == 2) {
 
 <?php }
 
-if ($user_jerarquia == 1 ) {
+if ($user_jerarquia == 1 || $user_jerarquia == 4) {
 ?>
 <!-- Nav Item - Charts -->
-<li class="nav-item <?php echo $claseToken ?> rol-4">
+<li class="nav-item <?php echo $claseToken; //rol-4 ?>">
     <a class="nav-link" href="generar-token.php?id=0&nav=token">
         <i class="fas fa-fw fa-lock"></i>
         <span>Generar token</span></a>
@@ -320,8 +329,6 @@ if ($user_jerarquia == 1 ) {
 
 <?php 
   }     # code...
-    
-
 ?>
 
 <!-- Divider -->

@@ -11,7 +11,7 @@ class Conectar
 
         $host = "localhost";
         $user = "root";
-        $password = "";
+        $password = "root";
         $db = "el_rayo";  
 
         $con = mysqli_connect($host, $user, $password, $db);
