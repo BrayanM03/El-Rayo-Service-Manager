@@ -16,12 +16,58 @@ if (!$con) {
 if(isset($_POST)){
 
     $id_credito = $_POST["id-credito"];
-    $abono = $_POST["abono"];
     $fecha = date("Y-m-d");
     $hora = date("h:i a");
-    $metodo = $_POST["metodo"];
+    $metodos = $_POST["metodo"];
+    
+    $desc_metodos ='';
+    $pago_efectivo=0;
+    $pago_transferencia=0;
+    $pago_tarjeta=0;
+    $pago_cheque=0;
+    $pago_sin_definir=0;
+    $monto_total = 0;
     $usuario = $_SESSION["nombre"];
 
+    foreach ($metodos as $key => $value) {
+        $metodo_id = isset($value['clave']) ? $value['clave']: $key;
+        switch ($metodo_id) {
+          case 0:
+           $pago_efectivo = $value['monto'];
+            break;
+          
+          case 1:
+          $pago_tarjeta = $value['monto'];
+          break;
+          
+          case 2:
+          $pago_transferencia = $value['monto'];
+  
+          break;
+    
+          case 3:
+          $pago_cheque = $value['monto'];
+          break;
+    
+          case 4:
+          $pago_sin_definir = $value['monto'];
+          break;     
+          
+          default:
+            break;
+        }
+        $monto_pago = $value['monto'];
+        $metodo_pago = $value['metodo'];
+        $monto_total = $pago_efectivo + $pago_tarjeta + $pago_transferencia + $pago_cheque + $pago_sin_definir;
+       
+        if($key != count($metodos) - 1) {
+          // Este código se ejecutará para todos menos el último
+          $desc_metodos .= $metodo_pago . ", ";
+        }else{
+          $desc_metodos .= $metodo_pago . ". ";
+        }
+      }
+      $metodos_str = count($metodos) > 1 ? 'Mixto' : $desc_metodos;
      //Obtenemos estatus del credito
      $obtenerStatus = "SELECT estatus FROM creditos WHERE id = ?";
      $stmt = $con->prepare($obtenerStatus);
@@ -56,7 +102,7 @@ if(isset($_POST)){
         $resp->fetch();
         $resp->close();
     
-        $comproba = $abono + $pagado;
+        $comproba = (double)$monto_total + (double)$pagado;
     
     
         if($comproba > $total){
@@ -68,18 +114,19 @@ if(isset($_POST)){
             }else{
                 $estado = 0; //Aun sin pagar
             }
-            $insertar_abono = "INSERT INTO abonos(id, id_credito, fecha, hora, abono, metodo_pago, usuario, estado, sucursal, id_sucursal) VALUES(null,?,?,?,?,?,?,?,?,?)";
+            
+            $insertar_abono = "INSERT INTO abonos(id, id_credito, fecha, hora, abono, metodo_pago, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, usuario, estado, sucursal, id_sucursal) VALUES(null,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             $resultado = $con->prepare($insertar_abono);  
-            $resultado->bind_param('issssssss', $id_credito, $fecha, $hora, $abono, $metodo, $usuario, $estado, $sucursal, $id_sucursal);
+            $resultado->bind_param('isssssssssssss', $id_credito, $fecha, $hora, $monto_total, $metodos_str, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $usuario, $estado, $sucursal, $id_sucursal);
             $resultado->execute();
            
             if ($resultado == true) {
               
             $resultado->close();
             
-            $pagado_update = $pagado + $abono;
-            $restante_update = $restante - $abono;
-    
+            $pagado_update = (double)$pagado + (double)$monto_total;
+            $restante_update = (double)$restante - (double)$monto_total;
+           
     
             $actualizar = "UPDATE creditos SET pagado = ?, restante = ?, estatus= 2 WHERE id = ?";
             $res = $con->prepare($actualizar);

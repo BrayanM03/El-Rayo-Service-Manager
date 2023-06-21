@@ -15,14 +15,64 @@ if (!$con) {
 
 if(isset($_POST)){
 
+  
     $id_abono = $_POST["id"];
-    $abono = $_POST["abono"];
-    $fecha = date("Y-m-a");
+    $fecha = date("Y-m-d");
     $hora = date("h:i a");
-    $metodo = $_POST["metodo"];
+    $metodos = $_POST["metodo"];
     $usuario = $_SESSION["user"];
-
-    if($abono < 0){
+    $suma_monto_anterior = $_POST["suma_monto_anterior"];
+      
+    $desc_metodos ='';
+    $pago_efectivo=0;
+    $pago_transferencia=0;
+    $pago_tarjeta=0;
+    $pago_cheque=0;
+    $pago_sin_definir=0;
+    $monto_total = 0;
+    $usuario = $_SESSION["nombre"];
+    foreach ($metodos as $key => $value) {
+        $metodo_id = isset($value['clave']) ? $value['clave']: $key;
+        switch ($metodo_id) {
+          case 0:
+           $pago_efectivo = $value['monto'];
+            break;
+          
+          case 1:
+          $pago_tarjeta = $value['monto'];
+          break;
+          
+          case 2:
+          $pago_transferencia = $value['monto'];
+  
+          break;
+    
+          case 3:
+          $pago_cheque = $value['monto'];
+          break;
+    
+          case 4:
+          $pago_sin_definir = $value['monto'];
+          break;     
+          
+          default:
+            break;
+        }
+        $monto_pago = $value['monto'];
+        $monto_total = $pago_efectivo + $pago_tarjeta + $pago_transferencia + $pago_cheque + $pago_sin_definir;
+       if($monto_pago > 0){
+        $metodo_pago = $value['metodo'];
+        if($key != count($metodos) - 1){
+            // Este código se ejecutará para todos menos el último
+            $desc_metodos .= $metodo_pago . ", ";
+          }else{
+            $desc_metodos .= $metodo_pago . "";
+          }
+       }
+       
+      }
+      $metodos_str = count($metodos) > 1 ? 'Mixto' : $desc_metodos;
+    if($monto_total < 0){
         print_r(2);
     }else{
         
@@ -47,17 +97,20 @@ if(isset($_POST)){
 
   
 
-    $nuevo_restante =  doubleval($restante) - doubleval($abono);
-   
+    $nuevo_pagado = ((double)$pagado - (double)$suma_monto_anterior) + (double)$monto_total;
+    $nuevo_restante = ((double)$total_a_pagar - $nuevo_pagado);
+
+    
+  
 
     if($nuevo_restante < 0 ){
         print_r(0);
     }else{
         
 
-        $actualizar = "UPDATE abonos SET fecha = ?, hora = ?, abono= ?, metodo_pago = ?, usuario =? WHERE id = ?";
+        $actualizar = "UPDATE abonos SET fecha = ?, hora = ?, abono= ?, metodo_pago = ?, pago_efectivo = ?, pago_tarjeta = ?, pago_transferencia = ?, pago_cheque = ?, pago_sin_definir = ?, usuario = ? WHERE id = ?";
         $res = $con->prepare($actualizar);
-        $res->bind_param('ssdssi', $fecha, $hora, $abono, $metodo, $usuario, $id_abono);
+        $res->bind_param('ssdsdddddsi', $fecha, $hora, $monto_total, $metodos_str, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $usuario, $id_abono);
         $res->execute();
         $res->close();
 
@@ -69,13 +122,10 @@ if(isset($_POST)){
         $response->fetch(); 
         $response->close();
 
-        $restante_total = doubleval($total_a_pagar) - doubleval($totalAbonos); 
-        $format_restante_total = doubleval($restante_total);
-        $format_abonos_total = doubleval($totalAbonos);
 
         $actualizar = "UPDATE creditos SET pagado = ?, restante = ? WHERE id = ?";
         $res = $con->prepare($actualizar);
-        $res->bind_param('ddi', $totalAbonos, $restante_total, $id_credito);
+        $res->bind_param('ddi', $totalAbonos, $nuevo_restante, $id_credito);
         $res->execute();
         $res->close();
 
@@ -107,7 +157,7 @@ if(isset($_POST)){
 
         //Se inserta movimiento
 
-        $data = array("nuevo_pagado"=>$format_abonos_total, "nuevo_restante"=>$format_restante_total);
+        $data = array("nuevo_pagado"=>$nuevo_pagado, "nuevo_restante"=>$nuevo_restante);
         echo json_encode($data, JSON_UNESCAPED_UNICODE);
        
 

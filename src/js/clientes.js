@@ -1,5 +1,7 @@
 function MostrarClientes() {  
     $.fn.dataTable.ext.errMode = 'none';
+    id_sesion = $("#emp-title").attr("sesion_id");
+    rol_sesion = $("#emp-title").attr("sesion_rol");
 
 table = $('#ventas').DataTable({
       
@@ -35,9 +37,8 @@ table = $('#ventas').DataTable({
       data: null,
       className: "celda-acciones",
       render: function (row, data) {
-        id_sesion = $("#emp-title").attr("sesion_id");
-
-        if(id_sesion == "5" || id_sesion == "6"){ //Esta configuracion es especifica para el usuario de Mario y Amita se debe en un furturo hacer mas dinamico
+        
+        if(rol_sesion == 2){ //Esta configuracion es especifica para el usuario de Mario y Amita se debe en un furturo hacer mas dinamico
             return '<div style="display: flex"><button onclick="editarCliente(' +row.id+ ');" type="button" class="buttonPDF btn btn-success" style="margin-right: 8px"><span class="fa fa-edit"></span><span class="hidden-xs"></span></button><br>';
         }else{
             return '<div style="display: flex"><button onclick="editarCliente(' +row.id+ ');" type="button" class="buttonPDF btn btn-success" style="margin-right: 8px"><span class="fa fa-edit"></span><span class="hidden-xs"></span></button><br>'+

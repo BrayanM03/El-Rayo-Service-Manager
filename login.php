@@ -17,11 +17,12 @@
 
 </head>
 <body>
-<video autoplay muted loop id="myVideo">
+    
+<!-- <video autoplay muted loop id="myVideo">
   <source src="./src/video/bg.mp4" type="video/mp4">
-</video>
+</video> -->
 
-<div class="simple-login-container">
+<div class="simple-login-container" style="border:1px solid #c8c8c8;">
     <div class="formulario">
 
 <form action="" id="login-form">

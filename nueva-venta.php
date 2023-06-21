@@ -1,6 +1,7 @@
 <?php
     session_start();
 
+    date_default_timezone_set("America/Matamoros");
     include 'modelo/conexion.php';
     $con= $conectando->conexion(); 
 
@@ -48,6 +49,7 @@
     <!---Librerias de estilos-->
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="src/css/menu-vertical.css" rel="stylesheet">
+    <link href="src/css/bootstrap-select.min.css" rel="stylesheet" />
     <link href="src/css/slide_notificaciones.css" rel="stylesheet">
      
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.css" integrity="sha512-oe8OpYjBaDWPt2VmSFR+qYOdnTjeV9QPLJUeqZyprDEQvQLJ9C5PCFclxwNuvb/GQgQngdCXzKSFltuHD3eCxA==" crossorigin="anonymous" />
@@ -55,6 +57,15 @@
    /*  .card,.grupo-2, #content, .sticky-footer{
         background-color: rgb(21, 20, 27);
     } */
+    .selectpicker{
+        background-color: white !important; 
+      
+    }
+    .bootstrap-select{
+        border: 1px solid #ccc !important;
+        max-width: 350px !important;
+   
+    }
 </style>
 </head>
 
@@ -253,14 +264,17 @@
                                                             <input type="text" id="search" name="search" class="input-group"> -->
                                                            <!--  
                                                         </label>  -->
-                                                        <div id="select-search-contain">
-                                                        <select id="search" style="margin-bottom: 15px;" name="clientes" class="form-control">  -->
-                                                            
-                                                            </select>
-                                                        </div>
                                                         
+                                                            <div id="select-search-contain">
+                                                                <select id="search" style="margin-bottom: 15px;" name="clientes" class="form-control"> 
+                                                                </select>
+                                                            </div>
+                                                       
+                                                        
+                                                        
+                                                       
 
-                                                        <div class="contenedor-tabla oculto">
+                                                        <!-- <div class="contenedor-tabla oculto">
                                                                 <table class="table" id="table-llantas-mostradas">
                                                                 <thead class="table-info">
                                                                 <tr>
@@ -277,24 +291,28 @@
                                                                 <tbody class="tbody">
                                                                 </tbody> 
                                                                 </table>
-                                                        </div>
+                                                        </div> -->
 
-                                                      
-                                                        <select id="clientes" name="clientes" class="form-control"> 
+                                                        
+                                                            <div id="select-search-contain">
+                                                                
+                                                                <select id="clientes" name="clientes" class="form-control"> 
+                                                                </select>
+                                                            </div>
+                                                     
                                                             
-                                                         </select>
-
-                                                                              
                                                         
 
-                                                         <select id="metodos-pago" name="clientes" class="form-control"> 
-                                                                <option disabled selected value></option>
+                                                         
+                                                        <select id="metodos-pago" class="selectpicker form-control mb-2" data-live-search="true"  multiple name="clientes" title="Metodos de pago"> 
+                                                                
                                                                 <option value="0">Efectivo</option>
                                                                 <option value="1">Tarjeta</option>
                                                                 <option value="2">Transferencia</option>
                                                                 <option value="3">Cheque</option>
                                                                 <option value="4">Sin definir</option>
                                                          </select>
+                                                    
                                                   
 
                                                         <label class="no-editable">
@@ -407,7 +425,7 @@
                                                 
                                                 <label>
                                                     <span for="fecha">Fecha</span>
-                                                    <input class="form-control"  type="date" id="fecha" name="fecha" style="width: 150px;"> 
+                                                    <input class="form-control"  type="date" id="fecha" name="fecha" style="width: 150px;" value="<?php echo date("Y-m-d");?>"> 
                                                 </label>
                                             </div>  
                                 </div>
@@ -431,7 +449,7 @@
                                                 <div class="botones-de-venta" style="margin-top: 8px;">
                                                     <div class="btn btn-danger text-white" comentario=" " style="color: rgb(31, 28, 28); margin-right: 2vh;" id="hacer-comentario"><i class="fas fa-comment-dots"></i></div>
                                                     <div class="btn btn-warning" onclick="limpiarTabla();" style="color: rgb(31, 28, 28); margin-right: 2vh;" id="limpiar-venta">Limpiar</div>
-                                                    <div class="btn btn-success" onclick="realizarVenta();" id="realizar-venta">Realizar venta</div>
+                                                    <div class="btn btn-success" onclick="procesarVenta();" id="realizar-venta">Realizar venta</div>
                                                     <div class="btn btn-primary" onclick="realizarVentaCredito();" style="margin-left: 2vh;" id="realizar-venta">Realizar venta a credito</div>
                                                 </div>   
                                                 
@@ -528,6 +546,7 @@
 
     <!--<script src="src/js/agregar-info-tabla-venta.js"></script>-->
     <script src="src/vendor/node_modules/@splidejs/splide/dist/js/splide.min.js"></script>
+    <script src="src/js/bootstrap-select.min.js"></script>
     <script src="src/js/nueva-venta.js"></script>
     <script src="src/js/agregar-product-temp.js"></script>
     <script src="src/js/generar-token.js"></script>

@@ -23,7 +23,7 @@ use PhpOffice\PhpSpreadsheet\Style\Color;
 require_once '../../vendor/phpoffice/phpspreadsheet/samples/Bootstrap.php'; 
 
 date_default_timezone_set("America/Matamoros");
-session_start(); 
+$index =0;
 $fecha = $_GET['fecha'];
 
 $spreadsheet = new SpreadSheet();
@@ -36,7 +36,7 @@ $hoja_activa->setTitle("Reporte de venta diaria");
 
 
 
-//$hoja_activa->mergeCells("A1:B1");
+//$hoja_activa->mergeCells("A1:B1"); 
         $hoja_activa->mergeCells("B1:G1");        
         $hoja_activa->setCellValue('B1', 'Reporte de ventas diarias de todas las sucursales | Llantera el rayo ');
         $hoja_activa->getStyle('B1')->getFont()->setBold(true);
@@ -212,6 +212,12 @@ $hoja_activa->setTitle("Reporte de venta diaria");
 
 
                     }
+                }else{
+                    $hoja_activa->mergeCells('A'.$index.':I'.$index);
+                    $hoja_activa->setCellValue('A'.$index, "Sin ventas realizadas");
+                    $hoja_activa->getStyle('A'.$index.':I'.$index)->getAlignment()->setHorizontal('center');
+                    $hoja_activa->getStyle('A'.$index.':I'.$index)->getAlignment()->setVertical('center');
+              
                 }
 
 
@@ -351,48 +357,57 @@ $hoja_activa->setTitle("Reporte de venta diaria");
                 //echo json_encode($abonos_hoy, JSON_UNESCAPED_UNICODE);
                 $contador2 = 1;
 
-                foreach ($abonos_hoy as $key => $value) {
-                    # code...
-                        
-                        $id_venta = $value["id"];
-                        $cliente = $value["cliente"];
-                        $fecha = $value["fecha"];
-                        $abono = $value["abono"];
-                        $sucursal = $value["sucursal"];
-                        $usuario = $value["usuario"];
-                        $id_credito = $value["id_credito"];
-                        $metodo = $value["metodo"];
-                        
-                $hoja_activa->getColumnDimension('A')->setWidth(8);
-                $hoja_activa->setCellValue('A'.$index, $contador2);
-                $hoja_activa->getColumnDimension('B')->setWidth(40);
-                $hoja_activa->setCellValue('B'.$index, $cliente);
-                $hoja_activa->getColumnDimension('C')->setWidth(18);
-                $hoja_activa->setCellValue('C'.$index, $fecha);
-                $hoja_activa->getColumnDimension('D')->setWidth(18);
-                $hoja_activa->setCellValue('D'.$index, $abono);
-                $hoja_activa->getColumnDimension('E')->setWidth(18);
-                $hoja_activa->setCellValue('E'.$index, $sucursal);
-                $hoja_activa->getColumnDimension('F')->setWidth(40);
-                $hoja_activa->setCellValue('F'.$index, $usuario);
-                $hoja_activa->getColumnDimension('G')->setWidth(18);
-                $hoja_activa->setCellValue('G'.$index, "CRED".$id_credito);     
-                $hoja_activa->getColumnDimension('H')->setWidth(18);
-                $hoja_activa->setCellValue('H'.$index, $metodo);           
-                $hoja_activa->getStyle('A'.$index.':H'.$index)->getAlignment()->setHorizontal('center');
-                $hoja_activa->getStyle('A'.$index.':H'.$index)->getAlignment()->setVertical('center');
+                if($abonos_hoy == 0){
+                    $hoja_activa->mergeCells('A'.$index.':H'.$index);
+                    $hoja_activa->setCellValue('A'.$index, 'Sin abonos realizados'); 
+                             
+                    $hoja_activa->getStyle('A'.$index.':H'.$index)->getAlignment()->setHorizontal('center');
+                    $hoja_activa->getStyle('A'.$index.':H'.$index)->getAlignment()->setVertical('center');
 
-                $index++;
-                $contador2++;
-                        
-                    }
-                
+                    $index++;
+                    $contador2++; 
+                }else{
+                    foreach ($abonos_hoy as $key => $value) {
+                        # code...
+                            
+                           // $id_venta = $value["id"];
+                            $cliente = $value["cliente"];
+                            $fecha = $value["fecha"];
+                            $abono = $value["abono"];
+                            $sucursal = $value["sucursal"];
+                            $usuario = $value["usuario"];
+                            $id_credito = $value["id_credito"];
+                            $metodo = $value["metodo"];
+                            
+                    $hoja_activa->getColumnDimension('A')->setWidth(8);
+                    $hoja_activa->setCellValue('A'.$index, $contador2);
+                    $hoja_activa->getColumnDimension('B')->setWidth(40);
+                    $hoja_activa->setCellValue('B'.$index, $cliente);
+                    $hoja_activa->getColumnDimension('C')->setWidth(18);
+                    $hoja_activa->setCellValue('C'.$index, $fecha);
+                    $hoja_activa->getColumnDimension('D')->setWidth(18);
+                    $hoja_activa->setCellValue('D'.$index, $abono);
+                    $hoja_activa->getColumnDimension('E')->setWidth(18);
+                    $hoja_activa->setCellValue('E'.$index, $sucursal);
+                    $hoja_activa->getColumnDimension('F')->setWidth(40);
+                    $hoja_activa->setCellValue('F'.$index, $usuario);
+                    $hoja_activa->getColumnDimension('G')->setWidth(18);
+                    $hoja_activa->setCellValue('G'.$index, "CRED".$id_credito);     
+                    $hoja_activa->getColumnDimension('H')->setWidth(18);
+                    $hoja_activa->setCellValue('H'.$index, $metodo);           
+                    $hoja_activa->getStyle('A'.$index.':H'.$index)->getAlignment()->setHorizontal('center');
+                    $hoja_activa->getStyle('A'.$index.':H'.$index)->getAlignment()->setVertical('center');
+    
+                    $index++;
+                    $contador2++;
+                            
+                        }
+                }
 
-                
                 $index++;
                 $index++;
                 $hoja_activa->mergeCells("A". $index .":I". $index ."");        
-                $hoja_activa->setCellValue('A'. $index , "Ventas realizados");
+                $hoja_activa->setCellValue('A'. $index , "Ventas realizadas a credito");
                 $hoja_activa->getStyle('A'.$index.':I'.$index)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('007bcc');
                 $hoja_activa->getStyle('A'.$index.':I'.$index)->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
                 $hoja_activa->getStyle('A'.$index.':I'.$index)->getFont()->setBold(true);
@@ -412,25 +427,36 @@ $hoja_activa->setTitle("Reporte de venta diaria");
                 $hoja_activa->getColumnDimension('F')->setWidth(40);
                 $hoja_activa->setCellValue('F'.$index, 'Vendedor');
                 $hoja_activa->getColumnDimension('G')->setWidth(18);
-                $hoja_activa->setCellValue('G'.$index, 'Folio');
-                $hoja_activa->getColumnDimension('H')->setWidth(20);
-                $hoja_activa->setCellValue('H'.$index, 'Tipo');
+                $hoja_activa->setCellValue('G'.$index, 'Estatus');
+                $hoja_activa->getColumnDimension('H')->setWidth(18);
+                $hoja_activa->setCellValue('H'.$index, 'Folio');
                 $hoja_activa->getColumnDimension('I')->setWidth(20);
-                $hoja_activa->setCellValue('I'.$index, 'Metodo pago');
+                $hoja_activa->setCellValue('I'.$index, 'Tipo');
+                $hoja_activa->getColumnDimension('J')->setWidth(20);
+                $hoja_activa->setCellValue('J'.$index, 'Metodo pago');
 
-                $hoja_activa->getStyle('A'.$index.':I'.$index)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('007bcc');
-                $hoja_activa->getStyle('A'.$index.':I'.$index)->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
-                $hoja_activa->getStyle('A'.$index.':I'.$index)->getFont()->setBold(true);
+                $hoja_activa->getStyle('A'.$index.':J'.$index)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('007bcc');
+                $hoja_activa->getStyle('A'.$index.':J'.$index)->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+                $hoja_activa->getStyle('A'.$index.':J'.$index)->getFont()->setBold(true);
                 $hoja_activa->getRowDimension('2')->setRowHeight(20);
-                $hoja_activa->getStyle('A'.$index.':I'.$index)->getAlignment()->setHorizontal('center');
-                $hoja_activa->getStyle('A'.$index.':I'.$index)->getAlignment()->setVertical('center');
+                $hoja_activa->getStyle('A'.$index.':J'.$index)->getAlignment()->setHorizontal('center');
+                $hoja_activa->getStyle('A'.$index.':J'.$index)->getAlignment()->setVertical('center');
 
                 $index++;
 
 
                 $estatuscred = "Abierta";
                 $tipocred = "Credito";
-                if($numero_ventas > 0){
+                $numero_ventas_cred =0;
+                $consultaCred = "SELECT COUNT(*) FROM ventas WHERE id_sucursal=? AND fecha = ? AND estatus =? AND tipo =?";
+                $respc = $con->prepare($consultaCred);
+                $respc->bind_param('ssss', $id_sucursal, $fecha, $estatuscred, $tipocred);
+                $respc->execute();
+                $respc->bind_result($numero_ventas_cred);
+                $respc->fetch();
+                $respc->close();
+
+                if($numero_ventas_cred > 0){
                     $traer_venta = "SELECT * FROM ventas WHERE fecha = '$fecha' AND estatus ='$estatuscred' AND tipo ='$tipocred'";
                     $respo = mysqli_query($con, $traer_venta);
 
@@ -442,6 +468,7 @@ $hoja_activa->setTitle("Reporte de venta diaria");
                         $sucursal = $fila["sucursal"];
                         $total_actual = $fila["Total"];
                         $metodo_p = $fila["metodo_pago"];
+                        $venta_estatus = $fila["estatus"];
                         
                         $consultaCliente = "SELECT Nombre_Cliente FROM clientes WHERE id =?";
                         $resp = $con->prepare($consultaCliente);
@@ -473,17 +500,29 @@ $hoja_activa->setTitle("Reporte de venta diaria");
                 $hoja_activa->getColumnDimension('F')->setWidth(40);
                 $hoja_activa->setCellValue('F'.$index, $nombre . " ".$apellido);
                 $hoja_activa->getColumnDimension('G')->setWidth(18);
-                $hoja_activa->setCellValue('G'.$index, "RAY".$id_venta);
-                $hoja_activa->getColumnDimension('H')->setWidth(20);
-                $hoja_activa->setCellValue('H'.$index, $tipocred);
+                $hoja_activa->setCellValue('G'.$index, $venta_estatus);
+                $hoja_activa->getColumnDimension('H')->setWidth(18);
+                $hoja_activa->setCellValue('H'.$index, "RAY".$id_venta);
                 $hoja_activa->getColumnDimension('I')->setWidth(20);
-                $hoja_activa->setCellValue('I'.$index, $metodo_p);
+                $hoja_activa->setCellValue('I'.$index, $tipocred);
+                $hoja_activa->getColumnDimension('J')->setWidth(20);
+                $hoja_activa->setCellValue('J'.$index, $metodo_p);
+
 
                 $index++;
                 $contador++;
 
 
                     }
+                }else{
+                    $hoja_activa->mergeCells('A'.$index.':J'.$index);
+                    $hoja_activa->setCellValue('A'.$index, 'Sin ventas realizadas'); 
+                             
+                    $hoja_activa->getStyle('A'.$index.':J'.$index)->getAlignment()->setHorizontal('center');
+                    $hoja_activa->getStyle('A'.$index.':J'.$index)->getAlignment()->setVertical('center');
+
+                    $index++;
+                 
                 }
 
 

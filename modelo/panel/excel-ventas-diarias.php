@@ -23,10 +23,9 @@ use PhpOffice\PhpSpreadsheet\Style\Color;
 require_once '../../vendor/phpoffice/phpspreadsheet/samples/Bootstrap.php'; 
 
 date_default_timezone_set("America/Matamoros");
-session_start(); 
 $id_sucursal = $_GET['id_sucursal'];
 $fecha = $_GET['fecha'];
-
+$index =0;
 $spreadsheet = new SpreadSheet();
 $spreadsheet->getProperties()->setCreator("Ricardo Reyna")->setTitle("creditos vencidos");
 $count=0;
@@ -97,9 +96,11 @@ $resp->close();
         $resp->fetch();
         $resp->close();
 
+   
+
                 $hoja_activa->getColumnDimension('F')->setWidth(40);
                 $hoja_activa->setCellValue('B3', "Ventas totales");
-                $hoja_activa->setCellValue('F3', "Ganancias totales	");
+                //$hoja_activa->setCellValue('F3', "Ganancias totales	");
                 $hoja_activa->getStyle('B3:G3')->getFont()->setBold(true);
                 $hoja_activa->setCellValue('B4', "Monto total de la venta:");
                 $hoja_activa->setCellValue('C4', "$". $venta_total);
@@ -116,7 +117,7 @@ $resp->close();
                 $hoja_activa->setCellValue('B10', "Ventas realizadas");
                 $hoja_activa->setCellValue('C10', $numero_ventas);
                 
-                $hoja_activa->setCellValue('F4', "Ganancia total de la venta:");
+                /*$hoja_activa->setCellValue('F4', "Ganancia total de la venta:");
                 $hoja_activa->setCellValue('G4', "$". $utilidad_total);
                 $hoja_activa->setCellValue('F5', "Ganancia total en efectivo:");
                 $hoja_activa->setCellValue('G5', "$". $utilidad_metodo_efectivo);
@@ -127,7 +128,7 @@ $resp->close();
                 $hoja_activa->setCellValue('F8', "Ganancia total en transferencia:");
                 $hoja_activa->setCellValue('G8', "$". $utilidad_metodo_transferencia);
                 $hoja_activa->setCellValue('F9', "Ganancia total sin definir:");
-                $hoja_activa->setCellValue('G9', "$". $utilidad_metodo_por_definir);
+                $hoja_activa->setCellValue('G9', "$". $utilidad_metodo_por_definir);*/
                 
                 $hoja_activa->getStyle('A'.$index.':G'.$index)->getAlignment()->setHorizontal('center');
                 $hoja_activa->getStyle('A'.$index.':G'.$index)->getAlignment()->setVertical('center');
@@ -153,13 +154,23 @@ $resp->close();
                 $hoja_activa->setCellValue('H'.$index, 'Tipo');
                 $hoja_activa->getColumnDimension('I')->setWidth(20);
                 $hoja_activa->setCellValue('I'.$index, 'Metodo pago');
+                $hoja_activa->getColumnDimension('J')->setWidth(20);
+                $hoja_activa->setCellValue('J'.$index, 'Pago Efectivo');
+                $hoja_activa->getColumnDimension('K')->setWidth(20);
+                $hoja_activa->setCellValue('K'.$index, 'Pago Tarjeta');
+                $hoja_activa->getColumnDimension('L')->setWidth(20);
+                $hoja_activa->setCellValue('L'.$index, 'Pago Cheque');
+                $hoja_activa->getColumnDimension('M')->setWidth(20);
+                $hoja_activa->setCellValue('M'.$index, 'Pago Transferencia');
+                $hoja_activa->getColumnDimension('N')->setWidth(20);
+                $hoja_activa->setCellValue('N'.$index, 'Pago por definir');
 
-                $hoja_activa->getStyle('A'.$index.':I'.$index)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('007bcc');
-                $hoja_activa->getStyle('A'.$index.':I'.$index)->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
-                $hoja_activa->getStyle('A'.$index.':I'.$index)->getFont()->setBold(true);
+                $hoja_activa->getStyle('A'.$index.':N'.$index)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('007bcc');
+                $hoja_activa->getStyle('A'.$index.':N'.$index)->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+                $hoja_activa->getStyle('A'.$index.':N'.$index)->getFont()->setBold(true);
                 $hoja_activa->getRowDimension('2')->setRowHeight(20);
-                $hoja_activa->getStyle('A'.$index.':I'.$index)->getAlignment()->setHorizontal('center');
-                $hoja_activa->getStyle('A'.$index.':I'.$index)->getAlignment()->setVertical('center');
+                $hoja_activa->getStyle('A'.$index.':N'.$index)->getAlignment()->setHorizontal('center');
+                $hoja_activa->getStyle('A'.$index.':N'.$index)->getAlignment()->setVertical('center');
 
                 $index++;
 
@@ -175,6 +186,11 @@ $resp->close();
                         $id_usuario = $fila["id_Usuarios"];
                         $sucursal = $fila["sucursal"];
                         $metodo_pag = $fila["metodo_pago"];
+                        $pago_efectivo = $fila["pago_efectivo"];
+                        $pago_tarjeta = $fila["pago_tarjeta"];
+                        $pago_cheque = $fila["pago_cheque"];
+                        $pago_transferencia = $fila["pago_transferencia"];
+                        $pago_por_definir = $fila["pago_sin_definir"];
                         $total_actual = $fila["Total"];
                         
                         $consultaCliente = "SELECT Nombre_Cliente FROM clientes WHERE id =?";
@@ -212,12 +228,28 @@ $resp->close();
                 $hoja_activa->setCellValue('H'.$index, $tipo);
                 $hoja_activa->getColumnDimension('I')->setWidth(20);
                 $hoja_activa->setCellValue('I'.$index, $metodo_pag);
+                $hoja_activa->getColumnDimension('J')->setWidth(20);
+                $hoja_activa->setCellValue('J'.$index, "$".$pago_efectivo);
+                $hoja_activa->getColumnDimension('K')->setWidth(20);
+                $hoja_activa->setCellValue('K'.$index, "$".$pago_tarjeta);
+                $hoja_activa->getColumnDimension('L')->setWidth(20);
+                $hoja_activa->setCellValue('L'.$index, "$".$pago_transferencia);
+                $hoja_activa->getColumnDimension('M')->setWidth(20);
+                $hoja_activa->setCellValue('M'.$index, "$".$pago_cheque);
+                $hoja_activa->getColumnDimension('N')->setWidth(20);
+                $hoja_activa->setCellValue('N'.$index, "$".$pago_por_definir);
+
 
                 $index++;
                 $contador++;
 
 
                     }
+                }else{
+                    $hoja_activa->mergeCells('A'.$index.':N'.$index);
+                    $hoja_activa->setCellValue('A'.$index, "Sin ventas realizadas");
+                    $hoja_activa->getStyle('A'.$index.':N'.$index)->getAlignment()->setHorizontal('center');
+                    $hoja_activa->getStyle('A'.$index.':N'.$index)->getAlignment()->setVertical('center');
                 }
 
 
@@ -283,7 +315,7 @@ $resp->close();
 
                 $hoja_activa->getColumnDimension('F')->setWidth(40);
                 $hoja_activa->setCellValue('B3', "Ventas totales");
-                $hoja_activa->setCellValue('F3', "Ganancias totales	");
+                //$hoja_activa->setCellValue('F3', "Ganancias totales	");
                 $hoja_activa->getStyle('B3:G3')->getFont()->setBold(true);
                 $hoja_activa->setCellValue('B4', "Monto total de la venta:");
                 $hoja_activa->setCellValue('C4', "$". $venta_total);
@@ -300,7 +332,7 @@ $resp->close();
                 $hoja_activa->setCellValue('B10', "Ventas realizadas");
                 $hoja_activa->setCellValue('C10', $numero_ventas);
                 
-                $hoja_activa->setCellValue('F4', "Ganancia total de la venta:");
+               /* $hoja_activa->setCellValue('F4', "Ganancia total de la venta:");
                 $hoja_activa->setCellValue('G4', "$". $utilidad_total);
                 $hoja_activa->setCellValue('F5', "Ganancia total en efectivo:");
                 $hoja_activa->setCellValue('G5', "$". $utilidad_metodo_efectivo);
@@ -314,18 +346,18 @@ $resp->close();
                 $hoja_activa->setCellValue('G9', "$". $utilidad_metodo_por_definir);
                 
                 $hoja_activa->getStyle('A'.$index.':G'.$index)->getAlignment()->setHorizontal('center');
-                $hoja_activa->getStyle('A'.$index.':G'.$index)->getAlignment()->setVertical('center');
+                $hoja_activa->getStyle('A'.$index.':G'.$index)->getAlignment()->setVertical('center');*/
 
 
                 $index=12;
                 //Tabla de abonos
-                $hoja_activa->mergeCells("A12:H12");        
+                $hoja_activa->mergeCells("A12:M12");        
                 $hoja_activa->setCellValue('A12', "Abonos realizados");
-                $hoja_activa->getStyle('A12:H12')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('950033');
-                $hoja_activa->getStyle('A12:H12')->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+                $hoja_activa->getStyle('A12:M12')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('950033');
+                $hoja_activa->getStyle('A12:M12')->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
                  
-                $hoja_activa->getStyle('A12:H12')->getAlignment()->setHorizontal('center');
-                $hoja_activa->getStyle('A12:H12')->getAlignment()->setVertical('center');
+                $hoja_activa->getStyle('A12:M12')->getAlignment()->setHorizontal('center');
+                $hoja_activa->getStyle('A12:M12')->getAlignment()->setVertical('center');
 
                 $index++;
                 $hoja_activa->getColumnDimension('A')->setWidth(8);
@@ -344,66 +376,100 @@ $resp->close();
                 $hoja_activa->setCellValue('G'.$index, 'Credito');
                 $hoja_activa->getColumnDimension('H')->setWidth(18);
                 $hoja_activa->setCellValue('H'.$index, 'Metodo pago');
+                $hoja_activa->getColumnDimension('I')->setWidth(18);
+                $hoja_activa->setCellValue('I'.$index, 'Pago Efectivo');
+                $hoja_activa->getColumnDimension('J')->setWidth(18);
+                $hoja_activa->setCellValue('J'.$index, 'Pago Tarjeta');
+                $hoja_activa->getColumnDimension('K')->setWidth(18);
+                $hoja_activa->setCellValue('K'.$index, 'Pago Transferencia');
+                $hoja_activa->getColumnDimension('L')->setWidth(18);
+                $hoja_activa->setCellValue('L'.$index, 'Pago Cheque');
+                $hoja_activa->getColumnDimension('M')->setWidth(18);
+                $hoja_activa->setCellValue('M'.$index, 'Pago por definir');
 
-                $hoja_activa->getStyle('A'.$index.':H'.$index)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('950033');
-                $hoja_activa->getStyle('A'.$index.':H'.$index)->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
-                $hoja_activa->getStyle('A'.$index.':H'.$index)->getFont()->setBold(true);
+                $hoja_activa->getStyle('A'.$index.':M'.$index)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('950033');
+                $hoja_activa->getStyle('A'.$index.':M'.$index)->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+                $hoja_activa->getStyle('A'.$index.':M'.$index)->getFont()->setBold(true);
                 $hoja_activa->getRowDimension('2')->setRowHeight(20);
-                $hoja_activa->getStyle('A'.$index.':H'.$index)->getAlignment()->setHorizontal('center');
-                $hoja_activa->getStyle('A'.$index.':H'.$index)->getAlignment()->setVertical('center');
+                $hoja_activa->getStyle('A'.$index.':M'.$index)->getAlignment()->setHorizontal('center');
+                $hoja_activa->getStyle('A'.$index.':M'.$index)->getAlignment()->setVertical('center');
                 $index++;
 
                 $abonos_hoy = obtenerClientesqueAbonaron($con, $id_sucursal, $fecha);
                 //echo json_encode($abonos_hoy, JSON_UNESCAPED_UNICODE);
                 $contador2 = 1;
+                //print_r($abonos_hoy);
+                if($abonos_hoy == 0){
+                    $hoja_activa->mergeCells('A'.$index.':H'.$index);
+                    $hoja_activa->setCellValue('A'.$index, 'Sin abonos realizados'); 
+                             
+                    $hoja_activa->getStyle('A'.$index.':H'.$index)->getAlignment()->setHorizontal('center');
+                    $hoja_activa->getStyle('A'.$index.':H'.$index)->getAlignment()->setVertical('center');
 
-                foreach ($abonos_hoy as $key => $value) {
-                    # code...
-                        
-                        $id_venta = $value["id"];
-                        $cliente = $value["cliente"];
-                        $fecha = $value["fecha"];
-                        $abono = $value["abono"];
-                        $sucursal = $value["sucursal"];
-                        $usuario = $value["usuario"];
-                        $id_credito = $value["id_credito"];
-                        $metodo = $value["metodo"];
-                        
-                $hoja_activa->getColumnDimension('A')->setWidth(8);
-                $hoja_activa->setCellValue('A'.$index, $contador2);
-                $hoja_activa->getColumnDimension('B')->setWidth(40);
-                $hoja_activa->setCellValue('B'.$index, $cliente);
-                $hoja_activa->getColumnDimension('C')->setWidth(18);
-                $hoja_activa->setCellValue('C'.$index, $fecha);
-                $hoja_activa->getColumnDimension('D')->setWidth(18);
-                $hoja_activa->setCellValue('D'.$index, $abono);
-                $hoja_activa->getColumnDimension('E')->setWidth(18);
-                $hoja_activa->setCellValue('E'.$index, $sucursal);
-                $hoja_activa->getColumnDimension('F')->setWidth(40);
-                $hoja_activa->setCellValue('F'.$index, $usuario);
-                $hoja_activa->getColumnDimension('G')->setWidth(18);
-                $hoja_activa->setCellValue('G'.$index, "CRED".$id_credito);     
-                $hoja_activa->getColumnDimension('H')->setWidth(18);
-                $hoja_activa->setCellValue('H'.$index, $metodo);           
-                $hoja_activa->getStyle('A'.$index.':H'.$index)->getAlignment()->setHorizontal('center');
-                $hoja_activa->getStyle('A'.$index.':H'.$index)->getAlignment()->setVertical('center');
-
-                $index++;
-                $contador2++;
-                        
-                    }
+                    $index++;
+                    $contador2++; 
+                }else{
+                    foreach ($abonos_hoy as $key => $value) {
+                        # code...
+                            
+                            $id_venta = !empty($value["id"]) ? $value["id"] : 0;
+                            $cliente = $value["cliente"];
+                            $fecha = $value["fecha"];
+                            $abono = $value["abono"];
+                            $sucursal = $value["sucursal"];
+                            $usuario = $value["usuario"];
+                            $id_credito = $value["id_credito"];
+                            $metodo = $value["metodo"];
+                            $pago_efectivo = $value["pago_efectivo"];
+                            $pago_tarjeta = $value["pago_tarjeta"];
+                            $pago_transferencia = $value["pago_transferencia"];
+                            $pago_cheque = $value["pago_cheque"];
+                            $pago_por_definir = $value["pago_sin_definir"];
+                            
+                            $hoja_activa->getColumnDimension('A')->setWidth(8);
+                            $hoja_activa->setCellValue('A'.$index, $contador2);
+                            $hoja_activa->getColumnDimension('B')->setWidth(40);
+                            $hoja_activa->setCellValue('B'.$index, $cliente);
+                            $hoja_activa->getColumnDimension('C')->setWidth(18);
+                            $hoja_activa->setCellValue('C'.$index, $fecha);
+                            $hoja_activa->getColumnDimension('D')->setWidth(18);
+                            $hoja_activa->setCellValue('D'.$index, $abono);
+                            $hoja_activa->getColumnDimension('E')->setWidth(18);
+                            $hoja_activa->setCellValue('E'.$index, $sucursal);
+                            $hoja_activa->getColumnDimension('F')->setWidth(40);
+                            $hoja_activa->setCellValue('F'.$index, $usuario);
+                            $hoja_activa->getColumnDimension('G')->setWidth(18);
+                            $hoja_activa->setCellValue('G'.$index, "CRED".$id_credito);     
+                            $hoja_activa->getColumnDimension('H')->setWidth(18);
+                            $hoja_activa->setCellValue('H'.$index, $metodo);  
+                            $hoja_activa->getColumnDimension('I')->setWidth(18);
+                            $hoja_activa->setCellValue('I'.$index, "$".$pago_efectivo);
+                            $hoja_activa->getColumnDimension('J')->setWidth(18);
+                            $hoja_activa->setCellValue('J'.$index, "$".$pago_tarjeta);
+                            $hoja_activa->getColumnDimension('K')->setWidth(18);
+                            $hoja_activa->setCellValue('K'.$index, "$".$pago_transferencia);
+                            $hoja_activa->getColumnDimension('L')->setWidth(18);
+                            $hoja_activa->setCellValue('L'.$index, "$".$pago_cheque);
+                            $hoja_activa->getColumnDimension('M')->setWidth(18);
+                            $hoja_activa->setCellValue('M'.$index, "$".$pago_por_definir);      
+                            $hoja_activa->getStyle('A'.$index.':M'.$index)->getAlignment()->setHorizontal('center');
+                            $hoja_activa->getStyle('A'.$index.':M'.$index)->getAlignment()->setVertical('center');
+    
+                            $index++;
+                            $contador2++;
+                            
+                        }
+                }
                 
-
-                
                 $index++;
                 $index++;
-                $hoja_activa->mergeCells("A". $index .":I". $index ."");        
-                $hoja_activa->setCellValue('A'. $index , "Ventas realizados");
-                $hoja_activa->getStyle('A'.$index.':I'.$index)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('007bcc');
-                $hoja_activa->getStyle('A'.$index.':I'.$index)->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
-                $hoja_activa->getStyle('A'.$index.':I'.$index)->getFont()->setBold(true);
-                $hoja_activa->getStyle('A'.$index.':I'.$index)->getAlignment()->setHorizontal('center');
-                $hoja_activa->getStyle('A'.$index.':I'.$index)->getAlignment()->setVertical('center');
+                $hoja_activa->mergeCells("A". $index .":O". $index ."");        
+                $hoja_activa->setCellValue('A'. $index , "Ventas realizadas a credito");
+                $hoja_activa->getStyle('A'.$index.':O'.$index)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('007bcc');
+                $hoja_activa->getStyle('A'.$index.':O'.$index)->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+                $hoja_activa->getStyle('A'.$index.':O'.$index)->getFont()->setBold(true);
+                $hoja_activa->getStyle('A'.$index.':O'.$index)->getAlignment()->setHorizontal('center');
+                $hoja_activa->getStyle('A'.$index.':O'.$index)->getAlignment()->setVertical('center');
                 $index++;
                 $hoja_activa->getColumnDimension('A')->setWidth(8);
                 $hoja_activa->setCellValue('A'.$index, "#");
@@ -418,25 +484,47 @@ $resp->close();
                 $hoja_activa->getColumnDimension('F')->setWidth(40);
                 $hoja_activa->setCellValue('F'.$index, 'Vendedor');
                 $hoja_activa->getColumnDimension('G')->setWidth(18);
-                $hoja_activa->setCellValue('G'.$index, 'Folio');
-                $hoja_activa->getColumnDimension('H')->setWidth(20);
-                $hoja_activa->setCellValue('H'.$index, 'Tipo');
+                $hoja_activa->setCellValue('G'.$index, 'Estatus');
+                $hoja_activa->getColumnDimension('H')->setWidth(18);
+                $hoja_activa->setCellValue('H'.$index, 'Folio');
                 $hoja_activa->getColumnDimension('I')->setWidth(20);
-                $hoja_activa->setCellValue('I'.$index, 'Metodo pago');
+                $hoja_activa->setCellValue('I'.$index, 'Tipo');
+                $hoja_activa->getColumnDimension('J')->setWidth(20);
+                $hoja_activa->setCellValue('J'.$index, 'Metodo pago');
+                $hoja_activa->getColumnDimension('K')->setWidth(20);
+                $hoja_activa->setCellValue('K'.$index, 'Pago Efectivo');
+                $hoja_activa->getColumnDimension('L')->setWidth(20);
+                $hoja_activa->setCellValue('L'.$index, 'Pago Tarjeta');
+                $hoja_activa->getColumnDimension('M')->setWidth(20);
+                $hoja_activa->setCellValue('M'.$index, 'Pago Transferencia');
+                $hoja_activa->getColumnDimension('N')->setWidth(20);
+                $hoja_activa->setCellValue('N'.$index, 'Pago Cheque');
+                $hoja_activa->getColumnDimension('O')->setWidth(20);
+                $hoja_activa->setCellValue('O'.$index, 'Pago por Definir');
 
-                $hoja_activa->getStyle('A'.$index.':I'.$index)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('007bcc');
-                $hoja_activa->getStyle('A'.$index.':I'.$index)->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
-                $hoja_activa->getStyle('A'.$index.':I'.$index)->getFont()->setBold(true);
+                $hoja_activa->getStyle('A'.$index.':O'.$index)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('007bcc');
+                $hoja_activa->getStyle('A'.$index.':O'.$index)->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+                $hoja_activa->getStyle('A'.$index.':O'.$index)->getFont()->setBold(true);
                 $hoja_activa->getRowDimension('2')->setRowHeight(20);
-                $hoja_activa->getStyle('A'.$index.':I'.$index)->getAlignment()->setHorizontal('center');
-                $hoja_activa->getStyle('A'.$index.':I'.$index)->getAlignment()->setVertical('center');
+                $hoja_activa->getStyle('A'.$index.':O'.$index)->getAlignment()->setHorizontal('center');
+                $hoja_activa->getStyle('A'.$index.':O'.$index)->getAlignment()->setVertical('center');
 
                 $index++;
 
 
                 $estatuscred = "Abierta";
                 $tipocred = "Credito";
-                if($numero_ventas > 0){
+                $numero_ventas_cred =0;
+                $consultaCred = "SELECT COUNT(*) FROM ventas WHERE id_sucursal=? AND fecha = ? AND estatus =? AND tipo =?";
+                $respc = $con->prepare($consultaCred);
+                $respc->bind_param('ssss', $id_sucursal, $fecha, $estatuscred, $tipocred);
+                $respc->execute();
+                $respc->bind_result($numero_ventas_cred);
+                $respc->fetch();
+                $respc->close();
+
+
+                if($numero_ventas_cred > 0){
                     $traer_venta = "SELECT * FROM ventas WHERE id_sucursal = '$id_sucursal' AND fecha = '$fecha' AND estatus ='$estatuscred' AND tipo ='$tipocred'";
                     $respo = mysqli_query($con, $traer_venta);
 
@@ -446,8 +534,14 @@ $resp->close();
                         $id_cliente = $fila["id_Cliente"];
                         $id_usuario = $fila["id_Usuarios"];
                         $sucursal = $fila["sucursal"];
+                        $pago_efectivo = $fila["pago_efectivo"];
+                        $pago_tarjeta = $fila["pago_tarjeta"];
+                        $pago_cheque = $fila["pago_cheque"];
+                        $pago_transferencia = $fila["pago_transferencia"];
+                        $pago_por_definir = $fila["pago_sin_definir"];
                         $total_actual = $fila["Total"];
                         $metodo_p = $fila["metodo_pago"];
+                        $venta_estatus = $fila["estatus"];
                         
                         $consultaCliente = "SELECT Nombre_Cliente FROM clientes WHERE id =?";
                         $resp = $con->prepare($consultaCliente);
@@ -479,22 +573,41 @@ $resp->close();
                 $hoja_activa->getColumnDimension('F')->setWidth(40);
                 $hoja_activa->setCellValue('F'.$index, $nombre . " ".$apellido);
                 $hoja_activa->getColumnDimension('G')->setWidth(18);
-                $hoja_activa->setCellValue('G'.$index, "RAY".$id_venta);
-                $hoja_activa->getColumnDimension('H')->setWidth(20);
-                $hoja_activa->setCellValue('H'.$index, $tipocred);
+                $hoja_activa->setCellValue('G'.$index, $venta_estatus);
+                $hoja_activa->getColumnDimension('H')->setWidth(18);
+                $hoja_activa->setCellValue('H'.$index, "RAY".$id_venta);
                 $hoja_activa->getColumnDimension('I')->setWidth(20);
-                $hoja_activa->setCellValue('I'.$index, $metodo_p);
+                $hoja_activa->setCellValue('I'.$index, $tipocred);
+                $hoja_activa->getColumnDimension('J')->setWidth(20);
+                $hoja_activa->setCellValue('J'.$index, $metodo_p);
+                $hoja_activa->getColumnDimension('K')->setWidth(20);
+                $hoja_activa->setCellValue('K'.$index, "$".$pago_efectivo);
+                $hoja_activa->getColumnDimension('L')->setWidth(20);
+                $hoja_activa->setCellValue('L'.$index, "$".$pago_tarjeta);
+                $hoja_activa->getColumnDimension('M')->setWidth(20);
+                $hoja_activa->setCellValue('M'.$index, "$".$pago_transferencia);
+                $hoja_activa->getColumnDimension('N')->setWidth(20);
+                $hoja_activa->setCellValue('N'.$index, "$".$pago_cheque);
+                $hoja_activa->getColumnDimension('O')->setWidth(20);
+                $hoja_activa->setCellValue('O'.$index, "$".$pago_por_definir);
 
                 $index++;
                 $contador++;
 
 
                     }
+                }else{
+                    $hoja_activa->mergeCells('A'.$index.':O'.$index);
+                    $hoja_activa->setCellValue('A'.$index, 'Sin ventas realizadas'); 
+                             
+                    $hoja_activa->getStyle('A'.$index.':O'.$index)->getAlignment()->setHorizontal('center');
+                    $hoja_activa->getStyle('A'.$index.':O'.$index)->getAlignment()->setVertical('center');
+
+                    $index++;
+                 
                 }
 
-
-
-
+                
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="Reporte de venta diaria '. $nombre_sucursal .' '. $fecha .'.xlsx"');
@@ -588,9 +701,28 @@ function obtenerUtilidadTotal($con, $id_sucursal, $fecha, $tipo, $estatus){
 
 function obtenerUtilidadMetodoPago($con, $id_sucursal, $fecha, $tipo, $estatus, $metodo_pago){
     $total_venta_metodo = 0;
-    $consulta = "SELECT SUM(Total) FROM ventas WHERE id_sucursal=? AND fecha = ? AND tipo = ? AND estatus = ? AND metodo_pago =?";
+    
+    switch($metodo_pago){
+        case "Efectivo":
+            $col = "pago_efectivo";
+            break;
+        case "Tarjeta":
+            $col = "pago_tarjeta";
+            break;
+        case "Cheque":
+            $col = "pago_cheque";
+            break;
+        case "Transferencia":
+            $col = "pago_transferencia";
+            break;
+        case "Por definir":
+            $col = "pago_sin_definir";
+            break;
+
+    }
+    $consulta = "SELECT SUM($col) FROM ventas WHERE id_sucursal=? AND fecha = ? AND tipo = ? AND estatus = ?";
     $res = $con->prepare($consulta);
-    $res->bind_param("sssss", $id_sucursal, $fecha, $tipo, $estatus, $metodo_pago);
+    $res->bind_param("ssss", $id_sucursal, $fecha, $tipo, $estatus);
     $res->execute();
     $res->bind_result($total_venta_metodo);
     $res->fetch();
@@ -605,7 +737,7 @@ function obtenerUtilidadMetodoPago($con, $id_sucursal, $fecha, $tipo, $estatus, 
                                                                    fecha = '$fecha' AND 
                                                                    tipo = '$tipo' AND 
                                                                    estatus = '$estatus' AND 
-                                                                   metodo_pago = '$metodo_pago'");
+                                                                   $col IS NOT NULL");
         //Iteramos sobre el arreglo de las ventas 
         $importe_acumulado =0; 
         $costo_acumulado =0;                                                            
@@ -653,13 +785,24 @@ function obtenerUtilidadMetodoPago($con, $id_sucursal, $fecha, $tipo, $estatus, 
 //Funciones para obtener ganancias
 function obtenerVentaTotal($con, $id_sucursal, $fecha, $tipo, $estatus){
     $total_venta = 0;
-    $consulta = "SELECT SUM(Total) FROM ventas WHERE id_sucursal=? AND fecha = ? AND tipo = ? AND estatus = ?";
-    $res = $con->prepare($consulta);
-    $res->bind_param("ssss", $id_sucursal, $fecha, $tipo, $estatus);
-    $res->execute();
-    $res->bind_result($total_venta);
-    $res->fetch();
-    $res->close();
+    if($tipo == "Credito"){
+        $consulta = "SELECT SUM(abono) FROM abonos WHERE id_sucursal=? AND fecha = ?";
+        $res = $con->prepare($consulta);
+        $res->bind_param("ss", $id_sucursal, $fecha);
+        $res->execute();
+        $res->bind_result($total_venta);
+        $res->fetch();
+        $res->close();
+    }else{
+        $consulta = "SELECT SUM(Total) FROM ventas WHERE id_sucursal=? AND fecha = ? AND tipo = ? AND estatus = ?";
+        $res = $con->prepare($consulta);
+        $res->bind_param("ssss", $id_sucursal, $fecha, $tipo, $estatus);
+        $res->execute();
+        $res->bind_result($total_venta);
+        $res->fetch();
+        $res->close();
+    }
+   
 
     if($total_venta == "" || $total_venta ==null){
         $total_venta = 0;
@@ -669,13 +812,43 @@ function obtenerVentaTotal($con, $id_sucursal, $fecha, $tipo, $estatus){
 
 function obtenerVentaMetodoPago($con, $id_sucursal, $fecha, $tipo, $estatus, $metodo_pago){
     $total_venta = 0;
-    $consulta = "SELECT SUM(Total) FROM ventas WHERE id_sucursal=? AND fecha = ? AND tipo = ? AND estatus = ? AND metodo_pago =?";
-    $res = $con->prepare($consulta);
-    $res->bind_param("sssss", $id_sucursal, $fecha, $tipo, $estatus, $metodo_pago);
-    $res->execute();
-    $res->bind_result($total_venta);
-    $res->fetch();
-    $res->close();
+    
+    switch($metodo_pago){
+        case "Efectivo":
+            $col = "pago_efectivo";
+            break;
+        case "Tarjeta":
+            $col = "pago_tarjeta";
+            break;
+        case "Cheque":
+            $col = "pago_cheque";
+            break;
+        case "Transferencia":
+            $col = "pago_transferencia";
+            break;
+        case "Por definir":
+            $col = "pago_sin_definir";
+            break;
+
+    }
+    if($tipo== "Normal"){
+        $consulta = "SELECT SUM($col) FROM ventas WHERE id_sucursal=? AND fecha = ? AND tipo = ? AND estatus = ?";
+        $res = $con->prepare($consulta);
+        $res->bind_param("ssss", $id_sucursal, $fecha, $tipo, $estatus);
+        $res->execute();
+        $res->bind_result($total_venta);
+        $res->fetch();
+        $res->close();
+    }else {
+        $consulta = "SELECT SUM($col) FROM abonos WHERE id_sucursal=? AND fecha = ?";
+        $res = $con->prepare($consulta);
+        $res->bind_param("ss", $id_sucursal, $fecha);
+        $res->execute();
+        $res->bind_result($total_venta);
+        $res->fetch();
+        $res->close();
+    }
+    
 
     if($total_venta == "" || $total_venta ==null){
         $total_venta = 0;
@@ -697,12 +870,17 @@ function obtenerClientesqueAbonaron($con, $id_sucursal, $fecha)
     } else {
         while ($fila = $resultado->fetch_assoc()) {
             $id_cliente="";
-            $id_credito = $fila["id_credito"];
-            $abono = $fila["abono"];
-            $sucurs = $fila["sucursal"];
-            $metodo_pago = $fila["metodo_pago"];
-            $usuario = $fila["usuario"];
-            $id_credito = $fila["id_credito"];
+            $id_credito = $fila['id_credito'];
+            $abono = $fila['abono'];
+            $sucurs = $fila['sucursal'];
+            $metodo_pago = $fila['metodo_pago'];
+            $pago_efectivo = isset($fila['pago_efectivo']) ? $fila['pago_efectivo']  :0;
+            $pago_tarjeta = isset($fila['pago_tarjeta']) ? $fila['pago_tarjeta']: 0;
+            $pago_cheque = isset($fila['pago_cheque']) ? $fila['pago_cheque']: 0;
+            $pago_transferencia = isset($fila['pago_transferencia']) ? $fila['pago_transferencia']: 0;
+            $pago_por_definir = isset($fila['pago_sin_definir']) ? $fila['pago_sin_definir']: 0;
+            $usuario = $fila['usuario'];
+            $id_credito = $fila['id_credito'];
 
             $traer_id = $con->prepare("SELECT id_Cliente FROM `creditos` WHERE id= ?");
             $traer_id->bind_param('s', $id_credito);
@@ -719,12 +897,18 @@ function obtenerClientesqueAbonaron($con, $id_sucursal, $fecha)
             $traer_id->fetch();
             $traer_id->close();
 
-            $arreglo[] = array("id_credito"=>$id_credito, "metodo"=>$metodo_pago, "cliente"=>$cliente, "abono"=> $abono, "fecha"=> $fecha, "sucursal"=> $sucurs, "usuario"=>$usuario);
+            $arreglo[] = array("id_credito"=>$id_credito, 
+            "metodo"=>$metodo_pago,
+            "pago_efectivo"=>$pago_efectivo,
+            "pago_tarjeta"=>$pago_tarjeta,
+            "pago_cheque"=>$pago_cheque,
+            "pago_transferencia"=>$pago_transferencia,
+            "pago_sin_definir"=>$pago_por_definir,
+            "cliente"=>$cliente, 
+            "abono"=> $abono, "fecha"=> $fecha, "sucursal"=> $sucurs, "usuario"=>$usuario);
+        
         };
     
         return $arreglo;
     }
 }
-
-
-?>

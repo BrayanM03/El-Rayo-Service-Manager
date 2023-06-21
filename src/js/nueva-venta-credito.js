@@ -16,7 +16,7 @@ function realizarVentaCredito(){
         datatype: "json",
         
         success: function (response) {
-            importetotal = $("#total").val() ;
+            importetotal = $("#total").val();
            
            
 
@@ -33,7 +33,39 @@ function realizarVentaCredito(){
                 confirmButtonText: 'Registrar', 
                 cancelButtonColor:'#ff764d',
                 didOpen: function () {   
-                
+                    var metodos_pago = $("#metodos-pago").val();
+                    let area_metodos = $("#metodos_pagos_area");
+                    var opciones = {
+                        0: "Efectivo",
+                        1: "Tarjeta",
+                        2: "Transferencia",
+                        3: "Cheque",
+                        4: "Sin definir"
+                      };
+            
+                      var arregloMetodos= metodos_pago.reduce(function(result, key) {
+                        result[key] = opciones[key];
+                        return result;
+                      }, {});
+
+                      for (var clave in arregloMetodos) {
+                        if (Object.hasOwnProperty.call(arregloMetodos, clave)) {
+                            let nombre_metodo = arregloMetodos[clave];
+                            area_metodos.append(`
+                            <div class="col-md-2">
+                                <label>${nombre_metodo}</label>
+                                <input type="number" class="form-control" id="monto_metodo_credito_${clave}" onkeyup='sumarMonto(${JSON.stringify(metodos_pago)})'  placeholder="0.00">
+                            </div>
+                      `);
+                        }
+
+                        // A partir del codigo forin acceder al input y obtener el valor dependiendo del metodo de pago
+                        // y sumarlo para obtener el total de la venta
+
+
+                      }
+                      let importetotal = $("#total").val();
+                      $("#restante").val("$" + importetotal);
                 },
                 preConfirm: (respuesta) =>{
 
@@ -47,7 +79,6 @@ function realizarVentaCredito(){
 
                     sbstring = data["restante"].substring(1);
                     restant = parseInt(sbstring);
-                    console.log(restant);
                     abono_valid = data["abono"].trim();
     
                     if( data["abono"] < 0){
@@ -64,6 +95,12 @@ function realizarVentaCredito(){
                          Swal.showValidationMessage(
                            `Ingrese una cantidad.`
                          );
+                       }else if(parseFloat(data["abono"]) > parseFloat(data["total"])){
+                        $(".border-danger").removeClass("border-danger"); 
+                        $("#restante").addClass("border-danger");
+                        Swal.showValidationMessage(
+                          `El abono supera el total.`
+                        )
                        }else if(restant < 0){
                      /*  $(".datoVacio").removeClass("datoVacio");*/
                       $(".border-danger").removeClass("border-danger"); 
@@ -76,10 +113,12 @@ function realizarVentaCredito(){
                   },
                 html: '<form class="mt-4" id="formulario-nuevo-credito">'+
                 '<h5>Agregar nuevo registro de credito para '+ response+'</h5><br>'+
-                '<div class="row">'+
+                '<div class="row" id="metodos_pagos_area">'+
+                '</div>'+    
+                '<div class="row mt-2">'+
                     '<div class="col-4">'+
                     '<label><b>Primer pago:</b></label></br>'+
-                    '<input id="abono" type="number" class="form-control" value="0" placeholder="$ 0.00">'+
+                    '<input id="abono" onchange="restarAbono()" disabled type="number" class="form-control" value="0" placeholder="$ 0.00">'+
                     '</div>'+
                     '<div class="col-4">'+
                     '<label><b>Restan:</b></label></br>'+
@@ -128,39 +167,63 @@ function realizarVentaCredito(){
                         importe_total = $("#importe-total").val();
                         abono = $("#abono").val();
                         restante = $("#restante").val();
-
                         fimporte_total    =    importe_total.replace('$','');
                         fabono    =    abono.replace('$','');
                         frestante =    restante.replace('$','');
                         fecha = $("#fecha").val();
-
-                        console.log(fecha);
 
                         if(result.isConfirmed){
 
                             
                                                 //Insertar venta
                                 llantaData = $("#pre-venta").dataTable().fnGetData();
-                               
-                                    
                                 
                                 total = $("#total").val();
                                 fecha = $("#fecha").val(); 
                                 cliente = $("#select2-clientes-container").attr("id-cliente");
-                                metodo_pago = $("#metodos-pago").val();  
                                 sucursal_id =$("#sucursal").val();
                                 comentario = $("#hacer-comentario").attr("comentario");
+                                //Creando objecto de pagos
+                                var metodos_pago = $("#metodos-pago").val();
+                                var opciones = {
+                                    0: "Efectivo",
+                                    1: "Tarjeta",
+                                    2: "Transferencia",
+                                    3: "Cheque",
+                                    4: "Sin definir"
+                                };
+                              
+                               //Transfotmando el arreglo de los metodos
+                               var metodosPago = []; // Arreglo donde se almacenarán los métodos de pago
+
+                                var inputs = document.querySelectorAll('#metodos_pagos_area input[type="number"]');
+
+                                inputs.forEach(function(input) {
+                                var clave = input.id.split("_")[3]; // Obtener la clave del método de pago del ID del input
+                                var metodo = opciones[clave]; // Obtener el nombre del método de pago según la clave
+                                
+                                var monto = parseFloat(input.value); // Obtener el monto ingresado en el input
+                                
+                                // Crear un objeto con la información del método de pago y el monto
+                                var metodoPago = {
+                                    clave: clave,
+                                    metodo: metodo,
+                                    monto: monto
+                                };
+                                
+                                metodosPago.push(metodoPago); // Agregar el objeto al arreglo metodosPago
+                                });
+
+                                console.log(metodosPago);
                                 //Enviando data
                                 
-
-                                
-                                $.ajax({
+                                $.ajax({ 
                                     type: "POST",
                                     url: "./modelo/ventas/insertar-venta.php",
                                     data: {'data': llantaData,
                                         'plazo': plazo,
                                         'cliente': cliente,
-                                        'metodo_pago': metodo_pago,
+                                        'metodo_pago': metodosPago,
                                         'fecha': fecha,
                                         'sucursal' : sucursal_id,
                                         'total': total,
@@ -169,16 +232,14 @@ function realizarVentaCredito(){
                                     dataType: "JSON",
                                     
                                     success: function (response) {
-                                        console.log(response);
                                         if (response) {
                                             
                                             $.ajax({
                                                 type: "POST",
                                                 url: "./modelo/creditos/nuevo-credito.php",
-                                                data: {"id_cliente": clienteid, "metodo_pago": metodo_pago, "sucursal_id": sucursal_id, "plazo": plazo, "importe": fimporte_total, "abono": fabono, "restante": frestante, "fecha": fecha},
+                                                data: {"id_cliente": clienteid, "arreglo_metodos":metodosPago, "metodo_pago": metodos_pago, "sucursal_id": sucursal_id, "plazo": plazo, "importe": fimporte_total, "abono": fabono, "restante": frestante, "fecha": fecha},
                                                 //dataType: "",
                                                 success: function (response) {
-                                                  console.log(response); 
                 
                                                 }
                                             });
@@ -200,7 +261,6 @@ function realizarVentaCredito(){
                                             ).then((result) =>{
                                 
                                                 if(result.isConfirmed){
-                                                //location.reload();
                                                 table.ajax.reload(null,false);
                                                     $("#pre-venta tbody tr").remove();
                                                     $(".pre-venta-error").html("");
@@ -247,28 +307,7 @@ function realizarVentaCredito(){
                         }
                     });
 
-                    abono = $("#abono");
-
-                    abono_valor = $("#abono").val();
-                    restante = importetotal - abono_valor;
-                    $("#restante").val("$" + restante);
-
-                    abono.keyup(function () { 
-                        abono_tecleado = $(this).val();
-                        restante = parseFloat(importetotal) - parseFloat(abono_tecleado);
-                        noNumerico = isNaN(restante);
-                        restanteVal = $("#restante").val();
-                        if (abono_tecleado == 0 && noNumerico == false) {
-                            $("#restante").val("$" + importetotal);    
-                        }else if(noNumerico == true){
-                            
-                            $("#restante").val("$-");
-                        }
-                        else{
-                            $("#restante").val("$" + restante);
-                        }
-                        
-                    });
+                    
         }
     });
    
@@ -279,4 +318,45 @@ function realizarVentaCredito(){
     }
 
 }
+
+function sumarMonto(metodos) {
+    let monto_acumulado = 0;
+    metodos.forEach(element => {
+        var valor = $("#monto_metodo_credito_" + element).val();
+       
+        var monto_metodo = valor =="" || undefined ? 0 : parseFloat(valor);
+
+        monto_acumulado += monto_metodo;
+    });
+   $("#abono").val(monto_acumulado);
+   // Simular el evento onchange
+    var event = new Event("change");
+    document.getElementById('abono').dispatchEvent(event);
+
+}
+
+function restarAbono(){
+
+    let abono_valor = $("#abono").val();
+    let importetotal = $("#total").val();
+    console.log(importetotal);
+    restante = importetotal - abono_valor;
+    $("#restante").val("$" + restante);
+
+        //abono_tecleado = $(this).val();
+        restante = parseFloat(importetotal) - parseFloat(abono_valor);
+        noNumerico = isNaN(restante);
+        restanteVal = $("#restante").val();
+        if ( noNumerico == false) {
+            $("#restante").val("$" + importetotal);    
+        }else if(noNumerico == true){
+            
+            $("#restante").val("$-");
+        }
+        else{
+            $("#restante").val("$" + restante);
+        }
+        
+   
+};
 

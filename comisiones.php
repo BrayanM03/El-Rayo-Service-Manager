@@ -1,5 +1,5 @@
 
-    <?php
+<?php
     session_start();
 
     include 'modelo/conexion.php';
@@ -11,10 +11,6 @@
 
     if (!isset($_SESSION['id_usuario'])) {
         header("Location:login.php");
-    }
-    $rol = $_SESSION["rol"];
-    if ($rol ==3) {
-        header("Location:nueva-venta.php");
     }
 
     
@@ -33,56 +29,33 @@
  
 	
 
-    <title>Creditos</title>
+    <title>Comisiones</title>
 
     <!-- Custom fonts for this template-->
     <link rel="stylesheet" href="src/css/inventario.css">
     <link rel="stylesheet" href="src/css/historial-ventas.css">
-    <link rel="stylesheet" href="src/css/creditos.css">
 
-    <link href="src/css/bootstrap-select.min.css" rel="stylesheet" />
     <link href="src/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
-        
-    <link href='https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css' rel='stylesheet' />
-
-        
-
-
     <!-- Custom styles for this template-->
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <!-- <link rel="stylesheet" href="src/vendor/datatables/dataTables.bootstrap4.css"> -->
+   
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.css" integrity="sha512-oe8OpYjBaDWPt2VmSFR+qYOdnTjeV9QPLJUeqZyprDEQvQLJ9C5PCFclxwNuvb/GQgQngdCXzKSFltuHD3eCxA==" crossorigin="anonymous" />
     
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="src/vendor/bower_components/select2-bootstrap-theme/dist/select2-bootstrap.css">
-
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.css"/>  
-     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
-  
-
-    <!---Librerias de estilos-->
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="src/css/menu-vertical.css" rel="stylesheet">
-   
-<style>
-    .swal2-content {
-    height: 80vh !important;
-    
-    }
-    .selectpicker{
-            z-index: 9999;  
-        }
-</style>
+
 </head>
 
 <body id="page-top"> 
 
     <!-- Page Wrapper -->
     <div id="wrapper">
-
+ 
         <!-- Sidebar -->
         <?php 
             require_once 'sidebar.php'
@@ -156,7 +129,7 @@
                             <!-- Dropdown - Alerts -->
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="alertsDropdown">
-                                <h6 class="dropdown-header">
+                                <h6 class="dropdown-header"> 
                                    Notificaciones
                                 </h6>
                                 <div class="empty-notification">
@@ -170,6 +143,7 @@
                             </div>
                         </li>
 
+                       
 
                         <div class="topbar-divider d-none d-sm-block"></div>
 
@@ -215,23 +189,26 @@
 
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid" style="display: flex; justify-content: center; align-items:center; flex-direction:column">
+                <div class="container" style="display: flex; justify-content: center; flex-direction:column">
 
                      <!-- Contenido inventario -->
                      
                         <div class="contenedor-tit">
-                        <img class="tyre-decoration-left" src="./src/img/tyre.svg" alt="insertar SVG con la etiqueta image"> 
                         <div class="titulo-inventario">
-                         <h5 style="margin: 10px 0px;">Creditos</h5>
-                         <p style="color: gray;">Historial de creditos</p>
+                         <h5 style="margin: 10px 0px;">Panel de comisiones</h5>
+                         <p style="color: gray;">Ajuste de comisiones por usuarios</p>
+                        </div>  
                         </div>
-                        <img class="tyre-decoration-right" src="./src/img/tyre.svg" alt="insertar SVG con la etiqueta image">   
-                        </div>
-                        <div class="botones">
-                            <a href="modelo/creditos/excel-creditos-vencidos.php"><div class="btn btn-success"><i class="fas fa-file-excel"></i> | Reporte de creditos vencidos</div></a>         
-                        </div>
-
-                      <table id="creditos" class="table table-striped">    
+                        <!-- <div class="botones">
+                                    <a href="#" class="btn btn-success btn-icon-split" onclick="agregarCliente();">
+                                        <span class="icon text-white-50">
+                                            <i class="fas fa-user-plus"></i>
+                                        </span>
+                                        <span class="text">Agregar cliente</span>
+                                    </a>
+                                    
+                      </div> -->
+                      <table id="usuarios" class="table table-striped" style="width:100% !important;">    
                      </table>
                 </div>
             <!-- End of Main Content -->
@@ -298,21 +275,26 @@
     <!-- Cargamos nuestras librerias-->
 
     
-   <!-- Cargamos nuestras librerias-->
-    
-   <script src="src/vendor/datatables/jquery.dataTables.min.js"></script> 
-    <!-- <script src="src/vendor/datatables-responsive/js/dataTables.responsive.min.js"></script> -->
+    <script src="src/vendor/datatables/jquery.dataTables.min.js"></script> 
+    <script src="src/vendor/datatables-responsive/js/dataTables.responsive.min.js"></script>
     <script src="src/vendor/datatables/dataTables.bootstrap4.js"></script>
-    <script src="src/js/bootstrap-select.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <!-- <script src="src/vendor/datatables/defaults.js"></script> --><!-- 
-    <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script> -->
+    <script src="src/vendor/datatables/defaults.js"></script>
+    <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    
-    <script src="src/js/creditos.js"></script>
-    
+    <script src="src/js/comisiones.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+     <!-- Make sure you put this AFTER Leaflet's CSS -->
+   <!-- 
+  
+   <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script> -->
+
+   
+   <!-- <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBDaeWicvigtP9xPv919E-RNoxfvC-Hqik"></script>
+    --->
    
 </body>
 

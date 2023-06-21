@@ -43,47 +43,59 @@ if(isset($_POST)){
     }else{
       $estatus = "Pagado";
       $tipo = "Normal";
-    }
-
-    
-   
-
-    switch ($_POST["metodo_pago"]) {
-      case 0:
-       $metodo_pago = "Efectivo";
-        break;
-      
-      case 1:
-      $metodo_pago = "Tarjeta";
-      break;
-      
-      case 2:
-      $metodo_pago = "Transferencia";
-      break;
-
-      case 3:
-      $metodo_pago = "Cheque";
+    } 
+    $desc_metodos ='';
+    $pago_efectivo=0;
+    $pago_transferencia=0;
+    $pago_tarjeta=0;
+    $pago_cheque=0;
+    $pago_sin_definir=0;
+      foreach ($_POST["metodo_pago"] as $key => $value) {
+      $metodo_id = isset($value['id_metodo']) ? $value['id_metodo']: $key;
+      switch ($metodo_id) {
+        case 0:
+         $pago_efectivo = $value['monto'];
           break;
-
-      case 4:
-      $metodo_pago = "Por definir";
-      break;     
-      
-      default:
-        $metodo_pago = "Sin valor";
+        
+        case 1:
+        $pago_tarjeta = $value['monto'];
         break;
+        
+        case 2:
+        $pago_transferencia = $value['monto'];
+
+        break;
+  
+        case 3:
+        $pago_cheque = $value['monto'];
+        break;
+  
+        case 4:
+        $pago_sin_definir = $value['monto'];
+        break;     
+        
+        default:
+          break;
+      }
+      $monto_pago = $value['monto'];
+      $metodo_pago = $value['metodo'];
+      if($key != count($_POST["metodo_pago"]) - 1) {
+        // Este código se ejecutará para todos menos el último
+        $desc_metodos .= $metodo_pago . ", ";
+      }else{
+        $desc_metodos .= $metodo_pago . ". ";
+      }
     }
 
-   
+
     $datos = $_POST['data'];
    // $info_producto_individual = json_decode($datos);  
    $info_producto_individual = $datos;
    $comentario = $_POST["comentario"];
-    
-   
-    $queryInsertar = "INSERT INTO ventas (id, Fecha, sucursal, id_sucursal, id_Usuarios, id_Cliente, Total, tipo, estatus, metodo_pago, hora, comentario) VALUES (null,?,?,?,?,?,?,?,?,?,?,?)";
+
+    $queryInsertar = "INSERT INTO ventas (id, Fecha, sucursal, id_sucursal, id_Usuarios, id_Cliente, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, Total, tipo, estatus, metodo_pago, hora, comentario) VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     $resultado = $con->prepare($queryInsertar);
-    $resultado->bind_param('ssiisdsssss', $fecha, $sucursal, $id_sucursal, $idUser, $cliente , $total, $tipo, $estatus, $metodo_pago, $hora, $comentario);
+    $resultado->bind_param('ssiisddddddsssss', $fecha, $sucursal, $id_sucursal, $idUser, $cliente , $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $total, $tipo, $estatus, $desc_metodos, $hora, $comentario);
     $resultado->execute();
     $resultado->close();
 
@@ -98,8 +110,6 @@ if(isset($_POST)){
 
         
         $id_Venta = $dato["id"];
-        
-        
 
         foreach ($info_producto_individual as $key => $value) { 
           
@@ -204,14 +214,6 @@ if(isset($_POST)){
                 
                 
             }
-
-              
-           
-          
-          
-
-
-          
            
 
           }else{

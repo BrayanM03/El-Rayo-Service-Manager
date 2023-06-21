@@ -84,13 +84,12 @@ let id_rol_session= $("#content").attr("rol_session_id");
         $('#search').select2({
             placeholder: "Selecciona una llanta",
             theme: "bootstrap",
-            minimumInputLength: 0,
+            minimumInputLength: 1,
             ajax: {
-                url: "./modelo/ventas/buscar-llantas-nueva-venta.php",
+                url: "./modelo/ventas/buscar-llantas-nueva-venta.php" ,
                 type: "post",
                 dataType: 'json',
                 delay: 250,
-    
                 data: function (params) {
                 
                  if(params.term == undefined){
@@ -102,19 +101,25 @@ let id_rol_session= $("#content").attr("rol_session_id");
                  return {
                    searchTerm: params.term, // search term
                    id_sucursal: params.id_sucursal,
+                   page: params.page || 1,
                    rol: params.rol
                    
                  };
                 },
-                processResults: function (data) {
-                    return {
-                       results: data
-                    };
-                  },
+                cache: true,
+               
                
                 cache: true
     
-            },
+            }, processResults: function (data, params) {
+              params.page = params.page || 1;
+                return {
+                   results: data.results,
+                   pagination: {
+                    more: (params.page * 10) < data.total_count // Verificar si hay más resultados para cargar
+                  }
+                };
+              },
             language:  {
     
                 inputTooShort: function () {
@@ -141,12 +146,11 @@ let id_rol_session= $("#content").attr("rol_session_id");
           if (repo.loading) {
             return repo.text;
           }
-          
             var $container = $(
                 "<div style='' class='select2-result-repository clearfix' desc='"+repo.Descripcion+" marca='"+repo.Marca +
                 "' costo='"+repo.precio_Inicial +" id='tyre"+repo.id+"' precio='"+repo.precio_Venta+" idcode='"+repo.id+"'>" +
                 "<div class='select2-contenedor-principal row' syle='display:flex;'>" +
-                "<div class='col-md-2 justify-content-center'><img class='' style='width: 50px; border-radius: 6px;' src='./src/img/logos/" + repo.Marca + ".jpg' /></div>" +
+                "<div class='col-md-2 justify-content-center'><img loading='lazy' class='' style='width: 50px; border-radius: 6px;' src='./src/img/logos/" + repo.Marca + ".jpg' /></div>" +
                   "<div class='col-md-10 select2-contenedor'>" +
                   "<div class='select2_modelo' style='font-size:14px;'>Modelo: "+ repo.Modelo +"</div>" +
                   "<div class='select2_description' style='font-size:14px;'>" + repo.Descripcion + "</div>" +
@@ -183,7 +187,7 @@ let id_rol_session= $("#content").attr("rol_session_id");
                 " Marca: <strong>"+ repo.Marca +"</strong></br>"+
                 "Descripcion: <strong>"+ repo.Descripcion +"</strong></br>"+
                 "Se agoto del inventario, contacta a un administrador para que modifique el inventario</span>"+
-                "<img src='./src/img/sad.png' style='width:80px; margin:15px auto 8px auto;'>",
+                "<img loading='lazy' src='./src/img/sad.png' style='width:80px; margin:15px auto 8px auto;'>",
                 icon: "warning",
                 cancelButtonColor: '#00e059',
                 showConfirmButton: true,
@@ -249,32 +253,66 @@ let id_rol_session= $("#content").attr("rol_session_id");
 
      
 
+      function procesarVenta(){
+        let metodos_pagos = $("#metodos-pago").val();  
 
+        if ( !table.data().any()){
+          
+          toastr.warning('La tabla no tiene productos', 'Sin productos' ); 
+        }else{
+          if(metodos_pagos.length == 0){
+              toastr.warning('Agrega un metodo de pago', 'Sin metodo pago' ); 
+          }else if(metodos_pagos.length == 1){
+            var opciones = {
+              0: "Efectivo",
+              1: "Tarjeta",
+              2: "Transferencia",
+              3: "Cheque",
+              4: "Sin definir"
+            };
+  
+            let metodos_formateado = metodos_pagos.reduce(function(result, key) {
+              let monto_total = $("#total").val();
+              result[key] = {"id_metodo":key, "metodo":opciones[key], "monto": monto_total};
+              return result;
+            }, {});
 
-      function realizarVenta(){
-
-
+            realizarVenta(metodos_formateado);
+          }else{
+            llantaData = $("#pre-venta").dataTable().fnGetData();
+            designarMontos(metodos_pagos, llantaData);
+          }
+        }
         
+        
+      }
+
+      function realizarVenta(metodos_pagos){
+       
         if ( !table.data().any()){
 
             toastr.warning('La tabla no tiene productos', 'Sin productos' ); 
 
         }else{
-            
+
+           /*  if(metodos_pagos.length > 1){
+              metodos_pagos.forEach(element => {
+                
+              });
+            }else{
+              let metodo_pago = metodos_pagos[0].monto; 
+            } */
             $("#realizar-venta").addClass("disabled");;
             $("#realizar-venta").text("Espere...");
 
             llantaData = $("#pre-venta").dataTable().fnGetData();
-            console.log(llantaData);
-                
               
             total = $("#total").val();
             fecha = $("#fecha").val(); 
             cliente = $("#select2-clientes-container").attr("id-cliente");
-            metodo_pago = $("#metodos-pago").val();  
             tienda = $("#sucursal").val();
             comentario = $("#hacer-comentario").attr("comentario");
-            
+          
             //Enviando data
             
             $.ajax({
@@ -282,7 +320,7 @@ let id_rol_session= $("#content").attr("rol_session_id");
                 url: "./modelo/ventas/insertar-venta.php", 
                 data: {'data': llantaData,
                        'cliente': cliente,
-                       'metodo_pago': metodo_pago,
+                       'metodo_pago': metodos_pagos,
                        'fecha': fecha,
                        'sucursal': tienda,
                        'total': total,
@@ -290,7 +328,7 @@ let id_rol_session= $("#content").attr("rol_session_id");
                        'tipo': 'vt-normal'},
                 dataType: "JSON",
                 success: function (response) {
-                    console.log(response);
+                   
                     if (response) {
                         Swal.fire({
                             title: 'Venta realizada',
@@ -368,11 +406,6 @@ let id_rol_session= $("#content").attr("rol_session_id");
                     
                 }
             }); 
-
-            
-            
-            
-
 
         }
         //$(".tbody").empty();
@@ -476,12 +509,13 @@ let id_rol_session= $("#content").attr("rol_session_id");
 
 //Select2 para los metodos de pago:
 
-    $("#metodos-pago").select2({
+    /* $("#metodos-pago").select2({
         placeholder: "Metodo de pago",
         theme: "bootstrap",
+        multiple: true,
         templateResult: formatState,
     });
-
+ */
 
     function formatState (state) {
         if (!state.id) {
@@ -645,7 +679,7 @@ $("#btn-add-client").hover(function() {
                     "<div style='' class='select2-result-repository clearfix' desc='"+repo.descripcion+" marca='"+repo.imagen +
                     "' id='service"+repo.id+"' precio='"+repo.precio+" idcode='"+repo.id+"'>" +
                     "<div class='select2-contenedor-principal row' syle='display:flex;'>" +
-                    "<div class='col-md-2 justify-content-center'><img class='' style='width: 50px; border-radius: 6px;' src='./src/img/services/" + repo.imagen + ".jpg' /></div>" +
+                    "<div class='col-md-2 justify-content-center'><img loading='lazy' class='' style='width: 50px; border-radius: 6px;' src='./src/img/services/" + repo.imagen + ".jpg' /></div>" +
                       "<div class='col-md-10 select2-contenedor'>" +
                       "<div class='select2_description' style='font-size:14px;'>" + repo.descripcion + "</div>" +
     
@@ -729,7 +763,7 @@ $("#btn-add-client").hover(function() {
                       if(params.term == undefined){
                         params.term = "";
                       }
-                      console.log(params);
+                    
                       params.id_sucursal = id_sucursal_session;
                       params.rol = id_rol_session;
                     
@@ -780,7 +814,7 @@ $("#btn-add-client").hover(function() {
                     "<div style='' class='select2-result-repository clearfix' desc='"+repo.Descripcion+" marca='"+repo.Marca +
                     "' costo='"+repo.precio_Inicial +" id='tyre"+repo.id+"' precio='"+repo.precio_Venta+" idcode='"+repo.id+"'>" +
                     "<div class='select2-contenedor-principal row' syle='display:flex;'>" +
-                    "<div class='col-md-2 justify-content-center'><img class='' style='width: 50px; border-radius: 6px;' src='./src/img/logos/" + repo.Marca + ".jpg' /></div>" +
+                    "<div class='col-md-2 justify-content-center'><img loading='lazy' class='' style='width: 50px; border-radius: 6px;' src='./src/img/logos/" + repo.Marca + ".jpg' /></div>" +
                       "<div class='col-md-10 select2-contenedor'>" +
                       "<div class='select2_modelo' style='font-size:14px;'>Modelo: "+ repo.Modelo +"</div>" +
                       "<div class='select2_description' style='font-size:14px;'>" + repo.Descripcion + "</div>" +
@@ -816,7 +850,7 @@ $("#btn-add-client").hover(function() {
                     " Marca: <strong>"+ repo.Marca +"</strong></br>"+
                     "Descripcion: <strong>"+ repo.Descripcion +"</strong></br>"+
                     "Se agoto del inventario, contacta a un administrador para que modifique el inventario</span>"+
-                    "<img src='./src/img/sad.png' style='width:80px; margin:15px auto 8px auto;'>",
+                    "<img loading='lazy' src='./src/img/sad.png' style='width:80px; margin:15px auto 8px auto;'>",
                     icon: "warning",
                     cancelButtonColor: '#00e059',
                     showConfirmButton: true,
@@ -1082,7 +1116,6 @@ $("#btn-add-client").hover(function() {
     
         $("#marker").remove();  
             latitud = JSON.stringify(e.lngLat);
-            console.log(latitud);
     
             var el = document.createElement("img");
             el.id = "marker";
@@ -1135,7 +1168,6 @@ $("#btn-add-client").hover(function() {
 
              let comentario = $("#comentario").val();
              $("#hacer-comentario").attr("comentario", comentario);
-             console.log(comentario);
 
             });
      });
@@ -1163,3 +1195,152 @@ $("#btn-add-client").hover(function() {
 
 
      }
+
+     function designarMontos(metodo_pago, llantaData){
+
+      Swal.fire({
+        title: "Asignar montos",
+        background: "#dcdcdc" ,
+        width: '800px',
+        showCancelButton: true,
+        cancelButtonText: 'Cerrar',
+        cancelButtonColor: '#00e059',
+        showConfirmButton: true,
+        confirmButtonText: 'Realizar venta', 
+        cancelButtonColor:'#ff764d',
+        html: `
+        <div class="container">
+            <div id="contenedor-metodos">
+            </div>
+        </div>`,
+        didOpen: function () { 
+          let button_confirm = document.querySelector('.swal2-confirm');
+           button_confirm.style.backgroundColor = '#858796';  
+          $("#contenedor-metodos").empty();
+          var opciones = {
+            0: "Efectivo",
+            1: "Tarjeta",
+            2: "Transferencia",
+            3: "Cheque",
+            4: "Sin definir"
+          };
+
+          var importe_total =  llantaData.reduce(function(total, element) {
+          return parseFloat(total) + parseFloat(element.importe);
+        }, 0);
+          var arregloMetodos= metodo_pago.reduce(function(result, key) {
+            result[key] = opciones[key];
+            return result;
+          }, {});
+       
+          for(var clave in arregloMetodos) {
+            if (arregloMetodos.hasOwnProperty(clave)) {
+              var nombre_metodo = arregloMetodos[clave];
+              $("#contenedor-metodos").append(`
+                <div class="row mt-2">
+                <div class="col-md-12">
+                    <label>Monto para pago ${nombre_metodo}</label>
+                    <input type="number" class="form-control" id="monto_metodo_${clave}" onkeyup="calcularMontos(${importe_total})" placeholder="0.00">
+                </div>
+                </div>
+          `);}
+            }
+
+            $("#contenedor-metodos").append(`
+            <div class="row mt-3">
+            <div class="col-md-12">
+                <label>Total</label>
+                <h1><span class="badge badge-secondary" id="badge-precio">$${importe_total}</span><h1>
+                <input type="hidden" value="${importe_total}"class="form-control" is-valid="false" id="total_venta" disabled>
+                <h2><span id="text-message" class="text-secondary"></span><h2>
+            </div>
+            </div>
+            `) 
+          
+          },
+          preConfirm: function(){
+          if($("#total_venta").attr("is-valid") == "false"){
+            Swal.showValidationMessage(
+              `La suma no corresponde al total`
+            )
+          }
+          }
+        
+      }).then(function (ress) {
+        if(ress.isConfirmed){
+          var opciones = {
+            0: "Efectivo",
+            1: "Tarjeta",
+            2: "Transferencia",
+            3: "Cheque",
+            4: "Sin definir"
+          };
+
+          var arregloMetodos= metodo_pago.reduce(function(result, key) {
+            let monto = parseFloat(document.getElementById(`monto_metodo_${key}`).value);
+            result[key] = {"id_metodo":key, "metodo":opciones[key], "monto": monto};
+            return result;
+          }, {});
+           realizarVenta(arregloMetodos);
+        }
+      })
+      
+     }
+
+     function calcularMontos(importe){
+      let button_confirm = document.querySelector('.swal2-confirm');
+      var inputs = document.querySelectorAll("#contenedor-metodos input[type=number]");  // Obtener todos los inputs
+      var suma = 0;
+      
+      inputs.forEach(function(input) {
+        var valor = parseFloat(input.value);
+        if (!isNaN(valor)) {
+          suma += valor;
+        }
+      });
+      
+      // Verificar si la suma es igual al precio_llanta y actualizar el badge
+      var badgePrecio = document.getElementById("badge-precio");
+      var text_message = document.getElementById("text-message");
+      if (suma === importe) {
+        badgePrecio.classList.remove("badge-secondary");
+        badgePrecio.classList.remove("badge-danger");
+        badgePrecio.classList.add("badge-success");
+        button_confirm.style.backgroundColor = '#1cc88a';
+        button_confirm.style.borderColor = '#1cc88a';
+        text_message.classList.remove("text-secondary");
+        text_message.classList.remove("text-danger");
+        text_message.classList.add("text-success");
+        text_message.textContent = '¡Listo!';
+        $("#total_venta").attr("is-valid", "true")
+        audio.play();      
+      }else if(suma > importe){
+        badgePrecio.classList.remove("badge-success");
+        badgePrecio.classList.remove("badge-secondary");
+        badgePrecio.classList.add("badge-danger");
+
+        button_confirm.style.backgroundColor = '#dc3545';
+        button_confirm.style.borderColor = '#dc3545';
+        text_message.classList.remove("text-success");
+        text_message.classList.remove("text-secondary");
+        text_message.classList.add("text-danger");
+        text_message.textContent = 'El monto soprepasa la cantidad';
+        $("#total_venta").attr("is-valid", "false")
+      } else {
+        badgePrecio.classList.remove("badge-success");
+        badgePrecio.classList.remove("badge-danger");
+        badgePrecio.classList.add("badge-secondary");
+
+        button_confirm.style.backgroundColor = '#858796';
+        button_confirm.style.borderColor = '#858796';
+        text_message.classList.remove("text-success");
+        text_message.classList.remove("text-danger");
+        text_message.classList.add("text-secondary");
+        text_message.textContent = '';
+        $("#total_venta").attr("is-valid", "false")
+      }
+      
+    }
+    const audio = new Audio("./src/sounds/success-sound.mp3");
+    audio.volume = 0.5;
+  

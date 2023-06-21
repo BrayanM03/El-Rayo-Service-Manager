@@ -2,20 +2,23 @@
 body{
     height: 100vh;
     font-size:14px;
-    background-repeat: repeat;
-    background-size: cover;
-    backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);  
+    background-repeat: no-repeat;
+   
+    /* backdrop-filter: blur(10px); */
+  /*-webkit-backdrop-filter: blur(10px);  */
+    background-image: url(../img/bb.jpeg);
+    background-color: #fee970;
     display: flex;
+    background-size: contain;
     flex-direction: column;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
     
 }
 .simple-login-container{
     width:350px;
     max-width:100%;  
-    margin-left: 100px;
+    
     background-color: azure;
     border-radius: 15px;
     height: 450px;

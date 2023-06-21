@@ -199,8 +199,11 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
                         <h3 class="h3 mb-0 text-gray-800">Metrica de ganancias</h3>
                         <a href="index.php?id=0&nav=inicio" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm"><i
                                 class="fas fa-hand-point-left fa-sm text-white-50"></i> Volver</a>
+
                         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" onclick="ejecutarPanelReporteVentas();"><i
-                                class="fas fa-download fa-sm text-white-50"></i> Generar reporte</a>
+                                class="fas fa-download fa-sm text-white-50"></i> Reporte de corte</a>
+                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-info shadow-sm" onclick="ejecutarPanelReporteComisiones();"><i
+                                class="fas fa-download fa-sm text-white-50"></i> Reporte comisiones</a>
                     </div>
                    
                             <!-- Content Row -->

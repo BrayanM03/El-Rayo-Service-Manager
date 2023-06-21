@@ -18,6 +18,7 @@ $claseMisLlantas = "";
 $claseExistencia = "";
 $claseServicios = "";
 $claseMovimientos = "";
+$claseMovimientosClientes ="";
 $user_jerarquia = $_SESSION["rol"];
 
 
@@ -278,6 +279,9 @@ if ($user_jerarquia == 1 || $user_jerarquia == 2) {
             <a class="collapse-item <?php echo $claseClientes ?>" href="clientes.php?id=0&nav=clientes" style="display:flex; flex-direction: row; justify-content:start;">
                 <img src="src/img/cliente.svg" width="18px" /> 
                 <span style="margin-left:12px;"> Clientes</span> </a>
+            <a class="collapse-item <?php echo $claseMovimientosClientes ?>" href="movimientos_clientes.php?id=0&nav=movimientos_creditos" style="display:flex; flex-direction: row; justify-content:start;">
+                <img src="src/img/entrada.svg" width="18px" /> 
+                <span style="margin-left:12px;"> Movimientos clientes</span> </a>
             <a class="collapse-item <?php echo $claseCreditos ?>" href="creditos.php?id=0&nav=creditos" style="display:flex; flex-direction: row; justify-content:start;">
                 <img src="src/img/credito.svg" width="18px" /> 
                 <span style="margin-left:12px;"> Creditos</span> </a>

@@ -37,7 +37,25 @@ if (isset($_POST)) {
         $r->close(); */
 
 
-        $query="SELECT creditos.id, creditos.id_cliente, creditos.pagado, creditos.restante, creditos.total, creditos.estatus, creditos.fecha_inicio, creditos.fecha_final, creditos.plazo, abonos.id , abonos.fecha, abonos.hora, abonos.abono, abonos.metodo_pago, abonos.usuario FROM creditos INNER JOIN abonos ON creditos.id = abonos.id_credito WHERE abonos.id_credito = $id_credito";
+        $query="SELECT creditos.id, 
+        creditos.id_cliente, 
+        creditos.pagado, 
+        creditos.restante, 
+        creditos.total, 
+        creditos.estatus, 
+        creditos.fecha_inicio, 
+        creditos.fecha_final, 
+        creditos.plazo, 
+        abonos.id , 
+        abonos.fecha, 
+        abonos.hora, 
+        abonos.abono, 
+        abonos.pago_efectivo, 
+        abonos.pago_tarjeta, 
+        abonos.pago_transferencia, 
+        abonos.pago_cheque, 
+        abonos.pago_sin_definir,
+        abonos.usuario FROM creditos INNER JOIN abonos ON creditos.id = abonos.id_credito WHERE abonos.id_credito = $id_credito";
         $resultado = mysqli_query($con, $query);
     
         while($fila = $resultado->fetch_assoc()){
@@ -54,7 +72,11 @@ if (isset($_POST)) {
         $abono = $fila["abono"];
         $fecha_abono = $fila["fecha"];
         $hora_abono = $fila["hora"];
-        $metodo_pago = $fila["metodo_pago"];
+        $pago_efectivo = $fila["pago_efectivo"];
+        $pago_tarjeta = $fila["pago_tarjeta"];
+        $pago_transferencia = $fila["pago_transferencia"];
+        $pago_cheque = $fila["pago_cheque"];
+        $pago_sin_definir = $fila["pago_sin_definir"];
         $usuario = $fila["usuario"];
     
         $sqlcliente = "SELECT Nombre_Cliente FROM clientes WHERE id = ?";
@@ -71,7 +93,13 @@ if (isset($_POST)) {
     
         $data["data"][] = array("id" => $id,"id_cliente"=>$clienteid, "fecha_inicial"=>$fecha_inicio,"fecha_final"=>$fecha_final, "restante" => $restante,
                         "pagado" => $pagado, "cliente"=>$cliente_name, "total"=>$total, "plazo"=>$plazo, "estatus"=>$estatus,"abono_id"=>$abono_id, "abono"=>$abono, "fecha_abono"=>$fecha_abono,
-                    "hora_abono"=> $hora_abono, "metodo_pago"=> $metodo_pago, "usuario"=>$usuario);
+                    "hora_abono"=> $hora_abono, 
+                    "pago_efectivo"=> $pago_efectivo,
+                    "pago_tarjeta"=> $pago_tarjeta,
+                    "pago_transferencia"=> $pago_transferencia,
+                    "pago_cheque"=> $pago_cheque,
+                    "pago_sin_definir"=> $pago_sin_definir,
+                    "usuario"=>$usuario);
     
                       
     }
