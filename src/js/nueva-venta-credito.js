@@ -64,8 +64,13 @@ function realizarVentaCredito(){
 
 
                       }
-                      let importetotal = $("#total").val();
-                      $("#restante").val("$" + importetotal);
+                       $("#abono").change(()=>{
+                          
+                          let importetotal = parseFloat($("#total").val());
+                          let abono = parseFloat($("#abono").val());
+                          let restante = importetotal - abono;
+                          $("#restante").val("$" + restante);
+                      });
                 },
                 preConfirm: (respuesta) =>{
 

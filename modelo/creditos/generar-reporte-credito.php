@@ -625,7 +625,8 @@ function cuerpoTabla(){
     $pdf->SetFont('Courier','',10);
     $pdf->Cell(30,8,'$ '.$GLOBALS["pagado"],0,0, 'C',1);
     $pdf->Ln(10);
-
+    
+    //die();
     switch ($GLOBALS['plazo']) {
             case '1':
             $plazos = '1 semana';
@@ -648,9 +649,11 @@ function cuerpoTabla(){
             break;
         
         default:
+        $plazos = 'Sin definir';
             # code...
             break;
     }
+ 
     $pdf->SetFont('Courier','',12);
     $pdf->Cell(29,6,$plazos,0,0,'C',1);
     $pdf->Cell(49,6,$GLOBALS["fecha_inicio"] ,0,0,'C',1);
