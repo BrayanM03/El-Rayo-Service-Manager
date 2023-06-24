@@ -43,23 +43,18 @@ $resp->bind_result($nombre_sucursal);
 $resp->fetch();
 $resp->close();
 
-//$hoja_activa->mergeCells("A1:B1");
-       /*  $hoja_activa->mergeCells("B1:G1");        
-        $hoja_activa->setCellValue('B1', 'Reporte de comisiones  de '.$nombre_sucursal . ' | Llantera el rayo ');
-        $hoja_activa->getStyle('B1')->getFont()->setBold(true);
-        $hoja_activa->getStyle('B1')->getFont()->setSize(16);
-        $hoja_activa->getRowDimension('1')->setRowHeight(50);
-        $hoja_activa->getStyle('B1')->getAlignment()->setHorizontal('center');
-        $hoja_activa->getStyle('B1')->getAlignment()->setVertical('center');
-        $hoja_activa->getStyle('B1')->getAlignment()->setHorizontal('center');
-        $hoja_activa->getStyle('B1')->getAlignment()->setVertical('center');
-        $hoja_activa->setCellValue('H1', "Fechas - Desde: ". $fecha_inicio . " - Hasta: " . $fecha_final); */
-                
-        /* $hoja_activa->getStyle('A2:F2')->getAlignment()->setHorizontal('center');
-        $hoja_activa->getStyle('A2:F2')->getAlignment()->setVertical('center'); */
-        /* $hoja_activa->getStyle('A2:F2')->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
-        $hoja_activa->getStyle('A2:F2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('007bcc');
-        */
+$hoja_activa->mergeCells("A1:F1");
+$hoja_activa->setCellValue('A1', 'Reporte de comisiones  de '.$nombre_sucursal . ' | Llantera el rayo ');
+$hoja_activa->mergeCells("A2:D2");
+$hoja_activa->mergeCells("E2:F2");
+$hoja_activa->setCellValue('A2', 'Sucursal: '.$nombre_sucursal);
+$hoja_activa->setCellValue('E2', 'Fechas - Desde: '. $fecha_inicio . " - Hasta: " . $fecha_final);
+$hoja_activa->getStyle('A1:F2')->getAlignment()->setHorizontal('center');
+$hoja_activa->getStyle('A1:F2')->getAlignment()->setVertical('center');
+$hoja_activa->getRowDimension('1')->setRowHeight(30);
+$hoja_activa->getStyle('A3:F3')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('dfe6f2');
+$hoja_activa->getStyle('A1:F1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('007bcc');
+$hoja_activa->getStyle('A1:F1')->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE); 
 
                 $index=3;
 
@@ -91,6 +86,7 @@ $resp->close();
 if($comisiones > 0) {
 
     $index++;
+    $contador = 0;
             foreach ($comisiones as $key => $value) {
                 
                 $nombre = $value["nombre"];
@@ -109,21 +105,17 @@ if($comisiones > 0) {
                 //$hoja_activa->getStyle('A'.$index.':F'.$index)->getFont()->setBold(true);
                 $hoja_activa->getStyle('A'.$index.':F'.$index)->getFont()->setSize(12);
                 $hoja_activa->getStyle('A'.$index.':F'.$index)->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_BLACK);
-
+                
                 $index++;
-
+                $contador++;
 
             }
+            $hoja_activa->getStyle('C4:C'.$index)->getNumberFormat()->setFormatCode(PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_CURRENCY_USD_SIMPLE);
         }
-
-       /*  $hoja_activa
-        ->getStyle('C4:C'.$index)
-        ->getNumberFormat()
-        ->setFormatCode(PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_CURRENCY_USD_SIMPLE); */
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="Reporte de venta diaria '. $nombre_sucursal .' '. $fecha_inicio .' - '. $fecha_final.'.xlsx"');
-        header('Cache-Control: max-age=0');
+        header('Cache-Control: max-age=0'); 
 
         $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
         
@@ -199,7 +191,7 @@ function obtenerComision($con, $fecha_inicio, $fecha_final, $id_usuario, $porcen
         $placeholders = implode(',', array_fill(0, count($ids_clientes), '?'));
 
    
-        $consulta = "SELECT id, Total FROM ventas WHERE Fecha BETWEEN ? AND ? AND id_Cliente IN ($placeholders)";
+        $consulta = "SELECT id, Total FROM ventas WHERE Fecha BETWEEN ? AND ? AND id_Cliente IN ($placeholders) AND estatus = 'Pagado'";
         $res = $con->prepare($consulta);
         // Añade dos elementos adicionales al array de parámetros para la fecha_inicio y fecha_final
         $params = array_merge([$fecha_inicio, $fecha_final], $ids_clientes);

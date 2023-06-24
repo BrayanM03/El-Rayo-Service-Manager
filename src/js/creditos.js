@@ -15,34 +15,32 @@ function MostrarCreditos() {
   //$.fn.dataTable.ext.errMode = 'none';
 
   table = $("#creditos").DataTable({
-    serverSide: false,
-    ajax: {
-      method: "POST",
-      url: "./modelo/creditos/traer-creditos.php",
-      dataType: "json",
-    },
-
+    processing: true,
+    serverSide: true,
+    ajax: './modelo/creditos/traer-creditos.php',
     columns: [
       { title: "#", data: null },
       {
         title: "id",
-        data: "id",
-        render: function (data, type, row) {
-          return "<span>CRED" + data + "</span>";
+        data: null,
+        render: function (data) {
+     
+          return "<span>CRED" + data[0] + "</span>";
         },
       },
-      { title: "Cliente", data: "cliente" },
-      { title: "cod", data: "id" },
-      { title: "Fecha inicio", data: "fecha_inicial" },
-      { title: "Fecha final", data: "fecha_final" },
-      { title: "Total", data: "total" },
-      { title: "Restante", data: "restante" },
-      { title: "Pagado", data: "pagado" },
+      { title: "Cliente", data: 9 },
+      { title: "cod", data: 0 },
+      { title: "Fecha inicio", data: 5 },
+      { title: "Fecha final", data: 6 },
+      { title: "Total", data: 3 },
+      { title: "Restante", data: 2 },
+      { title: "Pagado", data: 1 },
       {
         title: "Estatus",
-        data: "estatus",
-        render: function (data, type, row) {
-          switch (data) {
+        data: null,
+        render: function (data) {
+          
+          switch (data[4]) {
             case "0":
               return '<span class="badge badge-primary">Sin abono</span>';
               break;
@@ -69,9 +67,9 @@ function MostrarCreditos() {
       },
       {
         title: "Plazo",
-        data: "plazo",
-        render: function (data, type, row) {
-          switch (data) {
+        data: null,
+        render: function (data) {
+          switch (data[7]) {
             case "1":
               return "<span>7 dias</span>";
               break;
@@ -96,34 +94,34 @@ function MostrarCreditos() {
       {
         title: "Venta",
         data: null,
-        render: function (data, type, row) {
-          return "RAY" + row.id_venta;
+        render: function (data) {
+          return "RAY" + data[8];
         },
       },
       {
         title: "Accion",
         data: null,
         className: "celda-acciones",
-        render: function (row, data) {
+        render: function (data) {
           id_sesion = $("#emp-title").attr("sesion_id");
 
           if (id_sesion == "5" || id_sesion == "6") {
             //Esta configuracion es especifica para el usuario de Mario y Amita se debe en un furturo hacer mas dinamico
             return (
               '<div style="display: flex"><button type="button" onclick="traerPdfCredito(' +
-              row.id_venta +
+              data[8] +
               ');" class="btn ml-2 btn-danger"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button></div>'
             );
           } else {
             return (
               '<div style="display: flex"><button onclick="traerCredito(' +
-              row.id +
+              data[0] +
               ", " +
-              row.id_venta +
+              data[8] +
               ');" type="button" class="buttonPDF btn btn-primary" style="margin-right: 8px"><span class="fa fa-eye"></span><span class="hidden-xs"></span></button><br><button type="button" onclick="borrarCredito(' +
-              row.id +
+              data[0] +
               ');" class="buttonBorrar btn btn-warning"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button><br><button type="button" onclick="traerPdfCredito(' +
-              row.id_venta +
+              data[8] +
               ');" class="btn ml-2 btn-danger"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button></div>'
             );
           }
@@ -174,6 +172,9 @@ function borrarCredito(id) {
     confirmButtonText: "Borrar",
     cancelButtonColor: "#ff764d",
     focusConfirm: false,
+    customClass: {
+      container: 'borrar-credito'
+    },
   }).then((result) => {
     if (result.isConfirmed) {
       $.ajax({
@@ -226,7 +227,11 @@ function traerCredito(id, id_venta) {
     success: function (response) {
       Swal.fire({
         title: "Historial de credito",
+        heightAuto:false,
         background: "#dcdcdc",
+        customClass: {
+          popup: 'mostrar-creditos'
+        },
         width: "96vw",
         didOpen: function () {
           $(document).ready(function () {
@@ -363,7 +368,7 @@ function traerCredito(id, id_venta) {
               }
 
               fechaFormated = formatDate(fecha);
-              console.log(fechaFormated);
+             
               $("#cuerpo_edit").append(
                 '<div class="row">' +
                   '<div col="col-12 col-md-3" style="margin-left:20px;">' +
@@ -759,9 +764,9 @@ function registrarAbono(id) {
        var inputs = document.querySelectorAll('#area-metodos-pagos-creditos input[type="number"]');
 
        inputs.forEach(function(input) {
-        console.log(input);
+     
        var clave =  input.id.split("_").pop(); // Obtener la clave del método de pago del ID del input
-      console.log(clave);
+     
        var metodo = opciones[clave]; // Obtener el nombre del método de pago según la clave
        let monto_ing = input.value ? input.value : 0;
        var monto = parseFloat(monto_ing); // Obtener el monto ingresado en el input
@@ -896,7 +901,7 @@ function registrarAbonoEditado(id, monto1, monto2, monto3, monto4, monto5) {
        metodosPago.push(metodoPago); // Agregar el objeto al arreglo metodosPago
        });
 
-       console.log(metodosPago);
+     
        $.ajax({
         type: "POST",
         url: "./modelo/creditos/editar-abono.php",

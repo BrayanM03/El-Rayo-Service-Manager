@@ -68,8 +68,12 @@
     <link href="src/css/menu-vertical.css" rel="stylesheet">
    
 <style>
-    .swal2-content {
+    .mostrar-creditos .swal2-content {
     height: 80vh !important;
+    
+    }
+    .borrar-credito {
+    height: auto !important;
     
     }
     .selectpicker{

@@ -10,9 +10,9 @@ function ejecutarPanelReporteVentas(){
                 dataType: "JSON",
                 success: function (response) {
                     
-                    $("#sucursal").append(`
+                    /* $("#sucursal").append(`
                         <option value="all">Todas las plazas</option>
-                    `); 
+                    `);  */
                     response.forEach(element => {
                        
                     $("#sucursal").append(`
@@ -80,9 +80,9 @@ function ejecutarPanelReporteComisiones(){
                 dataType: "JSON",
                 success: function (response) {
                     
-                    $("#sucursal").append(`
+                    /* $("#sucursal").append(`
                         <option value="all">Todas las plazas</option>
-                    `); 
+                    `);  */
                     response.forEach(element => {
                        
                     $("#sucursal").append(`

@@ -3,69 +3,66 @@ function MostrarVentas() {
     ocultarSidebar();
 table = $('#ventas').DataTable({
       
-    serverSide: false,
-    ajax: {
-        method: "POST",
-        url: "./modelo/ventas/historial-ventas.php",
-        dataType: "json"
- 
-    },  
-
-  columns: [   
+   
+    processing: true,
+    serverSide: true,
+    ajax: './modelo/ventas/historial-ventas.php',
+    columns: [   
     { title: "#",              data: null             },
     { title: "Folio",         data: "folio", render: function(data,type,row) {
-        return '<span>RAY'+ data +'</span>';
+        return '<span>RAY'+ row[0] +'</span>';
         }},
-    { title: "Fecha",          data: "fecha"          },
-    { title: "Sucursal",       data: "nombre_suc"       }, 
-    { title: "Vendedor",       data: "vendedor"       },
-    { title: "Cliente",        data: "cliente"        },
-    { title: "ID",       data: "folio"  },
-    { title: "Tipo",           data: "tipo"       },
-    { title: "Total",          data: "total"          },
-    { title: "Estatus",        data: "estatus"        }, 
+    { title: "Fecha",          data: 1          },
+    { title: "Sucursal",       data: 2       }, 
+    { title: "Vendedor",       data: 3       },
+    { title: "Cliente",        data: 4        },
+    //{ title: "ID",       data: "folio"  },
+    { title: "Tipo",           data: 7       },
+    { title: "Total",          data: 6          },
+    { title: "Estatus",        data: 8        }, 
     { title: "Accion",
       data: null,
       className: "celda-acciones",
       render: function (row, data) {
+        
         rol = $("#titulo-hv").attr("rol");
         
        if(rol == "1"){
-            if (row.tipo == "Credito") {
+            if (row[7] == "Credito") {
                 return '<div style="display: flex; width: auto;">'+
-                '<button onclick="traerPdfCredito(' +row.folio+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px">'+
+                '<button onclick="traerPdfCredito(' +row[0]+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px">'+
                 '<span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>'+
-                '<button type="button" onclick="cancelarVenta('+ row.folio +');" class="buttonBorrar btn btn-primary">'+
+                '<button type="button" onclick="cancelarVenta('+ row[0] +');" class="buttonBorrar btn btn-primary">'+
                 '<span class="fa fa-ban"></span><span class="hidden-xs"></span></button>'+
-                '<button type="button" onclick="redirigirCredito('+ row.folio +');" class="buttonBorrar btn btn-info" style="margin-left: 8px">'+
+                '<button type="button" onclick="redirigirCredito('+ row[0] +');" class="buttonBorrar btn btn-info" style="margin-left: 8px">'+
                 '<span class="fa fa-share-square"></span><span class="hidden-xs"></span></button>'+
-                '<button type="button" onclick="borrarVenta('+ row.folio +',2);" class="buttonBorrar btn btn-warning" style="margin-left: 8px">'+
+                '<button type="button" onclick="borrarVenta('+ row[0] +',2);" class="buttonBorrar btn btn-warning" style="margin-left: 8px">'+
                 '<span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
                 
-            }else if(row.tipo == "Normal"){
+            }else if(row[7] == "Normal"){
                 return '<div style="display: flex; width: auto;">'+
-                '<button onclick="traerPdf(' +row.folio+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px">'+
+                '<button onclick="traerPdf(' +row[0]+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px">'+
                 '<span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>'+
-                '<button type="button" onclick="cancelarVenta('+ row.folio +');" class="buttonBorrar btn btn-primary">'+
+                '<button type="button" onclick="cancelarVenta('+ row[0] +');" class="buttonBorrar btn btn-primary">'+
                 '<span class="fa fa-ban"></span><span class="hidden-xs"></span></button>'+
-                '<button type="button" onclick="borrarVenta('+ row.folio +',1);" class="buttonBorrar btn btn-warning" style="margin-left: 8px">'+
+                '<button type="button" onclick="borrarVenta('+ row[0] +',1);" class="buttonBorrar btn btn-warning" style="margin-left: 8px">'+
                 '<span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
          
-            }else if(row.tipo == ""){
+            }else if(row[7] == ""){
                 return '<div style="display: flex; width: auto;">'+
-                '<button onclick="traerPdf(' +row.folio+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px">'+
+                '<button onclick="traerPdf(' +row[0]+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px">'+
                 '<span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>'+
-                '<button type="button" onclick="cancelarVenta('+ row.folio +');" class="buttonBorrar btn btn-primary">'+
+                '<button type="button" onclick="cancelarVenta('+ row[0] +');" class="buttonBorrar btn btn-primary">'+
                 '<span class="fa fa-ban"></span><span class="hidden-xs"></span></button>'+
-                '<button type="button" onclick="borrarVenta('+ row.folio +');" class="buttonBorrar btn btn-warning" style="margin-left: 8px">'+
+                '<button type="button" onclick="borrarVenta('+ row[0] +');" class="buttonBorrar btn btn-warning" style="margin-left: 8px">'+
                 '<span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
             }
         }else{
-            if (row.estatus == "Abierta") {
-                return '<div style="display: flex"><button onclick="traerPdfCredito(' +row.folio+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>';
+            if (row[8] == "Abierta") {
+                return '<div style="display: flex"><button onclick="traerPdfCredito(' +row[7]+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>';
                 
-            }else if(row.estatus == "Pagado"){
-                return '<div style="display: flex"><button onclick="traerPdf(' +row.folio+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>';
+            }else if(row[8] == "Pagado"){
+                return '<div style="display: flex"><button onclick="traerPdf(' +row[7]+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>';
          
             }else if(row.estatus == "Cancelada"){
                 
