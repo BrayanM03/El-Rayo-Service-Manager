@@ -20,37 +20,34 @@ function MostrarInventario(id_sucursal) {
     });
 
     table = $('#inventario-pedro').DataTable({   
-      
-        ajax: {
-            method: "POST",
-            data: {"id_sucursal": id_sucursal},
-            url: "./modelo/traerInventario.php" 
-        },  
-  
-      columns: [   
+        processing: true,
+        serverSide: true,
+        ajax:'./modelo/traerInventario.php?id_sucursal='+id_sucursal,
+            
+        columns: [   
         { title: "#",              data: null             },
-        { title: "Codigo",         data: "Codigo"         },
-        {title: 'Ancho',           data: "Ancho",      visible: false },
-        {title: 'Proporcion',      data: "Proporcion", visible: false },
-        {title: 'Diametro',        data: "Diametro",   visible: false },
-        { title: "Descripcion",    data: "Descripcion"    },
-        { title: "Marca",          data: "Marca"          },
-        { title: "Modelo",         data: "Modelo"         },
-        { title: "Costo",          data: "precio_Inicial", visible: visible_value},
-        { title: "Precio",         data: "precio_Venta",   visible: visible_value},
-        { title: "Mayoreo",        data: "precio_Mayoreo", visible: visible_value},
-        { title: "Sucursal",       data: "Sucursal"       },
-        { title: "Stock",          data: "Stock"          },
-        { title: "Imagen",         data: "Marca", render: function(data,type,row) {
-          return '<img src="./src/img/logos/'+ data +'.jpg" style="width: 60px; border-radius: 8px">';
+        { title: "Codigo",         data: 12        },
+        {title: 'Ancho',           data: 1,      visible: false },
+        {title: 'Proporcion',      data: 2, visible: false },
+        {title: 'Diametro',        data: 3,   visible: false },
+        { title: "Descripcion",    data: 4    },
+        { title: "Marca",          data: 5         },
+        { title: "Modelo",         data: 6        },
+        { title: "Costo",          data: 7, visible: visible_value},
+        { title: "Precio",         data: 8,   visible: visible_value},
+        { title: "Mayoreo",        data: 9, visible: visible_value},
+        { title: "Sucursal",       data: 13      },
+        { title: "Stock",          data: 15         },
+        { title: "Imagen",         data: null, render: function(data,type,row) {
+          return '<img src="./src/img/logos/'+ data[5] +'.jpg" style="width: 60px; border-radius: 8px">';
           }},
         {
           data: null,
           className: "celda-acciones",
-          visible: visible_value,
+          visible: visible_value, 
           render: function (row) { 
             
-            return '<div style="display: flex"><button type="button" onclick="editarStock('+row.id_Llanta+','+ id_sucursal +');" id="'+row.id_Llanta+'" class="buttonEditar btn btn-warning" style="margin-right: 8px"><span class="fa fa-edit"></span><span class="hidden-xs"></span></button><br><button type="button" onclick="borrarRegistro('+row.id_Llanta+','+ id_sucursal +');" id="'+row.id_Llanta+'" class="buttonBorrar btn btn-danger"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
+            return '<div style="display: flex"><button type="button" onclick="editarStock('+row[11]+','+ id_sucursal +');" id="'+row[11]+'" class="buttonEditar btn btn-warning" style="margin-right: 8px"><span class="fa fa-edit"></span><span class="hidden-xs"></span></button><br><button type="button" onclick="borrarRegistro('+row[11]+','+ id_sucursal +');" id="'+row[11]+'" class="buttonBorrar btn btn-danger"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
           },
         },
       ],

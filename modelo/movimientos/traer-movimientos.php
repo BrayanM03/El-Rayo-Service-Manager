@@ -1,44 +1,72 @@
 <?php
 
-session_start();
-include '../conexion.php';
-$con= $conectando->conexion(); 
+/*
+ * DataTables example server-side processing script.
+ *
+ * Please note that this script is intentionally extremely simple to show how
+ * server-side processing can be implemented, and probably shouldn't be used as
+ * the basis for a large complex system. It is suitable for simple use cases as
+ * for learning.
+ *
+ * See http://datatables.net/usage/server-side for full details on the server-
+ * side processing requirements of DataTables.
+ *
+ * @license MIT - http://datatables.net/license_mit
+ */
 
-if (!isset($_SESSION['id_usuario'])) {
-    header("Location:../../login.php");
-}
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * Easy set variables
+ */
+
+// DB table to use
+$table = 'movimientos';
+
+// Table's primary key
+$primaryKey = 'id';
+
+// Array of database columns which should be read and sent back to DataTables.
+// The `db` parameter represents the column name in the database, while the `dt`
+// parameter represents the DataTables column identifier. In this case simple
+// indexes
+$columns = array(
+	array( 'db' => 'id', 'dt' => 0 ),
+	array( 'db' => 'descripcion', 'dt' => 1 ),
+	array( 'db' => 'mercancia', 'dt' => 2 ),
+	array( 'db' => 'fecha', 'dt' => 3 ),
+	array( 'db' => 'hora',   'dt' => 4),
+	array( 'db' => 'usuario', 'dt' => 5 ),
+	array( 'db' => 'tipo', 'dt' => 6 ),
+	array( 'db' => 'sucursal', 'dt' => 7 ),
+	
+/* 	array(
+		'db'        => 'start_date',
+		'dt'        => 4,
+		'formatter' => function( $d, $row ) {
+			return date( 'jS M y', strtotime($d));
+		}
+	),
+	array(
+		'db'        => 'salary',
+		'dt'        => 5,
+		'formatter' => function( $d, $row ) {
+			return '$'.number_format($d);
+		}
+	) */
+);
+
+// SQL server connection information
+include_once '../credenciales.php';
+$sql_details = $credenciales_db;
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * If you just want to use the basic configuration for DataTables with PHP
+ * server-side, there is no need to edit below this line.
+ */
+
+require( '../ssp.class.php' );
+
+echo json_encode(
+	SSP::simple( $_GET, $sql_details, $table, $primaryKey, $columns )
+);
 
 
-if (isset($_POST)) {
-       
-    
-    $query="SELECT * FROM movimientos";
-
-    $resultado = mysqli_query($con, $query);
-
-    while($fila = $resultado->fetch_assoc()){
-    $id= $fila["id"];
-    $id = intval($id);
-    $descripcion = $fila["descripcion"];
-    $mercancia = $fila["mercancia"];
-    $fecha = $fila["fecha"];
-    $hora = $fila["hora"];
-    $usuario = $fila["usuario"];
-    $tipo = $fila["tipo"];
-    $tipo = intval($tipo);
-  
-
-    $data["data"][] = array("id" => $id, "descripcion"=>$descripcion, "mercancia" => $mercancia,
-                    "fecha" => $fecha, "hora"=>$hora, "usuario"=>$usuario, "tipo"=> $tipo);
-
-                  
-}
-
-echo json_encode($data, JSON_UNESCAPED_UNICODE);  
-
-}else{
-    print_r("No se pudo establecer una conexión");
-}
-
-
-?>

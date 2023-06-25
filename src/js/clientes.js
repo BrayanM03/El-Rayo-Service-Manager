@@ -6,25 +6,22 @@ function MostrarClientes() {
 table = $('#ventas').DataTable({
       
     serverSide: false,
-    ajax: {
-        method: "POST",
-        url: "./modelo/clientes/traer-clientes.php",
-        dataType: "json"
- 
-    },  
+    processing: true,
+    serverSide: true,
+    ajax:'./modelo/clientes/traer-clientes.php',
 
   columns: [   
     { title: "#",              data: null             },
-    { title: "Codigo",         data: "id", render: function(data,type,row) {
+    { title: "Codigo",         data: 0, render: function(data,type,row) {
         return '<span>R'+ data +'</span>';
         }},
         
     { title: "id",            data: "id"         },
-    { title: "Nombre",         data: "nombre"         },
-    { title: "Telefono",       data: "telefono"       },
-    { title: "Direccion",      data: "direccion" , width: "20%"  },
-    { title: "Correo",         data: "correo"         },
-    { title: "Credito",        data: "credito", render: function (data) {  
+    { title: "Nombre",         data: 1         },
+    { title: "Telefono",       data: 2       },
+    { title: "Direccion",      data: 3 , width: "20%"  },
+    { title: "Correo",         data: 4         },
+    { title: "Credito",        data: 5, render: function (data) {  
         if (data == 1) {
             return '<span class="badge badge-warning">Con credito</span>';
         }else if(data == 0){
@@ -32,17 +29,17 @@ table = $('#ventas').DataTable({
         }
             
      }},
-    { title: "RFC",            data: "rfc"        },
+    { title: "RFC",            data: 6       },
     { title: "Accion",
       data: null,
       className: "celda-acciones",
       render: function (row, data) {
         
         if(rol_sesion == 2){ //Esta configuracion es especifica para el usuario de Mario y Amita se debe en un furturo hacer mas dinamico
-            return '<div style="display: flex"><button onclick="editarCliente(' +row.id+ ');" type="button" class="buttonPDF btn btn-success" style="margin-right: 8px"><span class="fa fa-edit"></span><span class="hidden-xs"></span></button><br>';
+            return '<div style="display: flex"><button onclick="editarCliente(' +row[0]+ ');" type="button" class="buttonPDF btn btn-success" style="margin-right: 8px"><span class="fa fa-edit"></span><span class="hidden-xs"></span></button><br>';
         }else{
-            return '<div style="display: flex"><button onclick="editarCliente(' +row.id+ ');" type="button" class="buttonPDF btn btn-success" style="margin-right: 8px"><span class="fa fa-edit"></span><span class="hidden-xs"></span></button><br>'+
-            '<button type="button" onclick="borrarCliente('+ row.id +');" class="buttonBorrar btn btn-warning"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
+            return '<div style="display: flex"><button onclick="editarCliente(' +row[0]+ ');" type="button" class="buttonPDF btn btn-success" style="margin-right: 8px"><span class="fa fa-edit"></span><span class="hidden-xs"></span></button><br>'+
+            '<button type="button" onclick="borrarCliente('+ row[0] +');" class="buttonBorrar btn btn-warning"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
           
         }
     },
@@ -269,7 +266,9 @@ function borrarCliente(id) {
             $.ajax({
                 type: "POST",
                 url: "./modelo/clientes/agregar-cliente.php",
+                dataType:'JSON',
                 data: {
+                    "intento": 1,
                     "nombre": nombre,
                     "credito": credito,
                     "telefono": telefono,
@@ -281,10 +280,10 @@ function borrarCliente(id) {
                     "asesor": asesor},
                 
                 success: function (response) {
-                   if (response == 1) {
+                   if (response.status) {
                     Swal.fire(
                         "¡Registrado!",
-                        "Se agrego el cliente correctamente",
+                        response.msj,
                         "success"
                         ).then((result) => { 
                             if(result.isConfirmed){
@@ -292,12 +291,79 @@ function borrarCliente(id) {
                             }
                             table.ajax.reload(null,false);
                             });
-                   }else if(response == 0){
-                    Swal.fire(
-                        "¡Error!",
-                        "No se puede agregar el cliente",
-                        "error"
-                        )
+                   }else if(response.status == false){
+                    Swal.fire({
+                            icon: 'warning',
+                            didOpen: () => {
+                                if(Array.isArray(response.data)){
+                                    let contenedor = $("#contenedor-clientes-encontrados");
+                                    contenedor.empty();
+                                    contenedor.append(`<table class="table table-striped table-bordered" id="tabla-clientes-encontrados">
+                                    <thead class="table-info">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Nombre</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody-clientes-encontrados">
+                                    </tbody>
+                                    </table>`);
+                                    response.data.forEach(element => {
+                                        $("#tbody-clientes-encontrados").append(`
+                                        <tr>
+                                            <td>R${element.id}</td>
+                                            <td>${element.Nombre_Cliente}</td>
+                                        </tr>
+                                        `);
+                                    });
+                            }
+                            },
+                            html: `
+                            <div class=container"">
+                            <div class="row">
+                                <div class="col-12">
+                                <h5>¡Ups!</h5>
+                                <p>${response.msg}</p>
+                                </div>
+                                <div class="col-12" id="contenedor-clientes-encontrados">
+                                </div>
+                            </div>
+                            </div>`,
+                            confirmButtonText: 'Registrar aun asi',
+                            showCancelButton: true,
+                            cancelButtonText: 'Cancelar',
+                        }).then(function(re){
+                            if(re.isConfirmed){
+                                $.ajax({
+                                    type: "POST",
+                                    url: "./modelo/clientes/agregar-cliente.php",
+                                    dataType:'JSON',
+                                    data: {
+                                        "intento": 2,
+                                        "nombre": nombre,
+                                        "credito": credito,
+                                        "telefono": telefono,
+                                        "correo": correo,
+                                        "rfc": rfc,
+                                        "direccion": direccion,
+                                        "latitud": latitud,
+                                        "longitud": longitud,
+                                        "asesor": asesor},
+                                    success: function (respons) {
+                                        Swal.fire(
+                                            "¡Registrado!",
+                                            respons.msj,
+                                            "success"
+                                            ).then((result) => { 
+                                                if(result.isConfirmed){
+                                                    table.ajax.reload(null,false);
+                                                }
+                                                table.ajax.reload(null,false);
+                                                });
+                                    }    
+                                    })
+                            }
+                        });
                    }
                 }
             });

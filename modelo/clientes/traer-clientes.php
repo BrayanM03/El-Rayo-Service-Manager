@@ -1,43 +1,58 @@
 <?php
 
-session_start();
-include '../conexion.php';
-$con= $conectando->conexion(); 
+/*
+ * DataTables example server-side processing script.
+ *
+ * Please note that this script is intentionally extremely simple to show how
+ * server-side processing can be implemented, and probably shouldn't be used as
+ * the basis for a large complex system. It is suitable for simple use cases as
+ * for learning.
+ *
+ * See http://datatables.net/usage/server-side for full details on the server-
+ * side processing requirements of DataTables.
+ *
+ * @license MIT - http://datatables.net/license_mit
+ */
 
-if (!isset($_SESSION['id_usuario'])) {
-    header("Location:../../login.php");
-}
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * Easy set variables
+ */
+
+// DB table to use
+$table = 'clientes';
+
+// Table's primary key
+$primaryKey = 'id';
+
+// Array of database columns which should be read and sent back to DataTables.
+// The `db` parameter represents the column name in the database, while the `dt`
+// parameter represents the DataTables column identifier. In this case simple
+// indexes
+$columns = array(
+	array( 'db' => 'id', 'dt' => 0 ),
+	array( 'db' => 'Nombre_Cliente',  'dt' => 1 ),
+	array( 'db' => 'Telefono',  'dt' => 2 ),
+	array( 'db' => 'Direccion',  'dt' => 3 ),
+	array( 'db' => 'Correo',  'dt' => 4 ),
+	array( 'db' => 'Credito',  'dt' => 5 ),
+	array( 'db' => 'RFC',  'dt' => 6)
+);
+
+// SQL server connection information
+include_once '../credenciales.php';
+$sql_details = $credenciales_db;
 
 
-if (isset($_POST)) {
-       
-    
-    $query="SELECT * FROM clientes";
 
-    $resultado = mysqli_query($con, $query);
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * If you just want to use the basic configuration for DataTables with PHP
+ * server-side, there is no need to edit below this line.
+ */
 
-    while($fila = $resultado->fetch_assoc()){
-    $id= $fila["id"];
-    $nombre = $fila["Nombre_Cliente"];
-    $telefono = $fila["Telefono"];
-    $direccion = $fila["Direccion"];
-    $correo = $fila["Correo"];
-    $credito = $fila["Credito"];
-    $rfc = $fila["RFC"];
-    $id_asesor = $fila["id_asesor"];
-  
+require( '../ssp.class.php' );
 
-    $data["data"][] = array("id" => $id, "nombre"=>$nombre, "telefono" => $telefono,
-                    "direccion" => $direccion, "correo"=>$correo, "credito"=>$credito, "rfc"=>$rfc, "id_asesor"=>$id_asesor);
-
-                  
-}
-
-echo json_encode($data, JSON_UNESCAPED_UNICODE);  
-
-}else{
-    print_r("No se pudo establecer una conexión");
-}
+echo json_encode(
+	SSP::simple( $_GET, $sql_details, $table, $primaryKey, $columns )
+);
 
 
-?>

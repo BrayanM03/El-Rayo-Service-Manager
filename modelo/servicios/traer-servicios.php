@@ -8,7 +8,7 @@ if (!isset($_SESSION['id_usuario'])) {
     header("Location:../../login.php");
 }
 
-$id_usuario = $_POST['id_usuario'];
+//$id_usuario = $_POST['id_usuario'];
 
 
 $queryChange = "SELECT COUNT(*) FROM servicios";

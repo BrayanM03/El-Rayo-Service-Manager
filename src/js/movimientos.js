@@ -3,29 +3,25 @@ function MostrarClientes() {
 
 table = $('#movimientos').DataTable({
       
-    serverSide: false,
-    ajax: {
-        method: "POST",
-        url: "./modelo/movimientos/traer-movimientos.php",
-        dataType: "json"
- 
-    },  
+    processing: true,
+    serverSide: true,
+    ajax: './modelo/movimientos/traer-movimientos.php',  
 
   columns: [   
     { title: "#",              data: null             },
-    { title: "descripcion",    data: "descripcion", width: "30%"},
-    { title: "mercancia",      data: "mercancia", visible:true},
-    { title: "fecha",          data: "fecha" },
-    { title: "hora",           data: "hora"},
-    { title: "id",           data: "id"},
-    { title: "usuario",        data: "usuario"},
+    { title: "descripcion",    data: 1, width: "30%"},
+    { title: "mercancia",      data: 2, visible:true},
+    { title: "fecha",          data: 3 },
+    { title: "hora",           data: 4 },
+    { title: "id",             data: 0 },
+    { title: "usuario",        data: 5 },
     { title: "Accion",
       data: null,
       className: "celda-acciones",
       render: function (row, data) {
-        if(row.tipo == 1 || row.tipo ==2 || row.tipo ==3 || row.tipo ==4){
+        if(row[6] == 1 || row[6] ==2 || row[6] ==3 || row[6] ==4){
 
-          return `<div class="btn btn-danger" onclick="remisionSalida(${row.id})"><i class="fas fa-file-pdf"></i><div>`;
+          return `<div class="btn btn-danger" onclick="remisionSalida(${row[0]})"><i class="fas fa-file-pdf"></i><div>`;
         }else{
 
           return `<span>No disp</span>`;
@@ -61,7 +57,7 @@ MostrarClientes();
 
 
 function remisionSalida(id){
-  console.log(id);
+
   window.open('./modelo/movimientos/remision-salida.php?id='+ id, '_blank');
 }
 

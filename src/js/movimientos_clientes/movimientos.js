@@ -3,14 +3,9 @@ function MostrarClientes() {
 
 table = $('#movimientos').DataTable({
       
-    serverSide: false,
-    ajax: {
-        method: "POST",
-        url: "./modelo/movimientos/server-processing.php",
-        dataType: "json"
- 
-    },  
-
+    processing: true,
+    serverSide: true,
+    ajax:'./modelo/movimientos/server-processing.php',
   columns: [   
     { title: "#",              data: null             },
     { data: 1, title: "Descripcion",     width: "30%"},
@@ -38,7 +33,7 @@ table = $('#movimientos').DataTable({
   scrollY: "50vh",
   info: false,
   responsive: false,
-  order: [5, "desc"],
+  order: [2, "desc"],
  
   
 });
