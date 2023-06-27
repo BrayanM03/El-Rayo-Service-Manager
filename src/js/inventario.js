@@ -22,6 +22,14 @@ function MostrarInventario(id_sucursal) {
     table = $('#inventario-pedro').DataTable({   
         processing: true,
         serverSide: true,
+        rowCallback: function(row, data, index) {
+          var info = this.api().page.info();
+          var page = info.page;
+          var length = info.length;
+          var columnIndex = 0; // Índice de la primera columna a enumerar
+    
+          $('td:eq(' + columnIndex + ')', row).html(page * length + index + 1);
+        },
         ajax:'./modelo/traerInventario.php?id_sucursal='+id_sucursal,
             
         columns: [   
@@ -76,13 +84,7 @@ function MostrarInventario(id_sucursal) {
     .appendTo("#inventario-pedro_wrapper .col-md-6:eq(0)");
     //table.appendTo("#inventario-pedro_wrapper .col-md-6:eq(0)");
     table.columns( [10] ).visible( false );
-     //Enumerar las filas "index column"
-    table.on( 'order.dt search.dt', function () {
-      table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-          cell.innerHTML = i+1;
-         
-      } );
-  } ).draw();
+    
 
 
     

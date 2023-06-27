@@ -1047,7 +1047,9 @@ $("#btn-add-client").hover(function() {
                 $.ajax({
                     type: "POST",
                     url: "./modelo/clientes/agregar-cliente.php",
+                    dataType: 'JSON',
                     data: {
+                        "intento": 1,
                         "nombre": nombre,
                         "credito": credito,
                         "telefono": telefono,
@@ -1059,23 +1061,90 @@ $("#btn-add-client").hover(function() {
                         "asesor": asesor},
                     
                     success: function (response) {
-                       if (response == 1) {
+                      if (response.status) {
                         Swal.fire(
                             "¡Registrado!",
-                            "Se agrego el cliente correctamente",
+                            response.msj,
                             "success"
                             ).then((result) => { 
                                 if(result.isConfirmed){
-                                  
+                                    table.ajax.reload(null,false);
                                 }
-                               
+                                table.ajax.reload(null,false);
                                 });
-                       }else if(response == 0){
-                        Swal.fire(
-                            "¡Error!",
-                            "No se puede agregar el cliente",
-                            "error"
-                            )
+                       }else if(response.status == false){
+                        Swal.fire({
+                                icon: 'warning',
+                                didOpen: () => {
+                                    if(Array.isArray(response.data)){
+                                        let contenedor = $("#contenedor-clientes-encontrados");
+                                        contenedor.empty();
+                                        contenedor.append(`<table class="table table-striped table-bordered" id="tabla-clientes-encontrados">
+                                        <thead class="table-info">
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Nombre</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbody-clientes-encontrados">
+                                        </tbody>
+                                        </table>`);
+                                        response.data.forEach(element => {
+                                            $("#tbody-clientes-encontrados").append(`
+                                            <tr>
+                                                <td>R${element.id}</td>
+                                                <td>${element.Nombre_Cliente}</td>
+                                            </tr>
+                                            `);
+                                        });
+                                }
+                                },
+                                html: `
+                                <div class=container"">
+                                <div class="row">
+                                    <div class="col-12">
+                                    <h5>¡Ups!</h5>
+                                    <p>${response.msg}</p>
+                                    </div>
+                                    <div class="col-12" id="contenedor-clientes-encontrados">
+                                    </div>
+                                </div>
+                                </div>`,
+                                confirmButtonText: 'Registrar aun asi',
+                                showCancelButton: true,
+                                cancelButtonText: 'Cancelar',
+                            }).then(function(re){
+                                if(re.isConfirmed){
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "./modelo/clientes/agregar-cliente.php",
+                                        dataType:'JSON',
+                                        data: {
+                                            "intento": 2,
+                                            "nombre": nombre,
+                                            "credito": credito,
+                                            "telefono": telefono,
+                                            "correo": correo,
+                                            "rfc": rfc,
+                                            "direccion": direccion,
+                                            "latitud": latitud,
+                                            "longitud": longitud,
+                                            "asesor": asesor},
+                                        success: function (respons) {
+                                            Swal.fire(
+                                                "¡Registrado!",
+                                                respons.msj,
+                                                "success"
+                                                ).then((result) => { 
+                                                    if(result.isConfirmed){
+                                                        table.ajax.reload(null,false);
+                                                    }
+                                                    table.ajax.reload(null,false);
+                                                    });
+                                        }    
+                                        })
+                                }
+                            });
                        }
                     }
                 });

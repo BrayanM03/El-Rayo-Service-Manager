@@ -7,6 +7,14 @@ function MostrarCotizaciones() {
      "serverSide": true,
       "ajax": './modelo/cotizaciones/server_processing.php', 
       "responsive": true,
+      rowCallback: function(row, data, index) {
+        var info = this.api().page.info();
+        var page = info.page;
+        var length = info.length;
+        var columnIndex = 0; // Índice de la primera columna a enumerar
+  
+        $('td:eq(' + columnIndex + ')', row).html(page * length + index + 1);
+      },
       columns: [   
         { title: "#",              data: null    },
         { title: "Fecha",          data: 1       },
@@ -23,15 +31,6 @@ function MostrarCotizaciones() {
             "<div class='btn btn-primary' onclick='elimnarCotizacion("+ folio +")'><i class='fas fa-trash-alt'></i></div>"}
         }]
  });
-
-
-
- table.on( 'draw.dt', function () {
-    var PageInfo = $('#lista-cotizaciones').DataTable().page.info();
-         table.column(0, { page: 'current' }).nodes().each( function (cell, i) {
-            cell.innerHTML = i + 1 + PageInfo.start;
-        } );
-    } );
 
  }
  

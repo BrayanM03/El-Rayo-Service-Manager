@@ -9,7 +9,14 @@ table = $('#ventas').DataTable({
     processing: true,
     serverSide: true,
     ajax:'./modelo/clientes/traer-clientes.php',
-
+    rowCallback: function(row, data, index) {
+        var info = this.api().page.info();
+        var page = info.page;
+        var length = info.length;
+        var columnIndex = 0; // Índice de la primera columna a enumerar
+  
+        $('td:eq(' + columnIndex + ')', row).html(page * length + index + 1);
+      },
   columns: [   
     { title: "#",              data: null             },
     { title: "Codigo",         data: 0, render: function(data,type,row) {
@@ -57,13 +64,6 @@ table = $('#ventas').DataTable({
 
 $("table.dataTable thead").addClass("table-info")
 table.columns( [2] ).visible( false );
- //Enumerar las filas "index column"
- table.on( 'order.dt search.dt', function () {
-    table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-        cell.innerHTML = i+1;
-       
-    } );
-} ).draw();
 
 }
 
