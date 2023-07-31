@@ -42,14 +42,14 @@ $vendedor_usuario = $vendedor_name . " " . $vendedor_apellido;
 
 
 //Trayendo datos de la sucursal
-$ID = $con->prepare("SELECT nombre, calle, numero, colonia, ciudad, estado, pais, Telefono, RFC, CP  FROM sucursal WHERE id = ?");
+$ID = $con->prepare("SELECT code, nombre, calle, numero, colonia, ciudad, estado, pais, Telefono, RFC, CP  FROM sucursal WHERE id = ?");
 $ID->bind_param('i', $sucursal_id);
 $ID->execute();
-$ID->bind_result($sucursal_nombre, $calle_suc, $numero_suc, $colonia_suc, $ciudad_suc, $estado_suc, $pais_suc, $telefono_suc, $rfc_suc, $cp_suc);
+$ID->bind_result($codigo_sucursal, $sucursal_nombre, $calle_suc, $numero_suc, $colonia_suc, $ciudad_suc, $estado_suc, $pais_suc, $telefono_suc, $rfc_suc, $cp_suc);
 $ID->fetch();
 $ID->close();
 
-
+global $codigo_sucursal;
 global $fecha;
 global $sucursal_nombre;
 global $calle_suc;
@@ -274,8 +274,13 @@ function Header()
         $direccion = $calle . " " . $numero . " " ;
  
 
-        // Logo
-    $this->Image('../../src/img/logo.jpg',20,10,25);
+        if($GLOBALS['codigo_sucursal'] == 'RIOB') {
+            $this->Image('../../src/img/logo-del-rio.jpg',16,7,35);
+            $titulo_sucursal = 'Llantera economica "Del Rio"';
+        }else{
+            $titulo_sucursal = 'Llantera y Servicios "El Rayo"';
+            $this->Image('../../src/img/logo.jpg',20,10,25);
+        }
 
     $this->Ln(5);
    
@@ -309,7 +314,7 @@ function Header()
     $this->Ln(15);
     $this->SetFont('Arial','B',10);
     //$this->Cell(30,10,"'",0,0, 'C');
-    $this->Cell(108.3,10,"Llantas y Servicios 'EL Rayo'",0,0, 'L');
+    $this->Cell(108.3,10, $titulo_sucursal,0,0, 'L');
     $this->SetFont('Exo2-Bold','B',12);
     $this->Cell(60,10,utf8_decode('Reporte de abono'),0,0,'C');
     $this->Ln(5);

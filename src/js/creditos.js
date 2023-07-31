@@ -28,16 +28,9 @@ function MostrarCreditos() {
     },
     columns: [
       { title: "#", data: null },
-      {
-        title: "id",
-        data: null,
-        render: function (data) {
-     
-          return "<span>CRED" + data[0] + "</span>";
-        },
-      },
-      { title: "Cliente", data: 9 },
+      {title: "id",data: 10},
       { title: "cod", data: 0 },
+      { title: "Cliente", data: 9 },
       { title: "Fecha inicio", data: 5 },
       { title: "Fecha final", data: 6 },
       { title: "Total", data: 3 },
@@ -98,13 +91,12 @@ function MostrarCreditos() {
               break;
           }
         },
+        search: {
+          regex: true, // Habilitar búsqueda con expresiones regulares
+          smart: false // Deshabilitar el procesamiento inteligente del buscador
+          }
       },
-      {
-        title: "Venta",
-        data: null,
-        render: function (data) {
-          return "RAY" + data[8];
-        },
+      {title: "Venta", data: 11,
       },
       {
         title: "Accion",
@@ -141,11 +133,19 @@ function MostrarCreditos() {
     scrollY: "50vh",
     info: false,
     responsive: true,
-    order: [3, "desc"],
+    order: [[1, "desc"]],
+    'columnDefs': [
+      { 'orderData':[2], 'targets': [1] },
+      {
+          'targets': [2],
+          'visible': false,
+          'searchable': false
+      },
+  ]
   });
 
   $("table.dataTable thead").addClass("table-info");
-  table.columns([3]).visible(false);
+  //table.columns([3]).visible(false);
 }
 
 MostrarCreditos();

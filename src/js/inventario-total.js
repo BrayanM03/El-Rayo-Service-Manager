@@ -7,9 +7,21 @@ $(document).ready(function() {
         ajax: {
             method: "POST",
             url: "./modelo/traer_inv_total.php",
-            dataType: "json"
+            dataType: "json",
+            data: function (d) {
+              d.page = Math.ceil(d.start / d.length) + 1;
+          }
         },  
-  
+        dataSrc: function (json) {
+          // Obtener el número total de registros y el número de registros filtrados
+          var recordsTotal = json.recordsTotal || 0;
+          var recordsFiltered = json.recordsFiltered || 0;
+
+          // Actualizar la información en el área correspondiente
+          $('.dataTables_info').html('Mostrando ' + recordsFiltered + ' registros filtrados de un total de ' + recordsTotal);
+
+          return json.data; // Devolver los datos para DataTables
+      },
       columns: [   
         { title: "#",              data: null             },
         //{ title: "Codigo",         data: "id"             },
@@ -21,11 +33,10 @@ $(document).ready(function() {
         { title: "Precio Mayoreo", data: "mayoreo"        },   
         { title: "id",             data: "id"        },
         {title: "Sucursal",
-          data: null,
+          data: 'sucursales',
           className: "celda-select",
-          render: function (row, meta) {
-            //console.log(meta.index  
-            sucursales = row.sucursales;
+          render: function (data, display, row) {
+            sucursales = data;
             options = "";
             sucursales.forEach(element => {
                   id_suc = element["id"];
@@ -34,7 +45,7 @@ $(document).ready(function() {
                   
             });
                 
-            return'<select class="select-sucursal form-control" id="select'+ row.id +'" codigo="'+ row.id +'">'+
+            return'<select class="select-sucursal form-control" id="select'+ row.id +'" codigo="'+row.id +'">'+
                 '<option value="total">Total</option> '+
                 options+
                 '</select>'; 
@@ -42,14 +53,13 @@ $(document).ready(function() {
           },
         },
         {title: "Stock",
-          data: null,
+          data: "stock",
           className: "celda-stock",
-          render: function (row) {  
+          render: function (data,display, row) {  
             $(document).on('change', '#select'+row.id, function(event) {
             
             codigo = $(this).attr("codigo");
             suc = $(this).find("option:selected").attr("value");
-            //console.log(codigo +" - " + suc );
 
                         $.ajax({
                           type: "post",
@@ -89,8 +99,22 @@ $(document).ready(function() {
           },
         },
       ],
+      columnDefs: [
+        {
+            targets: 0,
+            render: function (data, type, row, meta) {
+                return meta.row + meta.settings._iDisplayStart + 1; // Display row number
+            }
+        },
+        { targets: [8], orderable: false }
+        // Add more column definitions as needed
+    ],
       paging: true,
       searching: true,
+      serverSide: true, // Enable server-side processing
+      processing: true, // Show processing indicator
+      pageLength: 10, // Number of rows per page
+      lengthMenu: [10, 25, 50, 100],
       scrollY: "300px",
       info: true,
       dom: 'Blfrtip',
@@ -98,7 +122,12 @@ $(document).ready(function() {
       order: [7, "desc"],
       lengthChange: false,
       buttons: [
-        'copy', 'csv', 'excel', 'pdf', 'print'
+        'copy', 'csv', {
+          'extend':'excel',
+          'title': 'Hoja Excel',
+          'titleAttr': 'Excel',
+          'action': newexportaction
+        }, 'pdf', 'print'
     ],
 
       language: {
@@ -497,4 +526,57 @@ function (dismiss) {
 
 
 
+}
+
+function newexportaction(e, dt, button, config) {
+  var self = this;
+  var oldStart = dt.settings()[0]._iDisplayStart;
+
+  dt.one('preXhr', function (e, s, data) {
+    // Just this once, load all data from the server...
+    data.start = 0;
+    data.length = -1;
+
+    dt.one('preDraw', function (e, settings) {
+      // Call the original action function
+      if (button[0].className.indexOf('buttons-copy') >= 0) {
+        $.fn.dataTable.ext.buttons.copyHtml5.action.call(self, e, dt, button, config);
+      } else if (button[0].className.indexOf('buttons-excel') >= 0) {
+        $.fn.dataTable.ext.buttons.excelHtml5.available(dt, config) ?
+          $.fn.dataTable.ext.buttons.excelHtml5.action.call(self, e, dt, button, config) :
+          $.fn.dataTable.ext.buttons.excelFlash.action.call(self, e, dt, button, config);
+      } else if (button[0].className.indexOf('buttons-csv') >= 0) {
+        $.fn.dataTable.ext.buttons.csvHtml5.available(dt, config) ?
+          $.fn.dataTable.ext.buttons.csvHtml5.action.call(self, e, dt, button, config) :
+          $.fn.dataTable.ext.buttons.csvFlash.action.call(self, e, dt, button, config);
+      } else if (button[0].className.indexOf('buttons-pdf') >= 0) {
+        $.fn.dataTable.ext.buttons.pdfHtml5.available(dt, config) ?
+          $.fn.dataTable.ext.buttons.pdfHtml5.action.call(self, e, dt, button, config) :
+          $.fn.dataTable.ext.buttons.pdfFlash.action.call(self, e, dt, button, config);
+      } else if (button[0].className.indexOf('buttons-print') >= 0) {
+        $.fn.dataTable.ext.buttons.print.action(e, dt, button, config);
+      }
+
+      dt.one('preXhr', function (e, s, data) {
+        // DataTables thinks the first item displayed is index 0, but we're not drawing that.
+        // Set the property to what it was before exporting.
+        settings._iDisplayStart = oldStart;
+        data.start = oldStart;
+      });
+
+      // Reload the grid with the original page. Otherwise, API functions like table.cell(this) don't work properly.
+      setTimeout(function () {
+        dt.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+          cell.innerHTML = i + 1;
+        });
+        dt.ajax.reload();
+      }, 0);
+
+      // Prevent rendering of the full data to the DOM
+      return false;
+    });
+  });
+
+  // Requery the server with the new one-time export settings
+  dt.ajax.reload();
 }

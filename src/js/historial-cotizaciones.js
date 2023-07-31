@@ -24,12 +24,14 @@ function MostrarCotizaciones() {
         { title: "Estatus",        data: 5       },
         { title: "Hora",           data: 6       },
         { title: "Comentario",     data: 7       },
+        { title: "id",             data: 0 , visible: false},
         { title: "Accion",     data: null, render: function (data) {  
             var folio = data[0]
            
             return "<div class='btn btn-danger m-2' onclick='abrir("+ folio +")'><i class='fas fa-file-pdf'></i></div>"+
             "<div class='btn btn-primary' onclick='elimnarCotizacion("+ folio +")'><i class='fas fa-trash-alt'></i></div>"}
-        }]
+        }],
+        order: [8, "desc"],
  });
 
  }

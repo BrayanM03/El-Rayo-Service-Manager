@@ -38,6 +38,7 @@ $columns = array(
 	array( 'db' => 'Total',   'dt' => 6 ),
 	array( 'db' => 'tipo',   'dt' => 7 ),
 	array( 'db' => 'estatus',   'dt' => 8),
+	array( 'db' => 'folio',   'dt' => 9),
 /* 	array(
 		'db'        => 'start_date',
 		'dt'        => 4,

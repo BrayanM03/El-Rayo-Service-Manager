@@ -81,21 +81,38 @@ function Header()
 
 {
     if($GLOBALS["sucursal"] == "Pedro"){
+        $titulo_sucursal = "Llantas y Servicios 'EL Rayo'";
         $direccion = "Avenida Pedro Cardenas KM5 No.207";
         $colonia = "Col. Francisco Castellanos";
         $telefono = "8688244404";
         $rfc = "SARK9104063L6";
-
+        $this->Image('../../src/img/logo.jpg',20,10,25);
         
    }else if($GLOBALS["sucursal"] == "Sendero"){
+    $titulo_sucursal = "Llantas y Servicios 'EL Rayo'";
     $direccion = "Av. Sendero Nacional";
     $colonia = "Kilometro 50";
     $telefono = "868 127 5833";
     $rfc = "REFR971218619";
+    $this->Image('../../src/img/logo.jpg',20,10,25);
+   }else if($GLOBALS["sucursal"] == "Valle Hermoso"){
+    $titulo_sucursal = "Llantas y Servicios 'EL Rayo'";
+    $direccion = "Calle 120A Entre insurgentes y Eva Samano";
+    $colonia = "";
+    $telefono = "8948424459";
+    $rfc = "SARK9104063L6";
+    $this->Image('../../src/img/logo-del-rio.jpg',10,4,43);
+   }else if($GLOBALS["sucursal"] == "Rio Bravo"){
+    $titulo_sucursal = 'Llantas economicas "Del Rio"';
+    $direccion = "Av.Madero Entre Tamaulipas y Poniente 3";
+    $colonia = "Centro";
+    $telefono = "89-99-30-51-03";
+    $rfc = "XAXX010101000";
+    $this->Image('../../src/img/logo-del-rio.jpg',16,7,35);
    }
 
     // Logo
-    $this->Image('../../src/img/logo.jpg',20,10,25);
+    
     // Arial bold 15
    
     
@@ -109,7 +126,7 @@ function Header()
 
     $this->SetFont('Arial','B',12);
     $this->Cell(30,10,"'",0,0, 'C');
-    $this->Cell(100,10,"Llantas y Servicios 'EL Rayo'",0,0, 'C');
+    $this->Cell(100,10,$titulo_sucursal,0,0, 'C');
     $this->SetFont('Arial','B',20);
     $this->Cell(60,10,utf8_decode('Cotización'),0,0,'C');
     $this->Ln(5);

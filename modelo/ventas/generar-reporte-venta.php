@@ -31,15 +31,15 @@ $ID->close();
 $vendedor_usuario = $vendedor_name . " " . $vendedor_apellido;
 
 //Trayendo datos de la sucursal
-$ID = $con->prepare("SELECT nombre, calle, numero, colonia, ciudad, estado, pais, Telefono, RFC, CP  FROM sucursal WHERE id = ?");
+$ID = $con->prepare("SELECT code, nombre, calle, numero, colonia, ciudad, estado, pais, Telefono, RFC, CP  FROM sucursal WHERE id = ?");
 $ID->bind_param('i', $ide_sucursal);
 $ID->execute();
-$ID->bind_result($sucursal, $calle_suc, $numero_suc, $colonia_suc, $ciudad_suc, $estado_suc, $pais_suc, $telefono_suc, $rfc_suc, $cp_suc);
+$ID->bind_result($codigo_sucursal, $sucursal, $calle_suc, $numero_suc, $colonia_suc, $ciudad_suc, $estado_suc, $pais_suc, $telefono_suc, $rfc_suc, $cp_suc);
 $ID->fetch();
 $ID->close();
 
 
-
+global $codigo_sucursal;
 global $fecha;
 global $sucursal;
 global $calle_suc;
@@ -59,14 +59,14 @@ global $estatus;
 global $metodo_pago;
 global $hora;
 global $comentario;
-/* 
+
 $formatterES = new NumberFormatter("es-ES", NumberFormatter::SPELLOUT);
 $izquierda = intval(floor($total));
 $derecha = intval(($total - floor($total)) * 100);
 $formatTotalminus = $formatterES->format($izquierda) . " y " . $derecha . "/100 m.n";
 $formatTotal = strtoupper($formatTotalminus);
 // ciento veintitrés coma cuarenta y cinco */
-$formatTotal = "Hola";
+//$formatTotal = "Hola";
 global $formatTotal;
 /*
 $detalle = $con->prepare("SELECT detalle_venta.Cantidad,llantas.Descripcion, llantas.Marca, detalle_venta.precio_Unitario, detalle_venta.Importe FROM detalle_venta INNER JOIN llantas ON detalle_venta.id_llanta = llantas.id WHERE id_Venta = ?");
@@ -97,15 +97,15 @@ function Header()
 {
    
         
-        $calle = $GLOBALS["calle_suc"];
-        $numero = $GLOBALS["numero_suc"];
-        $colonia = $GLOBALS["colonia_suc"];
-        $ciudad = $GLOBALS["ciudad_suc"];
-        $estado = $GLOBALS["estado_suc"];
-        $pais = $GLOBALS["pais_suc"];
-        $telefono = $GLOBALS["telefono_suc"];
-        $rfc = $GLOBALS["rfc_suc"];
-        $cp = $GLOBALS["cp_suc"];
+        $calle = $GLOBALS['calle_suc'];
+        $numero = $GLOBALS['numero_suc'];
+        $colonia = $GLOBALS['colonia_suc'];
+        $ciudad = $GLOBALS['ciudad_suc'];
+        $estado = $GLOBALS['estado_suc'];
+        $pais = $GLOBALS['pais_suc'];
+        $telefono = $GLOBALS['telefono_suc'];
+        $rfc = $GLOBALS['rfc_suc'];
+        $cp = $GLOBALS['cp_suc'];
 
         if($numero == 0 || $numero == null){
             $numero = "";
@@ -116,7 +116,13 @@ function Header()
         $middle_direction_2 = $ciudad . " " . $estado . " " . $pais;
 
     // Logo
-    $this->Image('../../src/img/logo.jpg',20,10,25);
+    if($GLOBALS['codigo_sucursal'] == 'RIOB') {
+        $this->Image('../../src/img/logo-del-rio.jpg',10,4,43);
+        $titulo_sucursal = 'Llantera economica "Del Rio"';
+    }else{
+        $titulo_sucursal = 'Llantera y Servicios "El Rayo"';
+        $this->Image('../../src/img/logo.jpg',20,10,25);
+    }
     // Arial bold 15
    
     
@@ -130,7 +136,7 @@ function Header()
 
     $this->SetFont('Arial','B',12);
     $this->Cell(30,10,"'",0,0, 'C');
-    $this->Cell(100,10,"Llantas y Servicios 'EL Rayo'",0,0, 'C');
+    $this->Cell(100,10, $titulo_sucursal,0,0, 'C');
     $this->SetFont('Arial','B',20);
     $this->Cell(60,10,'Reporte de Venta',0,0,'C');
     $this->Ln(5);

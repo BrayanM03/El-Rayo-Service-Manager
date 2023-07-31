@@ -22,19 +22,22 @@ function MostrarInventario(id_sucursal) {
     table = $('#inventario-pedro').DataTable({   
         processing: true,
         serverSide: true,
-        rowCallback: function(row, data, index) {
+        /*rowCallback: function(row, data, index) {
+          //console.log(this.api().buttons.exportData().length);
+         // if (!this.api().buttons.exportData().length) {
           var info = this.api().page.info();
           var page = info.page;
           var length = info.length;
           var columnIndex = 0; // Índice de la primera columna a enumerar
     
           $('td:eq(' + columnIndex + ')', row).html(page * length + index + 1);
-        },
+          //}
+        },*/
         ajax:'./modelo/traerInventario.php?id_sucursal='+id_sucursal,
             
         columns: [   
-        { title: "#",              data: null             },
-        { title: "Codigo",         data: 12        },
+        { title: "#",              data: 0             },
+        { title: "Codigo",         data: 12  , orderData: [1]},
         {title: 'Ancho',           data: 1,      visible: false },
         {title: 'Proporcion',      data: 2, visible: false },
         {title: 'Diametro',        data: 3,   visible: false },
@@ -59,6 +62,15 @@ function MostrarInventario(id_sucursal) {
           },
         },
       ],
+      columnDefs: [
+        {
+            targets: 0,
+            render: function (data, type, row, meta) {
+                return meta.row + meta.settings._iDisplayStart + 1; // Display row number
+            }
+        },
+        // Add more column definitions as needed
+    ],
       paging: true,
       searching: true,
       scrollY: "300px",
@@ -68,7 +80,12 @@ function MostrarInventario(id_sucursal) {
       lengthChange: false,
       order:[10, "desc"],
       buttons: [
-        'copy', 'csv', 'excel', 'pdf', 'print'
+        'copy', 'csv', {
+          'extend':'excel',
+          'title': 'Hoja Excel',
+          'titleAttr': 'Excel',
+          'action': newexportaction
+        }, 'pdf', 'print'
     ],
       
       language: {
@@ -368,3 +385,100 @@ function ocultarSidebar(){
 
   }
 };
+
+function newexportaction(e, dt, button, config) {
+  var self = this;
+  var oldStart = dt.settings()[0]._iDisplayStart;
+
+  dt.one('preXhr', function (e, s, data) {
+    // Just this once, load all data from the server...
+    data.start = 0;
+    data.length = -1;
+
+    dt.one('preDraw', function (e, settings) {
+      // Call the original action function
+      if (button[0].className.indexOf('buttons-copy') >= 0) {
+        $.fn.dataTable.ext.buttons.copyHtml5.action.call(self, e, dt, button, config);
+      } else if (button[0].className.indexOf('buttons-excel') >= 0) {
+        $.fn.dataTable.ext.buttons.excelHtml5.available(dt, config) ?
+          $.fn.dataTable.ext.buttons.excelHtml5.action.call(self, e, dt, button, config) :
+          $.fn.dataTable.ext.buttons.excelFlash.action.call(self, e, dt, button, config);
+      } else if (button[0].className.indexOf('buttons-csv') >= 0) {
+        $.fn.dataTable.ext.buttons.csvHtml5.available(dt, config) ?
+          $.fn.dataTable.ext.buttons.csvHtml5.action.call(self, e, dt, button, config) :
+          $.fn.dataTable.ext.buttons.csvFlash.action.call(self, e, dt, button, config);
+      } else if (button[0].className.indexOf('buttons-pdf') >= 0) {
+        $.fn.dataTable.ext.buttons.pdfHtml5.available(dt, config) ?
+          $.fn.dataTable.ext.buttons.pdfHtml5.action.call(self, e, dt, button, config) :
+          $.fn.dataTable.ext.buttons.pdfFlash.action.call(self, e, dt, button, config);
+      } else if (button[0].className.indexOf('buttons-print') >= 0) {
+        $.fn.dataTable.ext.buttons.print.action(e, dt, button, config);
+      }
+
+      dt.one('preXhr', function (e, s, data) {
+        // DataTables thinks the first item displayed is index 0, but we're not drawing that.
+        // Set the property to what it was before exporting.
+        settings._iDisplayStart = oldStart;
+        data.start = oldStart;
+      });
+
+      // Reload the grid with the original page. Otherwise, API functions like table.cell(this) don't work properly.
+      setTimeout(function () {
+        dt.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+          cell.innerHTML = i + 1;
+        });
+        dt.ajax.reload();
+      }, 0);
+
+      // Prevent rendering of the full data to the DOM
+      return false;
+    });
+  });
+
+  // Requery the server with the new one-time export settings
+  dt.ajax.reload();
+}
+
+function newexportactiodn(e, dt, button, config) {
+
+    var self = this;
+    var oldStart = dt.settings()[0]._iDisplayStart;
+    dt.one('preXhr', function (e, s, data) {
+      // Just this once, load all data from the server...
+      data.start = 0;
+      data.length = -1;
+      dt.one('preDraw', function (e, settings) {
+          // Call the original action function
+          if (button[0].className.indexOf('buttons-copy') >= 0) {
+              $.fn.dataTable.ext.buttons.copyHtml5.action.call(self, e, dt, button, config);
+          } else if (button[0].className.indexOf('buttons-excel') >= 0) {
+              $.fn.dataTable.ext.buttons.excelHtml5.available(dt, config) ?
+                  $.fn.dataTable.ext.buttons.excelHtml5.action.call(self, e, dt, button, config) :
+                  $.fn.dataTable.ext.buttons.excelFlash.action.call(self, e, dt, button, config);
+          } else if (button[0].className.indexOf('buttons-csv') >= 0) {
+              $.fn.dataTable.ext.buttons.csvHtml5.available(dt, config) ?
+                  $.fn.dataTable.ext.buttons.csvHtml5.action.call(self, e, dt, button, config) :
+                  $.fn.dataTable.ext.buttons.csvFlash.action.call(self, e, dt, button, config);
+          } else if (button[0].className.indexOf('buttons-pdf') >= 0) {
+              $.fn.dataTable.ext.buttons.pdfHtml5.available(dt, config) ?
+                  $.fn.dataTable.ext.buttons.pdfHtml5.action.call(self, e, dt, button, config) :
+                  $.fn.dataTable.ext.buttons.pdfFlash.action.call(self, e, dt, button, config);
+          } else if (button[0].className.indexOf('buttons-print') >= 0) {
+              $.fn.dataTable.ext.buttons.print.action(e, dt, button, config);
+          }
+          dt.one('preXhr', function (e, s, data) {
+              // DataTables thinks the first item displayed is index 0, but we're not drawing that.
+              // Set the property to what it was before exporting.
+              settings._iDisplayStart = oldStart;
+              data.start = oldStart;
+          });
+          // Reload the grid with the original page. Otherwise, API functions like table.cell(this) don't work properly.
+          setTimeout(dt.ajax.reload, 0);
+          // Prevent rendering of the full data to the DOM
+          return false;
+      });
+  });
+  // Requery the server with the new one-time export settings
+  dt.ajax.reload();
+
+}

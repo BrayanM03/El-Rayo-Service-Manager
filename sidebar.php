@@ -98,12 +98,13 @@ switch ($flag) {
 <hr class="sidebar-divider my-0">
 
 <!-- Nav Item - Dashboard -->
+<?php if ($user_jerarquia == 1 || $user_jerarquia == 2) { ?>
 <li class="nav-item <?php echo $claseInicio;?> rol-4">
     <a class="nav-link" href="index.php?id=0&nav=inicio">
         <i class="fas fa-fw fa-tachometer-alt"></i>
         <span>Inicio</span></a>
 </li>
-
+<?php } ?>
 <!-- Divider -->
 <hr class="sidebar-divider">
 
@@ -111,7 +112,8 @@ switch ($flag) {
 <div class="sidebar-heading rol-4">
     Punto de venta
 </div>
-
+<?php 
+    if ($user_jerarquia == 1 || $user_jerarquia == 2 || $user_jerarquia == 3) { ?>
 <!-- Nav Item - Pages Collapse Menu -->
 <li class="nav-item <?php echo $claseNuevaVenta ?> rol-4">
     <a class="nav-link" href="nueva-venta.php?id=0&nav=nueva_venta">
@@ -126,7 +128,7 @@ switch ($flag) {
         <span>Nueva cotización</span>
     </a>
 </li>
-
+<?php } ?>
 <!-- Nav Item - Utilities Collapse Menu -->
 <li class="nav-item <?php echo $claseHistorial ?>">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
@@ -191,7 +193,7 @@ switch ($flag) {
     <div id="collapseTyres" class="collapse <?php echo $showMisLlantas?>" aria-labelledby="headingPages" data-parent="#accordionSidebar">
     
     <?php 
-if ($user_jerarquia == 1 || $user_jerarquia == 4) {
+if ($user_jerarquia == 1 || $user_jerarquia == 4 || $_SESSION['id_usuario'] == 7 ) { // 7 es el id de Karina Flores
     ?>
     <div class="bg-white py-2 collapse-inner rounded">
     
@@ -252,9 +254,15 @@ if ($user_jerarquia == 1 || $user_jerarquia == 4) {
             <img src="src/img/entrada.svg" width="18px" /> 
                 <span style="margin-left:12px;"> Movimientos</span></a>
             </a>
+            <?php
+            if ($user_jerarquia == 1 || $user_jerarquia == 4){
+                ?>
             <a class="collapse-item <?php echo $claseCambios ?>" href="cambio_inventario.php?id=0&nav=cambios" style="display:flex; flex-direction: row; justify-content:start;">
             <i class="fas fa-people-carry"></i>
                 <span style="margin-left:7px;">Mover mercancia</span> </a>
+                <?php
+            } 
+            ?>
         
         </div>
     </div>

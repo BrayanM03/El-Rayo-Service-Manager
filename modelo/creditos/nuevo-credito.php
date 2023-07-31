@@ -26,9 +26,13 @@ if(isset($_POST)){
   $resp->close();
    
     $plazo = $_POST["plazo"];
-    $importe_total = $_POST["importe"];
+    $importe_total = $_POST['importe'];
 
-    $restante = $_POST["restante"];
+    if($_POST['restante'] == ''){
+        $restante = $_POST['importe'];
+    }else{
+        $restante = $_POST['restante'];
+    }
     $hora = date("h:i a");
     $metodo = $_POST["metodo_pago"];
     $metodos_pago = $_POST["arreglo_metodos"];
@@ -43,11 +47,12 @@ if(isset($_POST)){
     $monto_total = 0;
     foreach ($metodos_pago as $key => $value) {
         $clave = $value["clave"];
-        $monto_efectivo = in_array(0, $metodo) && $clave == 0 ? $value["monto"]: $monto_efectivo +=0;
-        $monto_tarjeta = in_array(1, $metodo) && $clave == 1 ? $value["monto"]: $monto_tarjeta+=0;
-        $monto_transferencia = in_array(2, $metodo) && $clave == 2 ? $value["monto"] : $monto_transferencia+=0;
-        $monto_cheque = in_array(3, $metodo) && $clave == 3 ? $value["monto"]: $monto_cheque+=0;
-        $monto_sin_definir = in_array(4, $metodo) && $clave == 4 ? $value["monto"]: $monto_sin_definir+=0;
+        $monto_recibido = !empty($value["monto"]) ? (double)$value['monto']:0;
+        $monto_efectivo = in_array(0, $metodo) && $clave == 0 ? $monto_recibido: $monto_efectivo +=0;
+        $monto_tarjeta = in_array(1, $metodo) && $clave == 1 ? $monto_recibido: $monto_tarjeta+=0;
+        $monto_transferencia = in_array(2, $metodo) && $clave == 2 ? $monto_recibido : $monto_transferencia+=0;
+        $monto_cheque = in_array(3, $metodo) && $clave == 3 ? $monto_recibido: $monto_cheque+=0;
+        $monto_sin_definir = in_array(4, $metodo) && $clave == 4 ? $monto_recibido: $monto_sin_definir+=0;
         $monto_total = $monto_efectivo + $monto_tarjeta + $monto_transferencia + $monto_cheque + $monto_sin_definir;
     }
 

@@ -21,7 +21,8 @@ table = $('#ventas').DataTable({
     { title: "#",              data: null             },
     { title: "Codigo",         data: 0, render: function(data,type,row) {
         return '<span>R'+ data +'</span>';
-        }},
+        },
+        orderData: [1]},
         
     { title: "id",            data: "id"         },
     { title: "Nombre",         data: 1         },
@@ -57,7 +58,7 @@ table = $('#ventas').DataTable({
   scrollY: "50vh",
   info: false,
   responsive: false,
-  order: [2, "desc"],
+  order: [1, "desc"],
  
   
 });

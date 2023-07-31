@@ -39,6 +39,8 @@ $columns = array(
 	array( 'db' => 'plazo', 'dt' => 7 ),
 	array( 'db' => 'id_venta',  'dt' => 8 ),
 	array( 'db' => 'Nombre_Cliente',  'dt' => 9 ), 
+	array( 'db' => 'folio_credito',  'dt' => 10 ), 
+	array( 'db' => 'folio_venta',  'dt' => 11 ), 
 /* 	array(
 		'db'        => 'start_date',
 		'dt'        => 4,

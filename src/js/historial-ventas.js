@@ -1,5 +1,5 @@
 function MostrarVentas() {  
-    $.fn.dataTable.ext.errMode = 'none';
+    //$.fn.dataTable.ext.errMode = 'none';
     ocultarSidebar();
 table = $('#ventas').DataTable({
       
@@ -15,16 +15,15 @@ table = $('#ventas').DataTable({
   
         $('td:eq(' + columnIndex + ')', row).html(page * length + index + 1);
       },
+     
     columns: [   
     { title: "#",              data: null             },
-    { title: "Folio",         data: "folio", render: function(data,type,row) {
-        return '<span>RAY'+ row[0] +'</span>';
-        }},
+    { title: "Folio",          data: 9},
+    {title: 'id', data: 0},
     { title: "Fecha",          data: 1          },
     { title: "Sucursal",       data: 2       }, 
     { title: "Vendedor",       data: 3       },
     { title: "Cliente",        data: 4        },
-    //{ title: "ID",       data: "folio"  },
     { title: "Tipo",           data: 7       },
     { title: "Total",          data: 6          },
     { title: "Estatus",        data: 8        }, 
@@ -67,10 +66,10 @@ table = $('#ventas').DataTable({
             }
         }else{
             if (row[8] == "Abierta") {
-                return '<div style="display: flex"><button onclick="traerPdfCredito(' +row[7]+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>';
+                return '<div style="display: flex"><button onclick="traerPdfCredito(' +row[0]+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>';
                 
             }else if(row[8] == "Pagado"){
-                return '<div style="display: flex"><button onclick="traerPdf(' +row[7]+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>';
+                return '<div style="display: flex"><button onclick="traerPdf(' +row[0]+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>';
          
             }else if(row.estatus == "Cancelada"){
                 
@@ -86,12 +85,21 @@ table = $('#ventas').DataTable({
   info: false,
   responsive: false,
   ordering: "enable",
-  order: [6, "desc"],
+  multiColumnSort: true,
+  order: [[1, "desc"]],
+  'columnDefs': [
+    { 'orderData':[2], 'targets': [1] },
+    {
+        'targets': [2],
+        'visible': false,
+        'searchable': false
+    },
+],
+  //order: [1, "desc"],
  
   
 });
-table.columns( [6] ).visible( false );
-
+//table.columns( [6] ).visible( true );
 $("table.dataTable thead").addClass("table-info")
 
 }
@@ -265,3 +273,6 @@ function ocultarSidebar(){
 
   }
   };
+
+
+

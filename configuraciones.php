@@ -12,6 +12,9 @@ if (!isset($_SESSION['id_usuario'])) {
 if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2 ) {
     header("Location:nueva-venta.php");
 }
+if ($_SESSION['rol'] == 5) {
+    header('Location:ventas-pv.php?id=0&nav=ventas');
+}
 
 if ($_SESSION['rol'] == 4) {
     header("Location:inventario.php?id=1&nav=inv");
