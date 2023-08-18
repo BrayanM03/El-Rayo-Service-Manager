@@ -24,13 +24,13 @@ $offset = ($page - 1) * $resultadosPorPagina;
 $sqlTraerLlanta = "SELECT l.*, inv.id, inv.Codigo, inv.Sucursal, inv.id_sucursal, inv.Stock
                   FROM llantas l
                   INNER JOIN inventario inv ON inv.id_Llanta = l.id
-                  WHERE l.Ancho LIKE ? 
+                  WHERE (l.Ancho LIKE ? 
                   OR inv.Codigo LIKE ? 
                   OR l.Proporcion LIKE ? 
                   OR l.Diametro LIKE ? 
                   OR l.Modelo LIKE ? 
                   OR l.Marca LIKE ? 
-                  OR l.Descripcion LIKE ?
+                  OR l.Descripcion LIKE ?) AND inv.Stock != 0
                   LIMIT ? OFFSET ?";
 
 // Preparar la consulta

@@ -38,7 +38,7 @@
 
     <!-- Custom styles for this template-->
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
-    <link href="src/vendor/node_modules/@splidejs/splide/dist/css/splide.min.css" rel="stylesheet">
+    <!-- <link href="src/vendor/node_modules/@splidejs/splide/dist/css/splide.min.css" rel="stylesheet"> -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="src/vendor/datatables/dataTables.bootstrap4.css">
     <link rel="stylesheet" href="src/vendor/datatables-responsive/css/responsive.bootstrap4.min.css">
@@ -225,14 +225,14 @@
                            
 
                          ?>
-                         <div class="col-12 col-md-6 text-center">
+                         <!--<div class="col-12 col-md-6 text-center">
                              <span><b>Creditos vencidos</b></span>
                             <div class="splide">
                                 <div class="splide__track">
                                             <ul class="splide__list" id="lista_splides">
                                                 <!-- <li class="splide__slide"><div class="slide_credito">Hola</div></li>
                                                 <li class="splide__slide"><div class="slide_credito">Hola</div></li> -->
-                                            </ul>
+                                            <!--</ul>
                                 </div>
 
                                 <div class="splide__progress">
@@ -240,7 +240,7 @@
                                         </div>
                                 </div>
                             </div>
-                         </div>
+                         </div>-->
                          <?php 
                           } 
                          ?>
@@ -451,6 +451,7 @@
                                                     <div class="btn btn-warning" onclick="limpiarTabla();" style="color: rgb(31, 28, 28); margin-right: 2vh;" id="limpiar-venta">Limpiar</div>
                                                     <div class="btn btn-success" onclick="procesarVenta();" id="realizar-venta">Realizar venta</div>
                                                     <div class="btn btn-primary" onclick="realizarVentaCredito();" style="margin-left: 2vh;" id="realizar-venta">Realizar venta a credito</div>
+                                                    <div class="btn" onclick="procesarApartado();" style="margin-left: 2vh; background-color: #D29BFD; color:white;" id="realizar-venta">Realizar apartado</div>
                                                 </div>   
                                                 
                                     
@@ -545,14 +546,15 @@
 <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.css" type="text/css">
 
     <!--<script src="src/js/agregar-info-tabla-venta.js"></script>-->
-    <script src="src/vendor/node_modules/@splidejs/splide/dist/js/splide.min.js"></script>
+    <!-- <script src="src/vendor/node_modules/@splidejs/splide/dist/js/splide.min.js"></script> -->
     <script src="src/js/bootstrap-select.min.js"></script>
     <script src="src/js/nueva-venta.js"></script>
     <script src="src/js/agregar-product-temp.js"></script>
     <script src="src/js/generar-token.js"></script>
     <script src="src/js/nueva-venta-credito.js"></script>
-    <script src="src/js/splide_notifications.js"></script>
+    <!-- <script src="src/js/splide_notifications.js"></script> -->
     <script src="src/js/consultar-llanta-nv.js"></script>
+    <script src="src/js/apartados.js"></script>
   <!--  <script src="src/js/notificaciones.js"></script>   -->
    
    

@@ -1,0 +1,111 @@
+
+<?php
+session_start();
+include '../conexion.php';
+$con = $conectando->conexion(); 
+
+$id = $_POST["id"];
+
+$ID = $con->prepare("SELECT a.sucursal, a.id_usuario, c.Nombre_Cliente, c.Telefono, a.primer_abono, a.restante, a.total,  a.tipo, a.estatus, a.metodo_pago, a.hora, a.comentario, a.plazo, a.fecha_inicial, a.fecha_final FROM apartados a INNER JOIN clientes c ON a.id_cliente = c.id WHERE a.id = ?");
+$ID->bind_param('i', $id);
+$ID->execute();
+$ID->bind_result($sucursal, $vendedor_id, $cliente, $telefono_cliente, $primer_abono, $restante, $total, $tipo, $estatus, $metodo_pago, $hora, $comentario, $plazo, $fecha_inicio, $fecha_final);
+$ID->fetch();
+$ID->close();
+
+$ID = $con->prepare("SELECT nombre, apellidos FROM usuarios WHERE id = ?");
+$ID->bind_param('i', $vendedor_id);
+$ID->execute();
+$ID->bind_result($vendedor_name, $vendedor_apellido);
+$ID->fetch();
+$ID->close();
+
+$vendedor_usuario = $vendedor_name . " " . $vendedor_apellido;
+
+//Haciendo consulta a detalle del apartado
+
+$detalles = $con->prepare("SELECT da.modelo, da.cantidad,servicios.descripcion, da.precio_unitario, da.importe FROM detalle_apartado da INNER JOIN servicios ON da.id_llanta = servicios.id WHERE da.id_apartado = ?");
+$detalles->bind_param('i', $id);
+$detalles->execute();
+$resultadoServ = $detalles->get_result();
+$detalles->close(); 
+
+$detalle = $con->prepare("SELECT da.modelo, da.cantidad,llantas.descripcion, llantas.Marca, da.precio_unitario, da.importe FROM detalle_apartado da INNER JOIN llantas ON da.id_llanta = llantas.id WHERE da.id_apartado = ?  AND da.modelo != 'no aplica'");
+$detalle->bind_param('i', $id);
+$detalle->execute();
+$resultado = $detalle->get_result(); 
+$detalle->close(); 
+
+//Iterando servicios
+$data_servicios = array();
+$data_productos = array();
+while($fila = $resultadoServ->fetch_assoc()) {
+
+    $cantidad = $fila["cantidad"];
+    $modelo = "N/A";
+    $descripcion = $fila["descripcion"];
+    $marca = "N/A";
+    $precio_unitario = $fila["precio_unitario"];
+    $importe = $fila["importe"];
+    $caracteres = mb_strlen($descripcion);
+    print_r($cantidad);
+    $data_servicios[] = array(
+        'cantidad' => $cantidad,
+        'modelo' => $modelo,
+        'descripcion' => $descripcion,
+        'marca' => $marca,
+        'precio_unitario' => $precio_unitario,
+        'importe' => $importe,
+        'caracteres' => $caracteres
+    );
+}
+
+//Iterando productos
+while($fila = $resultado->fetch_assoc()) {
+
+    $cantidad = $fila["cantidad"];
+    $modelo = $fila["modelo"];
+    $descripcion = $fila["descripcion"];
+    $marca = $fila["Marca"];
+    $precio_unitario = $fila["precio_unitario"];
+    $importe = $fila["importe"];
+    $caracteres = mb_strlen($descripcion);
+
+    $data_productos[] = array(
+        'cantidad' => $cantidad,
+        'modelo' => $modelo,
+        'descripcion' => $descripcion,
+        'marca' => $marca,
+        'precio_unitario' => $precio_unitario,
+        'importe' => $importe,
+        'caracteres' => $caracteres
+    );
+}
+
+$arreglo_final = array_merge($data_servicios, $data_productos);
+
+
+$data = array(
+    'id' => $id,
+    'sucursal' => $sucursal,
+    'vendedor_id' => $vendedor_id,  
+    'cliente' => $cliente,
+    'telefono_cliente' => $telefono_cliente,
+    'primer_abono' => $primer_abono,
+    'restante' => $restante,
+    'total' => $total,
+    'tipo' => $tipo,
+    'estatus' => $estatus,
+    'metodo_pago' => $metodo_pago,
+    'hora' => $hora,
+    'comentario' => $comentario,
+    'plazo' => $plazo,
+    'fecha_inicio' => $fecha_inicio,
+    'fecha_final' => $fecha_final,
+    'vendedor_usuario' => $vendedor_usuario,
+    'detalles' => $arreglo_final,
+);
+
+echo json_encode($data);
+
+?>

@@ -332,7 +332,7 @@ let id_rol_session= $("#content").attr("rol_session_id");
                     if (response) {
                         Swal.fire({
                             title: 'Venta realizada',
-                            html: "<span>La venta se realizo con exito</br></span>"+
+                            html: "<span>La venta se realizó con exito</br></span>"+
                             "ID Venta: RAY" + response,
                             icon: "success",
                             cancelButtonColor: '#00e059',
@@ -365,7 +365,7 @@ let id_rol_session= $("#content").attr("rol_session_id");
 
                             }else if(result.isDenied){
     
-                                window.open('./modelo/ventas/generar-reporte-venta.php?id='+ response, '_blank');
+                                window.open('./modelo/ventas/reporte-venta.php?id='+ response, '_blank');
                                 table.ajax.reload(null,false);
                                 $("#pre-venta tbody tr").remove();
                                 $(".pre-venta-error").html("");

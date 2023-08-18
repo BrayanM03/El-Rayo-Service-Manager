@@ -1,0 +1,56 @@
+.header-preview{
+    border: 1px solid rgb(253, 145, 51);
+    padding: .4rem 1rem;
+    border-radius: 6px;
+}
+
+.header-preview label{
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.header-preview span{
+    color: gray;
+    font-size: 14px;
+}
+
+#detalle_apartado{
+        font-size: 14px !important;  
+        width: 100% !important;
+        border: 1px solid rgb(200, 198, 198);
+        border-radius: 6px;  
+}
+
+#detalle_apartado tbody{
+    background-color: aliceblue !important;
+}
+
+#detalle_apartado_paginate, #detalle_apartado_info, #detalle_apartado_filter, #detalle_apartado_length{
+     font-size: 14px !important;
+}
+
+#detalle_apartado_length{
+    text-align: left;
+}
+
+.container{
+    margin: 2rem 0;
+}
+
+#importes{
+   
+    margin-left: auto;
+    width: 50% !important;
+    margin-top: 2rem ;
+    font-size: 14px !important;
+}
+#importes td{
+    padding: .4rem !important;
+
+}
+
+.dark-cell{
+    background-color: gray;
+    color: white;
+    border-top: 1px solid white;
+}

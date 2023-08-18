@@ -13,10 +13,17 @@ if (!isset($_SESSION['id_usuario'])) {
 
 if (isset($_POST)) {
 
-    $query_mostrar = $con->prepare("SELECT COUNT(*) total FROM llantas l");
+    $search_value = $_POST['search']['value']; // Valor de búsqueda enviado desde DataTables
+    $search_query = "%{$search_value}%";
+    
+    if($_POST['search']==''){
+        $query_mostrar = $con->prepare("SELECT COUNT(*) total FROM llantas l");
 
-    //-----------------------------------------------------------------------------------------------------//
-    //-----------------------------------------------------------------------------------------------------/
+    }else{
+        $query_mostrar = $con->prepare("SELECT COUNT(*) total FROM llantas l WHERE l.modelo LIKE ? OR l.Descripcion LIKE ? OR l.Marca LIKE ?");
+        $query_mostrar->bind_param('sss', $search_query, $search_query, $search_query);
+    }
+   
     $query_mostrar->execute();
     $query_mostrar->bind_result($total);
     $query_mostrar->fetch();
@@ -49,7 +56,6 @@ if (isset($_POST)) {
     $total_pages = ceil($total / $results_per_page);
     $offset = ($current_page - 1) * $results_per_page;
 
-    $search_value = $_POST['search']['value']; // Valor de búsqueda enviado desde DataTables
 
     $order_column_index = $_POST['order'][0]['column']; // Índice de la columna de ordenamiento
     if($_POST['columns'][$order_column_index]['data'] == 'mayoreo'){
@@ -80,7 +86,7 @@ if (isset($_POST)) {
                                                       
                                                   
         $stmt = $con->prepare($sqlTraerLlanta);
-        $search_query = "%{$search_value}%";
+        
         $stmt->bind_param("sssii", $search_query, $search_query, $search_query, $offset, $results_per_page);
         $stmt->execute();
         $resultado = $stmt->get_result();

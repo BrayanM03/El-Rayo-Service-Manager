@@ -43,6 +43,11 @@ switch ($flag) {
         $claseCotizaciones = "active";
         $showHistorial = "show";
         break;
+        case 'apartados':
+            $claseHistorial = "active";
+            $claseApartados = "active";
+            $showHistorial = "show";
+        break;    
         case "inv":
         $showMisLlantas = "show";
         $claseMisLlantas = "active";
@@ -148,6 +153,10 @@ switch ($flag) {
                 <img src="src/img/compras.svg" width="18px" /> 
                 <span style="margin-left:12px;"> Cotizaciones</span>
             </a>
+            <a class="collapse-item <?php echo $claseApartados ?> rol-4" href="apartados.php?id=0&nav=apartados">
+                <img src="src/img/payment.png" width="18px" /> 
+                <span style="margin-left:12px;"> Apartados</span>
+            </a>
         </div>
     </div>
 </li>
@@ -237,7 +246,7 @@ if ($user_jerarquia == 1 || $user_jerarquia == 4 || $_SESSION['id_usuario'] == 7
             ?>
         <div class="bg-white py-2 collapse-inner rounded">
         <?php 
-            if ($user_jerarquia == 1 || $user_jerarquia == 4){
+            if ($user_jerarquia == 1 || $user_jerarquia == 4 || $_SESSION['id_usuario'] == 7){
             ?>
             <h6 class="collapse-header">Stock total:</h6>
             <a class="collapse-item <?php echo $claseExistencia ?>" href="inventario-total.php?id=0&nav=existencia" style="display:flex; flex-direction: row; justify-content:start;">
