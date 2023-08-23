@@ -15,11 +15,8 @@ if(isset($_POST)) {
     $hora = date("h:i a");
 
     //Variables para el historial venta
-    if ($_POST['fecha'] == "") {
-        $fecha_inicial = date("Y-m-d");
-    } else {
-        $fecha_inicial = $_POST['fecha'];
-    }
+    $fecha_inicial = date("Y-m-d");
+   
 
     $fecha_final = date("Y-m-d", strtotime($fecha_inicial . " +1 month"));
 

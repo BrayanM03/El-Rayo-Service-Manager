@@ -5,54 +5,28 @@ include '../conexion.php';
 $con = $conectando->conexion(); 
 global $con;
 
-$folio = "RAY" . $_GET["id"];
+$folio = "AP" . $_GET["id"];
 $idVenta = $_GET["id"];
+$id_abono = $_GET["id_abono"];
+date_default_timezone_set("America/Matamoros");
+
 global $folio;
 
-$ID = $con->prepare("SELECT a.id, a.id_sucursal, a.id_usuario, c.Nombre_Cliente, c.Telefono, a.primer_abono, a.restante, a.pago_efectivo, a.pago_tarjeta, a.pago_transferencia, a.pago_cheque, a.pago_sin_definir, a.total,  a.tipo, a.estatus, a.metodo_pago, a.hora, a.comentario, a.plazo, a.fecha_inicial, a.fecha_final FROM apartados a INNER JOIN clientes c ON a.id_cliente = c.id WHERE a.id_venta = ?");
+$ID = $con->prepare("SELECT a.id_sucursal, a.id_usuario, c.Nombre_Cliente, c.Telefono, a.primer_abono, a.restante, a.pago_efectivo, a.pago_tarjeta, a.pago_transferencia, a.pago_cheque, a.pago_sin_definir, a.total,  a.tipo, a.estatus, a.metodo_pago, a.hora, a.comentario, a.plazo, a.fecha_inicial, a.fecha_final FROM apartados a INNER JOIN clientes c ON a.id_cliente = c.id WHERE a.id = ?");
 $ID->bind_param('i', $idVenta);
 $ID->execute();
-$ID->bind_result($id_apartados, $sucursal, $vendedor_id, $cliente, $telefono_cliente, $primer_abono, $restante, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $total, $tipo, $estatus, $metodo_pago, $hora, $comentario, $plazo, $fecha_inicio, $fecha_final);
+$ID->bind_result($sucursal, $vendedor_id, $cliente, $telefono_cliente, $primer_abono, $restante, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $total, $tipo, $estatus, $metodo_pago, $hora, $comentario, $plazo, $fecha_inicio, $fecha_final);
 $ID->fetch();
 $ID->close();
 
-$ID = $con->prepare("SELECT pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir FROM abonos_apartados WHERE id_apartado = ? AND estado = 0"); //El 0 indica el estado de apono de liquidacion
-$ID->bind_param('i', $id_apartados);
+
+$ID = $con->prepare("SELECT  a.fecha, a.hora, a.pago_efectivo, a.pago_tarjeta, a.pago_transferencia, a.pago_cheque, a.pago_sin_definir, a.estado FROM abonos_apartados a WHERE a.id = ?");
+$ID->bind_param('i', $id_abono);
 $ID->execute();
-$ID->bind_result($pago_efectivo_abono, $pago_tarjeta_abono, $pago_transferencia_abono, $pago_cheque_abono, $pago_sin_definir_abono);
+$ID->bind_result($fecha_abono, $hora_abono, $pago_efectivo_abono, $pago_tarjeta_abono, $pago_transferencia_abono, $pago_cheque_abono, $pago_sin_definir_abono, $estado_abono);
 $ID->fetch();
 $ID->close();
 
-//Revisar si no hay errores en los montos
-$select = "SELECT SUM(abono) FROM abonos_apartados WHERE id_apartado = ?";
-$re = $con->prepare($select);
-$re->bind_param('i', $id_apartados);
-$re->execute();
-$re->bind_result($suma_abonos);
-$re->fetch();
-$re->close();
-
-
-//Obtener el ultimo abono del apartadi
-$select = "SELECT MAX(id) FROM abonos_apartados WHERE id_apartado = ?";
-$re = $con->prepare($select);
-$re->bind_param('i', $id_apartados);
-$re->execute();
-$re->bind_result($folio_ultimo_abono);
-$re->fetch();
-$re->close();
-
-//Obtener el ultimo abono del apartadi
-$select = "SELECT abono FROM abonos_apartados WHERE id = ?";
-$re = $con->prepare($select);
-$re->bind_param('i', $folio_ultimo_abono);
-$re->execute();
-$re->bind_result($ultimo_abono);
-$re->fetch();
-$re->close();
-
-
-//Consultando formas de pago
 $ID = $con->prepare("SELECT nombre, apellidos FROM usuarios WHERE id = ?");
 $ID->bind_param('i', $vendedor_id);
 $ID->execute();
@@ -60,7 +34,7 @@ $ID->bind_result($vendedor_name, $vendedor_apellido);
 $ID->fetch();
 $ID->close();
 
-$vendedor_usuario = $vendedor_name . ' ' . $vendedor_apellido;
+$vendedor_usuario = $vendedor_name . " " . $vendedor_apellido;
 
 //Trayendo datos de la sucursal
 $ID = $con->prepare("SELECT code, nombre, calle, numero, colonia, ciudad, estado, pais, Telefono, RFC, CP  FROM sucursal WHERE id = ?");
@@ -69,6 +43,16 @@ $ID->execute();
 $ID->bind_result($codigo_sucursal, $sucursal, $calle_suc, $numero_suc, $colonia_suc, $ciudad_suc, $estado_suc, $pais_suc, $telefono_suc, $rfc_suc, $cp_suc);
 $ID->fetch();
 $ID->close();
+
+//SUma de los abonos
+ //Revisar si no hay errores en los montos
+ $select = "SELECT SUM(abono) FROM abonos_apartados WHERE id_apartado = ?";
+ $re = $con->prepare($select);
+ $re->bind_param('i', $idVenta);
+ $re->execute();
+ $re->bind_result($suma_abonos);
+ $re->fetch();
+ $re->close();
 
 global $codigo_sucursal;
 global $sucursal;
@@ -97,18 +81,21 @@ global $restante;
 global $primer_abono;
 global $direccion_cliente;
 global $correo_cliente;
-global $id_apartados;
+global $fecha_abono;
+global $hora_abono;
 global $pago_efectivo_abono;
 global $pago_tarjeta_abono;
 global $pago_transferencia_abono;
 global $pago_cheque_abono;
 global $pago_sin_definir_abono;
+global $estado_abono;
 global $suma_abonos;
-global $ultimo_abono;
 
 $formatterES = new NumberFormatter("es-ES", NumberFormatter::SPELLOUT);
-$izquierda = intval(floor($ultimo_abono));
-$derecha = intval(($ultimo_abono - floor($ultimo_abono)) * 100);
+$abono_realizado = floatval($GLOBALS["pago_efectivo_abono"]) + floatval($GLOBALS["pago_tarjeta_abono"])+ floatval($GLOBALS["pago_transferencia_abono"])+ floatval($GLOBALS["pago_cheque_abono"])+ floatval($GLOBALS["pago_sin_definir_abono"]);
+   
+$izquierda = intval(floor($abono_realizado));
+$derecha = intval(($abono_realizado - floor($abono_realizado)) * 100);
 $formatTotalminus = $formatterES->format($izquierda) . " y " . $derecha . "/100 m.n";
 $formatTotal = strtoupper($formatTotalminus);
 // ciento veintitrés coma cuarenta y cinco
@@ -117,8 +104,6 @@ global $formatTotal;
 
 require('../../src/vendor/fpdf/fpdf.php');
 //require('../../../vistas/plugins/fpdf/rounded_rect2.php');
-
-
 
 if (!isset($_SESSION['id_usuario'])) {
     header("Location:../../login.php");
@@ -254,7 +239,7 @@ function _putresources()
 // Cabecera de página
 function Header()
 
-{ 
+{  
     $calle = $GLOBALS["calle_suc"];
     $numero = $GLOBALS["numero_suc"];
     $colonia = $GLOBALS["colonia_suc"];
@@ -280,7 +265,7 @@ function Header()
         $titulo_sucursal = 'Llantera economica "Del Rio"';
     }else{
         $titulo_sucursal = 'Llantera y Servicios "El Rayo"';
-        $this->Image('../../src/img/logo.jpg',20,7,25);
+        $this->Image('../../src/img/logo.jpg',20,6,25);
     }
 
     $this->Ln(5);
@@ -304,8 +289,6 @@ function Header()
     $this->RoundedRect(166, 20, 17, 7, 2, '1234', 'DF');
     $this->Cell(18,6,utf8_decode($_GET["id"]),0,0,'C');
 
-   
-
     
     $this->SetDrawColor(135, 134, 134);
     $this->SetTextColor(36, 35, 28);
@@ -319,7 +302,7 @@ function Header()
     //$this->Cell(30,10,"'",0,0, 'C');
     $this->Cell(108.3,10, $titulo_sucursal,0,0, 'L');
     $this->SetFont('Exo2-Bold','B',12);
-    $this->Cell(60,10,utf8_decode('Reporte de venta'),0,0,'C');
+    $this->Cell(60,10,utf8_decode('Reporte abono de apartado'),0,0,'C');
     $this->Ln(5);
    
     $estatus = "Reporte";
@@ -327,9 +310,9 @@ function Header()
     $this->Cell(32,10,utf8_decode($top_direction . " "),0,0,'L', false);
     $this->Cell(88,10,utf8_decode($colonia . ", " . $cp),0,0,'L', false);
     $this->SetFont('Arial','B',9);
-    $this->Cell(25,10,utf8_decode("Fecha adelanto: "),0,0,'L', false);
+    $this->Cell(25,10,utf8_decode("Fecha abono: "),0,0,'L', false);
     $this->SetFont('Arial','',9);
-    $this->Cell(50,10,utf8_decode($GLOBALS['fecha_inicio']),0,0,'L', false);
+    $this->Cell(50,10,utf8_decode($GLOBALS['fecha_abono']),0,0,'L', false);
     $this->Ln(4);
 
    
@@ -339,7 +322,7 @@ function Header()
     $this->SetFont('Arial','B',9);
     $this->Cell(25,10,utf8_decode("Hora abono: "),0,0,'L', false);
     $this->SetFont('Arial','',9);
-    $this->Cell(50,10,utf8_decode($GLOBALS['hora']),0,0,'L', false);
+    $this->Cell(50,10,utf8_decode($GLOBALS['hora_abono']),0,0,'L', false);
     $this->Ln(4);
 
     $this->SetFont('Arial','B',9);
@@ -360,14 +343,14 @@ function Header()
     $this->Cell(25,10,utf8_decode("Correo: "),0,0,'L', false);
     $this->SetFont('Arial','',9);
     $this->Cell(50,10,utf8_decode("karlasanchezr@gmail.com"),0,0,'L', false);
+
     $this->Ln(4);
     $this->Cell(120,10,'',0,0,'L', false);
     $this->SetFont('Arial','B',9);
-    $this->Cell(25,10,utf8_decode('Vendedor: '),0,0,'L', false);
+    $this->Cell(25,10,utf8_decode("Vendedor: "),0,0,'L', false);
     $this->SetFont('Arial','',9);
     $this->Cell(10,10,utf8_decode($GLOBALS['vendedor_usuario']),0,0,'L', false);
 
-   
 
     $this->Ln(10);
     
@@ -466,10 +449,10 @@ function cuerpoTabla(){
     $pdf->SetFont('Arial','',10);
 
     $conexion = $GLOBALS["con"];
-    $id_apartados = $GLOBALS["id_apartados"];
+    $id_venta = $GLOBALS["idVenta"];
     $total = 0;
     $detalles = $conexion->prepare("SELECT da.modelo, da.cantidad,servicios.descripcion, da.precio_unitario, da.importe FROM detalle_apartado da INNER JOIN servicios ON da.id_llanta = servicios.id WHERE da.id_apartado = ?");
-        $detalles->bind_param('i', $id_apartados);
+        $detalles->bind_param('i', $id_venta);
         $detalles->execute();
         $resultadoServ = $detalles->get_result();
         $detalles->close(); 
@@ -477,7 +460,7 @@ function cuerpoTabla(){
     if($total == 0){
     
         $detalle = $conexion->prepare("SELECT da.modelo, da.cantidad,llantas.Descripcion, llantas.Marca, da.precio_unitario, da.importe FROM detalle_apartado da INNER JOIN llantas ON da.id_llanta = llantas.id WHERE da.id_apartado = ?  AND da.modelo != 'no aplica'");
-        $detalle->bind_param('i', $id_apartados);
+        $detalle->bind_param('i', $id_venta);
         $detalle->execute();
         $resultado = $detalle->get_result(); 
         $detalle->close();  
@@ -556,14 +539,14 @@ function cuerpoTabla(){
     }else if($total > 0){ 
 
     
-        $detalles = $conexion->prepare("SELECT da.modelo, da.cantidad,servicios.descripcion, da.precio_unitario, da.importe FROM detalle_apartado da INNER JOIN servicios ON da.id_llanta = servicios.id WHERE da.id_apartado = ?");
-        $detalles->bind_param('i', $id_apartados);
+        $detalles = $conexion->prepare("SELECT detalle_venta.Modelo, detalle_venta.Cantidad,servicios.descripcion, detalle_venta.precio_Unitario, detalle_venta.Importe FROM detalle_venta INNER JOIN servicios ON detalle_venta.id_llanta = servicios.id WHERE id_Venta = ?");
+        $detalles->bind_param('i', $id_venta);
         $detalles->execute();
         $resultadoServ = $detalles->get_result();
         $detalles->close(); 
 
-        $detalle = $conexion->prepare("SELECT da.modelo, da.cantidad,llantas.Descripcion, llantas.Marca, da.precio_unitario, da.importe FROM detalle_apartado da INNER JOIN llantas ON da.id_llanta = llantas.id WHERE da.id_apartado = ?  AND da.modelo != 'no aplica'");
-        $detalle->bind_param('i', $id_apartados);
+        $detalle = $conexion->prepare("SELECT detalle_venta.Modelo, detalle_venta.Cantidad,llantas.Descripcion, llantas.Marca, detalle_venta.precio_Unitario, detalle_venta.Importe FROM detalle_venta INNER JOIN llantas ON detalle_venta.id_llanta = llantas.id WHERE id_Venta = ?  AND detalle_venta.Modelo != 'no aplica'");
+        $detalle->bind_param('i', $id_venta);
         $detalle->execute();
         $resultado = $detalle->get_result(); 
         $detalle->close(); 
@@ -760,9 +743,8 @@ function cuerpoTabla(){
         
     }
 
-
-    
     $pdf->Ln(20);
+
     switch ($GLOBALS['plazo']) {
             case '1':
             $plazos = '1 semana';
@@ -785,7 +767,7 @@ function cuerpoTabla(){
             break;
         
         default:
-        $plazos = 'Sin definir';
+            # code...
             break;
     }
 
@@ -808,6 +790,7 @@ function cuerpoTabla(){
     $pdf->Cell(150,6,$GLOBALS["formatTotal"],0,0,'L',1);
     $pdf->Ln(15);
 
+
     $pdf->Ln(4);
     $pdf->SetFont('Exo2-Bold','B',11);
     $pdf->Cell(30,6,'Formas de pago:',0,0,'L',1);
@@ -825,45 +808,46 @@ function cuerpoTabla(){
     $pdf->Cell(35,5,$GLOBALS['pago_transferencia_abono'],0,0,'L',1);
     $pdf->Cell(30,5,$GLOBALS['pago_cheque_abono'],0,0,'L',1);
     $pdf->Cell(38,5,$GLOBALS['pago_sin_definir_abono'],0,0,'L',1);
-
-    $pdf->Ln(4);
+    $pdf->Ln(3);
     $pdf->SetFont('Exo2-Bold','B',12);
     //Subtotal
-    $pdf->Cell(132,6,'Condiciones y comentarios',0,0);  
+    $pdf->Cell(132,6,'Condiciones y comentarios',0,0);
+    $pdf->SetFont('Exo2-Bold','B',10);
+  
     $pdf->Ln(6.5);
-    $pdf->SetFont('Arial','',6);
-    $pdf->SetFontSize(8);
+    $pdf->SetFont('Arial','',10);
     //Subtotal
     /* $pdf->Cell(132,6, utf8_decode($GLOBALS["comentario"]),0,0); */
     $pdf->Ln(4.5);
-    $pdf->MultiCell(170,6, $GLOBALS["comentario"],0,0,'L',0);
+    $pdf->MultiCell(70,6, utf8_decode($GLOBALS["comentario"]),0,0,'L',0);
     $pdf->Ln(4.5);
-    $pdf->SetFont('Arial','',5);
-    $pdf->MultiCell(180,4, utf8_decode("GARANTÍA DE UN AÑO CONTRA DEFECTO DE FABRICACION; NO GOLPES, NO CORTES PROVOCADOS POR MAL MANEJO, PRESION DE AIRE INADECUADA,EXCESO DE PESO, ETC. A PARTIR DE ESTA FECHA
-FAVOR DE PRESENTAR ESTA NOTA PARA EMPEZAR EL PROCEDIMIENTO ADECUADO PARA GARANTIA. SI NO SE PRESENTA LA NOTA NO SE PODRA SEGUIR EL PROCESO; EN MALA INSTALACION
-SOLAMENTE SERA VALIDA LA GARANTIA DENTRO DEL PRIMER MES DESPUES DE LA COMPRA, SI TIENE PARCHE AUTOMATICAMENTE PIERDE LA GARANTIA; EN CASO DE PROCEDER GARANTIA SE COBRARÁEL DESGASTE SI ES EL CASO; TIEMPO ESTIMADO DE RESPUESTA DE 1-2 SEMANAS. APLICA RESTRICCIONES. VENTAS DE APARTADO: EL PLAZO PARA PAGAR ES DE 1 MES, EN CASO DE NO CUMPLIR EL PAGO A TIEMPO EL MONTO DEL ADELANTO NO SERÁ REEMBOLSABLE"),0,0,'C',0);
+    $pdf->SetFont('Arial','',6);
+    $pdf->MultiCell(180,4, utf8_decode("GARANTÍA DE UN AÑO CONTRA DEFECTO DE FABRICACION; NO GOLPES, NO CORTES PROVOCADOS POR MAL MANEJO, PRESION DE AIRE INADECUADA,EXCESO DE PESO, ETC. A PARTIR DE ESTA FECHA FAVOR DE PRESENTAR ESTA NOTA PARA EMPEZAR EL PROCEDIMIENTO ADECUADO PARA GARANTIA. SI NO SE PRESENTA LA NOTA NO SE PODRA SEGUIR EL PROCESO; EN MALA INSTALACION SOLAMENTE SERA VALIDA LA GARANTIA DENTRO DEL PRIMER MES DESPUES DE LA COMPRA, SI TIENE PARCHE AUTOMATICAMENTE PIERDE LA GARANTIA; EN CASO DE PROCEDER GARANTIA SE COBRARÁEL DESGASTE SI ES EL CASO; TIEMPO ESTIMADO DE RESPUESTA DE 1-2 SEMANAS.  VENTAS DE APARTADO: EL PLAZO PARA PAGAR ES DE 1 MES, EN CASO DE NO CUMPLIR EL PAGO A TIEMPO EL MONTO DEL ADELANTO NO SERÁ REEMBOLSABLE. APLICA RESTRICCIONES."),0,0,'C',0);
     
     $ejeY = $ejeY +17;
     $pdf->SetY($ejeY);
     $pdf->SetX(142);
     
     $pdf->SetFont('Exo2-Bold','B',10);
-    $pdf->Cell(30,6,"Ultimo abono:",0,0, 'R');
+    $pdf->Cell(30,6,"Abono:",0,0, 'R');
     $pdf->SetTextColor(1, 1, 1);
     $pdf->SetFont('Arial','',10);
     $pdf->Cell(10,6,"$",0,0, 'L',1);
-    $abono = number_format($GLOBALS["ultimo_abono"],2);
-    $pdf->Cell(15,6,$abono,0,0, 'R',1);
+    $abono_realizado = floatval($GLOBALS["pago_efectivo_abono"]) + floatval($GLOBALS["pago_tarjeta_abono"])+ floatval($GLOBALS["pago_transferencia_abono"])+ floatval($GLOBALS["pago_cheque_abono"])+ floatval($GLOBALS["pago_sin_definir_abono"]);
+    $abono_realizado_ft = number_format($abono_realizado,2);
+    
+    $pdf->Cell(15,6,$abono_realizado_ft,0,0, 'R',1);
     $pdf->Ln(8.5);
     
     $pdf->Cell(132,6,'',0,0);
     $pdf->SetFont('Exo2-Bold','B',10);
-    $pdf->Cell(30,6,"Total abonado:",0,0, 'R');
+    $pdf->Cell(30,6,"Restante:",0,0, 'R');
     $pdf->SetTextColor(1, 1, 1);
     $pdf->SetFont('Arial','',10);
     $pdf->Cell(10,6,"$",0,0, 'L',1);
-    $restante = number_format($GLOBALS["suma_abonos"],2);
-    $pdf->Cell(15,6,$restante,0,0, 'R',1);
+    $nuevo_rest = floatval($GLOBALS["total"])-(floatval($GLOBALS["suma_abonos"])) ;
+    $nuevo_rest_ft = number_format($nuevo_rest,2);
+    $pdf->Cell(15,6,$nuevo_rest_ft,0,0, 'R',1);
     $pdf->Ln(6.5);
 
     $pdf->SetFont('Exo2-Bold','B',10);

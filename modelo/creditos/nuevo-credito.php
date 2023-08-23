@@ -65,13 +65,8 @@ if(isset($_POST)){
     }
     
    
-
-    if($_POST["fecha"] == ""){
-        $fecha_inicio = date("Y-m-d");
-    }else{
-        
-        $fecha_inicio = $_POST["fecha"];
-    }
+    $fecha_inicio = date("Y-m-d");
+   
     
     $fecha = date($fecha_inicio);
 

@@ -34,7 +34,55 @@ $detalle = $con->prepare("SELECT da.modelo, da.cantidad,llantas.descripcion, lla
 $detalle->bind_param('i', $id);
 $detalle->execute();
 $resultado = $detalle->get_result(); 
-$detalle->close(); 
+$detalle->close();
+
+$detalle = $con->prepare("SELECT COUNT(*) FROM abonos_apartados WHERE id_apartado = ?");
+$detalle->bind_param('i', $id);
+$detalle->execute();
+$detalle->bind_result($no_abonos);
+$detalle->fetch();
+$detalle->close();
+if($no_abonos > 0){
+    $detalle = $con->prepare("SELECT * FROM abonos_apartados WHERE id_apartado = ?");
+    $detalle->bind_param('i', $id);
+    $detalle->execute();
+    $resultado_abonos = $detalle->get_result(); 
+    $detalle->close();
+    
+    while($fila_ab = $resultado_abonos->fetch_assoc()){
+        $id = $fila_ab['id']; 
+        $fecha_abono = $fila_ab['fecha'];
+        $hora = $fila_ab['hora'];
+        $abono = $fila_ab['abono'];
+        $metodo_pago = $fila_ab['metodo_pago'];
+        $pago_efectivo = $fila_ab['pago_efectivo'];
+        $pago_tarjeta = $fila_ab['pago_tarjeta'];
+        $pago_transferencia = $fila_ab['pago_transferencia'];
+        $pago_cheque = $fila_ab['pago_cheque'];
+        $pago_sin_definir = $fila_ab['pago_sin_definir'];
+        $usuario =  $fila_ab['usuario'];
+        $sucursal = $fila_ab['sucursal'];
+        $id_sucursal = $fila_ab['id_sucursal'];
+
+        $arreglo_abonos[] = array(
+            'id' => $id,
+            'fecha' => $fecha_abono,
+            'horas' => $hora,
+            'abono' => $abono,
+            'metodo_pago' => $metodo_pago,
+            'pago_efectivo' => $pago_efectivo,
+            'pago_tarjeta' => $pago_tarjeta,
+            'pago_transferencia' => $pago_transferencia,
+            'pago_cheque' => $pago_cheque,
+            'pago_sin_definir' => $pago_sin_definir,
+            'sucursal' => $sucursal,
+        );
+
+    }
+}else{
+    $arreglo_abonos = array();
+}
+
 
 //Iterando servicios
 $data_servicios = array();
@@ -48,7 +96,6 @@ while($fila = $resultadoServ->fetch_assoc()) {
     $precio_unitario = $fila["precio_unitario"];
     $importe = $fila["importe"];
     $caracteres = mb_strlen($descripcion);
-    print_r($cantidad);
     $data_servicios[] = array(
         'cantidad' => $cantidad,
         'modelo' => $modelo,
@@ -104,6 +151,7 @@ $data = array(
     'fecha_final' => $fecha_final,
     'vendedor_usuario' => $vendedor_usuario,
     'detalles' => $arreglo_final,
+    'abonos' => $arreglo_abonos
 );
 
 echo json_encode($data);

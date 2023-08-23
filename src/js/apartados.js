@@ -1,3 +1,21 @@
+toastr.options = {
+  "closeButton": true,
+  "debug": false,
+  "newestOnTop": false,
+  "progressBar": true,
+  "positionClass": "toast-bottom-right",
+  "preventDuplicates": false,
+  "onclick": null,
+  "showDuration": "300",
+  "hideDuration": "1000",
+  "timeOut": "5000",
+  "extendedTimeOut": "1000",
+  "showEasing": "swing",
+  "hideEasing": "linear",
+  "showMethod": "fadeIn",
+  "hideMethod": "fadeOut"
+}
+
 MostrarApartados();
 const meses = [
   "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
@@ -65,9 +83,11 @@ function designarAdelanto(metodo_pago, llantaData){
           4: "Sin definir"
         };
 
-        var restante_actual =  llantaData.reduce(function(total, element) {
-        return   parseFloat(element.importe) - parseFloat(total);
-      }, 0);
+          var importe_total_actual =  llantaData.reduce(function(total, element) {
+          let total_importe = parseFloat(element.importe) + parseFloat(total);
+          return  total_importe;
+        }, 0);
+
         var arregloMetodos= metodo_pago.reduce(function(result, key) {
           result[key] = opciones[key];
           return result;
@@ -80,7 +100,7 @@ function designarAdelanto(metodo_pago, llantaData){
               <div class="row mt-2">
               <div class="col-md-12">
                   <label>Monto para pago ${nombre_metodo}</label>
-                  <input type="number" class="form-control" id="monto_metodo_${clave}" onkeyup="calcularMontosAdelanto(${restante_actual})" placeholder="0.00">
+                  <input type="number" class="form-control" id="monto_metodo_${clave}" onkeyup="calcularMontosAdelanto(${importe_total_actual})" placeholder="0.00">
               </div>
               </div>
         `);}
@@ -90,20 +110,20 @@ function designarAdelanto(metodo_pago, llantaData){
           <div class="row mt-3">
           <div class="col-md-6">
               <label>Importe total</label>
-              <h1><span class="badge badge-info" id="badge-total">$${restante_actual}</span><h1>
-              <input type="hidden" value="${restante_actual}" class="form-control" id="total_importe" disabled>
+              <h1><span class="badge badge-info" id="badge-total">$${importe_total_actual}</span><h1>
+              <input type="hidden" value="${importe_total_actual}" class="form-control" id="total_importe" disabled>
           </div>
           <div class="col-md-6">
               <label>Restante</label>
-              <h1><span class="badge badge-secondary" id="badge-restante">$${restante_actual}</span><h1>
-              <input type="hidden" value="${restante_actual}" class="form-control" is-valid="false" id="total_restante" disabled>
+              <h1><span class="badge badge-secondary" id="badge-restante">$${importe_total_actual}</span><h1>
+              <input type="hidden" value="${importe_total_actual}" class="form-control" is-valid="false" id="total_restante" disabled>
           </div>
           <div class="col-md-12">
               <h4 id="validador-adelanto"><span id="text-message" class="text-secondary"></span><h4>
           </div>
           </div>
           `) 
-        
+          calcularMontosAdelanto(importe_total_actual)
         },
         preConfirm: function(){
         if($("#validador-adelanto").attr("is-valid") == "false"){
@@ -296,6 +316,7 @@ function calcularMontosAdelanto(importe){
     const monto_formateado = formatter.format(redondeado);
     const resta_formateada = formatter.format(resta_redondeada);
 
+  
     if (sumatoria_monto < redondeado) {
       badgeRestante.classList.remove("badge-success");
       badgeRestante.classList.remove("badge-danger");
@@ -379,7 +400,7 @@ table = $('#apartados').DataTable({
     render: function (row, data) {
       rol = $("#titulo-hv").attr("rol");
       
-      if(rol == "1"){
+      if(rol == "1" || rol == '2'){
           if (row[10] == "Activo") {
               return '<div style="display: flex; width: auto;">'+
               '<button onclick="traerPdfApartado(' +row[2]+ ');" title="Ver reporte" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px">'+
@@ -404,15 +425,7 @@ table = $('#apartados').DataTable({
               '<span class="fa fa-ban"></span><span class="hidden-xs"></span></button></div>';
           }
       }else{
-          if (row[8] == "Abierta") {
-              return '<div style="display: flex"><button onclick="traerPdfCredito(' +row[2]+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>';
-              
-          }else if(row[8] == "Pagado"){
-              return '<div style="display: flex"><button onclick="traerPdf(' +row[2]+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>';
-       
-          }else if(row.estatus == "Cancelada"){
-              
-          }
+          return '';
       }
       
        },
@@ -455,6 +468,10 @@ function traerPdfApartado(id){
   window.open("./modelo/apartados/reporte-apartado.php?id="+id);
 }
 
+function traerPdfAbonoApartado(id_abono, id_apartado){
+  window.open("./modelo/apartados/reporte-abono-apartado.php?id="+id_apartado+"&id_abono="+id_abono);
+}
+
 var tooltipSpan = document.getElementById('tooltip-span');
 
 window.onmousemove = function (e) {
@@ -465,7 +482,7 @@ window.onmousemove = function (e) {
 };
 
 
-function procesarOrden(id_apartado){
+function procesarOrden(id_apartado){  
   Swal.fire({
     title: 'Procesar venta',
     width: 800,
@@ -544,12 +561,14 @@ function procesarOrden(id_apartado){
       </div>
     `,
     showCancelButton: true,
-    //showDenyButton: true,
+    showConfirmButton:false,
+    showDenyButton: true,
     showCloseButton: true,
     confirmButtonColor: '#28a745',
     cancelButtonColor: '#dc3545',
-    denyButtonColor: '#ffc107',
-    confirmButtonText: 'Continuar', 
+    denyButtonColor: '#5DC1B9',
+    confirmButtonText: 'Liquidar', 
+    denyButtonText: 'Abonar', 
     //denyButtonText: 'Venta a credito',
     cancelButtonText: 'Cancelar',
     showLoaderOnConfirm: true,
@@ -609,7 +628,7 @@ function procesarOrden(id_apartado){
             objeto.caracteres
         ]);
 
-          table = $('#detalle_apartado').DataTable({
+          table_apartado = $('#detalle_apartado').DataTable({
     
             rowCallback: function(row, data, index) {
                 var info = this.api().page.info();
@@ -794,8 +813,6 @@ function procesarOrden(id_apartado){
               let metodo_pago = $("#metodos-pago").val();
             
               var arregloMetodos= metodo_pago.reduce(function(result, key) {
-                console.log(key);
-                console.log(document.getElementById(`monto_metodo_${key}_apartado`).value);
                 let monto = parseFloat(document.getElementById(`monto_metodo_${key}_apartado`).value);
                 result[key] = {"id_metodo":key, "metodo":opciones[key], "monto": monto};
                 return result;
@@ -807,6 +824,8 @@ function procesarOrden(id_apartado){
 
         }
       });
+    }else if(respuesta.isDenied){
+      abonarApartado(id_apartado);
     }
     
   })
@@ -997,7 +1016,7 @@ function cancelarApartado(id) {
 
  }
 
- function ventaYaCancelada(){
+function ventaYaCancelada(){
   Swal.fire({
     title: 'Apartado ya cancelado',
     html: "<span>Este apartado ya esta cancelado.</span>",
@@ -1008,3 +1027,362 @@ function cancelarApartado(id) {
     cancelButtonColor:'#ff764d',
 })
  }
+
+function abonarApartado(id_apartado){
+  $.ajax({
+    type: "post",
+    url: './modelo/apartados/traer-data-orden.php',
+    data: {"id":id_apartado},
+    dataType: "JSON",
+    success: function (response_ab) {
+      Swal.fire({
+        title: 'Realizar abono',
+        width: '1200',
+        html: `
+          <div class="container">
+              <div class="row">
+                  <div class="col-12">
+                      <label>Metodo(s) de pago:</label><br>
+                      <select id="metodos-pago-abono" class="selectpicker form-control mb-2" data-live-search="true"  multiple title="Metodos de pago"> 
+                              <option value="0" selected>Efectivo</option>
+                              <option value="1">Tarjeta</option>
+                              <option value="2">Transferencia</option>
+                              <option value="3">Cheque</option>
+                              <option value="4">Sin definir</option>
+                      </select>
+                  </div>
+              </div>   
+              
+              <div id="contenedor-metodos">
+                    <div class="row">
+                        <div class="col-12">
+                            <label>Selecciona el monto para cada metodo de pago:</label><br>
+                            <input type="number" class="form-control" placeholder="0.00" id="monto_metodo_0_apartado" onkeyup="calcularMontosAbonosApartado(${response_ab.total}, ${response_ab.restante})">
+                        </div>
+                    </div>  
+              </div>
+
+              <div class="row m-4 justify-content-center">
+                  <div class="col-md-3">
+                       <label>Total:</label>
+                       <input class="form-control disabled" placeholder="0.00" id="abono_apartado_ac" readonly>
+                  </div>
+              </div>
+
+              <div class="row m-4">
+                  <div class="col-12">
+                    <div class="btn btn-success disabled" id="btn-realizar-abono-apartado" onclick="realizarAbonoApartado(${id_apartado}, ${response_ab.total})">Abonar</div><br>
+                    <small style="color:red;" id="msj-alerta"></small>
+                  </div>
+              </div>
+              <div class="row mt-5">
+                  <div class="col-12">
+                    <table id="abonos_apartados_tabla" class="table table-bordered table-info">
+                    </table>
+                  </div>
+              </div>
+
+              <div id="area_totales_abonos" class="mt-4">
+                  
+              </div>
+          </div>
+        `,
+        didOpen: ()=>{
+          $('#metodos-pago-abono').selectpicker('refresh');
+
+          //Conversion de arreglo de objectos a arreglos de arrays
+          response_ab.abonos = response_ab.detalles.length == 0 ? [] : response_ab.abonos;
+          const data_convertida = response_ab.abonos.map(objeto => [
+            objeto.id,
+            objeto.fecha,
+            objeto.horas,
+            objeto.abono,
+            objeto.pago_efectivo,
+            objeto.pago_tarjeta,
+            objeto.pago_transferencia,
+            objeto.pago_cheque,
+            objeto.pago_sin_definir,
+            objeto.sucursal
+        ]);
+        table_abonos = $('#abonos_apartados_tabla').DataTable({
+    
+            rowCallback: function(row, data, index) {
+                var info = this.api().page.info();
+                var page = info.page;
+                var length = info.length;
+                var columnIndex = 0; // Índice de la primera columna a enumerar
+          
+                $('td:eq(' + columnIndex + ')', row).html(page * length + index + 1);
+              },
+             
+            columns: [   
+            { title: 'Folio' },
+            { title: 'Fecha' },
+            { title: 'Hora'},
+            { title: 'Abono'},
+            { title: 'Efectivo'},
+            { title: 'Tarjeta'},
+            { title: 'Transferencia'},
+            { title: 'Cheque'},
+            { title: 'Sin definir'},
+            { title: 'Sucursal'},
+            { title: 'PDF', render: function(data, type, row){
+            
+              return '<div style="display: flex; width: auto;">'+
+              '<button onclick="traerPdfAbonoApartado('+row[0]+', '+ id_apartado+');" title="Ver reporte" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px">'+
+              '<span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>'+
+              '</div>';
+            }}
+            ],
+            data: data_convertida,
+          });
+
+          let button_confirm = document.querySelector('.swal2-confirm');
+              button_confirm.style.backgroundColor = '#858796';
+    
+
+                  var opciones = {
+                    0: "Efectivo",
+                    1: "Tarjeta",
+                    2: "Transferencia",
+                    3: "Cheque",
+                    4: "Sin definir"
+                  };
+    
+                  var importe_total =  response_ab.total;
+    
+                  $("#metodos-pago-abono").change(function(){
+                  $("#contenedor-metodos").empty();
+                    let metodo_pago = $("#metodos-pago-abono").val();
+                    var arregloMetodos= metodo_pago.reduce(function(result, key) {
+                      result[key] = opciones[key];
+                      return result;
+                    }, {});
+      
+                    for(var clave in arregloMetodos) {
+                      if (arregloMetodos.hasOwnProperty(clave)) {
+                        var nombre_metodo = arregloMetodos[clave];
+                        $("#contenedor-metodos").append(`
+                          <div class="row mt-2">
+                          <div class="col-md-12">
+                              <label>Monto para pago ${nombre_metodo}</label>
+                              <input type="number" class="form-control" id="monto_metodo_${clave}_apartado" onkeyup="calcularMontosAbonosApartado(${importe_total}, ${response_ab.restante})" placeholder="0.00">
+                          </div>
+                          </div>
+                    `);}
+                      }
+
+                      calcularMontosAbonosApartado(importe_total, response_ab.restante);
+                  });
+    
+                  let restante_ = parseFloat(response_ab.restante);
+                  let adelanto_ = parseFloat(response_ab.primer_abono);
+                  let total_ = parseFloat(response_ab.total);
+                  const formatoMonedaAdelanto = adelanto_.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+                  const formatoMonedaRestante = restante_.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+                  const formatoMonedaTotal = total_.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+    
+    
+                  $("#area_totales_abonos").append(`
+                    <div class="row mt-3">
+                      <div class="col-md-4">
+                          <label>Total</label>
+                          <h1><span class="badge badge-info" id="badge-precio-total">${formatoMonedaTotal}</span><h1>
+                          <input type="hidden" value="${total_}"class="form-control" is-valid="false" id="total_venta" disabled>
+                      </div>
+                      <div class="col-md-4">
+                          <label>Abonado</label>
+                          <h1><span class="badge badge-warning" id="badge-sumatoria">${formatoMonedaAdelanto}</span><h1>
+                          <input type="hidden" value="${adelanto_}"class="form-control" is-valid="false" id="abonado_venta" disabled>
+                      </div>
+                      <div class="col-md-4">
+                          <label>Restante</label>
+                          <h1><span class="badge badge-secondary" id="badge-restante">${formatoMonedaRestante}</span><h1>
+                          <input type="hidden" value="${restante_}"class="form-control" is-valid="false" id="restante_venta" disabled>
+                      </div>
+                      <div class="col-md-12 text-center">
+                        <h2><span id="text-message" class="text-secondary mt-2 text-center"></span><h2>
+                      </div>
+                    </div>
+                    `) 
+              
+        },
+      }).then(()=>{
+        //kuku
+        table.ajax.reload(null, false);
+      });
+    }
+  });
+}
+
+
+function calcularMontosAbonosApartado(importe, restante){
+  let button_confirm = document.querySelector('.swal2-confirm');
+  var inputs = document.querySelectorAll("#contenedor-metodos input[type=number]");  // Obtener todos los inputs
+  var suma = 0;
+  var resta = 0;
+  let abonado = $("#abonado_venta").val();
+  inputs.forEach(function(input) {
+    var valor = parseFloat(input.value);
+    if (!isNaN(valor)) {
+      suma += valor;
+    }
+  });
+  resta = restante - suma;
+  let suma_ingresada = suma;
+  suma = parseFloat(suma) + parseFloat(abonado);
+  const formatoMonedaSumatoria = suma.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+  const formatoMonedaResta = resta.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+  
+  $("#badge-sumatoria").text(formatoMonedaSumatoria);
+  $("#badge-restante").text(formatoMonedaResta);
+  // Verificar si la suma es igual al precio_llanta y actualizar el badge
+  var badgePrecio = document.getElementById("badge-precio-total");
+  var badgeSumatoria = document.getElementById("badge-sumatoria");
+  var text_message = document.getElementById("text-message");
+  var btn_abonar_apartado_ = $("#btn-realizar-abono-apartado");
+  $("#abono_apartado_ac").val(suma_ingresada)
+  if(suma_ingresada > 0){
+    btn_abonar_apartado_.removeClass("disabled"); 
+    $("#msj-alerta").text('')
+  }
+
+  if(suma_ingresada <= 0){
+    btn_abonar_apartado_.addClass("disabled"); 
+  }
+
+  if (suma == importe) {
+    badgePrecio.classList.remove("badge-secondary");
+    badgePrecio.classList.remove("badge-danger");
+    badgePrecio.classList.add("badge-success");
+    badgeSumatoria.classList.remove("badge-secondary");
+    badgeSumatoria.classList.remove("badge-danger");
+    badgeSumatoria.classList.remove("badge-warning");
+    badgeSumatoria.classList.add("badge-success");
+    button_confirm.style.backgroundColor = '#1cc88a';
+    button_confirm.style.borderColor = '#1cc88a';
+    text_message.classList.remove("text-secondary");
+    text_message.classList.remove("text-danger");
+    text_message.classList.add("text-success");
+    text_message.textContent = '¡Listo!';
+    $("#total_venta").attr("is-valid", "true");
+    audio_2.play();
+    btn_abonar_apartado_.classList.removeClass('disabled'); 
+  }else if(suma > importe){
+    badgePrecio.classList.remove("badge-success");
+    badgePrecio.classList.remove("badge-secondary");
+    badgeSumatoria.classList.remove("badge-success");
+    badgeSumatoria.classList.add("badge-danger");
+    badgePrecio.classList.add("badge-danger");
+
+    button_confirm.style.backgroundColor = '#dc3545';
+    button_confirm.style.borderColor = '#dc3545';
+    text_message.classList.remove("text-success");
+    text_message.classList.remove("text-secondary");
+    text_message.classList.add("text-danger");
+    text_message.textContent = 'El monto soprepasa la cantidad';
+    $("#total_venta").attr("is-valid", "false");
+    btn_abonar_apartado_.addClass('disabled'); 
+
+  } else {
+    badgePrecio.classList.remove("badge-success");
+    badgePrecio.classList.remove("badge-danger");
+    badgePrecio.classList.add("badge-secondary");
+
+    button_confirm.style.backgroundColor = '#858796';
+    button_confirm.style.borderColor = '#858796';
+    text_message.classList.remove("text-success");
+    text_message.classList.remove("text-danger");
+    badgeSumatoria.classList.remove("badge-danger");
+    badgeSumatoria.classList.remove("badge-success");
+    text_message.classList.add("text-secondary");
+    badgeSumatoria.classList.add("badge-warning");
+    text_message.textContent = '';
+    $("#total_venta").attr("is-valid", "false");
+   // btn_abonar_apartado_.addClass('disabled'); 
+
+  }
+  
+}
+
+function realizarAbonoApartado(id_apartado){
+  let btn = $("#btn-realizar-abono-apartado");
+  const esta_desactivado = btn.hasClass("disabled"); 
+  let alerta_mensaje = $("#msj-alerta");
+  if(esta_desactivado){
+    alerta_mensaje.text('Hay un error con el monto')
+  }else{
+
+    var opciones = {
+      0: "Efectivo",
+      1: "Tarjeta",
+      2: "Transferencia",
+      3: "Cheque",
+      4: "Sin definir"
+    };
+    let metodo_pago = $("#metodos-pago-abono").val();
+    var arregloMetodos= metodo_pago.reduce(function(result, key) {
+      let monto = parseFloat(document.getElementById(`monto_metodo_${key}_apartado`).value);
+      result[key] = {"id_metodo":key, "metodo":opciones[key], "monto": monto};
+      return result;
+    }, {});
+  
+    if($('#abono_apartado_ac').val() <=0){
+    alerta_mensaje.text('El monto no puede ser igual o menor que 0')
+    }else{
+
+      $.ajax({
+        type: "post",
+        url: "./modelo/apartados/realizar-abono-apartados.php",
+        data: {'id_apartado': id_apartado, 'metodos_pago': arregloMetodos},
+        dataType: "JSON",
+        success: function (response) {
+          if(response.estatus){
+              alerta_mensaje.text('');
+              if(response.liquidacion){
+                toastr.success('Apartado liquidado con exito', 'Exito' ); 
+              }else{
+                toastr.success('Abonado con exito', 'Exito' ); 
+
+              }
+              recargarTablaAbonosApartado(id_apartado)
+            }else{
+              if(response.liquidacion){
+                toastr.error(response.mensaje, 'Error' ); 
+              }else{
+                alerta_mensaje.text('Hubo un error al agregar el abono')
+              }
+
+          }
+        }
+      });
+
+    }
+  }
+}
+
+function recargarTablaAbonosApartado(id_apartado){
+  $.ajax({
+    type: "post",
+    url: './modelo/apartados/traer-data-orden.php',
+    data: {"id":id_apartado},
+    dataType: "JSON",
+    success: function (response_ab) {
+      //Conversion de arreglo de objectos a arreglos de arrays
+      response_ab.abonos = response_ab.detalles.length == 0 ? [] : response_ab.abonos;
+      const data_convertida = response_ab.abonos.map(objeto => [
+        objeto.id,
+        objeto.fecha,
+        objeto.horas,
+        objeto.abono,
+        objeto.pago_efectivo,
+        objeto.pago_tarjeta,
+        objeto.pago_transferencia,
+        objeto.pago_cheque,
+        objeto.pago_sin_definir,
+        objeto.sucursal
+    ]);
+    table_abonos.clear().rows.add(data_convertida).draw();
+
+    }})
+}

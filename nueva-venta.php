@@ -420,15 +420,7 @@
 
                             <div class="grupo-2 col">
 
-                                <div class="fila3">
-                                            <div class="folio-fecha">
-                                                
-                                                <label>
-                                                    <span for="fecha">Fecha</span>
-                                                    <input class="form-control"  type="date" id="fecha" name="fecha" style="width: 150px;" value="<?php echo date("Y-m-d");?>"> 
-                                                </label>
-                                            </div>  
-                                </div>
+                            
                                     
                                     
                                     <div class="fila4 row">

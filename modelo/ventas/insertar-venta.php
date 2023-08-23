@@ -15,12 +15,8 @@ if(isset($_POST)){
   $hora = date("h:i a");
 
     //Variables para el historial venta
-  if ($_POST['fecha'] == "") {
     $fecha = date("Y-m-d"); 
-  }else{
-    $fecha = $_POST['fecha'];
-    
-  }
+ 
 
   $id_sucursal = $_POST["sucursal"];
 
