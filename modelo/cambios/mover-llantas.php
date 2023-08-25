@@ -7,12 +7,12 @@ date_default_timezone_set("America/Matamoros");
 if (!isset($_SESSION['id_usuario'])) {
     header("Location:../../login.php");
 }
-
+ 
 if (!$con) {
     echo "maaaaal";
 }
 $fecha = date("Y-m-d");
-$hora = date("H:i a");
+$hora = date("h:i a");
 
 if(isset($_POST)){
 
@@ -108,7 +108,7 @@ if(isset($_POST)){
 
         $acumulado = 0;
         if($total1 == 0){
-
+          
             //Tryendo el stock actual de la sucursal remitente
             $comprobar = "SELECT Stock FROM inventario WHERE id_sucursal = ? AND id_Llanta = ?";
             $result = $con->prepare($comprobar);
@@ -171,14 +171,17 @@ if(isset($_POST)){
                 id_destino, 
                 cantidad, 
                 id_usuario,
-                id_movimiento) VALUES(null, ?,?,?,?,?,?)";
+                id_movimiento,
+                stock_actual,
+                stock_anterior) VALUES(null, ?,?,?,?,?,?,?,0)";
                 $result = $con->prepare($insertar);
-                $result->bind_param('ssssss',$id_llanta, $id_ubicacion, $id_destino, $cantidad, $id_usuario, $id_movimiento);
+                $result->bind_param('sssssss',$id_llanta, $id_ubicacion, $id_destino, $cantidad, $id_usuario, $id_movimiento, $cantidad);
                 $result->execute();
                 $result->close();
             }
 
         }else{
+           
             /*Para el siguiente codigo la llanta se encuentra en la sucursal destino y lo que haremos sera actualizar el stock de
             la llanta */
   

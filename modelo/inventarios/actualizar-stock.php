@@ -46,83 +46,86 @@ if (isset($_POST)) {
             $result->fetch();
             $result->close();
 
+            $restante = $stock_actual_s - $stock;
             
-        
-            //Actualizamos stock de la llanta
-            $editar_llanta= $con->prepare("UPDATE inventario SET Stock = ? WHERE id = ?");
-            $editar_llanta->bind_param('ii', $stock_total, $this_tyre);
-            $editar_llanta->execute();
-            $editar_llanta->close();
+            if($restante < 0){
+                print_r(0);
+            }else{
+ //Actualizamos stock de la llanta
+ $editar_llanta= $con->prepare("UPDATE inventario SET Stock = ? WHERE id = ?");
+ $editar_llanta->bind_param('ii', $stock_total, $this_tyre);
+ $editar_llanta->execute();
+ $editar_llanta->close();
 
-            //Traemos descripcion del producto
-            $traerdatadenew = "SELECT Descripcion FROM llantas WHERE id = ?";
-            $result = $con->prepare($traerdatadenew);
-            $result->bind_param('i',$codigo);
-            $result->execute();
-            $result->bind_result($descripcion_llanta);
-            $result->fetch();
-            $result->close(); 
+ //Traemos descripcion del producto
+ $traerdatadenew = "SELECT Descripcion FROM llantas WHERE id = ?";
+ $result = $con->prepare($traerdatadenew);
+ $result->bind_param('i',$codigo);
+ $result->execute();
+ $result->bind_result($descripcion_llanta);
+ $result->fetch();
+ $result->close(); 
 
-            
-                $llantas_agregadas =  $stock;
-                if($llantas_agregadas == 1){
-                    $palabra = "". $palabra_singular . $llantas_agregadas . " llanta. Producto: " . $descripcion_llanta;
-                    $response =$response_singular . $llantas_agregadas . " llanta. Producto: " . $descripcion_llanta;
-                }else{
-                    $palabra = "". $palabra_plural . $llantas_agregadas . " llantas. Producto: " . $descripcion_llanta;
-                    $response =$response_plural . $llantas_agregadas . " llantas. Producto: " . $descripcion_llanta;
-                }
-               
-                
-                $data = array("llantas_agregadas" => $response);
-                echo json_encode($data, JSON_UNESCAPED_UNICODE); 
-                
-         
-            $traerSuc = "SELECT nombre FROM sucursal WHERE id=?";
-            $r = $con->prepare($traerSuc);
-            $r->bind_param('i', $sucursal_id);
-            $r->execute();
-            $r->bind_result($sucursal);
-            $r->fetch();
-            $r->close();
+ 
+     $llantas_agregadas =  $stock;
+     if($llantas_agregadas == 1){
+         $palabra = "". $palabra_singular . $llantas_agregadas . " llanta. Producto: " . $descripcion_llanta;
+         $response =$response_singular . $llantas_agregadas . " llanta. Producto: " . $descripcion_llanta;
+     }else{
+         $palabra = "". $palabra_plural . $llantas_agregadas . " llantas. Producto: " . $descripcion_llanta;
+         $response =$response_plural . $llantas_agregadas . " llantas. Producto: " . $descripcion_llanta;
+     }
+    
+     
+     $data = array("llantas_agregadas" => $response);
+     echo json_encode($data, JSON_UNESCAPED_UNICODE); 
+     
 
-            $fecha = date("Y-m-d");   
-            $hora =date("h:i a");   
-            $usuario = $_SESSION["nombre"] . " " . $_SESSION["apellidos"];
-            $descripcion_movimiento = "Se actualizó el stock del inventario de " . $sucursal . ", " . $palabra . ".
-            Stock anterior: " . $stock_actual_s . " - Stock actual: ". $stock_total;
+ $traerSuc = "SELECT nombre FROM sucursal WHERE id=?";
+ $r = $con->prepare($traerSuc);
+ $r->bind_param('i', $sucursal_id);
+ $r->execute();
+ $r->bind_result($sucursal);
+ $r->fetch();
+ $r->close();
 
-         //Registramos el movimiento
-            $tipo = 3;
-            $insertar_movimi = "INSERT INTO movimientos(id, descripcion, mercancia, fecha, hora, usuario, tipo, sucursal)
-            VALUES(null,?,?,?,?,?,?,?)";
-            $resultado = $con->prepare($insertar_movimi);                     
-            $resultado->bind_param('sssssss', $descripcion_movimiento, $descripcion_llanta, $fecha, $hora, $usuario, $tipo, $sucursal_id);
-            $resultado->execute();
-            $resultado->close();  
+ $fecha = date("Y-m-d");   
+ $hora =date("h:i a");   
+ $usuario = $_SESSION["nombre"] . " " . $_SESSION["apellidos"];
+ $descripcion_movimiento = "Se actualizó el stock del inventario de " . $sucursal . ", " . $palabra . ".
+ Stock anterior: " . $stock_actual_s . " - Stock actual: ". $stock_total;
 
-              //LAST ID
-              $rs = mysqli_query($con, "SELECT MAX(id) AS id FROM movimientos");
-              if ($rowss = mysqli_fetch_row($rs)) {
-              $id_movimiento = trim($rowss[0]);
-              }
-         
-            //Registrar detalle de edición
-            $insertar = "INSERT INTO historial_detalle_cambio(id, 
-            id_llanta, 
-            id_ubicacion, 
-            id_destino, 
-            cantidad, 
-            id_usuario,
-            id_movimiento,
-            stock_actual,
-            stock_anterior) VALUES(null, ?,?,?,?,?,?,?,?)";
-            $result = $con->prepare($insertar);
-            $result->bind_param('ssssssss',$codigo, $sucursal_id, $sucursal_id, $stock, $id_usuario, $id_movimiento, $stock_total, $stock_actual_s);
-            $result->execute();
-            $result->close();
-       
+//Registramos el movimiento
+ $tipo = 3;
+ $insertar_movimi = "INSERT INTO movimientos(id, descripcion, mercancia, fecha, hora, usuario, tipo, sucursal)
+ VALUES(null,?,?,?,?,?,?,?)";
+ $resultado = $con->prepare($insertar_movimi);                     
+ $resultado->bind_param('sssssss', $descripcion_movimiento, $descripcion_llanta, $fecha, $hora, $usuario, $tipo, $sucursal_id);
+ $resultado->execute();
+ $resultado->close();  
 
+   //LAST ID
+   $rs = mysqli_query($con, "SELECT MAX(id) AS id FROM movimientos");
+   if ($rowss = mysqli_fetch_row($rs)) {
+   $id_movimiento = trim($rowss[0]);
+   }
+
+ //Registrar detalle de edición
+ $insertar = "INSERT INTO historial_detalle_cambio(id, 
+ id_llanta, 
+ id_ubicacion, 
+ id_destino, 
+ cantidad, 
+ id_usuario,
+ id_movimiento,
+ stock_actual,
+ stock_anterior) VALUES(null, ?,?,?,?,?,?,?,?)";
+ $result = $con->prepare($insertar);
+ $result->bind_param('ssssssss',$codigo, $sucursal_id, $sucursal_id, $stock, $id_usuario, $id_movimiento, $stock_total, $stock_actual_s);
+ $result->execute();
+ $result->close();
+
+            }
 
 }else{
     print_r(0);

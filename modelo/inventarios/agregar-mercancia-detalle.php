@@ -9,14 +9,13 @@ if (!isset($_SESSION['id_usuario'])) {
 }
 
 if($_POST){
-
     $sucursal_remitente = $_POST['sucursal_remitente'];
     $sucursal_destino = $_POST['sucursal_destino']; 
     $cantidad = $_POST['cantidad'];
     $id_llanta = $_POST['id_llanta'];
     $id_usuario = $_POST['id_usuario'];
 
-    $comprobar = "SELECT COUNT(*) FROM inventario WHERE id_Llanta = ? AND id_sucursal =?";
+    /* $comprobar = "SELECT COUNT(*) FROM inventario WHERE id_Llanta = ? AND id_sucursal =?";
     $r= $con->prepare($comprobar);
     $r->bind_param("ii", $id_llanta, $sucursal_remitente);
     $r->execute();
@@ -24,7 +23,7 @@ if($_POST){
     $r->fetch();
     $r->close();
 
-    if($conteo > 0){
+    if($conteo > 0){ */
 
         $traer_stock = "SELECT Stock FROM inventario WHERE id_Llanta = ? AND id_sucursal =?";
         $r= $con->prepare($traer_stock);
@@ -34,11 +33,8 @@ if($_POST){
         $r->fetch();
         $r->close();
 
-
-        if($cantidad > $stock_actual){
-            $response =  array("mensaje"=> "El cantidad soprepasa el stock actual", "estatus"=>"warning");
-            echo json_encode($response, JSON_UNESCAPED_UNICODE);
-        }else{
+            //$response =  array("mensaje"=> "El cantidad soprepasa el stock actual", "estatus"=>"warning");
+           
             $comprobar= "SELECT COUNT(*) FROM detalle_cambio WHERE id_llanta =? AND id_ubicacion = ? AND id_destino =? AND id_usuario = ?";
             $res = $con->prepare($comprobar);
             $res->bind_param('iiii', $id_llanta, $sucursal_remitente, $sucursal_destino, $id_usuario);
@@ -61,13 +57,6 @@ if($_POST){
                 
                 $nueva_cantidad= intval($cantidad_actual) + intval($cantidad);
 
-                if($nueva_cantidad > $stock_actual){
-
-                    $response = array("mensaje"=> "Esa cantidad soprebasa tu stock", "estatus"=>"warning");
-                    echo json_encode($response, JSON_UNESCAPED_UNICODE);
-
-                }else{
-
                     $update= "UPDATE detalle_cambio SET cantidad = ? WHERE id_llanta =? AND id_ubicacion = ? AND id_destino =? AND id_usuario = ?";
                     $res = $con->prepare($update);
                     $res->bind_param('iiiii', $nueva_cantidad, $id_llanta, $sucursal_remitente, $sucursal_destino, $id_usuario);
@@ -76,9 +65,7 @@ if($_POST){
     
                     $response = array("mensaje"=> "Actualizado correctamente", "estatus"=>"success");
                     echo json_encode($response, JSON_UNESCAPED_UNICODE);
-                }
-
-
+                
             }else{
 
             $comprobar= "INSERT INTO detalle_cambio(id, id_llanta, id_ubicacion, id_destino, cantidad, id_usuario) VALUES(null, ?,?,?,?,?)";
@@ -91,12 +78,12 @@ if($_POST){
             echo json_encode($response, JSON_UNESCAPED_UNICODE);
             }
 
-        }
-    }else{
+        
+    /* }else{
         
         $response =  array("mensaje"=> "Al parecer esa llanta no se encuentra en el inventario.", "estatus"=>"error");
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
-    }
+    } */
 
     /* $insertar_cambio = "INSERT INTO detalle_cambio(id, id_llanta, id_ubicacion, id_destino) VALUES(null, ?,?,?)";
     $resultado = $con->prepare($insertar_cambio);

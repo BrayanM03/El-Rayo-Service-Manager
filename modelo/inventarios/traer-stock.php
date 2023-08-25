@@ -28,14 +28,28 @@
             $stock = $fila["Stock"];
             
 
-            $data = array("id" => $codigo, "id_llanta" => $id, "Sucursal" => $sucursal, "stock" => $stock);
+        $count = "SELECT COUNT(*) FROM proveedores";
+        $res = $con->prepare($count);
+        $res->execute();
+        $res->bind_result($no_proveedores);
+        $res->fetch();
+        $res->close();
+        if($no_proveedores > 0){
+        $sqlTraerProveedores= $con->prepare("SELECT * FROM proveedores");
+        $sqlTraerProveedores->execute();
+        $resultado = $sqlTraerProveedores->get_result();
         
-            
-               
-            
-          //echo $fila["Descripcion"];  
-             //print_r(" la segunda iteracion de la llanta ID " . $id . " tiene de stock ". $TotalStock);
-        
+        $proveedores = array(); // Inicializa el arreglo
+
+        while ($row = $resultado->fetch_assoc()) {
+            $proveedores[] = $row; // Agrega cada fila al arreglo
+        }
+
+        $sqlTraerProveedores->close();
+        }else{
+            $proveedores = [];
+        }
+       $data = array("id" => $codigo, "id_llanta" => $id, "Sucursal" => $sucursal, "stock" => $stock, 'proveedores' => $proveedores);
 
         echo json_encode($data, JSON_UNESCAPED_UNICODE);
 

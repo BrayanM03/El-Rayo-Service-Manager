@@ -120,7 +120,13 @@ if (isset($_POST)) {
 
         echo json_encode($data, JSON_UNESCAPED_UNICODE);
     } else {
-        echo 'Ninguna llanta coincide con ese ancho';
+        $data['data'] = [];
+        $data['total_pages'] = 0;
+        $data['current_page'] = 1;
+        $data['recordsTotal'] = 0;
+        $data['recordsFiltered'] = 0;
+        echo json_encode($data, JSON_UNESCAPED_UNICODE);
+
     }
 } else {
     print_r("Error al conectar");

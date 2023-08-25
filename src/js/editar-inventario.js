@@ -57,6 +57,20 @@ function editarStock(id, id_sucursal){
                         $("#label-movi").text("Ingresa las llantas a retirar");    
                     }
                  });
+
+
+                 $('#proveedor').empty();
+                 $('#proveedor').append(`
+                    <option value="0"></option>
+                 `);
+                 response.proveedores.forEach(element => {
+                    $('#proveedor').append(`
+                        <option value="${element.id}">${element.nombre}</option>
+                    `);   
+                 });
+
+                 $('#proveedor').selectpicker('refresh');
+                 
             },
             html: '<form class="mt-4" id="agregar-llanta-inv-total">'+
         
@@ -68,24 +82,33 @@ function editarStock(id, id_sucursal){
                   '</div>'+ 
                '</div>'+
 
+           
                '<div class="row">'+
-               '<div class="col-12">'+
-               '<div class="form-group">'+
-                    '<label>Stock actual</label>'+
-                    '<input type="number" id="stock-act" class="form-control" value="'+ response.stock +'" disabled>' +
-                    '<label>Tipo de operación</label>'+
-                    '<select class="form-control mb-2" id="tipo">'+
-                        '<option value="aumentar">Aumentar stock</option>'+
-                        '<option value="reducir">Reducir stock</option>'+
-                    '</select>'+   
-                    '<label id="label-movi">Ingresa las llantas a agregar</label>'+
-                    '<input type="number" id="stock-ind" class="form-control">' + 
-                    '<div class="invalid-feedback">No se pueden ingresar numeros negativos</div>'+
+                    '<div class="col-6">'+
+                        '<label>Stock actual</label>'+
+                        '<input type="number" id="stock-act" class="form-control" value="'+ response.stock +'" disabled>' + 
+                    '</div>'+
+                    '<div class="col-6">'+
+                        '<label>Tipo de operación</label>'+
+                        '<select class="form-control mb-2" id="tipo">'+
+                            '<option value="reducir">Reducir stock</option>'+
+                        '</select>'+ 
+                    '</div>'+
+                '</div>'+
+                
+                '<div class="row mt-3">'+ 
+                    '<div class="col-12">'+
+                        '<label id="label-movi" placeholder="0.00" type="number">Ingresa las llantas a agregar</label>'+
+                        '<input type="number" id="stock-ind" placeholder="0" class="form-control">' +
+                    '</div>'+
+                '</div>'+
+
+                        
+                '<div class="mt-4 invalid-feedback">No se pueden ingresar numeros negativos</div>'+
                     
-                  '</div>'+
-                  '</div>'+ 
-               '</div>'+
-               '<div id="alerta"></div>'+
+                     
+                
+               '<div id="alerta" class="mt-4"></div>'+
         
            
         '</form>',
@@ -99,6 +122,8 @@ function editarStock(id, id_sucursal){
             iconColor : "#36b9cc",
             preConfirm: function () { 
                 value_stock = $("#stock-ind").val();
+                proveedor = $("#proveedor").val();
+                folio_factura = $("#folio-factura").val();
                 return new Promise(function (resolve, reject) {
                     if(value_stock < 0){
 
@@ -109,7 +134,7 @@ function editarStock(id, id_sucursal){
                         resolve();
                     }
                   }).catch(err => {
-                    $("#alerta").append('<div class="alert alert-warning" role="alert">'+ err +'</div>');
+                    $("#alerta").empty().append('<div class="alert alert-warning" role="alert">'+ err +'</div>');
                    // alert(`error: ${err}`)
                     return false
                 });   
@@ -124,8 +149,7 @@ function editarStock(id, id_sucursal){
                 stock_actual       = $("#stock-act").val();
                 stock_para_editar       = $("#stock-ind").val();
                 type = $("#tipo").val();
-              
-
+                
                 $.ajax({
                     type: "POST",
                     url: "./modelo/inventarios/actualizar-stock.php",
@@ -133,7 +157,9 @@ function editarStock(id, id_sucursal){
                            stock       : stock_para_editar,
                            stock_actual : stock_actual,
                            sucursal_id : id_sucursal,
-                           tipo : type
+                           tipo : type,
+                           proveedor,
+                           folio_factura
                          },
                     dataType: "json",
                     success: function (response) {
@@ -153,7 +179,7 @@ function editarStock(id, id_sucursal){
                        }else{
                         Swal.fire(
                             "¡Error!",
-                            "Ocurrio un error inesperado",
+                            "El stock que resta sera menor 0",
                             "error"
                             )
                        }

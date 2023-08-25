@@ -1,23 +1,44 @@
 <?php
-    session_start();
+session_start();
 
-    include 'modelo/conexion.php';
-    $con= $conectando->conexion(); 
+include 'modelo/conexion.php';
+$con = $conectando->conexion();
 
-    if (!$con) {
-        echo "maaaaal";
+
+if (!isset($_SESSION['id_usuario'])) {
+    header("Location:login.php");
+}
+
+if ($_SESSION['rol'] == 3) {
+    header("Location:nueva-venta.php");
+}
+$sucursal_id = $_GET['sucursal_id'];
+
+$querySucu = "SELECT COUNT(*) FROM sucursal WHERE id=?";
+$resps = $con->prepare($querySucu);
+$resps->bind_param('i', $sucursal_id);
+$resps->execute();
+$resps->bind_result($total_sucu);
+$resps->fetch();
+$resps->close();
+
+if($total_sucu > 0) {
+    $querySuc = "SELECT * FROM sucursal  WHERE id= $sucursal_id";
+    $respon = mysqli_query($con, $querySuc);
+
+
+
+    while ($rows = $respon->fetch_assoc()) {
+        $suc_identificador = $rows['id'];
+        $nombre_sucursal = $rows['nombre'];
     }
+}
+?>
 
-    if (!isset($_SESSION['id_usuario'])) {
-        header("Location:login.php");
-    }
-
-    
-    ?>
 <!DOCTYPE html>
 <html lang="es">
 
-<head> 
+<head>
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -25,61 +46,44 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="shortcut icon" href="src/img/rayo.svg" />
- 
-	
 
-    <title>Inventario </title>
+    <title>El Rayo | Service Manager</title>
 
     <!-- Custom fonts for this template-->
-    <link rel="stylesheet" href="src/css/inventario.css">
     <link href="src/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
- 
-
+        <link rel="stylesheet" href="src/vendor/bower_components/select2-bootstrap-theme/dist/select2-bootstrap.css">
     <!-- Custom styles for this template-->
-    <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="src/vendor/datatables/dataTables.bootstrap4.css">
-    <link rel="stylesheet" href="src/vendor/datatables-responsive/css/responsive.bootstrap4.min.css">
-
-  <link rel="stylesheet" href="https://nightly.datatables.net/colreorder/css/colReorder.dataTables.min.css">
-    
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="src/vendor/bower_components/select2-bootstrap-theme/dist/select2-bootstrap.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.bootstrap4.min.css">
-    <!---Librerias de estilos-->
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="src/css/menu-vertical.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.css" integrity="sha512-oe8OpYjBaDWPt2VmSFR+qYOdnTjeV9QPLJUeqZyprDEQvQLJ9C5PCFclxwNuvb/GQgQngdCXzKSFltuHD3eCxA==" crossorigin="anonymous" />
-    <link rel="stylesheet" href="src/vendor/bower_components/select2-bootstrap-theme/dist/select2-bootstrap.css">
+    <link rel="stylesheet" href="src/css/inventario.css">
     <link href="src/css/bootstrap-select.min.css" rel="stylesheet" />
-
-   
-<style>
-    .toastr-container{
+    <style>
+       .toastr-container{
          z-index: 999999999999999999;
          background-color: green;
          }
-    .bootstrap-select.open {
-         z-index: 999999999999999999 !important; /* Puedes ajustar este valor según sea necesario */
+         .select2-container.form-control {
+                height: auto !important;
          }
-    .swal2-actions{
-        z-index: 0 !important;
-    }     
-</style>
+    </style>
+
+
 </head>
 
 <body id="page-top"> 
-
+    
     <!-- Page Wrapper -->
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <?php 
+       
+        <?php
             require_once 'sidebar.php'
-        ?>
+?>
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
@@ -163,8 +167,9 @@
                             </div>
                         </li>
 
-                   
 
+
+                       
                         <div class="topbar-divider d-none d-sm-block"></div>
 
                         <!-- Nav Item - User Information -->
@@ -172,10 +177,10 @@
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline  small" style="color: aliceblue;"><?php
-                                
-                                echo $_SESSION['nombre'] . " " . $_SESSION['apellidos'];
-                            
-                            ?></span>
+
+                            echo $_SESSION['nombre'] . " " . $_SESSION['apellidos'];
+
+?></span>
                                 <img class="img-profile rounded-circle"
                                     src="src/img/undraw_profile.svg">
                             </a>
@@ -197,7 +202,7 @@
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Cerrar sesión
+                                    Salir
                                 </a>
                             </div>
                         </li>
@@ -208,87 +213,148 @@
                 <!-- End of Topbar -->
 
 
-                <!-- Begin Page Content style="display: flex; justify-content: center; align-items:center; flex-direction:column" -->
-                <div class="containe" style="width:80%; margin:auto;"> 
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+               
+                    <div class="row justify-content-center">
+                        <div class="col-12 col-md-6">
+                            <div class="card p-3">
+                                <div class="row mt-4">
+                                    <div class="col-12 col-md-12 text-center">
+                                        <h5><b>Agregar nueva llanta al <br>
+                                            inventario de <?php echo $nombre_sucursal ?></b></h5>  
+                                    </div>
+                                </div>
+                                <div class="row justify-content-center mt-4">
+                                    <div class="col-12 col-md-6 text-center">
+                                        <label>Proveedor:</label> 
+                                        <select class="form-control selectpicker" data-live-search="true" id="proveedor">
+                                            <option value="0">Selecciona un proveedor</option>
+                                        <?php
 
-                     <!-- Contenido inventario -->
-                     <div class="titulo-inventario m-auto">
-                         <h5 style="margin: 10px 0px;">Stock de llantas en existencia</h5>
-                         <p style="color: gray;">Sucursal <span id="sucursal_name"></span></p>
-                        </div>
-                        
-                      <div class="botones">
-                                    <!-- <a href="#" class="btn btn-success btn-icon-split" onclick="agregarLLanta();">
-                                        <span class="icon text-white-50">
-                                            <i class="fas fa-check-circle"></i>
-                                        </span>
-                                        <span class="text">Agregar llanta</span>
-                                    </a> -->
-                                    <a href="ingresar-mercancia.php?nav=0&sucursal_id=<?php echo $_GET['id']; ?>" class="btn btn-success btn-icon-split <?php if($_SESSION['rol'] !=2 && $_SESSION['rol']!=1){ echo 'd-none';} ?>">
-                                        <span class="icon text-white-50">
-                                            <i class="fas fa-check-circle"></i>
-                                        </span>
-                                        <span class="text">Ingresar mercancia</span>
-                                    </a>
-                      </div>
-                    <div class="row mb-3" style="display:flex; align-items:end;">
-                        <div class="col-12 col-md-3">
-                             <label for="ancho">Ancho</label>
-                             <select name="" class="form-control" id="ancho" onclick="getMedidas('ancho');">
-                                 <option value="No aplica">Selecciona un ancho</option>
-                             
-                             </select>
-                        </div>
-                        <div class="col-12 col-md-2">
-                             <label for="proporcion">Perfil</label>
-                             <select name="" class="form-control" id="proporcion" onclick="getMedidas('proporcion');">
-                                 <option value="No aplica">Selecciona una proporcion</option>
-                             </select>
-                        </div>
-                        <div class="col-12 col-md-2">
-                             <label for="diametro">Diametro</label>
-                             <select name="" class="form-control" id="diametro" onclick="getMedidas('diametro');">
-                                  <option value="No aplica">Selecciona un diametro</option>
-                             </select>
-                        </div>
-                        <div class="col-12 col-md-2">
-                             <a href="#" class="btn btn-info btn-icon-split"  id="search-by-filter" onclick="buscarLlanta();">
-                                        <span class="icon text-white-50">
-                                            <i class="fas fa-search"></i>
-                                        </span>
-                                        <span class="text">Buscar</span>
-                            </a>
-                        </div>
-                        <div class="col-12 col-md-1 ml-3">
-                             <a href="#" class="btn btn-info btn-icon-split" id="reset" onclick="reload();"> 
-                                        <span class="icon text-white-50">
-                                        <i class="fas fa-sync-alt"></i>                                        </span>
-                                        <span class="text">Reset</span>
-                            </a>
-                        </div>
-                        <div class="col-12 col-md-1 ml-3">
-                             <a href="#" class="btn btn-info btn-icon-split"  id="btn_information" onclick="informacion();">
-                                        <span class="icon text-white-50">
-                                        <i class="fas fa-info"></i>
-                                        </span>
-                                        <span class="text">Info</span>
-                            </a>
+        $querySucu = "SELECT COUNT(*) FROM proveedores";
+$resps = $con->prepare($querySucu);
+$resps->execute();
+$resps->bind_result($total_sucu);
+$resps->fetch();
+$resps->close();
+
+if($total_sucu > 0) {
+    $querySuc = "SELECT * FROM proveedores";
+    $respon = mysqli_query($con, $querySuc);
+
+
+
+    while ($rows = $respon->fetch_assoc()) {
+        $suc_identificador = $rows['id'];
+        $nombre_suc = $rows['nombre'];
+
+        echo "<option value='". $suc_identificador."'>".$nombre_suc."</option>";
+    }
+}
+
+?>
+                                        </select> 
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>No. Factura</label>
+                                        <input class="form-control mb-2" placeholder="Folio" type="text" id="folio-factura">
+                                    </div>
+                                </div>
+
+                                <div class="row justify-content-center mt-3">
+                                    <div class="col-12 col-md-8 text-center">
+                                        <label for="buscador">Selecciona la llanta que moveras</label>
+                                        <select  class="form-control" id="buscador" disabled></select>
+                                    </div>
+                                    <div class="col-12 col-md-2">
+                                        <a href="#" class="btn btn-success mt-4" onclick="agregarLLanta();">
+                                            <span class="icon text-white-50">
+                                                <i class="fas fa-plus-circle"></i>
+                                            </span>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div class="row justify-content-center mt-3">
+
+                                     <div class="col-12 col-md-3 text-center">
+                                        <label for="stock">Stock actual</label>
+                                        <input type="number" placeholder="0" class="form-control" id="stock_actual" disabled> 
+                                    </div>
+                                    
+
+                                    <div class="col-12 col-md-7 text-center">
+                                        <label for="stock">¿Cuantas llantas vas a ingresar?</label>
+                                        <input type="number" placeholder="0" class="form-control" id="stock" valido disabled>
+                                        <div class="invalid-feedback" id="label-validator">
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+
+                                
+
+                                <div class="row justify-content-center mt-3 mb-3">
+                                    <div class="col-12 col-md-10 text-center">
+                                            <div class="btn btn-primary disabled" onclick="todas();" id="btn-mover" id_sucursal="<?php echo $sucursal_id ?>" id_usuario="<?php echo $_SESSION['id_usuario']; ?>" disabled>Agregar a la lista</div>
+                                    </div>    
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                      <table id="inventario-pedro"  class="table table-striped table-bordered table-hover">                   
-                     </table>
+                    <div class="row mt-4 justify-content-center">
+                        <div class="col-12 col-md-8">
+                            <div class="card">
+                                <div class="card-header text-center">
+                                    <span>Se ingresaran las siguientes llantas:</span>
+                                </div>
+                            <div class="list-group" style="background-color: #32bacd">
+                                <a href="#" class="list-group-item active">
+                                    <div class="row">
+                                        <div class="col-12 col-md-1">#</div>
+                                        <div class="col-12 col-md-4">Llanta</div>
+                                        <div class="col-12 col-md-2">Ubicación</div>
+                                        <div class="col-12 col-md-2">Destino</div>
+                                        <div class="col-12 col-md-2">Cantidad</div>
+                                        <div class="col-12 col-md-1"></div>
+                                    </div>
+                                </a>
+                                <div id="cuerpo_detalle_cambio">
 
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row m-4 justify-content-center">
+                        <div class="col-12 col-md-8 text-center">
+                            <div class="btn btn-success" id="btn-mov" onclick="realizarIngreso(<?php echo $_SESSION['id_usuario']; ?>);">Realizar el movimiento</div>
+                        </div>
+                    </div>
                      
-                   
 
                 </div>
+                <!-- /.container-fluid -->
+
+
+                
+                    <!-- Content Row -->
+
+                    
+                    <div class="row" style="display: flex; justify-content: center; margin-top: 80px;">
+                        <img src="src/img/undraw_by_my_car_ttge.svg" alt="" width="400px">
+                    </div>
+
+            </div>
             <!-- End of Main Content -->
   <!-- Footer -->
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; El Rayo Service Manager <?php print_r(date("Y")) ?></span><br><br>
+                        <span>Copyright &copy; El Rayo Service Manager  <?php print_r(date("Y")) ?></span><br><br>
                         <span>Edicion e integración por <a href="https://www.facebook.com/BrayanM03/">Brayan Maldonado</a></span>
                     </div>
                 </div>
@@ -320,7 +386,7 @@
                 <div class="modal-body">Seleccione "salir" para cerra su sesión actual.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
-                    <a class="btn btn-primary" href="./modelo/login/cerrar-sesion.php">Salir</a>
+                    <a class="btn btn-primary" href="modelo/login/cerrar-sesion.php">Salir</a>
                 </div>
             </div>
         </div>
@@ -332,46 +398,32 @@
 
     <!-- Core plugin JavaScript-->
     <script src="src/vendor/jquery-easing/jquery.easing.min.js"></script>
-
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <!-- Custom scripts for all pages-->
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous"></script>
+    
+    <script src="src/js/maximize-select2-height.js"></script>
+    
     <script src="src/js/sb-admin-2.min.js"></script>
 
-    <!-- Page level plugins -->
-    <script src="src/vendor/chart.js/Chart.min.js"></script>
+    <script src="src/js/bootstrap-select.min.js"></script>
+    <script src="src/js/agregar-mercancia-inventario.js"></script>
+    <script>
+ocultarSidebar();
+function ocultarSidebar(){
+  let sesion = $("#emp-title").attr("sesion_rol");
+  if(sesion == 4){
+    $(".rol-4").addClass("d-none");
 
-    <!-- Page level custom scripts 
-    <script src="src/js/demo/chart-area-demo.js"></script>
-    <script src="src/js/demo/chart-pie-demo.js"></script>-->
-
-
-    <!-- Cargamos nuestras librerias-->
-    
-    <script src="src/vendor/datatables/jquery.dataTables.min.js"></script> 
-    <script src="src/vendor/datatables/defaults.js"></script>
-    <script src="src/vendor/datatables-responsive/js/dataTables.responsive.min.js"></script>
-  <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-
-<!--   <script src="https://nightly.datatables.net/colreorder/js/dataTables.colReorder.min.js"></script>
- -->    <script src="src/vendor/datatables/dataTables.bootstrap4.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous"></script>
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-     <!-- Scripts para exportar archivos de tablas  -->        
-    <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.bootstrap4.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>   
-     <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
-     <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script> 
-     <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.colVis.min.js"></script>
-     <script src="src/js/bootstrap-select.min.js"></script>
-
-    <script src="src/js/inventario.js"></script>
-    <script src="src/js/editar-inventario.js"></script>
-    <script src="src/js/buscar-llanta.js"></script>
-   
+  }
+};
+   </script>
+ 
+    </script>
    
 </body>
+
 </html>

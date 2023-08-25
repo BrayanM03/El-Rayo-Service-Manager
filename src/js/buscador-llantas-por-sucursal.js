@@ -28,9 +28,9 @@ toastr.options = {
             console.log(validador());
         }else{
 
-          $("#buscador").val('').trigger('change');
-          $("#stock").removeClass().addClass("form-control").val(0).prop("disabled", true);
-          validador();
+            $("#buscador").val('').trigger('change');
+            $("#stock").removeClass().addClass("form-control").val(0).prop("disabled", true);
+            validador();
             $('#buscador').prop("disabled", false);
             ide_sucursal = $(this).val();
 
@@ -133,27 +133,29 @@ toastr.options = {
         theme: "bootstrap",
         minimumInputLength: 1,
         ajax: {
-            url: "./modelo/cambios/buscar-llanta.php",
+            url: "./modelo/cambios/buscar-llanta-inventario.php",
             type: "post",
             dataType: 'json',
             delay: 250,
 
             data: function (params) {
+              if(params.term == undefined){
+                params.term = "";
+              }
              return {
                searchTerm: params.term, // search term
-               id_sucursal: ide_sucursal
-               
+               id_sucursal: ide_sucursal,
+               page: params.page || 1,
              };
-            },
-            processResults: function (data) {
-                return {
-                   results: data
-                };
-              },
-           
-            cache: true
-
+            }
         },
+        processResults: function (data) {
+          return {
+             results: data
+          };
+        },
+     
+      cache: true,
         language:  {
 
             inputTooShort: function () {
@@ -216,7 +218,7 @@ toastr.options = {
         //A partir de aqui puedes agregar las llantas Brayan
        // ruta = "./src/img/logos/" + repo.marca + ".jpg";
 
-       
+       console.log(repo.Stock);
         $("#stock_actual").val(repo.Stock);
         $("#btn-mover").attr("id_item", repo.id);
         $("#btn-mover").attr("id_llanta", repo.id_Llanta);
@@ -507,6 +509,9 @@ function realizarMovimiento(id_user){
             Swal.fire({
               icon: 'success',
               html: '<b>Movimiento realizado, se agregarón ' + response + ' item(s)</b>',
+            }).then(()=>{
+              window.location.reload();
+
             });
 
 
@@ -521,7 +526,7 @@ function realizarMovimiento(id_user){
 
           }
 
-          depurarTabla();
+          depurarTabla(); 
       }
     });
 
