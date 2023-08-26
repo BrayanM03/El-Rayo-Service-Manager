@@ -19,7 +19,7 @@
  */
 
 // DB table to use
-$table = 'movimientos';
+$table = 'vista_movimientos';
 
 // Table's primary key
 $primaryKey = 'id';
@@ -37,6 +37,8 @@ $columns = array(
 	array( 'db' => 'usuario', 'dt' => 5 ),
 	array( 'db' => 'tipo', 'dt' => 6 ),
 	array( 'db' => 'sucursal', 'dt' => 7 ),
+	array( 'db' => 'nombre', 'dt' => 8 ),
+	array( 'db' => 'folio_factura', 'dt' => 9 ),
 	
 /* 	array(
 		'db'        => 'start_date',

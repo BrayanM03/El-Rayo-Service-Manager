@@ -118,8 +118,8 @@ if (isset($_POST)) {
  cantidad, 
  id_usuario,
  id_movimiento,
- stock_actual,
- stock_anterior) VALUES(null, ?,?,?,?,?,?,?,?)";
+ stock_destino_actual,
+ stock_destino_anterior) VALUES(null, ?,?,?,?,?,?,?,?)";
  $result = $con->prepare($insertar);
  $result->bind_param('ssssssss',$codigo, $sucursal_id, $sucursal_id, $stock, $id_usuario, $id_movimiento, $stock_total, $stock_actual_s);
  $result->execute();

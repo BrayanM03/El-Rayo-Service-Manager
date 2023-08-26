@@ -64,7 +64,7 @@ if($_POST){
         if($stock_actual > $total_cantidad &&  $stock > 0 || $stock_actual == $total_cantidad &&  $stock_actual > 0){
     
             print_r(1);
-        }else if($stocK == 0){
+        }else if($stock == 0){
           print_r(0);
         }else if($stock_actual < $total_cantidad){
     

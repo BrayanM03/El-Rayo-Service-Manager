@@ -129,6 +129,7 @@ if(isset($_POST)){
     
             $acumulado = 0;
             if($llantas_coincidentes_sucursal == 0){
+
     
                     //Insertando llanta a sucursal destino
                     $codigo = $code . $id_llanta;
@@ -145,8 +146,10 @@ if(isset($_POST)){
                     cantidad, 
                     id_usuario,
                     id_movimiento,
-                    stock_actual,
-                    stock_anterior) VALUES(null, ?,?,?,?,?,?,?,0)";
+                    stock_ubicacion_actual,
+                    stock_ubicacion_anterior,
+                    stock_destino_actual,
+                    stock_ubicacion_anterior) VALUES(null, ?,?,?,?,?,?,0,0,?,0)";
                     $result = $con->prepare($insertar);
                     $result->bind_param('sssssss',$id_llanta, $id_bodega, $id_destino, $cantidad, $id_usuario, $id_movimiento, $cantidad);
                     $result->execute();
@@ -161,13 +164,13 @@ if(isset($_POST)){
                 $result = $con->prepare($comprobar);
                 $result->bind_param('ss', $id_destino, $id_llanta);
                 $result->execute();
-                $result->bind_result($stock_anterior);
+                $result->bind_result($stock_destino_anterior);
                 $result->fetch();
                 $result->close();
     
-                $stock_anterior= intval($stock_anterior);
+                $stock_destino_anterior= intval($stock_destino_anterior);
                 $cantidad = intval($cantidad);
-                $nueva_cantidad = $cantidad + $stock_anterior;
+                $stock_destino_actual = $cantidad + $stock_destino_anterior;
                
                 if ($cantidad <= 0) {
                     $response = array('mensaje'=> 'La cantidad no puede ser menor o igual a 0', "estatus"=>false);
@@ -177,7 +180,7 @@ if(isset($_POST)){
                     //Actualizando sucursal destino
                     $update = "UPDATE inventario SET Stock = ? WHERE id_sucursal = ? AND id_Llanta = ?";
                     $result = $con->prepare($update);
-                    $result->bind_param('sss', $nueva_cantidad, $id_destino, $id_llanta);
+                    $result->bind_param('sss', $stock_destino_actual, $id_destino, $id_llanta);
                     $result->execute();
                     $result->close();
     
@@ -188,10 +191,12 @@ if(isset($_POST)){
                     cantidad, 
                     id_usuario,
                     id_movimiento,
-                    stock_actual,
-                    stock_anterior) VALUES(null, ?,?,?,?,?,?,?,?)";
+                    stock_ubicacion_actual,
+                    stock_ubicacion_anterior,
+                    stock_destino_actual,
+                    stock_destino_anterior) VALUES(null, ?,?,?,?,?,?,0,0,?,?)";
                     $result = $con->prepare($insertar);
-                    $result->bind_param('ssssssss',$id_llanta, $id_bodega, $id_destino, $cantidad, $id_usuario, $id_movimiento, $nueva_cantidad, $stock_anterior);
+                    $result->bind_param('ssssssss',$id_llanta, $id_bodega, $id_destino, $cantidad, $id_usuario, $id_movimiento, $stock_destino_actual, $stock_destino_anterior);
                     $result->execute();
                     $result->close();
     

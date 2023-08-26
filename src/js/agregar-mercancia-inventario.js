@@ -211,7 +211,16 @@ toastr.options = {
       function formatRepoSelection (repo) {
           //A partir de aqui puedes agregar las llantas Brayan
          // ruta = "./src/img/logos/" + repo.marca + ".jpg";
-         
+          $.ajax({
+            type: "method",
+            url: "url",
+            data: "data",
+            dataType: "dataType",
+            success: function (response) {
+              
+            }
+          });
+          
           $("#stock_actual").val(repo.Stock);
           $("#btn-mover").attr("id_item", repo.id);
           $("#btn-mover").attr("id_llanta", repo.id_Llanta);
@@ -525,7 +534,7 @@ toastr.options = {
                 `,
               }).then((r)=>{
                   if(r.isDenied){
-                    window.open('./modelo/movimientos/remision-salida.php?id=' + response.id_entrada , '_blank');
+                    window.open('./modelo/movimientos/remision-ingreso.php?id=' + response.id_entrada , '_blank');
                   }
               });
   

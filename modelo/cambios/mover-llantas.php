@@ -114,14 +114,14 @@ if(isset($_POST)){
             $result = $con->prepare($comprobar);
             $result->bind_param('ss', $id_ubicacion, $id_llanta);
             $result->execute();
-            $result->bind_result($stock_actual);
+            $result->bind_result($stock_ubicacion_anterior);
             $result->fetch();
             $result->close();
 
-            $stock_actual = intval($stock_actual);
+            $stock_ubicacion_anterior = intval($stock_ubicacion_anterior);
             $cantidad = intval($cantidad);
-            $cantidad_restante = $stock_actual - $cantidad;
-            if($stock_actual < $cantidad){
+            $stock_ubicacion_actual = $stock_ubicacion_anterior - $cantidad;
+            if($stock_ubicacion_anterior < $cantidad){
 
             $response = array("mensaje"=> "La cantidad que ingresas es mayor a el stock actual de " . $nombre_sucursal_remitente, "estatus"=>"error");
             echo json_encode($response, JSON_UNESCAPED_UNICODE);
@@ -140,7 +140,7 @@ if(isset($_POST)){
                 //Actualizando el stock restante de la sucursal remitente
                 $update = "UPDATE inventario SET Stock = ? WHERE id_sucursal = ? AND id_Llanta = ?";
                 $result = $con->prepare($update);
-                $result->bind_param('sss', $cantidad_restante, $id_ubicacion, $id_llanta);
+                $result->bind_param('sss', $stock_ubicacion_actual, $id_ubicacion, $id_llanta);
                 $result->execute();
                 $result->close();
 
@@ -172,10 +172,12 @@ if(isset($_POST)){
                 cantidad, 
                 id_usuario,
                 id_movimiento,
-                stock_actual,
-                stock_anterior) VALUES(null, ?,?,?,?,?,?,?,0)";
+                stock_ubicacion_actual,
+                stock_ubicacion_anterior,
+                stock_destino_actual,
+                stock_destino_anterior) VALUES(null, ?,?,?,?,?,?,?,?,?,0)";
                 $result = $con->prepare($insertar);
-                $result->bind_param('sssssss',$id_llanta, $id_ubicacion, $id_destino, $cantidad, $id_usuario, $id_movimiento, $cantidad);
+                $result->bind_param('sssssssss',$id_llanta, $id_ubicacion, $id_destino, $cantidad, $id_usuario, $id_movimiento, $stock_ubicacion_actual, $stock_ubicacion_anterior, $cantidad);
                 $result->execute();
                 $result->close();
             }
@@ -190,7 +192,7 @@ if(isset($_POST)){
             $result = $con->prepare($comprobar);
             $result->bind_param('ss', $id_ubicacion, $id_llanta);
             $result->execute();
-            $result->bind_result($stock_actual);
+            $result->bind_result($stock_ubicacion_anterior);
             $result->fetch();
             $result->close();
 
@@ -200,17 +202,17 @@ if(isset($_POST)){
             $result = $con->prepare($comprobar);
             $result->bind_param('ss', $id_destino, $id_llanta);
             $result->execute();
-            $result->bind_result($stock_actual_destino);
+            $result->bind_result($stock_destino_anterior);
             $result->fetch();
             $result->close();
 
-            $stock_actual = intval($stock_actual);
+            $stock_ubicacion_anterior = intval($stock_ubicacion_anterior);
             $cantidad = intval($cantidad);
-            $stock_actual_destino = intval($stock_actual_destino);
-            $nueva_cantidad = $cantidad + $stock_actual_destino;
-            $cantidad_restante = $stock_actual - $cantidad;
+            $stock_destino_anterior = intval($stock_destino_anterior);
+            $stock_destino_actual = $cantidad + $stock_destino_anterior;
+            $stock_ubicacion_actual = $stock_ubicacion_anterior - $cantidad;
            
-            if ($stock_actual < $cantidad) {
+            if ($stock_ubicacion_anterior < $cantidad) {
                 $response = array("mensaje"=> "La cantidad que ingresas es mayor a el stock actual de " . $nombre_sucursal_remitente, "estatus"=>"error");
                 echo json_encode($response, JSON_UNESCAPED_UNICODE);
             }else{
@@ -218,14 +220,14 @@ if(isset($_POST)){
                 //Actualizando sucursal destino
                 $update = "UPDATE inventario SET Stock = ? WHERE id_sucursal = ? AND id_Llanta = ?";
                 $result = $con->prepare($update);
-                $result->bind_param('sss', $nueva_cantidad, $id_destino, $id_llanta);
+                $result->bind_param('sss', $stock_destino_actual, $id_destino, $id_llanta);
                 $result->execute();
                 $result->close();
 
                 //Actualizando sucursal remitente
                 $update = "UPDATE inventario SET Stock = ? WHERE id_sucursal = ? AND id_Llanta = ?";
                 $result = $con->prepare($update);
-                $result->bind_param('sss', $cantidad_restante, $id_ubicacion, $id_llanta);
+                $result->bind_param('sss', $stock_ubicacion_actual, $id_ubicacion, $id_llanta);
                 $result->execute();
                 $result->close();
 
@@ -259,10 +261,12 @@ if(isset($_POST)){
                 cantidad, 
                 id_usuario,
                 id_movimiento,
-                stock_actual,
-                stock_anterior) VALUES(null, ?,?,?,?,?,?,?,?)";
+                stock_ubicacion_actual,
+                stock_ubicacion_anterior,
+                stock_destino_actual,
+                stock_destino_anterior) VALUES(null, ?,?,?,?,?,?,?,?,?,?)";
                 $result = $con->prepare($insertar);
-                $result->bind_param('ssssssss',$id_llanta, $id_ubicacion, $id_destino, $cantidad, $id_usuario, $id_movimiento, $stock_actual, $stock_anterior);
+                $result->bind_param('ssssssssss',$id_llanta, $id_ubicacion, $id_destino, $cantidad, $id_usuario, $id_movimiento, $stock_ubicacion_actual, $stock_ubicacion_anterior, $stock_destino_actual, $stock_destino_anterior);
                 $result->execute();
                 $result->close();
 

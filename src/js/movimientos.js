@@ -16,19 +16,41 @@ table = $('#movimientos').DataTable({
     },
   columns: [   
     { title: "#",              data: null             },
+    { title: "Folio",          data: 0 },
     { title: "descripcion",    data: 1, width: "30%"},
     { title: "mercancia",      data: 2, visible:true},
+    { title: 'proveedor',      data: 8, render:(data, row)=>{
+      if(data == null){
+        var prov = 'NA'
+      }else{
+        var prov = data;
+      }
+      return prov;
+    }},
+    { title: 'factura',        data: 9},
     { title: "fecha",          data: 3 },
     { title: "hora",           data: 4 },
-    { title: "id",             data: 0 },
+    { title: "tipo",           data: 6, render(data, row) {
+      if(data == 1){
+        tipo = 'Movimiento';
+      }else if(data == 2){
+        tipo = 'Ingreso';
+      }else if(data == 3){
+        tipo = 'Retiro';
+      }
+      return tipo;
+    }},
     { title: "usuario",        data: 5 },
     { title: "Accion",
       data: null,
       className: "celda-acciones",
       render: function (row, data) {
-        if(row[6] == 1 || row[6] ==2 || row[6] ==3 || row[6] ==4){
+        if(row[6] == 1 || row[6] ==3 || row[6] ==4){
 
           return `<div class="btn btn-danger" onclick="remisionSalida(${row[0]})"><i class="fas fa-file-pdf"></i><div>`;
+        }else if(row[6] ==2){
+          return `<div class="btn btn-danger" onclick="remisionIngreso(${row[0]})"><i class="fas fa-file-pdf"></i><div>`;
+
         }else{
 
           return `<span>No disp</span>`;
@@ -58,6 +80,11 @@ MostrarClientes();
 function remisionSalida(id){
 
   window.open('./modelo/movimientos/remision-salida.php?id='+ id, '_blank');
+}
+
+function remisionIngreso(id){
+
+  window.open('./modelo/movimientos/remision-ingreso.php?id='+ id, '_blank');
 }
 
 
