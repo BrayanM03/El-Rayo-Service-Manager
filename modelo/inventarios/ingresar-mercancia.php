@@ -149,7 +149,7 @@ if(isset($_POST)){
                     stock_ubicacion_actual,
                     stock_ubicacion_anterior,
                     stock_destino_actual,
-                    stock_ubicacion_anterior) VALUES(null, ?,?,?,?,?,?,0,0,?,0)";
+                    stock_destino_anterior) VALUES(null, ?,?,?,?,?,?,0,0,?,0)";
                     $result = $con->prepare($insertar);
                     $result->bind_param('sssssss',$id_llanta, $id_bodega, $id_destino, $cantidad, $id_usuario, $id_movimiento, $cantidad);
                     $result->execute();

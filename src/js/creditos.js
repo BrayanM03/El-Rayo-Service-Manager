@@ -34,8 +34,8 @@ function MostrarCreditos() {
       { title: "Fecha inicio", data: 5 },
       { title: "Fecha final", data: 6 },
       { title: "Total", data: 3 },
-      { title: "Restante", data: 2 },
       { title: "Pagado", data: 1 },
+      { title: "Restante", data: 2 },
       {
         title: "Estatus",
         data: null,

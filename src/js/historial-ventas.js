@@ -33,7 +33,6 @@ table = $('#ventas').DataTable({
       render: function (row, data) {
         
         rol = $("#titulo-hv").attr("rol");
-        
        if(rol == "1"){
             if (row[7] == "Credito") {
                 return '<div style="display: flex; width: auto;">'+

@@ -2,7 +2,7 @@
 
 include 'conexion.php';
 $con= $conectando->conexion(); 
-
+session_start();
 if (!$con) {
     echo "maaaaal";
 }
@@ -61,9 +61,9 @@ if (isset($_POST)) {
       }
 
        $sucursal_id = $_SESSION['id_sucursal'];
-       $stock = "NA";
-       $stock_actual_s = "NA";
-       $stock_total = "NA";
+       $stock = 0;
+       $stock_actual_s = 0;
+       $stock_total = 0;
        $id_usuario = $_SESSION['id_usuario'];
        //Ingresando info al detalle la
        $insertar = "INSERT INTO historial_detalle_cambio(id, 
@@ -73,14 +73,13 @@ if (isset($_POST)) {
             cantidad, 
             id_usuario,
             id_movimiento,
-            stock_actual,
-            stock_anterior) VALUES(null, ?,?,?,?,?,?,?,?)";
+            stock_destino_actual,
+            stock_destino_anterior) VALUES(null, ?,?,?,?,?,?,?,?)";
             $result = $con->prepare($insertar);
             $result->bind_param('ssssssss',$codigo, $sucursal_id, $sucursal_id, $stock, $id_usuario, $id_movimiento, $stock_total, $stock_actual_s);
             $result->execute();
+            $err = $con->error;
             $result->close();
-
-
 }else{
     print_r(2);
 }

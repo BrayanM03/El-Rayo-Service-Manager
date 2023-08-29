@@ -121,7 +121,7 @@ if(isset($_POST)) {
 
 
                     //Actualizar historial de movimientos con la cancelación
-                    $ins = "INSERT INTO historial_detalle_cambio(id_llanta, id_ubicacion, id_destino, cantidad, id_usuario, id_movimiento, stock_actual, stock_anterior)
+                    $ins = "INSERT INTO historial_detalle_cambio(id_llanta, id_ubicacion, id_destino, cantidad, id_usuario, id_movimiento, stock_destino_actual, stock_destino_anterior)
                     VALUES (?,?,?,?,?,?,?,?)";
                     $rr = $con->prepare($ins);
                     $rr->bind_param('iiiiiiii', $id_llanta, $sucursal, $sucursal, $cantidad, $_SESSION['id_usuario'], $movimiento_id, $cantidad_total, $stock_actual);

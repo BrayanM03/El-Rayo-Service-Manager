@@ -37,6 +37,12 @@ table = $('#movimientos').DataTable({
         tipo = 'Ingreso';
       }else if(data == 3){
         tipo = 'Retiro';
+      }else if(data == 4){
+        tipo = 'Ingreso';
+      }else if(data == 5){
+        tipo = 'Borrado';
+      }else{
+        tipo = data;
       }
       return tipo;
     }},
@@ -46,7 +52,6 @@ table = $('#movimientos').DataTable({
       className: "celda-acciones",
       render: function (row, data) {
         if(row[6] == 1 || row[6] ==3 || row[6] ==4){
-
           return `<div class="btn btn-danger" onclick="remisionSalida(${row[0]})"><i class="fas fa-file-pdf"></i><div>`;
         }else if(row[6] ==2){
           return `<div class="btn btn-danger" onclick="remisionIngreso(${row[0]})"><i class="fas fa-file-pdf"></i><div>`;
@@ -63,7 +68,7 @@ table = $('#movimientos').DataTable({
   scrollY: "50vh",
   info: false,
   responsive: false,
-  order: [5, "desc"],
+  order: [1, "desc"],
  
   
 });
