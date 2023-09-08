@@ -106,7 +106,7 @@ if(isset($_POST)) {
     $nuevo_pago_sin_definir = $pago_sin_definir + $actual_pago_sin_definir;
 
     if(($suma_abonos + $monto_total_abono) > $importe_total) {
-        $res = array('estatus' => false, 'mensaje' => 'El apartado ya esta liquidado', 'liquidacion' => true);
+        $res = array('estatus' => false, 'mensaje' => 'El monto que tratas de agregar soprepasa el total del importe', 'liquidacion' => true);
         echo json_encode($res);
     } else {
 

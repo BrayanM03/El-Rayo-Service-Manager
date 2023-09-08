@@ -197,8 +197,8 @@ function insertarCotizacion($con, $resultado, $id, $id_cliente, $abonado, $resta
         $id_usuario = $fila['id_usuario'];
         $arreglo_abonos[] = $fila;
         $estado =0;
-        $insertar_abonos = 'INSERT INTO abonos(id_credito, fecha, hora, abono, metodo_pago, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, usuario, id_usuario, estado, sucursal, id_sucursal, credito)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?, 1)';
+        $insertar_abonos = 'INSERT INTO abonos(id_credito, fecha, hora, abono, metodo_pago, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, usuario, id_usuario, estado, sucursal, id_sucursal)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
         $stmt = $con->prepare($insertar_abonos);
         $stmt->bind_param('sssssssssssssss', $id_credito, $fecha_abono, $hora_abono, $abono, $metodo_pago, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $usuario, $id_usuario, $estado, $sucursal, $id_sucursal);
         $stmt->execute();
