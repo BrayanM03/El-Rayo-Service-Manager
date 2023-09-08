@@ -10,16 +10,17 @@ $folio = "RAY" . $_GET["id"];
 $idCotiza = $_GET["id"];
 global $folio;
 
-$ID = $con->prepare("SELECT cotizaciones.id, cotizaciones.Fecha, cotizaciones.id_Sucursal, cotizaciones.id_Usuarios, clientes.Nombre_Cliente, cotizaciones.Total, cotizaciones.estatus, cotizaciones.hora, cotizaciones.comentario FROM cotizaciones INNER JOIN clientes ON cotizaciones.id_Cliente = clientes.id WHERE cotizaciones.id = ?");
+$ID = $con->prepare("SELECT cotizaciones.id, cotizaciones.Fecha, cotizaciones.id_Sucursal, cotizaciones.sucursal, cotizaciones.id_Usuarios, clientes.Nombre_Cliente, cotizaciones.Total, cotizaciones.estatus, cotizaciones.hora, cotizaciones.comentario FROM cotizaciones INNER JOIN clientes ON cotizaciones.id_Cliente = clientes.id WHERE cotizaciones.id = ?");
 $ID->bind_param('i', $idCotiza);
 $ID->execute();
-$ID->bind_result($id_cotizacion, $fecha, $sucursal, $vendedor_id, $cliente, $total, $estatus, $hora, $comentario );
+$ID->bind_result($id_cotizacion, $fecha, $id_sucursal, $sucursal, $vendedor_id, $cliente, $total, $estatus, $hora, $comentario );
 $ID->fetch();
 $ID->close();
 
 if($comentario == "" || $comentario == null){
     $comentario = "";
 }
+$sucursal = $sucursal == null ? $id_sucursal : $sucursal;
 
 $ID = $con->prepare("SELECT nombre, apellidos FROM usuarios WHERE id = ?");
 $ID->bind_param('i', $vendedor_id);

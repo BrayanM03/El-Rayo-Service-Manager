@@ -94,8 +94,12 @@ $(document).ready(function() {
           data: null,
           className: "celda-acciones",
           render: function (row) {
-           
-            return '<div style="display: flex"><button type="button" onclick="editarRegistro('+row.id+');" id="'+ row.id +'" class="buttonEditar btn btn-warning" style="margin-right: 8px"><span class="fa fa-edit"></span><span class="hidden-xs"></span></button><br><button type="button"  onclick="borrarRegistro('+row.id+');" class="buttonBorrar btn btn-danger"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
+            let rol = $('#id_rol').attr('role');
+            if(rol ==1 ){
+              return `<div style="display: flex"><button type="button" onclick="editarRegistro(${row.id});" id="${row.id}" class="buttonEditar btn btn-warning" style="margin-right: 8px"><span class="fa fa-edit"></span><span class="hidden-xs"></span></button></br><button type="button" onclick="borrarRegistro(${row.id});" class="buttonBorrar btn btn-danger"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>`;
+            }else{
+            return '<div style="display: flex"><button type="button" onclick="editarRegistro('+row.id+');" id="'+ row.id +'" class="buttonEditar btn btn-warning" style="margin-right: 8px"><span class="fa fa-edit"></span><span class="hidden-xs"></span></button>';
+          }
           },
         },
       ],

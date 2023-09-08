@@ -130,7 +130,7 @@ if(isset($_POST)) {
                                                             id_sucursal) VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $resultado = $con->prepare($queryInsertar);
         $resultado->bind_param('ssssssssssssss', $id_apartado, $fecha, $hora, $monto_total_abono,
-                                                  $metodo_pago, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque,
+                                                  $desc_metodos, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque,
                                                   $pago_sin_definir, $vendedor_usuario, $tipo, $sucursal, $id_sucursal);
         $resultado->execute();
         $error = $resultado->error;

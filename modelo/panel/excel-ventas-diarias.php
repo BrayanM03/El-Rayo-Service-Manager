@@ -97,6 +97,7 @@ $resp->close();
         $estatus = 'Pagado';
         $tipo = 'Normal';
         $tipo_apartado = 'Apartado';
+        $tipo_pedido = 'Pedido';
         $consultaVentas = "SELECT COUNT(*) FROM ventas WHERE id_sucursal=? AND fecha = ? AND estatus =? AND (tipo =? OR tipo =?)";
         $resp = $con->prepare($consultaVentas);
         $resp->bind_param('sssss', $id_sucursal, $fecha, $estatus, $tipo, $tipo_apartado);
@@ -126,10 +127,10 @@ $resp->close();
                 $hoja_activa->setCellValue('C10', $numero_ventas);
                 
                 //Headers de los abonos de los apartados
-                $hoja_activa->getStyle('E3:K3')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('36c200');
-                $hoja_activa->getStyle('E4:K4')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('4b4d4b');
-                $hoja_activa->getStyle('E3:K3')->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
-                $hoja_activa->getStyle('E4:K4')->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+                $hoja_activa->getStyle('E3:M3')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('36c200');
+                $hoja_activa->getStyle('E4:M4')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('4b4d4b');
+                $hoja_activa->getStyle('E3:M3')->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+                $hoja_activa->getStyle('E4:M4')->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
 
                 $hoja_activa->getColumnDimension('F')->setWidth(40);
                 $hoja_activa->getColumnDimension('G')->setWidth(18);
@@ -141,61 +142,125 @@ $resp->close();
                 $hoja_activa->setCellValue('E3', 'Abonos realizados por apartado');
                 $hoja_activa->setCellValue('E4', 'ID apartado');
                 $hoja_activa->setCellValue('F4', 'Cliente');
-                $hoja_activa->setCellValue('G4', 'Pago efectivo');
-                $hoja_activa->setCellValue('H4', 'Pago tarjeta');
-                $hoja_activa->setCellValue('I4', 'Pago transferencia');
-                $hoja_activa->setCellValue('J4', 'Pago cheque');
-                $hoja_activa->setCellValue('K4', 'Pago sin definir');
+                $hoja_activa->setCellValue('G4', 'Tipo');
+                $hoja_activa->setCellValue('H4', 'Pago efectivo');
+                $hoja_activa->setCellValue('I4', 'Pago tarjeta');
+                $hoja_activa->setCellValue('J4', 'Pago transferencia');
+                $hoja_activa->setCellValue('K4', 'Pago cheque');
+                $hoja_activa->setCellValue('L4', 'Pago sin definir');
+                $hoja_activa->setCellValue('M4', 'Estatus');
 
+                //Contamos los abonos de los apartados
                 $select_count = "SELECT COUNT(*) FROM abonos_apartados WHERE fecha = ? AND id_sucursal = ?";
                 $re = $con->prepare($select_count);
                 $re->bind_param('si', $fecha, $id_sucursal);
                 $re->execute();
-                $re->bind_result($numero_abonos);
+                $re->bind_result($numero_abonos_apartados);
                 $re->fetch();
                 $re->close();
 
-                if($numero_abonos > 0){
-                    $select_abono = "SELECT * FROM abonos_apartados WHERE fecha = '$fecha' AND id_sucursal = $id_sucursal";
-                    $resp_abono = mysqli_query($con, $select_abono);
-                    $index_ab = 5;
-                    while ($fila = mysqli_fetch_array($resp_abono)) {
-                        $id_apartado = $fila['id_apartado'];
-                        $select_apa = "SELECT COUNT(*) FROM apartados WHERE id = ?";
-                        $re_ = $con->prepare($select_apa);
-                        $re_->bind_param('s', $id_apartado);
-                        $re_->execute();
-                        $re_->bind_result($numero_apartados);
-                        $re_->fetch();
-                        $re_->close();
+                //Contamos los abonos de los pedidos
+                $select_count = "SELECT COUNT(*) FROM abonos_pedidos WHERE fecha = ? AND id_sucursal = ? AND credito != 1";
+                $re = $con->prepare($select_count);
+                $re->bind_param('si', $fecha, $id_sucursal);
+                $re->execute();
+                $re->bind_result($numero_abonos_pedidos);
+                $re->fetch();
+                $re->close();
 
-                        if($numero_apartados>0){
-                            $select_ap = "SELECT * FROM apartados WHERE id = $id_apartado";
-                            $resp_ap = mysqli_query($con, $select_ap);
-                            
-                            while ($fila_ap = mysqli_fetch_array($resp_ap)) {
-                                $id_cliente = $fila_ap['id_cliente'];
-                                $select_cliente = "SELECT Nombre_Cliente FROM clientes WHERE id = ?";
-                                $re__ = $con->prepare($select_cliente);
-                                $re__->bind_param('i', $id_cliente);
-                                $re__->execute();
-                                $re__->bind_result($nombre_cliente);
-                                $re__->fetch();
-                                $re__->close();
+                $numero_abonos = $numero_abonos_apartados + $numero_abonos_pedidos;
+                if($numero_abonos > 0){
+                    $index_ab = 5;
+                    if($numero_abonos_apartados > 0){
+                        $select_abono = "SELECT * FROM abonos_apartados WHERE fecha = '$fecha' AND id_sucursal = $id_sucursal";
+                        $resp_abono = mysqli_query($con, $select_abono);
+                        
+                        while ($fila = mysqli_fetch_array($resp_abono)) {
+                            $id_apartado = $fila['id_apartado'];
+                            $select_apa = "SELECT COUNT(*) FROM apartados WHERE id = ?";
+                            $re_ = $con->prepare($select_apa);
+                            $re_->bind_param('s', $id_apartado);
+                            $re_->execute();
+                            $re_->bind_result($numero_apartados);
+                            $re_->fetch();
+                            $re_->close();
+    
+                            if($numero_apartados>0){
+                                $select_ap = "SELECT * FROM apartados WHERE id = $id_apartado";
+                                $resp_ap = mysqli_query($con, $select_ap);
+                                
+                                while ($fila_ap = mysqli_fetch_array($resp_ap)) {
+                                    $id_cliente = $fila_ap['id_cliente'];
+                                    $select_cliente = "SELECT Nombre_Cliente FROM clientes WHERE id = ?";
+                                    $re__ = $con->prepare($select_cliente);
+                                    $re__->bind_param('i', $id_cliente);
+                                    $re__->execute();
+                                    $re__->bind_result($nombre_cliente);
+                                    $re__->fetch();
+                                    $re__->close();
+                                }
                             }
+                            $estatus_abono = $fila['estado'] == '1' ? 'Normal' : 'Liquidación';
+                            $hoja_activa->setCellValue('E'.$index_ab, $fila['id_apartado']);
+                            $hoja_activa->setCellValue('F'.$index_ab, $nombre_cliente);
+                            $hoja_activa->setCellValue('G'.$index_ab, 'Apartado');
+                            $hoja_activa->setCellValue('H'.$index_ab, $fila['pago_efectivo']);
+                            $hoja_activa->setCellValue('I'.$index_ab, $fila['pago_tarjeta']);
+                            $hoja_activa->setCellValue('J'.$index_ab, $fila['pago_transferencia']);
+                            $hoja_activa->setCellValue('K'.$index_ab, $fila['pago_cheque']);
+                            $hoja_activa->setCellValue('L'.$index_ab, $fila['pago_sin_definir']);
+                            $hoja_activa->setCellValue('M'.$index_ab, $estatus_abono);
+                            $index_ab++;
                         }
-                        $hoja_activa->setCellValue('E'.$index_ab, $fila['id_apartado']);
-                        $hoja_activa->setCellValue('F'.$index_ab, $nombre_cliente);
-                        $hoja_activa->setCellValue('G'.$index_ab, $fila['pago_efectivo']);
-                        $hoja_activa->setCellValue('H'.$index_ab, $fila['pago_tarjeta']);
-                        $hoja_activa->setCellValue('I'.$index_ab, $fila['pago_transferencia']);
-                        $hoja_activa->setCellValue('J'.$index_ab, $fila['pago_cheque']);
-                        $hoja_activa->setCellValue('K'.$index_ab, $fila['pago_sin_definir']);
-                        $index_ab++;
+                    }
+
+                    if($numero_abonos_pedidos > 0){
+                        $select_abono = "SELECT * FROM abonos_pedidos WHERE fecha = '$fecha' AND id_sucursal = $id_sucursal AND credito != 1";
+                        $resp_abono = mysqli_query($con, $select_abono);
+                        
+                        while ($fila = mysqli_fetch_array($resp_abono)) {
+                            $id_pedido = $fila['id_pedido'];
+                            $estatus_abono = $fila['estado'] == '1' ? 'Normal' : 'Liquidación';
+                            $select_apa = "SELECT COUNT(*) FROM pedidos WHERE id = ?";
+                            $re_ = $con->prepare($select_apa);
+                            $re_->bind_param('s', $id_pedido);
+                            $re_->execute();
+                            $re_->bind_result($numero_pedidos);
+                            $re_->fetch();
+                            $re_->close();
+
+                            if($numero_pedidos>0){
+                                $select_ap = "SELECT * FROM pedidos WHERE id = $id_pedido";
+                                $resp_ap = mysqli_query($con, $select_ap);
+
+                                    while ($fila_ap = mysqli_fetch_array($resp_ap)) {
+                                        $id_cliente = $fila_ap['id_cliente'];
+                                        $select_cliente = "SELECT Nombre_Cliente FROM clientes WHERE id = ?";
+                                        $re__ = $con->prepare($select_cliente);
+                                        $re__->bind_param('i', $id_cliente);
+                                        $re__->execute();
+                                        $re__->bind_result($nombre_cliente);
+                                        $re__->fetch();
+                                        $re__->close();
+                                    }
+                                }else{
+                                    $nombre_cliente = 'No encontrado';
+                                }
+                                $hoja_activa->setCellValue('E'.$index_ab, $fila['id_pedido']);
+                                $hoja_activa->setCellValue('F'.$index_ab, $nombre_cliente);
+                                $hoja_activa->setCellValue('G'.$index_ab, 'Pedido');
+                                $hoja_activa->setCellValue('H'.$index_ab, $fila['pago_efectivo']);
+                                $hoja_activa->setCellValue('I'.$index_ab, $fila['pago_tarjeta']);
+                                $hoja_activa->setCellValue('J'.$index_ab, $fila['pago_transferencia']);
+                                $hoja_activa->setCellValue('K'.$index_ab, $fila['pago_cheque']);
+                                $hoja_activa->setCellValue('L'.$index_ab, $fila['pago_sin_definir']);
+                                $hoja_activa->setCellValue('M'.$index_ab, $estatus_abono);
+                                $index_ab++;
+                        }
                     }
 
                     $hoja_activa
-                    ->getStyle('G5:K'.$index_ab)
+                    ->getStyle('G5:M'.$index_ab)
                     ->getNumberFormat()
                     ->setFormatCode(PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_CURRENCY_USD_SIMPLE);
 
@@ -257,7 +322,7 @@ $resp->close();
                 $index++;
 
                 if($numero_ventas > 0){
-                    $traer_venta = "SELECT * FROM ventas WHERE id_sucursal = '$id_sucursal' AND fecha = '$fecha' AND estatus ='$estatus' AND (tipo ='$tipo' OR tipo ='$tipo_apartado')";
+                    $traer_venta = "SELECT * FROM ventas WHERE id_sucursal = '$id_sucursal' AND fecha = '$fecha' AND estatus ='$estatus' AND (tipo ='$tipo' OR tipo ='$tipo_apartado' OR tipo = '$tipo_pedido')";
                     $respo = mysqli_query($con, $traer_venta);
 
                     $contador = 1;
@@ -274,7 +339,7 @@ $resp->close();
                         $pago_transferencia = $fila["pago_transferencia"];
                         $pago_por_definir = $fila["pago_sin_definir"];
                         $comentario = $fila["comentario"];
-                        if($tipo== 'Apartado'){
+                        if($tipo== 'Apartado' || $tipo == 'Pedido'){
                             $total_actual = floatval($pago_efectivo) + floatval($pago_tarjeta) + floatval($pago_cheque) + floatval($pago_transferencia) + floatval($pago_por_definir);
                         }else{
                             $total_actual = $fila["Total"];
@@ -399,7 +464,6 @@ $resp->close();
         $utilidad_metodo_cheque = obtenerUtilidadMetodoPago($con, $id_sucursal, $fecha, "Credito", "Abierta", "Cheque");
         $utilidad_metodo_transferencia = obtenerUtilidadMetodoPago($con, $id_sucursal, $fecha, "Credito", "Abierta", "Transferencia");
         $utilidad_metodo_por_definir = obtenerUtilidadMetodoPago($con, $id_sucursal, $fecha, "Credito", "Abierta", "Por definir");
-
 
         
         $estatus = 'Pagado';
@@ -980,6 +1044,7 @@ function obtenerUtilidadMetodoPago($con, $id_sucursal, $fecha, $tipo, $estatus, 
 function obtenerVentaTotal($con, $id_sucursal, $fecha, $tipo, $estatus){
     $total_venta = 0;
     $total_venta_apartados = 0;
+    $total_venta_pedidos = 0;
     if($tipo == "Credito"){
         $consulta = "SELECT SUM(abono) FROM abonos WHERE id_sucursal=? AND fecha = ?";
         $res = $con->prepare($consulta);
@@ -1005,7 +1070,15 @@ function obtenerVentaTotal($con, $id_sucursal, $fecha, $tipo, $estatus){
         $res->fetch();
         $res->close();
 
-        $total_venta = $total_venta + $total_venta_apartados;
+        $consulta = "SELECT SUM(abono) FROM abonos_pedidos WHERE id_sucursal=? AND fecha = ? AND credito != 1";
+        $res = $con->prepare($consulta);
+        $res->bind_param("ss", $id_sucursal, $fecha);
+        $res->execute();
+        $res->bind_result($total_venta_pedidos);
+        $res->fetch();
+        $res->close();
+
+        $total_venta = $total_venta + $total_venta_apartados + $total_venta_pedidos;
     }
    
 
@@ -1018,6 +1091,7 @@ function obtenerVentaTotal($con, $id_sucursal, $fecha, $tipo, $estatus){
 function obtenerVentaMetodoPago($con, $id_sucursal, $fecha, $tipo, $estatus, $metodo_pago){
     $total_venta = 0;
     $total_venta_apartados = 0;
+    $total_venta_pedidos = 0;
     switch($metodo_pago){
         case "Efectivo":
             $col = "pago_efectivo";
@@ -1037,7 +1111,7 @@ function obtenerVentaMetodoPago($con, $id_sucursal, $fecha, $tipo, $estatus, $me
 
     }
 
-    if($tipo== 'Normal' || $tipo == 'Apartado'){
+    if($tipo== 'Normal' || $tipo == 'Apartado' || $tipo == 'Pedido'){
         $consulta = "SELECT SUM($col) FROM ventas WHERE id_sucursal=? AND fecha = ? AND tipo = ? AND estatus = ?";
         $res = $con->prepare($consulta);
         $res->bind_param("ssss", $id_sucursal, $fecha, $tipo, $estatus);
@@ -1054,7 +1128,15 @@ function obtenerVentaMetodoPago($con, $id_sucursal, $fecha, $tipo, $estatus, $me
         $res->fetch();
         $res->close();
 
-        $total_venta = $total_venta + $total_venta_apartados;
+        $consulta = "SELECT SUM($col) FROM abonos_pedidos WHERE id_sucursal=? AND fecha = ? AND credito != 1";
+        $res = $con->prepare($consulta);
+        $res->bind_param("ss", $id_sucursal, $fecha);
+        $res->execute();
+        $res->bind_result($total_venta_pedidos);
+        $res->fetch();
+        $res->close();
+
+        $total_venta = $total_venta + $total_venta_apartados + $total_venta_pedidos;
     }else {
         $consulta = "SELECT SUM($col) FROM abonos WHERE id_sucursal=? AND fecha = ?";
         $res = $con->prepare($consulta);

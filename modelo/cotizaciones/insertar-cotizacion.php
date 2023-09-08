@@ -23,16 +23,84 @@ if(isset($_POST)){
     
   }
 
-
     $sucursal = $_SESSION['sucursal'];
+   
+    $id_sucursal = $_SESSION['id_sucursal'];
     $idUser =   $_SESSION['id_usuario'];
+    $usuario = $_SESSION['nombre'] . ' ' . $_SESSION['apellidos'];
     $cliente =  $_POST["cliente"];
     $total =    $_POST["total"];
-    
+    $tipo_cotizacion = $_POST["tipo_cotizacion"];
+    $estatus = 'Activo';
 
-  $estatus = "OK";
+    if($tipo_cotizacion ==1){
+      $tabla = 'cotizaciones';
+      $tabla_detalle = 'detalle_cotizacion';
+      $queryInsertar = "INSERT INTO $tabla (id, Fecha, id_Sucursal, sucursal, id_Usuarios, id_Cliente, Total, estatus, hora, comentario) VALUES (null,?,?,?,?,?,?,?,?,?)";
+      $resultado = $con->prepare($queryInsertar);
+      $resultado->bind_param('sssssssss', $fecha, $id_sucursal, $sucursal, $idUser, $cliente , $total, $estatus,$hora, $comentario);
+      $resultado->execute();
+      $id_Cotizacion = $con->insert_id;
+      $resultado->close();
+    }else{
+      $pago_efectivo = 0;
+      $pago_transferencia = 0;
+      $pago_tarjeta = 0;
+      $pago_cheque = 0;
+      $pago_sin_definir = 0;
+      $monto_total_abono = 0;
+      foreach ($_POST['metodos_pago'] as $key => $value) {
+        $metodo_id = isset($value['id_metodo']) ? $value['id_metodo'] : $key;
+        switch ($metodo_id) {
+            case 0:
+                $pago_efectivo = $value['monto'];
+                break;
 
-    
+            case 1:
+                $pago_tarjeta = $value['monto'];
+                break;
+
+            case 2:
+                $pago_transferencia = $value['monto'];
+
+                break;
+
+            case 3:
+                $pago_cheque = $value['monto'];
+                break;
+
+            case 4:
+                $pago_sin_definir = $value['monto'];
+                break;
+
+            default:
+                break;
+        }
+        $monto_pago = $value['monto'];
+        $monto_total_abono += $value['monto'];
+        $metodo_pago = $value['metodo'];
+        $desc_metodos = '';
+        $restante = floatval($total) -floatval($monto_total_abono);
+        if($key != count($_POST["metodos_pago"]) - 1) {
+            // Este código se ejecutará para todos menos el último
+            $desc_metodos .= $metodo_pago . ", ";
+        } else {
+            $desc_metodos .= $metodo_pago . ". ";
+        }
+    }
+        $tabla = 'pedidos';
+        $tipo = 'Pedido';
+        $tabla_detalle = 'detalle_pedido';
+        $queryInsertar = "INSERT INTO $tabla (id, fecha_inicio, id_sucursal, sucursal, abonado, restante, id_usuario, id_cliente, total, estatus, hora_inicio, tipo, comentario) VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?)";
+        $resultado = $con->prepare($queryInsertar);
+        $resultado->bind_param('ssssssssssss', $fecha, $id_sucursal, $sucursal, $monto_total_abono, $restante,  $idUser, $cliente , $total, $estatus, $hora, $tipo, $comentario);
+        $resultado->execute();
+        $erro = $resultado->error;
+        print_r($erro);
+        $id_pedido = $con->insert_id;
+        $resultado->close();
+    }
+    $estatus = "OK";
 
    
     $datos = $_POST['data'];
@@ -40,25 +108,7 @@ if(isset($_POST)){
    $info_producto_individual = $datos;
 
    
-    $queryInsertar = "INSERT INTO cotizaciones (id, Fecha, id_Sucursal, id_Usuarios, id_Cliente, Total, estatus, hora, comentario) VALUES (null,?,?,?,?,?,?,?,?)";
-    $resultado = $con->prepare($queryInsertar);
-    $resultado->bind_param('ssssssss', $fecha, $sucursal, $idUser, $cliente , $total, $estatus,$hora, $comentario);
-    $resultado->execute();
-    $resultado->close();
-
-    $sql = "SELECT id FROM cotizaciones ORDER BY id DESC LIMIT 1";
-    $resultado = mysqli_query($con, $sql);
     
-    if(!$resultado){
-      echo "no se pudo realizar la consulta";
-
-    }else{
-      $dato =  mysqli_fetch_array($resultado, MYSQLI_ASSOC);
-
-        
-      $id_Cotizacion = $dato["id"];
-        
-        
 
         foreach ($info_producto_individual as $key => $value) { 
           
@@ -76,42 +126,30 @@ if(isset($_POST)){
             
  
               $unidad = "pieza";
-              $queryInsertar = "INSERT INTO detalle_cotizacion (id, id_Llanta, id_Cotiza, Cantidad, Unidad, precio_Unitario, Importe) VALUES (null,?,?,?,?,?,?)";
-              $resultado = $con->prepare($queryInsertar);
-              $resultado->bind_param('ssssss',$id_llanta, $id_Cotizacion, $cantidad, $unidad, $precio_unitario, $importe);
-              $resultado->execute();
-              $resultado->close();
-             
-
-              
-            
-            
-            //Notify system
-
-            $vaciarTabla = "TRUNCATE TABLE cotizacion_temp$idUser";
-
-            $consulta = mysqli_query($con, $vaciarTabla);
+              if($tipo_cotizacion ==1){
+                $queryInsertar = "INSERT INTO $tabla_detalle (id, id_Llanta, id_Cotiza, Cantidad, Unidad, precio_Unitario, Importe) VALUES (null,?,?,?,?,?,?)";
            
-
-        
-               /* 
-                  $id_usuario_admi = $row['id'] . " " . $row["nombre"] ; // Sumar variable $total + resultado de la consulta 
-                  $desc_notifi = $_SESSION['nombre'] . $complemento_desc;
-                  $estatus = 1; 
-                  $fecha = date("d-m-Y"); 
-                  $hora = date("h:i a");
-                  $refe = 0;  
-                  $alertada = "NO";
-                  
-                  $queryInsertarNoti = "INSERT INTO registro_notificaciones (id, id_usuario, descripcion, estatus, fecha, hora, refe, alertada, tipo) VALUES (null,?,?,?,?,?,?,?,?)";
-                        $resultados = $con->prepare($queryInsertarNoti);
-                        $resultados->bind_param('isississ',$id_usuario_admi, $desc_notifi, $estatus, $fecha, $hora, $refe, $alertada, $tipo);
-                        $resultados->execute();
-                        $resultados->close(); */
-                
-                
-                
+                $resultado = $con->prepare($queryInsertar);
+                $resultado->bind_param('ssssss',$id_llanta, $id_Cotizacion, $cantidad, $unidad, $precio_unitario, $importe);
+                $resultado->execute();
+                $resultado->close();
             
+  
+              $vaciarTabla = "DELETE FROM detalle_nueva_cotizacion WHERE id_usuario = $idUser AND tipo = $tipo_cotizacion";
+  
+              $consulta = mysqli_query($con, $vaciarTabla);
+              }else{
+                $queryInsertar = "INSERT INTO $tabla_detalle (id, id_Llanta, id_pedido, Cantidad, Unidad, precio_Unitario, Importe) VALUES (null,?,?,?,?,?,?)";
+           
+                $resultado = $con->prepare($queryInsertar);
+                $resultado->bind_param('ssssss',$id_llanta, $id_pedido, $cantidad, $unidad, $precio_unitario, $importe);
+                $resultado->execute();
+                $resultado->close();
+
+              $vaciarTabla = "DELETE FROM detalle_nueva_cotizacion WHERE id_usuario = $idUser AND tipo = $tipo_cotizacion";
+              $consulta = mysqli_query($con, $vaciarTabla);
+              }
+              
 
           }else{
             echo "";
@@ -119,18 +157,28 @@ if(isset($_POST)){
 
         }
 
+        if($tipo_cotizacion != 1){
+          if($total === $monto_total_abono){
+            $estado = 0;
+          }  else{
+            $estado =1;
+          }
 
-      print_r($id_Cotizacion);
-    /*usar esta consulta:  select * from ventas ORDER BY id DESC LIMIT 1 para escoger el ultimo id
+          if($monto_total_abono > 0){
+            $queryInsertarAbono = "INSERT INTO abonos_pedidos(id_pedido, fecha, hora, abono, metodo_pago, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, usuario, id_usuario, estado, sucursal, id_sucursal, credito) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,0)";
+            $resultado = $con->prepare($queryInsertarAbono);
+            $resultado->bind_param('sssssssssssssss', $id_pedido, $fecha, $hora, $monto_total_abono, $metodo_pago, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $usuario, $idUser, $estado, $sucursal, $id_sucursal);
+            $resultado->execute();
+            $erro = $resultado->error;
+            print_r($erro);
+            $resultado->close();
+          }
+          print_r($id_pedido);
+        }else{
+          print_r($id_Cotizacion);
+        }
 
-          
-
-   // echo json_encode($codigo_llanta, JSON_UNESCAPED_UNICODE);*/
-
-    //Aqui //}
-
-    
-  }
+      
   
 }
 

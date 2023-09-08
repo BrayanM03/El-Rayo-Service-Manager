@@ -540,7 +540,7 @@ toastr.options = {
   
   
               $("#buscador").val('').trigger('change'); 
-              $('#buscador').prop("disabled", true);
+              //$('#buscador').prop("disabled", true);
               $("#btn-mover").attr("id_item", "");
               $("#btn-mover").attr("id_llanta", "");
               $("#stock_actual").prop("disabled", true).val("");

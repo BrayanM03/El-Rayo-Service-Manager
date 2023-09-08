@@ -19,24 +19,35 @@
  */
 
 // DB table to use
-$table = 'view_lista_cotizaciones';
-
+$table = 'vista_pedidos';
+$where = "estatus = 'Activo' or estatus = 'Cancelada'";
 // Table's primary key
 $primaryKey = 'id';
-
+//$where = "estatus = 'Activo' or estatus = 'Cancelada'";
 // Array of database columns which should be read and sent back to DataTables.
 // The `db` parameter represents the column name in the database, while the `dt`
 // parameter represents the DataTables column identifier. In this case simple
 // indexes
 $columns = array(
-	array( 'db' => 'id', 'dt' => 0 ),
-	array( 'db' => 'Fecha',  'dt' => 1 ),
-	array( 'db' => 'nombre', 'dt' => 2 ),
-	array( 'db' => 'Nombre_Cliente', 'dt' => 3 ),
-	array( 'db' => 'Total', 'dt' => 4 ),
-	array( 'db' => 'estatus',  'dt' => 5 ),
-	array( 'db' => 'hora',   'dt' => 6 ),
-	array( 'db' => 'comentario', 'dt' => 7 )
+	array( 'db' => 'id',   'dt' => 1),
+	array( 'db' => 'nombre_cliente',   'dt' => 2 ),
+	array( 'db' => 'fecha_inicio', 'dt' => 3 ),
+	array( 'db' => 'fecha_final', 'dt' => 4 ),
+	array( 'db' => 'hora_inicio',   'dt' => 5),
+	array( 'db' => 'hora_final',   'dt' => 6),
+	array( 'db' => 'sucursal', 'dt' => 7 ),
+	array( 'db' => 'total',   'dt' => 8 ),
+	array( 'db' => 'estatus',   'dt' => 9),
+	array( 'db' => 'tipo',   'dt' => 10),
+	array( 'db' => 'comentario',   'dt' => 11 ),
+	array( 'db' => 'vendedor', 'dt' => 12 ),
+    array( 'db' => 'id_sucursal',  'dt' => 13 ), 
+	array( 'db' => 'id_usuario', 'dt' => 14 ),
+	array( 'db' => 'id_cliente', 'dt' => 15 ),
+	array( 'db' => 'id_venta',   'dt' => 16 ),
+	array( 'db' => 'abonado',   'dt' => 17 ),
+	array( 'db' => 'restante',   'dt' => 18 ),
+	array( 'db' => 'orden_confirmada',   'dt' => 19 ),
 /* 	array(
 		'db'        => 'start_date',
 		'dt'        => 4,
@@ -54,19 +65,18 @@ $columns = array(
 );
 
 // SQL server connection information
-
+include_once '../credenciales.php';
+$sql_details = $credenciales_db;
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * If you just want to use the basic configuration for DataTables with PHP
  * server-side, there is no need to edit below this line.
  */
-include_once '../credenciales.php';
-$sql_details = $credenciales_db;
 
-require( '../cortes/ssp.class.php' );
+require( '../ssp.class.php' );
 
 echo json_encode(
-	SSP::simple( $_GET, $sql_details, $table, $primaryKey, $columns )
+	SSP::simple( $_GET, $sql_details, $table, $primaryKey, $columns, $where)
 );
 
 

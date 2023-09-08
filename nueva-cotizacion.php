@@ -12,20 +12,13 @@
         header("Location:login.php");
     }
 
-    if (!isset($_SESSION['id_usuario'])) {
-        header("Location:login.php");
-    }
-    
-    if ($_SESSION['rol'] == 3 || ($_SESSION['rol'] == 2 && $_SESSION['id_usuario']!= 7) ) {
-        header("Location:nueva-venta.php?nav=inicio");
-    }
-
     
     ?>
+
 <!DOCTYPE html>
 <html lang="es">
-
-<head> 
+ 
+<head>
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -34,33 +27,23 @@
     <meta name="author" content="">
     <link rel="shortcut icon" href="src/img/rayo.svg" />
 
-    <title>Inventario de llantas totales</title>
+    <title>El Rayo | Service Manager</title>
 
-  
     <!-- Custom fonts for this template-->
-    <link rel="stylesheet" href="src/css/inventario.css">
     <link href="src/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
-
 
     <!-- Custom styles for this template-->
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="src/vendor/datatables/dataTables.bootstrap4.css">
     <link rel="stylesheet" href="src/vendor/datatables-responsive/css/responsive.bootstrap4.min.css">
-
-  <link rel="stylesheet" href="https://nightly.datatables.net/colreorder/css/colReorder.dataTables.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.css" integrity="sha512-oe8OpYjBaDWPt2VmSFR+qYOdnTjeV9QPLJUeqZyprDEQvQLJ9C5PCFclxwNuvb/GQgQngdCXzKSFltuHD3eCxA==" crossorigin="anonymous" />
-    
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="src/vendor/bower_components/select2-bootstrap-theme/dist/select2-bootstrap.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.bootstrap4.min.css">
-    <!---Librerias de estilos-->
-    <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="src/css/cotizacion.css">
     <link href="src/css/menu-vertical.css" rel="stylesheet">
-   
 
 </head>
 
@@ -142,7 +125,7 @@
                             <!-- Dropdown - Alerts -->
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="alertsDropdown">
-                                <h6 class="dropdown-header">
+                                <h6 class="dropdown-header"> 
                                    Notificaciones
                                 </h6>
                                 <div class="empty-notification">
@@ -156,7 +139,7 @@
                             </div>
                         </li>
 
-
+                    
                         <div class="topbar-divider d-none d-sm-block"></div>
 
                         <!-- Nav Item - User Information -->
@@ -176,7 +159,7 @@
                                 aria-labelledby="userDropdown">
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Pefil
+                                    Perfil
                                 </a>
                                 <a class="dropdown-item" href="configuraciones.php?id=0&nav=configuraciones">
                                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -184,7 +167,7 @@
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                   Registro de actividad
+                                    Registro de actividad
                                 </a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
@@ -201,27 +184,61 @@
 
 
                 <!-- Begin Page Content -->
-                <div class="containe" style="width:80%; margin:auto;">
+                <div class="container-fluid">
 
-                     <!-- Contenido inventario -->
-                     <div class="titulo-inventario m-auto" id="id_rol" role="<?php echo $_SESSION['rol']; ?>">
-                         <h5 style="margin: 10px 0px;">Stock total de llantas en existencia</h5>
-                         <p style="color: gray;">Inventario completo</p>
-                        </div>
-                        
-                      <div class="botones">
-                                    <a href="#" class="btn btn-success btn-icon-split" onclick="agregarLLanta();">
-                                        <span class="icon text-white-50">
-                                            <i class="fas fa-check-circle"></i>
-                                        </span>
-                                        <span class="text">Agregar llanta</span>
-                                    </a>
-                                   
-                      </div>
-                      <table id="inventario" class="table table-striped table-bordered table-hover">                   
-                     </table>
+                     <!-- Contenido -->
+                     <div class="card" style="height: auto; width: auto;">
+                            <h4 class="ml-auto mr-auto mt-5" style="color:#191919;">Nueva cotización</h4>
+                            <div class="row mt-4">
+                            <div class="col-md-12">
+                            <form action=""  class="m-auto" style="width: 50%;">   
+                            <div class="form-group m-auto"  style="width: 100%;">
+                            <label for="busquedaLlantas" class="">Agregar llantas</label>
+                            <select style="width:100%" class="form-control" id="busquedaLlantas" value="" name="search"></select> 
+                            </div> 
+                            <div class="form-group mt-3 row"  style="width: 100%;">
+                            <div class="col-md-6">
 
-                     
+                            <label for="busqueda" class="">Cliente</label>
+                            <select style="width:100%" class="form-control" id="clientes" value="" name="clientes"></select>
+                            </div>
+                            <div class="col-md-6">
+                            <label for="Cantidad" class="">Cantidad</label> 
+                            <input style="width:100%; height:33px;" type="number" class="form-control" id="cantidad" value="" name="cantidad">
+                            </div>
+                            <div class="col-md-6 mt-3 mr-auto ml-auto"  onclick="generarToken();" id="precio-tok" >
+                            <label for="precio">Precio</label> 
+                            <input style="width:100%; height:33px;"type="number" class="form-control" id="precio" value="" name="precio" disabled>
+                            </div>
+                            </div> 
+                            <div class="form-group mt-3 row"  style="width: 100%;">
+                           
+                            <div class="btn btn-success m-auto" cotizacion="1" id="btn-agregar"onclick="agregarProducto();">Agregar</div>
+                            </div>
+
+                            </form>
+                            </div>
+                            
+                            <div class="col-12 col-md-10 ml-auto mr-auto mt-5 text-center">
+                                <table id="pre-cotizacion" class="table table-success table-bordered table-hover round_table"></table>
+                                <div class="row text-center mt-3 justify-content-center align-items-center">
+                                <div class="col-12 col-md-4">
+                                    <div class="center-block">
+                                    <label for="">Total:</label>
+                                    <input type="text" id="total-cotizacion" class="form-control" placeholder="0.00" disabled>
+                                
+                                    </div>
+                                    </div>
+                            </div>
+                            </div>
+                            
+                            </div>
+                            <div class="form-group mt-3 row justify-content-center align-items-center"  style="width: 100%;">
+                            <div class="btn btn-danger text-white mr-3" comentario="" style="color: rgb(31, 28, 28);" id="hacer-comentario"><i class="fas fa-comment-dots"></i></div>
+                            <div class="btn btn-danger" id="btn-cotizar" onclick="generarCotizacion();">Cotizar</div>
+                            </div>
+
+                     </div>
                    
 
                 </div>
@@ -230,9 +247,9 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; El Rayo Service Manager <?php print_r(date("Y")) ?></span><br><br>
-                        <span>Edicion e integración por <a href="https://www.facebook.com/BrayanM03/">Brayan Maldonado</a></span>
-                    </div>
+                        <span>Copyright &copy; El Rayo Service Manager 2020</span><br><br>
+<!--                         <span>Edicion e integración por <a href="https://www.facebook.com/BrayanM03/">Brayan Maldonado</a></span>
+ -->                    </div>
                 </div>
             </footer>
             <!-- End of Footer -->
@@ -241,7 +258,7 @@
         <!-- End of Content Wrapper -->
 
     </div>
-    <!-- End of Page Wrapper -->
+    <!-- End of Page Wrapper --> 
 
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
@@ -281,45 +298,19 @@
     <!-- Page level plugins -->
     <script src="src/vendor/chart.js/Chart.min.js"></script>
 
-    <!-- Page level custom scripts 
-    <script src="src/js/demo/chart-area-demo.js"></script>
-    <script src="src/js/demo/chart-pie-demo.js"></script>--> 
-
-
-    <!-- Cargamos nuestras librerias-->
+    <!-- Page level custom scripts -->
+ 
     <script src="src/vendor/datatables/jquery.dataTables.min.js"></script> 
-    <script src="src/vendor/datatables/defaults.js"></script>
     <script src="src/vendor/datatables-responsive/js/dataTables.responsive.min.js"></script>
-  <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-
- <!--  <script src="https://nightly.datatables.net/colreorder/js/dataTables.colReorder.min.js"></script> -->
     <script src="src/vendor/datatables/dataTables.bootstrap4.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous"></script>
 
-       <!-- Scripts para exportar archivos de tablas  -->        
-       <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.bootstrap4.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>   
-     <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
-     <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script> 
-     <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.colVis.min.js"></script>
-    
-    <script src="src/js/inventario-total.js"></script>
-    <script src="src/js/editar-llanta-inv-total.js"></script>
-   <script>
-ocultarSidebar();
-function ocultarSidebar(){
-  let sesion = $("#emp-title").attr("sesion_rol");
-  if(sesion == 4){
-    $(".rol-4").addClass("d-none");
-
-  }
-};
-   </script>
+    <!-- Cargamos nuestro componente de React. -->
+    <script src="src/js/cotizacion.js"></script>
+    <script src="src/js/agregar-product-cotiza.js"></script>
+    <script src="src/js/generar-token.js"></script>
    
 </body>
 

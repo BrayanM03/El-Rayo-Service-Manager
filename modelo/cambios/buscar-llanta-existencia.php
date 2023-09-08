@@ -38,7 +38,7 @@
 //    print_r($total);
      if ($total > 0) { 
         
-        $sqlTraerLlanta="SELECT l.*, inv.Stock FROM llantas l INNER JOIN inventario inv ON l.id = inv.id_Llanta WHERE (l.Ancho LIKE '%$term%'  
+        $sqlTraerLlanta="SELECT l.*, inv.Stock FROM llantas l LEFT JOIN inventario inv ON l.id = inv.id_Llanta WHERE (l.Ancho LIKE '%$term%'  
                                                                 OR l.Proporcion LIKE '%$term%'  
                                                                 OR l.Diametro LIKE '%$term%'
                                                                 OR l.Modelo LIKE '%$term%'  
@@ -113,11 +113,8 @@
                       'paginas_per_page'=> $resultadosPorPagina,
                       'more' => count($llantasEncontradas) == $resultadosPorPagina // Verificar si hay más resultados disponibles
                     ));
-                echo json_encode($response, JSON_UNESCAPED_UNICODE);                    
-        
-            
+                echo json_encode($response, JSON_UNESCAPED_UNICODE);                         
         }
-
 
     }
         

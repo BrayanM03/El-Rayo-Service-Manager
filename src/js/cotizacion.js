@@ -22,50 +22,54 @@ $(document).ready(function() {
 
 
     $('#busquedaLlantas').select2({
-        placeholder: "Selecciona una llanta",
-        theme: "bootstrap",
-        minimumInputLength: 1,
-        ajax: {
-            url: "./modelo/traer_stock_llantas_totales.php",
-            type: "post",
-            dataType: 'json',
-            delay: 250,
-
-            data: function (params) {
-             return {
-               searchTerm: params.term // search term
-               
-             };
-            },
-            processResults: function (data) {
-                return {
-                   results: data
-                };
-              },
-           
-            cache: true
-
-        },
-        language:  {
-
-            inputTooShort: function () {
-                return "Busca la llanta...";
-              },
-              
-            noResults: function() {
-        
-              return "Sin resultados";        
-            },
-            searching: function() {
-        
-              return "Buscando..";
-            }
+      placeholder: "Selecciona una llanta",
+      theme: "bootstrap",
+      minimumInputLength: 1,
+      ajax: {
+          url: "./modelo/traer_stock_llantas_totales.php",
+          type: "post",
+          dataType: 'json',
+          delay: 250,
+          data: function (params) {
+            console.log(params);
+          return {
+            searchTerm: params.term, // search term
+            page: params.page || 1,
+            rol: params.rol
+          };
           },
+        
+          cache: true
 
-          templateResult: formatRepo,
-          templateSelection: formatRepoSelection
+      },
+      processResults: function (data, params) {
+        params.page = params.page || 1;   
+        return {
+          results: data.results,
+          pagination: {
+              more: (params.page * 10) < data.total_count // Verificar si hay más resultados para cargar
+            }
+        };
+      },
+      language:  {
+
+          inputTooShort: function () {
+              return "Busca la llanta...";
+            },
+            
+          noResults: function() {
+      
+            return "Sin resultados";        
+          },
+          searching: function() {
+      
+            return "Buscando..";
+          }
+        },
+
+        templateResult: formatRepo,
+        templateSelection: formatRepoSelection
     });
-
 
     function formatRepo (repo) {
         
@@ -112,7 +116,10 @@ $(document).ready(function() {
         $("#btn-agregar").attr("marca", repo.marca);
         $("#btn-agregar").attr("costo", repo.costo);
         $("#btn-agregar").attr("precio", repo.precio);
+
         $("#precio").val(repo.precio);
+        $("#precio").addClass('disabled');
+        $('#precio').prop('disabled', true);
        /* $("#ancho-agregado").text(repo.ancho);
         $("#alto-agregado").text(repo.alto);
         $("#rin-agregado").text(repo.rin);
@@ -232,15 +239,23 @@ $("#hacer-comentario").on("click", function () {
         showConfirmButton: true,
         confirmButtonText: 'Agregar', 
         cancelButtonColor:'#ff764d',
+        didOpen:()=>{
+          let comentario = $("#hacer-comentario").attr("comentario");
+          $("#comentario").val(comentario);
+        },
         focusConfirm: false,
         iconColor : "#36b9cc",
         html:'<div class="m-auto"><label>Agregar un comentario:</label><br><textarea id="comentario" name="motivo" placeholder="Escribe un comentario sobre la cotización..." class="form-control m-auto" style="width:300px;height:80px;" ></textarea></div>',
         }).then((result) => { 
-
-         let comentario = $("#comentario").val();
-         $("#hacer-comentario").attr("comentario", comentario);
-         console.log(comentario);
-
+          if(result.isConfirmed) {
+            let comentario = $("#comentario").val();
+            if(comentario.trim() != ''){
+                $("#hacer-comentario").attr("comentario", comentario);
+                toastr.success('Comentario agregado correctamente', 'Exito');
+            }else{
+                toastr.success('Agregaste un comentario vacio, pero bueno 🤷🏻‍♂️', 'Exito');
+            }
+           }
         });
  })
 
@@ -265,7 +280,7 @@ $("#hacer-comentario").on("click", function () {
         
       
     total = $("#total-cotizacion").val();
-    
+    tipo_cotizacion = $("#btn-agregar").attr('cotizacion');
     comentario = $("#hacer-comentario").attr("comentario");
     
     //Enviando data
@@ -277,15 +292,21 @@ $("#hacer-comentario").on("click", function () {
                'cliente': cliente,
                'total': total,
                'comentario': comentario,
+               'tipo_cotizacion': tipo_cotizacion
               },
         dataType: "JSON",
         success: function (response) {
             console.log(response);
+            if(tipo_cotizacion ==1){
+              nombre_proceso = 'Cotización'
+            }else{
+              nombre_proceso = 'Pedido'
+            }
             if (response) {
                 Swal.fire({
-                    title: 'Cotización realizada',
-                    html: "<span>La cotización se generó con exito</br></span>"+
-                    "ID Cotización:" + response,
+                    title: `${nombre_proceso} realizada`,
+                    html: "<span>El proceso se generó con exito</br></span>"+
+                    "FOLIO:" + response,
                     icon: "success",
                     cancelButtonColor: '#00e059',
                     showConfirmButton: true,

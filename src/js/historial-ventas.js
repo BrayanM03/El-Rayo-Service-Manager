@@ -70,6 +70,16 @@ table = $('#ventas').DataTable({
                 '<span class="fa fa-ban"></span><span class="hidden-xs"></span></button>'+
                 '<button type="button" onclick="borrarVenta('+ row[0] +',1);" class="buttonBorrar btn btn-warning" style="margin-left: 8px">'+
                 '<span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
+            }else if(row[7] == "Pedido"){
+                return '<div style="display: flex; width: auto;">'+
+                '<button onclick="traerPdfPedido(' +row[0]+ ');" title="Ver reporte" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px">'+
+                '<span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>'+
+                '<button type="button" onclick="cancelarVenta('+ row[0] +');" class="buttonBorrar btn btn-primary">'+
+                '<span class="fa fa-ban"></span><span class="hidden-xs"></span></button>'+
+                '<button type="button" onclick="borrarVenta('+ row[0] +',1);" class="buttonBorrar btn btn-warning" style="margin-left: 8px">'+
+                '<span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
+            }else{
+                return '';
             }
         }else{
             if (row[7] == "Credito") {
@@ -79,6 +89,8 @@ table = $('#ventas').DataTable({
                 return '<div style="display: flex"><button onclick="traerPdf(' +row[0]+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>';
          
             }else if(row[7] == "Apartado"){
+                return '<div style="display: flex"><button onclick="traerPdfApartado(' +row[0]+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>';
+            }else if(row[7] == "Pedido"){
                 return '<div style="display: flex"><button onclick="traerPdfApartado(' +row[0]+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>';
             }else if(row.estatus == "Cancelada"){
                 
@@ -286,5 +298,7 @@ function ocultarSidebar(){
   function traerPdfApartado(id){
     window.open("./modelo/apartados/reporte-venta-apartado.php?id="+id);
   }
-
+  function traerPdfPedido(id){
+    window.open("./modelo/pedidos/reporte-venta-pedido.php?id="+id);
+  }
 

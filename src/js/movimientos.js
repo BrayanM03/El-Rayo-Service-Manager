@@ -27,7 +27,7 @@ table = $('#movimientos').DataTable({
       }
       return prov;
     }},
-    { title: 'factura',        data: 9},
+    { title: 'factura',        data: 9, visible:true},
     { title: "fecha",          data: 3 },
     { title: "hora",           data: 4 },
     { title: "tipo",           data: 6, render(data, row) {
@@ -75,7 +75,7 @@ table = $('#movimientos').DataTable({
 
 $("table.dataTable thead").addClass("table-info");
 
-table.columns( [5] ).visible( false );
+//table.columns( [5] ).visible( false );
 
 }
 

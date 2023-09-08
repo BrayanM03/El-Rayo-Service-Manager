@@ -91,6 +91,7 @@ function editarStock(id, id_sucursal){
                     '<div class="col-6">'+
                         '<label>Tipo de operación</label>'+
                         '<select class="form-control mb-2" id="tipo">'+
+                            '<option value="aumentar">Agregar stock</option>'+
                             '<option value="reducir">Reducir stock</option>'+
                         '</select>'+ 
                     '</div>'+

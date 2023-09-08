@@ -3,18 +3,17 @@ $(document).ready(function() {
 $.fn.dataTable.ext.errMode = 'none';
 
 
+let tipo_cotizacion = $("#btn-agregar").attr("cotizacion");
 $.ajax({
   type: "POST",
   url: "./modelo/cotizaciones/borrar-tabla-cotiza-temp.php",
-  data: {"data": "data"},
+  data: {"tipo_cotizacion": tipo_cotizacion},
   success: function (response) {}
     
 });
 
 table = $('#pre-cotizacion').DataTable({
-  
-
-  
+    
     destroy: true,
     serverSide: true,
     processing: false,
@@ -22,6 +21,7 @@ table = $('#pre-cotizacion').DataTable({
         method: "POST",
         url: "./modelo/cotizaciones/traer-cotizacion-temp.php",
         dataType: "json",
+        data: {'tipo_cotizacion': tipo_cotizacion},
         error: function(){  // error handling
           numRows = table.column( 0 ).data().length;
      
@@ -81,18 +81,19 @@ table.on('click', '.borrar-articulo', function() {
   
   let $tr = $(this).closest('tr');
   let id = $(this).attr("rowid");
+  tipo_cotizacion = $("#btn-agregar").attr('cotizacion');
   let $importe = $(this).attr("importe");
 
   $.ajax({
     type: "POST",
     url: "./modelo/cotizaciones/borrar-cotiza-temp.php",
-    data: {"id":id},
+    data: {"id":id, 'tipo_cotizacion':tipo_cotizacion},
     success: function(response) {
       if(response == 1){
         $.ajax({
           type: "POST",
           url: "./modelo/cotizaciones/traer-importe-cotizacion.php",
-          data: "data",
+          data: {'tipo_cotizacion': tipo_cotizacion},
           success: function (response) {
             $("#total-cotizacion").val(response);
             
@@ -128,6 +129,7 @@ function agregarProducto() {
     tyre_precio = $("#precio").val();
     modelo = $("#btn-agregar").attr("modelo");
     tyre_amount = $("#cantidad").val();
+    tipo_cotizacion = $("#btn-agregar").attr('cotizacion');
     tyre_import = parseFloat(tyre_precio) * tyre_amount;
     tyre_description = $("#btn-agregar").attr("descripcion");
 
@@ -143,27 +145,21 @@ function agregarProducto() {
         $.ajax({
             type: "POST",
             url: "./modelo/cotizaciones/agregar-cotizacion-temp.php",
-            data: {"id": tyre_id, "descripcion": tyre_description, "modelo": modelo, "cantidad": tyre_amount, "marca": tyre_marca,"precio": tyre_precio, "importe": tyre_import},
-          
+            data: {"id": tyre_id, "descripcion": tyre_description, "modelo": modelo, "cantidad": tyre_amount, "marca": tyre_marca,"precio": tyre_precio, "importe": tyre_import, 'tipo_cotizacion':tipo_cotizacion},
+            dataType:'json',
             success: function (response) {
-
               if (response ==1 || response == 2) {
                 table.ajax.reload(null,false);
                 $.ajax({
                   type: "POST",
                   url: "./modelo/cotizaciones/traer-importe-cotizacion.php",
-                  data: "data",
+                  data: {'tipo_cotizacion': tipo_cotizacion},
                   success: function (response) {
                     $("#total-cotizacion").val(response);
-                    
-                toastr.success('Producto agregado', 'Listo');
+                    toastr.success('Producto agregado', 'Listo');
                   }
                 });
               }
-                
-               
-
-
             }
         });
 

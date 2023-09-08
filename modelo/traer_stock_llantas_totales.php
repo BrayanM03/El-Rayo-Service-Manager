@@ -12,6 +12,12 @@
         $term = $_POST["searchTerm"];
         $parametro = "%$term%";
         $total =0;
+        $page = $_POST['page'] ?? 1; // Número de página actual (1 si no se especifica)
+        // Parámetros de paginación
+        $resultadosPorPagina = 10;
+        // Calcular el offset
+        $offset = ($page - 1) * $resultadosPorPagina;
+
         $sqlContarLlantas= $con->prepare("SELECT COUNT(*) total FROM llantas WHERE Descripcion LIKE ? 
                                                                              OR Ancho LIKE ?
                                                                              OR Proporcion LIKE ?
@@ -20,7 +26,7 @@
                                                                              OR Marca LIKE ?
                                                                              OR Modelo LIKE ?");
 
-                                                                                 
+                                                                                  
        
        $sqlContarLlantas->bind_param('sssssss', $parametro, $parametro, $parametro,  $parametro, $parametro, $parametro, $parametro); 
        $sqlContarLlantas->execute();
@@ -36,7 +42,7 @@
                                                   OR Diametro    LIKE '%$term%'
                                                   OR Modelo      LIKE '%$term%'  
                                                   OR Marca       LIKE '%$term%' 
-                                                  OR Descripcion LIKE '%$term%'";
+                                                  OR Descripcion LIKE '%$term%' LIMIT $resultadosPorPagina OFFSET $offset";
         
         $resultado = mysqli_query($con, $sqlTraerLlanta);
        
@@ -55,7 +61,17 @@
                              "costo"=> $costo, "precio"=>$precio, "mayoreo"=>$mayoreo);
         }
 
-        echo json_encode($data, JSON_UNESCAPED_UNICODE);
+        $response = array(
+            'results' => $data, // Array de resultados obtenidos de la consulta SQL
+            'post'=> $_POST,
+            'pagination' => array(
+              'page'=> $page,
+              'offset'=> $offset,
+              'paginas_per_page'=> $resultadosPorPagina,
+              'more' => count($data) == $resultadosPorPagina // Verificar si hay más resultados disponibles
+            ));
+        //echo json_encode($_POST);
+       echo json_encode($response, JSON_UNESCAPED_UNICODE);
        
     
     }else{ 

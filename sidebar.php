@@ -4,6 +4,7 @@ $flag = $_GET['nav'];
 $claseInicio = "";
 $claseNuevaVenta = "";
 $claseNuevaCotizacion = "";
+$claseNuevaPedido = "";
 $claseHistorial = "";
 $showHistorial = "";
 $claseVentas = "";
@@ -16,6 +17,7 @@ $claseToken = "";
 $showMisLlantas = "";
 $claseMisLlantas = "";
 $claseExistencia = "";
+$claseApartados = '';
 $claseServicios = "";
 $claseMovimientos = "";
 $claseMovimientosClientes ="";
@@ -33,6 +35,9 @@ switch ($flag) {
         case 'nueva_cotizacion':
         $claseNuevaCotizacion = "active";
         break;
+        case 'nueva_pedido':
+            $claseNuevaPedido = "active";
+        break;
         case 'ventas':
         $claseHistorial = "active";
         $claseVentas = "active";
@@ -47,7 +52,12 @@ switch ($flag) {
             $claseHistorial = "active";
             $claseApartados = "active";
             $showHistorial = "show";
-        break;    
+        break;   
+        case 'pedidos':
+            $claseHistorial = "active";
+            $clasePedidos = "active";
+            $showHistorial = "show";
+        break;   
         case "inv":
         $showMisLlantas = "show";
         $claseMisLlantas = "active";
@@ -96,7 +106,7 @@ switch ($flag) {
         <!-- <i class="fas fa-laugh-wink"></i>--->
         <img style="filter: invert(100%);" width="40px" src="src/img/racing.svg"/>
     </div>
-    <div class="sidebar-brand-text mx-3" id="emp-title" sesion_id="<?php echo $_SESSION["id_usuario"]; ?>" sesion_rol="<?php echo $_SESSION["rol"]; ?>">El Rayo<sup style="font-size:12px; margin-left:5px;">app</sup></div>
+    <div class="sidebar-brand-text mx-3" id="emp-title" sesion_id="<?php echo $_SESSION["id_usuario"]; ?>" sesion_rol="<?php echo $_SESSION["rol"]; ?>">El Rayo<sup style="font-size:6px !important; margin-left:5px;">app</sup></div>
 </a>
 
 <!-- Divider -->
@@ -128,9 +138,16 @@ switch ($flag) {
 </li>
 
 <li class="nav-item <?php echo $claseNuevaCotizacion ?> rol-4">
-    <a class="nav-link" href="cotizacion.php?id=0&nav=nueva_cotizacion">
+    <a class="nav-link" href="nueva-cotizacion.php?id=0&nav=nueva_cotizacion">
         <i class="fas fa-fw fa-clipboard"></i>
         <span>Nueva cotización</span>
+    </a>
+</li>
+
+<li class="nav-item <?php echo $claseNuevaPedido ?> rol-4">
+    <a class="nav-link" href="nuevo-pedido.php?id=0&nav=nueva_pedido">
+        <i class="fas fa-fw fa-clipboard"></i>
+        <span>Nuevo pedido</span>
     </a>
 </li>
 <?php } ?>
@@ -156,6 +173,10 @@ switch ($flag) {
             <a class="collapse-item <?php echo $claseApartados ?> rol-4" href="apartados.php?id=0&nav=apartados">
                 <img src="src/img/payment.png" width="18px" /> 
                 <span style="margin-left:12px;"> Apartados</span>
+            </a>
+            <a class="collapse-item <?php echo $clasePedidos ?> rol-4" href="pedidos.php?id=0&nav=pedidos">
+                <img src="src/img/payment.png" width="18px" /> 
+                <span style="margin-left:12px;"> Pedidos</span>
             </a>
         </div>
     </div>
