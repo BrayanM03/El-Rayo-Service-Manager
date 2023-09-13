@@ -102,7 +102,8 @@ function Header()
     $colonia = "";
     $telefono = "8948424459";
     $rfc = "SARK9104063L6";
-    $this->Image('../../src/img/logo-del-rio.jpg',10,4,43);
+    
+    $this->Image('../../src/img/logo.jpg',20,10,25);
    }else if($GLOBALS["sucursal"] == "Rio Bravo"){
     $titulo_sucursal = 'Llantas economicas "Del Rio"';
     $direccion = "Av.Madero Entre Tamaulipas y Poniente 3";

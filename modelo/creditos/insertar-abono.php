@@ -114,10 +114,12 @@ if(isset($_POST)){
             }else{
                 $estado = 0; //Aun sin pagar
             }
+
+            include '../helpers/verificar-hora-corte.php';
             
-            $insertar_abono = "INSERT INTO abonos(id, id_credito, fecha, hora, abono, metodo_pago, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, usuario, estado, sucursal, id_sucursal) VALUES(null,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            $insertar_abono = "INSERT INTO abonos(id, id_credito, fecha, hora, abono, metodo_pago, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, usuario, estado, sucursal, id_sucursal, fecha_corte, hora_corte) VALUES(null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             $resultado = $con->prepare($insertar_abono);  
-            $resultado->bind_param('isssssssssssss', $id_credito, $fecha, $hora, $monto_total, $metodos_str, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $usuario, $estado, $sucursal, $id_sucursal);
+            $resultado->bind_param('isssssssssssssss', $id_credito, $fecha, $hora, $monto_total, $metodos_str, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $usuario, $estado, $sucursal, $id_sucursal, $fecha_corte, $hora_corte);
             $resultado->execute();
            
             if ($resultado == true) {

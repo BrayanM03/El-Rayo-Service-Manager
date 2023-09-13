@@ -2,7 +2,7 @@
 <?php
 session_start();
 include '../conexion.php';
-$con = $conectando->conexion(); 
+$con = $conectando->conexion();
 
 date_default_timezone_set("America/Matamoros");
 
@@ -26,60 +26,63 @@ $ID->close();
 $vendedor_usuario = $vendedor_name . " " . $vendedor_apellido;
 $estatus = 'Pagado';
 
-$desc_metodos ='';
-    $pago_efectivo=0;
-    $pago_transferencia=0;
-    $pago_tarjeta=0;
-    $pago_cheque=0;
-    $pago_sin_definir=0;
-      foreach ($_POST["metodos_pago"] as $key => $value) {
-      $metodo_id = isset($value['id_metodo']) ? $value['id_metodo']: $key;
-      switch ($metodo_id) {
-        case 0:
-         $pago_efectivo = $value['monto'];
-          break;
-        
-        case 1:
-        $pago_tarjeta = $value['monto'];
-        break;
-        
-        case 2:
-        $pago_transferencia = $value['monto'];
+$desc_metodos = '';
+$pago_efectivo = 0;
+$pago_transferencia = 0;
+$pago_tarjeta = 0;
+$pago_cheque = 0;
+$pago_sin_definir = 0;
+foreach ($_POST["metodos_pago"] as $key => $value) {
+  $metodo_id = isset($value['id_metodo']) ? $value['id_metodo'] : $key;
+  switch ($metodo_id) {
+    case 0:
+      $pago_efectivo = $value['monto'];
+      break;
 
-        break;
-  
-        case 3:
-        $pago_cheque = $value['monto'];
-        break;
-  
-        case 4:
-        $pago_sin_definir = $value['monto'];
-        break;     
-        
-        default:
-          break;
-      }
-      $monto_pago = $value['monto'];
-      $metodo_pago = $value['metodo'];
-      if($key != count($_POST["metodos_pago"]) - 1) {
-        // Este código se ejecutará para todos menos el último
-        $desc_metodos .= $metodo_pago . ", ";
-      }else{
-        $desc_metodos .= $metodo_pago . ". ";
-      }
-    }
+    case 1:
+      $pago_tarjeta = $value['monto'];
+      break;
+
+    case 2:
+      $pago_transferencia = $value['monto'];
+
+      break;
+
+    case 3:
+      $pago_cheque = $value['monto'];
+      break;
+
+    case 4:
+      $pago_sin_definir = $value['monto'];
+      break;
+
+    default:
+      break;
+  }
+  $monto_pago = $value['monto'];
+  $metodo_pago = $value['metodo'];
+  if ($key != count($_POST["metodos_pago"]) - 1) {
+    // Este código se ejecutará para todos menos el último
+    $desc_metodos .= $metodo_pago . ", ";
+  } else {
+    $desc_metodos .= $metodo_pago . ". ";
+  }
+}
 
 //Haciendo consulta a detalle del apartado
 
 $detalle = $con->prepare("SELECT * FROM detalle_apartado da WHERE da.id_apartado = ?");
 $detalle->bind_param('i', $id);
 $detalle->execute();
-$resultado_da = $detalle->get_result(); 
-$detalle->close(); 
+$resultado_da = $detalle->get_result();
+$detalle->close();
+
+//Script que verifica la hora de corte actual
+include '../helpers/verificar-hora-corte.php';
 
 //Insertando la venta
-$insertar = $con->prepare("INSERT INTO ventas (Fecha, sucursal, id_sucursal, id_Usuarios, id_Cliente, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, Total, tipo, estatus, metodo_pago, hora, comentario) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-$insertar->bind_param('ssssssssssssssss', $fecha_actual, $sucursal, $id_sucursal, $vendedor_id, $id_cliente, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $total, $tipo, $estatus, $metodo_pago, $hora, $comentario);
+$insertar = $con->prepare("INSERT INTO ventas (Fecha, sucursal, id_sucursal, id_Usuarios, id_Cliente, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, Total, tipo, estatus, metodo_pago, hora, comentario, fecha_corte, hora_corte) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+$insertar->bind_param('ssssssssssssssssss', $fecha_actual, $sucursal, $id_sucursal, $vendedor_id, $id_cliente, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $total, $tipo, $estatus, $metodo_pago, $hora, $comentario, $fecha_corte, $hora);
 $insertar->execute();
 // Obtener el ID insertado
 $id_Venta = $con->insert_id;
@@ -96,29 +99,29 @@ $actualizar->close();
 $data_productos = array();
 
 //Insertar abono pendiente
-$estado =0; 
-$queryInsertar = "INSERT INTO abonos_apartados (id, id_apartado, fecha, hora, abono, metodo_pago, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, usuario, estado, sucursal, id_sucursal) VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+$estado = 0;
+$queryInsertar = "INSERT INTO abonos_apartados (id, id_apartado, fecha, hora, abono, metodo_pago, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, usuario, estado, sucursal, id_sucursal, fecha_corte, hora_corte) VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 $resultado = $con->prepare($queryInsertar);
-$resultado->bind_param('issdsdddddssss', $id, $fecha_actual, $hora, $restante, $metodo_pago, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $vendedor_usuario, $estado, $sucursal, $id_sucursal);
+$resultado->bind_param('issdsdddddssssss', $id, $fecha_actual, $hora, $restante, $metodo_pago, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $vendedor_usuario, $estado, $sucursal, $id_sucursal, $fecha_corte, $hora_corte);
 $resultado->execute();
 $resultado->close();
 
 //Iterando productos
-while($fila = $resultado_da->fetch_assoc()) {
+while ($fila = $resultado_da->fetch_assoc()) {
 
-    $cantidad = $fila["cantidad"];
-    $modelo = $fila["modelo"];
-    $unidad = $fila["unidad"];
-    $precio_unitario = $fila["precio_unitario"];
-    $importe = $fila["importe"];
-    $id_Llanta = $fila["id_llanta"];
+  $cantidad = $fila["cantidad"];
+  $modelo = $fila["modelo"];
+  $unidad = $fila["unidad"];
+  $precio_unitario = $fila["precio_unitario"];
+  $importe = $fila["importe"];
+  $id_Llanta = $fila["id_llanta"];
 
-    $dt_insert = "INSERT INTO detalle_venta (id, id_Venta, id_Llanta, Cantidad, Modelo, Unidad, precio_Unitario, Importe) VALUES (null,?,?,?,?,?,?,?)";
-    $resultado = $con->prepare($dt_insert);
-    $resultado->bind_param('iiisssd', $id_Venta, $id_Llanta, $cantidad, $modelo, $unidad, $precio_unitario, $importe);
-    $resultado->execute();
-    $resultado->close();
+  $dt_insert = "INSERT INTO detalle_venta (id, id_Venta, id_Llanta, Cantidad, Modelo, Unidad, precio_Unitario, Importe) VALUES (null,?,?,?,?,?,?,?)";
+  $resultado = $con->prepare($dt_insert);
+  $resultado->bind_param('iiisssd', $id_Venta, $id_Llanta, $cantidad, $modelo, $unidad, $precio_unitario, $importe);
+  $resultado->execute();
+  $resultado->close();
 }
 
-$res = array('estatus'=>true, 'mensaje'=>'Venta realizada correctamente. ', 'id_venta'=>$id_Venta);
+$res = array('estatus' => true, 'mensaje' => 'Venta realizada correctamente. ', 'id_venta' => $id_Venta);
 echo json_encode($res);

@@ -91,9 +91,11 @@ $ID->close();
    $info_producto_individual = $datos;
    $comentario = $_POST["comentario"];
 
-    $queryInsertar = "INSERT INTO ventas (id, Fecha, sucursal, id_sucursal, id_Usuarios, id_Cliente, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, Total, tipo, estatus, metodo_pago, hora, comentario) VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+   include '../helpers/verificar-hora-corte.php';
+
+    $queryInsertar = "INSERT INTO ventas (id, Fecha, sucursal, id_sucursal, id_Usuarios, id_Cliente, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, Total, tipo, estatus, metodo_pago, hora, comentario, fecha_corte, hora_corte) VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     $resultado = $con->prepare($queryInsertar);
-    $resultado->bind_param('ssiisddddddsssss', $fecha, $sucursal, $id_sucursal, $idUser, $cliente , $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $total, $tipo, $estatus, $desc_metodos, $hora, $comentario);
+    $resultado->bind_param('ssiisddddddsssssss', $fecha, $sucursal, $id_sucursal, $idUser, $cliente , $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $total, $tipo, $estatus, $desc_metodos, $hora, $comentario, $fecha_corte, $hora);
     $resultado->execute();
     $resultado->close();
 

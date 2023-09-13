@@ -64,6 +64,11 @@ if(isset($_POST)) {
 
     $vendedor_id = $_SESSION['id_usuario'];
 
+    //Insertando la venta
+    $fecha_actual = date('Y-m-d');
+   
+ 
+
     $ID = $con->prepare("SELECT nombre, apellidos FROM usuarios WHERE id = ?");
     $ID->bind_param('i', $vendedor_id);
     $ID->execute();
@@ -73,6 +78,7 @@ if(isset($_POST)) {
 
     $vendedor_usuario = $vendedor_name . " " . $vendedor_apellido;
    
+ 
     $select = "SELECT id_sucursal, id_usuario, id_cliente, sucursal, pago_efectivo, 
     pago_tarjeta, 
     pago_transferencia, 
@@ -103,6 +109,8 @@ if(isset($_POST)) {
     $nuevo_pago_cheque = $pago_cheque + $actual_pago_cheque;
     $nuevo_pago_sin_definir = $pago_sin_definir + $actual_pago_sin_definir;
 
+    include '../helpers/verificar-hora-corte.php';
+
     if(($suma_abonos + $monto_total_abono) > $importe_total){
         $res = array('estatus'=>false, 'mensaje'=>'El apartado ya esta liquidado', 'liquidacion'=>true);
         echo json_encode($res);
@@ -127,11 +135,11 @@ if(isset($_POST)) {
                                                             usuario, 
                                                             estado,
                                                             sucursal,
-                                                            id_sucursal) VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                                                            id_sucursal, fecha_corte, hora_corte) VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $resultado = $con->prepare($queryInsertar);
-        $resultado->bind_param('ssssssssssssss', $id_apartado, $fecha, $hora, $monto_total_abono,
+        $resultado->bind_param('ssssssssssssssss', $id_apartado, $fecha, $hora, $monto_total_abono,
                                                   $desc_metodos, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque,
-                                                  $pago_sin_definir, $vendedor_usuario, $tipo, $sucursal, $id_sucursal);
+                                                  $pago_sin_definir, $vendedor_usuario, $tipo, $sucursal, $id_sucursal, $fecha_corte, $hora);
         $resultado->execute();
         $error = $resultado->error;
         $resultado->close();
@@ -139,10 +147,9 @@ if(isset($_POST)) {
             $estatus = 'Pagado';
             $tipo = 'Apartado';
             $liquidacion = true;
-            //Insertando la venta
-            $fecha_actual = date('Y-m-d');
-            $insertar = $con->prepare("INSERT INTO ventas (Fecha, sucursal, id_sucursal, id_Usuarios, id_Cliente, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, Total, tipo, estatus, metodo_pago, hora, comentario) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-            $insertar->bind_param('ssssssssssssssss', $fecha_actual, $sucursal, $id_sucursal, $id_usuario, $id_cliente, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $importe_total, $tipo, $estatus, $metodo_pago, $hora, $comentario);
+
+            $insertar = $con->prepare("INSERT INTO ventas (Fecha, sucursal, id_sucursal, id_Usuarios, id_Cliente, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, Total, tipo, estatus, metodo_pago, hora, comentario, fecha_corte, hora_corte) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            $insertar->bind_param('ssssssssssssssssss', $fecha_actual, $sucursal, $id_sucursal, $id_usuario, $id_cliente, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $importe_total, $tipo, $estatus, $metodo_pago, $hora, $comentario, $fecha_corte, $hora);
             $insertar->execute();
             // Obtener el ID insertado
             $id_Venta = $con->insert_id;

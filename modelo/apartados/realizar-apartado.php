@@ -101,6 +101,8 @@ if(isset($_POST)) {
     $info_producto_individual = $datos;
     $comentario = $_POST['comentario'];
 
+    include '../helpers/verificar-hora-corte.php';
+
     $queryInsertar = "INSERT INTO apartados (id, sucursal, id_sucursal, id_usuario, id_cliente, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, primer_abono, restante, total, tipo, estatus, metodo_pago, hora, comentario, plazo, fecha_inicial, fecha_final) VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     $resultado = $con->prepare($queryInsertar);
     $resultado->bind_param('siisddddddddsssssiss', $sucursal, $id_sucursal, $idUser, $cliente , $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $adelanto, $restante, $total, $tipo, $estatus, $desc_metodos, $hora, $comentario, $plazo, $fecha_inicial, $fecha_final);
@@ -121,9 +123,9 @@ if(isset($_POST)) {
 
         //Insertar abono
         $estado =1; 
-        $queryInsertar = "INSERT INTO abonos_apartados (id, id_apartado, fecha, hora, abono, metodo_pago, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, usuario, estado, sucursal, id_sucursal) VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        $queryInsertar = "INSERT INTO abonos_apartados (id, id_apartado, fecha, hora, abono, metodo_pago, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, usuario, estado, sucursal, id_sucursal, fecha_corte, hora_corte) VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $resultado = $con->prepare($queryInsertar);
-        $resultado->bind_param('issdsdddddssss', $id_apartado, $fecha_inicial, $hora, $adelanto, $desc_metodos, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $vendedor_usuario, $estado, $sucursal, $id_sucursal);
+        $resultado->bind_param('issdsdddddssssss', $id_apartado, $fecha_inicial, $hora, $adelanto, $desc_metodos, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $vendedor_usuario, $estado, $sucursal, $id_sucursal, $fecha_corte, $hora);
         $resultado->execute();
         $resultado->close();
 

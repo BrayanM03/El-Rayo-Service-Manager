@@ -91,7 +91,7 @@ table = $('#ventas').DataTable({
             }else if(row[7] == "Apartado"){
                 return '<div style="display: flex"><button onclick="traerPdfApartado(' +row[0]+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>';
             }else if(row[7] == "Pedido"){
-                return '<div style="display: flex"><button onclick="traerPdfApartado(' +row[0]+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>';
+                return '<div style="display: flex"><button onclick="traerPdfPedido(' +row[0]+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>';
             }else if(row.estatus == "Cancelada"){
                 
             }

@@ -246,7 +246,8 @@ if ($_SESSION['user'] !==  "brayanm03") {
                                         $telefono = $fila["telefono"];
                                         $rfc = $fila["RFC"];
                                         $cp = $fila["CP"];
-                                        $corte = $fila["corte"];
+                                        $corte = $fila["hora_corte_normal"];
+                                        $corte = $fila["hora_corte_sabado"];
 
                                         $direccion = $calle . " " . $numero . " " . $colonia . " " . $ciudad . " " . $estado . " " . $pais . " " .$cp;
 

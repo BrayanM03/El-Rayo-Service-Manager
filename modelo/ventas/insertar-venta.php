@@ -20,11 +20,11 @@ if(isset($_POST)){
 
   $id_sucursal = $_POST["sucursal"];
 
-  $querySuc = "SELECT nombre FROM sucursal WHERE id =?";
+  $querySuc = "SELECT nombre, hora_corte_normal, hora_corte_sabado FROM sucursal WHERE id =?";
   $resp=$con->prepare($querySuc);
   $resp->bind_param('i', $id_sucursal);
   $resp->execute();
-  $resp->bind_result($sucursal);
+  $resp->bind_result($sucursal, $hora_corte_normal, $hora_corte_sabado);
   $resp->fetch();
   $resp->close();
    
@@ -88,10 +88,13 @@ if(isset($_POST)){
    // $info_producto_individual = json_decode($datos);  
    $info_producto_individual = $datos;
    $comentario = $_POST["comentario"];
+   
+    include '../helpers/verificar-hora-corte.php';
 
-    $queryInsertar = "INSERT INTO ventas (id, Fecha, sucursal, id_sucursal, id_Usuarios, id_Cliente, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, Total, tipo, estatus, metodo_pago, hora, comentario) VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+    $queryInsertar = "INSERT INTO ventas (id, Fecha, sucursal, id_sucursal, id_Usuarios, id_Cliente, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, Total, tipo, estatus, metodo_pago, hora, comentario, fecha_corte, hora_corte) VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     $resultado = $con->prepare($queryInsertar);
-    $resultado->bind_param('ssiisddddddsssss', $fecha, $sucursal, $id_sucursal, $idUser, $cliente , $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $total, $tipo, $estatus, $desc_metodos, $hora, $comentario);
+    $resultado->bind_param('ssiisddddddsssssss', $fecha, $sucursal, $id_sucursal, $idUser, $cliente , $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $total, $tipo, $estatus, $desc_metodos, $hora, $comentario, $fecha_corte, $hora);
     $resultado->execute();
     $resultado->close();
 
