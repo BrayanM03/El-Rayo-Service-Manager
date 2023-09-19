@@ -121,7 +121,10 @@ if(isset($_POST)){
             $resultado = $con->prepare($insertar_abono);  
             $resultado->bind_param('isssssssssssssss', $id_credito, $fecha, $hora, $monto_total, $metodos_str, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $usuario, $estado, $sucursal, $id_sucursal, $fecha_corte, $hora_corte);
             $resultado->execute();
-           
+            $error_credito = $resultado->error;
+            if($error_credito){
+                print_r($error_credito);
+            }
             if ($resultado == true) {
               
             $resultado->close();

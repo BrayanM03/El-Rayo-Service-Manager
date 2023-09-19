@@ -237,7 +237,7 @@ function realizarVentaCredito(){
                                     dataType: "JSON",
                                     
                                     success: function (response) {
-                                        if (response) {
+                                        if (response.estatus) {
                                             
                                             $.ajax({
                                                 type: "POST",
@@ -253,7 +253,7 @@ function realizarVentaCredito(){
                                             Swal.fire({
                                                 title: 'Venta a credito realizada',
                                                 html: "<span>La venta a credito se realizo con exito</br></span>"+
-                                                "ID Venta: RAY" + response,
+                                                "ID Venta: RAY" + response.folio,
                                                 icon: "success",
                                                 cancelButtonColor: '#00e059',
                                                 showConfirmButton: true,
@@ -278,7 +278,7 @@ function realizarVentaCredito(){
 
                                                 }else if(result.isDenied){
                         
-                                                    window.open('./modelo/creditos/generar-reporte-credito.php?id='+ response, '_blank');
+                                                    window.open('./modelo/creditos/generar-reporte-credito.php?id='+ response.folio, '_blank');
                                                     table.ajax.reload(null,false);
                                                     $("#pre-venta tbody tr").remove();
                                                     $(".pre-venta-error").html("");

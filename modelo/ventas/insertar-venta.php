@@ -88,151 +88,175 @@ if(isset($_POST)){
    // $info_producto_individual = json_decode($datos);  
    $info_producto_individual = $datos;
    $comentario = $_POST["comentario"];
+
+   $stock_ok = true;
    
+   foreach ($info_producto_individual as $key => $value) { 
+   
+    $codigo = $value["codigo"];
+    $subcadena = substr($codigo, 0, 4);
+
+        if($subcadena == "SERV") {
+
+        }else{
+            $ID = $con->prepare("SELECT id_Llanta, Stock FROM inventario WHERE Codigo = ?");
+            $ID->bind_param('s', $codigo);
+            $ID->execute();
+            $ID->bind_result($id_Llanta, $stockActual);
+            $ID->fetch();
+            $ID->close();
+    
+             if($stockActual <= 0){
+                $stock_ok = false;
+             }
+          }
+        
+    
+   }
+   
+if($stock_ok) {
     include '../helpers/verificar-hora-corte.php';
 
 
     $queryInsertar = "INSERT INTO ventas (id, Fecha, sucursal, id_sucursal, id_Usuarios, id_Cliente, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, Total, tipo, estatus, metodo_pago, hora, comentario, fecha_corte, hora_corte) VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     $resultado = $con->prepare($queryInsertar);
-    $resultado->bind_param('ssiisddddddsssssss', $fecha, $sucursal, $id_sucursal, $idUser, $cliente , $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $total, $tipo, $estatus, $desc_metodos, $hora, $comentario, $fecha_corte, $hora);
+    $resultado->bind_param('ssiisddddddsssssss', $fecha, $sucursal, $id_sucursal, $idUser, $cliente, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $total, $tipo, $estatus, $desc_metodos, $hora, $comentario, $fecha_corte, $hora_corte);
     $resultado->execute();
     $resultado->close();
 
     $sql = "SELECT id FROM ventas ORDER BY id DESC LIMIT 1";
     $resultado = mysqli_query($con, $sql);
-    
-    if(!$resultado){
-      echo "no se pudo realizar la consulta";
 
-    }else{
-      $dato =  mysqli_fetch_array($resultado, MYSQLI_ASSOC);
+    if(!$resultado) {
+        echo "no se pudo realizar la consulta";
 
-        
+    } else {
+        $dato =  mysqli_fetch_array($resultado, MYSQLI_ASSOC);
+
+
         $id_Venta = $dato["id"];
 
-        foreach ($info_producto_individual as $key => $value) { 
-          
-          $validacion = is_numeric($key);
+        foreach ($info_producto_individual as $key => $value) {
 
-          
-          if($validacion){
-            
-            $codigo = $value["codigo"];
-            $descripcion = $value["descripcion"];
-            $modelo = $value["modelo"];
-            $cantidad = $value["cantidad"];
-            $precio_unitario = $value["precio"];
-            $importe = $value["importe"];
-            
-
-            $subcadena = substr($codigo, 0, 4);
+            $validacion = is_numeric($key);
 
 
-            if($subcadena == "SERV"){
+            if($validacion) {
+                $codigo = $value["codigo"];
+                $descripcion = $value["descripcion"];
+                $modelo = $value["modelo"];
+                $cantidad = $value["cantidad"];
+                $precio_unitario = $value["precio"];
+                $importe = $value["importe"];
 
-              $ID = $con->prepare("SELECT id FROM servicios WHERE codigo LIKE ?");
-              $ID->bind_param('s', $codigo);
-              $ID->execute();
-              $ID->bind_result($id_Servicio);
-              $ID->fetch();
-              $ID->close();
 
-            }else{
-              $ID = $con->prepare("SELECT id_Llanta, Stock FROM inventario WHERE Codigo = ?");
-              $ID->bind_param('s', $codigo);
-              $ID->execute();
-              $ID->bind_result($id_Llanta, $stockActual);
-              $ID->fetch();
-              $ID->close();
+                $subcadena = substr($codigo, 0, 4);
 
-              $resultStock = $stockActual - $cantidad;
 
-             $updateStockSendero = $con->prepare("UPDATE inventario SET Stock = ? WHERE Codigo = ?");
-             $updateStockSendero->bind_param('is', $resultStock, $codigo);
-             $updateStockSendero->execute();
-             $updateStockSendero->close();
-            }
- 
-             if($subcadena == "SERV"){
-              $unidad = "servicio";
-              $queryInsertar = "INSERT INTO detalle_venta (id, id_Venta, id_Llanta, Modelo, Cantidad, Unidad, precio_Unitario, Importe) VALUES (null,?,?,?,?,?,?,?)";
-              $resultado = $con->prepare($queryInsertar);
-              $resultado->bind_param('iisisdd',$id_Venta, $id_Servicio, $modelo, $cantidad, $unidad, $precio_unitario, $importe);
-              $resultado->execute();
-              $resultado->close();
-             }else{
-              $unidad = "pieza";
-              $queryInsertar = "INSERT INTO detalle_venta (id, id_Venta, id_Llanta, Modelo, Cantidad, Unidad, precio_Unitario, Importe) VALUES (null,?,?,?,?,?,?,?)";
-              $resultado = $con->prepare($queryInsertar);
-              $resultado->bind_param('iisisdd',$id_Venta, $id_Llanta, $modelo, $cantidad, $unidad, $precio_unitario, $importe);
-              $resultado->execute();
-              $resultado->close();
-             }
+                if($subcadena == "SERV") {
 
-              
-            
-            
+                    $ID = $con->prepare("SELECT id FROM servicios WHERE codigo LIKE ?");
+                    $ID->bind_param('s', $codigo);
+                    $ID->execute();
+                    $ID->bind_result($id_Servicio);
+                    $ID->fetch();
+                    $ID->close();
 
-            //Notify system
-            $iduser = $_SESSION["id_usuario"];
+                } else {
+                    $ID = $con->prepare("SELECT id_Llanta, Stock FROM inventario WHERE Codigo = ?");
+                    $ID->bind_param('s', $codigo);
+                    $ID->execute();
+                    $ID->bind_result($id_Llanta, $stockActual);
+                    $ID->fetch();
+                    $ID->close();
 
-            $vaciarTabla = "TRUNCATE TABLE productos_temp$iduser";
+                    if($stockActual <= 0) {
 
-            $consulta = mysqli_query($con, $vaciarTabla);
-           
+                    } else {
+                        $resultStock = $stockActual - $cantidad;
 
-            $consulta = mysqli_query($con, "SELECT * FROM usuarios WHERE rol LIKE 1 OR rol LIKE 2");
+                        $updateStockSendero = $con->prepare("UPDATE inventario SET Stock = ? WHERE Codigo = ?");
+                        $updateStockSendero->bind_param('is', $resultStock, $codigo);
+                        $updateStockSendero->execute();
+                        $updateStockSendero->close();
+                    }
 
-            if($_POST["tipo"] == "vt-normal"){
-              $tipo = "vt-normal";
-              $complemento_desc = " realizo una venta";
-            }else if($_POST["tipo"] == "vt-credito"){
-              $tipo = "vt-credito";
-              $complemento_desc = " realizo una venta a credito";
-            }
+                }
 
-           // print_r($_POST["tipo"]);
+                if($subcadena == "SERV") {
+                    $unidad = "servicio";
+                    $queryInsertar = "INSERT INTO detalle_venta (id, id_Venta, id_Llanta, Modelo, Cantidad, Unidad, precio_Unitario, Importe) VALUES (null,?,?,?,?,?,?,?)";
+                    $resultado = $con->prepare($queryInsertar);
+                    $resultado->bind_param('iisisdd', $id_Venta, $id_Servicio, $modelo, $cantidad, $unidad, $precio_unitario, $importe);
+                    $resultado->execute();
+                    $resultado->close();
+                } else {
+                    $unidad = "pieza";
+                    $queryInsertar = "INSERT INTO detalle_venta (id, id_Venta, id_Llanta, Modelo, Cantidad, Unidad, precio_Unitario, Importe) VALUES (null,?,?,?,?,?,?,?)";
+                    $resultado = $con->prepare($queryInsertar);
+                    $resultado->bind_param('iisisdd', $id_Venta, $id_Llanta, $modelo, $cantidad, $unidad, $precio_unitario, $importe);
+                    $resultado->execute();
+                    $resultado->close();
+                }
 
-            if ($consulta) {
-                while($row = mysqli_fetch_assoc($consulta))
-                {
-                  $id_usuario_admi = $row['id'] . " " . $row["nombre"] ; // Sumar variable $total + resultado de la consulta 
-                  $desc_notifi = $_SESSION['nombre'] . $complemento_desc;
-                  $estatus = 1; 
-                  $fecha = date("d-m-Y"); 
-                  $hora = date("h:i a");
-                  $refe = 0;  
-                  $alertada = "NO";
-                  
-                  $queryInsertarNoti = "INSERT INTO registro_notificaciones (id, id_usuario, descripcion, estatus, fecha, hora, refe, alertada, tipo) VALUES (null,?,?,?,?,?,?,?,?)";
+
+
+
+
+                //Notify system
+                $iduser = $_SESSION["id_usuario"];
+
+                $vaciarTabla = "TRUNCATE TABLE productos_temp$iduser";
+
+                $consulta = mysqli_query($con, $vaciarTabla);
+
+
+                $consulta = mysqli_query($con, "SELECT * FROM usuarios WHERE rol LIKE 1 OR rol LIKE 2");
+
+                if($_POST["tipo"] == "vt-normal") {
+                    $tipo = "vt-normal";
+                    $complemento_desc = " realizo una venta";
+                } elseif($_POST["tipo"] == "vt-credito") {
+                    $tipo = "vt-credito";
+                    $complemento_desc = " realizo una venta a credito";
+                }
+
+                // print_r($_POST["tipo"]);
+
+                if ($consulta) {
+                    while($row = mysqli_fetch_assoc($consulta)) {
+                        $id_usuario_admi = $row['id'] . " " . $row["nombre"] ; // Sumar variable $total + resultado de la consulta
+                        $desc_notifi = $_SESSION['nombre'] . $complemento_desc;
+                        $estatus = 1;
+                        $fecha = date("d-m-Y");
+                        $hora = date("h:i a");
+                        $refe = 0;
+                        $alertada = "NO";
+
+                        $queryInsertarNoti = "INSERT INTO registro_notificaciones (id, id_usuario, descripcion, estatus, fecha, hora, refe, alertada, tipo) VALUES (null,?,?,?,?,?,?,?,?)";
                         $resultados = $con->prepare($queryInsertarNoti);
-                        $resultados->bind_param('isississ',$id_usuario_admi, $desc_notifi, $estatus, $fecha, $hora, $refe, $alertada, $tipo);
+                        $resultados->bind_param('isississ', $id_usuario_admi, $desc_notifi, $estatus, $fecha, $hora, $refe, $alertada, $tipo);
                         $resultados->execute();
                         $resultados->close();
-                }
-                
-                
-            }
-           
+                    }
 
-          }else{
-            echo "";
-          }
+
+                }
+
+
+            } else {
+                echo "";
+            }
 
         }
 
-
-      print_r($id_Venta);
-    /*usar esta consulta:  select * from ventas ORDER BY id DESC LIMIT 1 para escoger el ultimo id
-
-          
-
-   // echo json_encode($codigo_llanta, JSON_UNESCAPED_UNICODE);*/
-
-    //Aqui //}
-
-    
-  }
+        $response = array('estatus' =>true, 'mensaje' =>'Venta realizada correctamente', 'folio' =>$id_Venta);
+        echo json_encode($response);
+    }
+}else{
+        $response = array('estatus' =>false, 'mensaje' =>'El stock de una llanta es igual o menor a 0');
+        echo json_encode($response);
+}
   
 }
 

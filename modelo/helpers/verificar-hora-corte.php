@@ -25,13 +25,13 @@
      $fecha_obj = new DateTime($fecha_actual);
      $fecha_obj->modify('+2 day');
      $fecha_corte = $fecha_obj->format('Y-m-d');
-     $hora = '08:30 am';
+     $hora_corte = '08:30 am';
  } else {
      
      $fecha_obj = new DateTime($fecha_actual);
      $fecha_obj->modify('+1 day');
      $fecha_corte = $fecha_obj->format('Y-m-d');
-     $hora = '08:30 am';
+     $hora_corte = '08:30 am';
  }
  }
 

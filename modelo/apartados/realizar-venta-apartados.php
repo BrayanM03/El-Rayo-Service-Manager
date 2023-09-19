@@ -82,7 +82,7 @@ include '../helpers/verificar-hora-corte.php';
 
 //Insertando la venta
 $insertar = $con->prepare("INSERT INTO ventas (Fecha, sucursal, id_sucursal, id_Usuarios, id_Cliente, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, Total, tipo, estatus, metodo_pago, hora, comentario, fecha_corte, hora_corte) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-$insertar->bind_param('ssssssssssssssssss', $fecha_actual, $sucursal, $id_sucursal, $vendedor_id, $id_cliente, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $total, $tipo, $estatus, $metodo_pago, $hora, $comentario, $fecha_corte, $hora);
+$insertar->bind_param('ssssssssssssssssss', $fecha_actual, $sucursal, $id_sucursal, $vendedor_id, $id_cliente, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $total, $tipo, $estatus, $metodo_pago, $hora, $comentario, $fecha_corte, $hora_corte);
 $insertar->execute();
 // Obtener el ID insertado
 $id_Venta = $con->insert_id;

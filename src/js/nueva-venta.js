@@ -329,11 +329,11 @@ let id_rol_session= $("#content").attr("rol_session_id");
                 dataType: "JSON",
                 success: function (response) {
                    
-                    if (response) {
+                    if (response.estatus == true) {
                         Swal.fire({
                             title: 'Venta realizada',
                             html: "<span>La venta se realizó con exito</br></span>"+
-                            "ID Venta: RAY" + response,
+                            "ID Venta: RAY" + response.folio,
                             icon: "success",
                             cancelButtonColor: '#00e059',
                             showConfirmButton: true,
@@ -365,7 +365,7 @@ let id_rol_session= $("#content").attr("rol_session_id");
 
                             }else if(result.isDenied){
     
-                                window.open('./modelo/ventas/reporte-venta.php?id='+ response, '_blank');
+                                window.open('./modelo/ventas/reporte-venta.php?id='+ response.folio, '_blank');
                                 table.ajax.reload(null,false);
                                 $("#pre-venta tbody tr").remove();
                                 $(".pre-venta-error").html("");
@@ -402,6 +402,21 @@ let id_rol_session= $("#content").attr("rol_session_id");
                             });
 
                             
+                    }else{
+                      Swal.fire({
+                        title: 'Ocurrio un error',
+                        html: "<span>"+ response.mensaje+ "</br></span>",
+                        icon: "error",
+                        cancelButtonColor: '#00e059',
+                        showConfirmButton: true,
+                        confirmButtonText: 'Aceptar', 
+                        cancelButtonColor:'#ff764d',
+                        showDenyButton: false,
+                        allowOutsideClick: false,
+                        denyButtonText: 'Reporte'
+                    },
+                       
+                      )
                     }
                     
                 }

@@ -98,6 +98,7 @@ $(document).ready(function() {
             if(rol ==1 ){
               return `<div style="display: flex"><button type="button" onclick="editarRegistro(${row.id});" id="${row.id}" class="buttonEditar btn btn-warning" style="margin-right: 8px"><span class="fa fa-edit"></span><span class="hidden-xs"></span></button></br></div>`; //<button type="button" onclick="borrarRegistro(${row.id});" class="buttonBorrar btn btn-danger"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button>
             }else{
+              return '';
             //return '<div style="display: flex"><button type="button" onclick="editarRegistro('+row.id+');" id="'+ row.id +'" class="buttonEditar btn btn-warning" style="margin-right: 8px"><span class="fa fa-edit"></span><span class="hidden-xs"></span></button>';
           }
           },

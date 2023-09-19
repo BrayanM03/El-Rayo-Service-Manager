@@ -165,9 +165,11 @@ if(isset($_POST)){
           }
 
           if($monto_total_abono > 0){
-            $queryInsertarAbono = "INSERT INTO abonos_pedidos(id_pedido, fecha, hora, abono, metodo_pago, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, usuario, id_usuario, estado, sucursal, id_sucursal, credito) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,0)";
+              //Script que verifica la hora de corte actual
+            include '../helpers/verificar-hora-corte.php';
+            $queryInsertarAbono = "INSERT INTO abonos_pedidos(id_pedido, fecha, hora, abono, metodo_pago, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, usuario, id_usuario, estado, sucursal, id_sucursal, credito, fecha_corte, hora_corte) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,0,?,?)";
             $resultado = $con->prepare($queryInsertarAbono);
-            $resultado->bind_param('sssssssssssssss', $id_pedido, $fecha, $hora, $monto_total_abono, $metodo_pago, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $usuario, $idUser, $estado, $sucursal, $id_sucursal);
+            $resultado->bind_param('sssssssssssssssss', $id_pedido, $fecha, $hora, $monto_total_abono, $metodo_pago, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $usuario, $idUser, $estado, $sucursal, $id_sucursal, $fecha_corte, $hora_corte);
             $resultado->execute();
             $erro = $resultado->error;
             print_r($erro);

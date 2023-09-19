@@ -125,7 +125,7 @@ if(isset($_POST)) {
         $estado =1; 
         $queryInsertar = "INSERT INTO abonos_apartados (id, id_apartado, fecha, hora, abono, metodo_pago, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, usuario, estado, sucursal, id_sucursal, fecha_corte, hora_corte) VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $resultado = $con->prepare($queryInsertar);
-        $resultado->bind_param('issdsdddddssssss', $id_apartado, $fecha_inicial, $hora, $adelanto, $desc_metodos, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $vendedor_usuario, $estado, $sucursal, $id_sucursal, $fecha_corte, $hora);
+        $resultado->bind_param('issdsdddddssssss', $id_apartado, $fecha_inicial, $hora, $adelanto, $desc_metodos, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $vendedor_usuario, $estado, $sucursal, $id_sucursal, $fecha_corte, $hora_corte);
         $resultado->execute();
         $resultado->close();
 

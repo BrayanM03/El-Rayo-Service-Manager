@@ -122,9 +122,12 @@ if (isset($_POST)) {
             $estado = 0;
             $nuevo_pagado = 0;
             $metodo = "Sin definir";
-            $sql = "INSERT INTO abonos(id, id_credito, fecha, hora, abono, metodo_pago, usuario, estado, sucursal, id_sucursal) VALUES(null,?,?,?,?,?,?,?,?,?)";
+
+              //Script que verifica la hora de corte actual
+              include '../helpers/verificar-hora-corte.php';
+            $sql = "INSERT INTO abonos(id, id_credito, fecha, hora, abono, metodo_pago, usuario, estado, sucursal, id_sucursal, fecha_corte, hora_corte) VALUES(null,?,?,?,?,?,?,?,?,?,?,?)";
             $res = $con->prepare($sql);
-            $res->bind_param('issssssss', $id_credito, $fecha, $hora, $nuevo_pagado, $metodo, $usuario, $estado, $sucursal_user, $id_sucursal);
+            $res->bind_param('issssssssss', $id_credito, $fecha, $hora, $nuevo_pagado, $metodo, $usuario, $estado, $sucursal_user, $id_sucursal, $fecha_corte, $hora_corte);
             $res->execute();
             $res->close();
         }
