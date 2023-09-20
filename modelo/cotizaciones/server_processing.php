@@ -63,7 +63,7 @@ $columns = array(
 include_once '../credenciales.php';
 $sql_details = $credenciales_db;
 
-require( '../cortes/ssp.class.php' );
+require( '../ssp.class.php' ); 
 
 echo json_encode(
 	SSP::simple( $_GET, $sql_details, $table, $primaryKey, $columns )

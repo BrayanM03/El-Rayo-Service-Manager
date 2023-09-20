@@ -19,6 +19,7 @@
 
  if ($hora_actual < $hora_a_comparar) {
      $fecha_corte = $fecha_actual;
+     $hora_corte = $hora_actual;
  } else {
  if ($dia_de_la_semana == 'Saturday') {
      // Crear un objeto DateTime a partir de la cadena de fecha

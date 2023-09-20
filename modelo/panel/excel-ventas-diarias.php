@@ -98,7 +98,7 @@ $resp->close();
         $tipo = 'Normal';
         $tipo_apartado = 'Apartado';
         $tipo_pedido = 'Pedido';
-        $consultaVentas = "SELECT COUNT(*) FROM ventas WHERE id_sucursal=? AND fecha = ? AND estatus =? AND (tipo =? OR tipo =?)";
+        $consultaVentas = "SELECT COUNT(*) FROM ventas WHERE id_sucursal=? AND fecha_corte = ? AND estatus =? AND (tipo =? OR tipo =?)";
         $resp = $con->prepare($consultaVentas);
         $resp->bind_param('sssss', $id_sucursal, $fecha, $estatus, $tipo, $tipo_apartado);
         $resp->execute();
@@ -151,7 +151,7 @@ $resp->close();
                 $hoja_activa->setCellValue('M4', 'Estatus');
 
                 //Contamos los abonos de los apartados
-                $select_count = "SELECT COUNT(*) FROM abonos_apartados WHERE fecha = ? AND id_sucursal = ?";
+                $select_count = "SELECT COUNT(*) FROM abonos_apartados WHERE fecha_corte = ? AND id_sucursal = ?";
                 $re = $con->prepare($select_count);
                 $re->bind_param('si', $fecha, $id_sucursal);
                 $re->execute();
@@ -160,7 +160,7 @@ $resp->close();
                 $re->close();
 
                 //Contamos los abonos de los pedidos
-                $select_count = "SELECT COUNT(*) FROM abonos_pedidos WHERE fecha = ? AND id_sucursal = ? AND credito != 1";
+                $select_count = "SELECT COUNT(*) FROM abonos_pedidos WHERE fecha_corte = ? AND id_sucursal = ? AND credito != 1";
                 $re = $con->prepare($select_count);
                 $re->bind_param('si', $fecha, $id_sucursal);
                 $re->execute();
@@ -172,7 +172,7 @@ $resp->close();
                 if($numero_abonos > 0){
                     $index_ab = 5;
                     if($numero_abonos_apartados > 0){
-                        $select_abono = "SELECT * FROM abonos_apartados WHERE fecha = '$fecha' AND id_sucursal = $id_sucursal";
+                        $select_abono = "SELECT * FROM abonos_apartados WHERE fecha_corte = '$fecha' AND id_sucursal = $id_sucursal";
                         $resp_abono = mysqli_query($con, $select_abono);
                         
                         while ($fila = mysqli_fetch_array($resp_abono)) {
@@ -215,7 +215,7 @@ $resp->close();
                     }
 
                     if($numero_abonos_pedidos > 0){
-                        $select_abono = "SELECT * FROM abonos_pedidos WHERE fecha = '$fecha' AND id_sucursal = $id_sucursal AND credito != 1";
+                        $select_abono = "SELECT * FROM abonos_pedidos WHERE fecha_corte = '$fecha' AND id_sucursal = $id_sucursal AND credito != 1";
                         $resp_abono = mysqli_query($con, $select_abono);
                         
                         while ($fila = mysqli_fetch_array($resp_abono)) {
@@ -322,7 +322,7 @@ $resp->close();
                 $index++;
 
                 if($numero_ventas > 0){
-                    $traer_venta = "SELECT * FROM ventas WHERE id_sucursal = '$id_sucursal' AND fecha = '$fecha' AND estatus ='$estatus' AND (tipo ='$tipo' OR tipo ='$tipo_apartado' OR tipo = '$tipo_pedido')";
+                    $traer_venta = "SELECT * FROM ventas WHERE id_sucursal = '$id_sucursal' AND fecha_corte = '$fecha' AND estatus ='$estatus' AND (tipo ='$tipo' OR tipo ='$tipo_apartado' OR tipo = '$tipo_pedido')";
                     $respo = mysqli_query($con, $traer_venta);
 
                     $contador = 1;
@@ -468,7 +468,7 @@ $resp->close();
         
         $estatus = 'Pagado';
         $tipo = 'Normal';
-        $consultaVentas = "SELECT COUNT(*) FROM ventas WHERE id_sucursal =? AND fecha = ? AND estatus =? AND (tipo =? OR tipo =?)";
+        $consultaVentas = "SELECT COUNT(*) FROM ventas WHERE id_sucursal =? AND fecha_corte = ? AND estatus =? AND (tipo =? OR tipo =?)";
         $resp = $con->prepare($consultaVentas);
         $resp->bind_param('sssss', $id_sucursal, $fecha, $estatus, $tipo, $tipo_apartado);
         $resp->execute();
@@ -680,7 +680,7 @@ $resp->close();
                 $estatuscred = "Abierta";
                 $tipocred = "Credito";
                 $numero_ventas_cred =0;
-                $consultaCred = "SELECT COUNT(*) FROM ventas WHERE id_sucursal=? AND fecha = ? AND estatus =? AND (tipo =? OR tipo = ?)";
+                $consultaCred = "SELECT COUNT(*) FROM ventas WHERE id_sucursal=? AND fecha_corte = ? AND estatus =? AND (tipo =? OR tipo = ?)";
                 $respc = $con->prepare($consultaCred);
                 $respc->bind_param('sssss', $id_sucursal, $fecha, $estatuscred, $tipocred, $tipo_apartado);
                 $respc->execute();
@@ -690,7 +690,7 @@ $resp->close();
 
 
                 if($numero_ventas_cred > 0){
-                    $traer_venta = "SELECT * FROM ventas WHERE id_sucursal = '$id_sucursal' AND fecha = '$fecha' AND estatus ='$estatuscred' AND tipo ='$tipocred'";
+                    $traer_venta = "SELECT * FROM ventas WHERE id_sucursal = '$id_sucursal' AND fecha_corte = '$fecha' AND estatus ='$estatuscred' AND tipo ='$tipocred'";
                     $respo = mysqli_query($con, $traer_venta);
 
                     $contador = 1;
@@ -778,26 +778,109 @@ $resp->close();
         $spreadsheet->createSheet();
         $spreadsheet->setActiveSheetIndex(2);
         $hoja_activa = $spreadsheet->getActiveSheet();
+        $hoja_activa->setTitle('Reporte de gastos');
+        $hoja_activa->getStyle('D9')->getFont()->setSize(18);
+        $drawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+        $drawing->setName('LogoRayo');
+        $drawing->setDescription('Logo');
+        $drawing->setPath('../../src/img/logo.jpg'); // put your path and image here
+        $drawing->setCoordinates('A1');
+        $drawing->setOffsetX(40);
+        $drawing->setWidth(80);
+        $drawing->setHeight(63);
+        $drawing->setWorksheet($hoja_activa);
+        $hoja_activa->mergeCells("B1:G1");        
+        $hoja_activa->setCellValue('B1', 'Reporte de gastos diarios de '.$nombre_sucursal . ' | Llantera el rayo ');
+        $hoja_activa->getStyle('B1')->getFont()->setBold(true);
+        $hoja_activa->getStyle('B1')->getFont()->setSize(16);
+        $hoja_activa->getRowDimension('1')->setRowHeight(50);
+        $hoja_activa->getStyle('B1')->getAlignment()->setHorizontal('center');
+        $hoja_activa->getStyle('B1')->getAlignment()->setVertical('center');
+        $hoja_activa->getStyle('B1')->getAlignment()->setHorizontal('center');
+        $hoja_activa->getStyle('B1')->getAlignment()->setVertical('center');
+        $hoja_activa->setCellValue('H1', "Fecha: ". $fecha);
+
+        $hoja_activa->getColumnDimension('B')->setWidth(34);
+        $hoja_activa->getColumnDimension('G')->setWidth(18);
+        $hoja_activa->getColumnDimension('D')->setWidth(30);
+        $hoja_activa->getColumnDimension('H')->setWidth(19);
+        $hoja_activa->getColumnDimension('E')->setWidth(10);
+        
+        $hoja_activa->getStyle('A4:H4')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('fcf75e');
+        $hoja_activa->getStyle('A4:H4')->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_BLACK);
+        $hoja_activa->getStyle('A4:G4')->getFont()->setBold(true);
+        $hoja_activa->getRowDimension('2')->setRowHeight(20);
+        $hoja_activa->getStyle('A4:H4')->getAlignment()->setHorizontal('center');
+        $hoja_activa->getStyle('A4:H4')->getAlignment()->setVertical('center');
+        
+        $hoja_activa->setCellValue('A4', '#');
+        $hoja_activa->setCellValue('B4', 'Descripción');
+        $hoja_activa->setCellValue('C4', 'Folio');
+        $hoja_activa->setCellValue('D4', 'Categoria');
+        $hoja_activa->setCellValue('E4', 'Monto');
+        $hoja_activa->setCellValue('F4', 'Usuario');
+        $hoja_activa->setCellValue('G4', 'No. Factura');
+        $hoja_activa->setCellValue('H4', 'Sucursal');
+
+        $data_gastos = obtenerGastos($con, $fecha);
+        $total_gastos = count($data_gastos);
+        $index = 5;
+        $suma_gasto = 0;
+        if($total_gastos >0){
+             foreach ($data_gastos as $key => $value) {
+                $suma_gasto += floatval($value['monto']);
+                $hoja_activa->setCellValue('A'.$index, $index);
+                $hoja_activa->setCellValue('B'.$index, $value['descripcion']);
+                $hoja_activa->setCellValue('C'.$index, 'GA'.$value['id']);
+                $hoja_activa->setCellValue('D'.$index, $value['categoria']);
+                $hoja_activa->setCellValue('E'.$index, $value['monto']);
+                $hoja_activa->setCellValue('F'.$index, $value['usuario']);
+                $hoja_activa->setCellValue('G'.$index, $value['no_factura']);
+                $hoja_activa->setCellValue('H'.$index, $value['sucursal']);
+                $index++;
+             }
+             $hoja_activa->getStyle('B'.$index)->getFont()->setBold(true);
+             $hoja_activa->getStyle('E5:E'.$index)->getNumberFormat()->setFormatCode(PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_CURRENCY_USD_SIMPLE);
+             $hoja_activa->setCellValue('D'.$index, 'Total');
+             $hoja_activa->setCellValue('E'.$index, $suma_gasto);
+        }else{
+            $hoja_activa->getStyle('A5')->getFont()->getColor()->setRGB('808080');
+            $hoja_activa->getRowDimension('5')->setRowHeight(50);
+            $hoja_activa->getStyle('A5')->getAlignment()->setHorizontal('center');
+            $hoja_activa->getStyle('A5')->getAlignment()->setVertical('center');
+            $hoja_activa->mergeCells("A5:H5"); 
+            $hoja_activa->setCellValue('A5', 'No se encontrarón gastos');
+            $hoja_activa->getStyle('A5')->getFont()->setSize(18);
+        }
+        
+        
+        $spreadsheet->createSheet();
+        $spreadsheet->setActiveSheetIndex(3);
+        $hoja_activa = $spreadsheet->getActiveSheet();
         $hoja_activa->setTitle('Reporte de montos finales');
         $hoja_activa->mergeCells('B2:C3');
-        $hoja_activa->mergeCells('D2:E2');
-        $hoja_activa->mergeCells('D3:E3'); 
-        $hoja_activa->getStyle('D2:E3')->getAlignment()->setHorizontal('center');
-        $hoja_activa->getStyle('D2:E3')->getAlignment()->setVertical('center');
-        $hoja_activa->getStyle('D2:E3')->getAlignment()->setHorizontal('center');
-        $hoja_activa->getStyle('D4:E9')->getAlignment()->setVertical('center');
+        $hoja_activa->mergeCells('D2:G2');
+        $hoja_activa->mergeCells('D3:G3'); 
+        $hoja_activa->getStyle('D2:G3')->getAlignment()->setHorizontal('center');
+        $hoja_activa->getStyle('D2:G3')->getAlignment()->setVertical('center');
+        $hoja_activa->getStyle('D2:G3')->getAlignment()->setHorizontal('center');
+        $hoja_activa->getStyle('D4:F10')->getAlignment()->setVertical('center');
+        $hoja_activa->getStyle('E4:G4')->getAlignment()->setHorizontal('right');
         $hoja_activa->getRowDimension('2')->setRowHeight(50);
         $hoja_activa->getRowDimension('3')->setRowHeight(30);
         $hoja_activa->getColumnDimension('D')->setWidth(50);
-        $hoja_activa->getColumnDimension('E')->setWidth(30);
-        $hoja_activa->setCellValue('D4', 'Pagado en efectivo');
-        $hoja_activa->setCellValue('D5', 'Pagado en tarjeta');
-        $hoja_activa->setCellValue('D6', 'Pagado en transferencia');
-        $hoja_activa->setCellValue('D7', 'Pagado en cheque');
-        $hoja_activa->setCellValue('D8', 'Pagado en sin definir');
+        $hoja_activa->getColumnDimension('E')->setWidth(20);
+        $hoja_activa->getColumnDimension('F')->setWidth(18);
+        $hoja_activa->getColumnDimension('G')->setWidth(20);
+        $hoja_activa->setCellValue('D5', 'Pagado en efectivo');
+        $hoja_activa->setCellValue('D6', 'Pagado en tarjeta');
+        $hoja_activa->setCellValue('D7', 'Pagado en transferencia');
+        $hoja_activa->setCellValue('D8', 'Pagado en cheque');
+        $hoja_activa->setCellValue('D9', 'Pagado en sin definir');  
 
-        $hoja_activa->getStyle('D9')->getFont()->setSize(18);
-        $hoja_activa->setCellValue('D9', 'Total final');
+       
+        $hoja_activa->getStyle('D11')->getFont()->setSize(18);
+        $hoja_activa->setCellValue('D11', 'Total final');
         $drawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
         $drawing->setName('LogoRayo');
         $drawing->setDescription('Logo');
@@ -827,20 +910,32 @@ $resp->close();
         $final_metodo_por_definir = $normal_metodo_por_definir + $credito_metodo_por_definir;
         
         $final_corte = $final_metodo_efectivo + $final_metodo_tarjeta + $final_metodo_transferencia + $final_metodo_cheque + $final_metodo_por_definir;
-
+        
         $hoja_activa->getStyle('D2')->getFont()->setBold(true);
         $hoja_activa->getStyle('D2')->getFont()->setSize(16);
+        $hoja_activa->getStyle('D4:G4')->getFont()->setBold(true);
         $hoja_activa->setCellValue('D2', 'Reporte de montos finales');
         $hoja_activa->setCellValue('D3', $fecha . '  - Sucursal: ' . $nombre_sucursal);
+        $hoja_activa->setCellValue('D4', 'Descripción');
+        $hoja_activa->setCellValue('E4', 'Gastos');
+        $hoja_activa->setCellValue('F4', 'Entrada');
 
-        $hoja_activa->setCellValue('E4', $final_metodo_efectivo);
-        $hoja_activa->setCellValue('E5', $final_metodo_tarjeta);
-        $hoja_activa->setCellValue('E6', $final_metodo_transferencia);
-        $hoja_activa->setCellValue('E7', $final_metodo_cheque);
-        $hoja_activa->setCellValue('E8', $final_metodo_por_definir);
-        $hoja_activa->getStyle('E9')->getFont()->setSize(18);
-        $hoja_activa->setCellValue('E9', $final_corte);
-
+        $restante_efectivo = $final_metodo_efectivo - $suma_gasto;
+        $final_menos_gastos_efectivo = $final_corte - $suma_gasto;
+        $hoja_activa->setCellValue('G4', 'Restante');
+        $hoja_activa->setCellValue('G5', $restante_efectivo);
+        $hoja_activa->setCellValue('E5', $suma_gasto);
+        $hoja_activa->setCellValue('F5', $final_metodo_efectivo);
+        $hoja_activa->setCellValue('F6', $final_metodo_tarjeta);
+        $hoja_activa->setCellValue('F7', $final_metodo_transferencia);
+        $hoja_activa->setCellValue('F8', $final_metodo_cheque);
+        $hoja_activa->setCellValue('F9', $final_metodo_por_definir);
+        $hoja_activa->getStyle('G11')->getFont()->setSize(18);
+        $hoja_activa->setCellValue('E10', $suma_gasto);
+        $hoja_activa->setCellValue('F10', $final_corte);
+        $hoja_activa->setCellValue('G10', $restante_efectivo);
+        $hoja_activa->setCellValue('G11', $final_menos_gastos_efectivo);
+        
         $hoja_activa->getRowDimension('4')->setRowHeight(25);
         $hoja_activa->getRowDimension('5')->setRowHeight(25);
         $hoja_activa->getRowDimension('6')->setRowHeight(25);
@@ -848,12 +943,13 @@ $resp->close();
         $hoja_activa->getRowDimension('8')->setRowHeight(25);
         $hoja_activa->getRowDimension('9')->setRowHeight(35);
         $hoja_activa
-                ->getStyle('B2:F12')
-                ->getFill()
-                ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
-                ->getStartColor()
-                ->setARGB('ffffff');
-
+        ->getStyle('B2:H12')
+        ->getFill()
+        ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+        ->getStartColor()
+        ->setARGB('ffffff');
+        
+        $hoja_activa->getStyle('G11:G11')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('fcf75e');
         $hoja_activa
                 ->getStyle('D3')
                 ->getFill()
@@ -861,14 +957,14 @@ $resp->close();
                 ->getStartColor()
                 ->setARGB('fee135');
 
-        $hoja_activa->getStyle('B2:F12')->getBorders()->getOutline()->setBorderStyle(Border::BORDER_THIN)
+        $hoja_activa->getStyle('B2:H12')->getBorders()->getOutline()->setBorderStyle(Border::BORDER_THIN)
         ->setColor(new Color('18171c'));
-        $hoja_activa->getStyle('D3:E3')->getBorders()->getOutline()->setBorderStyle(Border::BORDER_THIN)
+        $hoja_activa->getStyle('D3:G3')->getBorders()->getOutline()->setBorderStyle(Border::BORDER_THIN)
         ->setColor(new Color('18171c'));
-        $hoja_activa->getStyle('D4:E8')->getBorders()->getBottom()->setBorderStyle(Border::BORDER_THIN)
+        $hoja_activa->getStyle('D4:G9')->getBorders()->getBottom()->setBorderStyle(Border::BORDER_THIN)
         ->setColor(new Color('18171c'));
 
-        $hoja_activa->getStyle('E4:E9')->getNumberFormat()->setFormatCode(PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_CURRENCY_USD_SIMPLE);
+        $hoja_activa->getStyle('E5:G12')->getNumberFormat()->setFormatCode(PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_CURRENCY_USD_SIMPLE);
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="Reporte de venta diaria '. $nombre_sucursal .' '. $fecha .'.xlsx"');
@@ -900,7 +996,7 @@ $resp->close();
 function obtenerUtilidadTotal($con, $id_sucursal, $fecha, $tipo, $estatus){
 
     $total_venta_metodo = 0;
-    $consulta = "SELECT SUM(Total) FROM ventas WHERE id_sucursal=? AND fecha = ? AND tipo = ? AND estatus = ?";
+    $consulta = "SELECT SUM(Total) FROM ventas WHERE id_sucursal=? AND fecha_corte = ? AND tipo = ? AND estatus = ?";
     $res = $con->prepare($consulta);
     $res->bind_param("ssss", $id_sucursal, $fecha, $tipo, $estatus);
     $res->execute();
@@ -914,7 +1010,7 @@ function obtenerUtilidadTotal($con, $id_sucursal, $fecha, $tipo, $estatus){
 
         
     $lista_ventas = mysqli_query($con, "SELECT * FROM ventas WHERE id_sucursal='$id_sucursal' AND 
-                                                                   fecha = '$fecha' AND 
+                                                                   fecha_corte = '$fecha' AND 
                                                                    tipo = '$tipo' AND 
                                                                    estatus = '$estatus'");
         //Iteramos sobre el arreglo de las ventas 
@@ -980,7 +1076,7 @@ function obtenerUtilidadMetodoPago($con, $id_sucursal, $fecha, $tipo, $estatus, 
             break;
 
     }
-    $consulta = "SELECT SUM($col) FROM ventas WHERE id_sucursal=? AND fecha = ? AND tipo = ? AND estatus = ?";
+    $consulta = "SELECT SUM($col) FROM ventas WHERE id_sucursal=? AND fecha_corte = ? AND tipo = ? AND estatus = ?";
     $res = $con->prepare($consulta);
     $res->bind_param("ssss", $id_sucursal, $fecha, $tipo, $estatus);
     $res->execute();
@@ -994,7 +1090,7 @@ function obtenerUtilidadMetodoPago($con, $id_sucursal, $fecha, $tipo, $estatus, 
 
         
     $lista_ventas = mysqli_query($con, "SELECT * FROM ventas WHERE id_sucursal='$id_sucursal' AND 
-                                                                   fecha = '$fecha' AND 
+                                                                   fecha_corte = '$fecha' AND 
                                                                    tipo = '$tipo' AND 
                                                                    estatus = '$estatus' AND 
                                                                    $col IS NOT NULL");
@@ -1046,7 +1142,7 @@ function obtenerVentaTotal($con, $id_sucursal, $fecha, $tipo, $estatus){
     $total_venta_apartados = 0;
     $total_venta_pedidos = 0;
     if($tipo == "Credito"){
-        $consulta = "SELECT SUM(abono) FROM abonos WHERE id_sucursal=? AND fecha = ?";
+        $consulta = "SELECT SUM(abono) FROM abonos WHERE id_sucursal=? AND fecha_corte = ?";
         $res = $con->prepare($consulta);
         $res->bind_param("ss", $id_sucursal, $fecha);
         $res->execute();
@@ -1054,7 +1150,7 @@ function obtenerVentaTotal($con, $id_sucursal, $fecha, $tipo, $estatus){
         $res->fetch();
         $res->close();
     }else{
-        $consulta = "SELECT SUM(Total) FROM ventas WHERE id_sucursal=? AND fecha = ? AND tipo = ? AND estatus = ?";
+        $consulta = "SELECT SUM(Total) FROM ventas WHERE id_sucursal=? AND fecha_corte = ? AND tipo = ? AND estatus = ?";
         $res = $con->prepare($consulta);
         $res->bind_param("ssss", $id_sucursal, $fecha, $tipo, $estatus);
         $res->execute();
@@ -1062,7 +1158,7 @@ function obtenerVentaTotal($con, $id_sucursal, $fecha, $tipo, $estatus){
         $res->fetch();
         $res->close();
 
-        $consulta = "SELECT SUM(abono) FROM abonos_apartados WHERE id_sucursal=? AND fecha = ?";
+        $consulta = "SELECT SUM(abono) FROM abonos_apartados WHERE id_sucursal=? AND fecha_corte = ?";
         $res = $con->prepare($consulta);
         $res->bind_param("ss", $id_sucursal, $fecha);
         $res->execute();
@@ -1070,7 +1166,7 @@ function obtenerVentaTotal($con, $id_sucursal, $fecha, $tipo, $estatus){
         $res->fetch();
         $res->close();
 
-        $consulta = "SELECT SUM(abono) FROM abonos_pedidos WHERE id_sucursal=? AND fecha = ? AND credito != 1";
+        $consulta = "SELECT SUM(abono) FROM abonos_pedidos WHERE id_sucursal=? AND fecha_corte = ? AND credito != 1";
         $res = $con->prepare($consulta);
         $res->bind_param("ss", $id_sucursal, $fecha);
         $res->execute();
@@ -1112,7 +1208,7 @@ function obtenerVentaMetodoPago($con, $id_sucursal, $fecha, $tipo, $estatus, $me
     }
 
     if($tipo== 'Normal' || $tipo == 'Apartado' || $tipo == 'Pedido'){
-        $consulta = "SELECT SUM($col) FROM ventas WHERE id_sucursal=? AND fecha = ? AND tipo = ? AND estatus = ?";
+        $consulta = "SELECT SUM($col) FROM ventas WHERE id_sucursal=? AND fecha_corte = ? AND tipo = ? AND estatus = ?";
         $res = $con->prepare($consulta);
         $res->bind_param("ssss", $id_sucursal, $fecha, $tipo, $estatus);
         $res->execute();
@@ -1120,7 +1216,7 @@ function obtenerVentaMetodoPago($con, $id_sucursal, $fecha, $tipo, $estatus, $me
         $res->fetch();
         $res->close();
 
-        $consulta = "SELECT SUM($col) FROM abonos_apartados WHERE id_sucursal=? AND fecha = ?";
+        $consulta = "SELECT SUM($col) FROM abonos_apartados WHERE id_sucursal=? AND fecha_corte = ?";
         $res = $con->prepare($consulta);
         $res->bind_param("ss", $id_sucursal, $fecha);
         $res->execute();
@@ -1128,7 +1224,7 @@ function obtenerVentaMetodoPago($con, $id_sucursal, $fecha, $tipo, $estatus, $me
         $res->fetch();
         $res->close();
 
-        $consulta = "SELECT SUM($col) FROM abonos_pedidos WHERE id_sucursal=? AND fecha = ? AND credito != 1";
+        $consulta = "SELECT SUM($col) FROM abonos_pedidos WHERE id_sucursal=? AND fecha_corte = ? AND credito != 1";
         $res = $con->prepare($consulta);
         $res->bind_param("ss", $id_sucursal, $fecha);
         $res->execute();
@@ -1138,7 +1234,7 @@ function obtenerVentaMetodoPago($con, $id_sucursal, $fecha, $tipo, $estatus, $me
 
         $total_venta = $total_venta + $total_venta_apartados + $total_venta_pedidos;
     }else {
-        $consulta = "SELECT SUM($col) FROM abonos WHERE id_sucursal=? AND fecha = ?";
+        $consulta = "SELECT SUM($col) FROM abonos WHERE id_sucursal=? AND fecha_corte = ?";
         $res = $con->prepare($consulta);
         $res->bind_param("ss", $id_sucursal, $fecha);
         $res->execute();
@@ -1157,7 +1253,8 @@ function obtenerVentaMetodoPago($con, $id_sucursal, $fecha, $tipo, $estatus, $me
 
 function obtenerClientesqueAbonaron($con, $id_sucursal, $fecha)
 {
-    $traer_id = $con->prepare("SELECT * FROM `abonos` WHERE fecha =? AND id_sucursal =?");
+    
+    $traer_id = $con->prepare("SELECT * FROM `abonos` WHERE fecha_corte =? AND id_sucursal =?");
     $traer_id->bind_param('ss', $fecha, $id_sucursal);
     $traer_id->execute();
     $resultado = $traer_id->get_result();
@@ -1210,3 +1307,28 @@ function obtenerClientesqueAbonaron($con, $id_sucursal, $fecha)
         return $arreglo;
     }
 }
+
+function obtenerGastos($con, $fecha){
+    $total_gastos = 0;
+    $resultado= [];
+    $query = "SELECT COUNT(*) FROM vista_gastos WHERE fecha = ?";
+    $res = $con->prepare($query);
+    $res->bind_param('s', $fecha);
+    $res->execute();
+    $res->bind_result($total_gastos);
+    $res->fetch();
+    $res->close();
+    $data =array();
+    if($total_gastos>0){
+        $select = "SELECT * FROM vista_gastos WHERE fecha = ?";
+        $res = $con->prepare($select);
+        $res->bind_param('s', $fecha);
+        $res->execute();
+        $resultado = $res->get_result();
+        $res->close();
+        while ($fila = $resultado->fetch_assoc()) {
+            $data[] = $fila;
+        }
+    }
+    return $data;
+};

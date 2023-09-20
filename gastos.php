@@ -10,7 +10,7 @@ if (!isset($_SESSION['id_usuario'])) {
 }
 
 if ($_SESSION['rol'] == 3 ) {
-    header("Location:nueva-venta.php");
+    header("Location:nueva-venta.php?nav=ventas");
 }
 if ($_SESSION['rol'] == 5) {
     header('Location:ventas-pv.php?id=0&nav=ventas');
@@ -65,6 +65,8 @@ if ($_SESSION['rol'] == 4) {
     <link href="src/css/menu-vertical.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.css" integrity="sha512-oe8OpYjBaDWPt2VmSFR+qYOdnTjeV9QPLJUeqZyprDEQvQLJ9C5PCFclxwNuvb/GQgQngdCXzKSFltuHD3eCxA==" crossorigin="anonymous" />
 
+    <!-- PDF viewer and library -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.10.111/web/pdf_viewer.min.css">
     <style>
         .tooltip span {
             display:none;
@@ -87,6 +89,22 @@ if ($_SESSION['rol'] == 4) {
 
         .toast-container{
             z-index: 999999999 !important;
+        }
+
+        .delete-thumbnail{
+            border: 1px solid red !important;
+            position: fixed;
+            left: 52% !important;
+            top: 56% !important;
+            color: white;
+            background-color: red;
+            width: 32px;
+            border-radius: 18px;
+            cursor: pointer !important;
+        }
+
+        .delete-thumbnail:hover{
+            background-color: orange;
         }
     </style>
 
@@ -124,9 +142,16 @@ if ($_SESSION['rol'] == 4) {
                             </div>
                             <img class="tyre-decoration-right" src="./src/img/tyre.svg" alt="insertar SVG con la etiqueta image">
                         </div>
+                        <div class="botones">
+                                    <a href="#" class="btn btn-success btn-icon-split" onclick="agregarGasto();">
+                                        <span class="icon text-white-50">
+                                            <i class="fas fa-check-circle"></i>
+                                        </span>
+                                        <span class="text">Nuevo gasto</span>
+                                    </a>
+                        </div>
 
-
-                        <table id="apartados" class="table table-striped table-bordered table-hover">
+                        <table id="gastos" class="table table-striped table-bordered table-hover">
                         </table>
 
                     </div>
@@ -195,6 +220,7 @@ if ($_SESSION['rol'] == 4) {
     <script src="src/js/sb-admin-2.min.js"></script>
 
     <!-- Page level plugins -->
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.10.111/build/pdf.min.js"></script>
     <script src="src/vendor/chart.js/Chart.min.js"></script>
     <script src="src/vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="src/vendor/datatables-responsive/js/dataTables.responsive.min.js"></script>
@@ -208,8 +234,7 @@ if ($_SESSION['rol'] == 4) {
 
 
     <!-- Page level plugins -->
-    <script src="src/js/apartados.js"></script>
-    </script>
+    <script src="src/js/gastos.js"></script>
 
 </body>
 

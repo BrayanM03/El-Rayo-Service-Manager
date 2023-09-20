@@ -9,6 +9,7 @@ $claseHistorial = "";
 $showHistorial = "";
 $claseVentas = "";
 $claseCotizaciones = "";
+$claseGastos = "";
 $claseCustomer = "";
 $showClientes = "";
 $claseClientes = "";
@@ -163,21 +164,30 @@ switch ($flag) {
         <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Ordenes de:</h6>
             <a class="collapse-item <?php echo $claseVentas ?>" href="ventas-pv.php?id=0&nav=ventas">
-                <img src="src/img/ventas.svg" width="18px" /> 
+                <img src="src/img/ventas.png" width="18px" /> 
                 <span style="margin-left:12px;"> Ventas</span>
             </a>
             <a class="collapse-item <?php echo $claseCotizaciones ?> rol-4" href="cotizaciones-lista.php?id=0&nav=cotizaciones">
-                <img src="src/img/compras.svg" width="18px" /> 
+                <img src="src/img/cotizaciones.png" width="18px" /> 
                 <span style="margin-left:12px;"> Cotizaciones</span>
             </a>
             <a class="collapse-item <?php echo $claseApartados ?> rol-4" href="apartados.php?id=0&nav=apartados">
-                <img src="src/img/payment.png" width="18px" /> 
+                <img src="src/img/apartados.png" width="18px" /> 
                 <span style="margin-left:12px;"> Apartados</span>
             </a>
             <a class="collapse-item <?php echo $clasePedidos ?> rol-4" href="pedidos.php?id=0&nav=pedidos">
-                <img src="src/img/payment.png" width="18px" /> 
+                <img src="src/img/pedidos.png" width="18px" /> 
                 <span style="margin-left:12px;"> Pedidos</span>
             </a>
+            <?php 
+
+
+    if ($user_jerarquia == 1 || $user_jerarquia == 2) { ?>
+            <a class="collapse-item <?php echo $claseGastos ?> rol-4" href="gastos.php?id=0&nav=gastos">
+                <img src="src/img/gastos.png" width="18px" /> 
+                <span style="margin-left:12px;"> Gastos</span>
+            </a>
+            <?php }?>
         </div>
     </div>
 </li>

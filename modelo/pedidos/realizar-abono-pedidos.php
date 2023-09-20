@@ -165,6 +165,8 @@ if (isset($_POST)) {
             }
 
             if ($stockSuficiente) {
+                include '../helpers/verificar-hora-corte.php';
+
                 $queryInsertar = "INSERT INTO abonos_pedidos (id, id_pedido, 
                                                             fecha, 
                                                             hora, 
@@ -179,7 +181,7 @@ if (isset($_POST)) {
                                                             id_usuario,
                                                             estado,
                                                             sucursal,
-                                                            id_sucursal, credito, fecha_corte) VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,0,?,?)";
+                                                            id_sucursal, credito, fecha_corte, hora_corte) VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,0,?,?)";
                 $resultado = $con->prepare($queryInsertar);
                 $resultado->bind_param(
                     'sssssssssssssssss',
@@ -199,7 +201,7 @@ if (isset($_POST)) {
                     $sucursal,
                     $id_sucursal,
                     $fecha_corte,
-                    $hora
+                    $hora_corte
                 );
                 $resultado->execute();
                 $error = $resultado->error;
@@ -209,33 +211,7 @@ if (isset($_POST)) {
                 $hora_actual = date("H:i a");
                 $dia_de_la_semana = date("l");
 
-                $hora_corte_normal = '';
-                $hora_corte_sabado = '';
-                $querySuc = "SELECT nombre, hora_corte_normal, hora_corte_sabado FROM sucursal WHERE id = ?";
-                $resp = $con->prepare($querySuc);
-                $resp->bind_param('i', $id_sucursal);
-                $resp->execute();
-                $resp->bind_result($sucursal, $hora_corte_normal, $hora_corte_sabado);
-                $resp->fetch();
-                $resp->close();
-
-                $hora_a_comparar = $dia_de_la_semana == 'Saturday' ? $hora_corte_sabado : $hora_corte_normal;
-                if ($hora_actual < $hora_a_comparar) {
-                    $fecha_corte = $fecha_actual;
-                } else {
-                    if ($dia_de_la_semana == 'Saturday') {
-                        // Crear un objeto DateTime a partir de la cadena de fecha
-                        $fecha_obj = new DateTime($fecha_actual);
-                        $fecha_obj->modify('+2 day');
-                        $fecha_corte = $fecha_obj->format('Y-m-d');
-                        $hora = '08:30 am';
-                    } else {
-                        $fecha_obj = new DateTime($fecha_actual);
-                        $fecha_obj->modify('+1 day');
-                        $fecha_corte = $fecha_obj->format('Y-m-d');
-                        $hora = '08:30 am';
-                    }
-                }
+                
 
                 $insertar = $con->prepare("INSERT INTO ventas (Fecha, sucursal, id_sucursal, id_Usuarios, id_Cliente, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, Total, tipo, estatus, metodo_pago, hora, comentario, fecha_corte, hora_corte) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
                 $insertar->bind_param('ssssssssssssssssss', $fecha_actual, $sucursal, $id_sucursal, $id_usuario, $id_cliente, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $importe_total, $tipo, $estatus, $metodo_pago, $hora, $comentario, $fecha_corte, $hora_corte);
@@ -287,7 +263,7 @@ if (isset($_POST)) {
         } else {
 
             
-
+            include '../helpers/verificar-hora-corte.php';
             $estado = 1;
             $queryInsertar = "INSERT INTO abonos_pedidos (id, id_pedido, 
                                                             fecha, 
