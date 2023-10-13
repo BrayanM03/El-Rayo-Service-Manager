@@ -680,7 +680,7 @@ function procesarOrden(id_apartado){
         text: '',
         html:`<div class="row">
                     <div class="col-12">
-                      <p>Este apartado se convertira en un credito, el sistema verificara si las llantas del apartado existen en el inventario de la sucursal y los abonos realizados se ajustaran al credito.</p>
+                      <p>Este pedido se convertira en un credito, el sistema verificara si las llantas del apartado existen en el inventario de la sucursal y los abonos realizados se ajustaran al credito.</p>
                     </div>
                     <div class="col-12">
                         <label>Seleccione un plazo de credito</label>
@@ -962,6 +962,12 @@ function abonarApartado(id_apartado){
     data: {"id":id_apartado},
     dataType: "JSON",
     success: function (response_ab) {
+      var restante_pedido = parseFloat(response_ab.restante);
+      if(restante_pedido >0){
+        var label_button_abono = 'Abonar';
+      }else{
+        var label_button_abono = 'Procesar venta'
+      }
       Swal.fire({
         title: 'Realizar abono',
         width: '1200',
@@ -998,7 +1004,7 @@ function abonarApartado(id_apartado){
 
               <div class="row m-4">
                   <div class="col-12">
-                    <div class="btn btn-success disabled" id="btn-realizar-abono-apartado" onclick="realizarAbonoApartado(${id_apartado}, ${response_ab.total})">Abonar</div><br>
+                    <div class="btn btn-success disabled" id="btn-realizar-abono-apartado" onclick="realizarAbonoPedido(${id_apartado}, ${response_ab.total}, ${restante_pedido})">${label_button_abono}</div><br>
                     <small style="color:red;" id="msj-alerta"></small>
                   </div>
               </div>
@@ -1015,6 +1021,12 @@ function abonarApartado(id_apartado){
           </div>
         `,
         didOpen: ()=>{
+          if(restante_pedido <=0){
+            $('#metodos-pago-abono').val('');
+            $("#metodos-pago-abono").prop('disabled', true);
+            $("#contenedor-metodos").empty();
+            $("#btn-realizar-abono-apartado").removeClass('disabled');
+          }
           $('#metodos-pago-abono').selectpicker('refresh');
 
           //Conversion de arreglo de objectos a arreglos de arrays
@@ -1232,7 +1244,7 @@ function calcularMontosAbonosApartado(importe, restante){
   
 }
 
-function realizarAbonoApartado(id_apartado){
+function realizarAbonoPedido(id_apartado, total, restante_pedido){
   let btn = $("#btn-realizar-abono-apartado");
   const esta_desactivado = btn.hasClass("disabled"); 
   let alerta_mensaje = $("#msj-alerta");
@@ -1255,20 +1267,27 @@ function realizarAbonoApartado(id_apartado){
       return result;
     }, {});
   
-    if($('#abono_apartado_ac').val() <=0){
+    if($('#abono_apartado_ac').val() <=0 && restante_pedido > 0){
     alerta_mensaje.text('El monto no puede ser igual o menor que 0')
     }else{
 
       $.ajax({
         type: "post",
         url: "./modelo/pedidos/realizar-abono-pedidos.php",
-        data: {'id_apartado': id_apartado, 'metodos_pago': arregloMetodos},
+        data: {'id_apartado': id_apartado, 'metodos_pago': arregloMetodos, restante_pedido},
         dataType: "JSON",
         success: function (response) {
           if(response.estatus){
               alerta_mensaje.text('');
               if(response.liquidacion){
                 toastr.success('Apartado liquidado con exito', 'Exito' ); 
+                $("#btn-realizar-abono-apartado").prop('disabled',true)
+                $("#btn-realizar-abono-apartado").addClass('disabled')
+                $("#btn-realizar-abono-apartado").removeClass('btn-success')
+                $("#btn-realizar-abono-apartado").addClass('btn-primary')
+                $("#btn-realizar-abono-apartado").text('Pedido procesado')
+                alerta_mensaje.text('Pedido procesado puedes revisarlo en el historial de venta o en el ultimo pdf generado en esta tabla')
+                alerta_mensaje.css('color', 'green')
               }else{
                 toastr.success('Abonado con exito', 'Exito' ); 
 
@@ -1280,7 +1299,7 @@ function realizarAbonoApartado(id_apartado){
               }else{
                 toastr.error(response.mensaje, 'Error' ); 
 
-                alerta_mensaje.text('Hubo un error al agregar el abono')
+                alerta_mensaje.text('Hubo un error al agregar el abono. Mensaje: ' + response.mensaje)
               }
 
           }
@@ -1313,7 +1332,8 @@ function recargarTablaAbonosApartado(id_apartado){
         objeto.sucursal
     ]);
     table_abonos.clear().rows.add(data_convertida).draw();
-
+    $('#badge-restante').text('$'+response_ab.restante)
+    $('#badge-sumatoria').text('$'+response_ab.primer_abono)
     }})
 }
 
