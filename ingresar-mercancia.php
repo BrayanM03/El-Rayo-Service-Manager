@@ -168,12 +168,17 @@ if($total_sucu > 0) {
                                     </div>
                                     
 
-                                    <div class="col-12 col-md-7 text-center">
+                                    <div class="col-12 col-md-4 text-center">
                                         <label for="stock">¿Cuantas llantas vas a ingresar?</label>
                                         <input type="number" placeholder="0" class="form-control" id="stock" valido disabled>
                                         <div class="invalid-feedback" id="label-validator">
                                             
                                         </div>
+                                    </div>
+
+                                    <div class="col-12 col-md-3 text-center">
+                                        <label for="stock">Cantidad en partidas</label>
+                                        <input type="number" value="0" placeholder="0" class="form-control" id="cantidad_piezas" valido disabled>
                                     </div>
                                 </div>
 

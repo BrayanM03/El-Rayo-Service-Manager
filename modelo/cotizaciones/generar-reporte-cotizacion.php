@@ -4,8 +4,9 @@
 session_start();
 include '../conexion.php';
 $con = $conectando->conexion(); 
+$sucursal_sesion = $_SESSION['id_sucursal'];
 global $con;
-
+global $sucursal_sesion;
 $folio = "RAY" . $_GET["id"]; 
 $idCotiza = $_GET["id"];
 global $folio;
@@ -43,16 +44,11 @@ global $metodo_pago;
 global $hora;
 global $comentario;
 
-/* $formatterES = new NumberFormatter("ES", NumberFormatter::SPELLOUT);
+$formatterES = new NumberFormatter("es-ES", NumberFormatter::SPELLOUT);
 $izquierda = intval(floor($total));
 $derecha = intval(($total - floor($total)) * 100);
-if($derecha == 0){
-    $derecha = "00";
-}
-$formatTotalminus = $formatterES->format($izquierda) . " PESOS Y " . $derecha . "/100 M.N";
-$formatTotal = strtoupper($formatTotalminus); */
-// ciento veintitrés coma cuarenta y cinco
-$formatTotal = "test";
+$formatTotalminus = $formatterES->format($izquierda) . " y " . $derecha . "/100 m.n";
+$formatTotal = strtoupper($formatTotalminus);
 global $formatTotal;
 /*
 $detalle = $con->prepare("SELECT detalle_venta.Cantidad,llantas.Descripcion, llantas.Marca, detalle_venta.precio_Unitario, detalle_venta.Importe FROM detalle_venta INNER JOIN llantas ON detalle_venta.id_llanta = llantas.id WHERE id_Venta = ?");
@@ -127,7 +123,7 @@ function Header()
     // Título
 
     $this->SetFont('Arial','B',12);
-    $this->Cell(30,10,"'",0,0, 'C');
+    $this->Cell(30,10,"",0,0, 'C');
     $this->Cell(100,10,$titulo_sucursal,0,0, 'C');
     $this->SetFont('Arial','B',20);
     $this->Cell(60,10,utf8_decode('Cotización'),0,0,'C');
@@ -192,7 +188,12 @@ function Header()
 // Pie de página
 function Footer()
 {
-    
+    $year = date('Y'); 
+    if($GLOBALS['sucursal_sesion'] == 6) {
+        $footer_title = 'Del Rio Service Manager';
+    }else{
+        $footer_title = 'El Rayo Service Manager';
+    }
     // Posición: a 1,5 cm del final
     $this->SetY(-15);
     //$this->Image('../src/img/logo-reporte.png',60,142,80);
@@ -202,7 +203,7 @@ function Footer()
     $this->SetTextColor(1, 1, 1);
     // Número de página
    
-    $this->Cell(0,10,'El Rayo Service Manager 2021',0,0,'C');
+    $this->Cell(0,10,$footer_title . ' ' . $year,0,0,'C');
 }
 
 
@@ -446,7 +447,7 @@ function cuerpoTabla(){
     $pdf->SetLineWidth(1);
     $pdf->Line(10,285,200,285);
 
-    $pdf->Output("Folio RAY" . $_GET["id"] .".pdf", "I");
+    $pdf->Output("Folio Cotizacion " . $_GET["id"] .".pdf", "I");
 }
 
 cuerpoTabla();

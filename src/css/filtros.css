@@ -1,0 +1,15 @@
+#contenedor-filtros .dropdown-toggle{
+    background-color: white !important;
+    border: 1px solid #d1d3e2;
+    color: #6e707e;
+}
+
+.empty_results{
+    overflow-y: scroll;
+    height: auto;
+}
+
+.with_results{
+    overflow-y: scroll;
+    height: 15rem;
+}

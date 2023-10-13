@@ -48,13 +48,19 @@
     
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="src/vendor/bower_components/select2-bootstrap-theme/dist/select2-bootstrap.css">
-
+    
     <!---Librerias de estilos-->
-   
+    
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="src/css/bootstrap-select.min.css" rel="stylesheet" />
     <link href="src/css/menu-vertical.css" rel="stylesheet">
+    <link href="src/css/filtros.css" rel="stylesheet">
+    <style>
+        #content-wrapper{
+            font-size: 12px !important;
+        }
+    </style>
 </head>
-
 <body id="page-top"> 
 
     <!-- Page Wrapper -->
@@ -72,162 +78,38 @@
             <!-- Main Content -->
             <div id="content">
 
-                <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-info bg-info topbar mb-4 static-top shadow">
-
-                    <!-- Sidebar Toggle (Topbar) -->
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                        <i class="fa fa-bars"></i>
-                    </button>
-
-                    <!-- Topbar Search -->
-                    <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                aria-label="Search" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-
-                    <!-- Topbar Navbar -->
-                    <ul class="navbar-nav ml-auto">
-
-                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-                        <li class="nav-item dropdown no-arrow d-sm-none">
-                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-search fa-fw"></i>
-                            </a>
-                            <!-- Dropdown - Messages -->
-                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                                aria-labelledby="searchDropdown">
-                                <form class="form-inline mr-auto w-100 navbar-search">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control bg-light border-0 small"
-                                            placeholder="Search for..." aria-label="Search"
-                                            aria-describedby="basic-addon2">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-primary" type="button">
-                                                <i class="fas fa-search fa-sm"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </li>
-
-                        <!-- Nav Item - Alerts -->
-                        <li class="nav-item dropdown no-arrow mx-1">
-                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-bell fa-fw icon-menu"></i>
-                                <!-- Counter - Alerts -->
-                                <span id="contador-notifi" class="badge badge-danger badge-counter">0</span>
-                            </a>
- 
-                            <!-- Dropdown - Alerts -->
-                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="alertsDropdown">
-                                <h6 class="dropdown-header">
-                                   Notificaciones
-                                </h6>
-                                <div class="empty-notification">
-                                 <img src="src/img/undraw_Notify_re_65on.svg" alt="" width="400px">
-                                 <span>Ups, por el momento no hay nada por aqui</span> 
-                              </div>
-                              
-                              <div id="contenedor-alertas"></div>
-                              <a class="dropdown-item text-center small text-gray-500" href="#">Mostrar mas notificaciones</a>
-                             
-                            </div>
-                        </li>
-
-                     
-
-                        <div class="topbar-divider d-none d-sm-block"></div>
-
-                        <!-- Nav Item - User Information -->
-                        <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline  small" style="color: aliceblue;"><?php
-                                
-                                echo $_SESSION['nombre'] . " " . $_SESSION['apellidos'];
-                            
-                            ?></span>
-                                <img class="img-profile rounded-circle"
-                                    src="src/img/undraw_profile.svg">
-                            </a>
-                            <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Perfil
-                                </a>
-                                <a class="dropdown-item" href="configuraciones.php?id=0&nav=configuraciones">
-                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Configuraciones
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Registro de actividad
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Cerrar sesión
-                                </a>
-                            </div>
-                        </li>
-
-                    </ul>
-
-                </nav>
+            <?php include 'views/navbar.php'; ?>
                 <!-- End of Topbar -->
 
  
                 <!-- Begin Page Content -->
-                <div class="container-fluid" style="display: flex; justify-content: center; align-items:center; flex-direction:column">
+                <div class="d-none" id="titulo-hv" rol="<?php echo $_SESSION['rol'] ?>" id_usuario="<?php echo $_SESSION['id_usuario'] ?>"  nombre_usuario="<?php echo $_SESSION['nombre'] . ' ' . $_SESSION['apellidos'] ?>"></div>
+                <div class="container-fluid" >
 
                      <!-- Contenido inventario -->
                      
-                        <div class="contenedor-tit">
+                        <!-- <div class="contenedor-tit">
                         <img class="tyre-decoration-left" src="./src/img/tyre.svg" alt="insertar SVG con la etiqueta image"> 
                         <div class="titulo-inventario" id="titulo-hv" rol="<?php echo $_SESSION["rol"] ?>">
                          <h5 style="margin: 10px 0px;">Ventas</h5>
                          <p style="color: gray;">Reporte de ventas totales</p>
                         </div>
                         <img class="tyre-decoration-right" src="./src/img/tyre.svg" alt="insertar SVG con la etiqueta image">   
-                        </div>
-
-                        <div class="row">
-                            <div class="col-12 cold-md-12">
-                                <a href="busqueda-avanzada-ventas.php">
-                                    <div class="btn btn-info">Busqueda avanzada</div>
-                                </a>
-                            </div>
-                        </div>
-                     
-                      <table id="ventas" class="table table-striped table-bordered table-hover">                   
-                     </table>
-
-                     
-                   
+                        </div> -->
+                    <div id="filter-vue-container" v-cloak>
+                        
+                    </div>  
+                      
+                    <table id="ventas" class="table table-striped table-bordered table-hover">                   
+                    </table>
 
                 </div>
             <!-- End of Main Content -->
-  <!-- Footer -->
+            <!-- Footer -->
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
                         <span>Copyright &copy; El Rayo Service Manager <?php print_r(date("Y")) ?></span><br><br>
-                        <span>Edicion e integración por <a href="https://www.facebook.com/BrayanM03/">Brayan Maldonado</a></span>
                     </div>
                 </div>
             </footer>
@@ -283,7 +165,8 @@
 
 
     <!-- Cargamos nuestras librerias-->
-    
+    <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->
+    <script src="src/js/vue.min.js"></script>
     <script src="src/vendor/datatables/jquery.dataTables.min.js"></script> 
     <script src="src/vendor/datatables-responsive/js/dataTables.responsive.min.js"></script>
     <script src="src/vendor/datatables/dataTables.bootstrap4.js"></script>
@@ -292,7 +175,11 @@
     <script src="src/vendor/datatables/defaults.js"></script>
     <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="src/js/bootstrap-select.min.js"></script>
     <script src="src/js/historial-ventas.js"></script>
+    <script src="./components/filtros.module.js" type="text/javascript"></script>
+    <script src="src/js/filtros.js"></script>
+
    
    
 </body>

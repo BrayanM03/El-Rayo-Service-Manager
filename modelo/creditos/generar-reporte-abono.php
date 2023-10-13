@@ -233,7 +233,12 @@ function Header()
 // Pie de página
 function Footer()
 {
-    
+    $year = date('Y'); 
+    if($GLOBALS['codigo_sucursal'] == 'RIOB') {
+        $footer_title = 'Del Rio Service Manager';
+    }else{
+        $footer_title = 'El Rayo Service Manager';
+    }
     // Posición: a 1,5 cm del final
     $this->SetY(-15);
     //$this->Image('../src/img/logo-reporte.png',60,142,80);
@@ -243,7 +248,7 @@ function Footer()
     $this->SetTextColor(1, 1, 1);
     // Número de página
    
-    $this->Cell(0,10,'El Rayo Service Manager 2021',0,0,'C');
+    $this->Cell(0,10,$footer_title . ' ' . $year,0,0,'C');
 }
 
 

@@ -381,6 +381,7 @@ toastr.options = {
   }*/
   
   function traerDetalleCambio(){
+    var cantidad_piezas=0;
     let id_usuario = $("#btn-mover").attr("id_usuario");
     $.ajax({
       type: "POST",
@@ -405,7 +406,8 @@ toastr.options = {
   
           $("#cuerpo_detalle_cambio").empty();  
           response.forEach(element => {
-            
+          cantidad_piezas += parseInt(element.cantidad)
+          console.log(cantidad_piezas);
           $("#cuerpo_detalle_cambio").append(`
   
           <a href="#" class="list-group-item list-group-item-action text-center">
@@ -421,6 +423,7 @@ toastr.options = {
           `);
           });
           $("#btn-mov").removeClass().addClass("btn btn-success");
+          $("#cantidad_piezas").val(cantidad_piezas);
         }
   
       }

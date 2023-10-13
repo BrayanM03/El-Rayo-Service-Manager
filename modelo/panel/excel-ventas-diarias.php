@@ -822,7 +822,7 @@ $resp->close();
         $hoja_activa->setCellValue('G4', 'No. Factura');
         $hoja_activa->setCellValue('H4', 'Sucursal');
 
-        $data_gastos = obtenerGastos($con, $fecha);
+        $data_gastos = obtenerGastos($con, $fecha, $id_sucursal);
         $total_gastos = count($data_gastos);
         $index = 5;
         $suma_gasto = 0;
@@ -1308,21 +1308,21 @@ function obtenerClientesqueAbonaron($con, $id_sucursal, $fecha)
     }
 }
 
-function obtenerGastos($con, $fecha){
+function obtenerGastos($con, $fecha, $id_sucursal){
     $total_gastos = 0;
     $resultado= [];
-    $query = "SELECT COUNT(*) FROM vista_gastos WHERE fecha = ?";
+    $query = "SELECT COUNT(*) FROM vista_gastos WHERE fecha = ? AND id_sucursal = ?";
     $res = $con->prepare($query);
-    $res->bind_param('s', $fecha);
+    $res->bind_param('ss', $fecha, $id_sucursal);
     $res->execute();
     $res->bind_result($total_gastos);
     $res->fetch();
     $res->close();
     $data =array();
     if($total_gastos>0){
-        $select = "SELECT * FROM vista_gastos WHERE fecha = ?";
+        $select = "SELECT * FROM vista_gastos WHERE fecha = ? AND id_sucursal = ?";
         $res = $con->prepare($select);
-        $res->bind_param('s', $fecha);
+        $res->bind_param('ss', $fecha, $id_sucursal);
         $res->execute();
         $resultado = $res->get_result();
         $res->close();

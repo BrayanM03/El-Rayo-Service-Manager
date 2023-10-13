@@ -11,7 +11,7 @@ if (!isset($_SESSION['id_usuario'])) {
     header("Location:../../login.php");
 }
 
-$term = $_POST['term'];
+$term = empty($_POST['term']) ? '' : $_POST['term'];
 $termino = '%' . $term . '%';
 $tabla = $_POST['tabla'];
 $columnas = $_POST['columnas'];

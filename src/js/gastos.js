@@ -286,6 +286,16 @@ const meses = [
         formData.append('id_sucursal', id_sucursal);
         formData.append('monto', monto);
       
+        swal({
+          title: 'Now loading',
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+          timer: 2000,
+          onOpen: () => {
+            swal.showLoading();
+          }
+        })
+        
         $.ajax({
           type: "post",
           url: "./modelo/gastos/registrar-gasto.php",

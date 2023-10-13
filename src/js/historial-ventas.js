@@ -3,7 +3,7 @@ function MostrarVentas() {
     ocultarSidebar();
 table = $('#ventas').DataTable({
       
-   
+    "bDestroy": true,
     processing: true,
     serverSide: true,
     ajax: './modelo/ventas/historial-ventas.php',
@@ -31,7 +31,6 @@ table = $('#ventas').DataTable({
       data: null,
       className: "celda-acciones",
       render: function (row, data) {
-        
         rol = $("#titulo-hv").attr("rol");
        if(rol == "1"){
             if (row[7] == "Credito") {

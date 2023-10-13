@@ -19,7 +19,7 @@ if(isset($_POST)){
 
     $id_usuario = $_POST["id_usuario"];
     $sucursal_user_id = $_SESSION["id_sucursal"];
-    $sucursal_id = $_SESSION["id_sucursal"];
+    $sucursal_id = $_POST["id_sucursal"]; 
     $id_bodega =0;
     $folio_factura = $_POST['folio_factura'];
     $id_proveedor = $_POST['id_proveedor'];
@@ -82,7 +82,7 @@ if(isset($_POST)){
                                                          tipo, sucursal, proveedor_id, folio_factura) VALUES(null, ?,?,?,?,?,?,?,?,?)";
                     $result = $con->prepare($insertar);
                     $result->bind_param('sssssssis',$descripcion_movimiento, $total_llantas,
-                                                    $fecha, $hora, $nombre_completo_usuario, $tipo, $sucursal_user_id, $id_proveedor, $folio_factura);
+                                                    $fecha, $hora, $nombre_completo_usuario, $tipo, $sucursal_id, $id_proveedor, $folio_factura);
                                                     
                     $result->execute();
                     $id_movimiento = $con->insert_id;

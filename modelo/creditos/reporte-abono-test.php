@@ -403,7 +403,12 @@ function Header()
 // Pie de página
 function Footer()
 {
-    
+    $year = date('Y'); 
+    if($GLOBALS['codigo_sucursal'] == 'RIOB') {
+        $footer_title = 'Del Rio Service Manager';
+    }else{
+        $footer_title = 'El Rayo Service Manager';
+    }
     // Posición: a 1,5 cm del final
     $this->SetY(-15);
     //$this->Image('../src/img/logo-reporte.png',60,142,80);
@@ -412,10 +417,7 @@ function Footer()
     $this->SetFont('Arial','',8);
     $this->SetTextColor(92, 89, 89);
     // Número de página
-   $año = date("Y");
-   $title_footer = "LLANTAS Y SERVICIOS 'EL RAYO' " . $año;
-    $this->Cell(0,10, $title_footer, 0,0,'C');
-    $this->Cell(0,10," El rayo",0,0,'R');
+   $this->Cell(0,10,$footer_title . ' ' . $year,0,0,'C');
 }
 
 

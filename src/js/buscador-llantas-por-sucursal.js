@@ -375,6 +375,7 @@ function comprobarStock(){
 }
 
 function traerDetalleCambio(){
+  var cantidad_partidas =0;
   let id_usuario = $("#btn-mover").attr("id_usuario");
   $.ajax({
     type: "POST",
@@ -399,7 +400,7 @@ function traerDetalleCambio(){
 
         $("#cuerpo_detalle_cambio").empty();  
         response.forEach(element => {
-          
+        cantidad_partidas += parseInt(element.cantidad)
         $("#cuerpo_detalle_cambio").append(`
 
         <a href="#" class="list-group-item list-group-item-action text-center">
@@ -415,6 +416,7 @@ function traerDetalleCambio(){
         `);
         });
         $("#btn-mov").removeClass().addClass("btn btn-success");
+        $("#cantidad-partidas").val(cantidad_partidas);
       }
 
     }

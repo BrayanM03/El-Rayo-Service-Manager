@@ -460,8 +460,6 @@ function cuerpoTabla(){
         $ejeY = $line_height;
         $k=1;
 
-      
-
         while($fila = $resultado->fetch_assoc()) {
             $cantidad = $fila["cantidad"];
             $id_llanta = $fila["id_llanta"];
@@ -511,7 +509,7 @@ function cuerpoTabla(){
             if ($caracteres < 25) {
               
                 $pdf->Cell(15,10,$cantidad,0,0,'C',1);
-                $pdf->MultiCell(40,5, utf8_decode($descripcion_llanta),0,1,'L',1); //$descripcion
+                $pdf->MultiCell(40,5, utf8_decode($descripcion_llanta),0,0,'L',1); //$descripcion
                 $pdf->SetY($ejeY);
                 $ejeY = $ejeY + 15;
                 $pdf->SetX(77);
@@ -526,7 +524,7 @@ function cuerpoTabla(){
             }else if ($caracteres > 25 && $caracteres < 45) {
                 
                 $pdf->Cell(15,10,$cantidad,0,0,'C',1);
-                $pdf->MultiCell(40,5, utf8_decode($descripcion_llanta),0,0,'L',1);
+                $pdf->MultiCell(40,4.1, utf8_decode($descripcion_llanta),0,0,'L',1);
                 $pdf->SetY($ejeY);
                 $ejeY = $ejeY + 12;
                 $pdf->SetX(65);
@@ -553,39 +551,28 @@ function cuerpoTabla(){
                 $pdf->Ln(15);
             }
     
-           if($k==12){
+           if($k>=12){
             $pdf->AddPage();
-            $pdf->SetFont('Times','B',12);
-            
             $pdf->SetDrawColor(135, 134, 134);
             $pdf->SetTextColor(36, 35, 28);
-            
-            
-            
             //$pdf->Rect(10, 80, 189, 8, 'F');
             $pdf->SetDrawColor(194, 34, 16);
-            $pdf->SetLineWidth(1);
-            //$pdf->Line(11,95,192,95);
+            $ejeY = $line_height;
+            $pdf->SetY($ejeY);
+            //$pdf->Line(11,81,196,81);
+            $line_height =$pdf->GetY();
+            $line_height = $line_height +8.2;
+            $pdf->Line(10,$line_height,198,$line_height);
             $pdf->Cell(19,8,utf8_decode("Cantidad"),0,0);  
             $pdf->Cell(55,8,utf8_decode("Concepto"),0,0, 'C');
             $pdf->Cell(30,8,utf8_decode("Modelo"),0,0, 'C');
             $pdf->Cell(30,8,utf8_decode("Marca"),0,0, 'C');
             $pdf->Cell(30,8,utf8_decode("Ubicación"),0,0, 'C');
             $pdf->Cell(30,8,utf8_decode("Destino"),0,0, 'C');
-            $pdf->Ln(0);
-            $pdf->Line(11,81,196,81);
-        
             $pdf->Ln(12);
-            
-            
-            
-            $pdf->SetDrawColor(1, 1, 1);
-            $pdf->SetLineWidth(0);
-        
-            //$pdf->SetFillColor(236, 236, 236);
-            
-           // $pdf->SetFont('Times','',12);
-            $ejeY = 85;
+            $line_height =$pdf->GetY();
+            $ejeY = $line_height;
+            $k=1;
            }
             
            $k=$k+1;
