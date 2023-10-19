@@ -39,6 +39,7 @@ $columns = array(
 	array( 'db' => 'sucursal', 'dt' => 7 ),
 	array( 'db' => 'nombre', 'dt' => 8 ),
 	array( 'db' => 'folio_factura', 'dt' => 9 ),
+	array( 'db' => 'estatus', 'dt' => 10 ),
 	
 /* 	array(
 		'db'        => 'start_date',

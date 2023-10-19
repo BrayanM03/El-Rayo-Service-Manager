@@ -80,7 +80,7 @@
 
 
                 <!-- Begin Page Content style="display: flex; justify-content: center; align-items:center; flex-direction:column" -->
-                <div class="containe" style="width:80%; margin:auto;"> 
+                <div class="containe" style="width:90%; margin:auto;"> 
 
                      <!-- Contenido inventario -->
                      <div class="titulo-inventario" style="margin: 0px auto 40px auto;">

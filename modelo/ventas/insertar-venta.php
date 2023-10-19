@@ -223,25 +223,7 @@ if($stock_ok) {
 
                 // print_r($_POST["tipo"]);
 
-                if ($consulta) {
-                    while($row = mysqli_fetch_assoc($consulta)) {
-                        $id_usuario_admi = $row['id'] . " " . $row["nombre"] ; // Sumar variable $total + resultado de la consulta
-                        $desc_notifi = $_SESSION['nombre'] . $complemento_desc;
-                        $estatus = 1;
-                        $fecha = date("d-m-Y");
-                        $hora = date("h:i a");
-                        $refe = 0;
-                        $alertada = "NO";
-
-                        $queryInsertarNoti = "INSERT INTO registro_notificaciones (id, id_usuario, descripcion, estatus, fecha, hora, refe, alertada, tipo) VALUES (null,?,?,?,?,?,?,?,?)";
-                        $resultados = $con->prepare($queryInsertarNoti);
-                        $resultados->bind_param('isississ', $id_usuario_admi, $desc_notifi, $estatus, $fecha, $hora, $refe, $alertada, $tipo);
-                        $resultados->execute();
-                        $resultados->close();
-                    }
-
-
-                }
+               
 
 
             } else {

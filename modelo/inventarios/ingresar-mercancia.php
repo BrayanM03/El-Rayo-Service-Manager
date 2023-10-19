@@ -79,7 +79,7 @@ if(isset($_POST)){
                                                          fecha, 
                                                          hora, 
                                                          usuario,
-                                                         tipo, sucursal, proveedor_id, folio_factura) VALUES(null, ?,?,?,?,?,?,?,?,?)";
+                                                         tipo, sucursal, proveedor_id, folio_factura, estatus) VALUES(null, ?,?,?,?,?,?,?,?,?, 'Pendiente')";
                     $result = $con->prepare($insertar);
                     $result->bind_param('sssssssis',$descripcion_movimiento, $total_llantas,
                                                     $fecha, $hora, $nombre_completo_usuario, $tipo, $sucursal_id, $id_proveedor, $folio_factura);
@@ -149,7 +149,9 @@ if(isset($_POST)){
                     stock_ubicacion_actual,
                     stock_ubicacion_anterior,
                     stock_destino_actual,
-                    stock_destino_anterior) VALUES(null, ?,?,?,?,?,?,0,0,?,0)";
+                    stock_destino_anterior,
+                    aprobado_receptor,
+                    aprobado_emisor) VALUES(null, ?,?,?,?,?,?,0,0,?,0,0,0)";
                     $result = $con->prepare($insertar);
                     $result->bind_param('sssssss',$id_llanta, $id_bodega, $id_destino, $cantidad, $id_usuario, $id_movimiento, $cantidad);
                     $result->execute();
@@ -194,7 +196,9 @@ if(isset($_POST)){
                     stock_ubicacion_actual,
                     stock_ubicacion_anterior,
                     stock_destino_actual,
-                    stock_destino_anterior) VALUES(null, ?,?,?,?,?,?,0,0,?,?)";
+                    stock_destino_anterior,
+                    aprobado_receptor,
+                    aprobado_emisor) VALUES(null, ?,?,?,?,?,?,0,0,?,?,0,0)";
                     $result = $con->prepare($insertar);
                     $result->bind_param('ssssssss',$id_llanta, $id_bodega, $id_destino, $cantidad, $id_usuario, $id_movimiento, $stock_destino_actual, $stock_destino_anterior);
                     $result->execute();

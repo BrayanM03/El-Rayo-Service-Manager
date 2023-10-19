@@ -129,9 +129,9 @@ $dia_de_la_semana = date("l");
                 <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                 Configuraciones
             </a>
-            <a class="dropdown-item" href="#">
+            <a class="dropdown-item" href="mercancia_pendiente.php?nav=0&id=<?php echo $_SESSION['id_sucursal'] ?>">
                 <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                Registro de actividad
+                Llantas pendientes
             </a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">

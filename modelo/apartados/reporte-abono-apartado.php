@@ -937,7 +937,7 @@ function cuerpoTabla(){
     $pdf->SetLineWidth(1);
     $pdf->Line(10,285,200,285);
 
-    $pdf->Output("Cotizacion F" . $_GET["id"] .".pdf", "I");
+    $pdf->Output("Reporte de abono de apartado " . $_GET["id"] .".pdf", "I");
 }
 
 cuerpoTabla();

@@ -20,7 +20,7 @@ if(isset($_POST)){
     $id_usuario = $_POST["id_usuario"];
     $sucursal_id = $_SESSION["id_sucursal"];
     $tipo = 1;
-
+    $estatus_movimiento = 'Pendiente';
     $traerusuario = "SELECT nombre, apellidos FROM usuarios WHERE id = ?";
     $result = $con->prepare($traerusuario);
     $result->bind_param('s', $id_usuario);
@@ -39,16 +39,16 @@ if(isset($_POST)){
     $result->close();
     
      $descripcion_movimiento = "Se realizo el movimiento de ". $total_llantas . " llanta(s)";
-      $insertar = "INSERT INTO movimientos(id, 
+     $insertar = "INSERT INTO movimientos(id, 
                                                      descripcion, 
                                                      mercancia, 
                                                      fecha, 
                                                      hora, 
                                                      usuario,
-                                                     tipo, sucursal) VALUES(null, ?,?,?,?,?,?,?)";
+                                                     tipo, sucursal, estatus) VALUES(null, ?,?,?,?,?,?,?,?)";
                 $result = $con->prepare($insertar);
-                $result->bind_param('sssssss',$descripcion_movimiento, $total_llantas,
-                                                $fecha, $hora, $nombre_completo_usuario, $tipo, $sucursal_id);
+                $result->bind_param('ssssssss',$descripcion_movimiento, $total_llantas,
+                                                $fecha, $hora, $nombre_completo_usuario, $tipo, $sucursal_id, $estatus_movimiento);
                                                 
                 $result->execute();
                 $result->close();
@@ -61,13 +61,13 @@ if(isset($_POST)){
 
     
     $traer_cambios= mysqli_query($con, "SELECT * FROM detalle_cambio WHERE id_usuario = $id_usuario");
-    $mercancia ="";
+    $mercancia ='';
     while ($rows = $traer_cambios->fetch_assoc()) {
-        $id_llanta = $rows["id_llanta"];
-        $id_ubicacion = $rows["id_ubicacion"];
-        $id_destino = $rows["id_destino"];
-        $cantidad = $rows["cantidad"];
-        $id_usuario = $rows["id_usuario"];
+        $id_llanta = $rows['id_llanta'];
+        $id_ubicacion = $rows['id_ubicacion'];
+        $id_destino = $rows['id_destino'];
+        $cantidad = $rows['cantidad'];
+        $id_usuario = $rows['id_usuario'];
 
         //Comprobar si esa llanta se encuentra en el inventario destino
         $comprobar = "SELECT COUNT(*) FROM inventario WHERE id_sucursal = ? AND id_Llanta = ?";
@@ -175,7 +175,9 @@ if(isset($_POST)){
                 stock_ubicacion_actual,
                 stock_ubicacion_anterior,
                 stock_destino_actual,
-                stock_destino_anterior) VALUES(null, ?,?,?,?,?,?,?,?,?,0)";
+                stock_destino_anterior,
+                aprobado_receptor,
+                aprobado_emisor) VALUES(null, ?,?,?,?,?,?,?,?,?,0,0,0)";
                 $result = $con->prepare($insertar);
                 $result->bind_param('sssssssss',$id_llanta, $id_ubicacion, $id_destino, $cantidad, $id_usuario, $id_movimiento, $stock_ubicacion_actual, $stock_ubicacion_anterior, $cantidad);
                 $result->execute();
@@ -264,7 +266,9 @@ if(isset($_POST)){
                 stock_ubicacion_actual,
                 stock_ubicacion_anterior,
                 stock_destino_actual,
-                stock_destino_anterior) VALUES(null, ?,?,?,?,?,?,?,?,?,?)";
+                stock_destino_anterior,
+                aprobado_receptor,
+                aprobado_emisor) VALUES(null, ?,?,?,?,?,?,?,?,?,?,0,0)";
                 $result = $con->prepare($insertar);
                 $result->bind_param('ssssssssss',$id_llanta, $id_ubicacion, $id_destino, $cantidad, $id_usuario, $id_movimiento, $stock_ubicacion_actual, $stock_ubicacion_anterior, $stock_destino_actual, $stock_destino_anterior);
                 $result->execute();

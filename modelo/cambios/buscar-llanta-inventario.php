@@ -18,15 +18,15 @@
        $resultadosPorPagina = 10;
        $offset = ($page - 1) * $resultadosPorPagina;
 
-       $query_mostrar = $con->prepare("SELECT COUNT(*) total FROM llantas l INNER JOIN inventario 
-       ON inventario.id_Llanta = l.id 
-       WHERE inventario.id_sucursal = ? AND (l.Ancho LIKE ?
-       OR inventario.Codigo LIKE ? 
+       $query_mostrar = $con->prepare("SELECT COUNT(*) total FROM llantas l INNER JOIN inventario i
+       ON i.id_Llanta = l.id 
+       WHERE i.id_sucursal = ? AND (l.Ancho LIKE ?
+       OR i.Codigo LIKE ? 
        OR l.Proporcion LIKE ? 
        OR l.Diametro LIKE ?
        OR l.Modelo LIKE ? 
        OR l.Marca LIKE ? 
-       OR l.Descripcion LIKE ?)");
+       OR l.Descripcion LIKE ?) AND i.Stock != 0");
 
      //-----------------------------------------------------------------------------------------------------//
      //-----------------------------------------------------------------------------------------------------//
@@ -38,16 +38,16 @@
      $query_mostrar->close();
      if ($total > 0) { 
         
-        $sqlTraerLlanta="SELECT l.*, inv.id, inv.id_Llanta, inv.Codigo, inv.Sucursal, inv.id_sucursal, inv.Stock FROM llantas l INNER JOIN inventario inv
-        ON inv.id_Llanta = l.id 
+        $sqlTraerLlanta="SELECT l.*, i.id, i.id_Llanta, i.Codigo, i.Sucursal, i.id_sucursal, i.Stock FROM llantas l INNER JOIN inventario i
+        ON i.id_Llanta = l.id 
         WHERE  
         (l.Ancho LIKE '%$term%'  
-        OR inv.Codigo LIKE '%$term%'
+        OR i.Codigo LIKE '%$term%'
         OR l.Proporcion LIKE '%$term%'  
         OR l.Diametro LIKE '%$term%'
         OR l.Modelo LIKE '%$term%'  
         OR l.Marca LIKE '%$term%' 
-        OR l.Descripcion LIKE '%$term%') AND inv.id_sucursal = $id_sucursal LIMIT $resultadosPorPagina OFFSET $offset";
+        OR l.Descripcion LIKE '%$term%') AND i.id_sucursal = $id_sucursal AND i.Stock != 0 ORDER BY i.Stock DESC LIMIT $resultadosPorPagina OFFSET $offset";
         $result = mysqli_query($con, $sqlTraerLlanta);
    
         while ($datas=mysqli_fetch_array($result)){

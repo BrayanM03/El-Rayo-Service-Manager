@@ -956,7 +956,7 @@ SOLAMENTE SERA VALIDA LA GARANTIA DENTRO DEL PRIMER MES DESPUES DE LA COMPRA, SI
     $pdf->SetLineWidth(1);
     $pdf->Line(10,285,200,285);
 
-    $pdf->Output("Cotizacion F" . $_GET["id"] .".pdf", "I");
+    $pdf->Output("Reporte de venta apartado RAY" . $_GET["id"] .".pdf", "I");
 }
 
 cuerpoTabla();

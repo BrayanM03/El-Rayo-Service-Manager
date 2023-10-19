@@ -9,9 +9,9 @@ if (!isset($_SESSION['id_usuario'])) {
     header("Location:login.php");
 }
 
-if ($_SESSION['rol'] == 3 ) {
+/* if ($_SESSION['rol'] == 3 ) {
     header("Location:nueva-venta.php");
-}
+} */
 if ($_SESSION['rol'] == 5) {
     header('Location:ventas-pv.php?id=0&nav=ventas');
 }

@@ -740,7 +740,7 @@ function cuerpoTabla(){
     $pdf->SetLineWidth(1);
     $pdf->Line(10,285,200,285);
 
-    $pdf->Output("Folio RAY" . $_GET["id"] .".pdf", "I");
+    $pdf->Output("Reporte de abono de credito " . $_GET["id"] .".pdf", "I");
 }
 
 cuerpoTabla();

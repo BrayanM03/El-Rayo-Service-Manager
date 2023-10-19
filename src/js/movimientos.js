@@ -46,6 +46,7 @@ table = $('#movimientos').DataTable({
       }
       return tipo;
     }},
+    { title: "estatus",        data: 10 },
     { title: "usuario",        data: 5 },
     { title: "Accion",
       data: null,
