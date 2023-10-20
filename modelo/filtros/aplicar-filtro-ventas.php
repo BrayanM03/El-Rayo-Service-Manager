@@ -34,7 +34,7 @@ $sql = "SELECT DISTINCT v.*, concat(u.nombre, ' ', u.apellidos) vendedor, c.Nomb
 if (!empty($marca_llanta) || !empty($ancho_llanta) || !empty($alto_llanta) || !empty($rin_llanta)) {
 
     $sql .= " LEFT JOIN detalle_venta dv ON v.id = dv.id_Venta";
-    $sql .= " LEFT JOIN llantas ll ON ll.id = dv.id_Llanta LEFT JOIN marcas m ON ll.Marca = m.Nombre";
+    $sql .= " LEFT JOIN llantas ll ON ll.id = dv.id_Llanta LEFT JOIN marcas m ON ll.Marca = m.Imagen";
     $sql .= " WHERE 1=1";
     if(!empty($marca_llanta)){
         $marcas_ids =  implode(",", array_map(function($valor) use ($con, $sanitizacion){

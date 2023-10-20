@@ -52,13 +52,28 @@ table = $('#movimientos').DataTable({
       data: null,
       className: "celda-acciones",
       render: function (row, data) {
+        if(row[10]=='Completado'){
+          class_btn_check = 'btn-secondary disabled';
+          candado ='ss';
+        }else{
+          candado = '';
+          class_btn_check = 'btn-success';
+        }
         if(row[6] == 1 || row[6] ==3 || row[6] ==4){
-          return `<div class="btn btn-danger" onclick="remisionSalida(${row[0]})"><i class="fas fa-file-pdf"></i><div>`;
+          return `
+          <div style="display:flex;">
+              <div class="btn btn-danger mr-2" onclick="remisionSalida(${row[0]})"><i class="fas fa-file-pdf"></i></div>
+              <div class="btn ${class_btn_check}" onclic${candado}k="AprobarMovimiento(${row[0]})"><i class="fas fa-check" disabled></i></div>
+          </div>
+              `;
         }else if(row[6] ==2){
-          return `<div class="btn btn-danger" onclick="remisionIngreso(${row[0]})"><i class="fas fa-file-pdf"></i><div>`;
+          return `
+          <div style="display:flex;">
+             <div class="btn btn-danger mr-2" onclick="remisionIngreso(${row[0]})"><i class="fas fa-file-pdf"></i></div>
+             <div class="btn ${class_btn_check}" onclick="AprobarMovimiento(${row[0]})"><i class="fas fa-check"></i></div>
+          </div>`;
 
         }else{
-
           return `<span>No disp</span>`;
         }
       },
@@ -91,6 +106,37 @@ function remisionSalida(id){
 function remisionIngreso(id){
 
   window.open('./modelo/movimientos/remision-ingreso.php?id='+ id, '_blank');
+}
+
+function AprobarMovimiento(id_mov){
+    Swal.fire({
+      icon: 'question',
+      html: '¿Deseas aprobar el movimiento',
+      confirmButtonText: 'Aprobar el movimiento',
+    }).then(function(resp){
+      if(resp.isConfirmed){
+        $.ajax({
+          type: "post",
+          url: "./modelo/requerimientos/aprobar-movimiento.php",
+          data: {id_mov},
+          dataType: "JSON",
+          success: function (response) {
+            if(response.estatus){
+              Swal.fire({
+                icon:'success',
+                html: response.mensaje
+              })
+            }else{
+              Swal.fire({
+                icon:'error',
+                html: response.mensaje
+              })
+            }
+            table.ajax.reload(false, null)
+          }
+        });
+      }
+    })
 }
 
 

@@ -19,161 +19,161 @@
    *          componente hijo, solo debe manejar la comunicación con él.
    **/
 
-// Función similar a $(document).ready(...) con VanillaJS
-function debounce(func, delay) {
-        let timer;
-        return function (...args) {
-          clearTimeout(timer);
-          timer = setTimeout(() => {
-            func.apply(this, args);
-          }, delay);
-        };
-      }
+  // Función similar a $(document).ready(...) con VanillaJS
+  function debounce(func, delay) {
+    let timer;
+    return function (...args) {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        func.apply(this, args);
+      }, delay);
+    };
+  }
 
-function onDocumentReady(callback) {
-      if (document.readyState === "complete" || (document.readyState !== "loading" && !document.documentElement.doScroll)) {
-          callback()
-      } else {
-          document.addEventListener("DOMContentLoaded", callback)
-      }
+  function onDocumentReady(callback) {
+    if (document.readyState === "complete" || (document.readyState !== "loading" && !document.documentElement.doScroll)) {
+      callback()
+    } else {
+      document.addEventListener("DOMContentLoaded", callback)
     }
+  }
 
-function getCustomerFilter(){
-     
-      return {
-          data: function () {
-              return {
-                results: []
-              }
-          },
-          props: ['tabla', 'columnas', 'columna_id'],
-          
-          template: `
+  function getCustomerFilter() {
+
+    return {
+      data: function () {
+        return {
+          results: []
+        }
+      },
+      props: ['tabla', 'columnas', 'columna_id'],
+
+      template: `
             <div>
               <b>Cliente</b>
               <select id="buscador-clientes" class="form-control selectpicker" multiple data-live-search="true">
               </select>
             </div>
           `,
-          mounted(){
-           //getCustomers(this._props)
-           const vm = this; // Almacenamos una referencia al componente Vue
-           let buscador = $(`#buscador-${this.tabla}`);
-           buscador.selectpicker('refresh');
-           let input_buscador = buscador.parent().find('.bs-searchbox > input');
-           let timeoutId;
-           
-           input_buscador.on('keyup', (e) => {
-             clearTimeout(timeoutId);
-     
-             buscador.selectpicker('refresh')
-             timeoutId = setTimeout(function() {
-               // Aquí se puede hacer la solicitud a la base de datos
-               $.ajax({
-                 type: "post",
-                 url: "./modelo/filtros/busqueda-select.php",
-                 data: {'term': input_buscador.val(), 'page': 1, 'tabla': vm.tabla, 'columnas': vm.columnas, 'columna_id': vm.columna_id},
-                 dataType: 'json',
-                 success: function (response) {
-                   if(response.estatus){
-                     vm.results = response.datos; // Usamos la referencia a vm para actualizar results
-                    vm.results.forEach(element => {
-                      buscador.append(`
+      mounted() {
+        //getCustomers(this._props)
+        const vm = this; // Almacenamos una referencia al componente Vue
+        let buscador = $(`#buscador-${this.tabla}`);
+        buscador.selectpicker('refresh');
+        let input_buscador = buscador.parent().find('.bs-searchbox > input');
+        let timeoutId;
+
+        input_buscador.on('keyup', (e) => {
+          clearTimeout(timeoutId);
+
+          buscador.selectpicker('refresh')
+          timeoutId = setTimeout(function () {
+            // Aquí se puede hacer la solicitud a la base de datos
+            $.ajax({
+              type: "post",
+              url: "./modelo/filtros/busqueda-select.php",
+              data: { 'term': input_buscador.val(), 'page': 1, 'tabla': vm.tabla, 'columnas': vm.columnas, 'columna_id': vm.columna_id },
+              dataType: 'json',
+              success: function (response) {
+                if (response.estatus) {
+                  vm.results = response.datos; // Usamos la referencia a vm para actualizar results
+                  vm.results.forEach(element => {
+                    buscador.append(`
                           <option value="${element.id}">${element.Nombre_Cliente}</option>
                       `)
-                    });
-                    buscador.selectpicker('refresh')
-                   }
-                 }
-               });
-             }, 200);
-           });
-          }
-            
+                  });
+                  buscador.selectpicker('refresh')
+                }
+              }
+            });
+          }, 200);
+        });
       }
-  
+
+    }
+
   }
 
-function getUserFilter(){
-   
-     return {
-         data: function () {
-             return {
-               results: []
-             }
-         },
-         props: ['tabla', 'columnas', 'columna_id', 'modo_usuario', 'rol_sesion', 'id_sesion', 'nombre_sesion'],
-         
-         template: `
+  function getUserFilter() {
+
+    return {
+      data: function () {
+        return {
+          results: []
+        }
+      },
+      props: ['tabla', 'columnas', 'columna_id', 'modo_usuario', 'rol_sesion', 'id_sesion', 'nombre_sesion', 'id_sucursal'],
+
+      template: `
            <div>
              <select :id="'buscador-' + modo_usuario" class="form-control selectpicker" multiple data-live-search="true">
              </select>
            </div>
          `,
-         mounted(){
-          const vm = this; // Almacenamos una referencia al componente Vue
-          let buscador = $(`#buscador-${this.modo_usuario}`);
-          buscador.selectpicker('refresh');
-          let input_buscador = buscador.parent().find('.bs-searchbox > input');
-          let timeoutId;
-          
-          if(vm.rol_sesion ==1){
-            input_buscador.on('keyup', (e) => {
-              clearTimeout(timeoutId);
-      
-              //buscador.selectpicker('refresh')
-              timeoutId = setTimeout(function() {
-                // Aquí se puede hacer la solicitud a la base de datos
-                $.ajax({
-                  type: "post",
-                  url: "./modelo/filtros/busqueda-select.php",
-                  data: {'term': input_buscador.val(), 'page': 1, 'tabla': vm.tabla, 'columnas': vm.columnas, 'columna_id': vm.columna_id, 'rol_sesion': vm.rol_sesion},
-                  dataType: 'json',
-                  success: function (response) {
-                     if(response.estatus){
-                      vm.results = response.datos; // Usamos la referencia a vm para actualizar results
-                      vm.results.forEach(element => {
-                        buscador.append(`
+      mounted() {
+        const vm = this; // Almacenamos una referencia al componente Vue
+        let buscador = $(`#buscador-${this.modo_usuario}`);
+        buscador.selectpicker('refresh');
+        let input_buscador = buscador.parent().find('.bs-searchbox > input');
+        let timeoutId;
+
+        if (vm.rol_sesion == 1) {
+          input_buscador.on('keyup', (e) => {
+            clearTimeout(timeoutId);
+
+            //buscador.selectpicker('refresh')
+            timeoutId = setTimeout(function () {
+              // Aquí se puede hacer la solicitud a la base de datos
+              $.ajax({
+                type: "post",
+                url: "./modelo/filtros/busqueda-select.php",
+                data: { 'term': input_buscador.val(), 'page': 1, 'tabla': vm.tabla, 'columnas': vm.columnas, 'columna_id': vm.columna_id, 'rol_sesion': vm.rol_sesion },
+                dataType: 'json',
+                success: function (response) {
+                  if (response.estatus) {
+                    vm.results = response.datos; // Usamos la referencia a vm para actualizar results
+                    vm.results.forEach(element => {
+                      buscador.append(`
                             <option value="${element.id}">${element.nombre} ${element.apellidos}</option>
                         `)
-                      });
-                      buscador.selectpicker('refresh');
-  
-                     }
-                    
-                  }
-                });
-              }, 200);
-            });
-          }else{
-            if(this.modo_usuario == 'asesor'){
-              buscador.empty().append(`
-              <option value="${vm.id_sesion}">${vm.nombre_sesion}</option>
-          `)
-        }else{
-              buscador.prop('disabled', true);
-              buscador.empty().append(`
-                            <option value="${vm.id_sesion}" selected>${vm.nombre_sesion}</option>
-                        `)
-            }
-            
-            buscador.selectpicker('refresh');
-            $(`.selectpicker[data-id='buscador-${this.modo_usuario}']`).addClass("disabled");
-          }
-          
-         }
-           
-     }
- 
- }
+                    });
+                    buscador.selectpicker('refresh');
 
-function getBrandFilter(){
-   
-  return {
+                  }
+
+                }
+              });
+            }, 200);
+          });
+        } else {
+          /* if (this.modo_usuario == 'asesor') {
+                     buscador.empty().append(`
+                       <option value="${vm.id_sesion}">${vm.nombre_sesion}</option>
+                   `)
+                   } else {
+                     buscador.prop('disabled', true);
+                     buscador.empty().append(`
+                                     <option value="${vm.id_sesion}" selected>${vm.nombre_sesion}</option>
+                                 `)
+                   }
+         
+                   buscador.selectpicker('refresh');
+                   $(`.selectpicker[data-id='buscador-${this.modo_usuario}']`).addClass("disabled");*/
+        }
+
+      }
+
+    }
+
+  }
+
+  function getBrandFilter() {
+
+    return {
       data: function () {
-          return {
-            results: []
-          }
+        return {
+          results: []
+        }
       },
       props: ['tabla', 'columnas', 'columna_id'],
       template: `
@@ -182,57 +182,57 @@ function getBrandFilter(){
           </select>
         </div>
       `,//  <option v-for="(result, index) in results" :value="result.id">{{result.Nombre}}</option>
-      mounted(){
-       //getCustomers(this._props)
-       const vm = this; // Almacenamos una referencia al componente Vue
-       let buscador = $(`#buscador-${this.tabla}`);
-       buscador.selectpicker('refresh');
-       let input_buscador = buscador.parent().find('.bs-searchbox > input');
-       let timeoutId;
-       
-       input_buscador.on('keyup', (e) => {
-         //clearTimeout(timeoutId);
- 
-         //buscador.selectpicker('refresh')
-        timeoutId = setTimeout(function() {
-           // Aquí se puede hacer la solicitud a la base de datos
-           $.ajax({
-             type: "post",
-             url: "./modelo/filtros/busqueda-select.php",
-             data: {'term': input_buscador.val(), 'page': 1, 'tabla': vm.tabla, 'columnas': vm.columnas, 'columna_id': vm.columna_id},
-             dataType: 'json',
-             success: function (response) {
-              if(response.estatus){
-                buscador.empty();
-                vm.results = response.datos;
-                vm.results.forEach(element => {
-                  buscador.append(`
+      mounted() {
+        //getCustomers(this._props)
+        const vm = this; // Almacenamos una referencia al componente Vue
+        let buscador = $(`#buscador-${this.tabla}`);
+        buscador.selectpicker('refresh');
+        let input_buscador = buscador.parent().find('.bs-searchbox > input');
+        let timeoutId;
+
+        input_buscador.on('keyup', (e) => {
+          //clearTimeout(timeoutId);
+
+          //buscador.selectpicker('refresh')
+          timeoutId = setTimeout(function () {
+            // Aquí se puede hacer la solicitud a la base de datos
+            $.ajax({
+              type: "post",
+              url: "./modelo/filtros/busqueda-select.php",
+              data: { 'term': input_buscador.val(), 'page': 1, 'tabla': vm.tabla, 'columnas': vm.columnas, 'columna_id': vm.columna_id },
+              dataType: 'json',
+              success: function (response) {
+                if (response.estatus) {
+                  buscador.empty();
+                  vm.results = response.datos;
+                  vm.results.forEach(element => {
+                    buscador.append(`
                       <option value="${element.id}">${element.Nombre}</option>
                   `)
-                });
-                buscador.selectpicker('refresh')
-              } 
-               
-             }
-           });
-         }, 400);
-       });
+                  });
+                  buscador.selectpicker('refresh')
+                }
+
+              }
+            });
+          }, 400);
+        });
       }
-        
+
+    }
+
   }
 
-}
+  function getStoreFilter() {
 
-function getStoreFilter(){
-   
-  return {
+    return {
       data: function () {
-          return {
-            results: []
-          }
+        return {
+          results: []
+        }
       },
       props: ['tabla', 'columnas', 'columna_id'],
-      
+
       template: `
         <div>
           <select id="buscador-sucursal" class="form-control selectpicker" data-live-search="true">
@@ -241,41 +241,55 @@ function getStoreFilter(){
           </select>
         </div>
       `,
-      mounted(){
-       const vm = this; // Almacenamos una referencia al componente Vue
-       let buscador = $(`#buscador-sucursal`);
-       let input_buscador = buscador.parent().find('.bs-searchbox > input');
-           // Aquí se puede hacer la solicitud a la base de datos
-           $.ajax({
-             type: "post",
-             url: "./modelo/filtros/busqueda-select.php",
-             data: {'term': input_buscador.val(), 'page': 1, 'tabla': vm.tabla, 'columnas': vm.columnas, 'columna_id': vm.columna_id},
-             dataType: 'json',
-             success: function (response) {
-               
-               vm.results = response.datos;
-               setTimeout(()=>{
-                 buscador.selectpicker('refresh')
-               },100)
-               buscador.selectpicker('render');
-             }
-           });
+      mounted() {
+        const vm = this; // Almacenamos una referencia al componente Vue
+        let buscador = $(`#buscador-sucursal`);
+        let input_buscador = buscador.parent().find('.bs-searchbox > input');
+        // Aquí se puede hacer la solicitud a la base de datos
+        $.ajax({
+          type: "post",
+          url: "./modelo/filtros/busqueda-select.php",
+          data: { 'term': input_buscador.val(), 'page': 1, 'tabla': vm.tabla, 'columnas': vm.columnas, 'columna_id': vm.columna_id },
+          dataType: 'json',
+          success: function (response) {
+
+            let rol_sesion = $('#titulo-hv').attr('rol')
+            console.log(rol_sesion);
+            if (rol_sesion == 2) {
+              let sucursal_nombre = $('#titulo-hv').attr('sucursal')
+              let sucursal_id = $('#titulo-hv').attr('id_sucursal')
+              
+              $('#buscador-sucursal').empty().
+              append(`
+                    <option value="${sucursal_id}">${sucursal_nombre}</option>            
+                `)
+                $('#buscador-sucursal').selectpicker('refresh');
+  
+          }else{
+            vm.results = response.datos;
+            setTimeout(() => {
+              buscador.selectpicker('refresh')
+            }, 100)
+            buscador.selectpicker('render');
+          }  
+          }
+        });
       }
-        
+
+    }
+
   }
 
-}
-
-function getTyreSize() {
+  function getTyreSize() {
     return {
-        data: function () {
-            return {
-              results: []
-            }
-        },
-        props: ['tabla', 'columna', 'columna_id'],
-        
-        template: `
+      data: function () {
+        return {
+          results: []
+        }
+      },
+      props: ['tabla', 'columna', 'columna_id'],
+
+      template: `
           <div>
             <select :id="columna" class="form-control">
                 <option value="null">Seleccione un {{columna}}</option>
@@ -283,72 +297,72 @@ function getTyreSize() {
             </select>
           </div>
         `,
-        mounted(){
-         const vm = this; // Almacenamos una referencia al componente Vue
-         let buscador = $(`#filtro-medida-${vm.columna}`);
-         $.ajax({
-            type: "post",
-            url: "./modelo/filtros/filtros-medidas.php",
-            data: { 'page': 1, 'tabla': vm.tabla, 'columna': vm.columna, 'columna_id': vm.columna_id},
-            dataType: 'json',
-            success: function (response) {
-              if(response.estatus){
-                  vm.results = response.medidas; // Usamos la referencia a vm para actualizar results
-                  //buscador.selectpicker('refresh')
-                }
+      mounted() {
+        const vm = this; // Almacenamos una referencia al componente Vue
+        let buscador = $(`#filtro-medida-${vm.columna}`);
+        $.ajax({
+          type: "post",
+          url: "./modelo/filtros/filtros-medidas.php",
+          data: { 'page': 1, 'tabla': vm.tabla, 'columna': vm.columna, 'columna_id': vm.columna_id },
+          dataType: 'json',
+          success: function (response) {
+            if (response.estatus) {
+              vm.results = response.medidas; // Usamos la referencia a vm para actualizar results
+              //buscador.selectpicker('refresh')
             }
+          }
         });
-        
-         
-        }
-          
-    }
-}
 
-function initVueFilter(rol_sesion, id_sesion, nombre_sesion){
+
+      }
+
+    }
+  }
+
+  function initVueFilter(rol_sesion, id_sesion, nombre_sesion) {
     return new Vue({
       el: '#filter-vue-container',
       components: {
-          'filtro-busqueda-cliente': getCustomerFilter(),
-          'filtro-busqueda-usuario': getUserFilter(),
-          'filtro-medidas': getTyreSize(),
-          'filtro-marcas': getBrandFilter(),
-          'filtro-sucursales': getStoreFilter(),
+        'filtro-busqueda-cliente': getCustomerFilter(),
+        'filtro-busqueda-usuario': getUserFilter(),
+        'filtro-medidas': getTyreSize(),
+        'filtro-marcas': getBrandFilter(),
+        'filtro-sucursales': getStoreFilter(),
 
       },
       data: {
-        clientes:{
-            columnas: ['Nombre_Cliente', 'RFC', 'Telefono', 'Correo'],
-            columna_id: 'id',
-            tabla: 'clientes',
-            modo_vendedor: 'vendedor',
-            modo_asesor: 'asesor'
+        clientes: {
+          columnas: ['Nombre_Cliente', 'RFC', 'Telefono', 'Correo'],
+          columna_id: 'id',
+          tabla: 'clientes',
+          modo_vendedor: 'vendedor',
+          modo_asesor: 'asesor'
         },
-        usuarios:{
-            columnas: ['nombre', 'apellidos', 'usuario', 'id_sucursal'],
-            columna_id: 'id',
-            tabla: 'usuarios',
-            rol_sesion: rol_sesion,
-            id_sesion : id_sesion,
-            nombre_sesion: nombre_sesion
+        usuarios: {
+          columnas: ['nombre', 'apellidos', 'usuario', 'id_sucursal'],
+          columna_id: 'id',
+          tabla: 'usuarios',
+          rol_sesion: rol_sesion,
+          id_sesion: id_sesion,
+          nombre_sesion: nombre_sesion
         },
-        medida:{
-            //columnas: ['Ancho', 'Proporcion', 'Diametro'],
-            tabla: 'llantas',
-            columna_id: 'id',
+        medida: {
+          //columnas: ['Ancho', 'Proporcion', 'Diametro'],
+          tabla: 'llantas',
+          columna_id: 'id',
         },
-        marca:{
+        marca: {
           tabla: 'marcas',
-          columnas:['Nombre'],
+          columnas: ['Nombre'],
           columna_id: 'id',
         },
         sucursal: {
           tabla: 'sucursal',
-          columnas:['Nombre'],
-          columna_id:'id'
+          columnas: ['Nombre'],
+          columna_id: 'id'
         }
       },
-      template:`
+      template: `
       <div id="contenedor-filtros">
       <div class="titulo-inventario d-none" id="titulo-hv" ></div>
                         <div class="row">
@@ -453,7 +467,7 @@ function initVueFilter(rol_sesion, id_sesion, nombre_sesion){
         <hr>
         </div>
       `,
-      
+
       mounted() {
         let filtro_tipo = $(`#filtro-tipo`);
         filtro_tipo.selectpicker('refresh');
@@ -464,17 +478,17 @@ function initVueFilter(rol_sesion, id_sesion, nombre_sesion){
   }
 
 
-// 1. Esperamos a que el DOM esté listo.
-onDocumentReady(function () {
-      // 2. Una vez listo, creamos nuestro widget con Vue.
-      let rol_sesion = document.getElementById('titulo-hv').getAttribute('rol');
-      let nombre_sesion = document.getElementById('titulo-hv').getAttribute('nombre_usuario');
-      let id_sesion = document.getElementById('titulo-hv').getAttribute('id_usuario');
-      let commentsWidget = initVueFilter(rol_sesion, id_sesion, nombre_sesion)
+  // 1. Esperamos a que el DOM esté listo.
+  onDocumentReady(function () {
+    // 2. Una vez listo, creamos nuestro widget con Vue.
+    let rol_sesion = document.getElementById('titulo-hv').getAttribute('rol');
+    let nombre_sesion = document.getElementById('titulo-hv').getAttribute('nombre_usuario');
+    let id_sesion = document.getElementById('titulo-hv').getAttribute('id_usuario');
+    let commentsWidget = initVueFilter(rol_sesion, id_sesion, nombre_sesion)
 
-      // Aquí tienes la referencia al widget completo. Puedes hacer con ella lo que gustes.
-      // Yo he decidido exponerlo como una propiedad de objeto window.
-      window.commentsWidget = commentsWidget
+    // Aquí tienes la referencia al widget completo. Puedes hacer con ella lo que gustes.
+    // Yo he decidido exponerlo como una propiedad de objeto window.
+    window.commentsWidget = commentsWidget
 
   })
 

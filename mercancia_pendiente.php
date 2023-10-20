@@ -102,6 +102,7 @@ if (!isset($_SESSION['id_usuario'])) {
                             <thead style="background-color:#36b9cc; color:white">
                                 <tr>
                                     <th>#</th>
+                                    <th>Fecha</th>
                                     <th>Descripción</th>
                                     <th>Marca</th>
                                     <th>Cantidad</th>
@@ -136,7 +137,7 @@ if (!isset($_SESSION['id_usuario'])) {
                                 $stmt->close();
 
                                 if ($total_llantas_ > 0) {
-                                    $select_x = "SELECT dc.id, dc.cantidad,dc.id_movimiento, dc.id_ubicacion, dc.id_destino, ll.Descripcion, ll.Marca, dc.aprobado_receptor, dc.aprobado_emisor FROM historial_detalle_cambio dc INNER JOIN llantas ll ON dc.id_llanta = ll.id INNER JOIN movimientos m ON dc.id_movimiento = m.id WHERE dc.id_ubicacion = ? AND m.estatus = ?";
+                                    $select_x = "SELECT dc.id, m.fecha, dc.cantidad,dc.id_movimiento, dc.id_ubicacion, dc.id_destino, ll.Descripcion, ll.Marca, dc.aprobado_receptor, dc.aprobado_emisor FROM historial_detalle_cambio dc INNER JOIN llantas ll ON dc.id_llanta = ll.id INNER JOIN movimientos m ON dc.id_movimiento = m.id WHERE dc.id_ubicacion = ? AND m.estatus = ?";
                                     $stmt = $con->prepare($select_x);
                                     $stmt->bind_param('ss', $id_sucursal, $estatus_pendiente);
                                     $stmt->execute();
@@ -148,6 +149,7 @@ if (!isset($_SESSION['id_usuario'])) {
                                     while ($fila_ab = $result_data->fetch_assoc()) {
                                         $cantidad = $fila_ab['cantidad'];
                                         $descripcion = $fila_ab['Descripcion'];
+                                        $fecha_mov = $fila_ab['fecha'];
                                         $id_destino = $fila_ab['id_destino'];
                                         $id_ubicacion = $fila_ab['id_ubicacion'];
                                         $folio_mov = $fila_ab['id_movimiento'];
@@ -199,6 +201,7 @@ if (!isset($_SESSION['id_usuario'])) {
                                         $marca = $fila_ab['Marca'];
                                         print_r("<tr>
                                                 <td>$ind</td>
+                                                <td>$fecha_mov</td>
                                                 <td>$descripcion</td>
                                                 <td>$marca</td>
                                                 <td>$cantidad</td>
@@ -206,9 +209,9 @@ if (!isset($_SESSION['id_usuario'])) {
                                                 <td style='background-color:$color_receptor; color: white'>$suc_destino</td>
                                                 <td>$folio_mov</td>
                                                 <td >
-                                                <div class='$dnone'>
-                                                    <a class='btn btn-success' title='Aprobar' href='#' onclick='aprovMercancia($id_historial, 1,1)'><i class='fas fa-check'></i><a>
-                                                    <a class='btn btn-danger' title='Aprobar' href='#' onclick='aprovMercancia($id_historial, 1,2)'><i class='fas fa-ban'></i><a>
+                                                <div class=''>
+                                                    <a class='btn btn-success' title='Aprobar' href='#' onclick='aprovMercancia($id_historial, 1,1, $folio_mov)'><i class='fas fa-check'></i><a>
+                                                    <a class='btn btn-danger' title='Aprobar' href='#' onclick='aprovMercancia($id_historial, 1,2, $folio_mov)'><i class='fas fa-ban'></i><a>
                                                 </div>
                                                 </td>
                                             </tr>");
@@ -230,6 +233,7 @@ if (!isset($_SESSION['id_usuario'])) {
                             <thead style="background-color:#36b9cc; color:white">
                                 <tr>
                                     <th>#</th>
+                                    <th>Fecha</th>
                                     <th>Descripción</th>
                                     <th>Marca</th>
                                     <th>Cantidad</th>
@@ -263,7 +267,7 @@ if (!isset($_SESSION['id_usuario'])) {
                                 $stmtx->close();
 
                                 if ($total_llantas > 0) {
-                                    $select_x = "SELECT dc.id, dc.cantidad,dc.id_movimiento, dc.id_ubicacion, dc.id_destino, ll.Descripcion, ll.Marca, dc.aprobado_receptor, dc.aprobado_emisor FROM historial_detalle_cambio dc INNER JOIN llantas ll ON dc.id_llanta = ll.id INNER JOIN movimientos m ON dc.id_movimiento = m.id WHERE dc.id_destino = ? AND m.estatus = ?";
+                                    $select_x = "SELECT dc.id, m.fecha, dc.cantidad,dc.id_movimiento, dc.id_ubicacion, dc.id_destino, ll.Descripcion, ll.Marca, dc.aprobado_receptor, dc.aprobado_emisor FROM historial_detalle_cambio dc INNER JOIN llantas ll ON dc.id_llanta = ll.id INNER JOIN movimientos m ON dc.id_movimiento = m.id WHERE dc.id_destino = ? AND m.estatus = ?";
                                     $stmt = $con->prepare($select_x);
                                     $stmt->bind_param('ss', $id_sucursal, $estatus_pendiente);
                                     $stmt->execute();
@@ -274,6 +278,7 @@ if (!isset($_SESSION['id_usuario'])) {
 
                                     while ($fila_ab = $result_data->fetch_assoc()) {
                                         $cantidad = $fila_ab['cantidad'];
+                                        $fecha_mov = $fila_ab['fecha'];
                                         $descripcion = $fila_ab['Descripcion'];
                                         $id_destino = $fila_ab['id_destino'];
                                         $id_ubicacion = $fila_ab['id_ubicacion'];
@@ -324,6 +329,7 @@ if (!isset($_SESSION['id_usuario'])) {
                                         
                                         print_r("<tr>
                                             <td>$ind</td>
+                                            <td>$fecha_mov</td>
                                             <td>$descripcion</td>
                                             <td>$marca</td>
                                             <td>$cantidad</td>
@@ -331,12 +337,13 @@ if (!isset($_SESSION['id_usuario'])) {
                                             <td style='background-color:$color_receptor; color:white'>$suc_destino</td>    
                                             <td>$folio_mov</td>
                                             <td>
-                                                <div class='$dnone'>
-                                               <a class='btn btn-success' title='Aprobar' href='#' onclick='aprovMercancia($id_historial,2,1)'><i class='fas fa-check'></i><a>
-                                               <a class='btn btn-danger' title='Aprobar' href='#' onclick='aprovMercancia($id_historial, 2,2)'><i class='fas fa-ban'></i><a>
+                                                <div class=''>
+                                               <a class='btn btn-success' title='Aprobar' href='#' onclick='aprovMercancia($id_historial,2,1,$folio_mov)'><i class='fas fa-check'></i><a>
+                                               <a class='btn btn-danger' title='Aprobar' href='#' onclick='aprovMercancia($id_historial, 2,2,$folio_mov)'><i class='fas fa-ban'></i><a>
                                                 </div>
                                             </td>
                                         </tr>");
+                                        $ind++;
                                     }
                                 } else {
                                     print_r("<tr><td colspan='8' class='text-center'>No hay mercancia pendiente de recibir</td></tr>");
@@ -362,6 +369,7 @@ if (!isset($_SESSION['id_usuario'])) {
                             <thead style="background-color:#36b9cc; color:white">
                                 <tr>
                                     <th>#</th>
+                                    <th>Fecha</th>
                                     <th>Descripción</th>
                                     <th>Marca</th>
                                     <th>Cantidad</th>
@@ -397,7 +405,7 @@ if (!isset($_SESSION['id_usuario'])) {
                                 $stmt->close();
 
                                 if ($total_llantas_ > 0) {
-                                    $select_x = "SELECT dc.id, dc.cantidad,dc.id_movimiento, dc.id_ubicacion, dc.id_destino, ll.Descripcion, ll.Marca, dc.aprobado_receptor, dc.aprobado_emisor FROM historial_detalle_cambio dc INNER JOIN llantas ll ON dc.id_llanta = ll.id INNER JOIN movimientos m ON dc.id_movimiento = m.id WHERE m.estatus = ?";
+                                    $select_x = "SELECT dc.id, m.fecha, dc.cantidad,dc.id_movimiento, dc.id_ubicacion, dc.id_destino, ll.Descripcion, ll.Marca, dc.aprobado_receptor, dc.aprobado_emisor FROM historial_detalle_cambio dc INNER JOIN llantas ll ON dc.id_llanta = ll.id INNER JOIN movimientos m ON dc.id_movimiento = m.id WHERE m.estatus = ?";
                                     $stmt = $con->prepare($select_x);
                                     $stmt->bind_param('s', $estatus_pendiente);
                                     $stmt->execute();
@@ -408,6 +416,7 @@ if (!isset($_SESSION['id_usuario'])) {
 
                                     while ($fila_ab = $result_data->fetch_assoc()) {
                                         $cantidad = $fila_ab['cantidad'];
+                                        $fecha_mov = $fila_ab['fecha'];
                                         $descripcion = $fila_ab['Descripcion'];
                                         $id_destino = $fila_ab['id_destino'];
                                         $id_ubicacion = $fila_ab['id_ubicacion'];
@@ -460,6 +469,7 @@ if (!isset($_SESSION['id_usuario'])) {
                                         $marca = $fila_ab['Marca'];
                                         print_r("<tr>
                                                 <td>$ind</td>
+                                                <td>$fecha_mov</td>
                                                 <td>$descripcion</td>
                                                 <td>$marca</td>
                                                 <td>$cantidad</td>
@@ -475,6 +485,7 @@ if (!isset($_SESSION['id_usuario'])) {
                                                     <a class='btn btn-danger' title='Aprobar' href='#' onclick='aprovMercancia($id_historial, 2,2,$folio_mov)'><i class='fas fa-ban'></i><a>
                                                 </td>
                                             </tr>");
+                                            $ind++;
                                     }
                                 } else {
                                     print_r("<tr><td colspan='8' class='text-center'> No hay mercancia pendiente de enviar </td></tr>");

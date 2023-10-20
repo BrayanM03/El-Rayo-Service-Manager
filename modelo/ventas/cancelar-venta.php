@@ -53,10 +53,11 @@ if(isset($_POST)) {
             //Actualizar historial de movimientos con la cancelación
             $nombre_usuario = $_SESSION['nombre'] . ' ' . $_SESSION['apellidos'];
             $tipo = 3;
-            $insert = "INSERT INTO movimientos (fecha, hora, usuario, tipo, sucursal)
-          VALUES(?,?,?,?,?)";
+            $pend = 'Pendiente';
+            $insert = "INSERT INTO movimientos (fecha, hora, usuario, tipo, sucursal, estatus)
+          VALUES(?,?,?,?,?,?)";
             $ress = $con->prepare($insert);
-            $ress->bind_param('sssss', $fecha, $hora, $nombre_usuario, $tipo, $sucursal);
+            $ress->bind_param('ssssss', $fecha, $hora, $nombre_usuario, $tipo, $sucursal, $pend);
             $ress->execute();
             $movimiento_id = $con->insert_id;
             $ress->close();
@@ -121,8 +122,8 @@ if(isset($_POST)) {
 
 
                     //Actualizar historial de movimientos con la cancelación
-                    $ins = "INSERT INTO historial_detalle_cambio(id_llanta, id_ubicacion, id_destino, cantidad, id_usuario, id_movimiento, stock_destino_actual, stock_destino_anterior)
-                    VALUES (?,?,?,?,?,?,?,?)";
+                    $ins = "INSERT INTO historial_detalle_cambio(id_llanta, id_ubicacion, id_destino, cantidad, id_usuario, id_movimiento, stock_destino_actual, stock_destino_anterior, aprobado_receptor, aprobado_emisor)
+                    VALUES (?,?,?,?,?,?,?,?,0,0)";
                     $rr = $con->prepare($ins);
                     $rr->bind_param('iiiiiiii', $id_llanta, $sucursal, $sucursal, $cantidad, $_SESSION['id_usuario'], $movimiento_id, $cantidad_total, $stock_actual);
                     $rr->execute();
@@ -182,6 +183,7 @@ if(isset($_POST)) {
               $descripcion_mov = 'Se agregan ' . $cantidad_llantas_movimiento . ' llantas a la sucursal ' . $sucursal_nombre . ' por motivo de cancelación.';
               $update = "UPDATE movimientos SET descripcion = ?, mercancia = ? WHERE id = ?";
               $respp = $con->prepare($update);
+             
               $respp->bind_param('ssi', $descripcion_mov, $mercancia, $movimiento_id);
               $respp->execute();
               $respp->close();
