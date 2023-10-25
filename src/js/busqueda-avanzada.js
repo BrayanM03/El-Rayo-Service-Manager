@@ -127,18 +127,23 @@ function setFilters(){
                     type: "post",
                     dataType: 'json',
                     delay: 250,
-        
                     data: function (params) {
-                     return {
-                       searchTerm: params.term // search term
-                       
-                     };
-                    },
-                    processResults: function (data) {
                         return {
-                           results: data
-                        }; 
-                      },
+                          searchTerm: params.term, // search term
+                          page: params.page || 1,
+                          rol: params.rol
+                          
+                        };
+                       },
+                       processResults: function (data, params) {
+                         params.page = params.page || 1;   
+                         return {
+                            results: data.results,
+                            pagination: {
+                               more: (params.page * 10) < data.total_count // Verificar si hay más resultados para cargar
+                             }
+                         };
+                       },
                    
                     cache: true
         

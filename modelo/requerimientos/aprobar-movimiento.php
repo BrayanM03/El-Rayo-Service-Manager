@@ -13,6 +13,7 @@ if (!$con) {
 }
 $id_movimiento = $_POST['id_mov'];
 $query = "SELECT COUNT(*) FROM movimientos WHERE id = ? AND estatus != 'Completado'";
+$id_sesion = $_SESSION['id_usuario'];
 $stmt = $con->prepare($query);
 $stmt->bind_param('s', $id_movimiento);
 $stmt->execute();

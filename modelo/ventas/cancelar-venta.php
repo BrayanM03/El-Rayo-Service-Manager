@@ -23,6 +23,7 @@ $fecha = date('Y-m-d');
 if(isset($_POST)) {
     $id_venta = $_POST["id_venta"];
     $motivo = $_POST["motivo_cancel"];
+$id_sesion = $_SESSION['id_usuario'];
     //Conseguir susucusal
 
     $obtenerSuc = "SELECT id_sucursal, sucursal, estatus FROM ventas WHERE id LIKE ?";
@@ -122,10 +123,10 @@ if(isset($_POST)) {
 
 
                     //Actualizar historial de movimientos con la cancelación
-                    $ins = "INSERT INTO historial_detalle_cambio(id_llanta, id_ubicacion, id_destino, cantidad, id_usuario, id_movimiento, stock_destino_actual, stock_destino_anterior, aprobado_receptor, aprobado_emisor)
-                    VALUES (?,?,?,?,?,?,?,?,0,0)";
+                    $ins = "INSERT INTO historial_detalle_cambio(id_llanta, id_ubicacion, id_destino, cantidad, id_usuario, id_movimiento, stock_destino_actual, stock_destino_anterior, aprobado_receptor, aprobado_emisor, usuario_emisor, usuario_receptor)
+                    VALUES (?,?,?,?,?,?,?,?,0,0,?,?)";
                     $rr = $con->prepare($ins);
-                    $rr->bind_param('iiiiiiii', $id_llanta, $sucursal, $sucursal, $cantidad, $_SESSION['id_usuario'], $movimiento_id, $cantidad_total, $stock_actual);
+                    $rr->bind_param('iiiiiiiiii', $id_llanta, $sucursal, $sucursal, $cantidad, $_SESSION['id_usuario'], $movimiento_id, $cantidad_total, $stock_actual, $id_sesion, $id_sesion);
                     $rr->execute();
                     $rr->close();
 

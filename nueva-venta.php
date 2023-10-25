@@ -256,11 +256,12 @@
                                                     </label>
                                         
                                                     <label class="input-corto precio-pointer" id="precio-tok" onclick="generarToken();">
-                                                        <span for="precio" class="precio-pointer">$ Precio</span>
-                                                        <input type="number" id="precio" name="precio" class="input-group precio-pointer" disabled>
+                                                            <span for="precio" class="precio-pointer">$ Precio</span>
+                                                            <input type="number" id="precio" name="precio" class="input-group precio-pointer disabled" disabled>
                                                     </label>
-
+                                                    
                                                     <label style="border-color: transparent;">
+                                                        <div class="btn btn-info" flag="0" onclick="generarToken();" style="width: 45px;margin: 8px 3px;"><i class="fas fa-lock"></i></div>
                                                     <div class="btn btn-info" onclick="busqueda();" id="btn-busqueda-llanta" style="width: 45px;margin: 8px 3px;"><i class="fas fa-search"></i></div>
                                                     <div class="btn btn-info" flag="0" onclick="changeServicios();" id="btn-change-servicios" style="width: 45px;margin: 8px 3px;"><i class="fas fa-car"></i></div>
                                                     <div class="btn btn-info" onclick="agregarcliente();" id="btn-add-client" style="width: 45px;margin: 8px 30px 8px 0px;"><i style=" width: 20px;" class="fas fa-user-plus"></i></div>
@@ -278,14 +279,14 @@
                                                     </div> 
                                                     </div> 
                                                     
-                                                    <div id="help-addclient-span" class="targeta-ayuda">
+                                                    <!-- <div id="help-addclient-span" class="targeta-ayuda">
                                                        <div class="card text-white border-info">
                                                        <div class="card-header bg-info">Agregar un cliente</div>
                                                        <div class="card-body bg-white text-info" >
                                                        <p class="card-text">Con este boton pueden agregar un cliente a la base de datos</p>
                                                        </div>
                                                     </div> 
-                                                    </div> 
+                                                    </div>  -->
 
                                                     <div id="help-changeservice-span" class="targeta-ayuda">
                                                        <div class="card text-white border-info">

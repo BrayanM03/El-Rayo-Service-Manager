@@ -151,9 +151,11 @@ if(isset($_POST)){
                     stock_destino_actual,
                     stock_destino_anterior,
                     aprobado_receptor,
-                    aprobado_emisor) VALUES(null, ?,?,?,?,?,?,0,0,?,0,0,0)";
+                    aprobado_emisor,
+                    usuario_emisor,
+                    usuario_receptor) VALUES(null, ?,?,?,?,?,?,0,0,?,0,0,0,?,?)";
                     $result = $con->prepare($insertar);
-                    $result->bind_param('sssssss',$id_llanta, $id_bodega, $id_destino, $cantidad, $id_usuario, $id_movimiento, $cantidad);
+                    $result->bind_param('sssssssss',$id_llanta, $id_bodega, $id_destino, $cantidad, $id_usuario, $id_movimiento, $cantidad, $id_usuario, $id_usuario);
                     $result->execute();
                     $result->close();
                 
@@ -198,9 +200,11 @@ if(isset($_POST)){
                     stock_destino_actual,
                     stock_destino_anterior,
                     aprobado_receptor,
-                    aprobado_emisor) VALUES(null, ?,?,?,?,?,?,0,0,?,?,0,0)";
+                    aprobado_emisor,
+                    usuario_emisor,
+                    usuario_receptor) VALUES(null, ?,?,?,?,?,?,0,0,?,?,0,0,?,?)";
                     $result = $con->prepare($insertar);
-                    $result->bind_param('ssssssss',$id_llanta, $id_bodega, $id_destino, $cantidad, $id_usuario, $id_movimiento, $stock_destino_actual, $stock_destino_anterior);
+                    $result->bind_param('ssssssssss',$id_llanta, $id_bodega, $id_destino, $cantidad, $id_usuario, $id_movimiento, $stock_destino_actual, $stock_destino_anterior, $id_usuario, $id_usuario);
                     $result->execute();
                     $result->close();
     

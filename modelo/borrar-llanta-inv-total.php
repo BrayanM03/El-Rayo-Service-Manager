@@ -11,7 +11,7 @@ if (isset($_POST)) {
 
 
         $codigo = $_POST["codigo"];
-
+$id_usuario = $_SESSION["id_usuario"];
 
         $tray_descp= $con->prepare("SELECT Descripcion FROM llantas WHERE id = ?");
         $tray_descp->bind_param('i', $codigo);
@@ -74,9 +74,11 @@ if (isset($_POST)) {
             id_usuario,
             id_movimiento,
             stock_destino_actual,
-            stock_destino_anterior) VALUES(null, ?,?,?,?,?,?,?,?)";
+            stock_destino_anterior,
+            usuario_emisor,
+            usuario_receptor) VALUES(null, ?,?,?,?,?,?,?,?,?,?)";
             $result = $con->prepare($insertar);
-            $result->bind_param('ssssssss',$codigo, $sucursal_id, $sucursal_id, $stock, $id_usuario, $id_movimiento, $stock_total, $stock_actual_s);
+            $result->bind_param('ssssssssss',$codigo, $sucursal_id, $sucursal_id, $stock, $id_usuario, $id_movimiento, $stock_total, $stock_actual_s, $id_usuario, $id_usuario);
             $result->execute();
             $err = $con->error;
             $result->close();

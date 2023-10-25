@@ -12,6 +12,10 @@ if (!isset($_SESSION['id_usuario'])) {
     header("Location:login.php");
 }
 
+if ($_SESSION['rol'] != 1 || $_SESSION['rol'] != 4 || $_SESSION['rol'] != 2) {
+    header('nueva-venta.php?nav=inicio&id=0');
+}
+
 
 ?>
 <!DOCTYPE html>
@@ -57,6 +61,12 @@ if (!isset($_SESSION['id_usuario'])) {
         #content-wrapper {
             font-size: 12px !important;
         }
+        
+        .toastr-container{
+   z-index: 999999999999999999;
+   background-color: cadetblue;
+ }
+
     </style>
 </head>
 
@@ -84,6 +94,20 @@ if (!isset($_SESSION['id_usuario'])) {
                 <!-- Begin Page Content -->
                 <div class="d-none" id="titulo-hv" sucursal="<?php echo $_SESSION['sucursal'] ?>" id_sucursal="<?php echo $_SESSION['id_sucursal'] ?>" rol="<?php echo $_SESSION['rol'] ?>" id_usuario="<?php echo $_SESSION['id_usuario'] ?>" nombre_usuario="<?php echo $_SESSION['nombre'] . ' ' . $_SESSION['apellidos'] ?>"></div>
                 <?php
+
+                $select_usuarios = "SELECT * FROM usuarios";
+                $stmt = $con->prepare($select_usuarios);
+                $stmt->execute();
+                $result_data = $stmt->get_result();
+                $stmt->fetch();
+                $stmt->close();
+                $arreglo_usuarios = array();
+                while ($fila_users = $result_data->fetch_assoc()) {
+                    array_push($arreglo_usuarios, array('id' => $fila_users['id'], 'nombre' => $fila_users['nombre'] . ' ' . $fila_users['apellidos']));
+                }
+
+                
+
                 $dnone = ($_SESSION['rol'] != 1 || $_SESSION['rol'] != 4) ? 'd-none' : ''; 
                 if ($_SESSION['rol'] != '4' && $_SESSION['rol'] !='1') {
                 ?>
@@ -108,6 +132,8 @@ if (!isset($_SESSION['id_usuario'])) {
                                     <th>Cantidad</th>
                                     <th>Suc. ubicación</th>
                                     <th>Suc. destino</th>
+                                    <th>Usuario ubicación</th>
+                                    <th>Usuario destino</th>
                                     <th>Folio mov.</th>
                                     <th>Acción</th>
                                 </tr>
@@ -137,7 +163,7 @@ if (!isset($_SESSION['id_usuario'])) {
                                 $stmt->close();
 
                                 if ($total_llantas_ > 0) {
-                                    $select_x = "SELECT dc.id, m.fecha, dc.cantidad,dc.id_movimiento, dc.id_ubicacion, dc.id_destino, ll.Descripcion, ll.Marca, dc.aprobado_receptor, dc.aprobado_emisor FROM historial_detalle_cambio dc INNER JOIN llantas ll ON dc.id_llanta = ll.id INNER JOIN movimientos m ON dc.id_movimiento = m.id WHERE dc.id_ubicacion = ? AND m.estatus = ?";
+                                    $select_x = "SELECT dc.id, m.fecha, dc.cantidad,dc.id_movimiento, dc.id_ubicacion, dc.id_destino, ll.Descripcion, ll.Marca, dc.aprobado_receptor, dc.aprobado_emisor, dc.comentario_emisor, dc.comentario_receptor, dc.usuario_emisor, dc.usuario_receptor  FROM historial_detalle_cambio dc INNER JOIN llantas ll ON dc.id_llanta = ll.id INNER JOIN movimientos m ON dc.id_movimiento = m.id WHERE dc.id_ubicacion = ? AND m.estatus = ?";
                                     $stmt = $con->prepare($select_x);
                                     $stmt->bind_param('ss', $id_sucursal, $estatus_pendiente);
                                     $stmt->execute();
@@ -154,7 +180,22 @@ if (!isset($_SESSION['id_usuario'])) {
                                         $id_ubicacion = $fila_ab['id_ubicacion'];
                                         $folio_mov = $fila_ab['id_movimiento'];
                                         $id_ubicacion = $fila_ab['id_ubicacion'];
-
+                                        $comentario_emisor = $fila_ab['comentario_emisor'];
+                                        $comentario_receptor = $fila_ab['comentario_receptor'];
+                                        $id_usuario_emisor =  $fila_ab['usuario_emisor'];
+                                        $id_usuario_receptor =  $fila_ab['usuario_receptor'];
+                                        foreach ($arreglo_usuarios as $usuarios) {
+                                            if ($usuarios['id'] == $id_usuario_emisor) {
+                                                $usuario_emisor = $usuarios['nombre'];
+                                                break;
+                                            }
+                                        }
+                                        foreach ($arreglo_usuarios as $usuarios) {
+                                            if ($usuarios['id'] == $id_usuario_receptor) {
+                                                $usuario_receptor = $usuarios['nombre'];
+                                                break;
+                                            }
+                                        }
                                         $aprobado_receptor = $fila_ab['aprobado_receptor'];
                                         $aprobado_emisor = $fila_ab['aprobado_emisor'];
                                         if ($aprobado_emisor == 1) {
@@ -205,9 +246,17 @@ if (!isset($_SESSION['id_usuario'])) {
                                                 <td>$descripcion</td>
                                                 <td>$marca</td>
                                                 <td>$cantidad</td>
-                                                <td style='background-color:$color_emisor; color: white'>$suc_ubicacion</td>
-                                                <td style='background-color:$color_receptor; color: white'>$suc_destino</td>
+                                                <td style='background-color:$color_emisor; color: white'>
+                                                <b>$suc_ubicacion</b> </br>
+                                                $usuario_emisor
+                                                </td>
+                                                <td style='background-color:$color_receptor; color: white'>
+                                                <b>$suc_destino</b> </br>
+                                                $usuario_receptor
+                                                </td>
                                                 <td>$folio_mov</td>
+                                                <td> $comentario_emisor</td>
+                                                <td> $comentario_receptor</td>
                                                 <td >
                                                 <div class=''>
                                                     <a class='btn btn-success' title='Aprobar' href='#' onclick='aprovMercancia($id_historial, 1,1, $folio_mov)'><i class='fas fa-check'></i><a>
@@ -240,6 +289,8 @@ if (!isset($_SESSION['id_usuario'])) {
                                     <th>Suc. ubicación</th>
                                     <th>Suc. destino</th>
                                     <th>Folio mov.</th>
+                                    <th>Usuario ubicación</th>
+                                    <th>Usuario destino</th>
                                     <th>Acción</th>
                                 </tr>
                             </thead>
@@ -267,7 +318,7 @@ if (!isset($_SESSION['id_usuario'])) {
                                 $stmtx->close();
 
                                 if ($total_llantas > 0) {
-                                    $select_x = "SELECT dc.id, m.fecha, dc.cantidad,dc.id_movimiento, dc.id_ubicacion, dc.id_destino, ll.Descripcion, ll.Marca, dc.aprobado_receptor, dc.aprobado_emisor FROM historial_detalle_cambio dc INNER JOIN llantas ll ON dc.id_llanta = ll.id INNER JOIN movimientos m ON dc.id_movimiento = m.id WHERE dc.id_destino = ? AND m.estatus = ?";
+                                    $select_x = "SELECT dc.id, m.fecha, dc.cantidad,dc.id_movimiento, dc.id_ubicacion, dc.id_destino, ll.Descripcion, ll.Marca, dc.aprobado_receptor, dc.aprobado_emisor, dc.comentario_emisor, dc.comentario_receptor, dc.usuario_emisor, dc.usuario_receptor  FROM historial_detalle_cambio dc INNER JOIN llantas ll ON dc.id_llanta = ll.id INNER JOIN movimientos m ON dc.id_movimiento = m.id WHERE dc.id_destino = ? AND m.estatus = ?";
                                     $stmt = $con->prepare($select_x);
                                     $stmt->bind_param('ss', $id_sucursal, $estatus_pendiente);
                                     $stmt->execute();
@@ -286,6 +337,22 @@ if (!isset($_SESSION['id_usuario'])) {
                                         $id_ubicacion = $fila_ab['id_ubicacion'];
                                         $aprobado_receptor = $fila_ab['aprobado_receptor'];
                                         $aprobado_emisor = $fila_ab['aprobado_emisor'];
+                                        $comentario_emisor = $fila_ab['comentario_emisor'];
+                                        $comentario_receptor = $fila_ab['comentario_receptor'];
+                                        $id_usuario_emisor =  $fila_ab['usuario_emisor'];
+                                        $id_usuario_receptor =  $fila_ab['usuario_receptor'];
+                                        foreach ($arreglo_usuarios as $usuarios) {
+                                            if ($usuarios['id'] == $id_usuario_emisor) {
+                                                $usuario_emisor = $usuarios['nombre'];
+                                                break;
+                                            }
+                                        }
+                                        foreach ($arreglo_usuarios as $usuarios) {
+                                            if ($usuarios['id'] == $id_usuario_receptor) {
+                                                $usuario_receptor = $usuarios['nombre'];
+                                                break;
+                                            }
+                                        }
                                         if ($aprobado_emisor == 1) {
                                             $color_emisor = '#03bb85';
                                         } else if ($aprobado_emisor == 0) {
@@ -333,9 +400,17 @@ if (!isset($_SESSION['id_usuario'])) {
                                             <td>$descripcion</td>
                                             <td>$marca</td>
                                             <td>$cantidad</td>
-                                            <td style='background-color:$color_emisor; color:white'>$suc_ubicacion</td>
-                                            <td style='background-color:$color_receptor; color:white'>$suc_destino</td>    
+                                            <td style='background-color:$color_emisor; color: white'>
+                                                <b>$suc_ubicacion</b> </br>
+                                                $usuario_emisor
+                                            </td>
+                                            <td style='background-color:$color_receptor; color: white'>
+                                                <b>$suc_destino</b> </br>
+                                                $usuario_receptor
+                                            </td>  
                                             <td>$folio_mov</td>
+                                            <td> $comentario_emisor</td>
+                                            <td> $comentario_receptor</td>
                                             <td>
                                                 <div class=''>
                                                <a class='btn btn-success' title='Aprobar' href='#' onclick='aprovMercancia($id_historial,2,1,$folio_mov)'><i class='fas fa-check'></i><a>
@@ -376,6 +451,8 @@ if (!isset($_SESSION['id_usuario'])) {
                                     <th>Suc. ubicación</th>
                                     <th>Suc. destino</th>
                                     <th>Folio mov.</th>
+                                    <th>Comentario ubicación</th>
+                                    <th>Comentario destino</th>
                                     <th>Aprov. Ubicacion</th>
                                     <th>Aprov. Destino</th>
                                 </tr>
@@ -405,7 +482,7 @@ if (!isset($_SESSION['id_usuario'])) {
                                 $stmt->close();
 
                                 if ($total_llantas_ > 0) {
-                                    $select_x = "SELECT dc.id, m.fecha, dc.cantidad,dc.id_movimiento, dc.id_ubicacion, dc.id_destino, ll.Descripcion, ll.Marca, dc.aprobado_receptor, dc.aprobado_emisor FROM historial_detalle_cambio dc INNER JOIN llantas ll ON dc.id_llanta = ll.id INNER JOIN movimientos m ON dc.id_movimiento = m.id WHERE m.estatus = ?";
+                                    $select_x = "SELECT dc.id, m.fecha, dc.cantidad,dc.id_movimiento, dc.id_ubicacion, dc.id_destino, ll.Descripcion, ll.Marca, dc.aprobado_receptor, dc.aprobado_emisor, dc.comentario_emisor, dc.comentario_receptor,  dc.usuario_emisor, dc.usuario_receptor FROM historial_detalle_cambio dc INNER JOIN llantas ll ON dc.id_llanta = ll.id INNER JOIN movimientos m ON dc.id_movimiento = m.id WHERE m.estatus = ?";
                                     $stmt = $con->prepare($select_x);
                                     $stmt->bind_param('s', $estatus_pendiente);
                                     $stmt->execute();
@@ -422,9 +499,24 @@ if (!isset($_SESSION['id_usuario'])) {
                                         $id_ubicacion = $fila_ab['id_ubicacion'];
                                         $folio_mov = $fila_ab['id_movimiento'];
                                         $id_ubicacion = $fila_ab['id_ubicacion'];
-
+                                        $comentario_emisor = $fila_ab['comentario_emisor'];
+                                        $comentario_receptor = $fila_ab['comentario_receptor'];
                                         $aprobado_receptor = $fila_ab['aprobado_receptor'];
                                         $aprobado_emisor = $fila_ab['aprobado_emisor'];
+                                        $id_usuario_emisor =  $fila_ab['usuario_emisor'];
+                                        $id_usuario_receptor =  $fila_ab['usuario_receptor'];
+                                        foreach ($arreglo_usuarios as $usuarios) {
+                                            if ($usuarios['id'] == $id_usuario_emisor) {
+                                                $usuario_emisor = $usuarios['nombre'];
+                                                break;
+                                            }
+                                        }
+                                        foreach ($arreglo_usuarios as $usuarios) {
+                                            if ($usuarios['id'] == $id_usuario_receptor) {
+                                                $usuario_receptor = $usuarios['nombre'];
+                                                break;
+                                            }
+                                        }
                                         if ($aprobado_emisor == 1) {
                                             $color_emisor = '#03bb85';
                                         } else if ($aprobado_emisor == 0) {
@@ -473,9 +565,17 @@ if (!isset($_SESSION['id_usuario'])) {
                                                 <td>$descripcion</td>
                                                 <td>$marca</td>
                                                 <td>$cantidad</td>
-                                                <td style='background-color:$color_emisor; color: white'>$suc_ubicacion</td>
-                                                <td style='background-color:$color_receptor; color: white'>$suc_destino</td>
+                                                <td style='background-color:$color_emisor; color: white'>
+                                                $suc_ubicacion </br>
+                                                $usuario_emisor
+                                                </td>
+                                                <td style='background-color:$color_receptor; color: white'>
+                                                $suc_destino </br>
+                                                $usuario_receptor
+                                                </td>
                                                 <td>$folio_mov</td>
+                                                <td>$comentario_emisor</td>
+                                                <td> $comentario_receptor</td>
                                                 <td>
                                                     <a class='btn btn-success' title='Aprobar' href='#' onclick='aprovMercancia($id_historial, 1,1,$folio_mov)'><i class='fas fa-check'></i><a>
                                                     <a class='btn btn-danger' title='Aprobar' href='#' onclick='aprovMercancia($id_historial, 1,2,$folio_mov)'><i class='fas fa-ban'></i><a>

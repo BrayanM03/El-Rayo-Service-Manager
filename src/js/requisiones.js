@@ -1,3 +1,20 @@
+toastr.options = {
+    "closeButton": true,
+    "debug": false,
+    "newestOnTop": false,
+    "progressBar": true,
+    "positionClass": "toast-bottom-right",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "timeOut": "5000",
+    "extendedTimeOut": "1000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+  }
 function aprovMercancia(id_dc, tipo, accion, id_movimiento){
     /**    
         Acción:
@@ -10,8 +27,7 @@ function aprovMercancia(id_dc, tipo, accion, id_movimiento){
     */
         let tipo_req = tipo == 1 ? 'por enviar' : 'por recibir';
         //let accion_text = accion == 1 ? 'Aprobar' : 'Cancelar';
-        console.log(accion);
-        console.log(tipo);
+    
         if(accion ==2){
             Swal.fire({
                 icon: 'question',
@@ -19,26 +35,26 @@ function aprovMercancia(id_dc, tipo, accion, id_movimiento){
                 <textarea id="comentario-requerimiento" class="form-control" placeholder="Escribe aquí tu motivo... "></textarea>`,
                 confirmButtonText: 'Cancelar'
             }).then(function(res){
-                let comentario = $("#comentario-requirimiento").val();
+                let comentario = $("#comentario-requerimiento").val();
                 if(res.isConfirmed){
                     procesarMercancia(id_dc, tipo, accion, comentario, id_movimiento);
                 }
             })
         }else{
-            Swal.fire({
+         /*    Swal.fire({
                 html: `<p>¿Deseas aprobar este requerimiento ${tipo_req}</p>`,
                 confirmButtonText: 'Aprobar',
             }).then(function(re){
-                if(re.isConfirmed){
+                if(re.isConfirmed){ */
                     let comentario = '';
                     procesarMercancia(id_dc, tipo, accion, comentario, id_movimiento);
-                }
-            })
+               /*  }
+            }) */
         }
 }
 
 function procesarMercancia(id_dc, tipo, accion, comentario, id_movimiento){
-    console.log(id_movimiento);
+    console.log(comentario);
     $.ajax({
         type: "post",
         url: "./modelo/requerimientos/procesar-mercancia.php",
@@ -46,7 +62,12 @@ function procesarMercancia(id_dc, tipo, accion, comentario, id_movimiento){
         dataType: "json",
         success: function (response) {
             if(response.estatus){
-                Swal.fire({
+
+                toastr.success('Actualizado correctamente', 'Actualizado' );
+                setTimeout(function(){
+                    window.location.reload();
+                }, 600);
+                /* Swal.fire({
                     icon: 'success',
                     html: response.mensaje,
                     allowOutsideClick: false
@@ -54,7 +75,7 @@ function procesarMercancia(id_dc, tipo, accion, comentario, id_movimiento){
                     if(r.isConfirmed){
                         window.location.reload();
                     }
-                })
+                }) */
             }else{
                 Swal.fire({
                     icon: 'error',

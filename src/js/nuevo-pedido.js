@@ -38,18 +38,17 @@ $(document).ready(function() {
                  
                };
               },
-             
+              processResults: function (data, params) {
+                params.page = params.page || 1;   
+                return {
+                   results: data.results,
+                   pagination: {
+                      more: (params.page * 10) < data.total_count // Verificar si hay más resultados para cargar
+                    }
+                };
+              },
               cache: true
   
-          },
-          processResults: function (data, params) {
-            params.page = params.page || 1;   
-            return {
-               results: data.results,
-               pagination: {
-                  more: (params.page * 10) < data.total_count // Verificar si hay más resultados para cargar
-                }
-            };
           },
           language:  {
   
@@ -153,15 +152,26 @@ $(document).ready(function() {
               delay: 250,
   
               data: function (params) {
-               return {
-                 searchTerm: params.term // search term
+                if(params.term == undefined){
+                  params.term = "";
+                }
+              
+                 return {
+                   searchTerm: params.term, 
+                   page: params.page || 1,
                  
-               };
+                   
+                 };
               },
-              processResults: function (data) {
+              processResults: function (data,params) {
+                
+                params.page = params.page || 1;
                   return {
-                     results: data
-                  }; 
+                     results: data.results,
+                     pagination: {
+                      more: (params.page * 10) < data.total_count // Verificar si hay más resultados para cargar
+                    }
+                  };
                 },
              
               cache: true

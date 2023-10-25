@@ -1,9 +1,12 @@
 function realizarVentaCredito(){
+    let metodos_pagos = $("#metodos-pago").val();  
 
     if ( !table.data().any()){
 
         toastr.warning('La tabla no tiene productos', 'Sin productos' ); 
     
+    }else if(metodos_pagos.length == 0){
+            toastr.warning('Agrega un metodo de pago', 'Sin metodo pago' ); 
     }else{
         
              //Pasar el codigo de aqui abajo al IF cuando termines

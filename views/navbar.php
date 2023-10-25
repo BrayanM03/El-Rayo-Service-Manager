@@ -7,7 +7,7 @@ $dia_de_la_semana = date("l");
 
 ?>
 <!-- Topbar -->
-<nav class="navbar navbar-expand navbar-info bg-info topbar mb-4 static-top shadow">
+<nav class="navbar navbar-expand navbar-info bg-info topbar mb-4 static-top shadow bg-warning">
 
 <!-- Sidebar Toggle (Topbar) -->
 <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
@@ -98,7 +98,7 @@ $dia_de_la_semana = date("l");
             </div>
 
             <div id="contenedor-alertas"></div>
-            <a class="dropdown-item text-center small text-gray-500" href="#">Mostrar mas notificaciones</a>
+            <a class="dropdown-item text-center small text-black" href="#">Mostrar mas notificaciones</a>
 
         </div>
     </li>
@@ -112,7 +112,7 @@ $dia_de_la_semana = date("l");
     <!-- Nav Item - User Information -->
     <li class="nav-item dropdown no-arrow">
         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="mr-2 d-none d-lg-inline  small" style="color: aliceblue;"><?php
+            <span class="mr-2 d-none d-lg-inline small" style="color:black !important;"><?php
 
                                                                                     echo $_SESSION['nombre'] . " " . $_SESSION['apellidos'];
 
@@ -129,10 +129,17 @@ $dia_de_la_semana = date("l");
                 <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                 Configuraciones
             </a>
+            <?php 
+               $rol = $_SESSION['rol'];
+               if($rol == 1 || $rol == 2 || $rol == 4){
+            ?>
             <a class="dropdown-item" href="mercancia_pendiente.php?nav=0&id=<?php echo $_SESSION['id_sucursal'] ?>">
                 <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                 Llantas pendientes
             </a>
+            <?php 
+               }
+            ?>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                 <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>

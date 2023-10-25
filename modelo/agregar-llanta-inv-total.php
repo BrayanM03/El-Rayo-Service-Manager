@@ -12,7 +12,7 @@
       $respuesta =  $_POST["mayorista"];
       $nulo = null;
       $fecha = date("Y-m-d"); 
-
+      $id_usuario = $_SESSION['id_usuario'];
       $query = "INSERT INTO llantas (Ancho, Proporcion, Diametro, Descripcion, Marca, Modelo, precio_Inicial, precio_Venta, precio_Mayoreo, Fecha) VALUES (?,?,?,?,?,?,?,?,?,?)";
       $resultado = $con->prepare($query);
       $resultado->bind_param(
@@ -77,9 +77,11 @@
             id_usuario,
             id_movimiento,
             stock_destino_actual,
-            stock_destino_anterior) VALUES(null, ?,?,?,?,?,?,?,?)";
+            stock_destino_anterior,
+            usuario_emisor,
+            usuario_receptor) VALUES(null, ?,?,?,?,?,?,?,?,?,?)";
             $result = $con->prepare($insertar);
-            $result->bind_param('ssssssss',$codigo, $sucursal_id, $sucursal_id, $stock, $id_usuario, $id_movimiento, $stock_total, $stock_actual_s);
+            $result->bind_param('ssssssssss',$codigo, $sucursal_id, $sucursal_id, $stock, $id_usuario, $id_movimiento, $stock_total, $stock_actual_s, $id_usuario, $id_usuario);
             $result->execute();
             $result->close();
        

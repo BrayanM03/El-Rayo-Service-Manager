@@ -106,8 +106,6 @@ let id_rol_session= $("#content").attr("rol_session_id");
                    
                  };
                 },
-                cache: true,
-               
                
                 cache: true
     
@@ -451,15 +449,30 @@ let id_rol_session= $("#content").attr("rol_session_id");
             delay: 250,
 
             data: function (params) {
-             return {
-               searchTerm: params.term // search term
-               
-             };
+              if(params.term == undefined){
+                params.term = "";
+              }
+              params.id_sucursal = id_sucursal_session;
+              params.rol = id_rol_session;
+            
+               return {
+                 searchTerm: params.term, // search term
+                 id_sucursal: params.id_sucursal,
+                 page: params.page || 1,
+                 rol: params.rol
+                 
+               };
             },
-            processResults: function (data) {
+            processResults: function (data,params) {
+              console.log(data);
+              
+              params.page = params.page || 1;
                 return {
-                   results: data
-                }; 
+                   results: data.results,
+                   pagination: {
+                    more: (params.page * 10) < data.total_count // Verificar si hay más resultados para cargar
+                  }
+                };
               },
            
             cache: true

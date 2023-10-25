@@ -12,7 +12,14 @@ if (!isset($_SESSION['id_usuario'])) {
 
 if (isset($_POST)) {
     
-    
+    $page = $_POST['page'] ?? 1; // Número de página actual (1 si no se especifica)
+
+    // Parámetros de paginación
+    $resultadosPorPagina = 10;
+
+    // Calcular el offset
+    $offset = ($page - 1) * $resultadosPorPagina;
+
    if(isset($_POST["searchTerm"])){
     $term = $_POST["searchTerm"];
     $termX = '%'.$term .'%';
@@ -26,7 +33,7 @@ if (isset($_POST)) {
 
    
     if($total_clientes > 0){
-        $query="SELECT * FROM clientes WHERE  Nombre_Cliente LIKE '%$term%'"; // WHERE id_asesor = ? OR id_autorizado = ?
+        $query="SELECT * FROM clientes WHERE  Nombre_Cliente LIKE '%$term%' LIMIT $resultadosPorPagina OFFSET $offset"; // WHERE id_asesor = ? OR id_autorizado = ?
 
         $resultado = $con->query($query);
     
@@ -43,8 +50,19 @@ if (isset($_POST)) {
         $data[] = array("id" => $id, "nombre"=>$nombre, "telefono" => $telefono,
                         "direccion" => $direccion, "correo"=>$correo, "credito"=>$credito,   "rfc"=>$rfc);
     }
-    
-    echo json_encode($data, JSON_UNESCAPED_UNICODE); 
+
+    $response = array(
+        'results' => $data, // Array de resultados obtenidos de la consulta SQL
+        'post'=> $_POST,
+        'total_count'=>$total_clientes,
+        'pagination' => array(
+          'page'=> $page,
+          'offset'=> $offset,
+          'paginas_per_page'=> $resultadosPorPagina,
+          'more' => count($data) == $resultadosPorPagina // Verificar si hay más resultados disponibles
+        ));
+
+    echo json_encode($response, JSON_UNESCAPED_UNICODE);
 }else{
     echo "Nada";
 };
@@ -60,7 +78,7 @@ if (isset($_POST)) {
     $resultado->close();
     if($total_clientes > 0){
 
-        $querySuc = "SELECT * FROM clientes"; // WHERE id_asesor = ?  OR id_autorizado = ?
+        $querySuc = "SELECT * FROM clientes LIMIT $resultadosPorPagina OFFSET $offset"; // WHERE id_asesor = ?  OR id_autorizado = ?
         $respon = $con->query($querySuc);
     
         while ($fila = $respon->fetch_assoc()) {
@@ -74,8 +92,18 @@ if (isset($_POST)) {
             $data[] = array("id" => $id, "nombre"=>$nombre, "telefono" => $telefono,
                     "direccion" => $direccion, "correo"=>$correo, "credito"=>$credito,   "rfc"=>$rfc);
         }
+        $response = array(
+            'results' => $data, // Array de resultados obtenidos de la consulta SQL
+            'post'=> $_POST,
+            'total_count'=>$total_clientes,
+            'pagination' => array(
+              'page'=> $page,
+              'offset'=> $offset,
+              'paginas_per_page'=> $resultadosPorPagina,
+              'more' => count($data) == $resultadosPorPagina // Verificar si hay más resultados disponibles
+            ));
     
-        echo json_encode($data, JSON_UNESCAPED_UNICODE);
+        echo json_encode($response, JSON_UNESCAPED_UNICODE);
     }else{
         echo "Nada";
     };
