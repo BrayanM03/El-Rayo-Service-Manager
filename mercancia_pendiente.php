@@ -12,7 +12,7 @@ if (!isset($_SESSION['id_usuario'])) {
     header("Location:login.php");
 }
 
-if ($_SESSION['rol'] != 1 || $_SESSION['rol'] != 4 || $_SESSION['rol'] != 2) {
+if ($_SESSION['rol'] != 1 || $_SESSION['rol'] != 4 || $_SESSION['rol'] != 2 || $_SESSION['id_usuario'] != 19) { //19 es el usuario de Javier
     header('nueva-venta.php?nav=inicio&id=0');
 }
 
@@ -132,9 +132,9 @@ if ($_SESSION['rol'] != 1 || $_SESSION['rol'] != 4 || $_SESSION['rol'] != 2) {
                                     <th>Cantidad</th>
                                     <th>Suc. ubicación</th>
                                     <th>Suc. destino</th>
-                                    <th>Usuario ubicación</th>
-                                    <th>Usuario destino</th>
                                     <th>Folio mov.</th>
+                                    <th>Comentario ubicación</th>
+                                    <th>Comentario destino</th>
                                     <th>Acción</th>
                                 </tr>
                             </thead>
@@ -266,7 +266,7 @@ if ($_SESSION['rol'] != 1 || $_SESSION['rol'] != 4 || $_SESSION['rol'] != 2) {
                                             </tr>");
                                     }
                                 } else {
-                                    print_r("<tr><td colspan='8' class='text-center'> No hay mercancia pendiente de enviar </td></tr>");
+                                    print_r("<tr><td colspan='11' class='text-center'> No hay mercancia pendiente de enviar </td></tr>");
                                 }
 
                                 ?>
@@ -289,8 +289,8 @@ if ($_SESSION['rol'] != 1 || $_SESSION['rol'] != 4 || $_SESSION['rol'] != 2) {
                                     <th>Suc. ubicación</th>
                                     <th>Suc. destino</th>
                                     <th>Folio mov.</th>
-                                    <th>Usuario ubicación</th>
-                                    <th>Usuario destino</th>
+                                    <th>Comentario ubicación</th>
+                                    <th>Comentario destino</th>
                                     <th>Acción</th>
                                 </tr>
                             </thead>
@@ -421,7 +421,7 @@ if ($_SESSION['rol'] != 1 || $_SESSION['rol'] != 4 || $_SESSION['rol'] != 2) {
                                         $ind++;
                                     }
                                 } else {
-                                    print_r("<tr><td colspan='8' class='text-center'>No hay mercancia pendiente de recibir</td></tr>");
+                                    print_r("<tr><td colspan='11' class='text-center'>No hay mercancia pendiente de recibir</td></tr>");
                                 }
                                 ?>
                             </tbody>
@@ -588,7 +588,7 @@ if ($_SESSION['rol'] != 1 || $_SESSION['rol'] != 4 || $_SESSION['rol'] != 2) {
                                             $ind++;
                                     }
                                 } else {
-                                    print_r("<tr><td colspan='8' class='text-center'> No hay mercancia pendiente de enviar </td></tr>");
+                                    print_r("<tr><td colspan='11' class='text-center'> No hay mercancia pendiente de enviar </td></tr>");
                                 }
 
                                 ?>

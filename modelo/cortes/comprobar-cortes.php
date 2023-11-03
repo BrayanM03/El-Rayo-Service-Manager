@@ -24,9 +24,6 @@ $comprobar = $con->prepare("SELECT * FROM `sucursal`");
                     $nombre = $fila["nombre"];
                     $data[] = array("id"=>$id, "corte"=> $corte, "nombre"=> $nombre);
 
-                   
-                   
-
                 }           
 
              }

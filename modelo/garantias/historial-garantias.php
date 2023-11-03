@@ -19,7 +19,7 @@
  */
 
 // DB table to use
-$table = 'vista_clientes';
+$table = 'vista_garantias';
 
 // Table's primary key
 $primaryKey = 'id';
@@ -30,13 +30,22 @@ $primaryKey = 'id';
 // indexes
 $columns = array(
 	array( 'db' => 'id', 'dt' => 0 ),
-	array( 'db' => 'Nombre_Cliente',  'dt' => 1 ),
-	array( 'db' => 'Telefono',  'dt' => 2 ),
-	array( 'db' => 'Direccion',  'dt' => 3 ),
-	array( 'db' => 'asesor',  'dt' => 7),
-	array( 'db' => 'Correo',  'dt' => 4 ),
-	array( 'db' => 'Credito',  'dt' => 5 ),
-	array( 'db' => 'RFC',  'dt' => 6)
+	array( 'db' => 'id_cliente',  'dt' => 1 ),
+	array( 'db' => 'cantidad',  'dt' => 2 ),
+	array( 'db' => 'id_llanta',  'dt' => 3 ),
+	array( 'db' => 'dot',  'dt' => 4 ),
+	array( 'db' => 'descripcion',  'dt' => 5 ),
+	array( 'db' => 'marca',  'dt' => 6 ),
+	array( 'db' => 'comentario_inicial',  'dt' => 7 ),
+	array( 'db' => 'analisis',  'dt' => 8 ),
+	array( 'db' => 'dictamen',  'dt' => 9 ),
+	array( 'db' => 'lugar_expedicion',  'dt' => 10),
+	array( 'db' => 'fecha_expedicion',  'dt' => 11),
+	array( 'db' => 'factura',  'dt' => 12),
+	array( 'db' => 'id_sucursal',  'dt' => 13),
+	array( 'db' => 'cliente',  'dt' => 14),
+	array( 'db' => 'sucursal',  'dt' => 15),
+	array( 'db' => 'comprobante_extension',  'dt' => 16),
 );
 
 // SQL server connection information
@@ -50,7 +59,7 @@ $sql_details = $credenciales_db;
  * server-side, there is no need to edit below this line.
  */
 
-require( '../ssp.class.php' );
+require( '../cortes/ssp.class.php' );
 
 echo json_encode(
 	SSP::simple( $_GET, $sql_details, $table, $primaryKey, $columns )

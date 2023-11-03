@@ -25,6 +25,7 @@ $(document).ready(function() {
       columns: [   
         { title: "#",              data: null             },
         //{ title: "Codigo",         data: "id"             },
+        { title: "Codigo",    data: "id"    },
         { title: "Descripcion",    data: "descripcion"    },
         { title: "Marca",          data: "marca"          },
         { title: "Modelo",         data: "modelo"         },

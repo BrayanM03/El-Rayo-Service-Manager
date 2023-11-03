@@ -29,6 +29,7 @@ table = $('#ventas').DataTable({
     { title: "Telefono",       data: 2       },
     { title: "Direccion",      data: 3 , width: "20%"  },
     { title: "Correo",         data: 4         },
+    {title: 'Asesor',          data: 7 },
     { title: "Credito",        data: 5, render: function (data) {  
         if (data == 1) {
             return '<span class="badge badge-warning">Con credito</span>';
@@ -43,12 +44,12 @@ table = $('#ventas').DataTable({
       className: "celda-acciones",
       render: function (row, data) {
         
-        if(rol_sesion == 2){ //Esta configuracion es especifica para el usuario de Mario y Amita se debe en un furturo hacer mas dinamico
+        if(rol_sesion == 1){ //Esta configuracion es especifica para el usuario de Mario y Amita se debe en un furturo hacer mas dinamico
             return '<div style="display: flex"><button onclick="editarCliente(' +row[0]+ ');" type="button" class="buttonPDF btn btn-success" style="margin-right: 8px"><span class="fa fa-edit"></span><span class="hidden-xs"></span></button><br>';
+                  // '<div style="display: flex"><button onclick="editarCliente(' +row[0]+ ');" type="button" class="buttonPDF btn btn-success" style="margin-right: 8px"><span class="fa fa-edit"></span><span class="hidden-xs"></span></button><br>';
+                   // '<button type="button" onclick="borrarCliente('+ row[0] +');" class="buttonBorrar btn btn-warning"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
         }else{
-            return '<div style="display: flex"><button onclick="editarCliente(' +row[0]+ ');" type="button" class="buttonPDF btn btn-success" style="margin-right: 8px"><span class="fa fa-edit"></span><span class="hidden-xs"></span></button><br>'+
-            '<button type="button" onclick="borrarCliente('+ row[0] +');" class="buttonBorrar btn btn-warning"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
-          
+          return '';
         }
     },
     },

@@ -195,6 +195,7 @@ toastr.options = {
                 "<div class='select2_description'>" + repo.Descripcion + "</div>" +
                 "</div>" +
                 "</div>" +
+                "<span>Cod: "+repo.id+"</span>" +
                 "<div class='select2_statistics' style='display:flex; border-top: 1px solid whitesmoke; padding-top:8px; justify-content:space-around; margin-top:5px;'>" +
                 "<div class='select2_marca'><i class='fa fa-star'></i> "+ repo.Marca+"</div>" +
                   "<div class='select2_costo'><i class='fa fa-dollar-sign'></i> "+repo.precio_Inicial+" (Costo) </div>" +

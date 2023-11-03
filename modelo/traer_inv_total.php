@@ -20,8 +20,8 @@ if (isset($_POST)) {
         $query_mostrar = $con->prepare("SELECT COUNT(*) total FROM llantas l");
 
     }else{
-        $query_mostrar = $con->prepare("SELECT COUNT(*) total FROM llantas l WHERE l.modelo LIKE ? OR l.Descripcion LIKE ? OR l.Marca LIKE ?");
-        $query_mostrar->bind_param('sss', $search_query, $search_query, $search_query);
+        $query_mostrar = $con->prepare("SELECT COUNT(*) total FROM llantas l WHERE l.id LIKE ? OR l.modelo LIKE ? OR l.Descripcion LIKE ? OR l.Marca LIKE ?");
+        $query_mostrar->bind_param('ssss', $search_query, $search_query, $search_query, $search_query);
     }
    
     $query_mostrar->execute();
@@ -81,13 +81,13 @@ if (isset($_POST)) {
     if ($total > 0) {
         // Obtener registros de la base de datos
             $sqlTraerLlanta = "SELECT l.*, COALESCE((SELECT SUM(i.Stock) FROM inventario i WHERE i.id_Llanta = l.id), 0) AS total_stock
-            FROM llantas l WHERE l.modelo LIKE ? OR l.Descripcion LIKE ? OR l.Marca LIKE ? ORDER BY $order_by LIMIT ?, ?;
+            FROM llantas l WHERE l.id LIKE ? OR l.modelo LIKE ? OR l.Descripcion LIKE ? OR l.Marca LIKE ? ORDER BY $order_by LIMIT ?, ?;
             ";
                                                       
                                                   
         $stmt = $con->prepare($sqlTraerLlanta);
         
-        $stmt->bind_param("sssii", $search_query, $search_query, $search_query, $offset, $results_per_page);
+        $stmt->bind_param("ssssii", $search_query, $search_query, $search_query, $search_query, $offset, $results_per_page);
         $stmt->execute();
         $resultado = $stmt->get_result();
 

@@ -270,14 +270,14 @@
                                                     <div class="btn btn-info" rol="<?php echo $_SESSION['rol']; ?>" sucursal="<?php echo $_SESSION['sucursal']; ?>"  id_sucursal="<?php echo $_SESSION['id_sucursal']; ?>" id="agregar-producto" onclick="agregarInfo()" >Agregar</div>
                                                     </label>
 
-                                                    <div id="help-searchtyre-span" class="targeta-ayuda">
+                                                   <!--  <div id="help-searchtyre-span" class="targeta-ayuda">
                                                        <div class="card text-white border-info">
                                                        <div class="card-header bg-info">Busqueda avanzada</div>
                                                        <div class="card-body bg-white text-info" >
                                                        <p class="card-text">Con este boton puedes revisar la disponibilidad de una llanta en otras sucursales</p>
                                                        </div>
                                                     </div> 
-                                                    </div> 
+                                                    </div>  -->
                                                     
                                                     <!-- <div id="help-addclient-span" class="targeta-ayuda">
                                                        <div class="card text-white border-info">
@@ -288,14 +288,14 @@
                                                     </div> 
                                                     </div>  -->
 
-                                                    <div id="help-changeservice-span" class="targeta-ayuda">
+                                                   <!--  <div id="help-changeservice-span" class="targeta-ayuda">
                                                        <div class="card text-white border-info">
                                                        <div class="card-header bg-info" id="title-help-card">Modo servicios</div>
                                                        <div class="card-body bg-white text-info" >
                                                        <p class="card-text" id="body-help-card">Pulsa este boton para cambiar a modo venta de servicios</p>
                                                        </div>
                                                     </div> 
-                                                    </div> 
+                                                    </div>  -->
 
                                                 </div>
                                                  
