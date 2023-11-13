@@ -9,7 +9,7 @@
         echo "maaaaal";
     }
 
-    if (!isset($_SESSION['id_usuario'])) {
+    if (!isset($_SESSION['id_usuario']) || $_SESSION['id_usuario'] ==16 || ($_SESSION['rol'] != 4 && $_SESSION['rol'] != 1)) {
         header("Location:login.php");
     }
 

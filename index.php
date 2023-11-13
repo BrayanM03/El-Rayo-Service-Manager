@@ -75,6 +75,7 @@ if ($_SESSION['rol'] == 4) {
                 <div class="container-fluid">
 
                      <!-- Page Heading -->
+                     
                      <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h3 class="h3 mb-0 text-gray-800">Bievenido al panel <?php echo $_SESSION['nombre']; ?></h3>
                         <a href="ganancias-diarias.php?id=0&nav=ganancias_diarias" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm"><i
@@ -271,7 +272,7 @@ if ($_SESSION['rol'] == 4) {
                         </div>
                     </div>
                     <div class="row" style="display: flex; justify-content: center; margin-top: 80px;">
-                        <img src="src/img/undraw_sobre_ruedas.svg" alt="" width="400px">
+                        <img src="src/img/undraw_snow_fun_re_plbr.svg" alt="" width="400px">
                     </div>
 
             </div>

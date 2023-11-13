@@ -391,7 +391,7 @@ switch ($flag) {
 
     <?php }
 
-    if ($user_jerarquia == 1 || $user_jerarquia == 4) {
+    if ($user_jerarquia == 1 || $user_jerarquia == 4 && $_SESSION['id_usuario'] !=16) { //16 usuario de Javier Lozano
     ?>
         <!-- Nav Item - Charts -->
         <li class="nav-item <?php echo $claseToken; //rol-4 
@@ -400,10 +400,8 @@ switch ($flag) {
                 <i class="fas fa-fw fa-lock"></i>
                 <span>Generar token</span></a>
         </li>
-
-
     <?php
-    }     # code...
+    }     
     ?>
 
     <!-- Divider -->

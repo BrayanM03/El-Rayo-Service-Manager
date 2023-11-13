@@ -21,7 +21,7 @@
     $estatusvencido = 4;
     $res =0.00;
     $abierta = "Abierta";
-    
+     
     $update = "UPDATE creditos SET estatus = ? WHERE estatus <> 5 AND pagado <> total AND restante <> ? AND fecha_final <= ?";
     $result = $con->prepare($update);
     $result->bind_param('sss', $estatusvencido, $res, $fecha_hoy);
@@ -29,7 +29,6 @@
     $result->close(); 
 
     $consulta = "SELECT COUNT(*) FROM creditos INNER JOIN ventas ON creditos.id_venta = ventas.id WHERE ventas.estatus <> 'Abierta' AND creditos.estatus = 4";
-    
     $totr = $con->prepare($consulta);
     //$totr->bind_param('ii', $abierta, $estatusvencido);
     $totr->execute();
@@ -99,9 +98,30 @@
 
     }
 
+    $total_creditos_vencidos =0;
+    $consulta2 = "SELECT COUNT(*) FROM creditos c WHERE c.estatus = 4";
+    $totrs = $con->prepare($consulta2);
+    $totrs->execute();
+    $totrs->bind_result($total_creditos_vencidos);
+    $totrs->fetch();
+    $totrs->close();
+    if($total_creditos_vencidos>0){
+        $select = "SELECT id_cliente FROM creditos c WHERE c.estatus = 4";
+        $result = mysqli_query($con, $select);
+        $id_clientes = array();
+        while ($row = $result->fetch_assoc()) {
+            $id_clientes[] = $row['id_cliente'];
+        }
+        $id_clientes = implode(',', $id_clientes);
+        $updt = "UPDATE clientes SET credito_vencido = 1 WHERE id IN ($id_clientes)";
+        $totrs = $con->prepare($updt);
+        $totrs->execute();
+        $totrs->close();
+    };
      $RESPONSE = array(
         "validacion1"=>$data,
-        "validacion2"=>$data2);
+        "validacion2"=>$data2,
+    );
 
       echo json_encode($RESPONSE, JSON_UNESCAPED_UNICODE);
 

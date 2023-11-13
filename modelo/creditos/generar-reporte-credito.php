@@ -706,11 +706,27 @@ function cuerpoTabla(){
 
     $pdf->SetTextColor(194, 34, 16);
     $pdf->SetFont('Arial','B',5);
-    $text = 'GARANTÍA DE UN AÑO CONTRA DEFECTO DE FABRICA A PARTIR DE ESTA FECHA';
-    $text2 = ' FAVOR DE PRESENTAR ESTE COMPROBANTE DE VENTA PARA HACER VALIDO LA GARANTÍA';
+    $text = 'GARANTÍA DE UN AÑO CONTRA DEFECTO DE FABRICACION; NO GOLPES, NO CORTES PROVOCADOS POR MAL MANEJO';
+    $text2 = ' PRESION DE AIRE INADECUADA,EXCESO DE PESO, ETC. A PARTIR DE ESTA FECHA';
+    $text3 = ' FAVOR DE PRESENTAR ESTA NOTA PARA EMPEZAR EL PROCEDIMIENTO ADECUADO PARA GARANTIA. SI NO SE PRESENTA LA';
+    $text4 = ' NOTA NO SE PODRA SEGUIR EL PROCESO; EN MALA INSTALACION';
+    $text5 = ' SOLAMENTE SERA VALIDA LA GARANTIA DENTRO DEL PRIMER MES DESPUES DE LA COMPRA, SI TIENE PARCHE';
+    $text6 = ' AUTOMATICAMENTE PIERDE LA GARANTIA; EN CASO DE PROCEDER GARANTIA SE COBRARÁEL DESGASTE SI ES EL CASO;';
+    $text7 = ' TIEMPO ESTIMADO DE RESPUESTA DE 1-2 SEMANAS. APLICA RESTRICCIONES.';
+    
     $pdf->Cell(189,6,utf8_decode($text),0,0,'L');
     $pdf->Ln(2);
     $pdf->Cell(189,6,utf8_decode($text2),0,0,'L');
+    $pdf->Ln(2);
+    $pdf->Cell(189,6,utf8_decode($text3),0,0,'L');
+    $pdf->Ln(2);
+    $pdf->Cell(189,6,utf8_decode($text4),0,0,'L');
+    $pdf->Ln(2);
+    $pdf->Cell(189,6,utf8_decode($text5),0,0,'L');
+    $pdf->Ln(2);
+    $pdf->Cell(189,6,utf8_decode($text6),0,0,'L');
+    $pdf->Ln(2);
+    $pdf->Cell(189,6,utf8_decode($text7),0,0,'L');
    
     
     $pdf->Ln(10);

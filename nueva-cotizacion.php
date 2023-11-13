@@ -97,9 +97,11 @@
                             <input style="width:100%; height:33px;"type="number" class="form-control" id="precio" value="" name="precio" disabled>
                             </div>
                             </div> 
-                            <div class="form-group mt-3 row"  style="width: 100%;">
-                           
-                            <div class="btn btn-success m-auto" cotizacion="1" id="btn-agregar"onclick="agregarProducto();">Agregar</div>
+                            <div class="form-group mt-3 row justify-content-center"  style="width: 100%;">
+                                <div class="col-4">
+                                    <div class="btn btn-info" flag="0" onclick="generarToken();" style="width: 45px;margin: 8px 3px;"><i class="fas fa-lock"></i></div>
+                                    <div class="btn btn-success m-auto" cotizacion="1" id="btn-agregar"onclick="agregarProducto();">Agregar</div>
+                                </div>
                             </div>
 
                             </form>

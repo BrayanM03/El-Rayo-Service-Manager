@@ -33,7 +33,7 @@ if (isset($_POST)) {
 
    
     if($total_clientes > 0){
-        $query="SELECT * FROM clientes WHERE  Nombre_Cliente LIKE '%$term%' LIMIT $resultadosPorPagina OFFSET $offset"; // WHERE id_asesor = ? OR id_autorizado = ?
+        $query="SELECT cl.*  FROM clientes cl WHERE cl.Nombre_Cliente LIKE '%$term%' LIMIT $resultadosPorPagina OFFSET $offset"; // WHERE id_asesor = ? OR id_autorizado = ?
 
         $resultado = $con->query($query);
     
@@ -44,11 +44,12 @@ if (isset($_POST)) {
         $direccion = $fila["Direccion"];
         $correo = $fila["Correo"];
         $credito = $fila["Credito"];
+        $credito_vencido = $fila["credito_vencido"];
         $rfc = $fila["RFC"];
       
     
         $data[] = array("id" => $id, "nombre"=>$nombre, "telefono" => $telefono,
-                        "direccion" => $direccion, "correo"=>$correo, "credito"=>$credito,   "rfc"=>$rfc);
+                        "direccion" => $direccion, "correo"=>$correo, "credito"=>$credito,   "rfc"=>$rfc, 'credito_vencido'=>$credito_vencido);
     }
 
     $response = array(
@@ -78,7 +79,7 @@ if (isset($_POST)) {
     $resultado->close();
     if($total_clientes > 0){
 
-        $querySuc = "SELECT * FROM clientes LIMIT $resultadosPorPagina OFFSET $offset"; // WHERE id_asesor = ?  OR id_autorizado = ?
+        $querySuc = "SELECT * FROM clientes cl LIMIT $resultadosPorPagina OFFSET $offset"; // WHERE id_asesor = ?  OR id_autorizado = ?
         $respon = $con->query($querySuc);
     
         while ($fila = $respon->fetch_assoc()) {
@@ -88,9 +89,11 @@ if (isset($_POST)) {
             $direccion = $fila["Direccion"];
             $correo = $fila["Correo"];
             $credito = $fila["Credito"];
+            $credito_vencido = $fila["credito_vencido"];
             $rfc = $fila["RFC"];
             $data[] = array("id" => $id, "nombre"=>$nombre, "telefono" => $telefono,
-                    "direccion" => $direccion, "correo"=>$correo, "credito"=>$credito,   "rfc"=>$rfc);
+                    "direccion" => $direccion, "correo"=>$correo, "credito"=>$credito,   "rfc"=>$rfc,
+                'credito_vencido' => $credito_vencido);
         }
         $response = array(
             'results' => $data, // Array de resultados obtenidos de la consulta SQL

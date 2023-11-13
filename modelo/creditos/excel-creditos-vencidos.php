@@ -56,13 +56,15 @@ $index=3;
                 $hoja_activa->setCellValue('I'.$index, 'plazo');
                 $hoja_activa->getColumnDimension('J')->setWidth(15);
                 $hoja_activa->setCellValue('J'.$index, 'Venta');
+                $hoja_activa->getColumnDimension('K')->setWidth(25);
+                $hoja_activa->setCellValue('K'.$index, 'Sucursal');
 
-                $hoja_activa->getStyle('A'.$index.':J'.$index)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('007bcc');
-                $hoja_activa->getStyle('A'.$index.':J'.$index)->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
-                $hoja_activa->getStyle('A'.$index.':J'.$index)->getFont()->setBold(true);
+                $hoja_activa->getStyle('A'.$index.':K'.$index)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('007bcc');
+                $hoja_activa->getStyle('A'.$index.':K'.$index)->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+                $hoja_activa->getStyle('A'.$index.':K'.$index)->getFont()->setBold(true);
                 $hoja_activa->getRowDimension('2')->setRowHeight(20);
-                $hoja_activa->getStyle('A'.$index.':J'.$index)->getAlignment()->setHorizontal('center');
-                $hoja_activa->getStyle('A'.$index.':J'.$index)->getAlignment()->setVertical('center');
+                $hoja_activa->getStyle('A'.$index.':K'.$index)->getAlignment()->setHorizontal('center');
+                $hoja_activa->getStyle('A'.$index.':K'.$index)->getAlignment()->setVertical('center');
 
                 $index++;
 
@@ -77,7 +79,8 @@ $res->close();
 
 if($total_creditos>0)
 {
-    $traer_creditos = "SELECT * FROM creditos WHERE estatus=4";
+    $traer_creditos = "SELECT c.*,s.nombre as nombre_sucursal FROM creditos c
+    LEFT JOIN ventas v ON v.id = c.id_venta INNER JOIN sucursal s ON v.id_sucursal =s.id WHERE c.estatus=4";
     $resp = $con->prepare($traer_creditos);
     $resp->execute();
     $respuesta = Arreglo_Get_Result($resp);
@@ -89,6 +92,7 @@ if($total_creditos>0)
         $cliente_id=$value["id_cliente"];
         $pagado=$value["pagado"];
         $restante=$value["restante"];
+        $sucursal = $value["nombre_sucursal"];
         $total=$value["total"];
        // $estatus=$value["estatus"];
        $estatus="Vencido";
@@ -152,6 +156,8 @@ if($total_creditos>0)
         $hoja_activa->setCellValue('I'.$index, $plazo);
         $hoja_activa->getColumnDimension('J')->setWidth(15);
         $hoja_activa->setCellValue('J'.$index, $id_venta);
+        $hoja_activa->getColumnDimension('K')->setWidth(25);
+        $hoja_activa->setCellValue('K'.$index, $sucursal);
 
         $contador++;
         $index++;

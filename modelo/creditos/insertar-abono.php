@@ -157,11 +157,11 @@ if(isset($_POST)){
                 $res2->execute();
                 $res2->close();
 
-                $actualizar2 = "SELECT id_venta FROM creditos WHERE id = ?";
+                $actualizar2 = "SELECT id_cliente, id_venta FROM creditos WHERE id = ?";
                 $res2 = $con->prepare($actualizar2);
                 $res2->bind_param('i', $id_credito);
                 $res2->execute();
-                $res2->bind_result($id_venta);
+                $res2->bind_result($id_cliente, $id_venta);
                 $res2->fetch();
                 $res2->close();
 
@@ -171,6 +171,23 @@ if(isset($_POST)){
                 $res2->bind_param('si', $new_status, $id_venta);
                 $res2->execute();
                 $res2->close();
+
+                $consulta2 = "SELECT COUNT(*) FROM creditos  WHERE estatus = 4 AND id_cliente =?";
+                $totrs = $con->prepare($consulta2);
+                $totrs->bind_param('i', $id_cliente);
+                $totrs->execute();
+                $totrs->bind_result($total_creditos_vencidos);
+                $totrs->fetch();
+                $totrs->close();
+
+                if($total_creditos_vencidos ==0){
+                    $actualizar_cliente = "UPDATE clientes SET credito_vencido = 0 WHERE id = ?";
+                    $res2 = $con->prepare($actualizar_cliente);
+                    $res2->bind_param('i', $id_cliente);
+                    $res2->execute();
+                    $res2->close();
+                }
+            
 
     
                 $data = array("pagado_nuevo"=> $pagado2, "restante_nuevo"=>$restante2);

@@ -380,8 +380,8 @@ function cuerpoTabla(){
       $ejeY = $line_height;
       $k=1;
     $articulos = "   CON REFERENCIA A:
-     I.- ARTICULOS; 32,333 Y 34 DE LA LEY DE PROTECCIÓN AL CONSUMIDOR
-     II.- ARTICULO; IV DEL ACUERDO SOBRE BASS MINIMAS DE POLIZAS DE GARANTIA
+     I.- ARTICULOS; 32,33 Y 34 DE LA LEY DE PROTECCIÓN AL CONSUMIDOR
+     II.- ARTICULO; IV DEL ACUERDO SOBRE BASE MINIMAS DE POLIZAS DE GARANTIA
                             (DIARIO OFICIAL DE MAYO 4 DE 1976)
      III.- GARANTIA DEL FABRICANTE";
      $pdf->MultiCell(130,3, utf8_decode($articulos),0,1,'C',0);

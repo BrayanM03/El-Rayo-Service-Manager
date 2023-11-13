@@ -328,7 +328,7 @@
                                                     <div class="btn btn-danger text-white" comentario=" " style="color: rgb(31, 28, 28); margin-right: 2vh;" id="hacer-comentario"><i class="fas fa-comment-dots"></i></div>
                                                     <div class="btn btn-warning" onclick="limpiarTabla();" style="color: rgb(31, 28, 28); margin-right: 2vh;" id="limpiar-venta">Limpiar</div>
                                                     <div class="btn btn-success" onclick="procesarVenta();" id="realizar-venta">Realizar venta</div>
-                                                    <div class="btn btn-primary" onclick="realizarVentaCredito();" style="margin-left: 2vh;" id="realizar-venta">Realizar venta a credito</div>
+                                                    <div class="btn btn-primary" onclick="revisarCredito();" style="margin-left: 2vh;" id="realizar-venta">Realizar venta a credito</div>
                                                     <div class="btn" onclick="procesarApartado();" style="margin-left: 2vh; background-color: #D29BFD; color:white;" id="realizar-venta">Realizar apartado</div>
                                                 </div>   
                                                 
@@ -425,10 +425,10 @@
     <!--<script src="src/js/agregar-info-tabla-venta.js"></script>-->
     <!-- <script src="src/vendor/node_modules/@splidejs/splide/dist/js/splide.min.js"></script> -->
     <script src="src/js/bootstrap-select.min.js"></script>
-    <script src="src/js/nueva-venta.js"></script>
+    <script src="src/js/nueva-venta.js?v=<?php echo(rand()); ?>"></script>
     <script src="src/js/agregar-product-temp.js"></script>
     <script src="src/js/generar-token.js"></script>
-    <script src="src/js/nueva-venta-credito.js"></script>
+    <script src="src/js/nueva-venta-credito.js?v=<?php echo(rand()); ?>"></script>
     <!-- <script src="src/js/splide_notifications.js"></script> -->
     <script src="src/js/consultar-llanta-nv.js"></script>
     <script src="src/js/apartados.js"></script>
