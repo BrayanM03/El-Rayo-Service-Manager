@@ -446,8 +446,8 @@ let id_rol_session= $("#content").attr("rol_session_id");
             url: "./modelo/ventas/traer_clientes.php",
             type: "post",
             dataType: 'json',
-            delay: 250,
-
+            delay: 550,
+            minimumInputLength: 1,
             data: function (params) {
               if(params.term == undefined){
                 params.term = "";
@@ -464,7 +464,6 @@ let id_rol_session= $("#content").attr("rol_session_id");
                };
             },
             processResults: function (data,params) {
-              console.log(data);
               
               params.page = params.page || 1;
                 return {
@@ -505,17 +504,14 @@ let id_rol_session= $("#content").attr("rol_session_id");
         if (repo.loading) {
             return repo.text;
           }
-          
-          if (repo.credito == 0) {
-              cred = "Sin credito"
-              badge="badge-info";
-          }else if (repo.credito == 1){
-              cred= "Con credito";
-              badge = "badge-warning";
+          if (repo.credito_vencido == 0) {
+              badge="";
+          }else if (repo.credito_vencido == 1){
+              badge = "<span class='badge badge-danger'>Credito vencido</span>";
           }
 
             var $container = $(
-                "<span id='"+repo.id+"'>"+ repo.nombre +" <span class='badge " + badge +"'>"+ cred +"</span></span>"
+                "<span id='"+repo.id+"'>"+ repo.nombre +" "+ badge +"</span>"
             );
           
            
@@ -529,8 +525,9 @@ let id_rol_session= $("#content").attr("rol_session_id");
         //A partir de aqui puedes agregar los clientes
         
         $("#select2-clientes-container").attr("id-cliente", repo.id);
-     
-       
+        $("#select2-clientes-container").attr("credito_vencido", repo.credito_vencido);
+        $("#select2-clientes-container").attr("cliente_nuevo", repo.credito);
+        $("#select2-clientes-container").attr("nombre", repo.nombre); 
 
         return repo.text || repo.nombre;
       }
@@ -593,8 +590,6 @@ let id_rol_session= $("#content").attr("rol_session_id");
         
         return $state;
       };
-
-
     
 });
 
@@ -761,7 +756,6 @@ $("#btn-add-client").hover(function() {
                     $("#precio").blur();
     
                     return repo.text || repo.descripcion;
-        
               
               }
         }else if(flag == "1"){
@@ -970,8 +964,8 @@ $("#btn-add-client").hover(function() {
                 '<div class="col-6">'+
                 '<div class="form-group">'+
                 '<label><b>Credito</b></label>'+
-                '<select class="form-control" id="credito" name="credito">'+
-                '<option value="0">Sin credito </option>'+
+                '<select class="form-control" id="credito" name="credito" disabled>'+
+                '<option value="0" selected>Sin credito </option>'+
                 '<option value="1">Con credito </option>'+
                 '</select>'+
               

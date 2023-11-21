@@ -39,7 +39,7 @@ function generarToken(){
                                         $.ajax({
                                         type: "post",
                                         url: "./modelo/token.php",
-                                        data: {"comprobar-token" : token_validar, "nuevo-token": nuevoToken},
+                                        data: {"comprobar-token" : token_validar, "nuevo-token": nuevoToken, 'tipo-token' : 1},
                                         dataType: "json",
                                         success: function (response) {
 
@@ -86,25 +86,58 @@ function generarToken(){
               }); 
 }
 
-function random() {
-    token = Math.floor((Math.random() * (9999 - 1000) + 1000)); // Eliminar `0.`
+function random(tipo_token) {
+    if(tipo_token==1){
+        token = Math.floor((Math.random() * (9999 - 1000) + 1000)); // Eliminar `0.`
+        $("#token-actual").empty().append(`
+        <img src="src/img/preload.gif" style="width:80px;">
+        `)
+    }else if (tipo_token==2){
+        token = generarCodigoAlfanumerico();
 
-    $.ajax({
-        type: "post",
-        url: "./modelo/token.php",
-        data: {"token" : token},
-        dataType: "json",
-        success: function (response) {
-          if(response == 1){
-                location.reload();
-          }
-           
-        }
-    });
-
-    
- 
+        $("#token-administrativo").empty().append(`
+        <img src="src/img/preload.gif" style="width:80px;">
+        `)
+    }
+    setTimeout(function(){
+        $.ajax({
+            type: "post",
+            url: "./modelo/token.php",
+            data: {"token" : token, 'tipo_token' : tipo_token},
+            dataType: "json",
+            success: function (response) {
+              if(response.estatus){
+                console.log(tipo_token);
+                if(tipo_token==1){
+                    $("#token-actual").empty().text(response.token_op)
+                }else if(tipo_token==2){
+                    $("#token-administrativo").empty().text(response.token_admin)
+                }else{
+                    alert('Ocurrio un error, contacta al administrador de sistemas')
+                }
+              }
+               
+            }
+        });
+    },1300)
 };
+
+function generarCodigoAlfanumerico() {
+    // Crear un conjunto de caracteres permitidos (letras y números)
+    const caracteresPermitidos = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  
+    let codigo = '';
+    for (let i = 0; i < 5; i++) {
+      // Elegir un carácter aleatorio del conjunto
+      const caracterAleatorio = caracteresPermitidos.charAt(Math.floor(Math.random() * caracteresPermitidos.length));
+  
+      // Agregar el carácter al código
+      codigo += caracterAleatorio;
+    }
+  
+    return codigo;
+  }
+
 
 
 

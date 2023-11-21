@@ -100,7 +100,7 @@ function MostrarInventario(id_sucursal) {
     .container()
     .appendTo("#inventario-pedro_wrapper .col-md-6:eq(0)");
     //table.appendTo("#inventario-pedro_wrapper .col-md-6:eq(0)");
-    table.columns( [10] ).visible( false );
+    //table.columns( [10] ).visible( false );
     
 
 

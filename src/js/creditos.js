@@ -272,7 +272,7 @@ function traerCredito(id, id_venta) {
                 { title: "Cheque", data: "pago_cheque"},
                 { title: "Sin definir", data: "pago_sin_definir"},
                 { title: "Usuario", data: "usuario" },
-                {
+                { 
                   title: "Accion",
                   data: null,
                   className: "celda-acciones",
@@ -371,10 +371,10 @@ function traerCredito(id, id_venta) {
              
               $("#cuerpo_edit").append(
                 '<div class="row">' +
-                  '<div col="col-12 col-md-3" style="margin-left:20px;">' +
+              /*     '<div col="col-12 col-md-3" style="margin-left:20px;">' +
                   'Fecha: <input type="date" id="fecha-abono" class="form-control" value="' +
                   fechaFormated +
-                  '"></div>' +
+                  '"></div>' + */
                   '<div col="col-12 col-md-6" style="margin-left:20px;">' +
                   'Metodo de pago: <select type="text" id="metodo_p" class="selectpicker form-control mb-2" val="hola" multiple onchange="setearFormPagosEditar('+atr_metodo_efectivo+','+atr_metodo_tarjeta+','+atr_metodo_transferencia+','+atr_metodo_cheque+','+atr_metodo_sin_definir+')">' +
                   '<option value="0">Efectivo</option>' +
@@ -412,10 +412,10 @@ function traerCredito(id, id_venta) {
           "</div>" +
           "</div>" +
           '<div class="col-12 col-md-3">' +
-          '<div class="form-group">' +
+         /*  '<div class="form-group">' +
           "<label><b>Fecha nuevo abono</b></label>" +
           '<input type="date" class="form-control" name="fecha" id="fecha">' +
-          "</div>" +
+          "</div>" + */
           "</div>" +
           '<div class="col-12 col-sm-3" >' +
           '<form class="mt-4" id="abonos">' +

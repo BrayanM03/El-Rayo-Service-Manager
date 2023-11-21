@@ -120,7 +120,8 @@ table = $('#ventas').DataTable({
   
 });
 //table.columns( [6] ).visible( true );
-$("table.dataTable thead").addClass("table-info")
+$("table.dataTable thead").addClass("table-dark")
+$("table.dataTable thead").addClass("text-white")
 
 }
 

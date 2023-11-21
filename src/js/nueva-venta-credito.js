@@ -1,3 +1,225 @@
+function revisarCredito(){
+    let credito_vencido = $("#select2-clientes-container").attr("credito_vencido");
+    let cliente_nuevo = $("#select2-clientes-container").attr("cliente_nuevo");
+    let nombre_cliente = $("#select2-clientes-container").attr("nombre");
+    console.log(cliente_nuevo);
+    if(credito_vencido==1){
+        avisoCreditoVencido(nombre_cliente)
+    }else if(cliente_nuevo == 0){
+        avisoClienteNuevo(nombre_cliente)
+    }else{
+        realizarVentaCredito();
+    }
+}
+
+function avisoClienteNuevo(nombre_cliente){ 
+    Swal.fire({
+        icon: 'warning',
+        width: '800px',
+        html:`
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <img class="mb-3" src="src/img/sad.png" style="width:80px;">
+                        <h5>El cliente: ${nombre_cliente} es un cliente sin credito, ya que es nuevo o nunca se le a vendido un credito.</h5>
+                    </div>
+                </div>
+                <small style="color:gray;">Ingrese el token para autorizar el credito</small>
+                <div class="row mb-3 mt-3 justify-content-center">
+                    <div class="col-3 text-center" id="contenedor-tabla-creditos-vencidos">
+                        <input type="text" id="token-autorizar-credito" placeholder="0000" class="form-control">
+                    </div>
+                </div>
+            </div>
+        `,
+        confirmButtonText: 'Procesar venta',
+        preConfirm: function(){
+            token = $("#token-autorizar-credito").val();
+            if(token.length ==0 || token=='' || token==null || token== undefined){
+
+                return Swal.showValidationMessage(`
+                Ingrese un token porvafor
+                `);
+            }else{
+                //nuevoToken = Math.floor((Math.random() * (9999 - 1000) + 1000)); // Eliminar `0.`
+                const nuevoToken = generarCodigoAlfanumerico();
+                console.log(nuevoToken);
+                return $.ajax({
+                type: "post",
+                url: "./modelo/token.php",
+                data: {"comprobar-token" : token, "nuevo-token": nuevoToken, 'tipo-token' : 2},
+                dataType: "json",
+                success: function (response) {
+
+                    if (response == 3) {
+                        Swal.fire({
+                            title: 'Token correcto',
+                            html: "<span>Ahora puedes vender a credito a este cliente en esta venta</br></span>",   
+                            icon: "success",
+                            cancelButtonColor: '#00e059',
+                            showConfirmButton: true,
+                            confirmButtonText: 'Aceptar', 
+                            cancelButtonColor:'#ff764d',
+                            showDenyButton: false,
+                            denyButtonText: 'Reporte',
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Proceder'
+
+                        }).then(function(response) {
+                            realizarVentaCredito();
+                        });
+
+                        }else{
+                            return Swal.showValidationMessage(`
+                                Token incorrecto, intenta de nuevo
+                                `);
+                    }
+                }
+            }); 
+            }
+        }
+    })
+}
+
+function avisoCreditoVencido(nombre_cliente){ 
+    Swal.fire({
+        icon: 'warning',
+        width: '800px',
+        html:`
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <img class="mb-3" src="src/img/sad.png" style="width:80px;">
+                        <h5>El cliente: ${nombre_cliente} tiene un credito vencido</h5>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-6 text-center">
+                        <div class="btn btn-info" onclick="verCreditosVencidos()">Ver creditos vencidos</div>
+                    </div>
+                </div>
+                <div class="row mb-2 mt-3 justify-content-center">
+                    <div class="col-12 text-center" id="contenedor-tabla-creditos-vencidos">
+                        
+                    </div>
+                </div>
+                <small style="color:gray;">Ingrese el token para autorizar el credito</small>
+                <div class="row mb-3 mt-3 justify-content-center">
+                    <div class="col-3 text-center" id="contenedor-tabla-creditos-vencidos">
+                        <input type="text" id="token-autorizar-credito" placeholder="0000" class="form-control">
+                    </div>
+                </div>
+            </div>
+        `,
+        confirmButtonText: 'Procesar venta',
+        preConfirm: function(){
+            token = $("#token-autorizar-credito").val();
+            if(token.length ==0 || token=='' || token==null || token== undefined){
+                return Swal.showValidationMessage(`
+                Ingrese un token porvafor
+                `);
+            }else{
+                //nuevoToken = Math.floor((Math.random() * (9999 - 1000) + 1000)); // Eliminar `0.`
+                const nuevoToken = generarCodigoAlfanumerico();
+                   
+                return $.ajax({
+                type: "post",
+                url: "./modelo/token.php",
+                data: {"comprobar-token" : token, "nuevo-token": nuevoToken, 'tipo-token' : 2},
+                dataType: "json",
+                success: function (response) {
+
+                    if (response == 3) {
+                        Swal.fire({
+                            title: 'Token correcto',
+                            html: "<span>Ahora puedes vender a credito a este cliente en esta venta</br></span>",   
+                            icon: "success",
+                            cancelButtonColor: '#00e059',
+                            showConfirmButton: true,
+                            confirmButtonText: 'Aceptar', 
+                            cancelButtonColor:'#ff764d',
+                            showDenyButton: false,
+                            denyButtonText: 'Reporte',
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Proceder'
+
+                        }).then(function(response) {
+                            realizarVentaCredito();
+                        });
+                          
+
+                        }else{
+                            return Swal.showValidationMessage(`
+                                Token incorrecto, intenta de nuevo
+                                `);
+                    }
+                }
+            }); 
+            }
+        }
+    })
+}
+
+function verCreditosVencidos(){
+    let id_cliente = $("#select2-clientes-container").attr("id-cliente");
+    let contenedor = $("#contenedor-tabla-creditos-vencidos");
+    contenedor.empty().append(`
+        <img src="src/img/preload.gif" style="width:100px;">
+    `);
+    setTimeout(function(){
+        $.ajax({
+            type: "post",
+            url: "./modelo/creditos/traer-creditos-vencidos.php",
+            data: {"id_cliente": id_cliente},
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                    contenedor.empty();
+                    contenedor.append(`
+                        <table class="table table-responsive text-center" style="font-size:14px; margin:auto;">
+                            <thead>
+                                <tr>
+                                    <th>Folio</th>
+                                    <th>Fecha apertura</th>
+                                    <th>Fecha vencimiento</th>
+                                    <th>Monto</th>
+                                    <th>Pagado</th>
+                                    <th>Restante</th>
+                                    <th>PDF</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody-creditos-vencidos"></tbody>
+                        </table>
+                    `);
+                    let tbody_cred = $("#tbody-creditos-vencidos");
+                    response.forEach(element => {
+                        tbody_cred.append(`
+                        <tr>
+                                    <th>${element.id_cred}</th>
+                                    <th>${element.fecha_inicio}</th>
+                                    <th>${element.fecha_final}</th>
+                                    <th>${element.total}</th>
+                                    <th>${element.pagado}</th>
+                                    <th>${element.restante}</th>
+                                    <th><button onclick="pdfCredito(${element.id_venta})" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px"><span class="fa fa-file-pdf"></span></th>
+                        </tr>
+                    `)
+                    });
+                    
+            }
+        });
+    },1500);
+   
+    
+}
+
+function pdfCredito(id) {
+    window.open(
+      "./modelo/creditos/generar-reporte-credito.php?id=" + id,
+      "_blank"
+    );
+  }
+
 function realizarVentaCredito(){
     let metodos_pagos = $("#metodos-pago").val();  
 
@@ -20,9 +242,6 @@ function realizarVentaCredito(){
         
         success: function (response) {
             importetotal = $("#total").val();
-           
-           
-
             //restante = parseFloat(importetotal) - parseFloat(abono);
 
             Swal.fire({
@@ -318,10 +537,6 @@ function realizarVentaCredito(){
                     
         }
     });
-   
-   
-                
-       
 
     }
 
@@ -367,4 +582,22 @@ function restarAbono(){
         
    
 };
+
+function generarCodigoAlfanumerico() {
+    // Crear un conjunto de caracteres permitidos (letras y números)
+    const caracteresPermitidos = 'ABCDEFGHIJKLMNPQRSTUVWXYZ0123456789';
+  
+    let codigo = '';
+    for (let i = 0; i < 5; i++) {
+      // Elegir un carácter aleatorio del conjunto
+      const caracterAleatorio = caracteresPermitidos.charAt(Math.floor(Math.random() * caracteresPermitidos.length));
+  
+      // Agregar el carácter al código
+      codigo += caracterAleatorio;
+    }
+  
+    return codigo;
+  }
+
+
 

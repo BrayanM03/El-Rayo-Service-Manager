@@ -41,7 +41,7 @@ if($_POST){
     InsertarMovimiento("insercion", $cambios, $con);
 
 
-    $insertar_cliente = "INSERT INTO clientes(id, Nombre_Cliente, Telefono, Direccion, Correo, Credito, RFC, Latitud, Longitud, id_asesor) VALUES(null, ?,?,?,?,?,?,?,?,?)";
+    $insertar_cliente = "INSERT INTO clientes(id, Nombre_Cliente, Telefono, Direccion, Correo, Credito, RFC, Latitud, Longitud, id_asesor, credito_vencido) VALUES(null, ?,?,?,?,?,?,?,?,?,0)";
     $resultado = $con->prepare($insertar_cliente);
     $resultado->bind_param('sisssssss', $nombre, $telefono, $direccion, $correo, $credito, $rfc, $latitud, $longitud, $asesor);
     $resultado->execute();

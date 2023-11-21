@@ -12,16 +12,13 @@
     margin: 50px;
 }
 
-.container-fluid{
-    height: 50vh;
-}
+
 .tokens{
     display:flex;
     flex-direction: column;
     width:100%;
     align-items:center;
     justify-content: center;
-    
     text-align:center;
 }
 #token-actual{
@@ -30,3 +27,38 @@
     font-weight: bold;   
     
 }
+
+#token-administrativo{
+    font-size: 25px;
+    color: black;
+    font-weight: bold;   
+    
+}
+.container-fluid{
+    height: 75vh;
+}
+@media (max-width: 1150px) {
+    .container-fluid{
+        height: auto;
+    }
+    #token-actual{
+        font-size: 15px;
+        color: black;
+        font-weight: bold;   
+        
+    }
+    
+    #token-administrativo{
+        font-size: 15px;
+        color: black;
+        font-weight: bold;   
+        
+    }
+
+    .botones{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+  }

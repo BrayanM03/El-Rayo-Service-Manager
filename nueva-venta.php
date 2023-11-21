@@ -426,12 +426,12 @@
     <!-- <script src="src/vendor/node_modules/@splidejs/splide/dist/js/splide.min.js"></script> -->
     <script src="src/js/bootstrap-select.min.js"></script>
     <script src="src/js/nueva-venta.js?v=<?php echo(rand()); ?>"></script>
-    <script src="src/js/agregar-product-temp.js"></script>
-    <script src="src/js/generar-token.js"></script>
+    <script src="src/js/agregar-product-temp.js?v=<?php echo(rand()); ?>"></script>
+    <script src="src/js/generar-token.js?v=<?php echo(rand()); ?>"></script>
     <script src="src/js/nueva-venta-credito.js?v=<?php echo(rand()); ?>"></script>
     <!-- <script src="src/js/splide_notifications.js"></script> -->
-    <script src="src/js/consultar-llanta-nv.js"></script>
-    <script src="src/js/apartados.js"></script>
+    <script src="src/js/consultar-llanta-nv.js?v=<?php echo(rand()); ?>"></script>
+    <script src="src/js/apartados.js?v=<?php echo(rand()); ?>"></script>
   <!--  <script src="src/js/notificaciones.js"></script>   -->
    
    

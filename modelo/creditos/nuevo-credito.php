@@ -124,14 +124,16 @@ if(isset($_POST)){
         $dato =  mysqli_fetch_array($resultado2, MYSQLI_ASSOC);
         $id_credito = $dato["id"];
             //print_r($id_credito.'-'. $fecha_inicio.'-'.$hora.'-'.$abono.'-'.$metodo_pago.'-'.$monto_efectivo.'-'.$monto_tarjeta.'-'.$monto_transferencia.'-'.$monto_cheque.'-'.$monto_sin_definir.'-'.$usuario.'-'.$estado.'-'.$sucursal.'-'.$id_sucursal);
-            $estado = $restante == 0 ? 1:0;
-            include '../helpers/verificar-hora-corte.php';
-
-            $queryInsertar = "INSERT INTO abonos (id, id_credito, fecha, hora, abono, metodo_pago, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, usuario, estado, sucursal, id_sucursal, fecha_corte, hora_corte) VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-            $resultado = $con->prepare($queryInsertar);
-            $resultado->bind_param('sssssdddddsissss',$id_credito, $fecha_inicio, $hora, $monto_total, $metodo_pago, $monto_efectivo, $monto_tarjeta, $monto_transferencia, $monto_cheque, $monto_sin_definir, $usuario, $estado, $sucursal, $id_sucursal, $fecha_corte, $hora_corte);
-            $resultado->execute();
-            $resultado->close();
+            if($monto_total >0){
+                $estado = $restante == 0 ? 1:0;
+                include '../helpers/verificar-hora-corte.php';
+                $queryInsertar = "INSERT INTO abonos (id, id_credito, fecha, hora, abono, metodo_pago, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, usuario, estado, sucursal, id_sucursal, fecha_corte, hora_corte) VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                $resultado = $con->prepare($queryInsertar);
+                $resultado->bind_param('sssssdddddsissss',$id_credito, $fecha_inicio, $hora, $monto_total, $metodo_pago, $monto_efectivo, $monto_tarjeta, $monto_transferencia, $monto_cheque, $monto_sin_definir, $usuario, $estado, $sucursal, $id_sucursal, $fecha_corte, $hora_corte);
+                $resultado->execute();
+                $resultado->close();
+            }
+            
     }else{
         print_r("valio queso");
     }

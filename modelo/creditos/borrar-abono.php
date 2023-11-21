@@ -43,14 +43,14 @@ if(isset($_POST)){
     $nuevo_restante = $restante + $abono_restaurar;
     $nuevo_pagado =  $pagado - $abono_restaurar;
 
-    if($nuevo_pagado == 0){
+ /*    if($nuevo_pagado == 0){
         $estado = 0;
         $sql = "INSERT INTO abonos(id, id_credito, fecha, hora, abono, metodo_pago, usuario, estado, sucursal, id_sucursal) VALUES(null,?,?,?,?,?,?,?,?,?)";
         $res = $con->prepare($sql);
         $res->bind_param('issssssss', $id_credito, $fecha, $hora, $nuevo_pagado, $metodo, $usuario, $estado, $sucursal, $id_sucursal);
         $res->execute();
         $res->close();
-    }
+    } */
 
 
 

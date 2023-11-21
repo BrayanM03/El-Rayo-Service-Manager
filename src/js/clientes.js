@@ -163,8 +163,8 @@ function borrarCliente(id) {
             '<div class="col-6">'+
             '<div class="form-group">'+
             '<label><b>Credito</b></label>'+
-            '<select class="form-control" id="credito" name="credito">'+
-            '<option value="0">Sin credito </option>'+
+            '<select class="form-control" id="credito" name="credito" disabled>'+
+            '<option value="0" selected>Sin credito </option>'+
             '<option value="1">Con credito </option>'+
             '</select>'+
           

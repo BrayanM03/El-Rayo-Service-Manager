@@ -137,7 +137,6 @@ $(document).ready(function() {
     ],
 
       language: {
-            
         emptyTable: "No hay registros",
         infoEmpty: "Ups!, no hay registros aun en esta categoria."
       }
@@ -146,7 +145,6 @@ $(document).ready(function() {
 
     $("table.dataTable thead").addClass("table-success")
 
-    table.columns( [7] ).visible( false );
      //Enumerar las filas "index column"
      table.on( 'order.dt search.dt', function () {
         table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
