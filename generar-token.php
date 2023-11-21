@@ -8,7 +8,7 @@ if (!$con) {
     echo "maaaaal";
 }
 
-if (!isset($_SESSION['id_usuario']) || $_SESSION['id_usuario'] == 16 || ($_SESSION['rol'] != 4 && $_SESSION['rol'] != 1)) {
+if (!isset($_SESSION['id_usuario']) || $_SESSION['id_usuario'] == 16 || ($_SESSION['rol'] != 4 && $_SESSION['rol'] != 1 && $_SESSION['id_usuario'] != 7)) {
     header("Location:login.php");
 }
 

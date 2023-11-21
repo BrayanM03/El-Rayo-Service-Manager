@@ -108,25 +108,14 @@ function MostrarCreditos() {
           if (id_sesion == "5" || id_sesion == "6" || id_sesion == "16") {
             //Esta configuracion es especifica para el usuario de Mario, Javier y Amita se debe en un futuro hacer mas dinamico
             return (
-              '<div style="display: flex"><button onclick="traerCredito(' +
-              data[0] +
-              ", " +
-              data[8] +
-              ');" type="button" class="buttonPDF btn btn-primary" style="margin-right: 8px"><span class="fa fa-eye"></span><span class="hidden-xs"></span><br><button type="button" onclick="traerPdfCredito(' +
-              data[8] +
-              ');" class="btn ml-2 btn-danger"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button></div>'
+              '<div style="display: flex"><button onclick="traerCredito(' + data[0] + ", " + data[8] + ');" type="button" class="buttonPDF btn btn-primary" style="margin-right: 8px"><span class="fa fa-eye"></span><span class="hidden-xs"></span><br>'+
+              '<button type="button" onclick="traerPdfCredito(' + data[8] + ');" class="btn ml-2 btn-danger"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button></div>'
             );
           } else {
             return (
-              '<div style="display: flex"><button onclick="traerCredito(' +
-              data[0] +
-              ", " +
-              data[8] +
-              ');" type="button" class="buttonPDF btn btn-primary" style="margin-right: 8px"><span class="fa fa-eye"></span><span class="hidden-xs"></span></button><br><button type="button" onclick="borrarCredito(' +
-              data[0] +
-              ');" class="buttonBorrar btn btn-warning"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button><br><button type="button" onclick="traerPdfCredito(' +
-              data[8] +
-              ');" class="btn ml-2 btn-danger"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button></div>'
+              '<div style="display: flex"><button onclick="traerCredito(' +data[0] +", " +data[8] +');" type="button" class="buttonPDF btn btn-primary" style="margin-right: 8px"><span class="fa fa-eye"></span><span class="hidden-xs"></span></button><br>'+
+              //'<button type="button" onclick="borrarCredito(' + data[0] +');" class="buttonBorrar btn btn-warning"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button><br>'+
+              '<button type="button" onclick="traerPdfCredito(' + data[8] + ');" class="btn ml-2 btn-danger"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button></div>'
             );
           }
         },
