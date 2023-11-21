@@ -1,3 +1,4 @@
+contador_general=0;
 function buscarRay() {
   let folio = $("#folio").val();
   let btn_vender = $("#btn-buscar");
@@ -20,7 +21,7 @@ function buscarRay() {
         if (response.estatus) {
           $("#nombre_cliente").val(response.nombre_cliente);
           $("#nombre_cliente").attr('id_cliente', response.id_cliente);
-          $("#sucursal").val(response.sucursal);
+          $("#sucursal").val(response.id_sucursal);
           $("#sucursal").attr('id_sucursal', response.id_sucursal);
           let tbody = $("#detalle-garantia");
           tbody.empty();
@@ -118,15 +119,20 @@ function registrarGarantia() {
       let precio = celdas[5].textContent;
       let dot = celdas[6].getElementsByTagName("input")[0].value; // Obtén el valor del input en la segunda celda
 
-      datos.push({
-        codigo: codigo,
-        numero: numero,
-        cantidad: cantidad,
-        descripcion: descripcion,
-        marca: marca,
-        precio: precio,
-        dot: dot
-      });
+      if(dot.length<1){
+        toastr.error(`Ingresa un DOT en la llanta: ${descripcion}`, 'ERROR' ); 
+        return false;
+      }else{
+        datos.push({
+          codigo: codigo,
+          numero: numero,
+          cantidad: cantidad,
+          descripcion: descripcion,
+          marca: marca,
+          precio: precio,
+          dot: dot
+        });
+      }
     }
       var datosJSON = JSON.stringify(datos);
       var formData = new FormData();
@@ -179,13 +185,24 @@ function tablaGarantias(){
          var info = this.api().page.info();
          var page = info.page;
          var length = info.length;
+         let estatus_dicaten = data.dictamen
          var columnIndex = 0; // Índice de la primera columna a enumerar
    
          $('td:eq(' + columnIndex + ')', row).html(page * length + index + 1);
+         console.log(data[9]);
+         if(data[9] == 'entregado' || data[9] == 'procedente'){
+           $(row).css('background-color','#c0f6b4')
+          }else if(data[9] == 'pendiente'){
+          $(row).css('background-color','#ffffbf')
+        }else if(data[9]=='improcedente'){
+          $(row).css('background-color','#FF6347')
+          $(row).css('color','white')
+        }
        },
       
      columns: [   
      { title: "#",              data: null   },
+     { title: "Folio",              data: 0   },
      { title: "Cantidad",          data: 2      },
      { title: "DOT",      data: 4      },
      { title: "Descripcion",    data: 5      }, 
@@ -222,11 +239,7 @@ function tablaGarantias(){
    responsive: false,
    ordering: "enable",
    multiColumnSort: true,
-   order: [[1, "desc"]],
-   'columnDefs': [
-     { 'orderData':[2], 'targets': [1] },
-     
-   ]
+   order: [1, "desc"],
    });
    //table.columns( [6] ).visible( true );
    $("table.dataTable thead").addClass("table-info")
@@ -257,6 +270,7 @@ function procesarGarantia(id_garantia){
                               <label>Dictamen:</label>
                               <select class="form-control" id="dictamen">
                                   <option value="pendiente">Pendiente</option>
+                                  <option value="entregado">Entregado al proveedor</option>
                                   <option value="procedente">Procedente</option>
                                   <option value="improcedente">Improcedente</option>
                               </select>
@@ -307,6 +321,8 @@ function procesarGarantia(id_garantia){
                       icon:'success',
                       html: response.mensaje
                     })
+
+                    table.ajax.reload(null, false)
                   }
                 }
               });
@@ -401,3 +417,158 @@ function deleteThumb(){
   toastr.success('Eliminado, click en actualizar para guardar los cambios' ); 
   eliminar_comprobante = true;
 }
+
+function cambiarGarantiaSinFolio(){
+  let garantia_switch = $('#garantia-sin-folio').prop('checked');
+  if(garantia_switch){
+    $('#sucursal').prop('disabled', false);
+    $('#contenedor-datos-llanta').removeClass('d-none')
+   
+  }else{
+    $('#sucursal').prop('disabled', true);
+    $('#sucursal').val('')
+    $('#contenedor-datos-llanta').addClass('d-none')
+  };
+}
+
+buscar();
+function buscar() {
+        
+  $('#search').select2({
+      placeholder: "Selecciona una llanta",
+      theme: "bootstrap",
+      minimumInputLength: 1,
+      ajax: {
+          url: "./modelo/ventas/buscar-llantas-nueva-venta.php" ,
+          type: "post",
+          dataType: 'json',
+          delay: 250,
+          data: function (params) {
+          
+           if(params.term == undefined){
+            params.term = "";
+          }
+        
+           return {
+             searchTerm: params.term, // search term
+             id_sucursal: params.id_sucursal,
+             page: params.page || 1,
+             rol: params.rol
+             
+           };
+          },
+         
+          cache: true
+
+      }, processResults: function (data, params) {
+        params.page = params.page || 1;
+          return {
+             results: data.results,
+             pagination: {
+              more: (params.page * 10) < data.total_count // Verificar si hay más resultados para cargar
+            }
+          };
+        },
+      language:  {
+
+          inputTooShort: function () {
+              return "Busca la llanta...";
+            },
+            
+          noResults: function() {
+      
+            return "Sin resultados";        
+          },
+          searching: function() {
+      
+            return "Buscando..";
+          }
+        },
+
+        templateResult: formatRepo,
+        templateSelection: formatRepoSelection
+  });
+
+
+  function formatRepo (repo) {
+      
+    if (repo.loading) {
+      return repo.text;
+    }
+      var $container = $(
+          "<div style='' class='select2-result-repository clearfix' desc='"+repo.Descripcion+" marca='"+repo.Marca +
+          "' costo='"+repo.precio_Inicial +" id='tyre"+repo.id+"' precio='"+repo.precio_Venta+" idcode='"+repo.id+"'>" +
+          "<div class='select2-contenedor-principal row' syle='display:flex;'>" +
+          "<div class='col-md-2 justify-content-center'><img loading='lazy' class='' style='width: 50px; border-radius: 6px;' src='./src/img/logos/" + repo.Marca + ".jpg' /></div>" +
+            "<div class='col-md-10 select2-contenedor'>" +
+            "<div class='select2_modelo' style='font-size:14px;'>Modelo: "+ repo.Modelo +"</div>" +
+            "<div class='select2_description' style='font-size:14px;'>" + repo.Descripcion + "</div>" +
+
+            "<span style='font-size:14px; margin-left:80%;'><strong>"+ repo.Codigo +"</strong></span>"+
+            "<div class='select2_precio_venta' style='margin-left:65%;''><i class='fa fa-store'></i> "+ repo.Sucursal +"</div>" + 
+            "</div>" +
+            "</div>" +
+            "<div class='select2_statistics' style='display:flex; border-top: 1px solid whitesmoke; padding-top:8px; justify-content:space-around; margin-top:5px;'>" +
+            "<div class='select2_marca'><i class='fa fa-star'></i> "+ repo.Marca+"</div>" +
+              "<div class='select2_precio_venta'><i class='fa fa-dollar-sign'></i> "+ repo.precio_Venta +" (precio)</div>" + 
+              "<div class='select2_precio_venta'><i class='fa fa-tag'></i> "+ repo.precio_Mayoreo +" (al mayoreo)</div>" +
+              "<div class='select2_precio_venta'><i class='fa fa-bullseye'></i> "+ repo.Stock +"</div>" +
+            "</div>" +
+          "</div>" +
+        "</div>"
+      );
+ 
+    
+      return $container;
+    }
+
+    function formatRepoSelection (repo) {
+          let btn_add = $('#btn-agregar-llanta');
+          btn_add.attr('id_llanta', repo.id)
+          btn_add.attr('descripcion', repo.Descripcion)
+          btn_add.attr('marca', repo.Marca)
+          btn_add.attr('precio', repo.precio_Venta)
+          return repo.text || repo.Descripcion;
+    
+    }
+}
+
+function agregarLlantaSinVenta(){
+  let tbody = $("#detalle-garantia");
+
+  if(contador_general==0){
+    tbody.empty()
+  }
+  let btn_add = $('#btn-agregar-llanta');
+  let id_llanta = btn_add.attr('id_llanta')
+  let descripcion = btn_add.attr('descripcion')
+  let marca = btn_add.attr('marca')
+  let precio = btn_add.attr('precio')
+  let dot = $("#dot-llanta").val()
+  let cantidad = $("#cantidad-llantas").val()
+  contador_general++;
+  let response =[{
+    contador: contador_general,
+    id: id_llanta,
+    Descripcion: descripcion,
+    Marca: marca,
+    Precio: precio,
+    Cantidad: cantidad
+  }]
+  response.forEach((element) => {
+    tbody.append(`
+    <tr id="fila_llanta_${element.id}">
+    <td>${element.contador}</td>
+    <td>${element.id}</td>
+    <td><input value="${element.Cantidad}" class="form-control" id="input_llanta_${element.id}}" type="number"></td>
+    <td>${element.Descripcion}</td>
+    <td>${element.Marca}</td>
+    <td>${element.Precio}</td>
+    <td><input placeholder="Escribe el DOT de la llanta" value="" class="form-control" id="dot_llanta_${element.id}"></td>
+    <td><div class="btn btn-danger" onclick="retirarLlanta(${element.id})"><span class="fa fa-trash"></span></div></td>
+    </tr>
+    `);         
+  });
+  setButtonRegister(1);
+}
+

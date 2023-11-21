@@ -18,10 +18,12 @@ if(isset($_POST)) {
     $datos = json_decode($datos);
     $comentario = $_POST['comentario'];
     $factura = $_POST['folio_factura'];
-    $id_cliente = $_POST['id_cliente'];
+    $id_cliente = $_POST['id_cliente'] == 'undefined' ? 1 : $_POST['id_cliente'];
     $id_sucursal = $_POST['sucursal'];
-    $id_sucursal = $_POST['id_sucursal'];
-    $id_venta = $_POST['id_venta'];
+  /*   print_r($id_sucursal);
+    die(); */
+   // $id_sucursal = $_POST['id_sucursal'];
+    $id_venta = $_POST['id_venta'] == '' ? 0: $_POST['id_venta'];
     
     if(empty($_FILES['comprobante'])){
         $comprobante = 0;
@@ -42,10 +44,10 @@ if(isset($_POST)) {
         $marca = $value->marca;
         $precio = $value->precio;
         $dot = $value->dot;
-        
-        $insert = "INSERT INTO garantias(id, id_cliente, cantidad, id_llanta, dot, descripcion, marca, comentario_inicial, factura, id_sucursal, id_venta, comprobante_extension) VALUES(null,?,?,?,?,?,?,?,?,?,?,?)";
+        $dictamen = 'pendiente';
+        $insert = "INSERT INTO garantias(id, id_cliente, cantidad, id_llanta, dot, descripcion, marca, comentario_inicial, dictamen, factura, id_sucursal, id_venta, comprobante_extension) VALUES(null,?,?,?,?,?,?,?,?,?,?,?,?)";
         $stmt = $con->prepare($insert);
-        $stmt->bind_param('sssssssssss', $id_cliente, $cantidad, $id_llanta, $dot, $descripcion, $marca, $comentario, $factura, $id_sucursal, $id_venta, $imageFileType);
+        $stmt->bind_param('ssssssssssss', $id_cliente, $cantidad, $id_llanta, $dot, $descripcion, $marca, $comentario, $dictamen, $factura, $id_sucursal, $id_venta, $imageFileType);
         $stmt->execute();
         $error = $stmt->error;
         if($error){

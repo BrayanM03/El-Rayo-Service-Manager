@@ -141,6 +141,12 @@ if ($_SESSION['rol'] == 4) {
                                 </div>
                             </div>
                             <div class="row justify-content-center">
+                                <div class="col-2">
+                                <div class="form-check form-switch mt-4">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="garantia-sin-folio" onchange="cambiarGarantiaSinFolio()">
+                                    <label class="form-check-label" for="garantia-sin-folio">Garantia sin folio</label>
+                                </div>
+                                </div>
                                 <div class="col-4">
                                     <label for="">Folio</label>
                                     <div style="display: flex; flex-direction:row">
@@ -149,7 +155,7 @@ if ($_SESSION['rol'] == 4) {
                                     </div>
                                 </div>
                             </div>
-                            <div class="row  justify-content-center mt-3">
+                            <div class="row justify-content-center mt-3">
                                 <div class="col-5">
                                     <label for="">Cliente</label>
                                     <input type="text" class="form-control" id="nombre_cliente">
@@ -159,11 +165,49 @@ if ($_SESSION['rol'] == 4) {
                                 </div>
                                 <div class="col-3">
                                     <label for="">Sucursal</label>
-                                    <input type="text" disabled class="disabled form-control" id="sucursal">
+                                    <select type="text" disabled class="disabled form-control" id="sucursal">
+                                        <option value=""></option>
+                                       <?php 
+                                            $sql = "SELECT * FROM sucursal";
+                                            $stmt = $con->prepare($sql);
+                                            $stmt->execute();
+                                            $get_resultz = $stmt->get_result();
+                                            $datos_sucu= $get_resultz->fetch_all(MYSQLI_ASSOC);
+                                            foreach ($datos_sucu as $key => $value) {
+                                                echo "<option value=".$value['id'].">".$value['nombre']."</option>";
+                                            }
+                                        ?>
+                                    </select>
                                     <label for="factura">Folio factura</label>
                                     <input type="text" class="form-control" id="folio_factura">
                                 </div>
                             </div>
+                            <hr>
+                            <div id="contenedor-datos-llanta" class="d-none">
+                                <div class="row justify-content-center mt-3">
+                                
+                                <div class="col-12 col-md-5">
+                                    <label for="">Buscador</label>
+                                    <select class="form-control" id="search"></select>
+                                </div>
+                                <div class="col-12 col-md-3">
+                                    <label for="">DOT</label>
+                                    <input class="form-control" id="dot-llanta">
+                                </div>
+                            </div>
+                            <div class="row mt-3 justify-content-center">
+                                <div class="col-12 col-md-3">
+                                    <label for="">Cantidad</label>
+                                    <input class="form-control" placeholder="0" id="cantidad-llantas">
+                                </div>
+                                <div class="col-12 col-md-2 mt-4">
+                                    <div class="btn btn-info" id="btn-agregar-llanta" onclick="agregarLlantaSinVenta()">Agregar</div>
+                                </div>
+                                <div class="col-12 col-md-3">
+                                </div>
+                            </div>
+                            </div>
+                            
                             <div class="row justify-content-center">
                                 <div class="col-8">
                                     <table class="table table-bordered mt-3">
