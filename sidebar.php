@@ -391,7 +391,7 @@ switch ($flag) {
 
     <?php }
 
-    if ($user_jerarquia == 1 || $user_jerarquia == 4 && $_SESSION['id_usuario'] !=16) { //16 usuario de Javier Lozano
+    if ($user_jerarquia == 1 || $user_jerarquia == 4 && $_SESSION['id_usuario'] !=16 ||$_SESSION['id_usuario'] ==7) { //16 usuario de Javier Lozano y 7 de Kari
     ?>
         <!-- Nav Item - Charts -->
         <li class="nav-item <?php echo $claseToken; //rol-4 

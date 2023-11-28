@@ -87,4 +87,4 @@ function editarComision(id, comision){
             });
         }
     })
-}
+} 

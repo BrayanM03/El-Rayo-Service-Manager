@@ -1016,7 +1016,7 @@ $("#btn-add-client").hover(function() {
                     '</textarea>'+
                 '</div>'+
             '</div>'+
-            '<div class="col-12">'+
+           /*  '<div class="col-12">'+
                 '<div class="form-group">'+
                     '<label><b>Mapear dirección</b></label>'+
                     '<div id="map-id"></div>'+
@@ -1025,7 +1025,7 @@ $("#btn-add-client").hover(function() {
                    // "<img id='marker' class='marker' src='./src/img/marker.svg' alt='insertar SVG con la etiqueta image'>"+
                     
                 '</div>'+
-            '</div>'+
+            '</div>'+ */
         
             '</div>'+
         
@@ -1050,6 +1050,16 @@ $("#btn-add-client").hover(function() {
                       });
                   }
                   });
+      },
+      preConfirm: function(){
+          let asesor =  $("#asesor").val();
+          let nombre_cliente = $("#nombre-cliente").val();
+          if(asesor == '' || asesor == 'nulo'){
+              Swal.showValidationMessage('Selecciona un asesor');
+          }
+          if(nombre_cliente == '' || nombre_cliente == undefined || nombre_cliente == null){
+              Swal.showValidationMessage('Escribe el nombre del cliente');
+          }
       }
         }).then((result) =>{
             //Agregando cliente
@@ -1174,7 +1184,7 @@ $("#btn-add-client").hover(function() {
             }
         });
     
-    //Codigo que genera mapa
+   /*  //Codigo que genera mapa
     mapboxgl.accessToken = 'pk.eyJ1IjoiYnJheWFubTAzIiwiYSI6ImNrbnRlNTdyZzAxcXcycG84ZnRvNnJtdmoifQ.8k-_U2-Eq-CmSrH6jm8KEg';
     
     var mymap = new mapboxgl.Map({
@@ -1218,22 +1228,13 @@ $("#btn-add-client").hover(function() {
                 element: el,
                 draggable: true
             }).setLngLat(e.lngLat).addTo(mymap);
-              /*.setPopup(
-                new mapboxgl.Popup({ offset: 25 }) // add popups
-                  .setHTML(
-                    '<h3>' +
-                      marker.properties.title +
-                      '</h3><p>' +
-                      marker.properties.description +
-                      '</p>'
-                  )
-              )*/
+            
     
               $("#lat-agregar").text(e.lngLat.lat);
               $("#long-agregar").text(e.lngLat.lng);
               
     
-    });
+    }); */
         
     };  
 

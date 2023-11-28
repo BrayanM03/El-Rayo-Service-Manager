@@ -628,7 +628,7 @@ function cuerpoTabla(){
     $pdf->MultiCell(70,6, utf8_decode(""),0,0,'L',0);
     $pdf->Ln(4.5);
     $pdf->SetFont('Arial','',8);
-    $pdf->MultiCell(150,3, utf8_decode("Remisión de salida por la cantidad de llantas mostradas en el presente documento."),0,0,'C',0);
+    $pdf->MultiCell(150,3, utf8_decode("Remisión de ingreso por la cantidad de llantas mostradas en el presente documento."),0,0,'C',0);
     
     $ejeY = $ejeY +17;
     $pdf->SetY($ejeY);

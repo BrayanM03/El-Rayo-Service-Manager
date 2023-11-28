@@ -214,7 +214,7 @@ function borrarCliente(id) {
                 '</textarea>'+
             '</div>'+
         '</div>'+
-        '<div class="col-12">'+
+        /* '<div class="col-12">'+
             '<div class="form-group">'+
                 '<label><b>Mapear dirección</b></label>'+
                 '<div id="map-id"></div>'+
@@ -223,7 +223,7 @@ function borrarCliente(id) {
                // "<img id='marker' class='marker' src='./src/img/marker.svg' alt='insertar SVG con la etiqueta image'>"+
                 
             '</div>'+
-        '</div>'+
+        '</div>'+ */
     
         '</div>'+
     
@@ -249,6 +249,16 @@ function borrarCliente(id) {
                     });
                 }
                 });
+    },
+    preConfirm: function(){
+        let asesor =  $("#asesor").val();
+        let nombre_cliente = $("#nombre-cliente").val();
+        if(asesor == '' || asesor == 'nulo'){
+            Swal.showValidationMessage('Selecciona un asesor');
+        }
+        if(nombre_cliente == '' || nombre_cliente == undefined || nombre_cliente == null){
+            Swal.showValidationMessage('Escribe el nombre del cliente');
+        }
     }
 
     }).then((result) =>{
@@ -374,7 +384,7 @@ function borrarCliente(id) {
     });
 
 //Codigo que genera mapa
-mapboxgl.accessToken = 'pk.eyJ1IjoiYnJheWFubTAzIiwiYSI6ImNrbnRlNTdyZzAxcXcycG84ZnRvNnJtdmoifQ.8k-_U2-Eq-CmSrH6jm8KEg';
+/* mapboxgl.accessToken = 'pk.eyJ1IjoiYnJheWFubTAzIiwiYSI6ImNrbnRlNTdyZzAxcXcycG84ZnRvNnJtdmoifQ.8k-_U2-Eq-CmSrH6jm8KEg';
 
 var mymap = new mapboxgl.Map({
     container: 'map-id',
@@ -418,22 +428,13 @@ mymap.on('click', function (e) {
             element: el,
             draggable: true
         }).setLngLat(e.lngLat).addTo(mymap);
-          /*.setPopup(
-            new mapboxgl.Popup({ offset: 25 }) // add popups
-              .setHTML(
-                '<h3>' +
-                  marker.properties.title +
-                  '</h3><p>' +
-                  marker.properties.description +
-                  '</p>'
-              )
-          )*/
+          
 
           $("#lat-agregar").text(e.lngLat.lat);
           $("#long-agregar").text(e.lngLat.lng);
           
 
-});
+}); */
     
 
   };
@@ -453,7 +454,7 @@ mymap.on('click', function (e) {
         success: function (response) {
 
             $(document).ready(function() { 
-                $("#latitud-editar").text(response.latitud);
+               /*  $("#latitud-editar").text(response.latitud);
                 $("#longitud-editar").text(response.longitud);
                 //console.log(response.longitud)
 
@@ -527,7 +528,7 @@ mymap.on('click', function (e) {
                         $("#longitud-editar").text(e.lngLat.lng);
                         
 
-                });
+                }); */
             
             })
 
@@ -610,7 +611,7 @@ mymap.on('click', function (e) {
                         '</textarea>'+
                     '</div>'+
                 '</div>'+
-                '<div class="col-12">'+
+               /*  '<div class="col-12">'+
                     '<div class="form-group">'+
                         '<label><b>Mapear dirección</b></label>'+
                         '<div id="map-edit"></div>'+
@@ -619,7 +620,7 @@ mymap.on('click', function (e) {
                        // "<img id='marker' class='marker' src='./src/img/marker.svg' alt='insertar SVG con la etiqueta image'>"+
                         
                     '</div>'+
-                '</div>'+
+                '</div>'+ */
             
                 '</div>'+
                     '<div>'+
@@ -646,6 +647,16 @@ mymap.on('click', function (e) {
                         }
                         });
 
+            },
+            preConfirm: function(){
+                let asesor =  $("#asesor").val();
+                let nombre_cliente = $("#nombre-cliente").val();
+                if(asesor == '' || asesor == 'nulo'){
+                    Swal.showValidationMessage('Selecciona un asesor');
+                }
+                if(nombre_cliente == '' || nombre_cliente == undefined || nombre_cliente == null){
+                    Swal.showValidationMessage('Escribe el nombre del cliente');
+                }
             }
         
             }).then((result) =>{

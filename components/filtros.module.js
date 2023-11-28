@@ -417,10 +417,7 @@
                                 <b>Rin</b>
                                 <filtro-medidas :tabla="medida.tabla" :columna_id="medida.columna_id" columna="Diametro"></filtro-medidas>
                             </div>
-                            <div class="col-md-2">
-                                <b>Asesor</b>
-                                <filtro-busqueda-usuario :rol_sesion="usuarios.rol_sesion" :id_sesion="usuarios.id_sesion" :nombre_sesion="usuarios.nombre_sesion" :modo_usuario="clientes.modo_asesor" :tabla="usuarios.tabla" :columnas="usuarios.columnas" :columna_id="usuarios.columna_id"></filtro-busqueda-usuario>
-                            </div>
+                           
                         </div>
 
                         <div class="row">
@@ -493,3 +490,4 @@
   })
 
 })(window.Vue)
+

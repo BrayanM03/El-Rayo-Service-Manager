@@ -87,7 +87,7 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
 
                         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" onclick="ejecutarPanelReporteVentas();"><i
                                 class="fas fa-download fa-sm text-white-50"></i> Reporte de corte</a>
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-info shadow-sm" onclick="ejecutarPanelReporteComisiones();"><i
+                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-info shadow-sm" onclick="ejecutarPanelTipoComision();"><i
                                 class="fas fa-download fa-sm text-white-50"></i> Reporte comisiones</a>
                     </div>
                    
