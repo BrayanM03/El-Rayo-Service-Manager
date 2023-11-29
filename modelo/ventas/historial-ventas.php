@@ -17,18 +17,18 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Easy set variables
  */
-session_start();
+//session_start();
 // DB table to use
 $table = 'vista_ventas';
 
 // Table's primary key
 $primaryKey = 'id';
-$id_sucursal = $_SESSION['id_sucursal'];
+/* $id_sucursal = $_SESSION['id_sucursal'];
 if($_SESSION['rol']!= 1 && $_SESSION['id_usuario'] != 7){
 	$where = 'id_sucursal ='.$id_sucursal;
 }else{
 	$where ='';
-}
+} */
 // Array of database columns which should be read and sent back to DataTables.
 // The `db` parameter represents the column name in the database, while the `dt`
 // parameter represents the DataTables column identifier. In this case simple

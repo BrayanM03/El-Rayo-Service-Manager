@@ -118,7 +118,7 @@
         let timeoutId;
         vm.id_sucursal = document.getElementById('titulo-hv').getAttribute('id_sucursal');
         console.log(vm.id_sesion);
-        if (vm.rol_sesion == 1 || vm.id_sesion == 7) {
+        if (vm.rol_sesion !=78) {
           input_buscador.on('keyup', (e) => {
             clearTimeout(timeoutId);
             //buscador.selectpicker('refresh')
@@ -272,7 +272,7 @@
             let rol_sesion = $('#titulo-hv').attr('rol')
             let id_sesion = document.getElementById('titulo-hv').getAttribute('id_usuario');
 
-            if(rol_sesion !=1 && id_sesion != 7) {
+            if(rol_sesion == 78) {
               buscador.prop('disabled', true);
               let sucursal_nombre = $('#titulo-hv').attr('sucursal')
               let sucursal_id = $('#titulo-hv').attr('id_sucursal')
