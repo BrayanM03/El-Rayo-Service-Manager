@@ -116,11 +116,11 @@
         buscador.selectpicker('refresh');
         let input_buscador = buscador.parent().find('.bs-searchbox > input');
         let timeoutId;
+        vm.id_sucursal = document.getElementById('titulo-hv').getAttribute('id_sucursal');
 
         if (vm.rol_sesion == 1) {
           input_buscador.on('keyup', (e) => {
             clearTimeout(timeoutId);
-
             //buscador.selectpicker('refresh')
             timeoutId = setTimeout(function () {
               // Aquí se puede hacer la solicitud a la base de datos
@@ -138,27 +138,43 @@
                         `)
                     });
                     buscador.selectpicker('refresh');
-
                   }
-
                 }
               });
             }, 200);
           });
-        } else {
-          /* if (this.modo_usuario == 'asesor') {
-                     buscador.empty().append(`
+        } else { //Este codigo sera temporal en lo que encuentro una forma de hacer mejor el filtrado
+         // buscador.prop('disabled', true);
+     
+              buscador.empty().append(`
                        <option value="${vm.id_sesion}">${vm.nombre_sesion}</option>
                    `)
-                   } else {
-                     buscador.prop('disabled', true);
-                     buscador.empty().append(`
-                                     <option value="${vm.id_sesion}" selected>${vm.nombre_sesion}</option>
-                                 `)
-                   }
-         
+              buscador.selectpicker('refresh');
+              $(`.selectpicker[data-id='buscador-${this.modo_usuario}']`).addClass("disabled");
+
+              if(vm.modo_usuario=='asesor'){
+                buscador.on('change', ()=>{
+                  // Obtén el valor de la opción seleccionada actualmente
+                  var valorActualSeleccionado = buscador.val();
+                  if(valorActualSeleccionado.length ==0){
+                    console.log(sucursales_actuales);
+                    console.log(vm.id_sucursal);
+                    $('#buscador-sucursal').empty();
+                    sucursales_actuales.forEach(element => {
+                      $('#buscador-sucursal').append(`
+                       <option value="${element.id}">${element.nombre}</option>
+                   `)
+
+                   $('#buscador-sucursal').val(vm.id_sucursal)
+                   $('#buscador-sucursal').selectpicker('refresh');
+                    });
                    buscador.selectpicker('refresh');
-                   $(`.selectpicker[data-id='buscador-${this.modo_usuario}']`).addClass("disabled");*/
+                  }else{
+                    $('#buscador-sucursal').val('');
+                    $(`#buscador-sucursal`).selectpicker('refresh');
+                  }
+                 })
+              }  
         }
 
       }
@@ -252,10 +268,10 @@
           data: { 'term': input_buscador.val(), 'page': 1, 'tabla': vm.tabla, 'columnas': vm.columnas, 'columna_id': vm.columna_id },
           dataType: 'json',
           success: function (response) {
-
+            sucursales_actuales = response.datos;
             let rol_sesion = $('#titulo-hv').attr('rol')
-            console.log(rol_sesion);
-            if (rol_sesion == 2) {
+            if(rol_sesion !=1) {
+              buscador.prop('disabled', true);
               let sucursal_nombre = $('#titulo-hv').attr('sucursal')
               let sucursal_id = $('#titulo-hv').attr('id_sucursal')
               
@@ -319,7 +335,7 @@
     }
   }
 
-  function initVueFilter(rol_sesion, id_sesion, nombre_sesion) {
+  function initVueFilter(rol_sesion, id_sesion, nombre_sesion, id_sucursal) {
     return new Vue({
       el: '#filter-vue-container',
       components: {
@@ -344,6 +360,7 @@
           tabla: 'usuarios',
           rol_sesion: rol_sesion,
           id_sesion: id_sesion,
+          id_sucursal: id_sucursal,
           nombre_sesion: nombre_sesion
         },
         medida: {
@@ -417,6 +434,11 @@
                                 <b>Rin</b>
                                 <filtro-medidas :tabla="medida.tabla" :columna_id="medida.columna_id" columna="Diametro"></filtro-medidas>
                             </div>
+
+                            <div class="col-md-2">
+                              <b>Asesor</b>
+                              <filtro-busqueda-usuario :rol_sesion="usuarios.rol_sesion" :id_sesion="usuarios.id_sesion" :nombre_sesion="usuarios.nombre_sesion" :modo_usuario="clientes.modo_asesor" :tabla="usuarios.tabla" :columnas="usuarios.columnas" :columna_id="usuarios.columna_id"></filtro-busqueda-usuario>
+                            </div>
                            
                         </div>
 
@@ -481,7 +503,8 @@
     let rol_sesion = document.getElementById('titulo-hv').getAttribute('rol');
     let nombre_sesion = document.getElementById('titulo-hv').getAttribute('nombre_usuario');
     let id_sesion = document.getElementById('titulo-hv').getAttribute('id_usuario');
-    let commentsWidget = initVueFilter(rol_sesion, id_sesion, nombre_sesion)
+    let id_sucursal = document.getElementById('titulo-hv').getAttribute('id_sucursal');
+    let commentsWidget = initVueFilter(rol_sesion, id_sesion, nombre_sesion, id_sucursal)
 
     // Aquí tienes la referencia al widget completo. Puedes hacer con ella lo que gustes.
     // Yo he decidido exponerlo como una propiedad de objeto window.
@@ -490,4 +513,3 @@
   })
 
 })(window.Vue)
-

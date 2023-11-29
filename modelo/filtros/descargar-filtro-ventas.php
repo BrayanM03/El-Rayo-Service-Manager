@@ -490,7 +490,7 @@ function informacionFiltros($con)
     }
 
     // Filtra por sucursal si está definida
-    if (!empty($sucursal)) {
+    if (!empty($sucursal) && $sucursal != 'null') {
         $sucursal_ = $con->real_escape_string($sucursal);
         $sql .= " AND v.id_sucursal = '" . $sucursal_ . "'";
     }
@@ -549,6 +549,7 @@ function informacionFiltros($con)
     
     //Ejecutamos la quert
     $sql .= " ORDER BY v.id DESC";
+  
     $stmt = $con->prepare($sql);
     $stmt->execute();
     $result = $stmt->get_result();

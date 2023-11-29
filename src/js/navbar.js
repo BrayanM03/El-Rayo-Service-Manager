@@ -226,7 +226,7 @@ function ejecutarPanelReporteComisionesVendedor(){
                 success: function (respuesta) {
                     respuesta.forEach(element => {
                        
-                    $("#asesor").append(`
+                    $("#asesor-nav").append(`
                     <option value="${element.id}">${element.nombre}</option>
                     `); 
                     });
@@ -239,7 +239,7 @@ function ejecutarPanelReporteComisionesVendedor(){
                 <div class="row">
                     <div class="col-md-12 col-12">
                         <label for="asesor">Selecciona una asesor</label>
-                        <select class="form-control" id="asesor"></select>
+                        <select class="form-control" id="asesor-nav"></select>
                     </div>
                 </div>
                 <div class="row mt-2">
@@ -312,7 +312,7 @@ function descargarPDF(tipo){
                 window.open("./modelo/comisiones/pdf-comision-encargado.php?mes="+mes +"&year="+year+ "&id_sucursal="+ id_sucursal+"&tipo_comision="+tipo);
             }
     }else{
-        let id_asesor = $('#asesor').val();
+        let id_asesor = $('#asesor.nav').val();
         window.open("./modelo/comisiones/pdf-comision-asesor.php?mes="+mes +"&year="+year+ "&id_asesor="+ id_asesor+"&tipo_comision="+tipo);
 
     }
@@ -327,7 +327,7 @@ function descargarExcel(tipo){
         id_sucursal = $("#sucursal-nav").val();
         window.open("./modelo/comisiones/excel-comision-encargado.php?mes="+mes+"&year="+year+ "&id_sucursal="+ id_sucursal);
     }else{
-        let id_asesor = $('#asesor').val();
+        let id_asesor = $('#asesor-nav').val();
         window.open("./modelo/comisiones/excel-comision-asesor.php?mes="+mes+"&year="+year+ "&id_asesor="+ id_asesor);
 
     }
