@@ -9,10 +9,10 @@ $folio = "RAY" . $_GET["id"];
 $idVenta = $_GET["id"];
 global $folio;
 
-$ID = $con->prepare("SELECT v.id, v.Fecha, v.id_sucursal, v.id_Usuarios, c.Nombre_Cliente, c.Telefono, v.pago_efectivo, v.pago_tarjeta, v.pago_transferencia, v.pago_cheque, v.pago_sin_definir, v.Total, v.tipo, v.estatus, v.metodo_pago, v.hora, v.comentario FROM ventas v INNER JOIN clientes c ON v.id_Cliente = c.id WHERE v.id = ?");
+$ID = $con->prepare("SELECT v.id, v.Fecha, v.id_sucursal, v.id_Usuarios, c.id, c.Nombre_Cliente, c.Telefono, v.pago_efectivo, v.pago_tarjeta, v.pago_transferencia, v.pago_cheque, v.pago_sin_definir, v.Total, v.tipo, v.estatus, v.metodo_pago, v.hora, v.comentario FROM ventas v INNER JOIN clientes c ON v.id_Cliente = c.id WHERE v.id = ?");
 $ID->bind_param('i', $idVenta);
 $ID->execute();
-$ID->bind_result($id_apartados, $fecha, $sucursal, $vendedor_id, $cliente, $telefono_cliente, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_por_definir, $total, $tipo, $estatus, $metodo_pago, $hora, $comentario);
+$ID->bind_result($id_apartados, $fecha, $sucursal, $vendedor_id, $id_cliente, $cliente, $telefono_cliente, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_por_definir, $total, $tipo, $estatus, $metodo_pago, $hora, $comentario);
 $ID->fetch();
 $ID->close();
 
@@ -22,6 +22,21 @@ $ID->execute();
 $ID->bind_result($vendedor_name, $vendedor_apellido);
 $ID->fetch();
 $ID->close();
+
+$ID = $con->prepare("SELECT id_asesor FROM clientes WHERE id = ?");
+$ID->bind_param('i', $id_cliente);
+$ID->execute();
+$ID->bind_result($id_asesor);
+$ID->fetch();
+$ID->close();
+
+$ID = $con->prepare("SELECT nombre, apellidos FROM usuarios WHERE id = ?");
+$ID->bind_param('i', $id_asesor);
+$ID->execute();
+$ID->bind_result($asesor_name, $asesor_apellido);
+$ID->fetch();
+$ID->close();
+
 
 $vendedor_usuario = $vendedor_name . " " . $vendedor_apellido;
 
@@ -65,6 +80,8 @@ global $pago_tarjeta;
 global $pago_transferencia;
 global $pago_cheque;
 global $pago_por_definir;
+global $asesor_name;
+global $asesor_apellido;
 
 $formatterES = new NumberFormatter("es-ES", NumberFormatter::SPELLOUT);
 $izquierda = intval(floor($total));
@@ -228,9 +245,14 @@ function Header()
     $cp = $GLOBALS["cp_suc"];
     $correo_cliente = $GLOBALS['correo_cliente'];
     $direccion_cliente = $GLOBALS['direccion_cliente'];
+    if($GLOBALS['asesor_name']!=''){
+        $nombre_asesor = $GLOBALS['asesor_name'] . ' '. $GLOBALS['asesor_apellido'];
+    }else{
+        $nombre_asesor = 'Sin asesor';
+    }
 
     if($numero == 0 || $numero == null){
-        $numero = "";
+        $numero = '';
     }
 
     $top_direction = $calle . " " . $numero . " " ;
@@ -327,10 +349,16 @@ function Header()
     $this->Cell(25,10,utf8_decode("Vendedor: "),0,0,'L', false);
     $this->SetFont('Arial','',9);
     $this->Cell(10,10,utf8_decode($GLOBALS['vendedor_usuario']),0,0,'L', false);
-
+    $this->Ln(4);
+    $this->Cell(120,10,'',0,0,'L', false);
+    $this->SetFont('Arial','B',9);
+    $this->Cell(25,10,utf8_decode("Asesor: "),0,0,'L', false);
+    $this->SetFont('Arial','',9);
+   
+    $this->Cell(10,10,utf8_decode($nombre_asesor),0,0,'L', false);
    
 
-    $this->Ln(10);
+    $this->Ln(6);
     
     $this->SetFont('Exo2-Bold','B',12);
     $this->Cell(50,10,utf8_decode("Receptor"),0,0,'L', false);
@@ -364,10 +392,6 @@ function Header()
     $this->SetFont('Arial','',10);
     $this->Cell(30,3,utf8_decode($direccion_cliente),0,0,'L', false);
     $this->Ln(15);
-
-
-
-
 }
 
 // Pie de página

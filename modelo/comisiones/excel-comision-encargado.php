@@ -226,11 +226,12 @@ if(count($comisiones['data']) > 0) {
                     }
                     
                     
-                    $hoja_activa->getColumnDimension('A')->setWidth(8);
-                    $hoja_activa->setCellValue('A'.$index, $folio);
-                    $hoja_activa->getColumnDimension('B')->setWidth(17);
-                    $hoja_activa->setCellValue('B'.$index, $fecha);
+                    
                     if($bandera==0){
+                        $hoja_activa->getColumnDimension('A')->setWidth(8);
+                        $hoja_activa->setCellValue('A'.$index, $folio);
+                        $hoja_activa->getColumnDimension('B')->setWidth(17);
+                        $hoja_activa->setCellValue('B'.$index, $fecha);
                         $hoja_activa->getColumnDimension('C')->setWidth(50);
                         $hoja_activa->setCellValue('C'.$index, $cliente);
                         $hoja_activa->getColumnDimension('D')->setWidth(18);
@@ -250,7 +251,22 @@ if(count($comisiones['data']) > 0) {
                         $hoja_activa->getStyle('A'.$index.':H'.$index)->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_BLACK);
                         
                     }else{
+                        $fecha_inicio_ = new DateTime($value['Fecha']);
+                        $fecha_ultimo_abono_ = new DateTime($value['fecha_ultimo_abono']);
+
+                        // Obtener la diferencia en días entre las dos fechas
+                        $intervalo = $fecha_inicio_->diff($fecha_ultimo_abono_);
+                        $dias_transcurridos = $intervalo->days;
+
+                        // Verificar si no han pasado más de 45 días desde la última vez que se abonó
                         $fecha_ultimo_abono = $value['fecha_ultimo_abono'];
+                        //print_r($value['Fecha'] . ' * ' . $value['fecha_ultimo_abono'] . ' = '.$dias_transcurridos .' dias transcurridos<br>');
+                        //print_r($dias_transcurridos .' - ' );
+                        if ($dias_transcurridos <= 45) {
+                        $hoja_activa->getColumnDimension('A')->setWidth(8);
+                        $hoja_activa->setCellValue('A'.$index, $folio);
+                        $hoja_activa->getColumnDimension('B')->setWidth(17);
+                        $hoja_activa->setCellValue('B'.$index, $fecha);
                         $hoja_activa->getColumnDimension('C')->setWidth(17);
                         $hoja_activa->setCellValue('C'.$index, $fecha_ultimo_abono);
                         $hoja_activa->setCellValue('D'.$index, $cliente);
@@ -269,6 +285,10 @@ if(count($comisiones['data']) > 0) {
                         //$hoja_activa->getStyle('A'.$index.':F'.$index)->getFont()->setBold(true);
                         $hoja_activa->getStyle('A'.$index.':I'.$index)->getFont()->setSize(12);
                         $hoja_activa->getStyle('A'.$index.':I'.$index)->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_BLACK);
+                        } else {
+                            $index--;
+                            //echo "Han pasado más de 45 días desde el último abono.";
+                        }
                         
                     }
                     $sumatoria_creditos += intval($importe_sin_servicio);
@@ -486,7 +506,7 @@ function informacionFiltros($con)
 
     if (!empty($mes)) { 
         //$sucursal_ = $con->real_escape_string($sucursal)
-        $mes_anterior = intval($mes) - 1;
+        $mes_anterior = intval($mes) - 2;
         $sql .= " AND MONTH(v.fecha) = " . $mes . "";
         $sql_creditos .= " AND MONTH(a.fecha) = ". $mes ." AND (MONTH(v.fecha) = " . $mes . " OR MONTH(v.fecha) = ".$mes_anterior.")";
     }

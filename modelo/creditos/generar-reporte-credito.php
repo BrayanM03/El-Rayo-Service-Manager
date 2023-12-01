@@ -5,15 +5,16 @@ session_start();
 include '../conexion.php';
 $con = $conectando->conexion(); 
 global $con;
-
 $folio = "RAY" . $_GET["id"];
 $idVenta = $_GET["id"];
 global $folio;
-
-$ID = $con->prepare("SELECT ventas.Fecha, ventas.id_sucursal, ventas.id_Usuarios, clientes.Nombre_Cliente, ventas.Total,  ventas.tipo, ventas.estatus, ventas.metodo_pago, ventas.hora, ventas.comentario FROM ventas INNER JOIN clientes ON ventas.id_Cliente = clientes.id WHERE ventas.id = ?");
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+$ID = $con->prepare("SELECT ventas.Fecha, ventas.id_sucursal, ventas.id_Usuarios, clientes.id, clientes.Nombre_Cliente, ventas.Total,  ventas.tipo, ventas.estatus, ventas.metodo_pago, ventas.hora, ventas.comentario FROM ventas INNER JOIN clientes ON ventas.id_Cliente = clientes.id WHERE ventas.id = ?");
 $ID->bind_param('i', $idVenta);
 $ID->execute();
-$ID->bind_result($fecha, $id_sucursal, $vendedor_id, $cliente, $total, $tipo, $estatus, $metodo_pago, $hora, $comentario );
+$ID->bind_result($fecha, $id_sucursal, $vendedor_id, $id_cliente, $cliente, $total, $tipo, $estatus, $metodo_pago, $hora, $comentario );
 $ID->fetch();
 $ID->close();
 
@@ -21,6 +22,20 @@ $ID = $con->prepare("SELECT nombre, apellidos FROM usuarios WHERE id = ?");
 $ID->bind_param('i', $vendedor_id);
 $ID->execute();
 $ID->bind_result($vendedor_name, $vendedor_apellido);
+$ID->fetch();
+$ID->close();
+
+$ID = $con->prepare("SELECT id_asesor FROM clientes WHERE id = ?");
+$ID->bind_param('i', $id_cliente);
+$ID->execute();
+$ID->bind_result($id_asesor);
+$ID->fetch();
+$ID->close();
+
+$ID = $con->prepare("SELECT nombre, apellidos FROM usuarios WHERE id = ?");
+$ID->bind_param('i', $id_asesor);
+$ID->execute();
+$ID->bind_result($asesor_name, $asesor_apellido);
 $ID->fetch();
 $ID->close();
 
@@ -55,6 +70,9 @@ global $estatus;
 global $metodo_pago;
 global $hora;
 global $comentario;
+global $asesor_name;
+global $asesor_apellido;
+
 
 $CREDITO = $con->prepare("SELECT id, pagado, restante, fecha_inicio, fecha_final, plazo FROM creditos WHERE id_venta = ?");
 $CREDITO->bind_param('i', $idVenta);
@@ -114,6 +132,11 @@ function Header()
     $telefono = $GLOBALS["telefono_suc"];
     $rfc = $GLOBALS["rfc_suc"];
     $cp = $GLOBALS["cp_suc"];
+    if($GLOBALS['asesor_name']!=''){
+        $nombre_asesor = $GLOBALS['asesor_name'] . ' '. $GLOBALS['asesor_apellido'];
+    }else{
+        $nombre_asesor = 'Sin asesor';
+    }
 
     if($numero == 0 || $numero == null){
         $numero = "";
@@ -210,9 +233,16 @@ function Header()
     $this->SetFont('Times','',12);
     $this->SetTextColor(36, 35, 28);
     $this->Cell(50,7,utf8_decode($GLOBALS["fecha"]),0,0,'', false);
+    $this->Ln(7);
+    $this->SetFont('Times','B',12);
+    $this->SetFillColor(253, 229, 2);
+    $this->Cell(24,7,utf8_decode("Asesor:"),0,0,'L', 1);
+    $this->SetFont('Times','',12);
+    $this->SetFillColor(236, 236, 236);
+    $this->Cell(70,7,utf8_decode($nombre_asesor),0,0, 'L',1);
 
     // Salto de línea
-    $this->Ln(18);
+    $this->Ln(11);
 }
 
 // Pie de página
@@ -235,14 +265,6 @@ function Footer()
    
     $this->Cell(0,10,$footer_title . ' ' . $year,0,0,'C');
 }
-
-
- //Aqui justifico
-
-
- 
-
-
 }
 
 // Creación del objeto de la clase heredada

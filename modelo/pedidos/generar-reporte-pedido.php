@@ -9,10 +9,10 @@ $folio = "PE" . $_GET["id"];
 $idVenta = $_GET["id"];
 global $folio;
 
-$ID = $con->prepare("SELECT a.id_sucursal, a.id_usuario, c.Nombre_Cliente, c.Telefono, a.abonado, a.restante, a.total, a.tipo, a.estatus, a.hora_inicio, a.comentario, a.fecha_inicio, a.fecha_final FROM pedidos a INNER JOIN clientes c ON a.id_cliente = c.id WHERE a.id = ?");
+$ID = $con->prepare("SELECT a.id_sucursal, a.id_usuario, c.id, c.Nombre_Cliente, c.Telefono, a.abonado, a.restante, a.total, a.tipo, a.estatus, a.hora_inicio, a.comentario, a.fecha_inicio, a.fecha_final FROM pedidos a INNER JOIN clientes c ON a.id_cliente = c.id WHERE a.id = ?");
 $ID->bind_param('i', $idVenta);
 $ID->execute();
-$ID->bind_result($sucursal, $vendedor_id, $cliente, $telefono_cliente, $primer_abono, $restante, $total, $tipo, $estatus, $hora_inicio, $comentario, $fecha_inicio, $fecha_final);
+$ID->bind_result($sucursal, $vendedor_id, $id_cliente, $cliente, $telefono_cliente, $primer_abono, $restante, $total, $tipo, $estatus, $hora_inicio, $comentario, $fecha_inicio, $fecha_final);
 $ID->fetch();
 if ($ID->errno) {
     echo "Error: " . $ID->error;
@@ -33,6 +33,21 @@ $ID = $con->prepare("SELECT nombre, apellidos FROM usuarios WHERE id = ?");
 $ID->bind_param('i', $vendedor_id);
 $ID->execute();
 $ID->bind_result($vendedor_name, $vendedor_apellido);
+$ID->fetch();
+$ID->close();
+
+
+$ID = $con->prepare("SELECT id_asesor FROM clientes WHERE id = ?");
+$ID->bind_param('i', $id_cliente);
+$ID->execute();
+$ID->bind_result($id_asesor);
+$ID->fetch();
+$ID->close();
+
+$ID = $con->prepare("SELECT nombre, apellidos FROM usuarios WHERE id = ?");
+$ID->bind_param('i', $id_asesor);
+$ID->execute();
+$ID->bind_result($asesor_name, $asesor_apellido);
 $ID->fetch();
 $ID->close();
 
@@ -77,6 +92,8 @@ global $suma_pago_efectivo;
 global $suma_pago_tarjeta;
 global $suma_pago_transferencia;
 global $suma_pago_sin_definir;
+global $asesor_name;
+global $asesor_apellido;
 
 $formatterES = new NumberFormatter("es-ES", NumberFormatter::SPELLOUT);
 $izquierda = intval(floor($primer_abono));
@@ -236,7 +253,11 @@ function Header()
     $cp = $GLOBALS["cp_suc"];
     $correo_cliente = $GLOBALS['correo_cliente'];
     $direccion_cliente = $GLOBALS['direccion_cliente'];
-
+    if($GLOBALS['asesor_name']!=''){
+        $nombre_asesor = $GLOBALS['asesor_name'] . ' '. $GLOBALS['asesor_apellido'];
+    }else{
+        $nombre_asesor = 'Sin asesor';
+    }
     if($numero == 0 || $numero == null){
         $numero = "";
     }
@@ -335,9 +356,16 @@ function Header()
     $this->Cell(25,10,utf8_decode("Vendedor: "),0,0,'L', false);
     $this->SetFont('Arial','',9);
     $this->Cell(10,10,utf8_decode($GLOBALS['vendedor_usuario']),0,0,'L', false);
+    $this->Ln(4);
+    $this->Cell(120,10,'',0,0,'L', false);
+    $this->SetFont('Arial','B',9);
+    $this->Cell(25,10,utf8_decode("Asesor: "),0,0,'L', false);
+    $this->SetFont('Arial','',9);
+   
+    $this->Cell(10,10,utf8_decode($nombre_asesor),0,0,'L', false);
+   
 
-
-    $this->Ln(10);
+    $this->Ln(6);
     
     $this->SetFont('Exo2-Bold','B',12);
     $this->Cell(50,10,utf8_decode("Receptor"),0,0,'L', false);
