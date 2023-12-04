@@ -3,7 +3,9 @@
 include '../conexion.php';
 $con = $conectando->conexion();
 setlocale(LC_MONETARY, 'es_MX');
-
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 if (!$con) {
     echo "Problemas con la conexion";
@@ -475,14 +477,20 @@ function informacionFiltros($con)
     }
 
     if (!empty($asesor)) {
-        
         $array_ases = explode(",", $asesor);
-        $asesores_ids =  implode(",", array_map(function($valor) use ($con, $sanitizacion){
-            return $sanitizacion($valor, $con);
-        }, $array_ases));
-        $sql .= " AND c.id_asesor IN (" . $asesores_ids. ")";
-        $sql_creditos .= " AND c.id_asesor IN (" . $asesores_ids. ")";
+            $asesores_ids =  implode(",", array_map(function($valor) use ($con, $sanitizacion){
+                return $sanitizacion($valor, $con);
+            }, $array_ases));
+        if($_SESSION['id_usuario']==6 || in_array(6, $array_ases)){ //Usuario de aminta se bloquearan las ventas fuera de su sucursal en filtro de asesor
+            $sql .= " AND v.id_sucursal = 1 AND c.id_asesor IN (" . $asesores_ids. ")";
+            $sql_creditos .= " AND v.id_sucursal = 1 AND c.id_asesor IN (" . $asesores_ids. ")";
+        }else{
+            $sql .= " AND c.id_asesor IN (" . $asesores_ids. ")";
+            $sql_creditos .= " AND c.id_asesor IN (" . $asesores_ids. ")";
+        }
     }
+    /* print_r($sql_creditos);
+    die(); */
 
     // Filtra por tipo de venta si está definido
     if (!empty($tipo)) {
@@ -520,7 +528,8 @@ function informacionFiltros($con)
     $stmt->close();
 
     $data_combinada = array_merge($data, $data_creditos);
-    
+    /* print_r($sql);
+    die(); */
     $total_resultados = count($data_combinada);
     if($total_resultados > 0) {
         $estatus = true;

@@ -84,11 +84,17 @@ if (!empty($vendedor)) {
 }
 // Filtra por vendedor si está definido
 if (!empty($asesor)) {
-    
-    $asesores_ids =  implode(",", array_map(function($valor) use ($con, $sanitizacion){
-        return $sanitizacion($valor, $con);
-    }, $asesor));
-    $sql .= " AND c.id_asesor IN (" . $asesores_ids. ")";
+    //print_r($asesor);
+    //$array_ases = explode(",", $asesor);
+        $asesores_ids =  implode(",", array_map(function($valor) use ($con, $sanitizacion){
+            return $sanitizacion($valor, $con);
+        }, $asesor));
+    if($_SESSION['id_usuario']==6 || in_array(6, $asesor)){ //Usuario de aminta se bloquearan las ventas fuera de su sucursal en filtro de asesor
+        $sql .= "AND v.id_sucursal = 1 AND c.id_asesor IN (" . $asesores_ids. ")";
+
+    }else{
+        $sql .= " AND c.id_asesor IN (" . $asesores_ids. ")";
+    }
 }
 
 // Filtra por cliente si está definido

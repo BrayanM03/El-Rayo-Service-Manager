@@ -18,10 +18,10 @@ $ID->bind_result($fecha, $sucursal_id, $vendedor_id, $cliente, $telefono_cliente
 $ID->fetch();
 $ID->close();
 
-$ab = $con->prepare("SELECT fecha, hora, abono, metodo_pago, usuario FROM abonos WHERE id=?");
+$ab = $con->prepare("SELECT fecha, hora, abono, metodo_pago, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, usuario FROM abonos WHERE id=?");
 $ab->bind_param("s", $idAbono);
 $ab->execute();
-$ab->bind_result($fecha_abono, $hora_abono, $abono_recibido, $metodo_pago_abono, $usuario_abono);
+$ab->bind_result($fecha_abono, $hora_abono, $abono_recibido, $metodo_pago_abono, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $usuario_abono);
 $ab->fetch();
 $ab->close();
 
@@ -30,6 +30,11 @@ global $hora_abono;
 global $metodo_pago_abono;
 global $usuario_abono;
 global $abono_recibido;
+global $pago_efectivo;
+global $pago_tarjeta;
+global $pago_transferencia;
+global $pago_cheque;
+global $pago_sin_definir;
 
 $ID = $con->prepare("SELECT nombre, apellidos FROM usuarios WHERE id = ?");
 $ID->bind_param('i', $vendedor_id);
@@ -791,7 +796,7 @@ function cuerpoTabla(){
     $pdf->Cell(29,6,$plazos,0,0,'C',1);
     $pdf->Cell(49,6,$GLOBALS["fecha_inicio"] ,0,0,'C',1);
     $pdf->Cell(50,6,$GLOBALS["fecha_final"] ,0,0,'C',1);
-   
+    
   
     $pdf->Ln(15);
     $pdf->SetFont('Exo2-Bold','B',11);
@@ -799,7 +804,26 @@ function cuerpoTabla(){
     $pdf->Ln(7);
     $pdf->SetFont('Courier','B',11);
     $pdf->Cell(150,6,$GLOBALS["formatTotal"],0,0,'L',1);
-    $pdf->Ln(15);
+    //$pdf->Ln(15);
+
+    $pdf->Ln(6);
+    $pdf->SetFont('Exo2-Bold','B',11);
+    $pdf->Cell(30,6,'Formas de pago:',0,0,'L',1);
+    $pdf->Ln(7);
+    $pdf->SetFont('Arial','B',9);
+    $pdf->Cell(30,5,'Efectivo:',0,0,'L',1);
+    $pdf->Cell(30,5,'Tarjeta:',0,0,'L',1);
+    $pdf->Cell(35,5,'Transferencia:',0,0,'L',1);
+    $pdf->Cell(30,5,'Cheque:',0,0,'L',1);
+    $pdf->Cell(38,5,'Por definir:',0,0,'L',1);
+    $pdf->Ln(7);
+    $pdf->SetFont('Arial','',9);
+    $pdf->Cell(30,5, $GLOBALS['pago_efectivo'],0,0,'L',1);
+    $pdf->Cell(30,5,$GLOBALS['pago_tarjeta'],0,0,'L',1);
+    $pdf->Cell(35,5,$GLOBALS['pago_transferencia'],0,0,'L',1);
+    $pdf->Cell(30,5,$GLOBALS['pago_cheque'],0,0,'L',1);
+    $pdf->Cell(38,5,$GLOBALS['pago_sin_definir'],0,0,'L',1);
+    $pdf->Ln(3);
 
     $pdf->SetFont('Exo2-Bold','B',12);
     //Subtotal

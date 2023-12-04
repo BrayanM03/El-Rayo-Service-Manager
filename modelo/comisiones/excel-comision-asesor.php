@@ -272,14 +272,19 @@ if(count($comisiones['data']) > 0) {
                 }
             }
             
-            $index++;
-            $hoja_activa->setCellValue('F'.$index, 'Sumatoria creditos pagados sin serv');
-            $hoja_activa->setCellValue('G'.$index, $sumatoria_creditos);
-            $index++;
-            $comision_creditos = ($sumatoria_creditos * floatval($porcentaje_comision))/100;
-            $hoja_activa->setCellValue('F'.$index, 'Ganacia comisión creditos ('.$porcentaje_comision.'%): ');
-            $hoja_activa->setCellValue('G'.$index, $comision_creditos);
-            $hoja_activa->getStyle('F'.($index-1).':F'.$index)->getFont()->setBold(true);
+            if($bandera == 0) {
+                $sumatoria_creditos =0;
+            }else{
+                $index++;
+                $hoja_activa->setCellValue('F'.$index, 'Sumatoria creditos pagados sin serv');
+                $hoja_activa->setCellValue('G'.$index, $sumatoria_creditos);
+                $index++;
+                $comision_creditos = ($sumatoria_creditos * floatval($porcentaje_comision))/100;
+                $hoja_activa->setCellValue('F'.$index, 'Ganacia comisión creditos ('.$porcentaje_comision.'%): ');
+                $hoja_activa->setCellValue('G'.$index, $comision_creditos);
+                $hoja_activa->getStyle('F'.($index-1).':F'.$index)->getFont()->setBold(true);  
+            }
+            
 
             $index+=2;
             $sumatoria_total = $sumatoria_ventas + $sumatoria_creditos;
@@ -510,13 +515,17 @@ function informacionFiltros($con)
 
     if (!empty($asesor)) {
         $array_ases = explode(",", $asesor);
-        $asesores_ids =  implode(",", array_map(function($valor) use ($con, $sanitizacion){
-            return $sanitizacion($valor, $con);
-        }, $array_ases));
-        $sql .= " AND c.id_asesor IN (" . $asesores_ids. ")";
-        $sql_creditos .= " AND c.id_asesor IN (" . $asesores_ids. ")";
+            $asesores_ids =  implode(",", array_map(function($valor) use ($con, $sanitizacion){
+                return $sanitizacion($valor, $con);
+            }, $array_ases));
+        if($_SESSION['id_usuario']==6 || in_array(6, $array_ases)){ //Usuario de aminta se bloquearan las ventas fuera de su sucursal en filtro de asesor
+            $sql .= " AND v.id_sucursal = 1 AND c.id_asesor IN (" . $asesores_ids. ")";
+            $sql_creditos .= " AND v.id_sucursal = 1 AND c.id_asesor IN (" . $asesores_ids. ")";
+        }else{
+            $sql .= " AND c.id_asesor IN (" . $asesores_ids. ")";
+            $sql_creditos .= " AND c.id_asesor IN (" . $asesores_ids. ")";
+        }
     }
-
     // Filtra por tipo de venta si está definido
     if (!empty($tipo)) {
         $array_tipo = explode(",", $tipo);
