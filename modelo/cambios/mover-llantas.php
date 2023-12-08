@@ -45,10 +45,10 @@ if(isset($_POST)){
                                                      fecha, 
                                                      hora, 
                                                      usuario,
-                                                     tipo, sucursal, estatus) VALUES(null, ?,?,?,?,?,?,?,?)";
+                                                     tipo, sucursal, estatus, id_usuario) VALUES(null, ?,?,?,?,?,?,?,?,?)";
                 $result = $con->prepare($insertar);
-                $result->bind_param('ssssssss',$descripcion_movimiento, $total_llantas,
-                                                $fecha, $hora, $nombre_completo_usuario, $tipo, $sucursal_id, $estatus_movimiento);
+                $result->bind_param('sssssssss',$descripcion_movimiento, $total_llantas,
+                                                $fecha, $hora, $nombre_completo_usuario, $tipo, $sucursal_id, $estatus_movimiento, $id_usuario);
                                                 
                 $result->execute();
                 $result->close();

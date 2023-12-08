@@ -3,7 +3,9 @@ session_start();
 include '../conexion.php';
 $con= $conectando->conexion(); 
 date_default_timezone_set("America/Matamoros");
-
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 if (!isset($_SESSION['id_usuario'])) {
     header("Location:../../login.php");
 }
@@ -23,6 +25,7 @@ if(isset($_POST)){
     $id_bodega =0;
     $folio_factura = $_POST['folio_factura'];
     $id_proveedor = $_POST['id_proveedor'];
+    $estado_movimiento = $_POST['estado_movimiento'];
     $tipo = 2; //categoria tipo ingreso
 
     //Trayendo codigo y nombre de sucursal destino
@@ -38,18 +41,23 @@ if(isset($_POST)){
     if($id_proveedor ==0){
         $response = array('mensaje'=> 'Selecciona un proveedor', "estatus"=>false);
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
-    }else if($folio_factura ==''){
+    }else if($folio_factura =='' && $estado_movimiento !=1){
         $response = array('mensaje'=> 'Ingresa un folio', "estatus"=>false);
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
     }else{
 
-        $consultar = "SELECT COUNT(*) FROM movimientos WHERE proveedor_id = ? AND folio_factura = ?";
-        $result = $con->prepare($consultar);
-        $result->bind_param('is', $id_proveedor, $folio_factura);
-        $result->execute();
-        $result->bind_result($movimientos_duplicados);
-        $result->fetch();
-        $result->close();
+        if($estado_movimiento ==1){
+            $movimientos_duplicados =0;
+        }else{
+            $consultar = "SELECT COUNT(*) FROM movimientos WHERE proveedor_id = ? AND folio_factura = ?";
+            $result = $con->prepare($consultar);
+            $result->bind_param('is', $id_proveedor, $folio_factura);
+            $result->execute();
+            $result->bind_result($movimientos_duplicados);
+            $result->fetch();
+            $result->close();
+        }
+        
     
     if($movimientos_duplicados >0){
         $response = array('mensaje'=> 'El folio ingresado ya existe', "estatus"=>false);
@@ -79,10 +87,10 @@ if(isset($_POST)){
                                                          fecha, 
                                                          hora, 
                                                          usuario,
-                                                         tipo, sucursal, proveedor_id, folio_factura, estatus) VALUES(null, ?,?,?,?,?,?,?,?,?, 'Pendiente')";
+                                                         tipo, sucursal, proveedor_id, folio_factura, estatus, id_usuario, estado_factura) VALUES(null, ?,?,?,?,?,?,?,?,?, 'Pendiente', ?,?)";
                     $result = $con->prepare($insertar);
-                    $result->bind_param('sssssssis',$descripcion_movimiento, $total_llantas,
-                                                    $fecha, $hora, $nombre_completo_usuario, $tipo, $sucursal_id, $id_proveedor, $folio_factura);
+                    $result->bind_param('sssssssisss',$descripcion_movimiento, $total_llantas,
+                                                    $fecha, $hora, $nombre_completo_usuario, $tipo, $sucursal_id, $id_proveedor, $folio_factura, $id_usuario, $estado_movimiento);
                                                     
                     $result->execute();
                     $id_movimiento = $con->insert_id;
@@ -92,13 +100,15 @@ if(isset($_POST)){
         
         $traer_cambios= mysqli_query($con, "SELECT * FROM detalle_cambio WHERE id_usuario = $id_usuario");
         $mercancia ="";
+        $costo_sumatoria = 0;
         while ($rows = $traer_cambios->fetch_assoc()) {
             $id_llanta = $rows["id_llanta"];
             $id_ubicacion = $rows["id_ubicacion"];
             $id_destino = $rows["id_destino"];
             $cantidad = $rows["cantidad"];
             $id_usuario = $rows["id_usuario"];
-    
+            $costo = $rows["costo"];
+            $costo_sumatoria += $costo;
             //Comprobar si esa llanta se encuentra en el inventario destino
             $comprobar = "SELECT COUNT(*) FROM inventario WHERE id_sucursal = ? AND id_Llanta = ?";
             $result = $con->prepare($comprobar);
@@ -153,9 +163,10 @@ if(isset($_POST)){
                     aprobado_receptor,
                     aprobado_emisor,
                     usuario_emisor,
-                    usuario_receptor) VALUES(null, ?,?,?,?,?,?,0,0,?,0,0,0,?,?)";
+                    usuario_receptor,
+                    costo) VALUES(null, ?,?,?,?,?,?,0,0,?,0,0,0,?,?,?)";
                     $result = $con->prepare($insertar);
-                    $result->bind_param('sssssssss',$id_llanta, $id_bodega, $id_destino, $cantidad, $id_usuario, $id_movimiento, $cantidad, $id_usuario, $id_usuario);
+                    $result->bind_param('ssssssssss',$id_llanta, $id_bodega, $id_destino, $cantidad, $id_usuario, $id_movimiento, $cantidad, $id_usuario, $id_usuario, $costo);
                     $result->execute();
                     $result->close();
                 
@@ -202,9 +213,10 @@ if(isset($_POST)){
                     aprobado_receptor,
                     aprobado_emisor,
                     usuario_emisor,
-                    usuario_receptor) VALUES(null, ?,?,?,?,?,?,0,0,?,?,0,0,?,?)";
+                    usuario_receptor,
+                    costo) VALUES(null, ?,?,?,?,?,?,0,0,?,?,0,0,?,?,?)";
                     $result = $con->prepare($insertar);
-                    $result->bind_param('ssssssssss',$id_llanta, $id_bodega, $id_destino, $cantidad, $id_usuario, $id_movimiento, $stock_destino_actual, $stock_destino_anterior, $id_usuario, $id_usuario);
+                    $result->bind_param('sssssssssss',$id_llanta, $id_bodega, $id_destino, $cantidad, $id_usuario, $id_movimiento, $stock_destino_actual, $stock_destino_anterior, $id_usuario, $id_usuario, $costo);
                     $result->execute();
                     $result->close();
     
@@ -213,9 +225,9 @@ if(isset($_POST)){
             
         }
     
-        $update = "UPDATE movimientos SET mercancia = ? WHERE id = ?";
+        $update = "UPDATE movimientos SET mercancia = ?, total = ? WHERE id = ?";
         $respp = $con->prepare($update);
-        $respp->bind_param('ss', $mercancia, $id_movimiento);
+        $respp->bind_param('sss', $mercancia, $costo_sumatoria, $id_movimiento);
         $respp->execute();
         $respp->close();
     

@@ -17,7 +17,7 @@ toastr.options = {
   } 
   
   
-      $("#proveedor").on("change", function (e) {
+      $("#proveedor").on("change", function (e) { 
   
            if($(this).val() == 0){
               $("#buscador").empty();
@@ -178,7 +178,14 @@ toastr.options = {
           templateResult: formatRepo,
           templateSelection: formatRepoSelection
     })//.maximizeSelect2Height();
-  
+      
+      $('#estado-movimientos').on('change', function(e){
+        if($(this).val() ==1){
+          $('#folio-factura').prop('disabled',true);
+        }else{
+          $('#folio-factura').prop('disabled',false);
+        }
+      })
   
       function formatRepo (repo) {
           
@@ -210,17 +217,6 @@ toastr.options = {
         }
   
       function formatRepoSelection (repo) {
-          //A partir de aqui puedes agregar las llantas Brayan
-         // ruta = "./src/img/logos/" + repo.marca + ".jpg";
-          $.ajax({
-            type: "method",
-            url: "url",
-            data: "data",
-            dataType: "dataType",
-            success: function (response) {
-              
-            }
-          });
           
           $("#stock_actual").val(repo.Stock);
           $("#btn-mover").attr("id_item", repo.id);
@@ -231,24 +227,13 @@ toastr.options = {
           $("#btn-mover").removeClass('disabled');
 
           validador();
-        /*$("#btn-agregar").attr("descripcion", repo.descripcion);
-          $("#btn-agregar").attr("modelo", repo.modelo);
-          $("#btn-agregar").attr("marca", repo.marca);
-          $("#btn-agregar").attr("costo", repo.costo);
-          $("#btn-agregar").attr("precio", repo.precio);
-          $("#precio").val(repo.precio); */
-         /* $("#ancho-agregado").text(repo.ancho);
-          $("#alto-agregado").text(repo.alto);
-          $("#rin-agregado").text(repo.rin);
-          $("#modelo-agregado").text(repo.modelo);
-          $("#marca-agregado").text(repo.marca);
-          $(".logo-marca-agregada").attr("src", ruta);
   
-          $("#costo-agregado").text(repo.costo);
-          $("#precio-agregado").text(repo.precio);
-          $("#mayoreo-agregado").text(repo.mayoreo);*/
-          //$("#mayoreo-agregado").fadeIn(400)
-         
+          $("#costo-actual").val(repo.precio_Inicial);
+          $("#precio-actual").val(repo.precio_Venta);
+          $("#mayoreo-actual").val(repo.precio_Mayoreo);
+          $("#costo-actual").attr('costo',repo.precio_Inicial);
+          $("#precio-actual").attr('precio',repo.precio_Venta);
+          $("#mayoreo-actual").attr('mayoreo',repo.precio_Mayoreo);
   
           return repo.text || repo.Descripcion;
         }
@@ -271,43 +256,45 @@ toastr.options = {
     hasDisabled = $("#btn-mover").hasClass("disabled");
     
     if(hasDisabled == false){
-  
-      let sucursal_remitente = $("#btn-mover").attr('id_sucursal');
-      let sucursal_destino = $("#btn-mover").attr('id_sucursal');
-      let cantidad = $("#stock").val();
-      let id_llanta = $("#btn-mover").attr("id_item");
-      let id_usuario = $("#btn-mover").attr("id_usuario");
-      if(cantidad > 0){
-        $.ajax({
-          type: "POST",
-          url: "./modelo/inventarios/agregar-mercancia-detalle.php",
-          data: {"sucursal_remitente": sucursal_remitente,
-                 "cantidad": cantidad, "sucursal_destino": sucursal_destino, "id_llanta": id_llanta, "id_usuario": id_usuario},
-          dataType: "JSON",
-          success: function (response) {
-           
-             estatus = response.estatus;
-             switch (estatus) {
-               case "success":
-                toastr.success(response.mensaje, 'Respuesta' );
-               break;
-               case "error":
-                toastr.error(response.mensaje, 'Respuesta' );
-               break;
-               case "warning":
-                toastr.warning(response.mensaje, 'Respuesta' );
-               break;
-               case "info":
-                toastr.info(response.mensaje, 'Respuesta' );
-               break;
-             } 
-             traerDetalleCambio();
-        
+      
+      let costo_actual = $("#costo-actual").attr('costo');
+      let precio_actual = $("#precio-actual").attr('precio');
+      let mayoreo_actual = $("#mayoreo-actual").attr('mayoreo');
+      let costo_= $("#costo-actual").val();
+      let precio_= $("#precio-actual").val();
+      let mayoreo_= $("#mayoreo-actual").val();
+      let id_llanta =  $("#btn-mover").attr("id_item")
+      if(costo_actual != costo_ || precio_actual != precio_ ||  mayoreo_actual != mayoreo_) {
+        Swal.fire({
+          icon: 'question',
+          html: `¿Quieres actualizar los precios de esta llanta en el catalogo?`,
+          showCancelButton: true,
+          confirmButtonText: 'Actualizar',
+          cancelButtonText: 'No',
+        }).then((r)=>{
+          if(r.isConfirmed) {
+            $.ajax({
+              type: "post",
+              url: "./modelo/inventarios/actualizar-precios.php",
+              data: {'costo':costo_, 'precio': precio_, 'mayoreo': mayoreo_, 'id_llanta': id_llanta},
+              dataType: "JSON",
+              success: function (response) {
+                if(response.estatus){
+                   $("#costo-actual").attr('costo', response.costo);
+                   $("#precio-actual").attr('precio', response.precio);
+                   $("#mayoreo-actual").attr('mayoreo', response.mayoreo);
+                  agregarLlantasTablaPremovimiento(response.mensaje)
+                }}
+            });
+          }else{
+           $("#costo-actual").val(costo_actual);
+           $("#precio-actual").val(precio_actual);
+           $("#mayoreo-actual").val(mayoreo_actual);
+           agregarLlantasTablaPremovimiento()
           }
-          });
+        })
       }else{
-
-        toastr.error("La cantidad no puede ser igual o menor que 0", 'Error' );
+        agregarLlantasTablaPremovimiento()
       }
      
     }else{
@@ -316,6 +303,45 @@ toastr.options = {
   
   }   
   
+  function agregarLlantasTablaPremovimiento(mensaje=''){
+    let sucursal_remitente = $("#btn-mover").attr('id_sucursal');
+    let sucursal_destino = $("#btn-mover").attr('id_sucursal');
+    let cantidad = $("#stock").val();
+    let id_llanta = $("#btn-mover").attr("id_item");
+    let id_usuario = $("#btn-mover").attr("id_usuario");
+    let costo_= $("#costo-actual").val();
+    if(cantidad > 0){
+      $.ajax({
+        type: "POST",
+        url: "./modelo/inventarios/agregar-mercancia-detalle.php",
+        data: {"sucursal_remitente": sucursal_remitente,
+               "cantidad": cantidad, "sucursal_destino": sucursal_destino, "id_llanta": id_llanta, "id_usuario": id_usuario, 'costo': costo_},
+        dataType: "JSON",
+        success: function (response) {
+         
+           estatus = response.estatus;
+           switch (estatus) {
+             case "success":
+              toastr.success(response.mensaje + ' ' + mensaje, 'Respuesta' );
+             break;
+             case "error":
+              toastr.error(response.mensaje, 'Respuesta' );
+             break;
+             case "warning":
+              toastr.warning(response.mensaje, 'Respuesta' );
+             break;
+             case "info":
+              toastr.info(response.mensaje, 'Respuesta' );
+             break;
+           } 
+           traerDetalleCambio();
+        }
+        });
+    }else{
+
+      toastr.error("La cantidad no puede ser igual o menor que 0", 'Error' );
+    }
+  }
   
   /*function comprobarStock(){
     let stock = $("#stock").val();
@@ -402,29 +428,35 @@ toastr.options = {
           `);
   
           $("#btn-mov").removeClass().addClass("btn btn-success disabled");
+          $('#sumatoria-mercancia').empty().text('$0.00')
+          $('#cantidad_piezas').val(0);
         }else{
           $contador = 1;
-  
+          let importe_total = 0;
           $("#cuerpo_detalle_cambio").empty();  
           response.forEach(element => {
           cantidad_piezas += parseInt(element.cantidad)
-          console.log(cantidad_piezas);
           $("#cuerpo_detalle_cambio").append(`
   
-          <a href="#" class="list-group-item list-group-item-action text-center">
+          <a href="#" class="list-group-item list-group-item-action">
               <div class="row">
                 <div class="col-12 col-md-1">${$contador}</div>
-                <div class="col-12 col-md-4">${element.descripcion}</div>
+                <div class="col-12 col-md-3">${element.descripcion}</div>
+                <div class="col-12 col-md-1">${element.costo}</div>
                 <div class="col-12 col-md-2">${element.sucursal_remitente}</div>
                 <div class="col-12 col-md-2">${element.sucursal_destino}</div>
-                <div class="col-12 col-md-2">${element.cantidad}</div>
+                <div class="col-12 col-md-1">${element.cantidad}</div>
+                <div class="col-12 col-md-1">${element.importe_ft}</div>
                 <div class="col-12 col-md-1"><div class="btn btn-danger" onclick="eliminarLlanta(${element.id})" id="${element.id}"><i class="fas fa-trash"></i></div></div>    
               </div>
           </a>
           `);
+          importe_total += parseFloat(element.importe);
+          importe_total_ft = new Intl.NumberFormat('en-IN').format(importe_total)
           });
           $("#btn-mov").removeClass().addClass("btn btn-success");
           $("#cantidad_piezas").val(cantidad_piezas);
+          $('#sumatoria-mercancia').empty().text('$'+(importe_total_ft))
         }
   
       }
@@ -495,10 +527,18 @@ toastr.options = {
       let folio_factura = $('#folio-factura').val();
       let proveedor = $('#proveedor').val();
       let id_sucursal = $('#btn-mover').attr('id_sucursal');
-      if(folio_factura.trim() == ''){
-        toastr.error('Ingresa una factura', 'Respuesta' );
-        return false;
+      let estado_movimiento = $('#estado-movimientos').val();
+      if(estado_movimiento == null ||  estado_movimiento == '' || estado_movimiento == undefined){
+        toastr.error('Selecciona un tipo de factura', 'Respuesta' );
+          return false;
       }
+      if(estado_movimiento!=1){
+        if(folio_factura.trim() == ''){
+          toastr.error('Ingresa una factura', 'Respuesta' );
+          return false;
+        }
+      }
+      
       if(proveedor == 0){
         toastr.error('Selecciona un proveedor', 'Respuesta' );
         return false;
@@ -507,7 +547,7 @@ toastr.options = {
       $.ajax({
           type: "POST",
           url: "./modelo/inventarios/ingresar-mercancia.php",
-          data: {"id_usuario": id_user, 'id_proveedor': proveedor, 'folio_factura':folio_factura, 'id_sucursal': id_sucursal},
+          data: {"id_usuario": id_user, 'id_proveedor': proveedor, 'folio_factura':folio_factura, 'id_sucursal': id_sucursal, estado_movimiento},
           dataType: "JSON",
           success: function (response) {
   

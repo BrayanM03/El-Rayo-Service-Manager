@@ -91,16 +91,17 @@ if (isset($_POST)) {
 
  $fecha = date("Y-m-d");   
  $hora =date("h:i a");   
+ $id_usuario = $_SESSION["id_usuario"]; 
  $usuario = $_SESSION["nombre"] . " " . $_SESSION["apellidos"];
  $descripcion_movimiento = "Se actualizó el stock del inventario de " . $sucursal . ", " . $palabra . ".
  Stock anterior: " . $stock_actual_s . " - Stock actual: ". $stock_total;
 
 //Registramos el movimiento
  $tipo = 3;
- $insertar_movimi = "INSERT INTO movimientos(id, descripcion, mercancia, fecha, hora, usuario, tipo, sucursal)
- VALUES(null,?,?,?,?,?,?,?)";
+ $insertar_movimi = "INSERT INTO movimientos(id, descripcion, mercancia, fecha, hora, usuario, tipo, sucursal, id_usuario)
+ VALUES(null,?,?,?,?,?,?,?,?)";
  $resultado = $con->prepare($insertar_movimi);                     
- $resultado->bind_param('sssssss', $descripcion_movimiento, $descripcion_llanta, $fecha, $hora, $usuario, $tipo, $sucursal_id);
+ $resultado->bind_param('ssssssss', $descripcion_movimiento, $descripcion_llanta, $fecha, $hora, $usuario, $tipo, $sucursal_id, $id_usuario);
  $resultado->execute();
  $resultado->close();  
 

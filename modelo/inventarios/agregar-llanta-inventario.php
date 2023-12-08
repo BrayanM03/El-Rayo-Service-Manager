@@ -18,6 +18,7 @@
         
         $codigo =  $_POST["code"];
         $stock = $_POST["stock"];
+        $id_usuario = $_SESSION["id_usuario"]; 
         $sucursal_id = $_POST["sucursal_id"];
 
         if ($codigo == "") {
@@ -80,10 +81,10 @@
                 }
     
              //Registramos el movimiento
-                $insertar_movimi = "INSERT INTO movimientos(id, descripcion, mercancia, fecha, hora, usuario)
-                VALUES(null,?,?,?,?,?)";
+                $insertar_movimi = "INSERT INTO movimientos(id, descripcion, mercancia, fecha, hora, usuario, id_usuario)
+                VALUES(null,?,?,?,?,?,?)";
                 $resultado = $con->prepare($insertar_movimi);                     
-                $resultado->bind_param('sssss', $descripcion_movimiento, $descripcion_llanta, $fecha, $hora, $usuario);
+                $resultado->bind_param('ssssss', $descripcion_movimiento, $descripcion_llanta, $fecha, $hora, $usuario, $id_usuario);
                 $resultado->execute();
                 $resultado->close(); 
                 

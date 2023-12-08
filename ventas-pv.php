@@ -29,7 +29,7 @@
  
 	
 
-    <title>Ventas totales</title>
+    <title>Ventas totales | El Rayo Service Manager</title>
 
     <!-- Custom fonts for this template-->
     <link rel="stylesheet" href="src/css/inventario.css">

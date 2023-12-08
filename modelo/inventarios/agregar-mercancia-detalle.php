@@ -7,13 +7,17 @@ $con= $conectando->conexion();
 if (!isset($_SESSION['id_usuario'])) {
     header("Location:../../login.php");
 }
-
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 if($_POST){
     $sucursal_remitente = $_POST['sucursal_remitente'];
     $sucursal_destino = $_POST['sucursal_destino']; 
     $cantidad = $_POST['cantidad'];
     $id_llanta = $_POST['id_llanta'];
     $id_usuario = $_POST['id_usuario'];
+    $costo = $_POST['costo'];
+    $importe = $costo * $cantidad;
 
     /* $comprobar = "SELECT COUNT(*) FROM inventario WHERE id_Llanta = ? AND id_sucursal =?";
     $r= $con->prepare($comprobar);
@@ -56,10 +60,11 @@ if($_POST){
 
                 
                 $nueva_cantidad= intval($cantidad_actual) + intval($cantidad);
+                $nuevo_importe= $nueva_cantidad * $costo;
 
-                    $update= "UPDATE detalle_cambio SET cantidad = ? WHERE id_llanta =? AND id_ubicacion = ? AND id_destino =? AND id_usuario = ?";
+                    $update= "UPDATE detalle_cambio SET cantidad = ?, importe = ? WHERE id_llanta =? AND id_ubicacion = ? AND id_destino =? AND id_usuario = ?";
                     $res = $con->prepare($update);
-                    $res->bind_param('iiiii', $nueva_cantidad, $id_llanta, $sucursal_remitente, $sucursal_destino, $id_usuario);
+                    $res->bind_param('idiiii', $nueva_cantidad, $nuevo_importe, $id_llanta, $sucursal_remitente, $sucursal_destino, $id_usuario);
                     $res->execute();
                     $res->close();
     
@@ -68,9 +73,9 @@ if($_POST){
                 
             }else{
 
-            $comprobar= "INSERT INTO detalle_cambio(id, id_llanta, id_ubicacion, id_destino, cantidad, id_usuario) VALUES(null, ?,?,?,?,?)";
+            $comprobar= "INSERT INTO detalle_cambio(id, id_llanta, id_ubicacion, id_destino, cantidad, id_usuario, costo, importe) VALUES(null, ?,?,?,?,?,?,?)";
             $res = $con->prepare($comprobar);
-            $res->bind_param('iiiii', $id_llanta, $sucursal_remitente, $sucursal_destino, $cantidad, $id_usuario);
+            $res->bind_param('iiiiidd', $id_llanta, $sucursal_remitente, $sucursal_destino, $cantidad, $id_usuario, $costo, $importe);
             $res->execute();
             $res->close();
 

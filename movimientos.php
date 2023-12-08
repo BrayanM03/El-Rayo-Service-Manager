@@ -28,7 +28,7 @@
  
 	
 
-    <title>Movimientos</title>
+    <title>Movimientos | El Rayo Service Manager</title>
 
     <!-- Custom fonts for this template-->
     <link rel="stylesheet" href="src/css/inventario.css">
@@ -39,6 +39,7 @@
 
     <!-- Custom styles for this template-->
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
+    <script src="src/js/vue.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="src/vendor/datatables/dataTables.bootstrap4.css">
     <link rel="stylesheet" href="src/vendor/datatables-responsive/css/responsive.bootstrap4.min.css">
@@ -50,14 +51,17 @@
     <link rel="stylesheet" href="src/vendor/bower_components/select2-bootstrap-theme/dist/select2-bootstrap.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.bootstrap4.min.css">
+    <link href="src/css/bootstrap-select.min.css" rel="stylesheet" />
+
     <!---Librerias de estilos-->
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="src/css/menu-vertical.css" rel="stylesheet">
+    <link href="src/css/filtros.css" rel="stylesheet">
    
 
 </head>
 
-<body id="page-top"> 
+<body id="page-top">  
 
     <!-- Page Wrapper -->
     <div id="wrapper">
@@ -80,29 +84,15 @@
 
 
                 <!-- Begin Page Content style="display: flex; justify-content: center; align-items:center; flex-direction:column" -->
-                <div class="containe" style="width:90%; margin:auto;"> 
+                <div class="d-none" id="titulo-hv" sucursal="<?php echo $_SESSION['sucursal']?>" id_sucursal="<?php echo $_SESSION['id_sucursal']?>" rol="<?php echo $_SESSION['rol'] ?>" id_usuario="<?php echo $_SESSION['id_usuario'] ?>"  nombre_usuario="<?php echo $_SESSION['nombre'] . ' ' . $_SESSION['apellidos'] ?>"></div>
 
-                     <!-- Contenido inventario -->
-                     <div class="titulo-inventario" style="margin: 0px auto 40px auto;">
-                         <h5 style="margin: 10px 0px;">Movimientos de inventario</h5>
-                         <p style="color: gray;">En este apartado puedes ver los movimientos que hacen los usuarios en el sistema.</p>
-                        </div>
+                <div class="containe" style="width:90%; margin:auto;">
                         
-                     <!--  <div class="botones">
-                                    <a href="#" class="btn btn-success btn-icon-split" onclick="agregarLLanta();">
-                                        <span class="icon text-white-50">
-                                            <i class="fas fa-check-circle"></i>
-                                        </span>
-                                        <span class="text">Agregar llanta</span>
-                                    </a>
-                                  
-                      </div> -->
-                      <table id="movimientos"  class="table table-striped table-bordered table-hover mt-5">                   
-                     </table>
+                    <div id="filter-movimientos-container" v-cloak>
+                    </div>
 
-                     
-                   
-
+                    <table id="movimientos"  class="table table-striped table-bordered table-hover mt-5">                   
+                    </table>
                 </div>
             <!-- End of Main Content -->
   <!-- Footer -->
@@ -186,6 +176,9 @@
      <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
      <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script> 
      <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.colVis.min.js"></script>
+    <script src="src/js/bootstrap-select.min.js"></script>
+    <script src="./components/filtros-movimientos.module.js" type="text/javascript"></script>
+    <script src="src/js/filtros.js"></script>
     <script src="src/js/movimientos.js"></script>
     <script>
 ocultarSidebar();

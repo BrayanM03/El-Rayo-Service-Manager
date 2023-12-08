@@ -23,7 +23,7 @@ $fecha = date('Y-m-d');
 if(isset($_POST)) {
     $id_venta = $_POST["id_venta"];
     $motivo = $_POST["motivo_cancel"];
-$id_sesion = $_SESSION['id_usuario'];
+    $id_sesion = $_SESSION['id_usuario'];
     //Conseguir susucusal
 
     $obtenerSuc = "SELECT id_sucursal, sucursal, estatus FROM ventas WHERE id LIKE ?";
@@ -55,10 +55,10 @@ $id_sesion = $_SESSION['id_usuario'];
             $nombre_usuario = $_SESSION['nombre'] . ' ' . $_SESSION['apellidos'];
             $tipo = 3;
             $pend = 'Pendiente';
-            $insert = "INSERT INTO movimientos (fecha, hora, usuario, tipo, sucursal, estatus)
-          VALUES(?,?,?,?,?,?)";
+            $insert = "INSERT INTO movimientos (fecha, hora, usuario, tipo, sucursal, estatus, id_usuario)
+          VALUES(?,?,?,?,?,?,?)";
             $ress = $con->prepare($insert);
-            $ress->bind_param('ssssss', $fecha, $hora, $nombre_usuario, $tipo, $sucursal, $pend);
+            $ress->bind_param('sssssss', $fecha, $hora, $nombre_usuario, $tipo, $sucursal, $pend, $id_sesion);
             $ress->execute();
             $movimiento_id = $con->insert_id;
             $ress->close();

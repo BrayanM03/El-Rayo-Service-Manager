@@ -41,16 +41,17 @@ $id_usuario = $_SESSION["id_usuario"];
       $descripcion_movimiento = "Se borró una llanta de la base de datos del catalogo.";
        
       $fecha = date("Y-m-d");   
-      $hora =date("h:i a");   
+      $hora =date("h:i a");  
+      $id_usuario = $_SESSION["id_usuario"]; 
       $usuario = $_SESSION["nombre"] . " " . $_SESSION["apellidos"];
 
       $tipo = 5; //Borrado de llanta del catalogo
       $sucursal = "No aplica";
     //Registramos el movimiento
-       $insertar_movimi = "INSERT INTO movimientos(id, descripcion, mercancia, fecha, hora, usuario, tipo, sucursal)
-       VALUES(null,?,?,?,?,?,?,?)";
+       $insertar_movimi = "INSERT INTO movimientos(id, descripcion, mercancia, fecha, hora, usuario, tipo, sucursal, id_usuario)
+       VALUES(null,?,?,?,?,?,?,?,?)";
        $resultado = $con->prepare($insertar_movimi);                     
-       $resultado->bind_param('sssssss', $descripcion_movimiento, $descripcion_llanta, $fecha, $hora, $usuario, $tipo, $sucursal);
+       $resultado->bind_param('ssssssss', $descripcion_movimiento, $descripcion_llanta, $fecha, $hora, $usuario, $tipo, $sucursal, $id_usuario);
        $resultado->execute();
        $resultado->close(); 
 

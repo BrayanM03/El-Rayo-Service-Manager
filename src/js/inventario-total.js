@@ -112,7 +112,7 @@ $(document).ready(function() {
                 return meta.row + meta.settings._iDisplayStart + 1; // Display row number
             }
         },
-        { targets: [8], orderable: false }
+       /*  { targets: [8], orderable: false } */
         // Add more column definitions as needed
     ],
       paging: true,
@@ -125,8 +125,8 @@ $(document).ready(function() {
       info: true,
       dom: 'Blfrtip',
       responsive: true,
-      order: [7, "desc"],
-      lengthChange: false,
+      order: [1, "desc"],
+      lengthChange: true,
       buttons: [
         'copy', 'csv', {
           'extend':'excel',
