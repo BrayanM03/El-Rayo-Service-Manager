@@ -210,8 +210,8 @@ function procesarFiltrosMovimientos(){
     var tabla = $('#movimientos');
     let fecha_inicial = $("#filtro-fecha-inicial").val()
     let fecha_final = $("#filtro-fecha-final").val()
-    let sucursal = $("#buscador-sucursal").val()
-    let vendedor = $("#buscador-vendedor").val()
+    let sucursal_ubicacion = $("#sucursal-ubicacion").val()
+    let sucursal_destino = $("#sucursal-destino").val()
     let folio = $("#filtro-folio").val()
     let factura = $("#filtro-factura").val()
     let marca_llanta = $("#buscador-marcas").val() //Multiple values
@@ -221,7 +221,7 @@ function procesarFiltrosMovimientos(){
     let filtro_tipo = $("#filtro-tipo").val() //Multiple values
     let filtro_estatus = $("#filtro-estatus").val() //Multiple values
     let filtro_proveedor = $("#buscador-proveedor").val() //Multiple values
-
+    let filtro_estado = $("#filtro-estado").val() //
     table.destroy()
     if ($.fn.DataTable.isDataTable( '#movimientos' ) ) {
         tabla.destroy();
@@ -235,12 +235,11 @@ function procesarFiltrosMovimientos(){
     $.ajax({
         type: "post",
         url: "./modelo/filtros/aplicar-filtro-movimientos.php",
-        data: {folio, factura, fecha_final, fecha_inicial, sucursal, vendedor, marca_llanta, ancho_llanta, alto_llanta, rin_llanta, filtro_estatus, filtro_tipo, filtro_proveedor},
+        data: {folio, factura, fecha_final, fecha_inicial, sucursal_ubicacion, sucursal_destino, marca_llanta, ancho_llanta, alto_llanta, rin_llanta, filtro_estatus, filtro_tipo, filtro_proveedor, filtro_estado},
         dataType: "JSON",
         success: function (response) {
 
             if(response.estatus){
-                
                 //Conversion de arreglo de objectos a arreglos de arrays
                 response.data = response.data.length == 0 ? [] : response.data;
                 const data_convertida = response.data.map(objeto => [
@@ -250,6 +249,7 @@ function procesarFiltrosMovimientos(){
                     objeto.mercancia,
                     objeto.nombre,
                     objeto.folio_factura,
+                    objeto.estado_factura,
                     objeto.fecha,
                     objeto.tipo,
                     objeto.estatus,
@@ -282,6 +282,22 @@ function procesarFiltrosMovimientos(){
                     return prov;
                   }},
                 { title: 'Factura'},
+                { title: 'Estado fact.', render(data, row) {
+                  if(data == 1){
+                    tipo = 'Movimiento';
+                  }else if(data == 2){
+                    tipo = 'Ingreso';
+                  }else if(data == 3){
+                    tipo = 'Retiro';
+                  }else if(data == 4){
+                    tipo = 'Ingreso';
+                  }else if(data == 5){
+                    tipo = 'Borrado';
+                  }else{
+                    tipo = data;
+                  }
+                  return tipo;
+                }},
                 { title: 'Fecha'},
                 { title: "Tipo", render(data, row) {
                     if(data == 1){
@@ -305,22 +321,21 @@ function procesarFiltrosMovimientos(){
                     data: null,
                     className: "celda-acciones",
                     render: function (row, data) {
-                        console.log(row);
-                        if(row[8]=='Completado'){
+                        if(row[9]=='Completado'){
                         class_btn_check = 'btn-secondary disabled';
                         candado ='ss';
                         }else{
                         candado = '';
                         class_btn_check = 'btn-success';
                         }
-                        if(row[7] == 1 || row[7] ==3 || row[7] ==4){
+                        if(row[8] == 1 || row[8] ==3 || row[8] ==4){
                         return `
                         <div style="display:flex;">
                             <div class="btn btn-danger mr-2" onclick="remisionSalida(${row[1]})"><i class="fas fa-file-pdf"></i></div>
                             <div class="btn ${class_btn_check}" onclic${candado}k="AprobarMovimiento(${row[1]})"><i class="fas fa-check" disabled></i></div>
                         </div>
                             `;
-                        }else if(row[7] ==2){
+                        }else if(row[8] ==2){
                         return `
                         <div style="display:flex;">
                             <div class="btn btn-danger mr-2" onclick="remisionIngreso(${row[1]})"><i class="fas fa-file-pdf"></i></div>

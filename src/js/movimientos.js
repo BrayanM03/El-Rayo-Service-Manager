@@ -28,6 +28,18 @@ table = $('#movimientos').DataTable({
       return prov;
     }},
     { title: 'factura',        data: 9, visible:true},
+    { title: 'Estado fact.', data:11, render(data, row) {
+      if(data == 1){
+        estado_factura_ = 'Sin factura';
+      }else if(data == 2){
+        estado_factura_ = 'Factura completa';
+      }else if(data == 3){
+        estado_factura_ = 'Factura incompleta';
+      }else{
+        estado_factura_ = 'No aplica'
+      }
+      return estado_factura_;
+    }},
     { title: "fecha",          data: 3 },
     { title: "hora",           data: 4 },
     { title: "tipo",           data: 6, render(data, row) {

@@ -40,6 +40,7 @@ $columns = array(
 	array( 'db' => 'nombre', 'dt' => 8 ),
 	array( 'db' => 'folio_factura', 'dt' => 9 ),
 	array( 'db' => 'estatus', 'dt' => 10 ),
+	array( 'db' => 'estado_factura', 'dt' => 11 ),
 	
 /* 	array(
 		'db'        => 'start_date',

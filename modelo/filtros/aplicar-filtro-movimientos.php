@@ -17,8 +17,8 @@ $sanitizacion = function($valor, $con){
 
 $fecha_inicial = empty($_POST['fecha_inicial']) ? '' : $_POST['fecha_inicial'];
 $fecha_final = empty($_POST['fecha_final']) ? '' : $_POST['fecha_final'];
-$sucursal = empty($_POST['sucursal']) ? '' : $_POST['sucursal'];
-$vendedor = empty($_POST['vendedor']) ? '' : $_POST['vendedor'];
+$sucursal_ubicacion = empty($_POST['sucursal_ubicacion']) ? '' : $_POST['sucursal_ubicacion'];
+$sucursal_destino = empty($_POST['sucursal_destino']) ? '' : $_POST['sucursal_destino'];
 $proveedor = empty($_POST['filtro_proveedor']) ? '' : $_POST['filtro_proveedor'];
 $cliente = empty($_POST['cliente']) ? '' : $_POST['cliente'];
 $folio = empty($_POST['folio']) ? '' : $_POST['folio'];
@@ -29,7 +29,7 @@ $alto_llanta = empty($_POST['alto_llanta']) ? '' : $_POST['alto_llanta']; //Mult
 $rin_llanta = empty($_POST['rin_llanta']) ? '' : $_POST['rin_llanta']; //Multiple values
 $tipo = empty($_POST['filtro_tipo']) ? '' : $_POST['filtro_tipo']; //Multiple values
 $estatus = empty($_POST['filtro_estatus']) ? '' : $_POST['filtro_estatus']; //Multiple values
-
+$estado_factura = empty($_POST['filtro_estado']) ? '' : $_POST['filtro_estado']; //Multiple values
 // Define la consulta SQL base
 $sql = "SELECT DISTINCT m.* FROM vista_movimientos m 
 LEFT JOIN usuarios u ON m.id_usuario = u.id LEFT JOIN proveedores p ON m.proveedor_id = p.id";
@@ -73,9 +73,14 @@ if (!empty($fecha_inicial) && !empty($fecha_final)) {
 }
 
 // Filtra por sucursal si está definida
-if (!empty($sucursal)) {
-    $sucursal_ = $con->real_escape_string($sucursal);
-    $sql .= " AND m.isucursal = '" . $sucursal_ . "'";
+if (!empty($sucursal_ubicacion)) {
+    $sucursal_ubicacion_ = $con->real_escape_string($sucursal_ubicacion);
+    $sql .= " AND hdc.id_ubicacion = '" . $sucursal_ubicacion_ . "'";
+}
+
+if (!empty($sucursal_destino)) {
+    $sucursal_destino_ = $con->real_escape_string($sucursal_destino);
+    $sql .= " AND hdc.id_destino = '" . $sucursal_destino_ . "'";
 }
 
 // Filtra por vendedor si está definido
@@ -113,6 +118,14 @@ if (!empty($estatus)) {
         return $sanitizacion($valor, $con);
     }, $estatus));
     $sql .= " AND m.estatus IN (" . $estatus_ids .")";
+} 
+
+// Filtra por estatus si está definido (múltiples valores)
+if (!empty($estado_factura)) {
+    $estado_ids =  implode(",", array_map(function($valor) use ($con, $sanitizacion){
+        return $sanitizacion($valor, $con);
+    }, $estado_factura));
+    $sql .= " AND m.estado_factura IN (" . $estado_ids .")";
 } 
 //print_r($sql);
 //Ejecutamos la quert

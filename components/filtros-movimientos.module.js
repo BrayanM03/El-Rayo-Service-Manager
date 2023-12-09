@@ -248,7 +248,8 @@
           template: `
             <div>
               <select :id="'sucursal-' + tipo_sucursal" class="form-control selectpicker" data-live-search="true">
-                  <option value="0">Seleccione una sucursal</option>
+                  <option>Seleccione una sucursal</option>
+                  <option value="0">Bodega</option>
                   <option v-for="(result, index) in results" :value="result.id">{{result.nombre}}</option>
               </select>
             </div>
@@ -462,6 +463,15 @@
                                     <option value="Cancelada">Cancelado</option>
                                 </select>
                             </div>
+                            <div class="col-md-2">
+                                <b>Estado factura</b>
+                                <select class="form-control selectpicker" multiple data-live-search="true" id="filtro-estado">
+                                    <option value="null">Selecciona un estatus</option>
+                                    <option value="1">Sin factura</option>
+                                    <option value="2">Factura completa</option>
+                                    <option value="3">Factura incompleta</option>
+                                </select>
+                            </div>
                             <div class="col-md-1 mt-3 text-right">
                                 <a href="#" onclick="procesarFiltrosMovimientos()">
                                     <div class="btn btn-info">
@@ -492,6 +502,8 @@
         filtro_tipo.selectpicker('refresh');
         let filtro_estatus = $(`#filtro-estatus`);
         filtro_estatus.selectpicker('refresh');
+        let filtro_estado = $(`#filtro-estado`);
+        filtro_estado.selectpicker('refresh');
       },
     });
       }
