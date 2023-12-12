@@ -443,7 +443,9 @@ table = $('#pedidos').DataTable({
             return '';
           }
       }else{
-          return '';
+        return '<div style="display: flex; width: auto;">'+
+        '<button onclick="traerPdfApartado(' +row[1]+ ');" title="Ver reporte" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px">'+
+        '<span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br></div>'
       }
       
        },
