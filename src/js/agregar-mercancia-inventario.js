@@ -79,25 +79,7 @@ toastr.options = {
         if($("#proveedor").val() == 0){
           $('#btn-mover').removeClass();
           $('#btn-mover').addClass("btn btn-primary disabled");
-          
-        }/* else if($("#stock").attr("valido") == "false" || $("#stock").attr("valido")==""){
-       
-          $('#btn-mover').removeClass();
-          $('#btn-mover').addClass("btn btn-primary disabled");
-        
-        }else if($("#destino").val() == 0){
-          $('#btn-mover').removeClass();
-          $('#btn-mover').addClass("btn btn-primary disabled");
-        
-        }else if($("#btn-mover").attr("id_item") == 0 || $("#btn-mover").attr("id_item") == null){
-          $('#btn-mover').removeClass();
-          $('#btn-mover').addClass("btn btn-primary disabled");
-          
-        }else{
-          $('#btn-mover').removeClass();
-          $('#btn-mover').addClass("btn btn-primary");
-         
-        }  */
+        }
         }
   
   
@@ -218,15 +200,14 @@ toastr.options = {
   
       function formatRepoSelection (repo) {
           
-          $("#stock_actual").val(repo.Stock);
           $("#btn-mover").attr("id_item", repo.id);
-          $("#btn-mover").attr("id_llanta", repo.id_Llanta);
           if(repo.id !== ""){
             $("#stock").prop("disabled", false);
           }
           $("#btn-mover").removeClass('disabled');
 
           validador();
+          traerStockSucursales(repo.id);
   
           $("#costo-actual").val(repo.precio_Inicial);
           $("#precio-actual").val(repo.precio_Venta);
@@ -248,7 +229,7 @@ toastr.options = {
             while(ul.getElementsByTagName('li') [i++]) itemCount++;
             return itemCount;
             }
-          }
+          } 
        
   
   function agregarLlantas(){
@@ -587,7 +568,7 @@ toastr.options = {
               //$('#buscador').prop("disabled", true);
               $("#btn-mover").attr("id_item", "");
               $("#btn-mover").attr("id_llanta", "");
-              $("#stock_actual").prop("disabled", true).val("");
+              //$("#stock_actual").prop("disabled", true).val("");
               $("#stock").removeClass().addClass("form-control").prop("disabled", true).val("");
               $('#ubicacion').prop('selectedIndex',0);
               $('#destino').prop('selectedIndex',0);
@@ -970,4 +951,27 @@ toastr.options = {
   
   
   
+  }
+
+  //Funcion que traera los stocks de las sucursales
+  function traerStockSucursales(id_llanta){
+    $.ajax({
+      type: "post",
+      url: "./modelo/inventarios/traer-stock-sucursales.php",
+      data: {id_llanta},
+      dataType: "JSON",
+      success: function (response) {
+        $("#stock_actual").empty();
+        if(response.data.length >0){
+          response.data.forEach(element => {
+            $("#stock_actual").append(`
+                  <option>${element.nombre}: ${element.stock}</option>
+              `);
+          });
+        }else{
+
+        }
+      }
+    });
+    
   }

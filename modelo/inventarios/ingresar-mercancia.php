@@ -108,7 +108,8 @@ if(isset($_POST)){
             $cantidad = $rows["cantidad"];
             $id_usuario = $rows["id_usuario"];
             $costo = $rows["costo"];
-            $costo_sumatoria += $costo;
+            $importe_partida = $costo * $cantidad;
+            $costo_sumatoria += $importe_partida;
             //Comprobar si esa llanta se encuentra en el inventario destino
             $comprobar = "SELECT COUNT(*) FROM inventario WHERE id_sucursal = ? AND id_Llanta = ?";
             $result = $con->prepare($comprobar);
@@ -164,9 +165,10 @@ if(isset($_POST)){
                     aprobado_emisor,
                     usuario_emisor,
                     usuario_receptor,
-                    costo) VALUES(null, ?,?,?,?,?,?,0,0,?,0,0,0,?,?,?)";
+                    costo,
+                    importe) VALUES(null, ?,?,?,?,?,?,0,0,?,0,0,0,?,?,?,?)";
                     $result = $con->prepare($insertar);
-                    $result->bind_param('ssssssssss',$id_llanta, $id_bodega, $id_destino, $cantidad, $id_usuario, $id_movimiento, $cantidad, $id_usuario, $id_usuario, $costo);
+                    $result->bind_param('sssssssssss',$id_llanta, $id_bodega, $id_destino, $cantidad, $id_usuario, $id_movimiento, $cantidad, $id_usuario, $id_usuario, $costo, $importe_partida);
                     $result->execute();
                     $result->close();
                 
@@ -214,9 +216,10 @@ if(isset($_POST)){
                     aprobado_emisor,
                     usuario_emisor,
                     usuario_receptor,
-                    costo) VALUES(null, ?,?,?,?,?,?,0,0,?,?,0,0,?,?,?)";
+                    costo,
+                    importe) VALUES(null, ?,?,?,?,?,?,0,0,?,?,0,0,?,?,?,?)";
                     $result = $con->prepare($insertar);
-                    $result->bind_param('sssssssssss',$id_llanta, $id_bodega, $id_destino, $cantidad, $id_usuario, $id_movimiento, $stock_destino_actual, $stock_destino_anterior, $id_usuario, $id_usuario, $costo);
+                    $result->bind_param('ssssssssssss',$id_llanta, $id_bodega, $id_destino, $cantidad, $id_usuario, $id_movimiento, $stock_destino_actual, $stock_destino_anterior, $id_usuario, $id_usuario, $costo, $importe_partida);
                     $result->execute();
                     $result->close();
     
