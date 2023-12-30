@@ -102,7 +102,12 @@ switch ($flag) {
     case 'token':
         $claseToken = "active";
         break;
-
+    case 'cuentas-por-pagar':
+        $claseCuentasPorPagar = 'active';
+        break;
+    case 'proveedores':
+        $claseProveedores = 'active';
+        break;    
     default:
         $clase = "";
         break;
@@ -188,11 +193,11 @@ switch ($flag) {
                     <img src="src/img/cotizaciones.png" width="18px" />
                     <span style="margin-left:12px;"> Cotizaciones</span>
                 </a>
-                <a class="collapse-item <?php echo $claseApartados ?> rol-4" href="apartados.php?id=0&nav=apartados">
+                <a class="collapse-item <?php echo $claseApartados ?>" href="apartados.php?id=0&nav=apartados">
                     <img src="src/img/apartados.png" width="18px" />
                     <span style="margin-left:12px;"> Apartados</span>
                 </a>
-                <a class="collapse-item <?php echo $clasePedidos ?> rol-4" href="pedidos.php?id=0&nav=pedidos">
+                <a class="collapse-item <?php echo $clasePedidos ?>" href="pedidos.php?id=0&nav=pedidos">
                     <img src="src/img/pedidos.png" width="18px" />
                     <span style="margin-left:12px;"> Pedidos</span>
                 </a>
@@ -400,15 +405,38 @@ switch ($flag) {
                 <i class="fas fa-fw fa-lock"></i>
                 <span>Generar token</span></a>
         </li>
+
     <?php
     }     
     ?>
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
+    <?php 
 
+if ($user_jerarquia == 1 || $_SESSION['id_usuario'] ==7) { // 7 de Kari
+?>
+    <div class="sidebar-heading rol-4">
+        Administración
+    </div>
+
+    <li class="nav-item <?php echo $claseCuentasPorPagar; ?>">
+        <a class="nav-link" href="cuentas-por-pagar.php?id=0&nav=cuentas-por-pagar">
+            <i class="fas fa-fw fa-money-bill"></i>
+            <span>Cuentas por pagar</span>
+        </a>
+    </li>
+
+   <!--  <li class="nav-item <?php echo $claseProveedores; ?>">
+        <a class="nav-link" href="cuentas-por-pagar.php?id=0&nav=proveedores">
+            <i class="fas fa-fw fa-truck"></i>
+            <span>Proveedores</span>
+        </a>
+    </li> -->
+    <?php } 
+?>
     <!-- Sidebar Toggler (Sidebar) -->
-    <div class="text-center d-none d-md-inline">
+    <div class="text-center d-none d-md-inline mt-3">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
     </div>
 

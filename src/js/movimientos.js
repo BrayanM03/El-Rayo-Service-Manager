@@ -1,8 +1,8 @@
 function MostrarClientes() {  
-    $.fn.dataTable.ext.errMode = 'none';
+  //  $.fn.dataTable.ext.errMode = 'none';
 
 table = $('#movimientos').DataTable({
-      
+    "bDestroy": true,
     processing: true,
     serverSide: true,
     ajax: './modelo/movimientos/traer-movimientos.php',  

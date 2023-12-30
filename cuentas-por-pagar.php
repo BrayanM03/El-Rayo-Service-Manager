@@ -1,3 +1,4 @@
+
 <?php
     session_start();
 
@@ -28,10 +29,12 @@
  
 	
 
-    <title>Movimientos | El Rayo Service Manager</title>
+    <title>Cuentas por pagar | El Rayo Service Manager</title>
 
     <!-- Custom fonts for this template-->
     <link rel="stylesheet" href="src/css/inventario.css">
+    <link rel="stylesheet" href="src/css/historial-ventas.css">
+
     <link href="src/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
@@ -39,29 +42,26 @@
 
     <!-- Custom styles for this template-->
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
-    <script src="src/js/vue.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="src/vendor/datatables/dataTables.bootstrap4.css">
-    <link rel="stylesheet" href="src/vendor/datatables-responsive/css/responsive.bootstrap4.min.css">
-
-  <link rel="stylesheet" href="https://nightly.datatables.net/colreorder/css/colReorder.dataTables.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.css" integrity="sha512-oe8OpYjBaDWPt2VmSFR+qYOdnTjeV9QPLJUeqZyprDEQvQLJ9C5PCFclxwNuvb/GQgQngdCXzKSFltuHD3eCxA==" crossorigin="anonymous" />
     
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="src/vendor/bower_components/select2-bootstrap-theme/dist/select2-bootstrap.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.bootstrap4.min.css">
-    <link href="src/css/bootstrap-select.min.css" rel="stylesheet" />
-
+    
     <!---Librerias de estilos-->
+    
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="src/css/bootstrap-select.min.css" rel="stylesheet" />
     <link href="src/css/menu-vertical.css" rel="stylesheet">
     <link href="src/css/filtros.css" rel="stylesheet">
-   
-
+    <style>
+        #content-wrapper{
+            font-size: 12px !important;
+        }
+    </style>
 </head>
-
-<body id="page-top">  
+<body id="page-top"> 
 
     <!-- Page Wrapper -->
     <div id="wrapper">
@@ -78,24 +78,24 @@
             <!-- Main Content -->
             <div id="content">
 
-                <!-- Topbar -->
-                <?php include 'views/navbar.php'; ?>
+            <?php include 'views/navbar.php'; ?>
                 <!-- End of Topbar -->
 
-
-                <!-- Begin Page Content style="display: flex; justify-content: center; align-items:center; flex-direction:column" -->
+ 
+                <!-- Begin Page Content -->
                 <div class="d-none" id="titulo-hv" sucursal="<?php echo $_SESSION['sucursal']?>" id_sucursal="<?php echo $_SESSION['id_sucursal']?>" rol="<?php echo $_SESSION['rol'] ?>" id_usuario="<?php echo $_SESSION['id_usuario'] ?>"  nombre_usuario="<?php echo $_SESSION['nombre'] . ' ' . $_SESSION['apellidos'] ?>"></div>
-
-                <div class="containe" style="width:90%; margin:auto;">
-                        
+                <div class="container-fluid" >
+                    
                     <div id="filter-movimientos-container" v-cloak>
-                    </div>
-
-                    <table id="movimientos"  class="table table-striped table-bordered table-hover mt-5">                   
+                        
+                    </div>  
+                      
+                    <table id="cuentas-por-pagar" class="table table-striped table-bordered table-hover">                   
                     </table>
+
                 </div>
             <!-- End of Main Content -->
-  <!-- Footer -->
+            <!-- Footer -->
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
@@ -155,41 +155,22 @@
 
 
     <!-- Cargamos nuestras librerias-->
-    
+    <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->
+    <script src="src/js/vue.min.js"></script>
     <script src="src/vendor/datatables/jquery.dataTables.min.js"></script> 
-    <script src="src/vendor/datatables/defaults.js"></script>
     <script src="src/vendor/datatables-responsive/js/dataTables.responsive.min.js"></script>
-  <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-
-<!--   <script src="https://nightly.datatables.net/colreorder/js/dataTables.colReorder.min.js"></script>
- -->    <script src="src/vendor/datatables/dataTables.bootstrap4.js"></script>
+    <script src="src/vendor/datatables/dataTables.bootstrap4.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="src/vendor/datatables/defaults.js"></script>
+    <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-     <!-- Scripts para exportar archivos de tablas  -->        
-    <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.bootstrap4.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>   
-     <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
-     <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script> 
-     <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.colVis.min.js"></script>
     <script src="src/js/bootstrap-select.min.js"></script>
-    <script src="./components/filtros-movimientos.module.js" type="text/javascript"></script>
-    <script src="src/js/movimientos.js"></script>
-    <script src="src/js/filtros.js"></script>
-    <script>
-ocultarSidebar();
-function ocultarSidebar(){
-  let sesion = $("#emp-title").attr("sesion_rol");
-  if(sesion == 4){
-    $(".rol-4").addClass("d-none");
+    <script src="src/js/cuentas-por-pagar.js"></script>
+    <script src="./components/filtros-cuentas.module.js" type="text/javascript"></script>
+    <script src="src/js/filtros.js"></script> 
 
-  }
-};
-   </script>
+   
    
 </body>
 

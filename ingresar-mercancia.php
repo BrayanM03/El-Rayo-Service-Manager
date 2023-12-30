@@ -194,7 +194,9 @@ if($total_sucu > 0) {
 
                                      <div class="col-12 col-md-3 text-center">
                                         <label for="stock">Stock actual</label>
-                                        <input type="number" placeholder="0" class="form-control" id="stock_actual" disabled> 
+                                        <select type="number" placeholder="0" class="form-control" id="stock_actual">
+
+                                        </select>     
                                     </div>
 
                                     <div class="col-12 col-md-4 text-center">

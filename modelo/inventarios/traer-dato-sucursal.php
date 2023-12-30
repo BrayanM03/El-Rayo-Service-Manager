@@ -19,7 +19,8 @@ if($_POST){
     $res->fetch();
     $res->close();
 
-    print_r($nombre);
+    $resp = array("nombre" => $nombre);
+    echo json_encode($resp);
 
 }
 

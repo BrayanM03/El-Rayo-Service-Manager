@@ -14,8 +14,11 @@ function MostrarInventario(id_sucursal) {
       url: "./modelo/inventarios/traer-dato-sucursal.php",
       data: {"id_suc": id_sucursal},
       success: function (response) {
-        $("#sucursal_name").text(response);
-        document.title = "Inventario de "+response;
+        if(response.estatus){
+          $("#sucursal_name").text(response.nombre);
+          document.title = "Inventario de "+response.nombre;
+        }
+       
       }
     });
 
@@ -58,7 +61,7 @@ function MostrarInventario(id_sucursal) {
           visible: visible_value, 
           render: function (row) { 
             
-            return '<div style="display: flex"><button type="button" onclick="editarStock('+row[11]+','+ id_sucursal +');" id="'+row[11]+'" class="buttonEditar btn btn-warning" style="margin-right: 8px"><span class="fa fa-edit"></span><span class="hidden-xs"></span></button><br>'; //<button type="button" onclick="borrarRegistro('+row[11]+','+ id_sucursal +');" id="'+row[11]+'" class="buttonBorrar btn btn-danger"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>
+            return '';//'<div style="display: flex"><button type="button" onclick="editarStock('+row[11]+','+ id_sucursal +');" id="'+row[11]+'" class="buttonEditar btn btn-warning" style="margin-right: 8px"><span class="fa fa-edit"></span><span class="hidden-xs"></span></button><br>'; //<button type="button" onclick="borrarRegistro('+row[11]+','+ id_sucursal +');" id="'+row[11]+'" class="buttonBorrar btn btn-danger"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>
           },
         },
       ],

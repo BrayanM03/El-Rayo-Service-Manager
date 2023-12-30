@@ -27,6 +27,7 @@ if(isset($_POST)){
     $id_proveedor = $_POST['id_proveedor'];
     $estado_movimiento = $_POST['estado_movimiento'];
     $tipo = 2; //categoria tipo ingreso
+    $pagado = 0;
 
     //Trayendo codigo y nombre de sucursal destino
     $comprobar = "SELECT nombre FROM sucursal WHERE id = ?";
@@ -81,7 +82,7 @@ if(isset($_POST)){
         $result->close();
         
          $descripcion_movimiento = "Se realizo el ingreso de ". $total_llantas . " llanta(s) al inventario de " . $nombre_sucursal;
-          $insertar = "INSERT INTO movimientos(id, 
+         $insertar = "INSERT INTO movimientos(id, 
                                                          descripcion, 
                                                          mercancia, 
                                                          fecha, 
@@ -155,7 +156,7 @@ if(isset($_POST)){
                     id_ubicacion, 
                     id_destino, 
                     cantidad, 
-                    id_usuario,
+                    id_usuario, 
                     id_movimiento,
                     stock_ubicacion_actual,
                     stock_ubicacion_anterior,
@@ -228,9 +229,9 @@ if(isset($_POST)){
             
         }
     
-        $update = "UPDATE movimientos SET mercancia = ?, total = ? WHERE id = ?";
+        $update = "UPDATE movimientos SET mercancia = ?, total = ?, pagado = ?, restante = ? WHERE id = ?";
         $respp = $con->prepare($update);
-        $respp->bind_param('sss', $mercancia, $costo_sumatoria, $id_movimiento);
+        $respp->bind_param('sssss', $mercancia, $costo_sumatoria, $pagado, $costo_sumatoria, $id_movimiento);
         $respp->execute();
         $respp->close();
     

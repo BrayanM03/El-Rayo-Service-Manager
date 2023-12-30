@@ -383,7 +383,7 @@
       <div class="titulo-inventario d-none" id="titulo-hv" ></div>
                         <div class="row">
                             <div class="col-md-6">
-                                <h3><b>Historial de movimientos</b></h3>
+                                <h3><b>Historial de cuentas por pagar</b></h3>
                             </div>
                         </div>
                         <hr>
