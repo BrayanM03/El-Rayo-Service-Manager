@@ -224,9 +224,12 @@ function traerCredito(id, id_venta) {
         width: "96vw",
         didOpen: function () {
           $(document).ready(function () {
+            let rol_usuario = $("#emp-title").attr('sesion_id');
+            if(rol_usuario != 1){
+              $("#formas-pago-area-credito").empty();
+            }
 
             $('.selectpicker').selectpicker('refresh');
-            
 
             restante = $("#restante").val();
             pagado = $("#pagado").val();
@@ -267,36 +270,49 @@ function traerCredito(id, id_venta) {
                   className: "celda-acciones",
                   render: function (row, data, index) {
                     sort = $(".sorting_1").text();
-                    return (
-                      '<div style="display: flex"><button metodo_efectivo="' +
-                      row.pago_efectivo +
-                      '" metodo_tarjeta="' +
-                      row.pago_tarjeta +
-                      '" metodo_transferencia="' +
-                      row.pago_transferencia +
-                      '" metodo_cheque="' +
-                      row.pago_cheque +
-                      '" metodo_sin_definir="' +
-                      row.pago_sin_definir +
-                      '" fecha="' +
-                      row.fecha_abono +
-                      '" abono="' +
-                      row.abono +
-                      '" abono_id="' +
-                      row.abono_id +
-                      '" idrow="' +
-                      row.id +
-                      '" type="button" class="buttonedit btn btn-primary" style="margin-right: 8px"><span class="fa fa-edit"></span><span class="hidden-xs"></span></button><br><button type="button" onclick="borrarAbono(' +
-                      row.id +
-                      ');" class="buttonBorrar btn btn-danger"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button>' +
-                      '<div class="btn btn-danger ml-1" onclick="pdfAbono(' +
-                      row.id +
-                      ", " +
-                      id +
-                      ", " +
-                      id_venta +
-                      ')"><i class="fas fa-file-pdf"></i></div></div>'
-                    );
+                    if(rol_usuario != 1){
+                      return (
+                        '<div style="display: flex">'+
+                        '<div class="btn btn-danger ml-1" onclick="pdfAbono(' +
+                        row.id +
+                        ", " +
+                        id +
+                        ", " +
+                        id_venta +
+                        ')"><i class="fas fa-file-pdf"></i></div></div>'
+                      );
+                    }else{
+                      return (
+                        '<div style="display: flex"><button metodo_efectivo="' +
+                        row.pago_efectivo +
+                        '" metodo_tarjeta="' +
+                        row.pago_tarjeta +
+                        '" metodo_transferencia="' +
+                        row.pago_transferencia +
+                        '" metodo_cheque="' +
+                        row.pago_cheque +
+                        '" metodo_sin_definir="' +
+                        row.pago_sin_definir +
+                        '" fecha="' +
+                        row.fecha_abono +
+                        '" abono="' +
+                        row.abono +
+                        '" abono_id="' +
+                        row.abono_id +
+                        '" idrow="' +
+                        row.id +
+                        '" type="button" class="buttonedit btn btn-primary" style="margin-right: 8px"><span class="fa fa-edit"></span><span class="hidden-xs"></span></button><br><button type="button" onclick="borrarAbono(' +
+                        row.id +
+                        ');" class="buttonBorrar btn btn-danger"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button>' +
+                        '<div class="btn btn-danger ml-1" onclick="pdfAbono(' +
+                        row.id +
+                        ", " +
+                        id +
+                        ", " +
+                        id_venta +
+                        ')"><i class="fas fa-file-pdf"></i></div></div>'
+                      );
+                    }
                   },
                 },
               ],
@@ -388,6 +404,7 @@ function traerCredito(id, id_venta) {
                     let $importe = $(this).attr("importe"); */
             });
           });
+          
         },
 
         html:
@@ -440,7 +457,7 @@ function traerCredito(id, id_venta) {
           '<div class="row">' +
 
           '<div class="col-12 col-md-12">' +
-          '<div class="form-group">' +
+          '<div class="form-group" id="formas-pago-area-credito">' +
           "<label><b>Metodo de pago</b></label>" +
           '<select class="form-control selectpicker" multiple id="metodos_pago" name="metodo_pago" onchange="setearFormPagos('+id+')">' +
           '<option value="0">Efectivo</option>' +
