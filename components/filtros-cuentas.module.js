@@ -125,7 +125,7 @@
                     type: "post",
                     url: "./modelo/filtros/busqueda-select.php",
                     data: { 'term': input_buscador.val(), 'page': 1, 'tabla': vm.tabla, 'columnas': vm.columnas, 'columna_id': vm.columna_id, 'rol_sesion': vm.rol_sesion },
-                    dataType: 'json',
+                    dataType: 'json', 
                     success: function (response) {
                       if (response.estatus) {
                         vm.results = response.datos; // Usamos la referencia a vm para actualizar results
@@ -473,7 +473,7 @@
                                 </select>
                             </div>
                             <div class="col-md-1 mt-3 text-right">
-                                <a href="#" onclick="procesarFiltrosMovimientos()">
+                                <a href="#" onclick="procesarFiltrosCuentasPorPagar()">
                                     <div class="btn btn-info">
                                         <span class="icon text-white-50">
                                             <i class="fas fa-search"></i>

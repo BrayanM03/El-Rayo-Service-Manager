@@ -143,9 +143,9 @@ function actualizarRemisionIngreso($con, $id_movimiento, $id_sucursal, $id_llant
     $total_nuevo = $importe + $total_actual_mov;
     $restante_nuevo = $restante_actual_mov + $importe;
     
-    $update= "UPDATE movimientos SET total =?, restante = ?";
+    $update= "UPDATE movimientos SET total =?, restante = ? WHERE id = ?";
     $stmt = $con->prepare($update);
-    $stmt->bind_param('ss',$total_nuevo, $restante_nuevo);
+    $stmt->bind_param('sss',$total_nuevo, $restante_nuevo, $id_movimiento);
     $stmt->execute();
     $stmt->close();
     $estatus = true;

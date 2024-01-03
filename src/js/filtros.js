@@ -1,3 +1,6 @@
+$('#cuentas-por-pagar tbody').attr('id', 'tbody-cuentas');
+$('#movimientos tbody').attr('id', 'tbody-movimientos');
+
 function procesarFiltros(){
     var tabla_ventas = $('#ventas');
 
@@ -221,17 +224,16 @@ function procesarFiltrosMovimientos(){
     let filtro_estatus = $("#filtro-estatus").val() //Multiple values
     let filtro_proveedor = $("#buscador-proveedor").val() //Multiple values
     let filtro_estado = $("#filtro-estado").val() //
-    table.destroy()
-    console.log($.fn.DataTable.isDataTable( '#movimientos' ));
-    if ($.fn.DataTable.isDataTable( '#movimientos' ) ) {
-      console.log('ya existe tabla');
-        tabla.destroy();
-      }
-    tabla.empty();
-    tabla.append(`
+    $('#movimientos tbody').attr('id', 'tbody-movimientos');
+    $('#tbody-movimientos').empty();
+    $('#tbody-movimientos').append(`
+    <tr>
+    <td colspan="13" style="margin: 0px important!; padding:0px !important;">
     <div class="row" style="background-color:white !important;">
         <div class="col-12 col-md-12 text-center"><img src="./src/img/preload.gif" style="width:70px;"><br></img>Buscando...</div>
     </div>
+    </td>
+    </tr>
     `);
     $.ajax({
         type: "post",
@@ -258,7 +260,15 @@ function procesarFiltrosMovimientos(){
                 ]);
                 clearTimeout();
                 setTimeout(function(){
-                tabla.empty();
+                  if ($.fn.DataTable.isDataTable( '#movimientos' ) ) {
+                    $("#contenedor-movimientos").empty().append(`
+                    <table id="movimientos" class="table table-striped table-bordered table-hover">                   
+                    </table>
+                    `);
+                    //tabla.destroy();
+                  }
+                  var tabla = $("#movimientos")
+                  tabla.empty();
                 tabla.DataTable({    
                 rowCallback: function(row, data, index) {
                     var info = this.api().page.info();
@@ -374,7 +384,7 @@ function procesarFiltrosMovimientos(){
 }
 
 function procesarFiltrosCuentasPorPagar(){
-  var tabla = $('#cuentas-por-pagar');
+
   let fecha_inicial = $("#filtro-fecha-inicial").val()
   let fecha_final = $("#filtro-fecha-final").val()
   let sucursal_ubicacion = $("#sucursal-ubicacion").val()
@@ -389,24 +399,27 @@ function procesarFiltrosCuentasPorPagar(){
   let filtro_estatus = $("#filtro-estatus").val() //Multiple values
   let filtro_proveedor = $("#buscador-proveedor").val() //Multiple values
   let filtro_estado = $("#filtro-estado").val() //
-  table.destroy()
-  if ($.fn.DataTable.isDataTable( '#cuentas-por-pagar' ) ) {
-      tabla.destroy();
-    }
-  tabla.empty();
-  tabla.append(`
+  
+
+  $('#cuentas-por-pagar tbody').attr('id', 'tbody-cuentas');
+  $('#tbody-cuentas').empty();
+  $('#tbody-cuentas').append(`
+  <tr>
+  <td colspan="14" style="margin: 0px important!; padding:0px !important;">
   <div class="row" style="background-color:white !important;">
       <div class="col-12 col-md-12 text-center"><img src="./src/img/preload.gif" style="width:70px;"><br></img>Buscando...</div>
   </div>
+  </td>
+  </tr>
   `);
-  $.ajax({
+  //return false;
+    $.ajax({
       type: "post",
       url: "./modelo/filtros/aplicar-filtro-movimientos.php",
       data: {folio, factura, fecha_final, fecha_inicial, sucursal_ubicacion, sucursal_destino, marca_llanta, ancho_llanta, alto_llanta, rin_llanta, filtro_estatus, filtro_tipo, filtro_proveedor, filtro_estado},
       dataType: "JSON",
       success: function (response) {
-
-          if(response.estatus){
+        if(response.estatus){
               //Conversion de arreglo de objectos a arreglos de arrays
               response.data = response.data.length == 0 ? [] : response.data;
               const data_convertida = response.data.map(objeto => [
@@ -422,9 +435,19 @@ function procesarFiltrosCuentasPorPagar(){
                   objeto.estatus,
                   objeto.usuario
               ]);
-              clearTimeout();
+             
               setTimeout(function(){
+                if ($.fn.DataTable.isDataTable( '#cuentas-por-pagar' ) ) {
+                  console.log('Entre');
+                    $("#contenedor-cuentas-pagar").empty().append(`
+                      <table id="cuentas-por-pagar" class="table table-striped table-bordered table-hover">                   
+                      </table>
+                      `);
+                    //tabla.destroy();
+                  }
+              var tabla = $('#cuentas-por-pagar');
               tabla.empty();
+              //var tabla = $('#cuentas-por-pagar');
               tabla.DataTable({    
               rowCallback: function(row, data, index) {
                   var info = this.api().page.info();
@@ -434,7 +457,8 @@ function procesarFiltrosCuentasPorPagar(){
             
                   $('td:eq(' + columnIndex + ')', row).html(page * length + index + 1);
                 },
-              "bDestroy": true,
+               
+               "bDestroy": true,
               columns: [   
               { title: '#' },
               { title: 'Folio'},
@@ -520,7 +544,8 @@ function procesarFiltrosCuentasPorPagar(){
               order: [1, "desc"],
             });},500);
         }else{
-          tabla_ventas.empty()
+          var tabla = $('#cuentas-por-pagar');
+          tabla.empty()
           .append(`
             <div class="row" style="background-color:white !important;">
                 <div class="col-12 col-md-12 text-center">No se encontraron resultados</div>
@@ -535,6 +560,7 @@ function procesarFiltrosCuentasPorPagar(){
         }
       }
   });
+  
 
   
 }

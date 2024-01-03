@@ -3,6 +3,7 @@ function MostrarCuentasPorPagar() {
     //ocultarSidebar();
     table = $('#cuentas-por-pagar').DataTable({
       
+        "bDestroy": true,
         processing: true,
         serverSide: true,
         ajax: './modelo/cuentas_pagar/historial-cuentas-pagar.php',  
@@ -48,10 +49,10 @@ function MostrarCuentasPorPagar() {
         { title: "total",          data: 12, render: function(data){
             return new Intl.NumberFormat().format(data)
         } },
-        { title: "pagado",          data: 12, render: function(data){
+        { title: "pagado",          data: 13, render: function(data){
           return new Intl.NumberFormat().format(data)
       } },
-      { title: "restante",          data: 12, render: function(data){
+      { title: "restante",          data: 14, render: function(data){
         return new Intl.NumberFormat().format(data)
     } },
         { title: "fecha",          data: 3 },

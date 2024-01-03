@@ -89,10 +89,10 @@
                     <div id="filter-movimientos-container" v-cloak>
                         
                     </div>  
-                      
-                    <table id="cuentas-por-pagar" class="table table-striped table-bordered table-hover">                   
-                    </table>
-
+                    <div id="contenedor-cuentas-pagar">
+                        <table id="cuentas-por-pagar" class="table table-striped table-bordered table-hover">                   
+                        </table>
+                    </div>
                 </div>
             <!-- End of Main Content -->
             <!-- Footer -->

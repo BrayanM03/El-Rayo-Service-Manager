@@ -91,8 +91,10 @@
                     <div id="filter-movimientos-container" v-cloak>
                     </div>
 
-                    <table id="movimientos"  class="table table-striped table-bordered table-hover mt-5">                   
-                    </table>
+                    <div id="contenedor-movimientos">
+                        <table id="movimientos"  class="table table-striped table-bordered table-hover mt-5"> 
+                        </table>
+                    </div>                  
                 </div>
             <!-- End of Main Content -->
   <!-- Footer -->
