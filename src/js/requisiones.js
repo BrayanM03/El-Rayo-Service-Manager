@@ -1,3 +1,4 @@
+
 toastr.options = {
     "closeButton": true,
     "debug": false,
@@ -54,7 +55,8 @@ function aprovMercancia(id_dc, tipo, accion, id_movimiento){
 }
 
 function procesarMercancia(id_dc, tipo, accion, comentario, id_movimiento){
-    console.log(comentario);
+    console.log('Acción: '+accion);
+    console.log('Tipo: '+tipo);
     $.ajax({
         type: "post",
         url: "./modelo/requerimientos/procesar-mercancia.php",
@@ -65,7 +67,17 @@ function procesarMercancia(id_dc, tipo, accion, comentario, id_movimiento){
 
                 toastr.success('Actualizado correctamente', 'Actualizado' );
                 setTimeout(function(){
-                    window.location.reload();
+                   // window.location.reload();
+                   if(tipo ==1 && accion ==1){
+                       $(`#${id_dc} td`).eq(5).css('background-color', '#03bb85')
+                    }else if(tipo ==1 && accion ==2){
+                       $(`#${id_dc} td`).eq(5).css('background-color', '#ee5740')
+                    }else if(tipo ==2 && accion ==1){
+                       $(`#${id_dc} td`).eq(6).css('background-color', '#03bb85')
+                   }else if(tipo ==2 && accion ==2){
+                    $(`#${id_dc} td`).eq(6).css('background-color', '#ee5740')
+                    
+                   }
                 }, 600);
                 /* Swal.fire({
                     icon: 'success',

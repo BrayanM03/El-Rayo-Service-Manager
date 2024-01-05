@@ -240,7 +240,7 @@ if ($_SESSION['rol'] != 1 || $_SESSION['rol'] != 4 || $_SESSION['rol'] != 2 || $
                                         }
 
                                         $marca = $fila_ab['Marca'];
-                                        print_r("<tr>
+                                        print_r("<tr id='$id_historial'>
                                                 <td>$ind</td>
                                                 <td>$fecha_mov</td>
                                                 <td>$descripcion</td>
@@ -259,8 +259,8 @@ if ($_SESSION['rol'] != 1 || $_SESSION['rol'] != 4 || $_SESSION['rol'] != 2 || $
                                                 <td> $comentario_receptor</td>
                                                 <td >
                                                 <div class=''>
-                                                    <a class='btn btn-success' title='Aprobar' href='#' onclick='aprovMercancia($id_historial, 1,1, $folio_mov)'><i class='fas fa-check'></i><a>
-                                                    <a class='btn btn-danger' title='Aprobar' href='#' onclick='aprovMercancia($id_historial, 1,2, $folio_mov)'><i class='fas fa-ban'></i><a>
+                                                    <a class='btn btn-success' title='Aprobar'  onclick='aprovMercancia($id_historial, 1,1, $folio_mov)'><i class='fas fa-check'></i><a>
+                                                    <a class='btn btn-danger' title='Aprobar' onclick='aprovMercancia($id_historial, 1,2, $folio_mov)'><i class='fas fa-ban'></i><a>
                                                 </div>
                                                 </td>
                                             </tr>");
@@ -394,7 +394,7 @@ if ($_SESSION['rol'] != 1 || $_SESSION['rol'] != 4 || $_SESSION['rol'] != 2 || $
 
                                         $marca = $fila_ab['Marca'];
                                         
-                                        print_r("<tr>
+                                        print_r("<tr id='$id_historial'>
                                             <td>$ind</td>
                                             <td>$fecha_mov</td>
                                             <td>$descripcion</td>
@@ -413,8 +413,8 @@ if ($_SESSION['rol'] != 1 || $_SESSION['rol'] != 4 || $_SESSION['rol'] != 2 || $
                                             <td> $comentario_receptor</td>
                                             <td>
                                                 <div class=''>
-                                               <a class='btn btn-success' title='Aprobar' href='#' onclick='aprovMercancia($id_historial,2,1,$folio_mov)'><i class='fas fa-check'></i><a>
-                                               <a class='btn btn-danger' title='Aprobar' href='#' onclick='aprovMercancia($id_historial, 2,2,$folio_mov)'><i class='fas fa-ban'></i><a>
+                                               <a class='btn btn-success' title='Aprobar' onclick='aprovMercancia($id_historial,2,1,$folio_mov)'><i class='fas fa-check'></i><a>
+                                               <a class='btn btn-danger' title='Aprobar' onclick='aprovMercancia($id_historial, 2,2,$folio_mov)'><i class='fas fa-ban'></i><a>
                                                 </div>
                                             </td>
                                         </tr>");
@@ -559,7 +559,7 @@ if ($_SESSION['rol'] != 1 || $_SESSION['rol'] != 4 || $_SESSION['rol'] != 2 || $
                                         }
 
                                         $marca = $fila_ab['Marca'];
-                                        print_r("<tr>
+                                        print_r("<tr id='$id_historial'>
                                                 <td>$ind</td>
                                                 <td>$fecha_mov</td>
                                                 <td>$descripcion</td>
@@ -577,12 +577,12 @@ if ($_SESSION['rol'] != 1 || $_SESSION['rol'] != 4 || $_SESSION['rol'] != 2 || $
                                                 <td>$comentario_emisor</td>
                                                 <td> $comentario_receptor</td>
                                                 <td>
-                                                    <a class='btn btn-success' title='Aprobar' href='#' onclick='aprovMercancia($id_historial, 1,1,$folio_mov)'><i class='fas fa-check'></i><a>
-                                                    <a class='btn btn-danger' title='Aprobar' href='#' onclick='aprovMercancia($id_historial, 1,2,$folio_mov)'><i class='fas fa-ban'></i><a>
+                                                    <a class='btn btn-success' title='Aprobar' onclick='aprovMercancia($id_historial, 1,1,$folio_mov)'><i class='fas fa-check'></i><a>
+                                                    <a class='btn btn-danger' title='Aprobar' onclick='aprovMercancia($id_historial, 1,2,$folio_mov)'><i class='fas fa-ban'></i><a>
                                                 </td>
                                                 <td>
-                                                    <a class='btn btn-success' title='Aprobar' href='#' onclick='aprovMercancia($id_historial, 2,1,$folio_mov)'><i class='fas fa-check'></i><a>
-                                                    <a class='btn btn-danger' title='Aprobar' href='#' onclick='aprovMercancia($id_historial, 2,2,$folio_mov)'><i class='fas fa-ban'></i><a>
+                                                    <a class='btn btn-success' title='Aprobar' onclick='aprovMercancia($id_historial, 2,1,$folio_mov)'><i class='fas fa-check'></i><a>
+                                                    <a class='btn btn-danger' title='Aprobar' onclick='aprovMercancia($id_historial, 2,2,$folio_mov)'><i class='fas fa-ban'></i><a>
                                                 </td>
                                             </tr>");
                                             $ind++;
