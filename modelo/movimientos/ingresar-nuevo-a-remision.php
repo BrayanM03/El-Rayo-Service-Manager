@@ -184,10 +184,10 @@ function actualizarInventario($id_sucursal, $id_llanta, $cantidad, $con){
         $stmt->bind_result($stock_destino_anterior);
         $stmt->fetch();
         $stmt->close();
-
+        $nuevo_stock = $stock_destino_anterior + $cantidad;
         $updat = "UPDATE inventario SET Stock =? WHERE id_Llanta = ? AND id_sucursal = ?";
         $stmt = $con->prepare($updat);
-        $stmt->bind_param('sss', $cantidad, $id_llanta, $id_sucursal);
+        $stmt->bind_param('sss', $nuevo_stock, $id_llanta, $id_sucursal);
         $stmt->execute();
         $stmt->close();
 
