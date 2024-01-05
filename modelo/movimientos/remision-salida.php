@@ -509,12 +509,12 @@ function cuerpoTabla(){
             if ($caracteres < 25) {
               
                 $pdf->Cell(15,10,$cantidad,0,0,'C',1);
-                $pdf->MultiCell(40,5, utf8_decode($descripcion_llanta),0,0,'L',1); //$descripcion
+                $pdf->MultiCell(40,5, utf8_decode($descripcion_llanta),0,'L',1); //$descripcion
                 $pdf->SetY($ejeY);
                 $ejeY = $ejeY + 15;
                 $pdf->SetX(77);
-                $pdf->Cell(20,10, utf8_decode($modelo_llanta),0,0,'C',1);
-                $pdf->Cell(20,10, utf8_decode($marca_llanta),0,0,'C',1);
+                $pdf->Cell(20,10, utf8_decode($modelo_llanta),0,0,'L',1);
+                $pdf->Cell(20,10, utf8_decode($marca_llanta),0,0,'L',1);
                 $pdf->Cell(23,10,utf8_decode($nombre_ubicacion),0,0, 'C',1);
                 $pdf->Cell(20,10,utf8_decode($nombre_destino),0,0, 'C',1);
                 $pdf->Cell(23,10,utf8_decode($stock_ubicacion_anterior.'/'.$stock_ubicacion_actual),0,0, 'C',1);
@@ -524,7 +524,7 @@ function cuerpoTabla(){
             }else if ($caracteres > 25 && $caracteres < 45) {
                 
                 $pdf->Cell(15,10,$cantidad,0,0,'C',1);
-                $pdf->MultiCell(40,4.1, utf8_decode($descripcion_llanta),0,0,'L',1);
+                $pdf->MultiCell(40,4.1, utf8_decode($descripcion_llanta),0,'L',1);
                 $pdf->SetY($ejeY);
                 $ejeY = $ejeY + 12;
                 $pdf->SetX(65);
@@ -537,14 +537,14 @@ function cuerpoTabla(){
                 $pdf->Ln(15);
           
             }else{
-                $pdf->Cell(19,12,$cantidad,0,0,'C',1);
-                $pdf->MultiCell(58,6, utf8_decode($descripcion_llanta),0,'L',1);
+                $pdf->Cell(15,12,$cantidad,0,0,'C',1);
+                $pdf->MultiCell(40,6, utf8_decode($descripcion_llanta),0,'L',1);
                 $pdf->SetY($ejeY);
-                $ejeY = $ejeY + 15;
+                $ejeY = $ejeY + 1;
                 $pdf->SetX(77);
-                $pdf->Cell(41,12, utf8_decode($marca_llanta),0,0,'C',1);
-                $pdf->Cell(28,12, utf8_decode($marca_llanta),0,0,'C',1);
-                $pdf->Cell(23,12,utf8_decode($nombre_ubicacion),0,0, 'C',1);
+                $pdf->Cell(20,12, utf8_decode($modelo_llanta),0,0,'L',1);
+                $pdf->Cell(18,12, utf8_decode($marca_llanta),0,0,'L',1);
+                $pdf->Cell(23,12,utf8_decode($nombre_ubicacion),0,0, 'L',1);
                 $pdf->Cell(30,12,utf8_decode($nombre_destino),0,0, 'C',1);
                 $pdf->Cell(23,10,utf8_decode($stock_ubicacion_anterior.'/'.$stock_ubicacion_actual),0,0, 'C',1);
                 $pdf->Cell(20,10,utf8_decode($stock_destino_anterior.'/'.$stock_destino_actual),0,0, 'C',1);
@@ -553,6 +553,7 @@ function cuerpoTabla(){
     
            if($k>=12){
             $pdf->AddPage();
+            $pdf->SetFont('Exo2-Bold','B',7);
             $pdf->SetDrawColor(135, 134, 134);
             $pdf->SetTextColor(36, 35, 28);
             //$pdf->Rect(10, 80, 189, 8, 'F');
@@ -562,16 +563,19 @@ function cuerpoTabla(){
             //$pdf->Line(11,81,196,81);
             $line_height =$pdf->GetY();
             $line_height = $line_height +8.2;
-            $pdf->Line(10,$line_height,198,$line_height);
-            $pdf->Cell(19,8,utf8_decode("Cantidad"),0,0);  
-            $pdf->Cell(55,8,utf8_decode("Concepto"),0,0, 'C');
-            $pdf->Cell(30,8,utf8_decode("Modelo"),0,0, 'C');
-            $pdf->Cell(30,8,utf8_decode("Marca"),0,0, 'C');
-            $pdf->Cell(30,8,utf8_decode("Ubicación"),0,0, 'C');
-            $pdf->Cell(30,8,utf8_decode("Destino"),0,0, 'C');
+           // $pdf->Line(10,$line_height,198,$line_height);
+            $pdf->Cell(15,8,utf8_decode("Cantidad"),0,0,'C');  
+            $pdf->Cell(40,8,utf8_decode("Descripción"),0,0, 'L');
+            $pdf->Cell(23,8,utf8_decode("Modelo"),0,0, 'L');
+            $pdf->Cell(20,8,utf8_decode("Marca"),0,0, 'C');
+            $pdf->Cell(26,8,utf8_decode("Ubicación"),0,0, 'C');
+            $pdf->Cell(25,8,utf8_decode("Destino"),0,0, 'L');
+            $pdf->Cell(23,8,utf8_decode("Stock ubicación"),0,0, 'L');
+            $pdf->Cell(20,8,utf8_decode("Stock destino"),0,0, 'L');
             $pdf->Ln(12);
             $line_height =$pdf->GetY();
             $ejeY = $line_height;
+            $pdf->SetFont('Arial','',10);
             $k=1;
            }
             
