@@ -508,7 +508,7 @@ function cuerpoTabla(){
 
           $caracteres = mb_strlen($descripcion_llanta);
             $pdf->SetFontSize(7);
-            if ($caracteres < 25) {
+            if ($caracteres <= 25) {
               
                 $pdf->Cell(15,10,$cantidad,0,0,'C',1);
                 $pdf->MultiCell(40,5, utf8_decode($descripcion_llanta),0,'L',1); //$descripcion
