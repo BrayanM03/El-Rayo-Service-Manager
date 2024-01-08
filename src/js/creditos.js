@@ -224,8 +224,9 @@ function traerCredito(id, id_venta) {
         width: "96vw",
         didOpen: function () {
           $(document).ready(function () {
-            let rol_usuario = $("#emp-title").attr('sesion_id');
-            if(rol_usuario != 1){
+            let rol_usuario = $("#emp-title").attr('sesion_rol');
+            let id_usuario = $("#emp-title").attr('sesion_id');
+            if(rol_usuario != 1 && id_usuario !=7){
               $("#formas-pago-area-credito").empty();
             }
 
