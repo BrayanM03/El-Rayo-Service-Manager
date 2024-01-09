@@ -115,7 +115,7 @@ function actualizarRemisionIngreso($con, $id_movimiento, $id_sucursal, $id_llant
         $stmt->bind_param('sssss', $nueva_cantidad, $nuevo_stock_destino_actual_remision, $costo_actual, $nuevo_importe_remision, $id_historial);
         $stmt->execute();
         $stmt->close();
-
+        actualizarDescripcion($con, $id_movimiento);//Actualiacion
         $mensaje = 'Llanta actualizada correctamente, stock actualizado';
 
     }else{
@@ -126,6 +126,7 @@ function actualizarRemisionIngreso($con, $id_movimiento, $id_sucursal, $id_llant
         $stmt->bind_param('sssssssssss',$id_llanta, $id_sucursal, $cantidad, $id_usuario, $id_movimiento, $stock_destino_actual,  $nuevo_stock_ubicacion_anterior, $usuario_emisor, $usuario_receptor, $costo_actual, $importe);
         $stmt->execute();
         $stmt->close();
+        actualizarDescripcion($con, $id_movimiento);//Insercion
         $mensaje = 'Llanta agregada correctamente, stock actualizado';
 
     }
@@ -213,6 +214,54 @@ function actualizarPrecioLlanta($con, $precio_actual, $costo_actual, $mayoreo_ac
     $respp->bind_param('ssss', $precio_actual, $costo_actual, $mayoreo_actual, $id_llanta);
     $respp->execute();
     $respp->close();
+};
+
+function actualizarDescripcion($con, $id_movimiento){
+    $descripcion_llanta='';
+    $descripcion_mov ='';
+    $mercancia_mov='';
+    $cantidad_actual ='';
+    $nombre_sucursal ='';
+    $id_sucursal = 0;
+    $mercancia ='';
+
+    $traer_cambios= mysqli_query($con, "SELECT * FROM historial_detalle_cambio WHERE id_movimiento = $id_movimiento");
+    while ($rows = $traer_cambios->fetch_assoc()) {
+        $id_pieza = $rows['id_llanta'];
+        $sel = "SELECT Descripcion FROM llantas WHERE id = ?";
+        $stmt = $con->prepare($sel);
+        $stmt->bind_param('i', $id_pieza);
+        $stmt->execute();
+        $stmt->bind_result($descripcion_llanta);
+        $stmt->fetch();
+        $stmt->close();
+
+        $mercancia = $mercancia . ", " . $descripcion_llanta . ", ";
+    }
+
+    $sel = "SELECT nombre FROM sucursal WHERE id = ?";
+    $stmt = $con->prepare($sel);
+    $stmt->bind_param('i', $id_sucursal);
+    $stmt->execute();
+    $stmt->bind_result($nombre_sucursal);
+    $stmt->fetch();
+    $stmt->close();
+
+    $sel = "SELECT SUM(cantidad) FROM historial_detalle_cambio WHERE id_movimiento = ?";
+    $stmt = $con->prepare($sel);
+    $stmt->bind_param('i', $id_movimiento);
+    $stmt->execute();
+    $stmt->bind_result($cantidad_actual);
+    $stmt->fetch();
+    $stmt->close();
+
+    $nueva_descripcion = "Se realizo el ingreso de $cantidad_actual llanta(s) al inventario del sistema";
+    $upd = "UPDATE movimientos SET mercancia = ?, descripcion = ? WHERE id = ?";
+    $stmt = $con->prepare($upd);
+    $stmt->bind_param('sss', $mercancia,  $nueva_descripcion, $id_movimiento);
+    $stmt->execute();
+    $stmt->close();
+
 };
 
 ?>

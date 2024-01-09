@@ -56,7 +56,7 @@ if($total_reg>0){
     $stmt->bind_param('sss',$nuevo_total, $nuevo_restante, $id_movimiento);
     $stmt->execute();
     $stmt->close();
-
+    actualizarDescripcion($con, $id_movimiento);
     $array = array('estatus' =>true, 'mensaje' => 'Partida actualizada correctamente');
 
 }else{
@@ -65,4 +65,49 @@ if($total_reg>0){
 
 echo json_encode($array);
 
+function actualizarDescripcion($con, $id_movimiento){
+    $descripcion_llanta='';
+    $cantidad_actual ='';
+    $nombre_sucursal ='';
+    $id_sucursal = 0;
+    $mercancia ='';
+
+    $traer_cambios= mysqli_query($con, "SELECT * FROM historial_detalle_cambio WHERE id_movimiento = $id_movimiento");
+    while ($rows = $traer_cambios->fetch_assoc()) {
+        $id_pieza = $rows['id_llanta'];
+        $sel = "SELECT Descripcion FROM llantas WHERE id = ?";
+        $stmt = $con->prepare($sel);
+        $stmt->bind_param('i', $id_pieza);
+        $stmt->execute();
+        $stmt->bind_result($descripcion_llanta);
+        $stmt->fetch();
+        $stmt->close();
+
+        $mercancia = $mercancia . " " . $descripcion_llanta . ", ";
+    }
+
+    $sel = "SELECT nombre FROM sucursal WHERE id = ?";
+    $stmt = $con->prepare($sel);
+    $stmt->bind_param('i', $id_sucursal);
+    $stmt->execute();
+    $stmt->bind_result($nombre_sucursal);
+    $stmt->fetch();
+    $stmt->close();
+
+    $sel = "SELECT SUM(cantidad) FROM historial_detalle_cambio WHERE id_movimiento = ?";
+    $stmt = $con->prepare($sel);
+    $stmt->bind_param('i', $id_movimiento);
+    $stmt->execute();
+    $stmt->bind_result($cantidad_actual);
+    $stmt->fetch();
+    $stmt->close();
+
+    $nueva_descripcion = "Se realizo el ingreso de $cantidad_actual llanta(s) al sistema";
+    $upd = "UPDATE movimientos SET mercancia = ?, descripcion = ? WHERE id = ?";
+    $stmt = $con->prepare($upd);
+    $stmt->bind_param('sss', $mercancia,  $nueva_descripcion, $id_movimiento);
+    $stmt->execute();
+    $stmt->close();
+
+};
 ?>

@@ -55,6 +55,10 @@ function traerDatosMovimiento(id, tipo_remision){
             $("#estado-factura").val(response.datos_movimiento[0].estado_factura);
             $("#estatus").val(response.datos_movimiento[0].estatus);
             $("#importe").val(response.datos_movimiento[0].total);
+            $("#pagado-total").val(response.datos_movimiento[0].pagado);
+            $("#restante-total").val(response.datos_movimiento[0].restante);
+            $("#mercancia").val(response.datos_movimiento[0].mercancia);
+            $("#descripcion-remision").val(response.datos_movimiento[0].descripcion);
 
              sucursales_arreglo = response.sucursales;
              sucursales_arreglo.forEach(element => {
@@ -917,7 +921,7 @@ function agregarLlantasARemision(id_llanta, id_sucursal, cantidad, costo_actual,
         dataType: "json",
         success: function (response) {
             if(response.estatus){
-                Swal.fire({
+                Swal.fire({ 
                     width:"600px",
                     title: 'Editar llanta',
                     html:`
@@ -1148,6 +1152,10 @@ setTimeout(function(){
                 $("#estado-factura").val(response.datos_movimiento[0].estado_factura);
                 $("#estatus").val(response.datos_movimiento[0].estatus);
                 $("#importe").val(response.datos_movimiento[0].total);
+                $("#pagado-total").val(response.datos_movimiento[0].pagado);
+                $("#restante-total").val(response.datos_movimiento[0].restante);
+                $("#descripcion-remision").val(response.datos_movimiento[0].descripcion);
+                $("#mercancia").val(response.datos_movimiento[0].mercancia);
     
                  sucursales_arreglo = response.sucursales;
                  $("#sucursales").empty();

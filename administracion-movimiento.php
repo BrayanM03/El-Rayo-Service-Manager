@@ -177,7 +177,15 @@
                             <div class="col-12 col-md-3">
                                 <label for=""><b>Importe total</b></label>
                                 <input type="number" id="importe" class="form-control" disabled>
-                            </div>   
+                            </div>  
+                            <div class="col-12 col-md-3">
+                                <label for=""><b>Pagado</b></label>
+                                <input type="number" id="pagado-total" class="form-control" disabled>
+                            </div> 
+                            <div class="col-12 col-md-3">
+                                <label for=""><b>Restante</b></label>
+                                <input type="number" id="restante-total" class="form-control" disabled>
+                            </div>  
                     </div>
                 </div>
                     <hr>
@@ -216,6 +224,17 @@
 
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+
+                    <div class="row mt-5">
+                        <div class="col-12 col-md-6">
+                            <label for="">Mercancia</label>
+                            <textarea class="form-control" id="mercancia" cols="30" rows="5" disabled></textarea>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label for="">Descripción</label>
+                            <textarea class="form-control" id="descripcion-remision" cols="30" rows="5" disabled></textarea>
                         </div>
                     </div>
                 </div>
