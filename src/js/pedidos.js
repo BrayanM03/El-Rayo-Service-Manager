@@ -975,6 +975,8 @@ function abonarApartado(id_apartado){
         width: '1200',
         html: `
           <div class="container">
+
+          <div id="permiso-abonar">
               <div class="row">
                   <div class="col-12">
                       <label>Metodo(s) de pago:</label><br>
@@ -1010,19 +1012,26 @@ function abonarApartado(id_apartado){
                     <small style="color:red;" id="msj-alerta"></small>
                   </div>
               </div>
+              </div>
+
               <div class="row mt-5">
                   <div class="col-12">
                     <table id="abonos_apartados_tabla" class="table table-bordered table-info">
                     </table>
                   </div>
               </div>
-
+            
               <div id="area_totales_abonos" class="mt-4">
                   
               </div>
           </div>
         `,
         didOpen: ()=>{
+          let rol_id = $("#emp-title").attr('sesion_rol');
+          let id_usuario = $("#emp-title").attr('sesion_id');
+          if(rol_id != 1 && id_usuario != 7) {
+              $("#permiso-abonar").addClass('d-none')
+          }
           if(restante_pedido <=0){
             $('#metodos-pago-abono').val('');
             $("#metodos-pago-abono").prop('disabled', true);

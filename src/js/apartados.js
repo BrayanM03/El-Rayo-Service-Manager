@@ -690,6 +690,7 @@ function procesarOrden(id_apartado){
             cancelButtonColor:'#ff764d',
             html: `
             <div class="container">
+                <div id="permiso-abonar">
                 <div class="row">
                     <div class="col-md-12">
                     <label>Selecciona los metodos de pago:</label><br>
@@ -711,13 +712,18 @@ function procesarOrden(id_apartado){
                         </div>
                     </div>  
                 </div>
-    
+                </div>
                 <div id="contenedor-montos"> 
                 </div>
     
             </div>`,
             didOpen: function () { 
-             
+                  let rol_id = $("#emp-title").attr('sesion_rol');
+                  let id_usuario = $("#emp-title").attr('sesion_id');
+                  if(rol_id != 1 && id_usuario != 7) {
+                      $("#permiso-abonar").addClass('d-none')
+                  }
+
                   let button_confirm = document.querySelector('.swal2-confirm');
                   button_confirm.style.backgroundColor = '#858796';
     
@@ -1042,6 +1048,7 @@ function abonarApartado(id_apartado){
         width: '1200',
         html: `
           <div class="container">
+          <div id="permiso-abonar">
               <div class="row">
                   <div class="col-12">
                       <label>Metodo(s) de pago:</label><br>
@@ -1063,19 +1070,19 @@ function abonarApartado(id_apartado){
                         </div>
                     </div>  
               </div>
-
+         
               <div class="row m-4 justify-content-center">
                   <div class="col-md-3">
                        <label>Total:</label>
                        <input class="form-control disabled" placeholder="0.00" id="abono_apartado_ac" readonly>
                   </div>
               </div>
-
               <div class="row m-4">
-                  <div class="col-12">
-                    <div class="btn btn-success disabled" id="btn-realizar-abono-apartado" onclick="realizarAbonoApartado(${id_apartado}, ${response_ab.total})">Abonar</div><br>
-                    <small style="color:red;" id="msj-alerta"></small>
-                  </div>
+              <div class="col-12">
+              <div class="btn btn-success disabled" id="btn-realizar-abono-apartado" onclick="realizarAbonoApartado(${id_apartado}, ${response_ab.total})">Abonar</div><br>
+              <small style="color:red;" id="msj-alerta"></small>
+              </div>
+              </div>
               </div>
               <div class="row mt-5">
                   <div class="col-12">
@@ -1090,6 +1097,12 @@ function abonarApartado(id_apartado){
           </div>
         `,
         didOpen: ()=>{
+          let rol_id = $("#emp-title").attr('sesion_rol');
+          let id_usuario = $("#emp-title").attr('sesion_id');
+          if(rol_id != 1 && id_usuario != 7) {
+              $("#permiso-abonar").addClass('d-none')
+          }
+
           $('#metodos-pago-abono').selectpicker('refresh');
 
           //Conversion de arreglo de objectos a arreglos de arrays
