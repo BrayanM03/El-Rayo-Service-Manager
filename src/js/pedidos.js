@@ -1027,11 +1027,11 @@ function abonarApartado(id_apartado){
           </div>
         `,
         didOpen: ()=>{
-          let rol_id = $("#emp-title").attr('sesion_rol');
-          let id_usuario = $("#emp-title").attr('sesion_id');
-          if(rol_id != 1 && id_usuario != 7) {
-              $("#permiso-abonar").addClass('d-none')
-          }
+             let rol_id = $("#emp-title").attr('sesion_rol');
+                  let id_usuario = $("#emp-title").attr('sesion_id');
+                  if(rol_id != 1 && rol_id != 2  && id_usuario != 7) {
+                      $("#permiso-abonar").addClass('d-none')
+                  }
           if(restante_pedido <=0){
             $('#metodos-pago-abono').val('');
             $("#metodos-pago-abono").prop('disabled', true);

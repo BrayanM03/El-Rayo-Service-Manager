@@ -690,7 +690,7 @@ function procesarOrden(id_apartado){
             cancelButtonColor:'#ff764d',
             html: `
             <div class="container">
-                <div id="permiso-abonar">
+                <div>
                 <div class="row">
                     <div class="col-md-12">
                     <label>Selecciona los metodos de pago:</label><br>
@@ -718,11 +718,11 @@ function procesarOrden(id_apartado){
     
             </div>`,
             didOpen: function () { 
-                  let rol_id = $("#emp-title").attr('sesion_rol');
+                  /* let rol_id = $("#emp-title").attr('sesion_rol');
                   let id_usuario = $("#emp-title").attr('sesion_id');
-                  if(rol_id != 1 && id_usuario != 7) {
+                  if(rol_id != 1 && rol_id != 2  && id_usuario != 7) {
                       $("#permiso-abonar").addClass('d-none')
-                  }
+                  } */
 
                   let button_confirm = document.querySelector('.swal2-confirm');
                   button_confirm.style.backgroundColor = '#858796';
@@ -1097,11 +1097,11 @@ function abonarApartado(id_apartado){
           </div>
         `,
         didOpen: ()=>{
-          let rol_id = $("#emp-title").attr('sesion_rol');
+          /* let rol_id = $("#emp-title").attr('sesion_rol');
           let id_usuario = $("#emp-title").attr('sesion_id');
           if(rol_id != 1 && id_usuario != 7) {
               $("#permiso-abonar").addClass('d-none')
-          }
+          } */
 
           $('#metodos-pago-abono').selectpicker('refresh');
 
