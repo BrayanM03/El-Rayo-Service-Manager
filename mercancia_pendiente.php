@@ -99,7 +99,7 @@ if ($_SESSION['rol'] != 1 || $_SESSION['rol'] != 4 || $_SESSION['rol'] != 2 || $
                 $stmt = $con->prepare($select_usuarios);
                 $stmt->execute();
                 $result_data = $stmt->get_result();
-                $stmt->fetch();
+                $stmt->free_result();
                 $stmt->close();
                 $arreglo_usuarios = array();
                 while ($fila_users = $result_data->fetch_assoc()) {
@@ -259,8 +259,8 @@ if ($_SESSION['rol'] != 1 || $_SESSION['rol'] != 4 || $_SESSION['rol'] != 2 || $
                                                 <td> $comentario_receptor</td>
                                                 <td >
                                                 <div class=''>
-                                                    <a class='btn btn-success' title='Aprobar'  onclick='aprovMercancia($id_historial, 1,1, $folio_mov)'><i class='fas fa-check'></i><a>
-                                                    <a class='btn btn-danger' title='Aprobar' onclick='aprovMercancia($id_historial, 1,2, $folio_mov)'><i class='fas fa-ban'></i><a>
+                                                    <div class='btn btn-success' title='Aprobar'  onclick='aprovMercancia($id_historial, 1,1, $folio_mov)'><i class='fas fa-check'></i></div>
+                                                    <div class='btn btn-danger' title='Aprobar' onclick='aprovMercancia($id_historial, 1,2, $folio_mov)'><i class='fas fa-ban'></i></div>
                                                 </div>
                                                 </td>
                                             </tr>");
@@ -413,8 +413,8 @@ if ($_SESSION['rol'] != 1 || $_SESSION['rol'] != 4 || $_SESSION['rol'] != 2 || $
                                             <td> $comentario_receptor</td>
                                             <td>
                                                 <div class=''>
-                                               <a class='btn btn-success' title='Aprobar' onclick='aprovMercancia($id_historial,2,1,$folio_mov)'><i class='fas fa-check'></i><a>
-                                               <a class='btn btn-danger' title='Aprobar' onclick='aprovMercancia($id_historial, 2,2,$folio_mov)'><i class='fas fa-ban'></i><a>
+                                               <div class='btn btn-success' title='Aprobar' onclick='aprovMercancia($id_historial,2,1,$folio_mov)'><i class='fas fa-check'></i></div>
+                                               <div class='btn btn-danger' title='Aprobar' onclick='aprovMercancia($id_historial, 2,2,$folio_mov)'><i class='fas fa-ban'></i></div>
                                                 </div>
                                             </td>
                                         </tr>");
@@ -464,7 +464,7 @@ if ($_SESSION['rol'] != 1 || $_SESSION['rol'] != 4 || $_SESSION['rol'] != 2 || $
                                 $stmt = $con->prepare($select_s);
                                 $stmt->execute();
                                 $result_data = $stmt->get_result();
-                                $stmt->fetch();
+                                $stmt->free_result();
                                 $stmt->close();
                                 $arreglo_suc = [];
                                 while ($fila_suc = $result_data->fetch_assoc()) {
@@ -487,7 +487,7 @@ if ($_SESSION['rol'] != 1 || $_SESSION['rol'] != 4 || $_SESSION['rol'] != 2 || $
                                     $stmt->bind_param('s', $estatus_pendiente);
                                     $stmt->execute();
                                     $result_data = $stmt->get_result();
-                                    $stmt->fetch();
+                                    $stmt->free_result();
                                     $stmt->close();
                                     $ind = 1;
 
@@ -577,12 +577,12 @@ if ($_SESSION['rol'] != 1 || $_SESSION['rol'] != 4 || $_SESSION['rol'] != 2 || $
                                                 <td>$comentario_emisor</td>
                                                 <td> $comentario_receptor</td>
                                                 <td>
-                                                    <a class='btn btn-success' title='Aprobar' onclick='aprovMercancia($id_historial, 1,1,$folio_mov)'><i class='fas fa-check'></i><a>
-                                                    <a class='btn btn-danger' title='Aprobar' onclick='aprovMercancia($id_historial, 1,2,$folio_mov)'><i class='fas fa-ban'></i><a>
+                                                    <div class='btn btn-success' title='Aprobar' onclick='aprovMercancia($id_historial, 1,1,$folio_mov)'><i class='fas fa-check'></i></div>
+                                                    <div class='btn btn-danger' title='Aprobar' onclick='aprovMercancia($id_historial, 1,2,$folio_mov)'><i class='fas fa-ban'></i></div>
                                                 </td>
                                                 <td>
-                                                    <a class='btn btn-success' title='Aprobar' onclick='aprovMercancia($id_historial, 2,1,$folio_mov)'><i class='fas fa-check'></i><a>
-                                                    <a class='btn btn-danger' title='Aprobar' onclick='aprovMercancia($id_historial, 2,2,$folio_mov)'><i class='fas fa-ban'></i><a>
+                                                    <div class='btn btn-success' title='Aprobar' onclick='aprovMercancia($id_historial, 2,1,$folio_mov)'><i class='fas fa-check'></i></div>
+                                                    <div class='btn btn-danger' title='Aprobar' onclick='aprovMercancia($id_historial, 2,2,$folio_mov)'><i class='fas fa-ban'></i></div>
                                                 </td>
                                             </tr>");
                                             $ind++;
@@ -667,7 +667,7 @@ if ($_SESSION['rol'] != 1 || $_SESSION['rol'] != 4 || $_SESSION['rol'] != 2 || $
         <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
         <script src="src/js/bootstrap-select.min.js"></script>
-        <script src="src/js/requisiones.js"></script>
+        <script src="src/js/llantas-pendientes.js"></script>
 </body>
 
 </html>

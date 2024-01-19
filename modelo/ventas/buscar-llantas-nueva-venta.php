@@ -31,11 +31,12 @@ $sqlTraerLlanta = "SELECT l.*, inv.id, inv.Codigo, inv.Sucursal, inv.id_sucursal
                   OR l.Modelo LIKE ? 
                   OR l.Marca LIKE ? 
                   OR l.Descripcion LIKE ?) AND inv.Stock != 0
+                  ORDER BY CASE WHEN inv.id_sucursal = ? THEN 0 ELSE 1 END, inv.id_sucursal
                   LIMIT ? OFFSET ?";
 
 // Preparar la consulta
 $stmt = $con->prepare($sqlTraerLlanta);
-$stmt->bind_param("ssssssssi", $parametro, $parametro, $parametro, $parametro, $parametro, $parametro, $parametro, $resultadosPorPagina, $offset);
+$stmt->bind_param("sssssssssi", $parametro, $parametro, $parametro, $parametro, $parametro, $parametro, $parametro, $id_user_sucursal, $resultadosPorPagina, $offset);
 $stmt->execute();
 
 // Obtener los resultados
