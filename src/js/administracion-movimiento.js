@@ -851,7 +851,7 @@ function validarAgregarLlantasARemision(){
     let mayoreo_actual = $("#mayoreo-actual").val();
     let mayoreo_antes = $("#mayoreo-actual").attr('mayoreo');
     let sucursal_remision = $("#sucursal-remision").val();
-
+    permiso_act_inv = $("#permiso-act-inv").val();
     if(cantidad.length ==0 || cantidad == 0 || cantidad == '' || cantidad == null || cantidad ==undefined){
         Swal.showValidationMessage('Escribe una cantidad');
     }else if(cantidad < 0){
@@ -883,9 +883,7 @@ function validarAgregarLlantasARemision(){
 
 
 function agregarLlantasARemision(id_llanta, id_sucursal, cantidad, costo_actual, costo_antes, precio_actual, precio_antes, mayoreo_actual, mayoreo_antes, tipo_remision, actualizar_precio){
-       
-        let permiso_act_inv = $("#permiso-act-inv").val();
-    
+        
         $.ajax({
             type: "post",
             url: "./modelo/movimientos/ingresar-nuevo-a-remision.php",
@@ -1084,34 +1082,52 @@ function agregarLlantasARemision(id_llanta, id_sucursal, cantidad, costo_actual,
 }
 
 function borrarrLlantaRemision(id_historial){
-    Swal.fire({
-        icon:'question',
-        html:`
-        ¿Quieres borrar este registro de la remisión?
-        `,
-        confirmButtonText: 'Si',
-        showCancelButton: true,
-        cancelButtonText: 'No',
-    }).then(function(r){
-        if(r.isConfirmed){
-            $.ajax({
-                type: "post",
-                url: "./modelo/movimientos/borrar-llanta-remision.php",
-                data: {id_historial},
-                dataType: "JSON",
-                success: function (response) {
-                    if(response.estatus){
-                        Swal.fire({
-                            icon: 'success',
-                            title: response.mensaje
-                        }).then(function(){
-                            actualizarTabla();
-                        })
-                    }
+    
+    $.ajax({
+        type: "post",
+        url: "./modelo/movimientos/traer-detalle-movimiento.php",
+        data: {id_historial},
+        dataType: "json",
+        success: function (response) {
+            Swal.fire({
+                icon:'question',
+                html:`
+                <h3>¿Quieres borrar este registro de la remisión?</h3>
+                <label>Borrar la llanta del inventario</label>
+                <label>Stock actual ${sucursales_arreglo[(response.data[0].id_destino)-1].nombre}: ${response.data[0].stock}</label>
+                <select id="permiso-borrar-inv" class="form-control">
+                    <option value="1" selected>Si</option>
+                    <option value="2">No</option>
+                </select>
+                `,
+                confirmButtonText: 'Si',
+                showCancelButton: true,
+                cancelButtonText: 'No',
+            }).then(function(r){
+                if(r.isConfirmed){
+                    let permiso_borrar = $("#permiso-borrar-inv").val();
+                    
+                    $.ajax({
+                        type: "post",
+                        url: "./modelo/movimientos/borrar-llanta-remision.php",
+                        data: {id_historial, permiso_borrar},
+                        dataType: "JSON",
+                        success: function (response) {
+                            if(response.estatus){
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: response.mensaje
+                                }).then(function(){
+                                    actualizarTabla();
+                                })
+                            }
+                        }
+                    });
                 }
-            });
+            })
         }
-    })
+    });
+    
 }
 
 function actualizarTabla(){

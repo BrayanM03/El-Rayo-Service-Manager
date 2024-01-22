@@ -11,6 +11,8 @@ if (!$con) {
 }
 $error=[];
 $id_historial = $_POST['id_historial'];
+$permiso = $_POST['permiso_borrar'];
+
 $qr = "SELECT COUNT(*) FROM historial_detalle_cambio WHERE id =?";
 $stmt = $con->prepare($qr);
 $stmt->bind_param('s', $id_historial);
@@ -20,14 +22,38 @@ $stmt->fetch();
 $stmt->close();
 
 if($total_reg>0){
-    $sel = "SELECT id_movimiento, importe FROM historial_detalle_cambio WHERE id = ?";
+    $mensaje ='';
+    $sel = "SELECT id_llanta, cantidad, id_movimiento, id_destino, importe FROM historial_detalle_cambio WHERE id = ?";
     $stmt = $con->prepare($sel);
     $stmt->bind_param('s',$id_historial);
     $stmt->execute();
-    $stmt->bind_result($id_movimiento, $importe_actual_historial);
+    $stmt->bind_result($id_llanta, $cantidad, $id_movimiento, $id_destino, $importe_actual_historial);
     $stmt->fetch();
     $error[] = $stmt->error;
     $stmt->close();
+
+    //Actualizando inventario 
+    if($permiso ==1){
+        $query = "SELECT Stock FROM inventario WHERE id_Llanta = ? AND id_sucursal = ?";
+        $stmt = $con->prepare($query);
+        $stmt->bind_param('ss', $id_llanta, $id_destino);
+        $stmt->execute();
+        $stmt->bind_result($stock_destino_actual);
+        $stmt->fetch();
+        $stmt->close();
+
+        $nuevo_stock = $stock_destino_actual - $cantidad;
+        if($nuevo_stock >= 0){
+            $updat = "UPDATE inventario SET Stock =? WHERE id_Llanta = ? AND id_sucursal = ?";
+            $stmt = $con->prepare($updat);
+            $stmt->bind_param('sss', $nuevo_stock, $id_llanta, $id_destino);
+            $stmt->execute();
+            $stmt->close();
+            $mensaje .= 'El inventario se actualizó con exito. Nuevo stock: ' . $nuevo_stock . '. ';
+        }else{
+            $mensaje .= 'El inventario quedará con un stock menor a 0, (Stock resultante: '. $nuevo_stock.'),  no se actualizó el inventario, contacte al administrador. ';
+        }
+    }
 
     $quer = "DELETE FROM historial_detalle_cambio WHERE id = ?";
     $stmt = $con->prepare($quer);
@@ -48,7 +74,12 @@ if($total_reg>0){
 
     $total_nuevo = $total_actual_mov - $importe_actual_historial;
     $restante_nuevo = $restante_actual_mov - $importe_actual_historial;
-    
+    if($total_nuevo < 0){
+        $total_nuevo =0;
+    }
+    if($restante_nuevo < 0){
+        $restante_nuevo =0;
+    }
     $update= "UPDATE movimientos SET total =?, restante = ?";
     $stmt = $con->prepare($update);
     $stmt->bind_param('ss',$total_nuevo, $restante_nuevo);
@@ -57,7 +88,7 @@ if($total_reg>0){
     $stmt->close();
 
     $estatus = true;
-    $mensaje = "Eliminado con exito";
+    $mensaje .= "Eliminado con exito";
 }else{
     $estatus = false;
     $mensaje = "No existe es ID en el registro";

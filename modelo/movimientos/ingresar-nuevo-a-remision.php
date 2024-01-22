@@ -193,10 +193,11 @@ function actualizarInventario($id_sucursal, $id_llanta, $cantidad, $con){
         $stmt->close();
 
     }else{
+        $codigo_llanta = $codigo_sucursal . $id_llanta;
         $stock_destino_anterior = 0;
         $query = "INSERT INTO inventario (id, id_Llanta, Codigo, Sucursal, id_sucursal, Stock) VALUES (null, ?,?,?,?,?)"; 
         $stmt = $con->prepare($query);
-        $stmt->bind_param('sssss',$id_llanta, $sucursal, $codigo_sucursal, $id_sucursal, $cantidad);
+        $stmt->bind_param('sssss',$id_llanta, $codigo_llanta, $sucursal, $id_sucursal, $cantidad);
         $stmt->execute();
         $error = $stmt->error;
         $stmt->close();

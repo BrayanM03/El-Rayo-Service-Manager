@@ -126,3 +126,8 @@ function administrarCuenta(id, tipo_remision){
   window.open("administracion-movimiento.php?id=" + id + "&tipo_remision="+tipo_remision, '_blank');
 }
 
+function remisionIngreso(id){
+
+  window.open('./modelo/movimientos/remision-ingreso.php?id='+ id, '_blank');
+}
+
