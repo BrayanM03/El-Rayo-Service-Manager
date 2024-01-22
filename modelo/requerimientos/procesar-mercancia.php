@@ -44,6 +44,68 @@ $stmt->bind_param('ssss', $accion, $comentario, $id_sesion, $id_dc);
 $stmt->execute();
 $stmt->close();
 $mensaje = 'Estatus de mercancia actualizado';
+
+//Actualizar estatus requisiciones
+$query = "SELECT COUNT(*) FROM requerimientos WHERE id_movimiento = ?";
+    $stmt = $con->prepare($query);
+    $stmt->bind_param('s', $id_movimiento);
+    $stmt->execute();
+    $stmt->bind_result($total_req);
+    $stmt->fetch();
+    $stmt->close();  
+if($total_req > 0){
+    $query = "SELECT id FROM requerimientos WHERE id_movimiento = ?";
+    $stmt = $con->prepare($query);
+    $stmt->bind_param('s', $id_movimiento);
+    $stmt->execute();
+    $stmt->bind_result($id_requerimiento);
+    $stmt->fetch();
+    $stmt->close(); 
+    $query = "SELECT id_llanta, aprobado_receptor, aprobado_emisor FROM historial_detalle_cambio WHERE id = ?";
+    $stmt = $con->prepare($query);
+    $stmt->bind_param('s', $id_dc);
+    $stmt->execute();
+    $stmt->bind_result($id_llanta, $aprobado_receptor, $aprobado_emisor);
+    $stmt->fetch();
+    $stmt->close();
+
+    if($accion == 1 && ($aprobado_emisor == 1 && $aprobado_receptor == 1)){
+        $query = "UPDATE detalle_requerimientos SET estatus =6 WHERE id_llanta = ? AND id_requerimiento = ?";
+        $stmt = $con->prepare($query);
+        $stmt->bind_param('ss', $id_llanta, $id_requerimiento);
+        $stmt->execute();
+        $stmt->close();
+    }else{
+        if($accion == 1 && $tipo == 1 ){
+
+            $query = "UPDATE detalle_requerimientos SET estatus =4 WHERE id_llanta = ? AND id_requerimiento = ?";
+            $stmt = $con->prepare($query);
+            $stmt->bind_param('ss', $id_llanta, $id_requerimiento);
+            $stmt->execute();
+            $stmt->close();
+        }else if($accion == 1  && $tipo == 2){
+            $query = "UPDATE detalle_requerimientos SET estatus =5 WHERE id_llanta = ? AND id_requerimiento = ?";
+            $stmt = $con->prepare($query);
+            $stmt->bind_param('ss', $id_llanta, $id_requerimiento);
+            $stmt->execute();
+            $stmt->close();
+        }else if($accion == 2 && $tipo == 1){
+            $query = "UPDATE detalle_requerimientos SET estatus =7 WHERE id_llanta = ? AND id_requerimiento = ?";
+            $stmt = $con->prepare($query);
+            $stmt->bind_param('ss', $id_llanta, $id_requerimiento);
+            $stmt->execute();
+            $stmt->close();
+        }else if($accion == 2 && $tipo == 2){
+            $query = "UPDATE detalle_requerimientos SET estatus =8 WHERE id_llanta = ? AND id_requerimiento = ?";
+            $stmt = $con->prepare($query);
+            $stmt->bind_param('ss', $id_llanta, $id_requerimiento);
+            $stmt->execute();
+            $stmt->close();
+        }
+    }
+
+    
+}      
 //Comprobacion 
 $query = "SELECT COUNT(*) FROM historial_detalle_cambio WHERE id_movimiento = ? AND (aprobado_emisor != 1 OR aprobado_receptor != 1)";
 $stmt = $con->prepare($query);
@@ -59,6 +121,19 @@ if($historial_aprobado ==0){
     $stmt->bind_param('s', $id_movimiento);
     $stmt->execute();
     $stmt->close();
+    if($total_req > 0){
+        $query = "UPDATE detalle_requerimientos SET estatus =6 WHERE id_llanta = ? AND id_requerimiento = ?";
+        $stmt = $con->prepare($query);
+        $stmt->bind_param('ss', $id_llanta, $id_requerimiento);
+        $stmt->execute();
+        $stmt->close();
+        $query = "UPDATE requerimientos SET estatus =4 WHERE  id_movimiento = ?";
+        $stmt = $con->prepare($query);
+        $stmt->bind_param('s', $id_movimiento);
+        $stmt->execute();
+        $stmt->close();
+    }
+   
     $mensaje = 'Estatus de mercancia actualizado y movimiento actualizado a completado';
 }
 

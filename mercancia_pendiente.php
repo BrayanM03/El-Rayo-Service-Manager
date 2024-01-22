@@ -145,7 +145,7 @@ if ($_SESSION['rol'] != 1 || $_SESSION['rol'] != 4 || $_SESSION['rol'] != 2 || $
                                 $stmt = $con->prepare($select_s);
                                 $stmt->execute();
                                 $result_data = $stmt->get_result();
-                                $stmt->fetch();
+                                $stmt->free_result();
                                 $stmt->close();
                                 $arreglo_suc = [];
                                 while ($fila_suc = $result_data->fetch_assoc()) {
@@ -168,7 +168,7 @@ if ($_SESSION['rol'] != 1 || $_SESSION['rol'] != 4 || $_SESSION['rol'] != 2 || $
                                     $stmt->bind_param('ss', $id_sucursal, $estatus_pendiente);
                                     $stmt->execute();
                                     $result_data = $stmt->get_result();
-                                    $stmt->fetch();
+                                    $stmt->free_result();
                                     $stmt->close();
                                     $ind = 1;
 
@@ -301,7 +301,7 @@ if ($_SESSION['rol'] != 1 || $_SESSION['rol'] != 4 || $_SESSION['rol'] != 2 || $
                                 $stmt = $con->prepare($select_s);
                                 $stmt->execute();
                                 $result_data = $stmt->get_result();
-                                $stmt->fetch();
+                                $stmt->free_result();
                                 $stmt->close();
                                 $arreglo_suc = [];
                                 while ($fila_suc = $result_data->fetch_assoc()) {
@@ -323,7 +323,7 @@ if ($_SESSION['rol'] != 1 || $_SESSION['rol'] != 4 || $_SESSION['rol'] != 2 || $
                                     $stmt->bind_param('ss', $id_sucursal, $estatus_pendiente);
                                     $stmt->execute();
                                     $result_data = $stmt->get_result();
-                                    $stmt->fetch();
+                                    $stmt->free_result();
                                     $stmt->close();
                                     $ind = 1;
 

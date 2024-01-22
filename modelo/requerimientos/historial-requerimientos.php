@@ -17,33 +17,26 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Easy set variables
  */
-//session_start();
+
 // DB table to use
-$table = 'vista_ventas';
+$table = 'vista_requerimientos';
 
 // Table's primary key
-$primaryKey = 'id';
-/* $id_sucursal = $_SESSION['id_sucursal'];
-if($_SESSION['rol']!= 1 && $_SESSION['id_usuario'] != 7){
-	$where = 'id_sucursal ='.$id_sucursal;
-}else{
-	$where ='';
-} */
+$primaryKey = 'id';/* 
+$where = "estatus = 'Activo' or estatus = 'Cancelada'"; */
 // Array of database columns which should be read and sent back to DataTables.
 // The `db` parameter represents the column name in the database, while the `dt`
 // parameter represents the DataTables column identifier. In this case simple
 // indexes
 $columns = array(
-	array( 'db' => 'id', 'dt' => 0 ),
-	array( 'db' => 'Fecha',  'dt' => 1 ), 
+	array( 'db' => 'id',   'dt' => 1),
 	array( 'db' => 'sucursal', 'dt' => 2 ),
-	array( 'db' => 'nombre', 'dt' => 3 ),
-	array( 'db' => 'Nombre_Cliente', 'dt' => 4 ),
-	array( 'db' => 'Cantidad',  'dt' => 5 ),
-	array( 'db' => 'Total',   'dt' => 6 ),
-	array( 'db' => 'tipo',   'dt' => 7 ),
-	array( 'db' => 'estatus',   'dt' => 8),
-	array( 'db' => 'folio',   'dt' => 9),
+	array( 'db' => 'fecha_inicio', 'dt' => 3 ),
+	array( 'db' => 'hora_inicio', 'dt' => 4 ),
+	array( 'db' => 'usuario', 'dt' => 5 ),
+	array( 'db' => 'id_sucursal',  'dt' => 6 ), 
+    array( 'db' => 'estatus',  'dt' => 7 ), 
+    array( 'db' => 'comentario',  'dt' => 8 ), 
 /* 	array(
 		'db'        => 'start_date',
 		'dt'        => 4,

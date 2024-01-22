@@ -31,14 +31,13 @@ if ($total_cambios > 0) {
         $cantidad = $rows['cantidad'];
         $costo =$rows['costo'];
         $importe = $rows['importe'];
-        $importe_ft = $importe;
-        
+        $importe_ft = $importe;        
 
-        $queryDesc = "SELECT Descripcion, precio_Inicial, precio_Venta, precio_Mayoreo FROM llantas WHERE id =?";
+        $queryDesc = "SELECT Descripcion, Marca, precio_Inicial, precio_Venta, precio_Mayoreo FROM llantas WHERE id =?";
         $resps = $con->prepare($queryDesc);
         $resps->bind_param("i", $id_llanta);
         $resps->execute();
-        $resps->bind_result($descripcion, $costo_, $precio, $mayoreo);
+        $resps->bind_result($descripcion, $marca, $costo_, $precio, $mayoreo);
         $resps->fetch();
         $resps->close();
 
@@ -51,7 +50,6 @@ if ($total_cambios > 0) {
         $resps->fetch();
         $resps->close();
 
-
         $queryDesc = "SELECT nombre FROM sucursal WHERE id =?";
         $resps = $con->prepare($queryDesc);
         $resps->bind_param("i", $id_destino);
@@ -59,12 +57,13 @@ if ($total_cambios > 0) {
         $resps->bind_result($sucursal_destino);
         $resps->fetch();
         $resps->close();
-
-        $data[] = array('id'=>$id, 'id_llanta'=> $id_llanta, 
+        
+        $data['data'][] = array('id'=>$id, 'id_llanta'=> $id_llanta, 
                         'descripcion'=> $descripcion, 
                         'id_ubicacion'=> $id_ubicacion,
                         'sucursal_remitente'=> $sucursal_remitente,
                         'id_destino'=> $id_destino, 
+                        'marca' => $marca,
                         'sucursal_destino' => $sucursal_destino,
                         'cantidad'=> $cantidad,
                         'costo'=>$costo,
@@ -74,7 +73,7 @@ if ($total_cambios > 0) {
 
    echo json_encode($data, JSON_UNESCAPED_UNICODE);
 }else{
-    $data = array("id"=>false, "mensaje"=> "Sin datos");
+    $data = array('data'=>[]);
     echo json_encode($data, JSON_UNESCAPED_UNICODE);
 }
 

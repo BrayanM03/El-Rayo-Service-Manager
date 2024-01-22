@@ -1,6 +1,6 @@
 <!-- Sidebar -->
 <?php
-$flag = $_GET['nav'];
+$flag = isset($_GET['nav']) ? $_GET['nav'] : 0;
 $claseInicio = "";
 $claseNuevaVenta = "";
 $claseNuevaCotizacion = "";
@@ -21,7 +21,10 @@ $claseExistencia = "";
 $claseApartados = '';
 $claseServicios = "";
 $claseGarantias = '';
-$claseMovimientos = "";
+$claseMovimientos = '';
+$showLogistica='';
+$claseRequerimientos = '';
+$claseHistorialRequerimientos ='';
 $claseMovimientosClientes = "";
 $user_jerarquia = $_SESSION["rol"];
 
@@ -82,11 +85,14 @@ switch ($flag) {
         break;
     case 'movimientos':
         $claseMovimientos = "active";
-        $showMisLlantas = "show";
+        $showMisLlantas = "";
+        $showLogistica ="show";
+
         break;
     case 'cambios':
         $claseCambios = "active";
-        $showMisLlantas = "show";
+        $showMisLlantas = "";
+        $showLogistica ="show";
         break;
 
     case 'clientes':
@@ -105,6 +111,15 @@ switch ($flag) {
     case 'cuentas-por-pagar':
         $claseCuentasPorPagar = 'active';
         break;
+    case 'requerimientos':
+        $claseRequerimientos = 'active';
+        $showLogistica = 'show';
+        break;
+    case 'historial-requerimientos':
+        $claseHistorialRequerimientos = 'active';
+        $showLogistica = 'show';
+
+        break;
     case 'proveedores':
         $claseProveedores = 'active';
         break;    
@@ -121,7 +136,7 @@ switch ($flag) {
             <!-- <i class="fas fa-laugh-wink"></i>--->
             <img style="filter: invert(100%);" width="40px" src="src/img/racing.svg" />
         </div>
-        <div class="sidebar-brand-text mx-3" id="emp-title" sesion_id="<?php echo $_SESSION["id_usuario"]; ?>" sesion_rol="<?php echo $_SESSION["rol"]; ?>">El Rayo<sup style="font-size:6px !important; margin-left:5px;">app</sup></div>
+        <div class="sidebar-brand-text mx-3" id="emp-title" sesion_sucursal_id="<?php echo $_SESSION["id_usuario"]; ?>" sesion_id="<?php echo $_SESSION["id_usuario"]; ?>" sesion_rol="<?php echo $_SESSION["rol"]; ?>">El Rayo<sup style="font-size:6px !important; margin-left:5px;">app</sup></div>
     </a>
 
     <!-- Divider -->
@@ -255,15 +270,15 @@ switch ($flag) {
 
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTyres" aria-expanded="true" aria-controls="collapsePages">
                 <i class="fas fa-fw fa-folder"></i>
-                <span>Mis llantas</span>
+                <span>Inventarios</span>
             </a>
-
             <div id="collapseTyres" class="collapse <?php echo $showMisLlantas ?>" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-
-                <?php
+                
+            <?php
                 if ($user_jerarquia == 1 || $user_jerarquia == 4 || $_SESSION['id_usuario'] == 7) { // 7 es el id de Karina Flores
-                ?>
+                    ?>
                     <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Sucursales:</h6>
 
                         <?php
 
@@ -305,31 +320,18 @@ switch ($flag) {
                 ?>
                 <div class="bg-white py-2 collapse-inner rounded">
                     <?php
-                    if ($user_jerarquia == 1 || $user_jerarquia == 4 || $_SESSION['id_usuario'] == 7) {
+                    if ($user_jerarquia == 1 || $user_jerarquia == 4 || $_SESSION['id_usuario'] == 7) {//Usuario de Kari
                     ?>
-                        <h6 class="collapse-header">Stock total:</h6>
+                        <h6 class="collapse-header">Catalogos:</h6>
                         <a class="collapse-item <?php echo $claseExistencia ?>" href="inventario-total.php?id=0&nav=existencia" style="display:flex; flex-direction: row; justify-content:start;">
                             <img src="src/img/tyre-invent.svg" width="18px" />
-                            <span style="margin-left:12px;"> Existencia</span> </a>
+                            <span style="margin-left:6px;"> Existencia</span> </a>
                         <a class="collapse-item <?php echo $claseServicios ?>" href="servicios.php?id=0&nav=servicios" style="display:flex; flex-direction: row; justify-content:start;">
                             <i class="fas fa-car"></i>
                             <span style="margin-left:7px;">Servicios</span> </a>
                     <?php
                     }
 
-                    ?>
-                    <a class="collapse-item <?php echo $claseMovimientos ?>" href="movimientos.php?id=0&nav=movimientos">
-                        <img src="src/img/entrada.svg" width="18px" />
-                        <span style="margin-left:12px;"> Movimientos</span></a>
-                    </a>
-                    <?php
-                    if ($user_jerarquia == 1 || $user_jerarquia == 4) {
-                    ?>
-                        <a class="collapse-item <?php echo $claseCambios ?>" href="cambio_inventario.php?id=0&nav=cambios" style="display:flex; flex-direction: row; justify-content:start;">
-                            <i class="fas fa-people-carry"></i>
-                            <span style="margin-left:7px;">Mover mercancia</span> </a>
-                    <?php
-                    }
                     ?>
 
                 </div>
@@ -412,13 +414,14 @@ switch ($flag) {
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
+    <div class="sidebar-heading rol-4">
+        Administración
+    </div>
     <?php 
 
 if ($user_jerarquia == 1 || $_SESSION['id_usuario'] ==7) { // 7 de Kari
 ?>
-    <div class="sidebar-heading rol-4">
-        Administración
-    </div>
+    
 
     <li class="nav-item <?php echo $claseCuentasPorPagar; ?>">
         <a class="nav-link" href="cuentas-por-pagar.php?id=0&nav=cuentas-por-pagar">
@@ -434,7 +437,43 @@ if ($user_jerarquia == 1 || $_SESSION['id_usuario'] ==7) { // 7 de Kari
         </a>
     </li> -->
     <?php } 
+    
 ?>
+    <li class="nav-item <?php echo $claseMovimientos ?> rol-4">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLogistica" aria-expanded="true" aria-controls="collapsePages">
+            <!-- <i class="fas fa-truck"></i> -->
+            <i class="fas fa-link"></i>
+                <span>Logistica</span>
+            </a>
+            <div id="collapseLogistica" class="collapse <?php echo $showLogistica ?>" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Categorias:</h6>
+                    <a class="collapse-item <?php echo $claseRequerimientos ?>" href="nuevo-requerimiento.php?id=0&nav=requerimientos" style="display:flex; flex-direction: row; justify-content:start;">
+                    <img src="src/img/racing.svg" width="18px" />
+                            <span style="margin-left:7px;">Requerir mercancia</span> 
+                    </a>
+                    <?php
+                    if ($user_jerarquia == 1 || $user_jerarquia == 4) {
+                    ?>
+                        <a class="collapse-item <?php echo $claseCambios ?>" href="cambio_inventario.php?id=0&nav=cambios" style="display:flex; flex-direction: row; justify-content:start;">
+                            <i class="fas fa-people-carry"></i>
+                            <span style="margin-left:7px;">Mover mercancia</span> </a>
+                    <?php
+                    }
+                    ?>
+                    <a class="collapse-item <?php echo $claseHistorialRequerimientos ?>" href="requerimientos.php?id=0&nav=historial-requerimientos">
+                        <img src="src/img/contract.png" width="18px" />
+                        <span style="margin-left:0px;"> Requerimientos</span></a>
+                    </a>
+                    <a class="collapse-item <?php echo $claseMovimientos ?>" href="movimientos.php?id=0&nav=movimientos">
+                        <img src="src/img/contract.png" width="18px" />
+                        <span style="margin-left:0px;"> Movimientos</span></a>
+                    </a>
+                    
+
+                </div>
+            </div>
+        </li>
     <!-- Sidebar Toggler (Sidebar) -->
     <div class="text-center d-none d-md-inline mt-3">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
@@ -443,7 +482,7 @@ if ($user_jerarquia == 1 || $_SESSION['id_usuario'] ==7) { // 7 de Kari
     <!-- Sidebar Message -->
     <div class="sidebar-card">
         <img class="sidebar-card-illustration mb-2" src="src/img/logo.jpg" alt="" style="border-radius: 8px;">
-        <p class="text-center mb-2"><strong>El Rayo Servce Manager</strong><br> Es un sistema de gestion de inventario. punto de venta y facturación.</p>
+        <p class="text-center mb-2"><strong>El Rayo Service Manager</strong><br> Es un sistema de ERP.</p>
         <!--     <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro">Ir a sitio web!</a>
  -->
     </div>

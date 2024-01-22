@@ -34,6 +34,35 @@ if($tot){
     $stmt->execute();
     $stmt->close();
 
+    $query = "SELECT COUNT(*) FROM requerimientos WHERE id_movimiento = ?";
+    $stmt = $con->prepare($query);
+    $stmt->bind_param('s', $id_movimiento);
+    $stmt->execute();
+    $stmt->bind_result($total_requerimientos);
+    $stmt->fetch();
+    $stmt->close();
+
+    if($total_requerimientos > 0){
+        $query = "SELECT id FROM requerimientos WHERE id_movimiento = ?";
+        $stmt = $con->prepare($query);
+        $stmt->bind_param('s', $id_movimiento);
+        $stmt->execute();
+        $stmt->bind_result($id_requerimiento);
+        $stmt->fetch();
+        $stmt->close();
+        $query = "UPDATE requerimientos SET estatus = 4 WHERE id_movimiento = ?";
+        $stmt = $con->prepare($query);
+        $stmt->bind_param('s', $id_movimiento);
+        $stmt->execute();
+        $stmt->close();
+        $query = "UPDATE detalle_requerimientos SET estatus = 6 WHERE id_requerimiento = ?";
+        $stmt = $con->prepare($query);
+        $stmt->bind_param('s', $id_requerimiento);
+        $stmt->execute();
+        $stmt->close();
+    }
+    
+
     $mensaje = 'Estatus de mercancia actualizado y movimiento actualizado a completado';
     $response = array('estatus' =>true, 'mensaje' => $mensaje);
 }else{
