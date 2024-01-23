@@ -80,9 +80,9 @@ if($total_reg>0){
     if($restante_nuevo < 0){
         $restante_nuevo =0;
     }
-    $update= "UPDATE movimientos SET total =?, restante = ?";
+    $update= "UPDATE movimientos SET total =?, restante = ? WHERE id = ?";
     $stmt = $con->prepare($update);
-    $stmt->bind_param('ss',$total_nuevo, $restante_nuevo);
+    $stmt->bind_param('sss',$total_nuevo, $restante_nuevo, $id_movimiento);
     $stmt->execute();
     $error[] = $stmt->error;
     $stmt->close();
