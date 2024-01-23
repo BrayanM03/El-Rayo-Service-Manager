@@ -180,7 +180,7 @@ switch ($flag) {
                 <span>Nuevo pedido</span>
             </a>
         </li>
-        <?php if ($user_jerarquia == 1) { ?>
+        <?php if ($user_jerarquia == 1 || $user_jerarquia == 2 || $_SESSION['id_usuario'] ==19) { ?>
 
         <li class="nav-item <?php echo $claseNuevaGarantia ?> rol-4">
             <a class="nav-link" href="nueva-garantia.php?id=0&nav=nueva_garantia">
@@ -218,7 +218,7 @@ switch ($flag) {
                 </a>
                 <?php
 
-                if ($user_jerarquia == 1) { ?>
+                if ($user_jerarquia == 1 || $user_jerarquia == 2) { ?>
                 <a class="collapse-item <?php echo $claseGarantias ?> rol-4" href="garantias.php?id=0&nav=garantias">
                     <img src="src/img/warranty.png" width="18px" />
                     <span style="margin-left:12px;"> Garantias</span>

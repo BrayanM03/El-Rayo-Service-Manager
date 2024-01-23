@@ -18,7 +18,7 @@ if($total_garantias>0){
     $res->execute();
     $error = $con->error;
     $resultado_garantias = $res->get_result();  
-    $res->fetch();
+    $res->free_result();
     $res->close();
     $data = array();
     while($fila = $resultado_garantias->fetch_assoc()){

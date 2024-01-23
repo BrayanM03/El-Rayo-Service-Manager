@@ -216,8 +216,8 @@ function tablaGarantias(){
        data: null,
        className: "celda-acciones",
        render: function (row, data) {
-         rol = $("#titulo-hv").attr("rol");
-           if(rol != '1'){
+         rol = $("#emp-title").attr("sesion_rol");
+           if(rol == '1'){
              return `
              <button type="button" onclick="procesarGarantia(${row[0]});" title="Procesar garantia" class="buttonBorrar btn btn-success" style="margin-left: 8px">
              <span class="fa fa-check"></span><span class="hidden-xs"></span></button>
@@ -227,7 +227,12 @@ function tablaGarantias(){
              <span class="fa fa-file-image"></span><span class="hidden-xs"></span></button>
              `;
          }else{
-             return '';
+             return `
+             <button type="button" onclick="pdfGarantia(${row[0]});" title="PDF garantia" class="buttonBorrar btn btn-danger">
+             <span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button>
+             <button type="button" onclick="compranteGarantia(${row[0]}, '${row[16]}');" title="comprobante garantia" class="buttonBorrar btn btn-info" style="margin-left: 8px">
+             <span class="fa fa-file-image"></span><span class="hidden-xs"></span></button>
+             `;
          }
           },
      },
@@ -447,13 +452,16 @@ function buscar() {
           
            if(params.term == undefined){
             params.term = "";
+          }else{
+            var id_sucursal = $("#sucursal").val();
+            var rol = $("#emp-title").attr('sesion_rol');
           }
         
            return {
              searchTerm: params.term, // search term
-             id_sucursal: params.id_sucursal,
+             id_sucursal: id_sucursal,
              page: params.page || 1,
-             rol: params.rol
+             rol: rol
              
            };
           },
