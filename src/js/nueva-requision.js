@@ -1,21 +1,25 @@
-$(document).ready(function() {
+
 
     $.fn.dataTable.ext.errMode = 'none';
-    let tipo_cotizacion = $("#btn-agregar").attr("cotizacion");
     let id_usuario = $("#emp-title").attr('sesion_id');
     id_sucursal_destino = $("#emp-title").attr('sesion_sucursal_id');
-    depurarTabla()
+    //depurarTabla()
+    
     function depurarTabla(){
+      let id_usuario = $("#emp-title").attr('sesion_id');
       $.ajax({
         type: "POST",
         url: "./modelo/cambios/depurar-tabla.php",
         data: {"id_usuario": id_usuario},
-        success: function (response) {}
-          
+        success: function (response) {
+         reload();
+         resetearSelect2()
+         $("#cantidad").val('');
+         
+        }
       });
-    }
-   
-    
+    } 
+
     table = $('#pre-requisicion').DataTable({
         
         destroy: true,
@@ -120,9 +124,8 @@ $(document).ready(function() {
     });
     
     
-    }); 
-    
-    
+ 
+
     function agregarProducto() { 
     
       tyre_amount = $("#cantidad").val();
@@ -339,28 +342,30 @@ $(document).ready(function() {
 
      function realizarRequerimiento(){
       let comentario = $("#hacer-comentario").attr('comentario')
-
-      $.ajax({
-        type: "post",
-        url: "./modelo/requerimientos/nuevo-requerimiento.php",
-        data: {comentario},
-        dataType: "JSON",
-        success: function (response) {
-          if(response.estatus){ 
+      
+      if (table.data().any()){
+        $.ajax({
+          type: "post",
+          url: "./modelo/requerimientos/nuevo-requerimiento.php",
+          data: {comentario},
+          dataType: "JSON",
+          success: function (response) {
+            if(response.estatus){ 
+                Swal.fire({
+                  icon: 'success',
+                  title: response.mensaje
+                })
+                depurarTabla()
+            }else{
               Swal.fire({
-                icon: 'success',
+                icon: 'error',
                 title: response.mensaje
               })
-              depurarTabla()
-          }else{
-            Swal.fire({
-              icon: 'error',
-              title: response.mensaje
-            })
+            }
           }
-        }
-      });
+        });
+      }else{
+        toastr.error('No hay productos en la tabla', 'Error');
+      }
+      
      }
-
-    
-     

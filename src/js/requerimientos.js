@@ -56,23 +56,23 @@ toastr.options = {
       { title: "Comentario",        data: 8       },
       { title: "Estatus",    data: 7 , render: function(data, type, row){
         switch(data){
-          case 1:
+          case '1':
           var estatus = 'Pendiente';
           var class_btn = 'warning'
           break;
-          case 2:
+          case '2':
           var estatus = 'Cancelado';
           var class_btn = 'danger'
           break;
-          case 3:
+          case '3':
           var estatus = 'Aprobado';
           var class_btn = 'info'
           break;
-          case 4:
+          case '4':
           var estatus = 'Entregada';
           var class_btn = 'success'
           break;
-          case 5:
+          case '5':
             var estatus = 'Aprobado parcialmente';
             var class_btn = 'primary'
             break;

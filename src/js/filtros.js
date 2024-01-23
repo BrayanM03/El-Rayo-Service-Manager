@@ -535,14 +535,14 @@ function procesarFiltrosCuentasPorPagar(){
                     if(row[11] == 1 || row[6] ==3 || row[6] ==4){
                       return `
                       <div style="display:flex;">
-                          <div class="btn btn-danger mr-2" onclick="remisionSalida(${row[0]})"><i class="fas fa-file-pdf"></i></div>
+                          <div class="btn btn-danger mr-2" onclick="remisionSalida(${row[1]})"><i class="fas fa-file-pdf"></i></div>
                           <div class="btn ${class_btn_check}" onclic${candado}k="administrarCuenta(${row[1]}, ${row[11]})"><i class="fas fa-check" disabled></i></div>
                       </div>
                           `;
                     }else if(row[11] ==2){
                       return `
                       <div style="display:flex;">
-                         <div class="btn btn-danger mr-2" onclick="remisionIngreso(${row[0]})"><i class="fas fa-file-pdf"></i></div>
+                         <div class="btn btn-danger mr-2" onclick="remisionIngreso(${row[1]})"><i class="fas fa-file-pdf"></i></div>
                          <div class="btn ${class_btn_check}" onclick="administrarCuenta(${row[1]},  ${row[11]})"><i class="fas fa-check"></i></div>
                       </div>`;
             
