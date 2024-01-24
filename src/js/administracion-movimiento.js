@@ -1089,12 +1089,28 @@ function borrarrLlantaRemision(id_historial){
         data: {id_historial},
         dataType: "json",
         success: function (response) {
+            switch (response.data[0].id_destino) {
+                case 1:
+                    index_sucursales = 0;
+                    break;
+                case 2:
+                    index_sucursales = 1;
+                    break;    
+                case 5:
+                    index_sucursales = 2;
+                    break;
+                case 6:
+                    index_sucursales = 3;
+                    break;
+                default:
+                    break;
+            }
             Swal.fire({
                 icon:'question',
                 html:`
                 <h3>¿Quieres borrar este registro de la remisión?</h3>
                 <label>Borrar la llanta del inventario</label>
-                <label>Stock actual ${sucursales_arreglo[(response.data[0].id_destino)-1].nombre}: ${response.data[0].stock}</label>
+                <label>Stock actual ${sucursales_arreglo[index_sucursales].nombre}: ${response.data[0].stock}</label>
                 <select id="permiso-borrar-inv" class="form-control">
                     <option value="1" selected>Si</option>
                     <option value="2">No</option>

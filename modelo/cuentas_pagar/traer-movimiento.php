@@ -73,7 +73,7 @@ if($total_movimientos>0){
 
 echo json_encode($resultado);
 
-function traer_llanta($id_llanta, $con){
+function traer_llanta($id_llanta, $con){ 
     $descripcion = '';
     $marca ='';
     $qr = "SELECT descripcion, marca FROM llantas WHERE id =?";
