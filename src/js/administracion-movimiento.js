@@ -78,6 +78,26 @@ function traerDatosMovimiento(id, tipo_remision){
                     contador++;
                     let ubicacionObj = element.id_ubicacion === 0 ? { id: 0, nombre: 'Bodega' } : response.sucursales.find(sucursal => sucursal.id === element.id_ubicacion);
                      let destinoObj = response.sucursales.find(sucursal => sucursal.id === element.id_destino);
+                     let id_usuario = $("#emp-title").attr('sesion_id')
+                     if(id_usuario == 22 || id_usuario ==15){
+                      $("#tbody-llantas-remision").append(`
+                      <tr>
+                          <td>${contador}</td>
+                          <td>${element.cantidad}</td>
+                          <td>${element.descripcion}</td>
+                          <td>${element.marca}</td>
+                          <td>${element.id_ubicacion ==0 ? 'Bodega': ubicacionObj.nombre}</td>
+                          <td>${destinoObj.nombre}</td>
+                          <td>${element.stock_destino_anterior}</td>
+                          <td>${element.stock_destino_actual}</td>
+                          <td>${element.costo}</td>
+                          <td>${element.importe}</td>
+                          <td>
+                          <div class="btn btn-success" onclick="editarLlantaRemision(${element.id})"><i class="fas fa-pen"></i></div>
+                         
+                          </td>
+                      </tr>
+                  `)}else{
                     $("#tbody-llantas-remision").append(`
                     <tr>
                         <td>${contador}</td>
@@ -96,6 +116,8 @@ function traerDatosMovimiento(id, tipo_remision){
                         </td>
                     </tr>
                 `)
+                  }
+                     
                 });
             }
 
@@ -1209,6 +1231,27 @@ setTimeout(function(){
                         contador++;
                         let ubicacionObj = element.id_ubicacion === 0 ? { id: 0, nombre: 'Bodega' } : response.sucursales.find(sucursal => sucursal.id === element.id_ubicacion);
                          let destinoObj = response.sucursales.find(sucursal => sucursal.id === element.id_destino);
+                       let id_usuario = $("#emp-title").attr('sesion_id')
+                       if(id_usuario == 22 || id_usuario ==15){
+                        $("#tbody-llantas-remision").append(`
+                        <tr>
+                            <td>${contador}</td>
+                            <td>${element.cantidad}</td>
+                            <td>${element.descripcion}</td>
+                            <td>${element.marca}</td>
+                            <td>${element.id_ubicacion ==0 ? 'Bodega': ubicacionObj.nombre}</td>
+                            <td>${destinoObj.nombre}</td>
+                            <td>${element.stock_destino_anterior}</td>
+                            <td>${element.stock_destino_actual}</td>
+                            <td>${element.costo}</td>
+                            <td>${element.importe}</td>
+                            <td>
+                            <div class="btn btn-success" onclick="editarLlantaRemision(${element.id})"><i class="fas fa-pen"></i></div>
+                           
+                            </td>
+                        </tr>
+                    `)
+                       }else{
                         $("#tbody-llantas-remision").append(`
                         <tr>
                             <td>${contador}</td>
@@ -1227,6 +1270,8 @@ setTimeout(function(){
                             </td>
                         </tr>
                     `)
+                       }
+                        
                     });
                 }else{
                     $("#tbody-llantas-remision").append(

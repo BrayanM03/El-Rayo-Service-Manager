@@ -117,7 +117,9 @@
                             <div class="col-md-3" id="contenedor-botones-edicion">
                                 <div class="row justify-content-end">
                                     <div class="col-12 col-md-4">
+                                    <?php if($_SESSION['id_usuario'] != 22 && $_SESSION['id_usuario'] != 15){ ?>
                                         <div class="btn btn-primary w-100" onclick="actualizarDatosGenerales(0)">Editar</div>
+                                    <?php }?>
                                     </div>
                                 </div>
                             </div>   
@@ -196,7 +198,9 @@
                             <div class="col-md-3">
                                 <div class="row justify-content-end">
                                     <div class="col-12 col-md-8">
+                                        <?php if($_SESSION['id_usuario'] != 22 && $_SESSION['id_usuario'] != 15){ ?>
                                         <div class="btn btn-primary w-100" onclick="modalAgregarLlantas()">Agregar llantas</div>
+                                        <?php } ?>
                                     </div>
                                 </div>
                             </div>   
