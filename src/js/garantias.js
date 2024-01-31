@@ -197,6 +197,9 @@ function tablaGarantias(){
         }else if(data[9]=='improcedente'){
           $(row).css('background-color','#FF6347')
           $(row).css('color','white')
+        }else if(data[9]=='concluido'){
+          $(row).css('background-color','gray')
+          $(row).css('color','white')
         }
        },
       
@@ -244,7 +247,7 @@ function tablaGarantias(){
    responsive: false,
    ordering: "enable",
    multiColumnSort: true,
-   order: [1, "desc"],
+   order: [8, "desc"],
    });
    //table.columns( [6] ).visible( true );
    $("table.dataTable thead").addClass("table-info")
@@ -278,6 +281,7 @@ function procesarGarantia(id_garantia){
                                   <option value="entregado">Entregado al proveedor</option>
                                   <option value="procedente">Procedente</option>
                                   <option value="improcedente">Improcedente</option>
+                                  <option value="concluido">Concluido</option>
                               </select>
                           </div>
                           <div class="col-6">
