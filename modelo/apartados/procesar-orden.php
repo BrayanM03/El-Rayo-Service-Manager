@@ -7,7 +7,10 @@ $con= $conectando->conexion();
 if (!isset($_SESSION['id_usuario'])) {
     header("Location:../../login.php"); 
 }
+ 
 
+//insertar utilidad
+include '../ventas/insertar_utilidad.php';
 
 if(isset($_POST)){
 
@@ -191,7 +194,7 @@ $ID->close();
               $tipo = "vt-credito";
               $complemento_desc = " realizo una venta a credito";
             }
-           
+            $utilidad_res = insertarUtilidad($con, $id_Venta);
 
           }else{
             echo "";

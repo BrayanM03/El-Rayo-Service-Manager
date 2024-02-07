@@ -6,6 +6,9 @@ $con = $conectando->conexion();
 
 date_default_timezone_set("America/Matamoros");
 
+//insertar utilidad
+include '../ventas/insertar_utilidad.php';
+
 $id = $_POST["id_apartado"];
 $fecha_actual = date("Y-m-d");
 $hora = date("h:i a");
@@ -123,5 +126,6 @@ while ($fila = $resultado_da->fetch_assoc()) {
   $resultado->close();
 }
 
-$res = array('estatus' => true, 'mensaje' => 'Venta realizada correctamente. ', 'id_venta' => $id_Venta);
+$utlidad_res = insertarUtilidad($con, $id_Venta);
+$res = array('estatus' => true, 'mensaje' => 'Venta realizada correctamente. ', 'id_venta' => $id_Venta, 'utilidad' => $utlidad_res);
 echo json_encode($res);

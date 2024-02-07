@@ -3,6 +3,8 @@ session_start();
 include '../conexion.php';
 $con = $conectando->conexion(); 
 
+//insertar utilidad
+include '../ventas/insertar_utilidad.php';
 date_default_timezone_set("America/Matamoros");
 $hora = date("h:i a");
 $fecha_actual = date("Y-m-d");
@@ -92,6 +94,7 @@ function insertarCotizacion($con, $resultado, $id, $id_cliente, $abonado, $resta
     $suma_pago_sin_definir = 0;
     $select_ab = 'SELECT SUM(pago_efectivo),SUM(pago_tarjeta),SUM(pago_transferencia),SUM(pago_cheque), SUM(pago_sin_definir) FROM abonos_pedidos WHERE id_pedido =?';
     $r = $con->prepare($select_ab);
+    $r->bind_param('i', $id);
     $r->execute();
     $r->bind_result($suma_pago_efectivo,$suma_pago_tarjeta,$suma_pago_transferencia, $suma_pago_cheque, $suma_pago_sin_definir);
     $r->fetch();
@@ -180,6 +183,8 @@ function insertarCotizacion($con, $resultado, $id, $id_cliente, $abonado, $resta
         $stmt->close();
     }
 
+    $utlidad_res = insertarUtilidad($con, $id_venta);
+
     $select_ap = "SELECT * FROM abonos_pedidos WHERE id_pedido = ?";
     $resp = $con->prepare($select_ap);
     $resp->bind_param('i', $id);
@@ -213,7 +218,7 @@ function insertarCotizacion($con, $resultado, $id, $id_cliente, $abonado, $resta
     $resp->close();
     
     if(!$error){
-        return array('estatus' =>true, 'mensaje' =>'Credito insertado correctamene');
+        return array('estatus' =>true, 'mensaje' =>'Credito insertado correctamente', 'utilidad_res'=>$utlidad_res);
     }else{
         return array('estatus' =>false, 'mensaje' =>'Hubo un error: '. $error);
     }

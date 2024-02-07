@@ -9,6 +9,9 @@ if (!isset($_SESSION['id_usuario'])) {
 }
 
 
+//insertar utilidad
+include '../ventas/insertar_utilidad.php';
+
 if(isset($_POST)) {
 
     date_default_timezone_set("America/Matamoros");
@@ -178,11 +181,14 @@ if(isset($_POST)) {
                 $resultado->execute();
                 $resultado->close();
             }
+
+        $utilidad_res = insertarUtilidad($con, $id_Venta);
     
         }else{
             $estatus = 'Activo';
             $id_Venta = null;
             $liquidacion = false;
+            $utilidad_res=[];
         }
         
         $upd = "UPDATE apartados SET pago_efectivo = ?, 
@@ -199,7 +205,7 @@ if(isset($_POST)) {
         $ress->execute();
         $ress->close();
      
-        $res = array('estatus'=>true, 'mensaje'=>'Abono realizado correctamente', 'liquidacion'=>$liquidacion);
+        $res = array('estatus'=>true, 'mensaje'=>'Abono realizado correctamente', 'liquidacion'=>$liquidacion, 'utilidad_res'=>$utilidad_res);
         echo json_encode($res);
     }
     

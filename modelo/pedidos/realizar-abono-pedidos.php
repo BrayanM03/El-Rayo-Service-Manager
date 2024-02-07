@@ -4,6 +4,8 @@ session_start();
 include '../conexion.php';
 $con = $conectando->conexion();
 
+//insertar utilidad
+include '../ventas/insertar_utilidad.php';
 if (!isset($_SESSION['id_usuario'])) {
     header("Location:../../login.php");
 }
@@ -290,8 +292,11 @@ if (isset($_POST)) {
                     $ress->bind_param('ddssi', $nueva_suma_abonos, $nuevo_restante, $estatus, $id_Venta, $id_apartado);
                     $ress->execute();
                     $ress->close();
+
+
+                    $utlidad_res = insertarUtilidad($con, $id_Venta);
     
-                    $res = array('estatus' => true, 'mensaje' => 'Pedido liquidado correctamente', 'liquidacion' => $liquidacion);
+                    $res = array('estatus' => true, 'mensaje' => 'Pedido liquidado correctamente', 'liquidacion' => $liquidacion, 'utilidad_res'=>$utlidad_res);
                 } else {
                     $res = array('estatus' => $stockSuficiente, 'mensaje' => $mensaje);
                 }

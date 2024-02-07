@@ -16,7 +16,7 @@ toastr.options = {
   "hideMethod": "fadeOut"
 }
 
-MostrarApartados();
+MostrarPedidos();
 const meses = [
   "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
   "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
@@ -364,7 +364,7 @@ function calcularMontosAdelanto(importe){
     $("#total_restante").val(resta_redondeada);
 }
 
-function MostrarApartados() {  
+function MostrarPedidos() {  
   //$.fn.dataTable.ext.errMode = 'none';
   ocultarSidebar();
 table = $('#pedidos').DataTable({
@@ -656,19 +656,6 @@ function procesarOrden(id_apartado){
         }
       });
     },
-    preConfirm: async () => {
-      /*try {
-        const response = await fetch(`./modelo/apartados/procesar-orden.php?id=${id_apartado}`);
-        if (!response.ok) {
-          throw new Error(response.statusText);
-        }
-        return await response.json();
-      } catch (error) {
-        Swal.showValidationMessage(
-          `Request failed: ${error}`
-        );
-      }*/
-    },
     allowOutsideClick: () => !Swal.isLoading(),
 
   }).then((respuesta) => {
@@ -754,7 +741,7 @@ function procesarOrden(id_apartado){
       })
       
     }else if(respuesta.isDenied){
-      abonarApartado(id_apartado);
+      abonarPedido(id_apartado);
     }
     
   })
@@ -833,32 +820,6 @@ function calcularMontosApartado(importe, restante){
   
 }
 
-function realizarVentaApartado(metodos_pago, id_apartado){
-  $.ajax({
-    type: "post",
-    url: "./modelo/apartados/realizar-venta-apartados.php",
-    data: {"id_apartado": id_apartado, "metodos_pago": metodos_pago},
-    dataType: "JSON",
-    success: function (response) {
-      if(response.estatus){
-     Swal.fire({
-        title: 'Exito',
-        text: response.mensaje,
-        html: `Folio de venta: RAY${response.id_venta}`,
-        icon: 'success',
-        showCancelButton: false,
-        confirmButtonColor: '#28a745',
-        confirmButtonText: 'Aceptar', 
-      }).then((result) => {
-        if (result.isConfirmed) {
-          location.reload();
-        }
-      })
-      }
-      
-    }
-  });
-}
 
 const audio_2 = new Audio("./src/sounds/success-sound.mp3");
 audio_2.volume = 0.5;
@@ -957,7 +918,7 @@ function ventaYaCancelada(){
 })
  }
 
-function abonarApartado(id_apartado){
+function abonarPedido(id_apartado){
   $.ajax({
     type: "post",
     url: './modelo/pedidos/traer-data-orden.php',
@@ -994,7 +955,7 @@ function abonarApartado(id_apartado){
                     <div class="row">
                         <div class="col-12">
                             <label>Selecciona el monto para cada metodo de pago:</label><br>
-                            <input type="number" class="form-control" placeholder="0.00" id="monto_metodo_0_apartado" onkeyup="calcularMontosAbonosApartado(${response_ab.total}, ${response_ab.restante})">
+                            <input type="number" class="form-control" placeholder="0.00" id="monto_metodo_0_apartado" onkeyup="calcularMontosAbonosPedido(${response_ab.total}, ${response_ab.restante})">
                         </div>
                     </div>  
               </div>
@@ -1116,13 +1077,13 @@ function abonarApartado(id_apartado){
                           <div class="row mt-2">
                           <div class="col-md-12">
                               <label>Monto para pago ${nombre_metodo}</label>
-                              <input type="number" class="form-control" id="monto_metodo_${clave}_apartado" onkeyup="calcularMontosAbonosApartado(${importe_total}, ${response_ab.restante})" placeholder="0.00">
+                              <input type="number" class="form-control" id="monto_metodo_${clave}_apartado" onkeyup="calcularMontosAbonosPedido(${importe_total}, ${response_ab.restante})" placeholder="0.00">
                           </div>
                           </div>
                     `);}
                       }
 
-                      calcularMontosAbonosApartado(importe_total, response_ab.restante);
+                      calcularMontosAbonosPedido(importe_total, response_ab.restante);
                   });
     
                   let restante_ = parseFloat(response_ab.restante);
@@ -1166,7 +1127,7 @@ function abonarApartado(id_apartado){
 }
 
 
-function calcularMontosAbonosApartado(importe, restante){
+function calcularMontosAbonosPedido(importe, restante){
   let button_confirm = document.querySelector('.swal2-confirm');
   var inputs = document.querySelectorAll("#contenedor-metodos input[type=number]");  // Obtener todos los inputs
   var suma = 0;
@@ -1303,7 +1264,7 @@ function realizarAbonoPedido(id_apartado, total, restante_pedido){
                 toastr.success('Abonado con exito', 'Exito' ); 
 
               }
-              recargarTablaAbonosApartado(id_apartado)
+              recargarTablaAbonosPedido(id_apartado)
             }else{
               if(response.liquidacion){
                 toastr.error(response.mensaje, 'Error' ); 
@@ -1321,7 +1282,7 @@ function realizarAbonoPedido(id_apartado, total, restante_pedido){
   }
 }
 
-function recargarTablaAbonosApartado(id_apartado){
+function recargarTablaAbonosPedido(id_apartado){
   $.ajax({
     type: "post",
     url: './modelo/pedidos/traer-data-orden.php',

@@ -8,6 +8,7 @@ if (!isset($_SESSION['id_usuario'])) {
     header("Location:../../login.php"); 
 }
 
+include 'insertar_utilidad.php';
 
 if(isset($_POST)){
 
@@ -200,7 +201,8 @@ if($stock_ok) {
                 }
 
 
-
+                //insertar utilidad
+                $utlidad_res = insertarUtilidad($con, $id_Venta);
 
 
                 //Notify system
@@ -232,7 +234,7 @@ if($stock_ok) {
 
         }
 
-        $response = array('estatus' =>true, 'mensaje' =>'Venta realizada correctamente', 'folio' =>$id_Venta);
+        $response = array('estatus' =>true, 'mensaje' =>'Venta realizada correctamente', 'folio' =>$id_Venta, 'utlidad_res'=>$utlidad_res);
         echo json_encode($response);
     }
 }else{

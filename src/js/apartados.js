@@ -654,19 +654,6 @@ function procesarOrden(id_apartado){
         }
       });
     },
-    preConfirm: async () => {
-      /*try {
-        const response = await fetch(`./modelo/apartados/procesar-orden.php?id=${id_apartado}`);
-        if (!response.ok) {
-          throw new Error(response.statusText);
-        }
-        return await response.json();
-      } catch (error) {
-        Swal.showValidationMessage(
-          `Request failed: ${error}`
-        );
-      }*/
-    },
     allowOutsideClick: () => !Swal.isLoading(),
 
   }).then((respuesta) => {
