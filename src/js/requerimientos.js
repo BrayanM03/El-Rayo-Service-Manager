@@ -294,22 +294,25 @@ toastr.options = {
   }
 
   function formatearFecha(fechaStr) {
-    // Crear un objeto Date a partir de la cadena de fecha
-    const fecha = new Date(fechaStr);
+    // Separar la cadena de fecha en año, mes y día
+    const [ano, mes, dia] = fechaStr.split('-');
+
+    // Crear un objeto Date a partir de los componentes de la fecha
+    const fecha = new Date(ano, mes - 1, dia); // El mes se cuenta desde 0, por eso restamos 1
 
     // Obtener el día, mes y año
-    const dia = fecha.getDate();
-    const mes = obtenerNombreMes(fecha.getMonth());
-    const anio = fecha.getFullYear();
+    const diaNumero = fecha.getDate();
+    const nombreMes = obtenerNombreMes(fecha.getMonth());
+    const anoNumero = fecha.getFullYear();
 
     // Crear la cadena formateada
-    const fechaFormateada = `${dia} de ${mes} ${anio}`;
+    const fechaFormateada = `${diaNumero} de ${nombreMes} ${anoNumero}`;
 
     return fechaFormateada;
 }
 
+// Función para obtener el nombre del mes
 function obtenerNombreMes(numeroMes) {
-    // Array con los nombres de los meses en español
     const meses = [
         "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
         "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
