@@ -3,7 +3,7 @@ session_start();
 include '../conexion.php';
 $con= $conectando->conexion(); 
 date_default_timezone_set("America/Matamoros");
-
+include 'obtener-utilidad-abono.php';
 if (!isset($_SESSION['id_usuario'])) {
     header("Location:../../login.php");
 }
@@ -132,6 +132,10 @@ if(isset($_POST)){
                 $resultado->bind_param('sssssdddddsissss',$id_credito, $fecha_inicio, $hora, $monto_total, $metodo_pago, $monto_efectivo, $monto_tarjeta, $monto_transferencia, $monto_cheque, $monto_sin_definir, $usuario, $estado, $sucursal, $id_sucursal, $fecha_corte, $hora_corte);
                 $resultado->execute();
                 $resultado->close();
+                $id_abono = $con->insert_id;
+               // print_r($id_abono);
+                insertarUtilidadAbono($id_abono, $con);
+                
             }
             
     }else{

@@ -3,6 +3,7 @@ session_start();
 include '../conexion.php';
 $con= $conectando->conexion(); 
 date_default_timezone_set("America/Matamoros");
+include 'obtener-utilidad-abono.php';
 
 if (!isset($_SESSION['id_usuario'])) {
     header("Location:../../login.php");
@@ -128,7 +129,8 @@ if(isset($_POST)){
             if ($resultado == true) {
               
             $resultado->close();
-            
+            $id_abono = $con->insert_id;
+            insertarUtilidadAbono($id_abono, $con);
             $pagado_update = (double)$pagado + (double)$monto_total;
             $restante_update = (double)$restante - (double)$monto_total;
            

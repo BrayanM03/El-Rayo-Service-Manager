@@ -8,6 +8,7 @@ include '../ventas/insertar_utilidad.php';
 date_default_timezone_set("America/Matamoros");
 $hora = date("h:i a");
 $fecha_actual = date("Y-m-d");
+include '../creditos/obtener-utilidad-abono.php';
 
 $id = $_POST["id"];
 $plazo_credito = $_POST["plazo"];
@@ -213,6 +214,8 @@ function insertarCotizacion($con, $resultado, $id, $id_cliente, $abonado, $resta
         $stmt = $con->prepare($insertar_abonos);
         $stmt->bind_param('sssssssssssssssss', $id_credito, $fecha_abono, $hora_abono, $abono, $metodo_pago, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $usuario, $id_usuario, $estado, $sucursal, $id_sucursal, $fecha_corte, $hora_corte);
         $stmt->execute();
+        $id_abono = $con->insert_id;
+        insertarUtilidadAbono($id_abono, $con);
     }
 
     $resp->close();
