@@ -91,11 +91,12 @@ if(isset($_POST)){
    $comentario = $_POST["comentario"];
 
    $stock_ok = true;
-   
+   $error_llantas='';
    foreach ($info_producto_individual as $key => $value) { 
    
     $codigo = $value["codigo"];
     $subcadena = substr($codigo, 0, 4);
+    $cantidad_post = $value['cantidad'];
 
         if($subcadena == "SERV") {
 
@@ -107,7 +108,8 @@ if(isset($_POST)){
             $ID->fetch();
             $ID->close();
     
-             if($stockActual <= 0){
+             if($stockActual < $cantidad_post){
+                $error_llantas .= $value['descripcion'] .', ';
                 $stock_ok = false;
              }
           }
@@ -238,7 +240,7 @@ if($stock_ok) {
         echo json_encode($response);
     }
 }else{
-        $response = array('estatus' =>false, 'mensaje' =>'El stock de una llanta es igual o menor a 0');
+        $response = array('estatus' =>false, 'mensaje' =>'El stock de la llantas: '. $error_llantas.' no es suficiente. Cantidad solicitada<b>'.$cantidad_post .'</b>  Stock actual:<b>'.$stockActual);
         echo json_encode($response);
 }
   
