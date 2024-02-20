@@ -181,7 +181,7 @@ if(isset($_POST)) {
 
             if($total_detalles > 1 || ($total_detalles == 1 && $bandera_producto_servicio > 0)){
               
-              $descripcion_mov = 'Se agregan ' . $cantidad_llantas_movimiento . ' llantas a la sucursal ' . $sucursal_nombre . ' por motivo de cancelación.';
+              $descripcion_mov = 'Se agregan ' . $cantidad_llantas_movimiento . ' llantas a la sucursal ' . $sucursal_nombre . ' por motivo de cancelación. RAY'.$id_venta . ': ' . $motivo;
               $update = "UPDATE movimientos SET descripcion = ?, mercancia = ? WHERE id = ?";
               $respp = $con->prepare($update);
              
