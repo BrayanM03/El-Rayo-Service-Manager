@@ -47,10 +47,10 @@ $vendedor_usuario = $vendedor_name . " " . $vendedor_apellido;
 
 
 //Trayendo datos de la sucursal
-$ID = $con->prepare("SELECT code, nombre, calle, numero, colonia, ciudad, estado, pais, Telefono, RFC, CP  FROM sucursal WHERE id = ?");
+$ID = $con->prepare("SELECT code, nombre, calle, numero, colonia, ciudad, estado, pais, Telefono, RFC, CP, correo  FROM sucursal WHERE id = ?");
 $ID->bind_param('i', $sucursal_id);
 $ID->execute();
-$ID->bind_result($codigo_sucursal, $sucursal_nombre, $calle_suc, $numero_suc, $colonia_suc, $ciudad_suc, $estado_suc, $pais_suc, $telefono_suc, $rfc_suc, $cp_suc);
+$ID->bind_result($codigo_sucursal, $sucursal_nombre, $calle_suc, $numero_suc, $colonia_suc, $ciudad_suc, $estado_suc, $pais_suc, $telefono_suc, $rfc_suc, $cp_suc, $correo_suc);
 $ID->fetch();
 $ID->close();
 
@@ -77,6 +77,7 @@ global $estatus;
 global $metodo_pago;
 global $hora;
 global $comentario;
+global $correo_suc;
 
 $CREDITO = $con->prepare("SELECT id, pagado, restante, fecha_inicio, fecha_final, plazo FROM creditos WHERE id_venta = ?");
 $CREDITO->bind_param('i', $idVenta);
@@ -258,6 +259,7 @@ function Header()
       $telefono = $GLOBALS["telefono_suc"];
       $rfc = $GLOBALS["rfc_suc"];
       $cp = $GLOBALS["cp_suc"];
+      $correo_suc = $GLOBALS["correo_suc"];
 
       $cliente= $GLOBALS["cliente"];
       $telefono_cliente = $GLOBALS["telefono_cliente"];
@@ -361,7 +363,7 @@ function Header()
     $this->SetFont('Arial','B',9);
     $this->Cell(25,10,utf8_decode("Correo: "),0,0,'L', false);
     $this->SetFont('Arial','',9);
-    $this->Cell(50,10,utf8_decode("karlasanchezr@gmail.com"),0,0,'L', false);
+    $this->Cell(50,10,utf8_decode($correo_suc),0,0,'L', false);
 
    
 
