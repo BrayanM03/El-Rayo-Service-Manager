@@ -49,6 +49,8 @@ $columns = array(
 	array( 'db' => 'Sucursal',   'dt' => 13 ),
 	array( 'db' => 'id_sucursal',   'dt' => 14 ),
 	array( 'db' => 'Stock',   'dt' => 15 ),
+	array( 'db' => 'stock_minimo',   'dt' => 16 ),
+	array( 'db' => 'medida_stock_estatus',   'dt' => 17 ),
 /* 	array(
 		'db'        => 'start_date',
 		'dt'        => 4,

@@ -24,18 +24,14 @@ function MostrarInventario(id_sucursal) {
 
     table = $('#inventario-pedro').DataTable({   
         processing: true,
-        serverSide: true,
-        /*rowCallback: function(row, data, index) {
-          //console.log(this.api().buttons.exportData().length);
-         // if (!this.api().buttons.exportData().length) {
-          var info = this.api().page.info();
-          var page = info.page;
-          var length = info.length;
-          var columnIndex = 0; // Índice de la primera columna a enumerar
-    
-          $('td:eq(' + columnIndex + ')', row).html(page * length + index + 1);
-          //}
-        },*/
+        serverSide: true, 
+        rowCallback: function(row, data, index) {
+          if(data[15] <= data[16] && data[16] !=0 && data[17] ==1){
+            $(row).css('background-color','#edb95e')
+          }/* else{
+            $(row).css('background-color','#ffffbf')
+          } */
+        },
         ajax:'./modelo/traerInventario.php?id_sucursal='+id_sucursal,
             
         columns: [   
