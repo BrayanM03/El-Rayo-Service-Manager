@@ -344,6 +344,9 @@
       let comentario = $("#hacer-comentario").attr('comentario')
       
       if (table.data().any()){
+        // Deshabilitar el botón
+        $("#boton-requerimiento").prop("disabled", true);
+
         $.ajax({
           type: "post",
           url: "./modelo/requerimientos/nuevo-requerimiento.php",
@@ -362,6 +365,9 @@
                 title: response.mensaje
               })
             }
+            
+            // Habilitar el botón después de la respuesta
+            $("#boton-requerimiento").prop("disabled", true);
           }
         });
       }else{
