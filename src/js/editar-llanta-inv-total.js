@@ -75,7 +75,7 @@ function editarRegistro(id){
         
             '</div>'+
         
-            '<div class="row">'+
+            '<div class="row" id="precios_area">'+
                 '<div class="col-4">'+
                     '<div class="form-group">'+
                         '<label><b>Costo</b></label>'+
@@ -196,7 +196,12 @@ function editarRegistro(id){
                         return repo.imagen || repo.text;
                       }
         
-        
+                      let rol = $('#id_rol').attr('role');
+                      if(rol != 1 && rol != 4){
+                        $("#precio").prop('disabled', true);
+                        $("#costo").prop('disabled', true);
+                        $("#mayorista").prop('disabled', true);
+                      }
                 });
             } 
             

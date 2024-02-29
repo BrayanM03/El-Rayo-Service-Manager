@@ -24,7 +24,7 @@
     <div class="col-12 col-md-3 col-sm-12">
             <div class="col-12 col-md-12 mt-3">
                 <div class="option-card text-center" id="card-check">
-                    <lottie-player src="https://lottie.host/778c96cc-3b7a-476f-aa83-a20666fd5e54/9TCnTeDU6W.json" background="transparent" speed="1" style="width: 250px; height: 250px;" loop autoplay></lottie-player>
+                    <lottie-player src="https://lottie.host/b456286d-19b4-4303-be60-5eaea6bdacca/0V7LI9PuA7.json" background="transparent" speed="1" style="width: 250px; height: 250px;" loop autoplay></lottie-player>
                 </div>
             </div>
         </div>
@@ -73,7 +73,7 @@
         <div class="col-12 col-md-3 col-sm-12">
             <div class="col-12 col-md-12 mt-3">
                 <div class="option-card text-center" id="card-check">
-                    <lottie-player src="https://lottie.host/a6942026-227d-45ea-a9f3-78766166e4da/lFdYG8cJu0.json" background="transparent" speed="1" style="width: 250px; height: 250px;" loop autoplay></lottie-player>
+                    <lottie-player src="https://lottie.host/b456286d-19b4-4303-be60-5eaea6bdacca/0V7LI9PuA7.json" background="transparent" speed="1" style="width: 250px; height: 250px;" loop autoplay></lottie-player>
                 </div>
             </div>
         </div>

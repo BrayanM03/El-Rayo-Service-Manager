@@ -11,13 +11,14 @@
     if (!isset($_SESSION['id_usuario'])) {
         header("Location:login.php");
     }
-
-    if (!isset($_SESSION['id_usuario'])) {
-        header("Location:login.php");
-    }
+    $id_usuario = $_SESSION['id_usuario'];
+    $rol_usuario = $_SESSION['rol'];
     
-    if ($_SESSION['rol'] == 3 || ($_SESSION['rol'] == 2 && $_SESSION['id_usuario']!= 7) ) {
-        header("Location:nueva-venta.php?nav=inicio");
+    if ($rol_usuario == 3 || $rol_usuario == 2) {
+        
+        if($id_usuario !=7 && $id_usuario != 15){
+            header("Location:nueva-venta.php?nav=inicio");
+        }
     }
 
     
