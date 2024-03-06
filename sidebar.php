@@ -226,7 +226,7 @@ switch ($flag) {
                 <?php } ?>
                 <?php
 
-                if ($user_jerarquia == 1 || $user_jerarquia == 2) { ?>
+                if ($user_jerarquia == 1 || $user_jerarquia == 2 || $user_jerarquia == 3) { ?>
                     <a class="collapse-item <?php echo $claseGastos ?> rol-4" href="gastos.php?id=0&nav=gastos">
                         <img src="src/img/gastos.png" width="18px" />
                         <span style="margin-left:12px;"> Gastos</span>
