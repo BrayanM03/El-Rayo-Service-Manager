@@ -2,7 +2,7 @@
  //Validar hora de cortes
 
  $fecha_actual = date('Y-m-d');
- $hora_actual = date("H:i a");
+ $hora_actual = date("h:i a");
  $dia_de_la_semana = date("l");
 
  $hora_corte_normal = '';
