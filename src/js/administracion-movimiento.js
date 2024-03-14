@@ -404,6 +404,7 @@ function modalAbonosRemisionIngreso(){
                                         <option value="Deposito">Deposito</option>
                                         <option value="Tarjeta">Tarjeta</option>
                                         <option value="Cheque">Cheque</option>
+                                        <option value="Deposito">Deposito</option>
                                         <option value="Sin definir">Sin definir</option>
                                     </select>
                                 </div>
@@ -415,6 +416,12 @@ function modalAbonosRemisionIngreso(){
                                 <div class="col-12">
                                     <label>Folio transferencia</label>
                                     <input type="text" class="form-control" id="folio-pago" placeholder="Folio">
+                                </div>
+                            </div>
+                            <div class="row m-4" id="area-folio-pago">
+                                <div class="col-6">
+                                    <label>Fecha y hora</label>
+                                    <input type="datetime-local" class="form-control" id="hora-fecha-pago">
                                 </div>
                             </div>    
                             <div class="mt-3">
@@ -510,6 +517,7 @@ function abonarCuentaPorPagar(id_movimiento){
     let abono = $("#monto-abono-abonos").val();
     let forma_pago = $("#forma-pago-abonos").val();
     let importe_total = $("#importe-abonos").val();
+    let hora_fecha_pago = $("#hora-fecha-pago").val();
     
     if($('#forma-pago-abonos').val()== 'Transferencia' || $('#forma-pago-abonos').val()== 'Deposito' || $('#forma-pago-abonos').val()== 'Tarjeta' || $('#forma-pago-abonos').val()== 'Cheque'){
         var folio_forma_pago = $("#folio-pago").val();
@@ -532,7 +540,7 @@ function abonarCuentaPorPagar(id_movimiento){
         $.ajax({
             type: "post",
             url: "./modelo/cuentas_pagar/abonar-cuenta-pagar.php",
-            data: {id_movimiento, abono, forma_pago, importe_total, folio_forma_pago},
+            data: {id_movimiento, abono, forma_pago, importe_total, folio_forma_pago, hora_fecha_pago},
             dataType: "JSON",
             success: function (response) {
                 if(response.estatus){

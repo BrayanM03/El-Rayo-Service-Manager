@@ -6,10 +6,10 @@ $con = $conectando->conexion();
 
 //insertar utilidad
 include '../ventas/insertar_utilidad.php';
+include '../creditos/obtener-utilidad-abono.php';
 if (!isset($_SESSION['id_usuario'])) {
     header("Location:../../login.php");
 }
-
 
 if (isset($_POST)) {
     
@@ -23,6 +23,7 @@ if (isset($_POST)) {
     $pago_transferencia = 0;
     $pago_tarjeta = 0;
     $pago_cheque = 0;
+    $pago_deposito = 0;
     $pago_sin_definir = 0;
     $monto_total_abono = 0;
 
@@ -58,6 +59,10 @@ if (isset($_POST)) {
                     case 3:
                         $pago_cheque = $value['monto'];
                         break;
+                    
+                    case 5:
+                        $pago_deposito = $value['monto'];
+                        break;    
         
                     case 4:
                         $pago_sin_definir = $value['monto'];
@@ -102,7 +107,7 @@ if (isset($_POST)) {
         include '../helpers/verificar-hora-corte.php';
     
         //Revisar si no hay errores en los montos
-        $select = "SELECT SUM(abono), SUM(pago_efectivo), SUM(pago_tarjeta), SUM(pago_transferencia), SUM(pago_cheque), SUM(pago_sin_definir) FROM abonos_pedidos WHERE id_pedido = ?";
+        $select = "SELECT SUM(abono), SUM(pago_efectivo), SUM(pago_tarjeta), SUM(pago_transferencia), SUM(pago_cheque), SUM(pago_deposito), SUM(pago_sin_definir) FROM abonos_pedidos WHERE id_pedido = ?";
         $re = $con->prepare($select);
         $re->bind_param('i', $id_apartado);
         $re->execute();
@@ -112,6 +117,7 @@ if (isset($_POST)) {
             $actual_pago_tarjeta,
             $actual_pago_transferencia,
             $actual_pago_cheque,
+            $actual_pago_deposito,
             $actual_pago_sin_definir
         );
         $re->fetch();
@@ -123,6 +129,7 @@ if (isset($_POST)) {
         $nuevo_pago_tarjeta = $pago_tarjeta + $actual_pago_tarjeta;
         $nuevo_pago_transferencia = $pago_transferencia + $actual_pago_transferencia;
         $nuevo_pago_cheque = $pago_cheque + $actual_pago_cheque;
+        $nuevo_pago_deposito = $pago_deposito + $actual_pago_deposito;
         $nuevo_pago_sin_definir = $pago_sin_definir + $actual_pago_sin_definir;
     
         if (($suma_abonos + $monto_total_abono) > $importe_total) {
@@ -145,40 +152,62 @@ if (isset($_POST)) {
                 $fecha_actual = date('Y-m-d');
     
                 //Revisar si hay stock disponible
-                $detalle = $con->prepare("SELECT i.Codigo, llantas.Modelo as modelo, da.Cantidad,llantas.Descripcion as descripcion, 
-                llantas.Marca, da.precio_Unitario, da.Importe, i.Stock FROM detalle_pedido da 
+                $contar = 'SELECT COUNT(*) FROM detalle_pedido da WHERE da.id_pedido = ?';
+                $stmt = $con->prepare($contar);
+                $stmt->bind_param('s', $id_apartado);
+                $stmt->execute();
+                $stmt->bind_result($total_detalle_pedidos);
+                $stmt->fetch();
+                $stmt->close();
+
+                $contar_detalle = "SELECT COUNT(*) FROM detalle_pedido da 
                 INNER JOIN inventario i ON da.id_Llanta = i.id_Llanta
-                INNER JOIN llantas ON da.id_Llanta = llantas.id WHERE da.id_pedido = ? AND i.id_sucursal = ?");
-                $detalle->bind_param('ii', $id_apartado, $id_sucursal);
-                $detalle->execute();
-                $resultado = $detalle->get_result();
-                $num_rows = $detalle->num_rows();
-                $detalle->close();
-    
-                $stockSuficiente = true;
-                $lista_llantas = '';
-                
-                while ($fila = $resultado->fetch_assoc()) {
+                INNER JOIN llantas ON da.id_Llanta = llantas.id WHERE da.id_pedido = ? AND i.id_sucursal = ?";
+                $stmt = $con->prepare($contar_detalle);
+                $stmt->bind_param('ii', $id_apartado, $id_sucursal);
+                $stmt->execute();
+                $stmt->bind_result($total_detalle_encontrados);
+                $stmt->fetch();
+                $stmt->close();
+
+                if($total_detalle_encontrados == $total_detalle_pedidos){
+                    $detalle = $con->prepare("SELECT i.Codigo, llantas.Modelo as modelo, da.Cantidad,llantas.Descripcion as descripcion, 
+                    llantas.Marca, da.precio_Unitario, da.Importe, i.Stock FROM detalle_pedido da 
+                    LEFT JOIN inventario i ON da.id_Llanta = i.id_Llanta
+                    INNER JOIN llantas ON da.id_Llanta = llantas.id WHERE da.id_pedido = ? AND i.id_sucursal = ?");
+                    $detalle->bind_param('ii', $id_apartado, $id_sucursal);
+                    $detalle->execute();
+                    $resultado = $detalle->get_result();
+                    $detalle->close();
+        
+                    $stockSuficiente = true;
+                    $lista_llantas = '';
+                    while ($fila = $resultado->fetch_assoc()) {
+                        
+                            $cantidadSolicitada = $fila['Cantidad'];
+                            $stockDisponible = $fila['Stock'];
+                            $codigo = $fila['Codigo'];
+            
+                            if ($stockDisponible >= $cantidadSolicitada) {
+                                // Aquí puedes realizar las acciones necesarias
+                            } else {
+                                // El stock es insuficiente para la cantidad solicitadas
+                                $descripcion = $fila['descripcion'];
+                                $stockSuficiente = false;
+                                $lista_llantas .= ', ' . $descripcion;
+                            }
+                            $lista_llantas = rtrim($lista_llantas, ', ');
+            
+                            if (!$stockSuficiente) {
+                                $mensaje = 'El stock es insuficiente para la llanta: ' . $codigo . ' ' . $lista_llantas . '
+                                Cantidad solicitada: ' . $cantidadSolicitada . ' Stock actual: ' . $stockDisponible;
+                                break;
+                            }
+                        }
                     
-                    $cantidadSolicitada = $fila['Cantidad'];
-                    $stockDisponible = $fila['Stock'];
-                    $codigo = $fila['Codigo'];
-    
-                    if ($stockDisponible >= $cantidadSolicitada) {
-                        // Aquí puedes realizar las acciones necesarias
-                    } else {
-                        // El stock es insuficiente para la cantidad solicitadas
-                        $descripcion = $fila['descripcion'];
-                        $stockSuficiente = false;
-                        $lista_llantas .= ', ' . $descripcion;
-                    }
-                    $lista_llantas = rtrim($lista_llantas, ', ');
-    
-                    if (!$stockSuficiente) {
-                        $mensaje = 'El stock es insuficiente para la llanta: ' . $codigo . ' ' . $lista_llantas . '
-                        Cantidad solicitada: ' . $cantidadSolicitada . ' Stock actual: ' . $stockDisponible;
-                        break;
-                    }
+                }else{
+                    $stockSuficiente =false;
+                    $mensaje = 'Una de las llantas del pedido no existen en el inventario';
                 }
                 
                 if ($stockSuficiente) {
@@ -360,7 +389,7 @@ if (isset($_POST)) {
                 $ress->execute();
                 $ress->close();
             }
-    
+            
             echo json_encode($res);
         }
     }

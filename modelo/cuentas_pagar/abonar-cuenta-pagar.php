@@ -13,11 +13,13 @@ $id_movimiento = $_POST['id_movimiento'];
 $abono = floatval($_POST['abono']);
 $forma_pago = $_POST['forma_pago'];
 $importe_total = $_POST['importe_total'];
+$fecha_hora_pago = $_POST['hora_fecha_pago'];
 $folio_forma_pago = $_POST['folio_forma_pago'] == 'false' ? 'No aplica' : $_POST['folio_forma_pago'];
-
+$resultado_fechas = convertirFechaHora($fecha_hora_pago);
 $suma_abonos =0;
-$fecha = date("Y-m-d");
-$hora = date("h:i a");
+
+$fecha = $resultado_fechas['fecha'];
+$hora =  $resultado_fechas['hora'];
 $tipo =0;
 
 $qr = "SELECT COUNT(*) FROM movimientos WHERE id =? AND tipo = 2";
@@ -78,5 +80,23 @@ if($total_movimientos>0){
 $response = array('estatus'=>$estatus, 'mensaje'=>$mensaje, 'tipo'=>$tipo);
 echo json_encode($response);
 
-
+function convertirFechaHora($fechaHoraStr) {
+    // Validar formato de la cadena
+    if (!preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/', $fechaHoraStr)) {
+      return "Formato de fecha y hora incorrecto";
+    }
+  
+    // Separar la fecha de la hora
+    $fecha = substr($fechaHoraStr, 0, 10);
+    $hora = substr($fechaHoraStr, 11);
+  
+    // Convertir la hora a formato 12 horas con AM/PM
+    $horaFormato12 = date('h:i A', strtotime($hora));
+  
+    // Devolver las variables
+    return [
+      'fecha' => $fecha,
+      'hora' => $horaFormato12,
+    ];
+  }
 ?>
