@@ -36,6 +36,7 @@
      $query_mostrar->close();
 
 //    print_r($total);
+     $llantasEncontradas = array();
      if ($total > 0) { 
         
         $sqlTraerLlanta="SELECT l.*, inv.Stock FROM llantas l LEFT JOIN inventario inv ON l.id = inv.id_Llanta WHERE (l.Ancho LIKE '%$term%'  
