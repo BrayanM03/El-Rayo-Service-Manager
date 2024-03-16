@@ -107,7 +107,7 @@ if (isset($_POST)) {
         include '../helpers/verificar-hora-corte.php';
     
         //Revisar si no hay errores en los montos
-        $select = "SELECT SUM(abono), SUM(pago_efectivo), SUM(pago_tarjeta), SUM(pago_transferencia), SUM(pago_cheque), SUM(pago_deposito), SUM(pago_sin_definir) FROM abonos_pedidos WHERE id_pedido = ?";
+        $select = "SELECT SUM(abono), SUM(pago_efectivo), SUM(pago_tarjeta), SUM(pago_transferencia), SUM(pago_cheque), SUM(pago_sin_definir) FROM abonos_pedidos WHERE id_pedido = ?";
         $re = $con->prepare($select);
         $re->bind_param('i', $id_apartado);
         $re->execute();
@@ -117,7 +117,6 @@ if (isset($_POST)) {
             $actual_pago_tarjeta,
             $actual_pago_transferencia,
             $actual_pago_cheque,
-            $actual_pago_deposito,
             $actual_pago_sin_definir
         );
         $re->fetch();
@@ -129,7 +128,7 @@ if (isset($_POST)) {
         $nuevo_pago_tarjeta = $pago_tarjeta + $actual_pago_tarjeta;
         $nuevo_pago_transferencia = $pago_transferencia + $actual_pago_transferencia;
         $nuevo_pago_cheque = $pago_cheque + $actual_pago_cheque;
-        $nuevo_pago_deposito = $pago_deposito + $actual_pago_deposito;
+        //$nuevo_pago_deposito = $pago_deposito + $actual_pago_deposito;
         $nuevo_pago_sin_definir = $pago_sin_definir + $actual_pago_sin_definir;
     
         if (($suma_abonos + $monto_total_abono) > $importe_total) {
@@ -270,6 +269,8 @@ if (isset($_POST)) {
                         $error = $con->error;
                        
                         $resultado->close();
+                        $id_abono = $con->insert_id;
+                        insertarUtilidadAbonoPedidos($id_abono, $con);
                     }
     
                     //Validar hora de cortes
@@ -373,7 +374,8 @@ if (isset($_POST)) {
                 $resultado->execute();
                 $error = $resultado->error;
                 $resultado->close();
-    
+                $id_abono = $con->insert_id;
+                insertarUtilidadAbonoPedidos($id_abono, $con);
                 $estatus = 'Activo';
                 $id_Venta = null;
                 $liquidacion = false;

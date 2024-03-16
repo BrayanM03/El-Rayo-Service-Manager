@@ -10,7 +10,9 @@ if (!isset($_SESSION['id_usuario'])) {
 
 
 if(isset($_POST)){
-
+//insertar utilidad
+include '../ventas/insertar_utilidad.php';
+include '../creditos/obtener-utilidad-abono.php';
   date_default_timezone_set("America/Matamoros");
   $hora = date("h:i a");
   $fecha= date("Y-m-d");
@@ -47,6 +49,7 @@ if(isset($_POST)){
       $pago_transferencia = 0;
       $pago_tarjeta = 0;
       $pago_cheque = 0;
+      $pago_deposito = 0;
       $pago_sin_definir = 0;
       $monto_total_abono = 0;
       foreach ($_POST['metodos_pago'] as $key => $value) {
@@ -68,6 +71,10 @@ if(isset($_POST)){
             case 3:
                 $pago_cheque = $value['monto'];
                 break;
+                
+            case 5:
+                  $pago_deposito = $value['monto'];
+                  break;
 
             case 4:
                 $pago_sin_definir = $value['monto'];
@@ -99,6 +106,7 @@ if(isset($_POST)){
         print_r($erro);
         $id_pedido = $con->insert_id;
         $resultado->close();
+
     }
     $estatus = "OK";
 
@@ -164,17 +172,21 @@ if(isset($_POST)){
             $estado =1;
           }
 
+          insertarUtilidadPedido($con, $id_pedido);
           if($monto_total_abono > 0){
               //Script que verifica la hora de corte actual
             include '../helpers/verificar-hora-corte.php';
-            $queryInsertarAbono = "INSERT INTO abonos_pedidos(id_pedido, fecha, hora, abono, metodo_pago, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, usuario, id_usuario, estado, sucursal, id_sucursal, credito, fecha_corte, hora_corte) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,0,?,?)";
+            $queryInsertarAbono = "INSERT INTO abonos_pedidos(id_pedido, fecha, hora, abono, metodo_pago, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_deposito, pago_sin_definir, usuario, id_usuario, estado, sucursal, id_sucursal, credito, fecha_corte, hora_corte) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,0,?,?)";
             $resultado = $con->prepare($queryInsertarAbono);
-            $resultado->bind_param('sssssssssssssssss', $id_pedido, $fecha, $hora, $monto_total_abono, $metodo_pago, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $usuario, $idUser, $estado, $sucursal, $id_sucursal, $fecha_corte, $hora_corte);
+            $resultado->bind_param('ssssssssssssssssss', $id_pedido, $fecha, $hora, $monto_total_abono, $metodo_pago, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_deposito, $pago_sin_definir, $usuario, $idUser, $estado, $sucursal, $id_sucursal, $fecha_corte, $hora_corte);
             $resultado->execute();
-            $erro = $resultado->error;
-            print_r($erro);
+            /* $erro = $resultado->error;
+            print_r($erro); */
             $resultado->close();
+            $id_abono = $con->insert_id;
+            insertarUtilidadAbonoPedidos($id_abono, $con);
           }
+
           print_r($id_pedido);
         }else{
           print_r($id_Cotizacion);

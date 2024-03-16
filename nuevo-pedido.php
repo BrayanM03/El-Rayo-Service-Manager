@@ -150,6 +150,7 @@
                                         <option value="1">Tarjeta</option>
                                         <option value="2">Transferencia</option>
                                         <option value="3">Cheque</option>
+                                       <!--  <option value="5">Deposito</option> -->
                                         <option value="4">Sin definir</option>
                                     </select>
                                 </div>

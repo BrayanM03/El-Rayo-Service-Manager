@@ -11,7 +11,7 @@ function totalVentas(){
 
   $.ajax({
     type: "POST",
-    url: "./modelo/panel/grafica-pastel.php", 
+    url: "./modelo/metricas/grafica-pastel.php", 
     data: {"data":"data"},
     dataType: "JSON",
     success: function (response) { 
@@ -89,7 +89,7 @@ function numeroVentas(){
 
   $.ajax({
     type: "POST",
-    url: "./modelo/panel/grafica-pastel-numero-ventas.php", 
+    url: "./modelo/metricas/grafica-pastel-numero-ventas.php", 
     data: {"data":"data"},
     dataType: "JSON",
     success: function (responses) {
@@ -166,7 +166,7 @@ function totalCreditos(){
 
   $.ajax({
     type: "POST",
-    url: "./modelo/panel/grafica-pastel-creditos.php", 
+    url: "./modelo/metricas/grafica-pastel-creditos.php", 
     data: {"data":"data"},
     dataType: "JSON",
     success: function (response) {

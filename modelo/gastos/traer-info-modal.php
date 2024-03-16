@@ -25,7 +25,7 @@ if($total_categorias > 0){
     $ID = $con->prepare("SELECT * FROM categorias_gastos ORDER BY nombre ASC");
     $ID->execute();
     $resultado_cate = $ID->get_result();    
-    $ID->fetch();
+    $ID->free_result();
     $ID->close();
     while($fila_ab = $resultado_cate->fetch_assoc()){
         $data['categorias'][] = $fila_ab;
@@ -38,7 +38,7 @@ if($total_sucursales > 0){
     $ID = $con->prepare("SELECT * FROM sucursal");
     $ID->execute();
     $resultado_cate = $ID->get_result();    
-    $ID->fetch();
+    $ID->free_result();
     $ID->close();
     while($fila_ab = $resultado_cate->fetch_assoc()){
         $data['sucursales'][] = $fila_ab;

@@ -1,7 +1,7 @@
 // Set new default font family and font color to mimic Bootstrap's default styling
 Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 Chart.defaults.global.defaultFontColor = '#858796';
-
+let bandera_grafica_area_fusionar = 1;
 function number_format(number, decimals, dec_point, thousands_sep) {
   // *     example: number_format(1234.56, 2, ',', ' ');
   // *     return: '1 234,56'
@@ -29,14 +29,15 @@ function number_format(number, decimals, dec_point, thousands_sep) {
 
 // Area Chart Example
 function graficaAreaGeneral() { 
+  let year = $("#año-grafica-meses").val();
   $("#myAreaChart").remove();
   $("#chart-area-container").append("<canvas id='myAreaChart'></canvas>");
   $("#titulo-graf").text("(General)")
 
   $.ajax({
     type: "POST",
-    url: "./modelo/panel/grafica-area.php",
-    data: {"data":"data"},
+    url: "./modelo/metricas/grafica-area-meses.php",
+    data: {year},
     dataType: "JSON",
     success: function (response) {
   
@@ -46,7 +47,7 @@ function graficaAreaGeneral() {
     data: {
       labels: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
       datasets: [{
-        label: "Ganancias",
+        label: "Entradas",
         lineTension: 0.3,
         backgroundColor: "rgb(222, 208, 11, 0.05)",
         borderColor: "#ded00b",
@@ -139,7 +140,7 @@ graficaAreaGeneral();
 
 function graficaAreaPorSucursal(id_suc, backColor, hoverColor, sweetColor, nombreSucursal){
 
-console.log(backColor);
+  let year = $("#año-grafica-meses").val();
   $("#myAreaChart").remove();
   $("#chart-area-container").append("<canvas id='myAreaChart'></canvas>");
   $("#titulo-graf").text("(Sucursal "+ nombreSucursal +")");
@@ -147,8 +148,8 @@ console.log(backColor);
 // Area Chart Example
 $.ajax({
   type: "POST",
-  url: "./modelo/panel/grafica-area-sucursal.php",
-  data: {"id_suc":id_suc},
+  url: "./modelo/metricas/grafica-area-meses-sucursal.php",
+  data: {id_suc,year},
   dataType: "JSON",
   success: function (response) {
 
@@ -158,7 +159,7 @@ var myLineChart = new Chart(ctx, {
   data: {
     labels: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
     datasets: [{
-      label: "Ganancias",
+      label: "Entradas",
       lineTension: 0.3,
       backgroundColor: sweetColor,//,
       borderColor: backColor,//"rgba(78, 115, 223, 1)",
@@ -246,110 +247,23 @@ var myLineChart = new Chart(ctx, {
 
 };
 
-/* function graficaAreaSendero(){
+function graficaAreaYear(){
 
-  $("#myAreaChart").remove();
-  $("#chart-area-container").append(" <canvas id='myAreaChart'></canvas>");
-  $("#titulo-graf").text("(Sucursal Sendero)");
-
-  // Area Chart Example
-  $.ajax({
-    type: "POST",
-    url: "./modelo/panel/grafica-area-sendero.php",
-    data: {"data":"data"},
-    dataType: "JSON",
-    success: function (response) {
-  
-      var ctx = document.getElementById("myAreaChart");
-  var myLineChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
-      datasets: [{
-        label: "Ganancias",
-        lineTension: 0.3,
-        backgroundColor: "rgba(28, 200, 138, 0.05)",
-        borderColor: "#1cc88a",
-        pointRadius: 3,
-        pointBackgroundColor: "#088c5e", 
-        pointBorderColor: "#088c5e", 
-        pointHoverRadius: 3,
-        pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
-        pointHoverBorderColor: "rgba(78, 115, 223, 1)",
-        pointHitRadius: 10,
-        pointBorderWidth: 2,
-        data: [response.ganancia_ene, response.ganancia_feb, response.ganancia_mar, response.ganancia_abr, response.ganancia_may, response.ganancia_jun, 
-               response.ganancia_jul, response.ganancia_ago, response.ganancia_sep, response.ganancia_oct, response.ganancia_nov, response.ganancia_dic],
-      }],
-    },
-    options: {
-      maintainAspectRatio: false,
-      layout: {
-        padding: {
-          left: 10,
-          right: 25,
-          top: 25,
-          bottom: 0
-        }
-      },
-      scales: {
-        xAxes: [{
-          time: {
-            unit: 'date'
-          },
-          gridLines: {
-            display: false,
-            drawBorder: false
-          },
-          ticks: {
-            maxTicksLimit: 7
-          }
-        }],
-        yAxes: [{
-          ticks: {
-            maxTicksLimit: 5,
-            padding: 10,
-            // Include a dollar sign in the ticks
-            callback: function(value, index, values) {
-              return '$' + number_format(value);
+  if(bandera_grafica_area_fusionar==1){
+    graficaAreaGeneral()
+  }else{
+    var dropdownItems = document.querySelectorAll('.dropdown-item');
+        dropdownItems.forEach(function(item) {
+            let tiene_clase = item.classList.contains('opcion-seleccionada');
+            if(tiene_clase) {
+              suc_identificador = item.getAttribute('chart_sucursal_id');
+              background_color = item.getAttribute('chart_background_color');
+              hover_color = item.getAttribute('chart_hover_color');
+              sweet_color = item.getAttribute('chart_sweet_color');
+              name_sucursal = item.getAttribute('nombre_sucursal');
             }
-          },
-          gridLines: {
-            color: "rgb(234, 236, 244)",
-            zeroLineColor: "rgb(234, 236, 244)",
-            drawBorder: false,
-            borderDash: [2],
-            zeroLineBorderDash: [2]
-          }
-        }],
-      },
-      legend: {
-        display: false
-      },
-      tooltips: {
-        backgroundColor: "rgb(255,255,255)",
-        bodyFontColor: "#858796",
-        titleMarginBottom: 10,
-        titleFontColor: '#6e707e',
-        titleFontSize: 14,
-        borderColor: '#dddfeb',
-        borderWidth: 1,
-        xPadding: 15,
-        yPadding: 15,
-        displayColors: false,
-        intersect: false,
-        mode: 'index',
-        caretPadding: 10,
-        callbacks: {
-          label: function(tooltipItem, chart) {
-            var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-            return datasetLabel + ': $' + number_format(tooltipItem.yLabel);
-          }
-        }
-      }
-    }
-  });
-    }
-  });
-  
-  }; */
+        });
+        console.log(suc_identificador +' --  '+ background_color  +' --  '+ hover_color  +' --  '+ sweet_color  +' --  '+ name_sucursal);
+        graficaAreaPorSucursal(suc_identificador, background_color, hover_color, sweet_color, name_sucursal)
+  }
+}

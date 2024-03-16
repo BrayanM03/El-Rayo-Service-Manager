@@ -42,6 +42,55 @@ function insertarUtilidadAbono($id_abono, $con){
         $stmt->close();
     }
 }
+ 
+function insertarUtilidadAbonoApartados($id_abono, $con){
+    $utilidad_credito=0;
+    $total_a_pagar=0;
+    $abono =0;
+    $sel = "SELECT a.abono, ap.utilidad, ap.total FROM abonos_apartados a INNER JOIN apartados ap ON ap.id = a.id_apartado WHERE a.id = ?";
+    $stmt = $con->prepare($sel);
+    $stmt->bind_param('s',$id_abono);
+    $stmt->execute();
+    $stmt->bind_result($abono, $utilidad_credito, $total_a_pagar);
+    $stmt->fetch();
+    $stmt->close();
+    
+    $porcentaje_utilidad = calcular_porcentaje_utilidad($abono, $total_a_pagar, $utilidad_credito);
+   
+    if($porcentaje_utilidad>0){
+        $porcentaje_utilidad = floatval(str_replace(',', '', $porcentaje_utilidad));
+        $upd = "UPDATE abonos_apartados SET utilidad = ? WHERE id =?";
+        $stmt = $con->prepare($upd);
+        $stmt->bind_param('ss', $porcentaje_utilidad, $id_abono);
+        $stmt->execute();
+        $stmt->close();
+    }
+}
+
+function insertarUtilidadAbonoPedidos($id_abono, $con){
+    
+    $utilidad_pedido=0;
+    $total_a_pagar=0;
+    $abono =0;
+    $sel = "SELECT a.abono, p.utilidad, p.total FROM abonos_pedidos a INNER JOIN pedidos p ON p.id = a.id_pedido WHERE a.id = ?";
+    $stmt = $con->prepare($sel);
+    $stmt->bind_param('s',$id_abono);
+    $stmt->execute();
+    $stmt->bind_result($abono, $utilidad_pedido, $total_a_pagar);
+    $stmt->fetch();
+    $stmt->close();
+    
+    $porcentaje_utilidad = calcular_porcentaje_utilidad($abono, $total_a_pagar, $utilidad_pedido);
+  
+    if($porcentaje_utilidad>0){
+        $porcentaje_utilidad = floatval(str_replace(',', '', $porcentaje_utilidad));
+        $upd = "UPDATE abonos_pedidos SET utilidad = ? WHERE id =?";
+        $stmt = $con->prepare($upd);
+        $stmt->bind_param('ss', $porcentaje_utilidad, $id_abono);
+        $stmt->execute();
+        $stmt->close();
+    }
+}
 
 function calcular_porcentaje_utilidad($abono, $total, $utilidad) {
     // Calcula el porcentaje del abono con respecto al total

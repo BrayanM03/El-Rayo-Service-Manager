@@ -101,6 +101,166 @@ echo json_encode($resppp); */
         return $resp;
        
     }
+   // insertarUtilidadApartado($con, 111);
 
+    function insertarUtilidadApartado($con, $id_apartado){
+       
+        $total_ventas=0;
+        $select = "SELECT COUNT(*) FROM apartados WHERE id=?";
+        $stmt = $con->prepare($select);
+        $stmt->bind_param('i',$id_apartado);
+        $stmt->execute();
+        $stmt->bind_result($total_ventas);
+        $stmt->fetch();
+        $stmt->close();
+        $dv_no_enc =0;
+        if($total_ventas>0){
+            $query = "SELECT * FROM detalle_apartado WHERE id_apartado =?";
+            $stmt = $con->prepare($query);
+            $stmt->bind_param('i',$id_apartado);
+            $stmt->execute();
+            $resultado =$stmt->get_result();
+            $stmt->close();
+            $costo =0;
+            $suma_utilidad =0;
+            $total_llantas =0;
+            $llantas_no_enc =0;
+            foreach($resultado as $row){
+                $importe = $row['importe'];
+                $cantidad = $row['cantidad'];
+                $id_llanta = $row['id_llanta'];
+                $tipo_unidad = $row['unidad'];
+                $id_detalle = $row['id'];
+                $utilidad_x_servicio=0;
+                $utilidad_x_pieza=0;
+                $select_count="SELECT COUNT(*) FROM llantas WHERE id=?";
+                $stmt = $con->prepare($select_count);
+                $stmt->bind_param('i',$id_llanta);
+                $stmt->execute();
+                $stmt->bind_result($total_llantas);
+                $stmt->fetch(); 
+                $stmt->close();
+                if($total_llantas>0)
+                {
+                    //Obteniendo utilidad del catalogo actual
+                    $obtener = "SELECT precio_Inicial FROM llantas WHERE id = ?";
+                    $stmt = $con->prepare($obtener);
+                    $stmt->bind_param('i',$id_llanta);
+                    $stmt->execute();
+                    $stmt->bind_result($costo);
+                    $stmt->fetch();
+                    $stmt->close();
+                    $utilidad_x_pieza = $importe - ($cantidad * $costo); 
+                }else{
+                    if($tipo_unidad == 'servicio'){
+                        $utilidad_x_servicio += $importe; 
+                    }else{
+                        $llantas_no_enc++;
+                    }
+                }   
+                $utilidad_x_partida = $utilidad_x_pieza + $utilidad_x_servicio;
+                $update = $con->prepare("UPDATE detalle_apartado SET utilidad =? WHERE id = ?");
+                $update->bind_param('di',$utilidad_x_partida, $id_detalle);
+                $update->execute();
+                $update->close();
+                $suma_utilidad += $utilidad_x_partida;
+    
+            }
+    
+            $update = "UPDATE apartados SET utilidad =? WHERE id = ?";
+            $stmt = $con->prepare($update);
+            $stmt->bind_param('di',$suma_utilidad, $id_apartado);
+            $stmt->execute();
+            $stmt->close();
+            $resp = array('estatus' =>true, 'mensaje'=> 'Utilidad insertada correctamente');
+        }else{
+            $dv_no_enc++;
+            $resp = array('estatus' =>false, 'mensaje'=> 'No se pudo insertar utilidad, no se encontro el id de la venta');
+        }
+        $resp['llantas_empty'] = $llantas_no_enc;
+        $resp['dv_empty'] = $dv_no_enc;
+        return $resp;
+       
+    }
+
+    function insertarUtilidadPedido($con, $id_pedido){
+       
+        $total_ventas=0; 
+        $select = "SELECT COUNT(*) FROM pedidos WHERE id=?";
+        $stmt = $con->prepare($select);
+        $stmt->bind_param('i',$id_pedido);
+        $stmt->execute();
+        $stmt->bind_result($total_ventas);
+        $stmt->fetch();
+        $stmt->close();
+        $dv_no_enc =0;
+        if($total_ventas>0){
+            $query = "SELECT * FROM detalle_pedido WHERE id_pedido =?";
+            $stmt = $con->prepare($query);
+            $stmt->bind_param('i',$id_pedido);
+            $stmt->execute();
+            $resultado =$stmt->get_result();
+            $stmt->close();
+            $costo =0;
+            $suma_utilidad =0;
+            $total_llantas =0;
+            $llantas_no_enc =0;
+            foreach($resultado as $row){
+                $importe = $row['Importe'];
+                $cantidad = $row['Cantidad'];
+                $id_llanta = $row['id_Llanta'];
+                $tipo_unidad = $row['Unidad'];
+                $id_detalle = $row['id'];
+                $utilidad_x_servicio=0;
+                $utilidad_x_pieza=0;
+                $select_count="SELECT COUNT(*) FROM llantas WHERE id=?";
+                $stmt = $con->prepare($select_count);
+                $stmt->bind_param('i',$id_llanta);
+                $stmt->execute();
+                $stmt->bind_result($total_llantas);
+                $stmt->fetch(); 
+                $stmt->close();
+                if($total_llantas>0)
+                {
+                    //Obteniendo utilidad del catalogo actual
+                    $obtener = "SELECT precio_Inicial FROM llantas WHERE id = ?";
+                    $stmt = $con->prepare($obtener);
+                    $stmt->bind_param('i',$id_llanta);
+                    $stmt->execute();
+                    $stmt->bind_result($costo);
+                    $stmt->fetch();
+                    $stmt->close();
+                    $utilidad_x_pieza = $importe - ($cantidad * $costo); 
+                }else{
+                    if($tipo_unidad == 'servicio'){
+                        $utilidad_x_servicio += $importe; 
+                    }else{
+                        $llantas_no_enc++;
+                    }
+                }   
+                $utilidad_x_partida = $utilidad_x_pieza + $utilidad_x_servicio;
+                $update = $con->prepare("UPDATE detalle_pedido SET utilidad =? WHERE id = ?");
+                $update->bind_param('di',$utilidad_x_partida, $id_detalle);
+                $update->execute();
+                $update->close();
+                $suma_utilidad += $utilidad_x_partida;
+    
+            }
+    
+            $update = "UPDATE pedidos SET utilidad =? WHERE id = ?";
+            $stmt = $con->prepare($update);
+            $stmt->bind_param('di',$suma_utilidad, $id_pedido);
+            $stmt->execute();
+            $stmt->close();
+            $resp = array('estatus' =>true, 'mensaje'=> 'Utilidad insertada correctamente');
+        }else{
+            $dv_no_enc++;
+            $resp = array('estatus' =>false, 'mensaje'=> 'No se pudo insertar utilidad, no se encontro el id de la venta');
+        }
+        $resp['llantas_empty'] = $llantas_no_enc;
+        $resp['dv_empty'] = $dv_no_enc;
+        return $resp;
+       
+    }
 
 ?>

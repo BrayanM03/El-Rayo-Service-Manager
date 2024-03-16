@@ -80,6 +80,7 @@ function designarAdelanto(metodo_pago, llantaData){
           1: "Tarjeta",
           2: "Transferencia",
           3: "Cheque",
+          5: "Deposito",
           4: "Sin definir"
         };
 
@@ -140,6 +141,7 @@ function designarAdelanto(metodo_pago, llantaData){
           1: "Tarjeta",
           2: "Transferencia",
           3: "Cheque",
+          5: "Deposito",
           4: "Sin definir"
         };
 
@@ -946,6 +948,7 @@ function abonarPedido(id_apartado){
                               <option value="1">Tarjeta</option>
                               <option value="2">Transferencia</option>
                               <option value="3">Cheque</option>
+                         
                               <option value="4">Sin definir</option>
                       </select>
                   </div>
@@ -1012,6 +1015,7 @@ function abonarPedido(id_apartado){
             objeto.pago_tarjeta,
             objeto.pago_transferencia,
             objeto.pago_cheque,
+            objeto.pago_deposito,
             objeto.pago_sin_definir,
             objeto.sucursal
         ]);
@@ -1035,6 +1039,7 @@ function abonarPedido(id_apartado){
             { title: 'Tarjeta'},
             { title: 'Transferencia'},
             { title: 'Cheque'},
+            /*{ title: 'Deposito'},*/
             { title: 'Sin definir'},
             { title: 'Sucursal'},
             { title: 'PDF', render: function(data, type, row){
@@ -1057,6 +1062,7 @@ function abonarPedido(id_apartado){
                     1: "Tarjeta",
                     2: "Transferencia",
                     3: "Cheque",
+                    5: "Deposito",
                     4: "Sin definir"
                   };
     
@@ -1229,6 +1235,7 @@ function realizarAbonoPedido(id_apartado, total, restante_pedido){
       1: "Tarjeta",
       2: "Transferencia",
       3: "Cheque",
+      3: "Deposito",
       4: "Sin definir"
     };
     let metodo_pago = $("#metodos-pago-abono").val();
@@ -1300,6 +1307,7 @@ function recargarTablaAbonosPedido(id_apartado){
         objeto.pago_tarjeta,
         objeto.pago_transferencia,
         objeto.pago_cheque,
+        objeto.pago_deposito,
         objeto.pago_sin_definir,
         objeto.sucursal
     ]);

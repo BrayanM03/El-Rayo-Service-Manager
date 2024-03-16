@@ -71,23 +71,24 @@ function MostrarCreditos() {
         data: null,
         render: function (data) {
           switch (data[7]) {
-            case "1":
+            case 1:
               return "<span>7 dias</span>";
               break;
-            case "2":
+            case 2:
               return "<span>15 dias</span>";
               break;
-            case "3":
+            case 3:
               return "<span>1 mes</span>";
               break;
-            case "4":
+            case 4:
               return "<span>1 año</span>";
               break;
-            case "5":
+            case 5:
               return "<span>7 dias</span>";
               break;
 
             default:
+              return ''
               break;
           }
         },
@@ -263,6 +264,7 @@ function traerCredito(id, id_venta) {
                 { title: "Tarjeta", data: "pago_tarjeta"},
                 { title: "Transferencia", data: "pago_transferencia"},
                 { title: "Cheque", data: "pago_cheque"},
+                { title: "Deposito", data: "pago_deposito"},
                 { title: "Sin definir", data: "pago_sin_definir"},
                 { title: "Usuario", data: "usuario" },
                 { 
@@ -292,6 +294,8 @@ function traerCredito(id, id_venta) {
                         row.pago_transferencia +
                         '" metodo_cheque="' +
                         row.pago_cheque +
+                        '" metodo_deposito="' +
+                        row.pago_deposito +
                         '" metodo_sin_definir="' +
                         row.pago_sin_definir +
                         '" fecha="' +
@@ -358,6 +362,7 @@ function traerCredito(id, id_venta) {
               var atr_metodo_tarjeta = $(this).attr("metodo_tarjeta");
               var atr_metodo_transferencia = $(this).attr("metodo_transferencia");
               var atr_metodo_cheque = $(this).attr("metodo_cheque");
+              var atr_metodo_deposito = $(this).attr("metodo_deposito");
               var atr_metodo_sin_definir = $(this).attr("metodo_sin_definir");
               id_abono = $(this).attr("abono_id");
 
@@ -382,24 +387,25 @@ function traerCredito(id, id_venta) {
                   fechaFormated +
                   '"></div>' + */
                   '<div col="col-12 col-md-6" style="margin-left:20px;">' +
-                  'Metodo de pago: <select type="text" id="metodo_p" class="selectpicker form-control mb-2" val="hola" multiple onchange="setearFormPagosEditar('+atr_metodo_efectivo+','+atr_metodo_tarjeta+','+atr_metodo_transferencia+','+atr_metodo_cheque+','+atr_metodo_sin_definir+')">' +
+                  'Metodo de pago: <select type="text" id="metodo_p" class="selectpicker form-control mb-2" val="hola" multiple onchange="setearFormPagosEditar('+atr_metodo_efectivo+','+atr_metodo_tarjeta+','+atr_metodo_transferencia+','+atr_metodo_cheque+','+atr_metodo_deposito+','+atr_metodo_sin_definir+')">' +
                   '<option value="0">Efectivo</option>' +
                   '<option value="1">Tarjeta</option>' +
                   '<option value="2">Transferencia</option>' +
                   '<option value="3">Cheque</option>' +
+                  '<option value="5">Deposito</option>' +
                   '<option value="4">Sin definir</option>' +
                   "</select></div>" +
                   '<div col="col-12 col-md-3">' +
-                  '<buttom class="btn btn-warning ml-2 mt-4" name="registrar-abono" onclick="registrarAbonoEditado('+id_abono+','+atr_metodo_efectivo+','+atr_metodo_tarjeta+','+atr_metodo_transferencia+','+atr_metodo_cheque+','+atr_metodo_sin_definir+')" id="registrar-abono-2">Actualizar</buttom>' +
+                  '<buttom class="btn btn-warning ml-2 mt-4" name="registrar-abono" onclick="registrarAbonoEditado('+id_abono+','+atr_metodo_efectivo+','+atr_metodo_tarjeta+','+atr_metodo_transferencia+','+atr_metodo_cheque+','+atr_metodo_deposito+','+atr_metodo_sin_definir+')" id="registrar-abono-2">Actualizar</buttom>' +
                   "</div>" +
                   "</div>"+
                   '<div class="row" id="area-metodos-editar">' +
                   "</div>"
               );
-              let options_default = [0,1,2,3,4];
+              let options_default = [0,1,2,3,5,4];
               $("#metodo_p").val(options_default);
               $('#metodo_p').selectpicker('refresh');
-              setearFormPagosEditar(atr_metodo_efectivo,atr_metodo_tarjeta,atr_metodo_transferencia,atr_metodo_cheque,atr_metodo_sin_definir)
+              setearFormPagosEditar(atr_metodo_efectivo,atr_metodo_tarjeta,atr_metodo_transferencia,atr_metodo_cheque, atr_metodo_deposito, atr_metodo_sin_definir)
 
               /*   let $id = $(this).attr("idrow");
                     let $importe = $(this).attr("importe"); */
@@ -465,6 +471,7 @@ function traerCredito(id, id_venta) {
           '<option value="1">Tarjeta</option>' +
           '<option value="2">Transferencia</option>' +
           '<option value="3">Cheque</option>' +
+          '<option value="5">Deposito</option>' +
           '<option value="4">Sin definir</option>' +
           "</select>" +
           '<div class="invalid-feedback">Sobrepasaste el stock.</div>' +
@@ -597,6 +604,7 @@ function setearFormPagos(id_cred){
     1: "Tarjeta",
     2: "Transferencia",
     3: "Cheque",
+    5: "Deposito",
     4: "Sin definir"
   };
 
@@ -643,7 +651,7 @@ function setearFormPagos(id_cred){
   
 }
 
-function setearFormPagosEditar(atr_metodo_efectivo,atr_metodo_tarjeta,atr_metodo_transferencia,atr_metodo_cheque,atr_metodo_sin_definir){
+function setearFormPagosEditar(atr_metodo_efectivo,atr_metodo_tarjeta,atr_metodo_transferencia,atr_metodo_cheque, atr_metodo_deposito, atr_metodo_sin_definir){
  
   let met = $("#metodo_p").val();
   let area = $("#area-metodos-editar");
@@ -652,6 +660,7 @@ function setearFormPagosEditar(atr_metodo_efectivo,atr_metodo_tarjeta,atr_metodo
     1: "Tarjeta",
     2: "Transferencia",
     3: "Cheque",
+    5: "Deposito",
     4: "Sin definir"
   };
   
@@ -678,6 +687,9 @@ function setearFormPagosEditar(atr_metodo_efectivo,atr_metodo_tarjeta,atr_metodo
       case "3":
         valor_metodo = atr_metodo_cheque;
         break;
+      case "3":
+        valor_metodo = atr_metodo_deposito;
+      break;
       case "4":
         valor_metodo = atr_metodo_sin_definir;
         break; 
@@ -762,6 +774,7 @@ function registrarAbono(id) {
            1: "Tarjeta",
            2: "Transferencia",
            3: "Cheque",
+           5: "Deposito",
            4: "Sin definir"
        };
      
@@ -881,6 +894,7 @@ function registrarAbonoEditado(id, monto1, monto2, monto3, monto4, monto5) {
            1: "Tarjeta",
            2: "Transferencia",
            3: "Cheque",
+           3: "Deposito",
            4: "Sin definir"
        };
      

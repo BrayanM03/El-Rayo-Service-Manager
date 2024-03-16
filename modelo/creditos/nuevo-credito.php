@@ -42,8 +42,11 @@ if(isset($_POST)){
     $monto_tarjeta = 0;
     $monto_transferencia = 0;
     $monto_cheque = 0;
+    $monto_deposito = 0;
     $monto_sin_definir = 0;
-    $metodo_pago = count($metodo) > 1 ? "Mixto": $metodos_pago[$metodo[0]]["metodo"];
+    /* print_r($_POST);
+    die(); */
+    $metodo_pago = count($metodo) > 1 ? "Mixto": $metodos_pago[0]["metodo"];//$metodos_pago[$metodo[0]]["metodo"];
     $monto_total = 0;
     foreach ($metodos_pago as $key => $value) {
         $clave = $value["clave"];
@@ -52,11 +55,13 @@ if(isset($_POST)){
         $monto_tarjeta = in_array(1, $metodo) && $clave == 1 ? $monto_recibido: $monto_tarjeta+=0;
         $monto_transferencia = in_array(2, $metodo) && $clave == 2 ? $monto_recibido : $monto_transferencia+=0;
         $monto_cheque = in_array(3, $metodo) && $clave == 3 ? $monto_recibido: $monto_cheque+=0;
+        $monto_deposito = in_array(5, $metodo) && $clave == 5 ? $monto_recibido: $monto_deposito+=0;
         $monto_sin_definir = in_array(4, $metodo) && $clave == 4 ? $monto_recibido: $monto_sin_definir+=0;
         $monto_total = $monto_efectivo + $monto_tarjeta + $monto_transferencia + $monto_cheque + $monto_sin_definir;
     }
 
-    $usuario = $_SESSION["nombre"];
+    $usuario = $_SESSION["nombre"] . ' ' . $_SESSION['apellidos'];
+    $id_usuario = $_SESSION['id_usuario'];
 
     if ($monto_total == 0) {
         $estatus = 0;
@@ -127,9 +132,9 @@ if(isset($_POST)){
             if($monto_total >0){
                 $estado = $restante == 0 ? 1:0;
                 include '../helpers/verificar-hora-corte.php';
-                $queryInsertar = "INSERT INTO abonos (id, id_credito, fecha, hora, abono, metodo_pago, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, usuario, estado, sucursal, id_sucursal, fecha_corte, hora_corte) VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                $queryInsertar = "INSERT INTO abonos (id, id_credito, fecha, hora, abono, metodo_pago, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_deposito, pago_sin_definir, usuario, id_usuario, estado, sucursal, id_sucursal, fecha_corte, hora_corte) VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                 $resultado = $con->prepare($queryInsertar);
-                $resultado->bind_param('sssssdddddsissss',$id_credito, $fecha_inicio, $hora, $monto_total, $metodo_pago, $monto_efectivo, $monto_tarjeta, $monto_transferencia, $monto_cheque, $monto_sin_definir, $usuario, $estado, $sucursal, $id_sucursal, $fecha_corte, $hora_corte);
+                $resultado->bind_param('sssssddddddsisssss',$id_credito, $fecha_inicio, $hora, $monto_total, $metodo_pago, $monto_efectivo, $monto_tarjeta, $monto_transferencia, $monto_cheque, $monto_deposito, $monto_sin_definir, $usuario, $id_usuario, $estado, $sucursal, $id_sucursal, $fecha_corte, $hora_corte);
                 $resultado->execute();
                 $resultado->close();
                 $id_abono = $con->insert_id;

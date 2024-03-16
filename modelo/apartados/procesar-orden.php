@@ -50,6 +50,7 @@ $ID->close();
     $pago_transferencia=0;
     $pago_tarjeta=0;
     $pago_cheque=0;
+    $pago_deposito=0;
     $pago_sin_definir=0;
       foreach ($_POST["metodo_pago"] as $key => $value) {
       $metodo_id = isset($value['id_metodo']) ? $value['id_metodo']: $key;
@@ -68,7 +69,11 @@ $ID->close();
         break;
   
         case 3:
-        $pago_cheque = $value['monto'];
+          $pago_cheque = $value['monto'];
+          break;
+
+        case 5:
+        $pago_deposito = $value['monto'];
         break;
   
         case 4:
@@ -96,9 +101,9 @@ $ID->close();
 
    include '../helpers/verificar-hora-corte.php';
 
-    $queryInsertar = "INSERT INTO ventas (id, Fecha, sucursal, id_sucursal, id_Usuarios, id_Cliente, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, Total, tipo, estatus, metodo_pago, hora, comentario, fecha_corte, hora_corte) VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    $queryInsertar = "INSERT INTO ventas (id, Fecha, sucursal, id_sucursal, id_Usuarios, id_Cliente, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_deposito, pago_sin_definir, Total, tipo, estatus, metodo_pago, hora, comentario, fecha_corte, hora_corte) VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     $resultado = $con->prepare($queryInsertar);
-    $resultado->bind_param('ssiisddddddsssssss', $fecha, $sucursal, $id_sucursal, $idUser, $cliente , $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $total, $tipo, $estatus, $desc_metodos, $hora, $comentario, $fecha_corte, $hora_corte);
+    $resultado->bind_param('ssiisdddddddsssssss', $fecha, $sucursal, $id_sucursal, $idUser, $cliente , $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_deposito, $pago_sin_definir, $total, $tipo, $estatus, $desc_metodos, $hora, $comentario, $fecha_corte, $hora_corte);
     $resultado->execute();
     $resultado->close();
 

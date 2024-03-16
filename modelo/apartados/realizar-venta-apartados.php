@@ -12,10 +12,10 @@ include '../ventas/insertar_utilidad.php';
 $id = $_POST["id_apartado"];
 $fecha_actual = date("Y-m-d");
 $hora = date("h:i a");
-$ID = $con->prepare("SELECT a.id_sucursal, a.sucursal, a.id_usuario, a.id_cliente, c.Nombre_Cliente, c.Telefono, a.primer_abono, a.restante, a.total,  a.tipo, a.metodo_pago, a.hora, a.comentario, a.plazo, a.fecha_inicial, a.fecha_final, a.pago_efectivo, a.pago_tarjeta, a.pago_transferencia, a.pago_cheque, a.pago_sin_definir FROM apartados a INNER JOIN clientes c ON a.id_cliente = c.id WHERE a.id = ?");
+$ID = $con->prepare("SELECT a.id_sucursal, a.sucursal, a.id_usuario, a.id_cliente, c.Nombre_Cliente, c.Telefono, a.primer_abono, a.restante, a.total,  a.tipo, a.metodo_pago, a.hora, a.comentario, a.plazo, a.fecha_inicial, a.fecha_final, a.pago_efectivo, a.pago_tarjeta, a.pago_transferencia, a.pago_cheque, a.pago_deposito, a.pago_sin_definir FROM apartados a INNER JOIN clientes c ON a.id_cliente = c.id WHERE a.id = ?");
 $ID->bind_param('i', $id);
 $ID->execute();
-$ID->bind_result($id_sucursal, $sucursal, $vendedor_id, $id_cliente, $cliente, $telefono_cliente, $primer_abono, $restante, $total, $tipo, $metodo_pago, $hora, $comentario, $plazo, $fecha_inicio, $fecha_final, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir);
+$ID->bind_result($id_sucursal, $sucursal, $vendedor_id, $id_cliente, $cliente, $telefono_cliente, $primer_abono, $restante, $total, $tipo, $metodo_pago, $hora, $comentario, $plazo, $fecha_inicio, $fecha_final, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_deposito, $pago_sin_definir);
 $ID->fetch();
 $ID->close();
 
@@ -34,6 +34,7 @@ $pago_efectivo = 0;
 $pago_transferencia = 0;
 $pago_tarjeta = 0;
 $pago_cheque = 0;
+$pago_deposito = 0;
 $pago_sin_definir = 0;
 foreach ($_POST["metodos_pago"] as $key => $value) {
   $metodo_id = isset($value['id_metodo']) ? $value['id_metodo'] : $key;
@@ -54,6 +55,10 @@ foreach ($_POST["metodos_pago"] as $key => $value) {
     case 3:
       $pago_cheque = $value['monto'];
       break;
+
+    case 5:
+      $pago_deposito = $value['monto'];
+      break;  
 
     case 4:
       $pago_sin_definir = $value['monto'];
@@ -84,8 +89,8 @@ $detalle->close();
 include '../helpers/verificar-hora-corte.php';
 
 //Insertando la venta
-$insertar = $con->prepare("INSERT INTO ventas (Fecha, sucursal, id_sucursal, id_Usuarios, id_Cliente, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, Total, tipo, estatus, metodo_pago, hora, comentario, fecha_corte, hora_corte) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-$insertar->bind_param('ssssssssssssssssss', $fecha_actual, $sucursal, $id_sucursal, $vendedor_id, $id_cliente, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $total, $tipo, $estatus, $metodo_pago, $hora, $comentario, $fecha_corte, $hora_corte);
+$insertar = $con->prepare("INSERT INTO ventas (Fecha, sucursal, id_sucursal, id_Usuarios, id_Cliente, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_deposito, pago_sin_definir, Total, tipo, estatus, metodo_pago, hora, comentario, fecha_corte, hora_corte) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+$insertar->bind_param('sssssssssssssssssss', $fecha_actual, $sucursal, $id_sucursal, $vendedor_id, $id_cliente, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_deposito, $pago_sin_definir, $total, $tipo, $estatus, $metodo_pago, $hora, $comentario, $fecha_corte, $hora_corte);
 $insertar->execute();
 // Obtener el ID insertado
 $id_Venta = $con->insert_id;
@@ -103,12 +108,12 @@ $data_productos = array();
 
 //Insertar abono pendiente
 $estado = 0;
-$queryInsertar = "INSERT INTO abonos_apartados (id, id_apartado, fecha, hora, abono, metodo_pago, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, usuario, estado, sucursal, id_sucursal, fecha_corte, hora_corte) VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+$queryInsertar = "INSERT INTO abonos_apartados (id, id_apartado, fecha, hora, abono, metodo_pago, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_deposito, pago_sin_definir, usuario, estado, sucursal, id_sucursal, fecha_corte, hora_corte) VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 $resultado = $con->prepare($queryInsertar);
-$resultado->bind_param('issdsdddddssssss', $id, $fecha_actual, $hora, $restante, $metodo_pago, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $vendedor_usuario, $estado, $sucursal, $id_sucursal, $fecha_corte, $hora_corte);
+$resultado->bind_param('issdsdddddssssss', $id, $fecha_actual, $hora, $restante, $metodo_pago, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_deposito, $pago_sin_definir, $vendedor_usuario, $estado, $sucursal, $id_sucursal, $fecha_corte, $hora_corte);
 $resultado->execute();
 $resultado->close();
-
+$id_abono = $con->insert_id;
 //Iterando productos
 while ($fila = $resultado_da->fetch_assoc()) {
 
@@ -127,5 +132,6 @@ while ($fila = $resultado_da->fetch_assoc()) {
 }
 
 $utlidad_res = insertarUtilidad($con, $id_Venta);
+$utilidad_abono = insertarUtilidadAbonoApartados($id_abono, $con);
 $res = array('estatus' => true, 'mensaje' => 'Venta realizada correctamente. ', 'id_venta' => $id_Venta, 'utilidad' => $utlidad_res);
 echo json_encode($res);

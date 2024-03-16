@@ -286,7 +286,7 @@ const meses = [
         formData.append('id_sucursal', id_sucursal);
         formData.append('monto', monto);
       
-        swal({
+        Swal.fire({
           title: 'Now loading',
           allowEscapeKey: false,
           allowOutsideClick: false,

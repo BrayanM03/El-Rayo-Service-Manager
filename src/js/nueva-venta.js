@@ -266,7 +266,8 @@ let id_rol_session= $("#content").attr("rol_session_id");
               1: "Tarjeta",
               2: "Transferencia",
               3: "Cheque",
-              4: "Sin definir"
+              5: "Deposito",
+              4: "Sin definir",
             };
   
             let metodos_formateado = metodos_pagos.reduce(function(result, key) {
@@ -570,6 +571,13 @@ let id_rol_session= $("#content").attr("rol_session_id");
                     
                     break;           
             case "Cheque":
+                var $state = $(
+                    '<span><i class="fas fa-money-check-alt"></i> '+state.text+'</span>'
+                );
+                            
+            break;
+            
+            case "Deposito":
                 var $state = $(
                     '<span><i class="fas fa-money-check-alt"></i> '+state.text+'</span>'
                 );
@@ -1314,6 +1322,7 @@ $("#btn-add-client").hover(function() {
             1: "Tarjeta",
             2: "Transferencia",
             3: "Cheque",
+            5: "Deposito",
             4: "Sin definir"
           };
 
@@ -1365,6 +1374,7 @@ $("#btn-add-client").hover(function() {
             1: "Tarjeta",
             2: "Transferencia",
             3: "Cheque",
+            5: "Deposito",
             4: "Sin definir"
           };
 

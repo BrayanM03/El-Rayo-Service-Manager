@@ -11,8 +11,9 @@ if (!isset($_SESSION['id_usuario'])) {
 
 //insertar utilidad
 include '../ventas/insertar_utilidad.php';
+include '../creditos/obtener-utilidad-abono.php';
 
-if(isset($_POST)) {
+if(isset($_POST)) { 
 
     date_default_timezone_set("America/Matamoros");
     $hora = date("h:i a");
@@ -24,6 +25,7 @@ if(isset($_POST)) {
     $pago_transferencia = 0;
     $pago_tarjeta = 0;
     $pago_cheque = 0;
+    $pago_deposito = 0;
     $pago_sin_definir = 0;
     $monto_total_abono = 0;
     foreach ($_POST['metodos_pago'] as $key => $value) {
@@ -46,6 +48,9 @@ if(isset($_POST)) {
                 $pago_cheque = $value['monto'];
                 break;
 
+            case 5:
+                $pago_deposito = $value['monto'];
+                break;
             case 4:
                 $pago_sin_definir = $value['monto'];
                 break;
@@ -86,11 +91,12 @@ if(isset($_POST)) {
     pago_tarjeta, 
     pago_transferencia, 
     pago_cheque, 
+    pago_deposito, 
     pago_sin_definir, total, metodo_pago, comentario FROM apartados WHERE id = ?";
     $re = $con->prepare($select);
     $re->bind_param('i', $id_apartado);
     $re->execute();
-    $re->bind_result($id_sucursal, $id_usuario, $id_cliente, $sucursal, $actual_pago_efectivo, $actual_pago_tarjeta, $actual_pago_transferencia, $actual_pago_cheque,
+    $re->bind_result($id_sucursal, $id_usuario, $id_cliente, $sucursal, $actual_pago_efectivo, $actual_pago_tarjeta, $actual_pago_transferencia, $actual_pago_cheque, $actual_pago_deposito,
     $actual_pago_sin_definir, $importe_total, $metodo_pago, $comentario);
     $re->fetch();
     $re->close();
@@ -110,6 +116,7 @@ if(isset($_POST)) {
     $nuevo_pago_tarjeta = $pago_tarjeta + $actual_pago_tarjeta;
     $nuevo_pago_transferencia = $pago_transferencia + $actual_pago_transferencia;
     $nuevo_pago_cheque = $pago_cheque + $actual_pago_cheque;
+    $nuevo_pago_deposito = $pago_deposito + $actual_pago_deposito;
     $nuevo_pago_sin_definir = $pago_sin_definir + $actual_pago_sin_definir;
 
     include '../helpers/verificar-hora-corte.php';
@@ -134,25 +141,28 @@ if(isset($_POST)) {
                                                             pago_tarjeta, 
                                                             pago_transferencia, 
                                                             pago_cheque, 
+                                                            pago_deposito, 
                                                             pago_sin_definir, 
                                                             usuario, 
                                                             estado,
                                                             sucursal,
-                                                            id_sucursal, fecha_corte, hora_corte) VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                                                            id_sucursal, fecha_corte, hora_corte) VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $resultado = $con->prepare($queryInsertar);
-        $resultado->bind_param('ssssssssssssssss', $id_apartado, $fecha, $hora, $monto_total_abono,
-                                                  $desc_metodos, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque,
+        $resultado->bind_param('sssssssssssssssss', $id_apartado, $fecha, $hora, $monto_total_abono,
+                                                  $desc_metodos, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_deposito,
                                                   $pago_sin_definir, $vendedor_usuario, $tipo, $sucursal, $id_sucursal, $fecha_corte, $hora_corte);
         $resultado->execute();
         $error = $resultado->error;
         $resultado->close();
+        $id_abono = $con->insert_id;
+        insertarUtilidadAbonoApartados($id_abono, $con);
         if($nuevo_restante == 0){
             $estatus = 'Pagado';
             $tipo = 'Apartado';
             $liquidacion = true;
 
-            $insertar = $con->prepare("INSERT INTO ventas (Fecha, sucursal, id_sucursal, id_Usuarios, id_Cliente, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, Total, tipo, estatus, metodo_pago, hora, comentario, fecha_corte, hora_corte) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-            $insertar->bind_param('ssssssssssssssssss', $fecha_actual, $sucursal, $id_sucursal, $id_usuario, $id_cliente, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $importe_total, $tipo, $estatus, $metodo_pago, $hora, $comentario, $fecha_corte, $hora_corte);
+            $insertar = $con->prepare("INSERT INTO ventas (Fecha, sucursal, id_sucursal, id_Usuarios, id_Cliente, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_deposito, pago_sin_definir, Total, tipo, estatus, metodo_pago, hora, comentario, fecha_corte, hora_corte) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            $insertar->bind_param('sssssssssssssssssss', $fecha_actual, $sucursal, $id_sucursal, $id_usuario, $id_cliente, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_deposito, $pago_sin_definir, $importe_total, $tipo, $estatus, $metodo_pago, $hora, $comentario, $fecha_corte, $hora_corte);
             $insertar->execute();
             // Obtener el ID insertado
             $id_Venta = $con->insert_id;
@@ -195,13 +205,14 @@ if(isset($_POST)) {
         pago_tarjeta = ?, 
         pago_transferencia = ?, 
         pago_cheque = ?, 
+        pago_deposito = ?, 
         pago_sin_definir = ?,
         primer_abono = ?,
         restante = ?,
         estatus = ?,
         id_venta =? WHERE id = ?";
         $ress = $con->prepare($upd);
-        $ress->bind_param('dddddddssi', $nuevo_pago_efectivo, $nuevo_pago_tarjeta, $nuevo_pago_transferencia, $nuevo_pago_cheque, $nuevo_pago_sin_definir, $nueva_suma_abonos, $nuevo_restante, $estatus, $id_Venta, $id_apartado);
+        $ress->bind_param('ddddddddssi', $nuevo_pago_efectivo, $nuevo_pago_tarjeta, $nuevo_pago_transferencia, $nuevo_pago_cheque, $nuevo_pago_deposito, $nuevo_pago_sin_definir, $nueva_suma_abonos, $nuevo_restante, $estatus, $id_Venta, $id_apartado);
         $ress->execute();
         $ress->close();
      

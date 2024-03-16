@@ -10,7 +10,8 @@ if (!isset($_SESSION['id_usuario'])) {
 
 
 if(isset($_POST)) {
-
+    include '../ventas/insertar_utilidad.php';
+    include '../creditos/obtener-utilidad-abono.php';
     date_default_timezone_set("America/Matamoros");
     $hora = date("h:i a");
 
@@ -30,12 +31,14 @@ if(isset($_POST)) {
       $pago_transferencia=0;
       $pago_tarjeta=0;
       $pago_cheque=0;
+      $pago_deposito=0;
       $pago_sin_definir=0;
+
         foreach ($_POST['metodos_pago'] as $key => $value) {
         $metodo_id = isset($value['id_metodo']) ? $value['id_metodo']: $key;
         switch ($metodo_id) {
           case 0:
-           $pago_efectivo = $value['monto'];
+           $pago_efectivo = $value['monto']; 
             break;
           
           case 1:
@@ -50,6 +53,10 @@ if(isset($_POST)) {
           case 3:
           $pago_cheque = $value['monto'];
           break;
+
+          case 5:
+            $pago_deposito = $value['monto'];
+            break;
     
           case 4:
           $pago_sin_definir = $value['monto'];
@@ -103,9 +110,9 @@ if(isset($_POST)) {
 
     include '../helpers/verificar-hora-corte.php';
 
-    $queryInsertar = "INSERT INTO apartados (id, sucursal, id_sucursal, id_usuario, id_cliente, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, primer_abono, restante, total, tipo, estatus, metodo_pago, hora, comentario, plazo, fecha_inicial, fecha_final) VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    $queryInsertar = "INSERT INTO apartados (id, sucursal, id_sucursal, id_usuario, id_cliente, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_deposito, pago_sin_definir, primer_abono, restante, total, tipo, estatus, metodo_pago, hora, comentario, plazo, fecha_inicial, fecha_final) VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     $resultado = $con->prepare($queryInsertar);
-    $resultado->bind_param('siisddddddddsssssiss', $sucursal, $id_sucursal, $idUser, $cliente , $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $adelanto, $restante, $total, $tipo, $estatus, $desc_metodos, $hora, $comentario, $plazo, $fecha_inicial, $fecha_final);
+    $resultado->bind_param('siisdddddddddsssssiss', $sucursal, $id_sucursal, $idUser, $cliente , $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_deposito, $pago_sin_definir, $adelanto, $restante, $total, $tipo, $estatus, $desc_metodos, $hora, $comentario, $plazo, $fecha_inicial, $fecha_final);
     $resultado->execute();
     
     $resultado->close();
@@ -120,15 +127,6 @@ if(isset($_POST)) {
       $dato =  mysqli_fetch_array($resultado, MYSQLI_ASSOC);
         
         $id_apartado = $dato["id"];
-
-        //Insertar abono
-        $estado =1; 
-        $queryInsertar = "INSERT INTO abonos_apartados (id, id_apartado, fecha, hora, abono, metodo_pago, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, usuario, estado, sucursal, id_sucursal, fecha_corte, hora_corte) VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        $resultado = $con->prepare($queryInsertar);
-        $resultado->bind_param('issdsdddddssssss', $id_apartado, $fecha_inicial, $hora, $adelanto, $desc_metodos, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $vendedor_usuario, $estado, $sucursal, $id_sucursal, $fecha_corte, $hora_corte);
-        $resultado->execute();
-        $resultado->close();
-
         foreach ($info_producto_individual as $key => $value) { 
           
           $validacion = is_numeric($key);
@@ -197,6 +195,22 @@ if(isset($_POST)) {
           }else{
             echo "";
           }
+        }
+
+        insertarUtilidadApartado($con, $id_apartado);
+        //Insertar abono
+
+        if($adelanto>0){
+          $estado =1; 
+          $queryInsertar = "INSERT INTO abonos_apartados (id, id_apartado, fecha, hora, abono, metodo_pago, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_deposito, pago_sin_definir, usuario, estado, sucursal, id_sucursal, fecha_corte, hora_corte) VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+          $resultado = $con->prepare($queryInsertar);
+          $resultado->bind_param('issdsddddddssssss', $id_apartado, $fecha_inicial, $hora, $adelanto, $desc_metodos, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_deposito, $pago_sin_definir, $vendedor_usuario, $estado, $sucursal, $id_sucursal, $fecha_corte, $hora_corte);
+          $resultado->execute();
+          $resultado->close();
+          $id_abono = $con->insert_id;
+
+          
+          insertarUtilidadAbonoApartados($id_abono, $con);
         }
 
       print_r($id_apartado);

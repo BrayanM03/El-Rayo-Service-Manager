@@ -262,6 +262,7 @@ function realizarVentaCredito(){
                         1: "Tarjeta",
                         2: "Transferencia",
                         3: "Cheque",
+                        5: "Deposito",
                         4: "Sin definir"
                       };
             
@@ -417,6 +418,7 @@ function realizarVentaCredito(){
                                     1: "Tarjeta",
                                     2: "Transferencia",
                                     3: "Cheque",
+                                    5: "Deposito",
                                     4: "Sin definir"
                                 };
                               

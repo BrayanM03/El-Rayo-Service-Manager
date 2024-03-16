@@ -54,6 +54,7 @@ if (isset($_POST)) {
         abonos.pago_tarjeta, 
         abonos.pago_transferencia, 
         abonos.pago_cheque, 
+        abonos.pago_deposito, 
         abonos.pago_sin_definir,
         abonos.usuario FROM creditos INNER JOIN abonos ON creditos.id = abonos.id_credito WHERE abonos.id_credito = $id_credito";
         $resultado = mysqli_query($con, $query);
@@ -76,6 +77,7 @@ if (isset($_POST)) {
         $pago_tarjeta = $fila["pago_tarjeta"];
         $pago_transferencia = $fila["pago_transferencia"];
         $pago_cheque = $fila["pago_cheque"];
+        $pago_deposito = $fila["pago_deposito"];
         $pago_sin_definir = $fila["pago_sin_definir"];
         $usuario = $fila["usuario"];
     
@@ -95,6 +97,7 @@ if (isset($_POST)) {
                     "pago_tarjeta"=> $pago_tarjeta,
                     "pago_transferencia"=> $pago_transferencia,
                     "pago_cheque"=> $pago_cheque,
+                    "pago_deposito"=> $pago_deposito,
                     "pago_sin_definir"=> $pago_sin_definir,
                     "usuario"=>$usuario);
     
@@ -134,11 +137,11 @@ if (isset($_POST)) {
             $fecha_final = $fila["fecha_final"];
             $plazo = $fila["plazo"];
             $abono_id = $fila["id"];
-            $abono = $fila["abono"];
-            $fecha_abono = $fila["fecha"];
+           /* $abono = $fila["abono"];
+             $fecha_abono = $fila["fecha"];
             $hora_abono = $fila["hora"];
-            $metodo_pago = $fila["metodo_pago"];
-            $usuario = $fila["usuario"];
+            $metodo_pago = $fila["metodo_pago"]; 
+            $usuario = $fila["usuario"];*/
         
             $sqlcliente = "SELECT Nombre_Cliente FROM clientes WHERE id = ?";
             $stmt = $con->prepare($sqlcliente);
@@ -150,7 +153,7 @@ if (isset($_POST)) {
         
         
             $data = array("id" => $id,"id_cliente"=>$clienteid, "fecha_inicial"=>$fecha_inicio,"fecha_final"=>$fecha_final, "restante" => $restante,
-                            "pagado" => $pagado, "cliente"=>$cliente_name, "total"=>$total, "plazo"=>$plazo, "estatus"=>$estatus,"abono_id"=>$abono_id, "abono"=>$abono, "fecha_abono"=>$fecha_abono, "hora_abono"=> $hora_abono, "metodo_pago"=> $metodo_pago, "usuario"=>$usuario);
+                            "pagado" => $pagado, "cliente"=>$cliente_name, "total"=>$total, "plazo"=>$plazo, "estatus"=>$estatus,"abono_id"=>$abono_id, /* "abono"=>$abono, "fecha_abono"=>$fecha_abono, "hora_abono"=> $hora_abono, "metodo_pago"=> $metodo_pago,  "usuario"=>$usuario*/);
         
                           
         }

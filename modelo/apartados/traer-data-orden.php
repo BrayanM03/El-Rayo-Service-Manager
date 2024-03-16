@@ -59,6 +59,7 @@ if($no_abonos > 0){
         $pago_tarjeta = $fila_ab['pago_tarjeta'];
         $pago_transferencia = $fila_ab['pago_transferencia'];
         $pago_cheque = $fila_ab['pago_cheque'];
+        $pago_deposito = $fila_ab['pago_deposito'];
         $pago_sin_definir = $fila_ab['pago_sin_definir'];
         $usuario =  $fila_ab['usuario'];
         $sucursal = $fila_ab['sucursal'];
@@ -74,6 +75,7 @@ if($no_abonos > 0){
             'pago_tarjeta' => $pago_tarjeta,
             'pago_transferencia' => $pago_transferencia,
             'pago_cheque' => $pago_cheque,
+            'pago_deposito' => $pago_deposito,
             'pago_sin_definir' => $pago_sin_definir,
             'sucursal' => $sucursal,
         );

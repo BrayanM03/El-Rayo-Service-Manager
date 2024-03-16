@@ -26,9 +26,11 @@ if(isset($_POST)){
     $pago_transferencia=0;
     $pago_tarjeta=0;
     $pago_cheque=0;
+    $pago_deposito=0;
     $pago_sin_definir=0;
     $monto_total = 0;
-    $usuario = $_SESSION["nombre"];
+    $usuario = $_SESSION["nombre"] . ' ' . $_SESSION['apellidos'];
+    $id_usuario = $_SESSION['id_usuario'];
 
     foreach ($metodos as $key => $value) {
         $metodo_id = isset($value['clave']) ? $value['clave']: $key;
@@ -49,6 +51,10 @@ if(isset($_POST)){
           case 3:
           $pago_cheque = $value['monto'];
           break;
+
+          case 5:
+            $pago_deposito = $value['monto'];
+            break;
     
           case 4:
           $pago_sin_definir = $value['monto'];
@@ -59,7 +65,7 @@ if(isset($_POST)){
         }
         $monto_pago = $value['monto'];
         $metodo_pago = $value['metodo'];
-        $monto_total = $pago_efectivo + $pago_tarjeta + $pago_transferencia + $pago_cheque + $pago_sin_definir;
+        $monto_total = $pago_efectivo + $pago_tarjeta + $pago_transferencia + $pago_cheque + $pago_deposito + $pago_sin_definir;
        
         if($key != count($metodos) - 1) {
           // Este código se ejecutará para todos menos el último
@@ -118,9 +124,9 @@ if(isset($_POST)){
 
             include '../helpers/verificar-hora-corte.php';
             
-            $insertar_abono = "INSERT INTO abonos(id, id_credito, fecha, hora, abono, metodo_pago, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, usuario, estado, sucursal, id_sucursal, fecha_corte, hora_corte) VALUES(null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            $insertar_abono = "INSERT INTO abonos(id, id_credito, fecha, hora, abono, metodo_pago, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_deposito, pago_sin_definir, usuario, id_usuario, estado, sucursal, id_sucursal, fecha_corte, hora_corte) VALUES(null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             $resultado = $con->prepare($insertar_abono);  
-            $resultado->bind_param('isssssssssssssss', $id_credito, $fecha, $hora, $monto_total, $metodos_str, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $usuario, $estado, $sucursal, $id_sucursal, $fecha_corte, $hora_corte);
+            $resultado->bind_param('isssssssssssssssss', $id_credito, $fecha, $hora, $monto_total, $metodos_str, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_deposito, $pago_sin_definir, $usuario, $id_usuario, $estado, $sucursal, $id_sucursal, $fecha_corte, $hora_corte);
             $resultado->execute();
             $error_credito = $resultado->error;
             if($error_credito){

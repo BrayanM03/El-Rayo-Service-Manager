@@ -14,9 +14,6 @@ if ($_SESSION['id_usuario'] == 1 || $_SESSION['id_usuario'] == 8) {
     header("Location:dashboard.php?nav=inicio&id=0");
 }
 
-if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2 || $_SESSION['id_usuario'] == 7) {
-    header("Location:dashboard-vendedores.php?nav=inicio&id=0");
-}
 
 if ($_SESSION['rol'] == 5) {
     header('Location:ventas-pv.php?id=0&nav=ventas');
@@ -80,10 +77,7 @@ if ($_SESSION['rol'] == 4) {
                 <div class="container-fluid">
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h3 class="h3 mb-0 text-gray-800">Bievenido al panel <?php echo $_SESSION['nombre']; ?></h3>
-                        <a href="ganancias-diarias.php?id=0&nav=ganancias_diarias" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm"><i
-                                class="fas fa-eye fa-sm text-white-50"></i> Ganancias diarias</a>
-                        <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                class="fas fa-download fa-sm text-white-50"></i> Generar reporte</a> -->
+                        
                     </div>
                         <div class="row justify-content-center">
                             <div class="col-12 col-md-5 mt-3 text-center border p-5" style="background-color: white; border-radius:8px;">

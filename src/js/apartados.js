@@ -80,6 +80,7 @@ function designarAdelanto(metodo_pago, llantaData){
           1: "Tarjeta",
           2: "Transferencia",
           3: "Cheque",
+          5: "Deposito",
           4: "Sin definir"
         };
 
@@ -118,6 +119,9 @@ function designarAdelanto(metodo_pago, llantaData){
               <h1><span class="badge badge-secondary" id="badge-restante">$${importe_total_actual}</span><h1>
               <input type="hidden" value="${importe_total_actual}" class="form-control" is-valid="false" id="total_restante" disabled>
           </div>
+          <div class="col-md-12" id="contenedor-token">
+             
+          </div>
           <div class="col-md-12">
               <h4 id="validador-adelanto"><span id="text-message" class="text-secondary"></span><h4>
           </div>
@@ -126,29 +130,85 @@ function designarAdelanto(metodo_pago, llantaData){
           calcularMontosAdelanto(importe_total_actual)
         },
         preConfirm: function(){
-        if($("#validador-adelanto").attr("is-valid") == "false"){
-          Swal.showValidationMessage(
-            `No se puede apartar, corrija los montos`
-          )
-        }
+          let con_token = $("#validador-adelanto").attr("token");
+          let valid_token = $("#validador-adelanto").attr("valid-token");
+          let token = $("#token").val() === undefined ? 0 : $("#token").val();
+
+          if(con_token === 'true' && (token == undefined || token == '' || token == null || token == 0)){
+            Swal.showValidationMessage(
+              `Ingresa el token:`
+            )
+            $('#contenedor-token').empty().append(`
+                <div class="row">
+                    <div class="col-12">
+                        <input type="number" id="token" class="form-control" placeholder="Ingresa aqui el token">
+                    </div>
+                </div>  
+                <div class="row mt-4 justify-content-center">
+                    <div class="col-4 text-center" id="area-loader">
+                    
+                    </div>
+                </div>       
+            `);
+          }else if(con_token && token > 0){
+            //swal.showLoading();
+            $('#area-loader').append(`
+            <div class="loader"></div>
+            `);
+            return new Promise((resolve) =>{
+              $.ajax({
+                type: "POST",
+                url: "./modelo/token.php",
+                data: {"traer-token": true, 'token_':token},
+                dataType: "JSON",
+                success: function (response) {
+                  if(response.codigo== token){
+                    resolve();
+                  }else{
+                    setTimeout(()=>{
+                      $('#area-loader').empty();
+                      document.querySelector('.swal2-confirm').removeAttribute('disabled');
+                      Swal.showValidationMessage(
+                        `El Token ingresado es incorrecto`
+                      )
+                    }, 1500)
+                   
+                  };
+                }
+              });
+            })
+          }else{
+            if($("#validador-adelanto").attr("is-valid") == "false"){
+              Swal.showValidationMessage(
+                `No se puede apartar, corrija los montos`
+              )
+            }
+          }
         }
       
     }).then(function (ress) {
       if(ress.isConfirmed){
-        var opciones = {
-          0: "Efectivo",
-          1: "Tarjeta",
-          2: "Transferencia",
-          3: "Cheque",
-          4: "Sin definir"
-        };
+        if($("#validador-adelanto").attr("sin-adeltanto") =='true'){
 
-        var arregloMetodos= metodo_pago.reduce(function(result, key) {
-          let monto = parseFloat(document.getElementById(`monto_metodo_${key}`).value);
-          result[key] = {"id_metodo":key, "metodo":opciones[key], "monto": monto};
-          return result;
-        }, {});
-         realizarApartado(arregloMetodos);
+        }else{
+          var opciones = {
+            0: "Efectivo",
+            1: "Tarjeta",
+            2: "Transferencia",
+            3: "Cheque",
+            5: "Deposito",
+            4: "Sin definir"
+          };
+  
+          var arregloMetodos= metodo_pago.reduce(function(result, key) {
+            let monto = parseFloat(document.getElementById(`monto_metodo_${key}`).value);
+            result[key] = {"id_metodo":key, "metodo":opciones[key], "monto": monto};
+            return result;
+          }, {});
+         
+           realizarApartado(arregloMetodos);
+        }
+        
       }
     })
     
@@ -317,7 +377,10 @@ function calcularMontosAdelanto(importe){
     const resta_formateada = formatter.format(resta_redondeada);
 
   
-    if (sumatoria_monto < redondeado) {
+    if(sumatoria_monto == 0){
+      $("#validador-adelanto").attr("token", "true");
+     // text_message.textContent = `Ingrese un token:`;
+    }if (sumatoria_monto < redondeado) {
       badgeRestante.classList.remove("badge-success");
       badgeRestante.classList.remove("badge-danger");
       badgeRestante.classList.add("badge-secondary");
@@ -331,6 +394,8 @@ function calcularMontosAdelanto(importe){
       
       text_message.textContent = `Agregue un monto minimo del ${porcentajeFormateado} = ${monto_formateado}`;
       $("#validador-adelanto").attr("is-valid", "false")
+      $("#validador-adelanto").attr("token", "true")
+
           
     }else if(resta < 0){
       
@@ -345,6 +410,7 @@ function calcularMontosAdelanto(importe){
       text_message.classList.add("text-danger");
       text_message.textContent = 'El resta es menor que el total';
       $("#validador-adelanto").attr("is-valid", "false")
+      $("#validador-adelanto").attr("token", "false")
     }else if(sumatoria_monto >= redondeado){
 
       badgeRestante.classList.remove("badge-secondary");
@@ -359,6 +425,7 @@ function calcularMontosAdelanto(importe){
 
       text_message.textContent = '';
       $("#validador-adelanto").attr("is-valid", "true")
+      $("#validador-adelanto").attr("token", "false")
       audio_2.play();  
     }
     $("#badge-restante").empty().append(`${resta_formateada}`);
@@ -686,6 +753,7 @@ function procesarOrden(id_apartado){
                               <option value="1">Tarjeta</option>
                               <option value="2">Transferencia</option>
                               <option value="3">Cheque</option>
+                              <option value="5">Deposito</option>
                               <option value="4">Sin definir</option>
                       </select>
                     </div>
@@ -720,6 +788,7 @@ function procesarOrden(id_apartado){
                     1: "Tarjeta",
                     2: "Transferencia",
                     3: "Cheque",
+                    5: "Deposito",
                     4: "Sin definir"
                   };
     
@@ -803,6 +872,7 @@ function procesarOrden(id_apartado){
                 1: "Tarjeta",
                 2: "Transferencia",
                 3: "Cheque",
+                5: "Deposito",
                 4: "Sin definir"
               };
               let metodo_pago = $("#metodos-pago").val();
@@ -1044,6 +1114,7 @@ function abonarApartado(id_apartado){
                               <option value="1">Tarjeta</option>
                               <option value="2">Transferencia</option>
                               <option value="3">Cheque</option>
+                              <option value="5">Deposito</option>
                               <option value="4">Sin definir</option>
                       </select>
                   </div>
@@ -1103,6 +1174,7 @@ function abonarApartado(id_apartado){
             objeto.pago_tarjeta,
             objeto.pago_transferencia,
             objeto.pago_cheque,
+            objeto.pago_deposito,
             objeto.pago_sin_definir,
             objeto.sucursal
         ]);
@@ -1126,6 +1198,7 @@ function abonarApartado(id_apartado){
             { title: 'Tarjeta'},
             { title: 'Transferencia'},
             { title: 'Cheque'},
+            { title: 'Deposito'},
             { title: 'Sin definir'},
             { title: 'Sucursal'},
             { title: 'PDF', render: function(data, type, row){
@@ -1148,6 +1221,7 @@ function abonarApartado(id_apartado){
                     1: "Tarjeta",
                     2: "Transferencia",
                     3: "Cheque",
+                    5: "Deposito",
                     4: "Sin definir"
                   };
     
@@ -1320,6 +1394,7 @@ function realizarAbonoApartado(id_apartado){
       1: "Tarjeta",
       2: "Transferencia",
       3: "Cheque",
+      5: "Deposito",
       4: "Sin definir"
     };
     let metodo_pago = $("#metodos-pago-abono").val();
@@ -1381,6 +1456,7 @@ function recargarTablaAbonosApartado(id_apartado){
         objeto.pago_tarjeta,
         objeto.pago_transferencia,
         objeto.pago_cheque,
+        objeto.pago_deposito,
         objeto.pago_sin_definir,
         objeto.sucursal
     ]);

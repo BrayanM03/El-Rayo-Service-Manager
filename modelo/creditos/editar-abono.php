@@ -28,6 +28,7 @@ if(isset($_POST)){
     $pago_transferencia=0;
     $pago_tarjeta=0;
     $pago_cheque=0;
+    $pago_deposito=0;
     $pago_sin_definir=0;
     $monto_total = 0;
     $usuario = $_SESSION["nombre"];
@@ -50,6 +51,10 @@ if(isset($_POST)){
           case 3:
           $pago_cheque = $value['monto'];
           break;
+
+          case 5:
+            $pago_deposito = $value['monto'];
+            break;
     
           case 4:
           $pago_sin_definir = $value['monto'];
@@ -59,7 +64,7 @@ if(isset($_POST)){
             break;
         }
         $monto_pago = $value['monto'];
-        $monto_total = $pago_efectivo + $pago_tarjeta + $pago_transferencia + $pago_cheque + $pago_sin_definir;
+        $monto_total = $pago_efectivo + $pago_tarjeta + $pago_transferencia + $pago_cheque + $pago_deposito + $pago_sin_definir;
        if($monto_pago > 0){
         $metodo_pago = $value['metodo'];
         if($key != count($metodos) - 1){
@@ -108,9 +113,9 @@ if(isset($_POST)){
     }else{
         
 
-        $actualizar = "UPDATE abonos SET fecha = ?, hora = ?, abono= ?, metodo_pago = ?, pago_efectivo = ?, pago_tarjeta = ?, pago_transferencia = ?, pago_cheque = ?, pago_sin_definir = ?, usuario = ? WHERE id = ?";
+        $actualizar = "UPDATE abonos SET fecha = ?, hora = ?, abono= ?, metodo_pago = ?, pago_efectivo = ?, pago_tarjeta = ?, pago_transferencia = ?, pago_cheque = ?, pago_deposito = ?, pago_sin_definir = ?, usuario = ? WHERE id = ?";
         $res = $con->prepare($actualizar);
-        $res->bind_param('ssdsdddddsi', $fecha, $hora, $monto_total, $metodos_str, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $usuario, $id_abono);
+        $res->bind_param('ssdsddddddsi', $fecha, $hora, $monto_total, $metodos_str, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_deposito, $pago_sin_definir, $usuario, $id_abono);
         $res->execute();
         $res->close();
 

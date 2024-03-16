@@ -92,12 +92,13 @@ function insertarCotizacion($con, $resultado, $id, $id_cliente, $abonado, $resta
     $suma_pago_tarjeta = 0;
     $suma_pago_transferencia = 0;
     $suma_pago_cheque = 0;
+    $suma_pago_deposito = 0;
     $suma_pago_sin_definir = 0;
-    $select_ab = 'SELECT SUM(pago_efectivo),SUM(pago_tarjeta),SUM(pago_transferencia),SUM(pago_cheque), SUM(pago_sin_definir) FROM abonos_pedidos WHERE id_pedido =?';
+    $select_ab = 'SELECT SUM(pago_efectivo),SUM(pago_tarjeta),SUM(pago_transferencia), SUM(pago_cheque), SUM(pago_deposito), SUM(pago_sin_definir) FROM abonos_pedidos WHERE id_pedido =?';
     $r = $con->prepare($select_ab);
     $r->bind_param('i', $id);
     $r->execute();
-    $r->bind_result($suma_pago_efectivo,$suma_pago_tarjeta,$suma_pago_transferencia, $suma_pago_cheque, $suma_pago_sin_definir);
+    $r->bind_result($suma_pago_efectivo,$suma_pago_tarjeta,$suma_pago_transferencia, $suma_pago_cheque, $suma_pago_deposito, $suma_pago_sin_definir);
     $r->fetch();
     $r->close();
 
@@ -112,10 +113,10 @@ function insertarCotizacion($con, $resultado, $id, $id_cliente, $abonado, $resta
     $hora = date("h:i a");
     include '../helpers/verificar-hora-corte.php';
 
-    $insert = "INSERT INTO ventas(Fecha, sucursal, id_sucursal, id_usuarios, id_Cliente, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, Total, tipo, estatus, metodo_pago, hora, fecha_corte, hora_corte)
-    VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    $insert = "INSERT INTO ventas(Fecha, sucursal, id_sucursal, id_usuarios, id_Cliente, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_deposito, pago_sin_definir, Total, tipo, estatus, metodo_pago, hora, fecha_corte, hora_corte)
+    VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     $res = $con->prepare($insert);
-    $res->bind_param('sssssssssssssssss', $fecha_actual, $sucursal, $id_sucursal, $id_usuario , $id_cliente, $suma_pago_efectivo, $suma_pago_tarjeta, $suma_pago_transferencia, $suma_pago_cheque, $suma_pago_sin_definir, $total, $tipo_venta, $estatus_venta, $metodo_por_def, $hora_venta, $fecha_corte, $hora_corte);
+    $res->bind_param('ssssssssssssssssss', $fecha_actual, $sucursal, $id_sucursal, $id_usuario , $id_cliente, $suma_pago_efectivo, $suma_pago_tarjeta, $suma_pago_transferencia, $suma_pago_cheque, $suma_pago_deposito, $suma_pago_sin_definir, $total, $tipo_venta, $estatus_venta, $metodo_por_def, $hora_venta, $fecha_corte, $hora_corte);
     $res->execute();
     $id_venta = mysqli_insert_id($con);
     $res->close();
@@ -202,6 +203,7 @@ function insertarCotizacion($con, $resultado, $id, $id_cliente, $abonado, $resta
         $pago_tarjeta = $fila['pago_tarjeta'];
         $pago_transferencia = $fila['pago_transferencia'];
         $pago_cheque = $fila['pago_cheque'];
+        $pago_deposito = $fila['pago_deposito'];
         $pago_sin_definir = $fila['pago_sin_definir'];
         $usuario = $fila['usuario'];
         $fecha_abono = $fila['fecha'];
@@ -209,10 +211,10 @@ function insertarCotizacion($con, $resultado, $id, $id_cliente, $abonado, $resta
         $id_usuario = $fila['id_usuario'];
         $arreglo_abonos[] = $fila;
         $estado =0;
-        $insertar_abonos = 'INSERT INTO abonos(id_credito, fecha, hora, abono, metodo_pago, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir, usuario, id_usuario, estado, sucursal, id_sucursal, fecha_corte, hora_corte)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+        $insertar_abonos = 'INSERT INTO abonos(id_credito, fecha, hora, abono, metodo_pago, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_deposito, pago_sin_definir, usuario, id_usuario, estado, sucursal, id_sucursal, fecha_corte, hora_corte)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
         $stmt = $con->prepare($insertar_abonos);
-        $stmt->bind_param('sssssssssssssssss', $id_credito, $fecha_abono, $hora_abono, $abono, $metodo_pago, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_sin_definir, $usuario, $id_usuario, $estado, $sucursal, $id_sucursal, $fecha_corte, $hora_corte);
+        $stmt->bind_param('ssssssssssssssssss', $id_credito, $fecha_abono, $hora_abono, $abono, $metodo_pago, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_deposito, $pago_sin_definir, $usuario, $id_usuario, $estado, $sucursal, $id_sucursal, $fecha_corte, $hora_corte);
         $stmt->execute();
         $id_abono = $con->insert_id;
         insertarUtilidadAbono($id_abono, $con);
