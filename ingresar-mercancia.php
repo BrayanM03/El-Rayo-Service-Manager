@@ -60,6 +60,8 @@ if($total_sucu > 0) {
     <link href="src/css/menu-vertical.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.css" integrity="sha512-oe8OpYjBaDWPt2VmSFR+qYOdnTjeV9QPLJUeqZyprDEQvQLJ9C5PCFclxwNuvb/GQgQngdCXzKSFltuHD3eCxA==" crossorigin="anonymous" />
     <link rel="stylesheet" href="src/css/inventario.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.10.111/web/pdf_viewer.min.css">
+
     <link href="src/css/bootstrap-select.min.css" rel="stylesheet" />
     <style>
        .toastr-container{
@@ -70,6 +72,20 @@ if($total_sucu > 0) {
                 height: auto !important;
          }
 
+         .btn-x-documento{
+            font-size: 2.5rem;
+            font-weight: 500;
+            color: white;
+            -webkit-text-stroke: 2px black;
+            font-weight: bold;
+            position: absolute;
+            right: 10rem;
+            top: .3rem;
+            cursor: pointer;
+         }
+         .btn-x-documento:hover{
+            color: red;
+         }
     </style>
 
 
@@ -214,6 +230,20 @@ if($total_sucu > 0) {
                                 </div>
 
                                 
+                                <div class="row mt-4 justify-content-center" id="area-adjuntar-archivo">
+                                    <div class="col-12 col-md-10 text-left">
+                                        <label>Comprobante:</label>
+                                        <input type="file" class="form-control" id="factura-documento" onchange="cargarComprobanteRegistro()">
+                                        <div class="row mt-5 justify-content-center">
+                                            <div class="col-12 col-md-5 text-center">
+                                                <div id="area-canvas">
+                                                    <canvas id="thumbnailCanvas" width="100" height="150"></canvas>
+                                                    <img src="" height="200" id="gasto-imagen">
+                                                    </div>
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <div class="row justify-content-center mt-3 mb-3">
                                     <div class="col-12 col-md-10 text-center">
@@ -334,7 +364,7 @@ if($total_sucu > 0) {
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous"></script>
-    
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.10.111/build/pdf.min.js"></script>
     <script src="src/js/maximize-select2-height.js"></script>
     
     <script src="src/js/sb-admin-2.min.js"></script>

@@ -15,7 +15,7 @@ if (!$con) {
 }
 $fecha = date("Y-m-d");
 $hora = date("H:i a");
-
+$comprobante = 0;
 if(isset($_POST)){
 
 
@@ -26,6 +26,7 @@ if(isset($_POST)){
     $folio_factura = $_POST['folio_factura'];
     $id_proveedor = $_POST['id_proveedor'];
     $estado_movimiento = $_POST['estado_movimiento'];
+   
     $tipo = 2; //categoria tipo ingreso
     $pagado = 0;
 
@@ -83,15 +84,22 @@ if(isset($_POST)){
         
          $descripcion_movimiento = "Se realizo el ingreso de ". $total_llantas . " llanta(s) al inventario de " . $nombre_sucursal;
          $insertar = "INSERT INTO movimientos(id, 
-                                                         descripcion, 
-                                                         mercancia, 
-                                                         fecha, 
-                                                         hora, 
-                                                         usuario,
-                                                         tipo, sucursal, proveedor_id, folio_factura, estatus, id_usuario, estado_factura) VALUES(null, ?,?,?,?,?,?,?,?,?, 'Pendiente', ?,?)";
+                                              descripcion, 
+                                              mercancia, 
+                                              fecha, 
+                                              hora, 
+                                              usuario,
+                                              tipo, 
+                                              sucursal, 
+                                              proveedor_id, 
+                                              folio_factura, 
+                                              estatus, 
+                                              id_usuario, 
+                                              estado_factura, 
+                                              archivo) VALUES(null, ?,?,?,?,?,?,?,?,?, 'Pendiente',?,?,?)";
                     $result = $con->prepare($insertar);
-                    $result->bind_param('sssssssisss',$descripcion_movimiento, $total_llantas,
-                                                    $fecha, $hora, $nombre_completo_usuario, $tipo, $sucursal_id, $id_proveedor, $folio_factura, $id_usuario, $estado_movimiento);
+                    $result->bind_param('sssssssisssi',$descripcion_movimiento, $total_llantas,
+                                                    $fecha, $hora, $nombre_completo_usuario, $tipo, $sucursal_id, $id_proveedor, $folio_factura, $id_usuario, $estado_movimiento, $comprobante);
                                                     
                     $result->execute();
                     $id_movimiento = $con->insert_id;
@@ -228,14 +236,36 @@ if(isset($_POST)){
             }
             
         }
+
+        if(empty($_FILES['documento_adjunto'])){
+            $comprobante = 0;
+            $imageFileType = 'NA';
+            $mensaje_archivo = 'No se subio un archivo';
+
+        }else{
+            $comprobante = 1;
+            $targetDir = '../../src/docs/facturas_compras/';
+            $targetFile = $targetDir . basename($_FILES['documento_adjunto']['name']);
+            $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+            if ($imageFileType != 'jpg' && $imageFileType != 'png' && $imageFileType != 'jpeg' && $imageFileType != 'pdf') {
+                echo json_encode(["error" => "El archivo no es una imagen válida."]);
+                exit;
+            }
     
-        $update = "UPDATE movimientos SET mercancia = ?, total = ?, pagado = ?, restante = ? WHERE id = ?";
+            // Mover el archivo al directorio de destino
+            if (move_uploaded_file($_FILES["documento_adjunto"]["tmp_name"], $targetDir . 'FAC-' . $id_movimiento.'.' .$imageFileType)) {
+                $mensaje_archivo ="El archivo se ha subido correctamente.";
+            } else {
+                $mensaje_archivo ="Hubo un error al subir el archivo.";
+            }
+        }
+
+        $update = "UPDATE movimientos SET mercancia = ?, total = ?, pagado = ?, restante = ?, archivo = ? WHERE id = ?";
         $respp = $con->prepare($update);
-        $respp->bind_param('sssss', $mercancia, $costo_sumatoria, $pagado, $costo_sumatoria, $id_movimiento);
+        $respp->bind_param('ssssss', $mercancia, $costo_sumatoria, $pagado, $costo_sumatoria, $comprobante, $id_movimiento);
         $respp->execute();
         $respp->close();
-    
-        $response = array('mensaje'=> 'Mercancia agregada correctamente', "estatus"=>true, 'id_entrada'=> $id_movimiento);
+        $response = array('mensaje'=> 'Mercancia agregada correctamente', "estatus"=>true, 'id_entrada'=> $id_movimiento, 'archivo'=>$mensaje_archivo, 'post'=>$_POST, 'files'=>$_FILES);
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
     }
     }

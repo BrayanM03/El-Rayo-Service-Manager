@@ -267,6 +267,14 @@ function traerCredito(id, id_venta) {
                 { title: "Deposito", data: "pago_deposito"},
                 { title: "Sin definir", data: "pago_sin_definir"},
                 { title: "Usuario", data: "usuario" },
+                { title: "Comentario", data: "comentario",
+                 render: function(data){
+                    if(data == null){
+                      return ''
+                    }else{
+                      return data
+                    }
+                 }},
                 { 
                   title: "Accion",
                   data: null,
@@ -478,8 +486,10 @@ function traerCredito(id, id_venta) {
           "</div>" +
           "</div>" +
 
-          '<div id="area-metodos-pagos-creditos" class="col-12" style="display:flex;">' +
-
+          '<div class="col-12 col-md-12">' +
+              '<textarea class="form-control" placeholder="Observación del abono" id="observacion-abono"></textarea>' +
+          "</div>" +
+          '<div id="area-metodos-pagos-creditos" class="col-12 mt-3" style="display:flex;">' +
           "</div>" +
           "</div>" +
 
@@ -768,7 +778,6 @@ function registrarAbono(id) {
     }else {
 
        //Creando objecto de pagos
-      
        var opciones = {
            0: "Efectivo",
            1: "Tarjeta",
@@ -791,6 +800,7 @@ function registrarAbono(id) {
        let monto_ing = input.value ? input.value : 0;
        var monto = parseFloat(monto_ing); // Obtener el monto ingresado en el input
        
+       
        // Crear un objeto con la información del método de pago y el monto
        var metodoPago = {
            clave: clave,
@@ -800,41 +810,51 @@ function registrarAbono(id) {
        
        metodosPago.push(metodoPago); // Agregar el objeto al arreglo metodosPago
        });
-
-
-      $.ajax({
-        type: "POST",
-        url: "./modelo/creditos/insertar-abono.php",
-        data: {
-          "id-credito": id,
-          metodo: metodosPago,
-          fecha: fecha,
-        },
-        dataType: "JSON",
-        success: function (response) {
-          if (response == 1) {
-            $("#alerta").empty();
-            $("#alerta").append(
-              '<div class="alert alert-warning" role="alert">' +
-                "El abono sobrepasa el total" +
-                "</div>"
-            );
-          } else if (response == 6) {
-            $("#alerta").empty();
-            $("#alerta").append(
-              '<div class="alert alert-warning" role="alert">' +
-                "Esta venta esta cancelada, no puedes agregar mas abonos." +
-                "</div>"
-            );
-          } else {
-            $("#alerta").empty();
-            tabla.ajax.reload(null, false);
-            table.ajax.reload(null, false);
-            $("#pagado").val(response.pagado_nuevo);
-            $("#restante").val(response.restante_nuevo);
-          }
-        },
-      });
+       let comentario_abono = $("#observacion-abono").val();
+       let sin_definir_found = metodosPago.find((element) => element.clave == 4);
+       if(comentario_abono.trim()=="" && sin_definir_found != undefined) {
+        $("#alerta").empty();
+        $("#alerta").append(
+          '<div class="alert alert-warning" role="alert">' +
+            "El forma de pago sin definir debes definir un comentario" +
+            "</div>"
+        );
+       }else{
+        $.ajax({
+          type: "POST",
+          url: "./modelo/creditos/insertar-abono.php",
+          data: {
+            "id-credito": id,
+            metodo: metodosPago,
+            fecha: fecha,
+            comentario_abono
+          },
+          dataType: "JSON",
+          success: function (response) {
+            if (response == 1) {
+              $("#alerta").empty();
+              $("#alerta").append(
+                '<div class="alert alert-warning" role="alert">' +
+                  "El abono sobrepasa el total" +
+                  "</div>"
+              );
+            } else if (response == 6) {
+              $("#alerta").empty();
+              $("#alerta").append(
+                '<div class="alert alert-warning" role="alert">' +
+                  "Esta venta esta cancelada, no puedes agregar mas abonos." +
+                  "</div>"
+              );
+            } else {
+              $("#alerta").empty();
+              tabla.ajax.reload(null, false);
+              table.ajax.reload(null, false);
+              $("#pagado").val(response.pagado_nuevo);
+              $("#restante").val(response.restante_nuevo);
+            }
+          },
+        });
+       }
     }
   }
 }

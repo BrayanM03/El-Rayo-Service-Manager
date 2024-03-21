@@ -20,7 +20,7 @@ if(isset($_POST)){
     $fecha = date("Y-m-d");
     $hora = date("h:i a");
     $metodos = $_POST["metodo"];
-    
+    $comentario_abono = $_POST["comentario_abono"];
     $desc_metodos ='';
     $pago_efectivo=0;
     $pago_transferencia=0;
@@ -124,9 +124,9 @@ if(isset($_POST)){
 
             include '../helpers/verificar-hora-corte.php';
             
-            $insertar_abono = "INSERT INTO abonos(id, id_credito, fecha, hora, abono, metodo_pago, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_deposito, pago_sin_definir, usuario, id_usuario, estado, sucursal, id_sucursal, fecha_corte, hora_corte) VALUES(null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            $insertar_abono = "INSERT INTO abonos(id, id_credito, fecha, hora, abono, metodo_pago, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_deposito, pago_sin_definir, usuario, id_usuario, estado, sucursal, id_sucursal, fecha_corte, hora_corte, comentario) VALUES(null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             $resultado = $con->prepare($insertar_abono);  
-            $resultado->bind_param('isssssssssssssssss', $id_credito, $fecha, $hora, $monto_total, $metodos_str, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_deposito, $pago_sin_definir, $usuario, $id_usuario, $estado, $sucursal, $id_sucursal, $fecha_corte, $hora_corte);
+            $resultado->bind_param('issssssssssssssssss', $id_credito, $fecha, $hora, $monto_total, $metodos_str, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_deposito, $pago_sin_definir, $usuario, $id_usuario, $estado, $sucursal, $id_sucursal, $fecha_corte, $hora_corte, $comentario_abono);
             $resultado->execute();
             $error_credito = $resultado->error;
             if($error_credito){

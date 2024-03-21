@@ -145,8 +145,8 @@ $hoja_activa->getStyle('A1:H1')->getFont()->getColor()->setARGB(\PhpOffice\PhpSp
                 
                // $comisiones =  obtenerComisiones($con, $id_sucursal, $fecha_inicio, $fecha_final);
                $comisiones = informacionFiltros($con);
-               /*  echo json_encode($comisiones);
-                die(); */
+               /* echo json_encode($comisiones);
+               die(); */
 
                 $bandera = 0;
                 $sumatoria =0;
@@ -290,22 +290,33 @@ if(count($comisiones['data']) > 0) {
                             //echo "Han pasado más de 45 días desde el último abono.";
                         }
                         
+                        $sumatoria_creditos += intval($importe_sin_servicio);
                     }
-                    $sumatoria_creditos += intval($importe_sin_servicio);
                     $index++;
                 }
             }
             
             $index++;
-            $hoja_activa->setCellValue('F'.$index, 'Sumatoria creditos pagados sin serv');
-            $hoja_activa->setCellValue('G'.$index, $sumatoria_creditos);
-            $index++;
-            $comision_creditos = ($sumatoria_creditos * floatval($porcentaje_comision))/100;
-            $hoja_activa->setCellValue('F'.$index, 'Ganacia comisión creditos ('.$porcentaje_comision.'%): ');
-            $hoja_activa->setCellValue('G'.$index, $comision_creditos);
-            $hoja_activa->getStyle('F'.($index-1).':F'.$index)->getFont()->setBold(true);
-
-            $index+=2;
+            if($bandera !=0){
+                $hoja_activa->setCellValue('F'.$index, 'Sumatoria creditos pagados sin serv');
+                $hoja_activa->setCellValue('G'.$index, $sumatoria_creditos);
+                $index++;
+                $comision_creditos = ($sumatoria_creditos * floatval($porcentaje_comision))/100;
+                $hoja_activa->setCellValue('F'.$index, 'Ganacia comisión creditos ('.$porcentaje_comision.'%): ');
+                $hoja_activa->setCellValue('G'.$index, $comision_creditos);
+                $hoja_activa->getStyle('F'.($index-1).':F'.$index)->getFont()->setBold(true);
+    
+                $index+=2;
+            }else{
+                $hoja_activa->setCellValue('F'.$index, 'Sumatoria ventas sin serv');
+                $hoja_activa->setCellValue('G'.$index, $sumatoria_ventas);
+                $index++;
+                $comision_venta = ($sumatoria_ventas * floatval($porcentaje_comision))/100;
+                $hoja_activa->setCellValue('F'.$index, 'Ganacia comisión ('.$porcentaje_comision.'%): ');
+                $hoja_activa->setCellValue('G'.$index, $comision_venta);
+                $hoja_activa->getStyle('F'.($index-1).':F'.$index)->getFont()->setBold(true);
+                $index+=2;
+            }
           
             $sumatoria_total = $sumatoria_ventas + $sumatoria_creditos;
             $hoja_activa->setCellValue('F'.$index, 'Sumatoria total sin serv');
