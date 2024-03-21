@@ -14,10 +14,8 @@
     $id_usuario = $_SESSION['id_usuario'];
     $rol_usuario = $_SESSION['rol'];
     
-    if ($rol_usuario == 3 || $rol_usuario == 2) {
-        
+    if ($rol_usuario == 3 || $rol_usuario == 2 && $id_usuario != 7) {
             header("Location:nueva-venta.php?nav=inicio");
-        
     }
 
     

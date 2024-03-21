@@ -29,7 +29,13 @@ $(document).ready(function() {
         { title: "Descripcion",    data: "descripcion"    },
         { title: "Marca",          data: "marca"          },
         { title: "Modelo",         data: "modelo"         },
-        { title: "Costo",          data: "costo"          },
+        { title: "Costo",          data: "costo", render: function(data){
+          console.log(data);
+          /* const numeroStr = data.toString();
+          console.log(numeroStr); */
+          const resultado = data.toFixed(2);
+          return resultado;
+        }},
         { title: "Precio",         data: "precio"         },
         { title: "Precio Mayoreo", data: "mayoreo"        },   
         { title: "id",             data: "id"        },
