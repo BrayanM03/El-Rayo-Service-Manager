@@ -16,9 +16,8 @@
     
     if ($rol_usuario == 3 || $rol_usuario == 2) {
         
-        if($id_usuario !=7 && $id_usuario != 15){
             header("Location:nueva-venta.php?nav=inicio");
-        }
+        
     }
 
     
