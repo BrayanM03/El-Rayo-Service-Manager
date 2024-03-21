@@ -19,20 +19,27 @@ if (isset($_POST["searchTerm"]) && $_POST["searchTerm"] != '') {
 
     // Calcular el offset
 $offset = ($page - 1) * $resultadosPorPagina;
-
+ 
 // Consulta preparada para obtener los resultados paginados
-$sqlTraerLlanta = "SELECT l.*, inv.id, inv.Codigo, inv.Sucursal, inv.id_sucursal, inv.Stock
-                  FROM llantas l
-                  INNER JOIN inventario inv ON inv.id_Llanta = l.id
-                  WHERE (l.Ancho LIKE ? 
-                  OR inv.Codigo LIKE ? 
-                  OR l.Proporcion LIKE ? 
-                  OR l.Diametro LIKE ? 
-                  OR l.Modelo LIKE ? 
-                  OR l.Marca LIKE ? 
-                  OR l.Descripcion LIKE ?) AND inv.Stock != 0
-                  ORDER BY CASE WHEN inv.id_sucursal = ? THEN 0 ELSE 1 END, inv.id_sucursal
-                  LIMIT ? OFFSET ?";
+$sqlTraerLlanta = "SELECT
+                    l.Descripcion, 
+                    l.Modelo,
+                    l.Marca,
+                    TRUNCATE(l.precio_Inicial, 2) AS precio_Inicial,
+                    TRUNCATE(l.precio_Venta, 2) AS precio_Venta,
+                    TRUNCATE(l.precio_Mayoreo, 2) AS precio_Mayoreo,
+                    inv.id, inv.Codigo, inv.Sucursal, inv.id_sucursal, inv.Stock
+                    FROM llantas l
+                    INNER JOIN inventario inv ON inv.id_Llanta = l.id
+                    WHERE (l.Ancho LIKE ? 
+                    OR inv.Codigo LIKE ? 
+                    OR l.Proporcion LIKE ? 
+                    OR l.Diametro LIKE ? 
+                    OR l.Modelo LIKE ? 
+                    OR l.Marca LIKE ? 
+                    OR l.Descripcion LIKE ?) AND inv.Stock != 0
+                    ORDER BY CASE WHEN inv.id_sucursal = ? THEN 0 ELSE 1 END, inv.id_sucursal
+                    LIMIT ? OFFSET ?";
 
 // Preparar la consulta
 $stmt = $con->prepare($sqlTraerLlanta);
