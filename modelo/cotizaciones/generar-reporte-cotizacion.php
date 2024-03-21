@@ -43,6 +43,7 @@ global $estatus;
 global $metodo_pago;
 global $hora;
 global $comentario;
+global $id_sucursal;
 
 $formatterES = new NumberFormatter("es-ES", NumberFormatter::SPELLOUT);
 $izquierda = intval(floor($total));
@@ -78,7 +79,7 @@ function Header()
 
 
 {
-    if($GLOBALS["sucursal"] == "Pedro"){
+    if($GLOBALS['id_sucursal'] == 1){
         $titulo_sucursal = "Llantas y Servicios 'EL Rayo'";
         $direccion = "Avenida Pedro Cardenas KM5 No.207";
         $colonia = "Col. Francisco Castellanos";
