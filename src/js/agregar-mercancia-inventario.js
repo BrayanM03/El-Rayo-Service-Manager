@@ -164,8 +164,11 @@ toastr.options = {
       $('#estado-movimientos').on('change', function(e){
         if($(this).val() ==1){
           $('#folio-factura').prop('disabled',true);
+          $("#area-adjuntar-archivo").css('display', 'none');
         }else{
           $('#folio-factura').prop('disabled',false);
+          $("#area-adjuntar-archivo").css('display', '');
+
         }
       })
   
@@ -203,6 +206,9 @@ toastr.options = {
           $("#btn-mover").attr("id_item", repo.id);
           if(repo.id !== ""){
             $("#stock").prop("disabled", false);
+            $("#importe").prop("disabled", false);
+            $("#tasa").prop("disabled", false);
+            $("#importe_total").prop("disabled", false);
           }
           $("#btn-mover").removeClass('disabled');
 
@@ -524,11 +530,24 @@ toastr.options = {
         toastr.error('Selecciona un proveedor', 'Respuesta' );
         return false;
       }
-  
+
+
+      //Forma data
+      let documento_adjunto = document.getElementById('factura-documento');
+      var file =  documento_adjunto.files[0];
+      var formData = new FormData();
+      formData.append('id_usuario', id_user);
+      formData.append('documento_adjunto', file);
+      formData.append('id_proveedor', proveedor);
+      formData.append('folio_factura', folio_factura);
+      formData.append('id_sucursal', id_sucursal);
+      formData.append('estado_movimiento', estado_movimiento);
       $.ajax({
           type: "POST",
           url: "./modelo/inventarios/ingresar-mercancia.php",
-          data: {"id_usuario": id_user, 'id_proveedor': proveedor, 'folio_factura':folio_factura, 'id_sucursal': id_sucursal, estado_movimiento},
+          data: formData,
+          contentType: false,
+          processData: false,
           dataType: "JSON",
           success: function (response) {
   
@@ -974,4 +993,105 @@ toastr.options = {
       }
     });
     
+  }
+
+  function cargarComprobanteRegistro(){
+    let input_comprobante = document.getElementById('factura-documento');
+    let file = input_comprobante.files[0];
+    let area_canvas = $("#area-canvas");
+
+    if (file && file.type === 'application/pdf') {
+    // Ruta del PDF desde donde se obtendrá la miniatura
+    var pdfURL = URL.createObjectURL(file);//'./src/docs/gastos/Folio RAY440.pdf'; // Reemplaza con la ruta correcta a tu archivo PDF
+    var pdfjsLib = window['pdfjs-dist/build/pdf'];
+    // Obtiene el elemento canvas
+    area_canvas.empty().append(`
+    <span aria-hidden="true" class="btn-x-documento" onclick="deleteThumb()">×</span>
+    <canvas id="thumbnailCanvas" width="100" height="150"></canvas>`)
+    var canvas = document.getElementById('thumbnailCanvas');
+
+    // Carga el PDF
+    pdfjsLib.getDocument(pdfURL).promise.then(function(pdfDoc) {
+      // Obtiene la primera página del PDF (página 1)
+      var pageNumber = 1;
+
+      // Renderiza la página en el canvas
+      pdfDoc.getPage(pageNumber).then(function(page) {
+        var viewport = page.getViewport({ scale: 0.2 });
+        var context = canvas.getContext('2d');
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+
+        var renderContext = {
+          canvasContext: context,
+          viewport: viewport,
+        };
+        
+        
+        page.render(renderContext).promise.then(function() {
+     
+        });
+      });
+    });
+   // reader.readAsDataURL(file);
+  }else if (file.type.startsWith('image/')){
+    // Si es una imagen (cualquier tipo de imagen)
+    var reader = new FileReader();
+    area_canvas.empty().append(`
+    <span aria-hidden="true" class="btn-x-documento" onclick="deleteThumb()">×</span>
+    <img src="" height="200" id="gasto-imagen">`)
+    let img_preview = document.getElementById('gasto-imagen')
+  
+      reader.onloadend = function () {
+        img_preview.src = reader.result;
+      }
+    
+      if (file) {
+        reader.readAsDataURL(file);
+       // clearCanvas()
+      } else {
+        img_previewpreview.src = "";
+      }
+
+      Swal.resetValidationMessage()
+      toastr.success('Documento adjunto agregado con exito' ); 
+  }else{
+    area_canvas.empty()
+    Swal.showValidationMessage(
+      `Tipo de archivo no admitido`
+    );
+  }
+  }
+
+  function clearCanvas() {
+    var canvas = document.getElementById('thumbnailCanvas');
+    var context = canvas.getContext('2d');
+    context.clearRect(0, 0, canvas.width, canvas.height);
+  }
+
+  function deleteThumb(){
+    $("#factura-documento").val('');
+    let area_canvas = $("#area-canvas");
+    area_canvas.empty().append(`<canvas id="thumbnailCanvas" width="100" height="150"></canvas>
+    <img src="" height="200" id="gasto-imagen">`)
+    toastr.success('Documento adjunto eliminado con exito' ); 
+    eliminar_comprobante = true;
+  }
+
+  function recalculoDeMontos(tipo){
+    let costo_input = $("#costo-actual");
+    let stock_input = $("#stock");
+    let importe_input = $("#importe");
+    let tasa_select = $("#tasa");
+    let importe_total_input = $("#importe_total");
+    if(tipo == 1) //Recalcular costo
+    {
+      let importe_actual = parseFloat(importe_input.val());
+      let cantidad = parseInt(stock_input.val());
+      let division = (importe_actual / cantidad);
+      let costo_x_unidad = division * parseFloat(tasa_select.val());
+      let nuevo_importe = importe_actual * parseFloat(tasa_select.val());
+      costo_input.val(costo_x_unidad)
+      importe_total_input.val(nuevo_importe)
+    }
   }
