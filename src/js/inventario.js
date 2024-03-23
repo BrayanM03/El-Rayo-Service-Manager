@@ -43,9 +43,42 @@ function MostrarInventario(id_sucursal) {
         { title: "Descripcion",    data: 4    },
         { title: "Marca",          data: 5         },
         { title: "Modelo",         data: 6        },
-        { title: "Costo",          data: 7, visible: visible_value},
-        { title: "Precio",         data: 8,   visible: visible_value},
-        { title: "Mayoreo",        data: 9, visible: visible_value},
+        { title: "Costo",          data: 7, visible: visible_value, render: function(data){
+          // Convert the string to a number using parseFloat()
+          const numero = parseFloat(data);
+      
+          // Check if the conversion was successful (returns NaN if not a number)
+          if (!isNaN(numero)) {
+            let resultado = numero.toFixed(2);
+            return resultado;
+          } else {
+            return "N/A"; // Or any other default value
+          }
+        }},
+        { title: "Precio",         data: 8,   visible: visible_value, render: function(data){
+          // Convert the string to a number using parseFloat()
+          const numero = parseFloat(data);
+      
+          // Check if the conversion was successful (returns NaN if not a number)
+          if (!isNaN(numero)) {
+            let resultado = numero.toFixed(2);
+            return resultado;
+          } else {
+            return "N/A"; // Or any other default value
+          }
+        }},
+        { title: "Mayoreo",        data: 9, visible: visible_value, render: function(data){
+          // Convert the string to a number using parseFloat()
+          const numero = parseFloat(data);
+      
+          // Check if the conversion was successful (returns NaN if not a number)
+          if (!isNaN(numero)) {
+            let resultado = numero.toFixed(2);
+            return resultado;
+          } else {
+            return "N/A"; // Or any other default value
+          }
+        }},
         { title: "Sucursal",       data: 13      },
         { title: "Stock",          data: 15         },
         { title: "Imagen",         data: null, render: function(data,type,row) {

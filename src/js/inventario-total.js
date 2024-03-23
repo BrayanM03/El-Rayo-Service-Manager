@@ -30,14 +30,41 @@ $(document).ready(function() {
         { title: "Marca",          data: "marca"          },
         { title: "Modelo",         data: "modelo"         },
         { title: "Costo",          data: "costo", render: function(data){
-          console.log(data);
-          /* const numeroStr = data.toString();
-          console.log(numeroStr); */
-          const resultado = data.toFixed(2);
-          return resultado;
+          // Convert the string to a number using parseFloat()
+          const numero = parseFloat(data);
+      
+          // Check if the conversion was successful (returns NaN if not a number)
+          if (!isNaN(numero)) {
+            let resultado = numero.toFixed(2);
+            return resultado;
+          } else {
+            return "N/A"; // Or any other default value
+          }
         }},
-        { title: "Precio",         data: "precio"         },
-        { title: "Precio Mayoreo", data: "mayoreo"        },   
+        { title: "Precio",         data: "precio",       render: function(data){
+          // Convert the string to a number using parseFloat()
+          const numero = parseFloat(data);
+      
+          // Check if the conversion was successful (returns NaN if not a number)
+          if (!isNaN(numero)) {
+            let resultado = numero.toFixed(2);
+            return resultado;
+          } else {
+            return "N/A"; // Or any other default value
+          }
+        }  },
+        { title: "Precio Mayoreo", data: "mayoreo"     ,render: function(data){
+          // Convert the string to a number using parseFloat()
+          const numero = parseFloat(data);
+      
+          // Check if the conversion was successful (returns NaN if not a number)
+          if (!isNaN(numero)) {
+            let resultado = numero.toFixed(2);
+            return resultado;
+          } else {
+            return "N/A"; // Or any other default value
+          }
+        }   },   
         { title: "id",             data: "id"        },
         {title: "Sucursal",
           data: 'sucursales',
