@@ -122,6 +122,7 @@ function traerDatosMovimiento(id, tipo_remision){
             }
 
         }
+        $("#contenedor-loader").addClass('d-none')
     }
   });
 }
@@ -1668,3 +1669,92 @@ function agregarLLantaCatalogo() {
   
   
   }
+
+
+function buscarFoliosCuentasPorPagar(){
+    let folio = $("#buscar-folio-factura").val();
+    if(folio.trim() == ""){
+        
+        toastr.error("Escribe un folio de factura o movimiento", 'Error');
+      }else{
+        $("#contenedor-loader").removeClass('d-none')
+        setTimeout(function () {
+            
+                  $.ajax({
+                      type: "post",
+                      url: "./modelo/movimientos/buscar-folio-factura.php",
+                      data: {folio},
+                      dataType: "json",
+                      success: function (response) {
+                          if(response.estatus){
+                            $("#contenedor-loader").addClass('d-none')
+                              if(response.total_facturas >1){
+                                  Swal.fire({
+                                      icon: 'info',
+                                      width: "1400px",
+                                      title: 'Se encontrarón mas de 1 factura',
+                                      html: `
+                                      <span>Seleccione la factura que quiera cargar: </span>
+                                      <div class="container-fluid mt-2">
+                                          <div class="row">
+                                              <div class="col-md-12">
+                                                  <ul class="list-group">
+                                                      <li class="list-group-item active">
+                                                          <div class="row">
+                                                              <div class="col-md-1">#</div>
+                                                              <div class="col-md-4">Proveedor</div>
+                                                              <div class="col-md-1">Folio</div>
+                                                              <div class="col-md-1">Fecha</div>
+                                                              <div class="col-md-4">Mercancia</div>
+                                                              <div class="col-md-1">Usuario</div>
+                                                          </div>
+                                                      </li>
+                                                      <div id="facturas-encontradas">
+                                                          
+                                                          </div>
+                                                  </ul>
+                                              </div>
+                                          </div>
+                                      </div>`,
+                                      didOpen: function(){
+                                          $("#facturas-encontradas").empty();
+                                          response.data.forEach(element => {
+                                              $("#facturas-encontradas").append(`
+                                              <li class="list-group-item list-group-item-action" style="cursor:pointer" onclick="cargarNuevoMovimiento(${element.id})">
+                                              <div class="row">
+                                                              <div class="col-md-1">${element.id}</div>
+                                                              <div class="col-md-4">${element.proveedor}</div>
+                                                              <div class="col-md-1">${element.folio_factura}</div>
+                                                              <div class="col-md-1">${element.fecha}</div>
+                                                              <div class="col-md-4">${element.mercancia}</div>
+                                                              <div class="col-md-1">${element.usuario}</div>
+                                                          </div>
+                                              </li>
+                                              `)
+                                          });
+                                      }
+                                  })
+          
+                              }else if(response.total_facturas ==1){
+                                response.data.forEach(element => {
+                                    cargarNuevoMovimiento(element.id)
+                                })
+                              }
+                          }
+                      }
+                  });
+              
+        },1000)
+        
+      }
+  
+  }
+
+
+function cargarNuevoMovimiento(id_movimiento){
+    $("#contenedor-loader").removeClass('d-none')
+    setTimeout(function () {
+        const dominio = window.location.hostname;   
+        location.href =  'administracion-movimiento.php?id=' + id_movimiento + '&tipo_remision=2';
+    },1500)
+}  

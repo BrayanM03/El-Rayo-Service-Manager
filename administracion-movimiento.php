@@ -81,6 +81,8 @@
 </head>
 <body id="page-top"> 
 
+    <?php include 'views/loader.php'; ?>
+    <div class="container"></div>
     <!-- Page Wrapper -->
     <div id="wrapper">
 
@@ -109,10 +111,15 @@
                             </div>
                 </div>
                 <hr>
-                <div id="contenedor-datos-generales">
+                
                 <div class="row">
-                            <div class="col-md-9">
+                            <div class="col-md-6">
                                 <h5><b>Desde este panel puede editar los datos generales del folio de ingreso</b></h5>
+                            </div>
+                            <div class="col-md-3 d-flex">
+                                <h5 class="mt-2">Buscar: </h5>
+                                <input type="text" class="form-control ml-3" id="buscar-folio-factura" placeholder="Folio ó Factura">
+                                <div class="btn btn-info ml-2" onclick="buscarFoliosCuentasPorPagar()">Buscar</div>
                             </div>
                             <div class="col-md-3" id="contenedor-botones-edicion">
                                 <div class="row justify-content-end">
@@ -124,6 +131,7 @@
                                 </div>
                             </div>   
                 </div>
+                <div id="contenedor-datos-generales">
                     <div class="row mt-5">
                         <div class="col-12 col-md-4" style="font-size: 14px !important;">
                             <label for="proveedor"><b>Proveedor</b></label>
@@ -305,6 +313,7 @@
     <!-- Cargamos nuestras librerias-->
     <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->
     <script src="src/js/vue.min.js"></script>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <script src="src/vendor/datatables/jquery.dataTables.min.js"></script> 
     <script src="src/vendor/datatables-responsive/js/dataTables.responsive.min.js"></script>
     <script src="src/vendor/datatables/dataTables.bootstrap4.js"></script>
