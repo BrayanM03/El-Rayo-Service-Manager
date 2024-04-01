@@ -285,12 +285,12 @@ if(count($comisiones['data']) > 0) {
                         //$hoja_activa->getStyle('A'.$index.':F'.$index)->getFont()->setBold(true);
                         $hoja_activa->getStyle('A'.$index.':I'.$index)->getFont()->setSize(12);
                         $hoja_activa->getStyle('A'.$index.':I'.$index)->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_BLACK);
+                        $sumatoria_creditos += intval($importe_sin_servicio);
                         } else {
                             $index--;
                             //echo "Han pasado más de 45 días desde el último abono.";
                         }
                         
-                        $sumatoria_creditos += intval($importe_sin_servicio);
                     }
                     $index++;
                 }
