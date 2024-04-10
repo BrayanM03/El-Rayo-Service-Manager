@@ -27,6 +27,7 @@ disabled_botton = true;
 traerDatosMovimiento(id_movimiento, tipo_remision)
 
 function traerDatosMovimiento(id, tipo_remision){
+    $("#input-comprobante-edicion").attr('eliminar', false);
   $.ajax({
     type: "post",
     url: "./modelo/cuentas_pagar/traer-movimiento.php",
@@ -34,6 +35,10 @@ function traerDatosMovimiento(id, tipo_remision){
     dataType: "JSON",
     success: function (response) {
         if(response.estatus){
+           extension_archivo = response.datos_movimiento[0].extension_archivo;
+           console.log(extension_archivo);
+            cargarComprobante(response.datos_movimiento[0].extension_archivo);
+
             $("#proveedor").empty();
                 response.proveedores.forEach(element => {
                 $("#proveedor").append(`
@@ -133,7 +138,7 @@ function actualizarDatosGenerales(updating_data_status){
         var inputs_contenedor = contenedor.querySelectorAll('input');
         var selects_contenedor = contenedor.querySelectorAll('select');
         let contenedor_btnes_edicion_gnl = $("#contenedor-botones-edicion");
-    
+        
         if(tipo_remision ==2 && !modo_edicion){
             inputs_contenedor.forEach(function(input) {
                 input.removeAttribute('disabled');
@@ -155,8 +160,24 @@ function actualizarDatosGenerales(updating_data_status){
                 </div>
             </div>
             `);
+            $("#contenedor-cargar-documento").removeClass().addClass('contenedor-cargar-documento-edicion').attr('onclick','cargarComprobanteEdicion()');
+            
+            let documento_cargado= $("#area-canvas").attr('documento')
+            if(documento_cargado=='true'){
+                $("#area-canvas").append(`<span aria-hidden="true" class="btn-x-documento" onclick="deleteThumb()">×</span>`)
+            }
+            
         }else if(modo_edicion){
-            inputs_contenedor.forEach(function(input) {
+            /* $("#area-canvas span").last().remove()
+            let archivo_adjuntado = $("#area-canvas").find('canvas');
+            console.log(archivo_adjuntado.length);
+           if(archivo_adjuntado.length !=1){
+                traerDatosMovimiento(id_movimiento, tipo_remision)
+             }else{
+                traerDatosMovimiento(id_movimiento, tipo_remision)
+           } */
+           traerDatosMovimiento(id_movimiento, tipo_remision)
+            inputs_contenedor.forEach(function(input) { 
                 input.setAttribute('disabled', true);
             });
             selects_contenedor.forEach(function(input) {
@@ -164,11 +185,14 @@ function actualizarDatosGenerales(updating_data_status){
             });
             contenedor_btnes_edicion_gnl.empty().append(`
             <div class="row justify-content-end">
-            <div class="col-12 col-md-4">
-                <div class="btn btn-primary w-100" onclick="actualizarDatosGenerales(0)">Editar</div>
+                <div class="col-12 col-md-4">
+                    <div class="btn btn-primary w-100" onclick="actualizarDatosGenerales(0)">Editar</div>
+                </div>
             </div>
-        </div>
-            `);
+                `);
+            $("#contenedor-cargar-documento").removeClass().addClass('contenedor-cargar-documento').attr('onclick','');
+            
+
         }
         if(!modo_edicion){
             modo_edicion = true
@@ -186,10 +210,37 @@ function actualizarDatosGenerales(updating_data_status){
         let aprobacion_importe = 'unknown';
         let aprobacion_actualizar_stock ='unknown';
 
+        let documento_adjunto = document.getElementById('input-comprobante-edicion');
+        var file =  documento_adjunto.files[0];
+        if(file != undefined){
+            const extension = file.name.split('.').pop();
+            extension_archivo=extension;
+        };
+        let eliminar_documento = $("#input-comprobante-edicion").attr('eliminar')
+        console.log(extension_archivo);
+        var formData = new FormData();
+        /* formData.append('id_usuario', id_user); */
+        formData.append('proveedor_actualizado', proveedor_actualizado);
+        formData.append('factura_actualizado',factura_actualizado);
+        formData.append('usuario_actualizado',usuario_actualizado);
+        formData.append('estado_actualizado',estado_actualizado);
+        formData.append('estatus_actualizado',estatus_actualizado);
+        formData.append('importe_total_actualizado',importe_total_actualizado);
+        formData.append('aprobacion_importe', aprobacion_importe);
+        formData.append('id_sucursal', id_sucursal);
+        formData.append('aprobacion_actualizar_stock', aprobacion_actualizar_stock);
+        formData.append('documento_adjunto', file);
+        formData.append('id_movimiento', id_movimiento);
+        formData.append('eliminar_documento', eliminar_documento);
+        formData.append('extension_archivo', extension_archivo);
+
+              
         $.ajax({
             type: "post",
             url: "./modelo/cuentas_pagar/actualizar-remision.php",
-            data: {proveedor_actualizado, factura_actualizado, usuario_actualizado, estado_actualizado, estatus_actualizado, importe_total_actualizado, id_movimiento, aprobacion_importe, id_sucursal,aprobacion_actualizar_stock},
+            data: formData,
+            contentType: false,
+            processData: false,
             dataType: "JSON",
             success: function (response) {
                 if(response.estatus){
@@ -1757,4 +1808,158 @@ function cargarNuevoMovimiento(id_movimiento){
         const dominio = window.location.hostname;   
         location.href =  'administracion-movimiento.php?id=' + id_movimiento + '&tipo_remision=2';
     },1500)
-}  
+} 
+
+function cargarComprobante(extension_archivo){
+    let area_canvas = $("#area-canvas");
+    $.ajax({
+        url: "./src/docs/facturas_compras/FAC-"+id_movimiento+"."+extension_archivo,
+        method: "GET",
+        xhr: function() {
+          var xhr = new window.XMLHttpRequest();
+          xhr.responseType = "arraybuffer";
+          return xhr;
+        },
+        success: function(data) {
+         if(extension_archivo =='pdf'){
+            var pdfData = new Uint8Array(data);
+            var pdfURL = URL.createObjectURL(new Blob([pdfData], { type: "application/pdf" }));
+        
+            // Continuar con el código original usando `pdfURL`
+            var pdfjsLib = window['pdfjs-dist/build/pdf'];
+              // Obtiene el elemento canvas
+              area_canvas.empty().append(`
+              
+              <canvas id="thumbnailCanvas" width="100" height="150"></canvas>`)
+              var canvas = document.getElementById('thumbnailCanvas');
+  
+              // Carga el PDF
+              pdfjsLib.getDocument(pdfURL).promise.then(function(pdfDoc) {
+              // Obtiene la primera página del PDF (página 1)
+              var pageNumber = 1;
+  
+              // Renderiza la página en el canvas
+              pdfDoc.getPage(pageNumber).then(function(page) {
+                  var viewport = page.getViewport({ scale: 0.3 });
+                  var context = canvas.getContext('2d');
+                  canvas.width = viewport.width;
+                  canvas.height = viewport.height;
+  
+                  var renderContext = {
+                  canvasContext: context,
+                  viewport: viewport,
+                  };
+                  page.render(renderContext).promise.then(function() {
+
+                  });
+              });
+              });
+         }else{
+            let random_v = Math.floor(Math.random() * 900000) + 100000;
+            area_canvas.empty().append(`
+              <img height="200" src="./src/docs/facturas_compras/FAC-${id_movimiento}.${extension_archivo}?v=${random_v}">`)
+         }
+
+         $("#area-canvas").attr('documento', true)
+          
+        },
+        error: function(message){
+            area_canvas.empty().append(`
+            <div class="contenedor-cargar-documento" id="contenedor-cargar-documento">Sin factura cargada</div>
+            
+            `)
+            $("#area-canvas").attr('documento', false)
+        }
+
+      });
+}
+
+
+function cargarComprobanteEdicion(){
+    document.getElementById("input-comprobante-edicion").click(); 
+}
+
+function cargarComprobanteRegistro(){
+    let input_comprobante = document.getElementById('input-comprobante-edicion');
+    let file = input_comprobante.files[0];
+    let area_canvas = $("#area-canvas");
+
+    if (file && file.type === 'application/pdf') {
+    // Ruta del PDF desde donde se obtendrá la miniatura
+    var pdfURL = URL.createObjectURL(file);//'./src/docs/gastos/Folio RAY440.pdf'; // Reemplaza con la ruta correcta a tu archivo PDF
+    var pdfjsLib = window['pdfjs-dist/build/pdf'];
+    // Obtiene el elemento canvas
+    area_canvas.empty().append(`
+    <span aria-hidden="true" class="btn-x-documento" onclick="deleteThumb()">×</span>
+    <canvas id="thumbnailCanvas" width="100" height="150"></canvas>`)
+    var canvas = document.getElementById('thumbnailCanvas');
+
+    // Carga el PDF
+    pdfjsLib.getDocument(pdfURL).promise.then(function(pdfDoc) {
+      // Obtiene la primera página del PDF (página 1)
+      var pageNumber = 1;
+
+      // Renderiza la página en el canvas
+      pdfDoc.getPage(pageNumber).then(function(page) {
+        var viewport = page.getViewport({ scale: 0.2 });
+        var context = canvas.getContext('2d');
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+
+        var renderContext = {
+          canvasContext: context,
+          viewport: viewport,
+        };
+        
+        
+        page.render(renderContext).promise.then(function() {
+     
+        });
+      });
+    });
+    $("#input-comprobante-edicion").attr('eliminar', false);
+   // reader.readAsDataURL(file);
+  }else if (file.type.startsWith('image/')){
+    // Si es una imagen (cualquier tipo de imagen)
+    var reader = new FileReader();
+    area_canvas.empty().append(`
+    <span aria-hidden="true" class="btn-x-documento" onclick="deleteThumb()">×</span>
+    <img src="" height="200" id="gasto-imagen">`)
+    let img_preview = document.getElementById('gasto-imagen')
+  
+      reader.onloadend = function () {
+        img_preview.src = reader.result;
+      }
+    
+      if (file) {
+        reader.readAsDataURL(file);
+       // clearCanvas()
+      } else {
+        img_previewpreview.src = "";
+      }
+
+      Swal.resetValidationMessage()
+      toastr.success('Documento adjunto agregado con exito' ); 
+      $("#input-comprobante-edicion").attr('eliminar', false);
+  }else{
+    area_canvas.empty()
+    Swal.showValidationMessage(
+      `Tipo de archivo no admitido`
+    );
+  }
+  }
+
+  function clearCanvas() {
+    var canvas = document.getElementById('thumbnailCanvas');
+    var context = canvas.getContext('2d');
+    context.clearRect(0, 0, canvas.width, canvas.height);
+  }
+
+  function deleteThumb(flag =0){
+      let area_canvas = $("#area-canvas");
+      area_canvas.empty().append(`<div class="contenedor-cargar-documento-edicion" onclick="cargarComprobanteEdicion()" id="contenedor-cargar-documento">Sin factura cargada</div>
+     `)
+      flag !== 1 ? toastr.success('Documento adjunto eliminado con exito' ) : false; 
+      $("#input-comprobante-edicion").val('').attr('eliminar', true);
+    eliminar_comprobante = true;
+  }

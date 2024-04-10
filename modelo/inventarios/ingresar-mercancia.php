@@ -254,15 +254,17 @@ if(isset($_POST)){
     
             // Mover el archivo al directorio de destino
             if (move_uploaded_file($_FILES["documento_adjunto"]["tmp_name"], $targetDir . 'FAC-' . $id_movimiento.'.' .$imageFileType)) {
+                
                 $mensaje_archivo ="El archivo se ha subido correctamente.";
             } else {
+                $comprobante = 0;
                 $mensaje_archivo ="Hubo un error al subir el archivo.";
             }
         }
 
-        $update = "UPDATE movimientos SET mercancia = ?, total = ?, pagado = ?, restante = ?, archivo = ? WHERE id = ?";
+        $update = "UPDATE movimientos SET mercancia = ?, total = ?, pagado = ?, restante = ?, archivo = ?, extension_archivo = ? WHERE id = ?";
         $respp = $con->prepare($update);
-        $respp->bind_param('ssssss', $mercancia, $costo_sumatoria, $pagado, $costo_sumatoria, $comprobante, $id_movimiento);
+        $respp->bind_param('sssssss', $mercancia, $costo_sumatoria, $pagado, $costo_sumatoria, $comprobante, $imageFileType, $id_movimiento);
         $respp->execute();
         $respp->close();
         $response = array('mensaje'=> 'Mercancia agregada correctamente', "estatus"=>true, 'id_entrada'=> $id_movimiento, 'archivo'=>$mensaje_archivo, 'post'=>$_POST, 'files'=>$_FILES);

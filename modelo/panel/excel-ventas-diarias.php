@@ -514,13 +514,13 @@ $resp->close();
 
                 $index=12;
                 //Tabla de abonos
-                $hoja_activa->mergeCells("A12:M12");        
+                $hoja_activa->mergeCells("A12:N12");        
                 $hoja_activa->setCellValue('A12', "Abonos realizados");
-                $hoja_activa->getStyle('A12:M12')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('950033');
-                $hoja_activa->getStyle('A12:M12')->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+                $hoja_activa->getStyle('A12:N12')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('950033');
+                $hoja_activa->getStyle('A12:N12')->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
                  
-                $hoja_activa->getStyle('A12:M12')->getAlignment()->setHorizontal('center');
-                $hoja_activa->getStyle('A12:M12')->getAlignment()->setVertical('center');
+                $hoja_activa->getStyle('A12:N12')->getAlignment()->setHorizontal('center');
+                $hoja_activa->getStyle('A12:N12')->getAlignment()->setVertical('center');
 
                 $index++;
                 $hoja_activa->getColumnDimension('A')->setWidth(8);
@@ -549,13 +549,15 @@ $resp->close();
                 $hoja_activa->setCellValue('L'.$index, 'Pago Cheque');
                 $hoja_activa->getColumnDimension('M')->setWidth(18);
                 $hoja_activa->setCellValue('M'.$index, 'Pago por definir');
+                $hoja_activa->getColumnDimension('N')->setWidth(18);
+                $hoja_activa->setCellValue('N'.$index, 'Comentario');
 
-                $hoja_activa->getStyle('A'.$index.':M'.$index)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('950033');
-                $hoja_activa->getStyle('A'.$index.':M'.$index)->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
-                $hoja_activa->getStyle('A'.$index.':M'.$index)->getFont()->setBold(true);
+                $hoja_activa->getStyle('A'.$index.':N'.$index)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('950033');
+                $hoja_activa->getStyle('A'.$index.':N'.$index)->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+                $hoja_activa->getStyle('A'.$index.':N'.$index)->getFont()->setBold(true);
                 $hoja_activa->getRowDimension('2')->setRowHeight(20);
-                $hoja_activa->getStyle('A'.$index.':M'.$index)->getAlignment()->setHorizontal('center');
-                $hoja_activa->getStyle('A'.$index.':M'.$index)->getAlignment()->setVertical('center');
+                $hoja_activa->getStyle('A'.$index.':N'.$index)->getAlignment()->setHorizontal('center');
+                $hoja_activa->getStyle('A'.$index.':N'.$index)->getAlignment()->setVertical('center');
                 $index++;
 
                 $abonos_hoy = obtenerClientesqueAbonaron($con, $id_sucursal, $fecha);
@@ -576,18 +578,19 @@ $resp->close();
                         # code...
                             
                             $id_venta = !empty($value["id"]) ? $value["id"] : 0;
-                            $cliente = $value["cliente"];
-                            $fecha = $value["fecha"];
-                            $abono = $value["abono"];
-                            $sucursal = $value["sucursal"];
-                            $usuario = $value["usuario"];
-                            $id_credito = $value["id_credito"];
-                            $metodo = $value["metodo"];
-                            $pago_efectivo = $value["pago_efectivo"];
-                            $pago_tarjeta = $value["pago_tarjeta"];
-                            $pago_transferencia = $value["pago_transferencia"];
-                            $pago_cheque = $value["pago_cheque"];
-                            $pago_por_definir = $value["pago_sin_definir"];
+                            $cliente = $value['cliente'];
+                            $fecha = $value['fecha'];
+                            $abono = $value['abono'];
+                            $sucursal = $value['sucursal'];
+                            $usuario = $value['usuario'];
+                            $id_credito = $value['id_credito'];
+                            $metodo = $value['metodo'];
+                            $pago_efectivo = $value['pago_efectivo'];
+                            $pago_tarjeta = $value['pago_tarjeta'];
+                            $pago_transferencia = $value['pago_transferencia'];
+                            $pago_cheque = $value['pago_cheque'];
+                            $pago_por_definir = $value['pago_sin_definir'];
+                            $comentario = $value['comentario'];
                             
                             $hoja_activa->getColumnDimension('A')->setWidth(8);
                             $hoja_activa->setCellValue('A'.$index, $contador2);
@@ -615,8 +618,10 @@ $resp->close();
                             $hoja_activa->setCellValue('L'.$index, "$".$pago_transferencia);
                             $hoja_activa->getColumnDimension('M')->setWidth(18);
                             $hoja_activa->setCellValue('M'.$index, "$".$pago_por_definir);      
-                            $hoja_activa->getStyle('A'.$index.':M'.$index)->getAlignment()->setHorizontal('center');
-                            $hoja_activa->getStyle('A'.$index.':M'.$index)->getAlignment()->setVertical('center');
+                            $hoja_activa->getColumnDimension('N')->setWidth(18);
+                            $hoja_activa->setCellValue('N'.$index, $comentario); 
+                            $hoja_activa->getStyle('A'.$index.':N'.$index)->getAlignment()->setHorizontal('center');
+                            $hoja_activa->getStyle('A'.$index.':N'.$index)->getAlignment()->setVertical('center');
     
                             $index++;
                             $contador2++;
@@ -1276,6 +1281,7 @@ function obtenerClientesqueAbonaron($con, $id_sucursal, $fecha)
             $pago_por_definir = isset($fila['pago_sin_definir']) ? $fila['pago_sin_definir']: 0;
             $usuario = $fila['usuario'];
             $id_credito = $fila['id_credito'];
+            $coment= $fila['comentario'];
 
             $traer_id = $con->prepare("SELECT id_Cliente FROM `creditos` WHERE id= ?");
             $traer_id->bind_param('s', $id_credito);
@@ -1300,7 +1306,7 @@ function obtenerClientesqueAbonaron($con, $id_sucursal, $fecha)
             "pago_transferencia"=>$pago_transferencia,
             "pago_sin_definir"=>$pago_por_definir,
             "cliente"=>$cliente, 
-            "abono"=> $abono, "fecha"=> $fecha, "sucursal"=> $sucurs, "usuario"=>$usuario);
+            "abono"=> $abono, "fecha"=> $fecha, "sucursal"=> $sucurs, "usuario"=>$usuario, 'comentario'=>$coment);
         
         };
     

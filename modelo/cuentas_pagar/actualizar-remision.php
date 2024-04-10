@@ -111,12 +111,57 @@ if($total_movimientos>0){
             $icon = 'success';
         }
 
+        if(empty($_FILES['documento_adjunto'])){
+            $comprobante = 0;
+            $imageFileType = 'NA';
+            $mensaje_archivo = 'No se subio un archivo';
+
+        }else{
+            $comprobante = 1;
+            $targetDir = '../../src/docs/facturas_compras/';
+            $targetFile = $targetDir . basename($_FILES['documento_adjunto']['name']);
+            $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+            if ($imageFileType != 'jpg' && $imageFileType != 'png' && $imageFileType != 'jpeg' && $imageFileType != 'pdf') {
+                echo json_encode(["error" => "El archivo no es una imagen válida."]);
+                exit;
+            }
+    
+            // Mover el archivo al directorio de destino
+            if (move_uploaded_file($_FILES["documento_adjunto"]["tmp_name"], $targetDir . 'FAC-' . $id_movimiento.'.' .$imageFileType)) {
+                $mensaje_archivo ="El archivo se ha subido correctamente.";
+                $update = 'UPDATE movimientos SET archivo = 1, extension_archivo = ? WHERE id = ?';
+                $stmt = $con->prepare($update);
+                $stmt->bind_param('ss', $imageFileType, $id_movimiento);
+                $stmt->execute();
+                $stmt->close();
+              
+            } else {
+                $mensaje_archivo ="Hubo un error al subir el archivo.";
+            }
+        }
+        $mensaje_eliminacion ='';
+        if($_POST['eliminar_documento']=='true'){
+            $targetDir = '../../src/docs/facturas_compras/';
+            if (unlink($targetDir . 'FAC-' . $id_movimiento.'.' .$_POST['extension_archivo'])) {
+                $mensaje_eliminacion .= "El archivo se ha eliminado correctamente.";
+                $update = 'UPDATE movimientos SET archivo = 0, extension_archivo = null WHERE id = ?';
+                $stmt = $con->prepare($update);
+                $stmt->bind_param('s', $id_movimiento);
+                $stmt->execute();
+                $stmt->close();
+              } else {
+                $mensaje_eliminacion .=  "Error al eliminar el archivo.";
+              }
+        }
+
+
 }else{
     $estatus = false;
     $icon = 'error';
     $mensaje = 'No existe una movimiento con ese ID';
 }
 
-$response = array('estatus'=>$estatus, 'mensaje'=>$mensaje, 'post'=>$_POST, 'icon'=>$icon, 'necesita_aprobacion_stock'=>$necesita_aprobacion_stock, 'necesita_aprobacion_importes'=>$necesita_aprobacion_importes);
+$response = array('ext'=>$imageFileType, 'estatus'=>$estatus, 'files'=>$_FILES, 'mensaje'=>$mensaje, 'mensaje_eliminacion'=>$mensaje_eliminacion,
+ 'post'=>$_POST, 'icon'=>$icon, 'necesita_aprobacion_stock'=>$necesita_aprobacion_stock, 'necesita_aprobacion_importes'=>$necesita_aprobacion_importes);
 echo json_encode($response);
 ?>

@@ -46,6 +46,7 @@
     <link rel="stylesheet" href="src/vendor/datatables/dataTables.bootstrap4.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.css" integrity="sha512-oe8OpYjBaDWPt2VmSFR+qYOdnTjeV9QPLJUeqZyprDEQvQLJ9C5PCFclxwNuvb/GQgQngdCXzKSFltuHD3eCxA==" crossorigin="anonymous" />
     
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.10.111/web/pdf_viewer.min.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="src/vendor/bower_components/select2-bootstrap-theme/dist/select2-bootstrap.css">
     
@@ -77,6 +78,56 @@
         .swal2-container {
         z-index: 99 !important;
         }
+        .btn-x-documento{
+            font-size: 2.5rem;
+            font-weight: 500;
+            color: white;
+            -webkit-text-stroke: 2px black;
+            font-weight: bold;
+            position: absolute;
+            right: 10rem;
+            top: .3rem;
+            cursor: pointer;
+         }
+         .btn-x-documento:hover{
+            color: red;
+         }
+         .contenedor-cargar-documento{
+            width: 19rem;
+            border-radius: 9px;
+            height: 10rem;
+            margin-left: auto;
+            margin-right: auto;
+            border: 2px dashed #D4D1D1;
+            font-size: larger;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: whitesmoke;
+            color: gray;
+            
+         }
+
+         .contenedor-cargar-documento-edicion{
+            width: 19rem;
+            border-radius: 9px;
+            height: 10rem;
+            margin-left: auto;
+            margin-right: auto;
+            border: 2px dashed #D4D1D1;
+            font-size: larger;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            background-color: white;
+            color: black;
+         }
+         .contenedor-cargar-documento-edicion:hover{
+            font-weight: bolder;
+            color: green;
+            border: 2px dashed #59EB32;
+         }
     </style>
 </head>
 <body id="page-top"> 
@@ -132,51 +183,69 @@
                             </div>   
                 </div>
                 <div id="contenedor-datos-generales">
-                    <div class="row mt-5">
-                        <div class="col-12 col-md-4" style="font-size: 14px !important;">
-                            <label for="proveedor"><b>Proveedor</b></label>
-                            <select class="form-control" id="proveedor" placeholder="Proveedor" disabled>
-                            <option value="">Seleccione un proveedor</option>
-                            </select>  
-                        </div>
-                        <div class="col-12 col-md-4" style="font-size: 14px !important;">
-                            <label for="factura"><b>Factura</b></label>
-                            <input type="text" class="form-control" id="factura" placeholder="Folio" disabled>
-                        </div>
-                        <div class="col-12 col-md-4" style="font-size: 14px !important;">
-                            <label for="usuario"><b>Usuario</b></label>
-                           <select name="usuario" class="form-control" id="usuario" disabled>
-                                <option value="">Seleccione un usuario</option>
-                           </select>
-                        </div>
+                    <div class="row">
+                            <div class="col-md-8 col-12">
+                                <div class="row mt-5">
+                                    <div class="col-12 col-md-4" style="font-size: 14px !important;">
+                                        <label for="proveedor"><b>Proveedor</b></label>
+                                        <select class="form-control" id="proveedor" placeholder="Proveedor" disabled>
+                                        <option value="">Seleccione un proveedor</option>
+                                        </select>  
+                                    </div>
+                                    <div class="col-12 col-md-4" style="font-size: 14px !important;">
+                                        <label for="factura"><b>Factura</b></label>
+                                        <input type="text" class="form-control" id="factura" placeholder="Folio" disabled>
+                                    </div>
+                                    <div class="col-12 col-md-4" style="font-size: 14px !important;">
+                                        <label for="usuario"><b>Usuario</b></label>
+                                        <select name="usuario" class="form-control" id="usuario" disabled>
+                                                <option value="">Seleccione un usuario</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mt-3 mb-3">
+                                    <div class="col-12 col-md-4" style="font-size: 14px !important;">
+                                            <label for="estado-factura"><b>Estado de la factura</b></label>
+                                            <select class="form-control" id="estado-factura" disabled>
+                                                <option value="">Seleccione una opción</option>
+                                                <option value="1">Sin factura</option>
+                                                <option value="2">Factura completa</option>
+                                                <option value="3">Factura incompleta</option>
+                                                <option value="4">Factura pagada</option>
+                                            </select>    
+                                    </div>
+                                    <div class="col-12 col-md-4" style="font-size: 14px !important;">
+                                            <label for="estatus"><b>Estatus del movimiento</b></label>
+                                            <select class="form-control" id="estatus" disabled>
+                                                <option value="">Seleccione una opción</option>
+                                                <option value="Completado">Completado</option>
+                                                <option value="Pendiente">Pendiente</option>
+                                                <option value="Cancelada">Cancelado</option>
+                                            </select> 
+                                    </div>
+                                    <div class="col-md-4 col-12">
+                                        <label>Sucursal</label>
+                                        <select class="form-control" id="sucursales" name="sucursales" disabled>
+                                            <option value="0">Bodega</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 col-12">
+                                    <div class="row mt-5">
+                                        <div class="col-md-12 text-center">
+                                            <div class="contenedor-pdf">
+                                                <div id="area-canvas"></div>
+                                                <input class="d-none" name="archive" type="file" id="input-comprobante-edicion" onchange="cargarComprobanteRegistro()">
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+
                     </div>
-                    <div class="row mt-3 mb-3">
-                        <div class="col-12 col-md-4" style="font-size: 14px !important;">
-                                <label for="estado-factura"><b>Estado de la factura</b></label>
-                                <select class="form-control" id="estado-factura" disabled>
-                                    <option value="">Seleccione una opción</option>
-                                    <option value="1">Sin factura</option>
-                                    <option value="2">Factura completa</option>
-                                    <option value="3">Factura incompleta</option>
-                                    <option value="4">Factura pagada</option>
-                                </select>    
-                        </div>
-                        <div class="col-12 col-md-4" style="font-size: 14px !important;">
-                                <label for="estatus"><b>Estatus del movimiento</b></label>
-                                <select class="form-control" id="estatus" disabled>
-                                    <option value="">Seleccione una opción</option>
-                                    <option value="Completado">Completado</option>
-                                    <option value="Pendiente">Pendiente</option>
-                                    <option value="Cancelada">Cancelado</option>
-                                </select> 
-                        </div>
-                        <div class="col-md-4 col-12">
-                            <label>Sucursal</label>
-                            <select class="form-control" id="sucursales" name="sucursales" disabled>
-                                <option value="0">Bodega</option>
-                            </select>
-                        </div>
-                    </div>
+
+                    
                     <hr class="mt-3">
                     <div class="row">
                             <div class="col-md-10">
@@ -292,6 +361,22 @@
         </div>
     </div>
 
+    <script>
+        // Seleccionamos el input
+        const input = document.getElementById('buscar-folio-factura');
+
+        // Agregamos un evento 'keydown' al input
+        input.addEventListener('keydown', (event) => {
+
+        // Si la tecla presionada es Enter (código 13)
+        if (event.keyCode === 13) {
+
+            // Ejecutamos la función
+            buscarFoliosCuentasPorPagar()
+        }
+        });
+    </script>
+
     <!-- Bootstrap core JavaScript-->
     <script src="src/vendor/jquery/jquery.min.js"></script>
     <script src="src/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -319,6 +404,7 @@
     <script src="src/vendor/datatables/dataTables.bootstrap4.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.10.111/build/pdf.min.js"></script>
     <script src="src/vendor/datatables/defaults.js"></script>
     <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
