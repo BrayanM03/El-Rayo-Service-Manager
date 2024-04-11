@@ -81,7 +81,8 @@ if($total_movimientos>0){
             $estatus = false;
             $icon = 'warning';
             $necesita_aprobacion_importes = true;
-        }else if($importe_total_actualizado != $suma_importe_actual && $aprobacion_importe== 'true'){
+        }else {
+            if($importe_total_actualizado != $suma_importe_actual && $aprobacion_importe== 'true'){
             $update = 'UPDATE movimientos SET sucursal = ?, proveedor_id = ?, folio_factura = ?, id_usuario = ?, estado_factura = ?, estatus = ?, total = ? WHERE id = ?';
             $stmt = $con->prepare($update);
             $stmt->bind_param('ssssssss', $id_sucursal, $proveedor_actualizado, $factura_actualizado, $usuario_actualizado, $estado_actualizado, $estatus_actualizado, $importe_total_actualizado, $id_movimiento);
@@ -153,7 +154,7 @@ if($total_movimientos>0){
                 $mensaje_eliminacion .=  "Error al eliminar el archivo.";
               }
         }
-
+    }
 
 }else{
     $estatus = false;
@@ -161,7 +162,7 @@ if($total_movimientos>0){
     $mensaje = 'No existe una movimiento con ese ID';
 }
 
-$response = array('ext'=>$imageFileType, 'estatus'=>$estatus, 'files'=>$_FILES, 'mensaje'=>$mensaje, 'mensaje_eliminacion'=>$mensaje_eliminacion,
+$response = array('estatus'=>$estatus, 'files'=>$_FILES, 'mensaje'=>$mensaje,
  'post'=>$_POST, 'icon'=>$icon, 'necesita_aprobacion_stock'=>$necesita_aprobacion_stock, 'necesita_aprobacion_importes'=>$necesita_aprobacion_importes);
 echo json_encode($response);
 ?>

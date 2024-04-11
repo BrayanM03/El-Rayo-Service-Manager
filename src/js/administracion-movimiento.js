@@ -200,6 +200,7 @@ function actualizarDatosGenerales(updating_data_status){
             modo_edicion = false
         }
     }else{
+        $("#contenedor-loader").removeClass('d-none')
         let proveedor_actualizado = $('#proveedor').val()
         let factura_actualizado = $('#factura').val()
         let usuario_actualizado = $('#usuario').val()
@@ -243,6 +244,8 @@ function actualizarDatosGenerales(updating_data_status){
             processData: false,
             dataType: "JSON",
             success: function (response) {
+                $("#contenedor-loader").addClass('d-none')
+
                 if(response.estatus){
                     Swal.fire({
                         icon: response.icon,
@@ -278,13 +281,19 @@ function actualizarDatosGenerales(updating_data_status){
                                 aprobacion_importe = true;
                             }
 
+                            formData.append('aprobacion_actualizar_stock', aprobacion_actualizar_stock);
+                            formData.append('aprobacion_importe', aprobacion_importe);
+
+                            $("#contenedor-loader").removeClass('d-none')
                             $.ajax({
                                 type: "post",
+                                contentType: false,
+                                processData: false,
                                 url: "./modelo/cuentas_pagar/actualizar-remision.php",
-                                data: {proveedor_actualizado, factura_actualizado, usuario_actualizado, estado_actualizado, estatus_actualizado, importe_total_actualizado, 
-                                    id_movimiento, aprobacion_importe, id_sucursal, aprobacion_actualizar_stock},
+                                data: formData,
                                 dataType: "JSON",
                                 success: function (response2){
+                                    $("#contenedor-loader").addClass('d-none')
                                     if(response2.estatus){
                                         Swal.fire({
                                             icon: response2.icon,
@@ -307,15 +316,20 @@ function actualizarDatosGenerales(updating_data_status){
                                            if(response2.necesita_aprobacion_importes){
                                                aprobacion_importe = true;
                                            }
+
+                                           formData.append('aprobacion_actualizar_stock', aprobacion_actualizar_stock);
+                                           formData.append('aprobacion_importe', aprobacion_importe);
                                            if(rr.isConfirmed || rr.isDenied){
+                                            $("#contenedor-loader").removeClass('d-none')
                                             $.ajax({
                                                 type: "post",
                                                 url: "./modelo/cuentas_pagar/actualizar-remision.php",
-                                                data: {proveedor_actualizado, factura_actualizado, usuario_actualizado, estado_actualizado, estatus_actualizado, importe_total_actualizado, 
-                                                    id_movimiento, aprobacion_importe, id_sucursal, aprobacion_actualizar_stock},
+                                                contentType: false,
+                                                processData: false,
+                                                data: formData,
                                                 dataType: "JSON",
                                                 success: function (response3){
-                                                    
+                                                    $("#contenedor-loader").addClass('d-none')
                                                     Swal.fire({
                                                         icon: response3.icon,
                                                         html: response3.mensaje,
@@ -333,6 +347,8 @@ function actualizarDatosGenerales(updating_data_status){
                                 }
                             })
                         }else if(r.isDenied && response.icon == 'warning'){
+                            $("#contenedor-loader").removeClass('d-none')
+
                             if(response.necesita_aprobacion_stock){
                                 aprobacion_actualizar_stock = false;
 
@@ -341,13 +357,18 @@ function actualizarDatosGenerales(updating_data_status){
                                aprobacion_importe = false;
                            }
 
+                           formData.append('aprobacion_actualizar_stock', aprobacion_actualizar_stock);
+                           formData.append('aprobacion_importe', aprobacion_importe);
                            $.ajax({
                             type: "post",
                             url: "./modelo/cuentas_pagar/actualizar-remision.php",
-                            data: {proveedor_actualizado, factura_actualizado, usuario_actualizado, estado_actualizado, estatus_actualizado, importe_total_actualizado, 
-                                id_movimiento, aprobacion_importe, id_sucursal, aprobacion_actualizar_stock},
+                            data: formData,
+                            contentType: false,
+                            processData: false,
                             dataType: "JSON",
                             success: function (response2){
+                                $("#contenedor-loader").addClass('d-none')
+
                                 if(response2.estatus){
                                     Swal.fire({
                                         icon: response2.icon,
@@ -364,21 +385,27 @@ function actualizarDatosGenerales(updating_data_status){
                                         showCancelButton: myShowCancelButton,
                                         cancelButtonText: myCancelButtonText
                                     }).then(function(rr){
+                                        $("#contenedor-loader").removeClass('d-none')
+
                                         if(response2.necesita_aprobacion_stock){
                                             aprobacion_actualizar_stock = true;
                                        }
                                        if(response2.necesita_aprobacion_importes){
                                            aprobacion_importe = true;
                                        }
+                                       formData.append('aprobacion_actualizar_stock', aprobacion_actualizar_stock);
+                                       formData.append('aprobacion_importe', aprobacion_importe);
                                        if(rr.isConfirmed || rr.isDenied){
                                         $.ajax({
                                             type: "post",
                                             url: "./modelo/cuentas_pagar/actualizar-remision.php",
-                                            data: {proveedor_actualizado, factura_actualizado, usuario_actualizado, estado_actualizado, estatus_actualizado, importe_total_actualizado, 
-                                                id_movimiento, aprobacion_importe, id_sucursal, aprobacion_actualizar_stock},
+                                            data:formData,
+                                            contentType: false,
+                                            processData: false,
                                             dataType: "JSON",
                                             success: function (response3){
-                                                
+                                                $("#contenedor-loader").addClass('d-none')
+
                                                 Swal.fire({
                                                     icon: response3.icon,
                                                     html: response3.mensaje,
