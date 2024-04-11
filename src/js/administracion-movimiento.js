@@ -1857,7 +1857,7 @@ function cargarComprobante(extension_archivo){
               // Obtiene el elemento canvas
               area_canvas.empty().append(`
               
-              <canvas id="thumbnailCanvas" width="100" height="150"></canvas>`)
+              <canvas id="thumbnailCanvas" onclick="verDocumento('pdf', ${id_movimiento})" width="100" height="150"></canvas>`)
               var canvas = document.getElementById('thumbnailCanvas');
   
               // Carga el PDF
@@ -1884,7 +1884,7 @@ function cargarComprobante(extension_archivo){
          }else{
             let random_v = Math.floor(Math.random() * 900000) + 100000;
             area_canvas.empty().append(`
-              <img height="200" src="./src/docs/facturas_compras/FAC-${id_movimiento}.${extension_archivo}?v=${random_v}">`)
+              <img height="200" onclick="verDocumento('${extension_archivo}', ${id_movimiento})" src="./src/docs/facturas_compras/FAC-${id_movimiento}.${extension_archivo}?v=${random_v}">`)
          }
 
          $("#area-canvas").attr('documento', true)
@@ -1918,7 +1918,7 @@ function cargarComprobanteRegistro(){
     // Obtiene el elemento canvas
     area_canvas.empty().append(`
     <span aria-hidden="true" class="btn-x-documento" onclick="deleteThumb()">×</span>
-    <canvas id="thumbnailCanvas" width="100" height="150"></canvas>`)
+    <canvas id="thumbnailCanvas" onclick="verDocumento('pdf', ${id_movimiento})" width="100" height="150"></canvas>`)
     var canvas = document.getElementById('thumbnailCanvas');
 
     // Carga el PDF
@@ -1949,9 +1949,10 @@ function cargarComprobanteRegistro(){
   }else if (file.type.startsWith('image/')){
     // Si es una imagen (cualquier tipo de imagen)
     var reader = new FileReader();
+    console.log(file.type);
     area_canvas.empty().append(`
     <span aria-hidden="true" class="btn-x-documento" onclick="deleteThumb()">×</span>
-    <img src="" height="200" id="gasto-imagen">`)
+    <img src="" height="200" id="gasto-imagen" onclick="verDocumento('', ${id_movimiento})">`)
     let img_preview = document.getElementById('gasto-imagen')
   
       reader.onloadend = function () {
@@ -1990,3 +1991,18 @@ function cargarComprobanteRegistro(){
       $("#input-comprobante-edicion").val('').attr('eliminar', true);
     eliminar_comprobante = true;
   }
+
+ function verDocumento(ext, id_movimiento){
+    console.log(ext);
+    console.log(id_movimiento);
+    Swal.fire({
+        width:  '100%',
+        title: 'Documento cargado',
+        showCloseButton: true,
+        html: `
+        <div class="swal-pdf-container text-center">
+            <embed type="application/pdf"  width="1500" height="600" src="./src/docs/facturas_compras/FAC-${id_movimiento}.${ext}"/>
+        </div>
+        `
+    })
+ }

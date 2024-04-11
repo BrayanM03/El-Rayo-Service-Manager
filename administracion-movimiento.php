@@ -128,6 +128,11 @@
             color: green;
             border: 2px dashed #59EB32;
          }
+
+         #thumbnailCanvas:hover{
+            border: 2px dashed #55A38B;
+            cursor: pointer;
+         }
     </style>
 </head>
 <body id="page-top"> 
