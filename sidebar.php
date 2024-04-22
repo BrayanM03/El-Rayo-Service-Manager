@@ -26,7 +26,8 @@ $showLogistica='';
 $claseRequerimientos = '';
 $claseHistorialRequerimientos ='';
 $claseMovimientosClientes = "";
-$user_jerarquia = $_SESSION["rol"];
+$user_jerarquia = $_SESSION['rol'];
+$user_id = $_SESSION['id_usuario'];
 
 
 
@@ -240,11 +241,11 @@ switch ($flag) {
     <?php
 
 
-    if ($user_jerarquia == 1) {
+    if ($user_jerarquia == 1 || $user_id == 19 || $user_jerarquia == 2) {
         $name = "Inventario";
-    } else if ($user_jerarquia == 2) {
+    } /* else if ($user_jerarquia == 2) {
         $name = "Clientes y creditos";
-    } else {
+    } */ else {
         $name = "";
     }
 
@@ -257,7 +258,7 @@ switch ($flag) {
     </div>
     <?php
 
-    if ($user_jerarquia == 1 || $user_jerarquia == 4 || $user_jerarquia == 2) {
+    if ($user_jerarquia == 1 || $user_jerarquia == 4 || $user_jerarquia == 2 || $user_id == 19) {
         # code...
 
 
@@ -275,7 +276,7 @@ switch ($flag) {
             <div id="collapseTyres" class="collapse <?php echo $showMisLlantas ?>" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                 
             <?php
-                if ($user_jerarquia == 1 || $user_jerarquia == 4 || $_SESSION['id_usuario'] == 7) { // 7 es el id de Karina Flores
+                if ($user_jerarquia == 1 || $user_jerarquia == 4 || $user_jerarquia == 2 || $user_id == 7 || $user_id == 19) { // 7 y 19  es el id de Karina Flores y Javier Pere
                     ?>
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Sucursales:</h6>
@@ -320,7 +321,7 @@ switch ($flag) {
                 ?>
                 <div class="bg-white py-2 collapse-inner rounded">
                     <?php
-                    if ($user_jerarquia == 1 || $user_jerarquia == 4 || $_SESSION['id_usuario'] == 7) {//Usuario de Kari
+                    if ($user_jerarquia == 1 || $user_jerarquia == 4 || $user_id == 7 || $user_id == 19) {//Usuario de Kari
                     ?>
                         <h6 class="collapse-header">Catalogos:</h6>
                         <a class="collapse-item <?php echo $claseExistencia ?>" href="inventario-total.php?id=0&nav=existencia" style="display:flex; flex-direction: row; justify-content:start;">

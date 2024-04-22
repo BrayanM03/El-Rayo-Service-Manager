@@ -1,6 +1,14 @@
 $(document).ready(function() {
 
-
+  let user_sesion = $("#emp-title").attr("sesion_rol");
+  let id_usuario = $("#emp-title").attr("sesion_id");
+  user_sesion = parseInt(user_sesion);
+  if(user_sesion != 1 && id_usuario !=7){
+    visible_value = false;
+   
+  }else{
+    visible_value = true;
+  }
     table = $('#inventario').DataTable({
       
       
@@ -29,7 +37,7 @@ $(document).ready(function() {
         { title: "Descripcion",    data: "descripcion"    },
         { title: "Marca",          data: "marca"          },
         { title: "Modelo",         data: "modelo"         },
-        { title: "Costo",          data: "costo", render: function(data){
+        { title: "Costo",          data: "costo", visible: visible_value, render: function(data){
           // Convert the string to a number using parseFloat()
           const numero = parseFloat(data);
       

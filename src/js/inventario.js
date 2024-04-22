@@ -1,8 +1,9 @@
 function MostrarInventario(id_sucursal) { 
   ocultarSidebar();
     let user_sesion = $("#emp-title").attr("sesion_rol");
+    let id_usuario = $("#emp-title").attr("sesion_id");
     user_sesion = parseInt(user_sesion);
-    if(user_sesion == "No aplicar por el momento programador"){
+    if(user_sesion != 1  && id_usuario !=7){
       visible_value = false;
      
     }else{
@@ -55,7 +56,7 @@ function MostrarInventario(id_sucursal) {
             return "N/A"; // Or any other default value
           }
         }},
-        { title: "Precio",         data: 8,   visible: visible_value, render: function(data){
+        { title: "Precio",         data: 8,    render: function(data){
           // Convert the string to a number using parseFloat()
           const numero = parseFloat(data);
       
@@ -67,7 +68,7 @@ function MostrarInventario(id_sucursal) {
             return "N/A"; // Or any other default value
           }
         }},
-        { title: "Mayoreo",        data: 9, visible: visible_value, render: function(data){
+        { title: "Mayoreo",        data: 9,  render: function(data){
           // Convert the string to a number using parseFloat()
           const numero = parseFloat(data);
       
