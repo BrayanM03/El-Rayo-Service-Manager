@@ -3,7 +3,7 @@ $(document).ready(function() {
   let user_sesion = $("#emp-title").attr("sesion_rol");
   let id_usuario = $("#emp-title").attr("sesion_id");
   user_sesion = parseInt(user_sesion);
-  if(user_sesion != 1 && id_usuario !=7){
+  if(user_sesion != 1 && id_usuario !=7 && user_sesion != 4){
     visible_value = false;
    
   }else{
