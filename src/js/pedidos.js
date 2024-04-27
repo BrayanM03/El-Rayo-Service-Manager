@@ -445,9 +445,20 @@ table = $('#pedidos').DataTable({
             return '';
           }
       }else{
-        return '<div style="display: flex; width: auto;">'+
-        '<button onclick="traerPdfApartado(' +row[1]+ ');" title="Ver reporte" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px">'+
-        '<span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br></div>'
+        if (row[9] == "Activo") {
+          return '<div style="display: flex; width: auto;">'+
+          '<button onclick="traerPdfApartado(' +row[1]+ ');" title="Ver reporte" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px">'+
+          '<span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>'+
+          '<button type="button" onclick="procesarOrden('+ row[1] +');" title="Procesar venta" class="buttonBorrar btn btn-success" style="margin-left: 8px">'+
+          '<span class="fa fa-check"></span><span class="hidden-xs"></span></button>'+
+          '</div>'
+        }else if(row[9] == "Cancelada"){
+          return '<div style="display: flex; width: auto;">'+
+          '<button onclick="traerPdfApartado(' +row[1]+ ');" title="Ver reporte" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px">'+
+          '<span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>'+
+          '</div>'
+        }
+        
       }
       
        },
@@ -676,8 +687,9 @@ function procesarOrden(id_apartado){
                     <div class="col-12">
                         <label>Seleccione un plazo de credito</label>
                         <select id="plazo-credito" class="form-control">
+                            <option value="6">1 día</option>
                             <option value="1">1 Semana</option>
-                            <option value="2">15 dias</option>
+                            <option value="2">15 días</option>
                             <option value="3">1 mes</option>
                             <option value="5">Sin definir</option>
                         </select>
@@ -706,8 +718,7 @@ function procesarOrden(id_apartado){
               }, 100)
             },
             willClose: () => {
-              
-              console.log(plazo_credito);
+          
               clearInterval(timerInterval)
               $.ajax({
                 type: "post",
@@ -993,7 +1004,7 @@ function abonarPedido(id_apartado){
         didOpen: ()=>{
              let rol_id = $("#emp-title").attr('sesion_rol');
                   let id_usuario = $("#emp-title").attr('sesion_id');
-                  if(rol_id != 1 && rol_id != 2  && id_usuario != 7) {
+                  if(rol_id != 1 && rol_id != 2 && rol_id != 3 && id_usuario != 7) {
                       $("#permiso-abonar").addClass('d-none')
                   }
           if(restante_pedido <=0){

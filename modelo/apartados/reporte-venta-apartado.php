@@ -816,6 +816,10 @@ function cuerpoTabla(){
             case '5':
             $plazos = 'Sin definir';
             break;
+
+            case '6':
+                $plazos = '1 día';
+            break;
         
         default:
         $plazos = 'Sin definir';

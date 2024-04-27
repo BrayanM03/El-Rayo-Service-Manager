@@ -96,6 +96,10 @@ if(isset($_POST)){
             $fecha_limite = date("Y-m-d",strtotime($fecha ."+ 7 days")); 
         break;
 
+        case '6':
+            $fecha_limite = date("Y-m-d",strtotime($fecha ."+ 1 days")); 
+        break;
+
         default:
             # code...
         break;

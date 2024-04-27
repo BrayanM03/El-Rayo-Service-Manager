@@ -86,7 +86,9 @@ function MostrarCreditos() {
             case 5:
               return "<span>7 dias</span>";
               break;
-
+              case 6:
+                return "<span>1 día</span>";
+                break;
             default:
               return ''
               break;

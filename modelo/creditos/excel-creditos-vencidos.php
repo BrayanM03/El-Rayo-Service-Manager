@@ -117,6 +117,10 @@ if($total_creditos>0)
                     $plazo="7 dias";
                     break;
 
+                case '6':
+                    $plazos = '1 día';
+                break;
+
                 default:
                 $plazo="Sin definir";
                     # code...

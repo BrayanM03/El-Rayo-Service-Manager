@@ -135,6 +135,8 @@ function insertarCotizacion($con, $resultado, $id, $id_cliente, $abonado, $resta
         $fecha->modify('+15 days');
     } elseif ($plazo_credito == 3) {
         $fecha->modify('+1 month');
+    } elseif($plazo_credito == 6){
+        $fecha->modify('+1 days');
     } elseif ($plazo_credito == 5) {
         // No hace nada, ya que es "sin definir"
     }

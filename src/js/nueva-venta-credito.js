@@ -294,6 +294,7 @@ function realizarVentaCredito(){
                           let restante = importetotal - abono;
                           $("#restante").val("$" + restante);
                       });
+                      $("#plazo").val(1)
                 },
                 preConfirm: (respuesta) =>{
 
@@ -360,8 +361,9 @@ function realizarVentaCredito(){
                     '<div class="form-group">'+
                     '<label><b>Elige un plazo para pagar:</b></label></br>'+
                     '<select class="form-control" id="plazo">'+
+                    '<option value="6">1 día</option>'+
                     '<option value="1">1 Semana</option>'+
-                    '<option value="2">15 dias</option>'+
+                    '<option value="2">15 días</option>'+
                     '<option value="3">1 mes</option>'+
                     '<option value="5">Sin definir</option>'+
                     '</select>'+
