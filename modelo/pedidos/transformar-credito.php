@@ -5,6 +5,7 @@ $con = $conectando->conexion();
 
 //insertar utilidad
 include '../ventas/insertar_utilidad.php';
+include '../helpers/comprobacion_clientes.php';
 date_default_timezone_set("America/Matamoros");
 $hora = date("h:i a");
 $fecha_actual = date("Y-m-d");
@@ -29,10 +30,23 @@ if($total_pedidos>0){
     $res->fetch();
     $res->close();
 
+    $comprobacion_cliente = comprobar_clientes($id_cliente, $con);
+    if(count($comprobacion_cliente)==0){
+        $res = array('estatus'=> false, 'mensaje'=> 'Ese cliente no existe');
+        echo json_encode($res);
+        die();
+    }else{
+        if($comprobacion_cliente['Credito'] ==0){
+            $res_ = array('estatus'=> false, 'mensaje'=> 'El cliente ' . $comprobacion_cliente['Nombre_Cliente'] . ' no cuenta con credito, favor de actualizar su estatus.');
+            echo json_encode($res_);
+            die();
+        };
+    }
+    print_r("Todo ok");
+    die();
     if($restante == 0){
         $res = array('estatus'=> false, 'mensaje'=> 'El pedido ya fue pagado');
-
-    }else{
+    }else{ 
         //Haciendo consulta a detalle del apartado
 
         $detalle = $con->prepare("SELECT i.Codigo, llantas.Modelo as modelo, da.cantidad,llantas.Descripcion as descripcion, 
@@ -44,21 +58,24 @@ if($total_pedidos>0){
         $resultado = $detalle->get_result(); 
         $detalle->close();
 
-        $stockSuficiente = true;
+        $stockSuficiente = false;
+        $no_entre_al_bucle = true;
         $lista_llantas ='';
         while($fila = $resultado->fetch_assoc()){
 
             $cantidadSolicitada = $fila['cantidad'];
             $stockDisponible = $fila['Stock'];
             $codigo = $fila['Codigo'];
-            
+          
             if ($stockDisponible >= $cantidadSolicitada) {
                 // Aquí puedes realizar las acciones necesarias
+                $stockSuficiente = true;
             } else {
                 // El stock es insuficiente para la cantidad solicitadas
                 $descripcion = $fila['descripcion'];
                 $stockSuficiente = false;
                 $lista_llantas .= ', '.$descripcion;
+                $no_entre_al_bucle = false;
             }
             $lista_llantas = rtrim($lista_llantas, ', ');
             
@@ -73,6 +90,10 @@ if($total_pedidos>0){
             
             $res = $insert_cotiza;
         }else{
+            if($no_entre_al_bucle == true){
+                $mensaje ='La llanta que intentas hacer credito no esta actualmente cargada en tu inventario, revisa con el administrador.';
+            };
+            
             $res = array('estatus'=> $stockSuficiente, 'mensaje'=> $mensaje);
         }
     }
@@ -242,7 +263,7 @@ function descontarStock($con, $id_llanta, $id_sucursal, $cantidad){
     $stmt->close();
     
     if($stock_actual < $cantidad){
-        print_r('Erro, el stock actual es menor a la cantidad a retirar');
+        //print_r('Erro, el stock actual es menor a la cantidad a retirar');
     }else{
         $nuevo_stock = intval($stock_actual) - intval($cantidad);
         $updt = "UPDATE inventario SET Stock = ? WHERE id_Llanta = ? AND id_sucursal =?";

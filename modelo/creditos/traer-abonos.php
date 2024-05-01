@@ -173,7 +173,7 @@ if (isset($_POST)) {
             $res->execute();
             $res->close(); */
         }else{
-            $query="SELECT creditos.id, creditos.id_cliente, creditos.pagado, creditos.restante, creditos.total, creditos.estatus, creditos.fecha_inicio, creditos.fecha_final, creditos.plazo, abonos.id , abonos.fecha, abonos.hora,  abonos.abono, abonos.metodo_pago, abonos.usuario, abonos.sucursal FROM creditos INNER JOIN abonos ON creditos.id = abonos.id_credito WHERE abonos.id_credito = $id_credito";
+            $query="SELECT creditos.id, creditos.id_cliente, creditos.pagado, creditos.restante, creditos.total, creditos.estatus, creditos.fecha_inicio, creditos.fecha_final, creditos.plazo, abonos.id , abonos.fecha, abonos.hora,  abonos.abono, abonos.metodo_pago, abonos.usuario, abonos.sucursal, abonos.comentario FROM creditos INNER JOIN abonos ON creditos.id = abonos.id_credito WHERE abonos.id_credito = $id_credito";
         
             $resultado = mysqli_query($con, $query);
         
