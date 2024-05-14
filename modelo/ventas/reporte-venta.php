@@ -811,7 +811,8 @@ SOLAMENTE SERA VALIDA LA GARANTIA DENTRO DEL PRIMER MES DESPUES DE LA COMPRA, SI
     $pdf->Ln(98);
     $pdf->SetTextColor(1, 1, 1);
     $pdf->SetFont('Arial','',10);
-    $pdf->Cell(193,6,utf8_decode_("Recibido"),0,0,'C'); 
+    $pdf->Cell(93,6,utf8_decode_("Recibido cliente"),0,0,'C'); 
+    $pdf->Cell(93,6,utf8_decode_("Entregado por"),0,0,'C'); 
     $pdf->Ln(7);
     $pdf->SetFont('Arial','B',11);
     

@@ -112,6 +112,7 @@ if (!isset($_SESSION['id_usuario'])) {
 }
 
 
+require('../helpers/utf8_decode.php');
 
 class PDF extends FPDF
 {
@@ -173,20 +174,20 @@ function Header()
     $estatus = $GLOBALS["estatus"];
     $this->SetFont('Arial','',9);
     $this->Cell(25,15,'',0,0,'C');
-    $this->Cell(115,10,utf8_decode($top_direction),0,0,'C', false);
+    $this->Cell(115,10,utf8_decode_($top_direction),0,0,'C', false);
     $this->SetFont('Arial','',12);
     $this->SetTextColor(194, 34, 16);
     $this->Cell(50,15,$estatus,0,0,'C');
     $this->SetTextColor(36, 35, 28);
     $this->SetFont('Arial','',9);
     $this->Ln(4);
-    $this->Cell(160,10,utf8_decode($middle_direction),0,0,'C', false);
+    $this->Cell(160,10,utf8_decode_($middle_direction),0,0,'C', false);
     $this->Ln(4);
-    $this->Cell(160,10,utf8_decode("H. Matamoros Tam"),0,0,'C', false);
+    $this->Cell(160,10,utf8_decode_("H. Matamoros Tam"),0,0,'C', false);
     $this->Ln(4);
-    $this->Cell(160,10,utf8_decode("RFC: " .$rfc),0,0,'C', false);
+    $this->Cell(160,10,utf8_decode_("RFC: " .$rfc),0,0,'C', false);
     $this->Ln(4);
-    $this->Cell(160,10,utf8_decode("Telefono: " .$telefono),0,0,'C', false);
+    $this->Cell(160,10,utf8_decode_("Telefono: " .$telefono),0,0,'C', false);
     $this->Ln(17);
 
     //$this->Rect(133, 58, 20, 7, 'F');
@@ -194,52 +195,52 @@ function Header()
 
     $this->SetFillColor(253, 229, 2);
     $this->SetFont('Times','B',12);
-    $this->Cell(24,10,utf8_decode("Cliente:"),0,0,'L', 1);
+    $this->Cell(24,10,utf8_decode_("Cliente:"),0,0,'L', 1);
     $this->SetFont('Times','',12);
     $this->SetFillColor(236, 236, 236);
-    $this->Cell(70,10,utf8_decode($GLOBALS["cliente"]),0,0, 'L',1);
+    $this->Cell(70,10,utf8_decode_($GLOBALS["cliente"]),0,0, 'L',1);
     $this->SetFont('Arial','B',12);
     $this->SetTextColor(194, 34, 16);
-    $this->Cell(30,7,utf8_decode("Metodo pago:"),0,0,'', false);
+    $this->Cell(30,7,utf8_decode_("Metodo pago:"),0,0,'', false);
     $this->SetFont('Times','',12);
     $this->SetTextColor(36, 35, 28);
-    $this->Cell(20,7,utf8_decode($GLOBALS["metodo_pago"]),0,0,'', false);
+    $this->Cell(20,7,utf8_decode_($GLOBALS["metodo_pago"]),0,0,'', false);
     $this->SetFont('Arial','B',12);
     $this->SetTextColor(194, 34, 16);
-    $this->Cell(20,7,utf8_decode("Folio:"),0,0, false);
+    $this->Cell(20,7,utf8_decode_("Folio:"),0,0, false);
     $this->SetFont('Times','',12);
     $this->SetTextColor(36, 35, 28);
-    $this->Cell(50,7,utf8_decode($GLOBALS["folio"]),0,0,'', false);
+    $this->Cell(50,7,utf8_decode_($GLOBALS["folio"]),0,0,'', false);
 
     $this->Ln(7);
 
     
     $this->SetFont('Times','B',12);
     $this->SetFillColor(253, 229, 2);
-    $this->Cell(24,7,utf8_decode("Vendedor:"),0,0,'L', 1);
+    $this->Cell(24,7,utf8_decode_("Vendedor:"),0,0,'L', 1);
     $this->SetFont('Times','',12);
     $this->SetFillColor(236, 236, 236);
-    $this->Cell(70,7,utf8_decode($GLOBALS["vendedor_usuario"]),0,0, 'L',1);
+    $this->Cell(70,7,utf8_decode_($GLOBALS["vendedor_usuario"]),0,0, 'L',1);
     $this->SetFont('Arial','B',12);
     $this->SetTextColor(194, 34, 16);
     $this->Cell(30,7,'Hora: ',0,0,'R', false);
     $this->SetFont('Times','',12);
     $this->SetTextColor(36, 35, 28);
-    $this->Cell(20,7,utf8_decode($GLOBALS["hora"]),0,0,'', false);
+    $this->Cell(20,7,utf8_decode_($GLOBALS["hora"]),0,0,'', false);
 
     $this->SetFont('Arial','B',12);
     $this->SetTextColor(194, 34, 16);
-    $this->Cell(20,7,utf8_decode("Fecha:"),0,0, false);
+    $this->Cell(20,7,utf8_decode_("Fecha:"),0,0, false);
     $this->SetFont('Times','',12);
     $this->SetTextColor(36, 35, 28);
-    $this->Cell(50,7,utf8_decode($GLOBALS["fecha"]),0,0,'', false);
+    $this->Cell(50,7,utf8_decode_($GLOBALS["fecha"]),0,0,'', false);
     $this->Ln(7);
     $this->SetFont('Times','B',12);
     $this->SetFillColor(253, 229, 2);
-    $this->Cell(24,7,utf8_decode("Asesor:"),0,0,'L', 1);
+    $this->Cell(24,7,utf8_decode_("Asesor:"),0,0,'L', 1);
     $this->SetFont('Times','',12);
     $this->SetFillColor(236, 236, 236);
-    $this->Cell(70,7,utf8_decode($nombre_asesor),0,0, 'L',1);
+    $this->Cell(70,7,utf8_decode_($nombre_asesor),0,0, 'L',1);
 
     // Salto de línea
     $this->Ln(11);
@@ -284,12 +285,12 @@ function cuerpoTabla(){
     $pdf->SetLineWidth(1);
     //$pdf->Line(11,95,192,95);
     
-    $pdf->Cell(19,8,utf8_decode("Cantidad"),0,0);  
-    $pdf->Cell(55,8,utf8_decode("Concepto"),0,0, 'C');
-    $pdf->Cell(30,8,utf8_decode("Modelo"),0,0, 'C');
-    $pdf->Cell(30,8,utf8_decode("Marca"),0,0, 'C');
-    $pdf->Cell(30,8,utf8_decode("Precio Uni"),0,0, 'C');
-    $pdf->Cell(30,8,utf8_decode("Importe"),0,0, 'C');
+    $pdf->Cell(19,8,utf8_decode_("Cantidad"),0,0);  
+    $pdf->Cell(55,8,utf8_decode_("Concepto"),0,0, 'C');
+    $pdf->Cell(30,8,utf8_decode_("Modelo"),0,0, 'C');
+    $pdf->Cell(30,8,utf8_decode_("Marca"),0,0, 'C');
+    $pdf->Cell(30,8,utf8_decode_("Precio Uni"),0,0, 'C');
+    $pdf->Cell(30,8,utf8_decode_("Importe"),0,0, 'C');
     $pdf->Ln(0);
     $pdf->Line(11,81,196,81);
 
@@ -335,38 +336,38 @@ function cuerpoTabla(){
         $caracteres = mb_strlen($descripcion);
         if ($caracteres < 25) {
             $pdf->Cell(10,12,$cantidad,0,0,'C',1);
-            $pdf->MultiCell(58,6, utf8_decode($descripcion),1,'L',1);
+            $pdf->MultiCell(58,6, utf8_decode_($descripcion),1,'L',1);
             $pdf->SetY($ejeY);
             $ejeY = $ejeY + 15;
             $pdf->SetX(82);
-            $pdf->Cell(40,10, utf8_decode($modelo),0,0,'C',1);
-            $pdf->Cell(20,10, utf8_decode($marca),0,0,'C',1);
-            $pdf->Cell(30,10,utf8_decode($precio_unitario),0,0, 'C',1);
-            $pdf->Cell(30,10,utf8_decode($importe),0,0, 'C',1);
+            $pdf->Cell(40,10, utf8_decode_($modelo),0,0,'C',1);
+            $pdf->Cell(20,10, utf8_decode_($marca),0,0,'C',1);
+            $pdf->Cell(30,10,utf8_decode_($precio_unitario),0,0, 'C',1);
+            $pdf->Cell(30,10,utf8_decode_($importe),0,0, 'C',1);
             $pdf->Ln(14 );
       
         }else if ($caracteres > 25 && $caracteres < 39) {
             $pdf->Cell(14,10,$cantidad,0,0,'C',1);
-            $pdf->MultiCell(58,5, utf8_decode($descripcion),0,'L',1);
+            $pdf->MultiCell(58,5, utf8_decode_($descripcion),0,'L',1);
             $pdf->SetY($ejeY);
             $ejeY = $ejeY + 15;
             $pdf->SetX(82);
-            $pdf->Cell(40,10, utf8_decode($modelo),0,0,'C',1);
-            $pdf->Cell(20,10, utf8_decode($marca),0,0,'C',1);
-            $pdf->Cell(30,10,utf8_decode($precio_unitario),0,0, 'C',1);
-            $pdf->Cell(30,10,utf8_decode($importe),0,0, 'C',1);
+            $pdf->Cell(40,10, utf8_decode_($modelo),0,0,'C',1);
+            $pdf->Cell(20,10, utf8_decode_($marca),0,0,'C',1);
+            $pdf->Cell(30,10,utf8_decode_($precio_unitario),0,0, 'C',1);
+            $pdf->Cell(30,10,utf8_decode_($importe),0,0, 'C',1);
             $pdf->Ln(15);
       
         }else{
             $pdf->Cell(14,13,$cantidad,0,0,'C',1);
-            $pdf->MultiCell(58,4.3, utf8_decode($descripcion),0,'L',1);
+            $pdf->MultiCell(58,4.3, utf8_decode_($descripcion),0,'L',1);
             $pdf->SetY($ejeY);
             $ejeY = $ejeY + 15;
             $pdf->SetX(82);
-            $pdf->Cell(40,13, utf8_decode($marca),0,0,'C',1);
-            $pdf->Cell(20,13, utf8_decode($marca),0,0,'C',1);
-            $pdf->Cell(30,13,utf8_decode($precio_unitario),0,0, 'C',1);
-            $pdf->Cell(30,13,utf8_decode($importe),0,0, 'C',1);
+            $pdf->Cell(40,13, utf8_decode_($marca),0,0,'C',1);
+            $pdf->Cell(20,13, utf8_decode_($marca),0,0,'C',1);
+            $pdf->Cell(30,13,utf8_decode_($precio_unitario),0,0, 'C',1);
+            $pdf->Cell(30,13,utf8_decode_($importe),0,0, 'C',1);
             $pdf->Ln(15);
         }
 
@@ -384,12 +385,12 @@ function cuerpoTabla(){
             $pdf->SetLineWidth(1);
             //$pdf->Line(11,95,192,95);
             
-            $pdf->Cell(19,8,utf8_decode("Cantidad"),0,0);  
-            $pdf->Cell(55,8,utf8_decode("Concepto"),0,0, 'C');
-            $pdf->Cell(30,8,utf8_decode("Modelo"),0,0, 'C');
-            $pdf->Cell(30,8,utf8_decode("Marca"),0,0, 'C');
-            $pdf->Cell(30,8,utf8_decode("Precio Uni"),0,0, 'C');
-            $pdf->Cell(30,8,utf8_decode("Importe"),0,0, 'C');
+            $pdf->Cell(19,8,utf8_decode_("Cantidad"),0,0);  
+            $pdf->Cell(55,8,utf8_decode_("Concepto"),0,0, 'C');
+            $pdf->Cell(30,8,utf8_decode_("Modelo"),0,0, 'C');
+            $pdf->Cell(30,8,utf8_decode_("Marca"),0,0, 'C');
+            $pdf->Cell(30,8,utf8_decode_("Precio Uni"),0,0, 'C');
+            $pdf->Cell(30,8,utf8_decode_("Importe"),0,0, 'C');
             $pdf->Ln(0);
             $pdf->Line(11,81,196,81);
         
@@ -440,38 +441,38 @@ function cuerpoTabla(){
             
             if ($caracteres < 25) {
                 $pdf->Cell(10,10,$cantidad,0,0,'C',1);
-                $pdf->MultiCell(62,10, utf8_decode($descripcion),0,'L',1); //$descripcion
+                $pdf->MultiCell(62,10, utf8_decode_($descripcion),0,'L',1); //$descripcion
                 $pdf->SetY($ejeY);
                 $ejeY = $ejeY + 15;
                 $pdf->SetX(82);
-                $pdf->Cell(40,10, utf8_decode($modelo),0,0,'C',1);
-                $pdf->Cell(20,10, utf8_decode($marca),0,0,'C',1);
-                $pdf->Cell(30,10,utf8_decode($precio_unitario),0,0, 'C',1);
-                $pdf->Cell(30,10,utf8_decode($importe),0,0, 'C',1);
+                $pdf->Cell(40,10, utf8_decode_($modelo),0,0,'C',1);
+                $pdf->Cell(20,10, utf8_decode_($marca),0,0,'C',1);
+                $pdf->Cell(30,10,utf8_decode_($precio_unitario),0,0, 'C',1);
+                $pdf->Cell(30,10,utf8_decode_($importe),0,0, 'C',1);
                 $pdf->Ln(15);
           
             }else if ($caracteres > 25 && $caracteres < 45) {
                 $pdf->Cell(14,10,$cantidad,0,0,'C',1);
-                $pdf->MultiCell(58,5, utf8_decode($descripcion),0,'L',1);
+                $pdf->MultiCell(58,5, utf8_decode_($descripcion),0,'L',1);
                 $pdf->SetY($ejeY);
                 $ejeY = $ejeY + 15;
                 $pdf->SetX(82);
-                $pdf->Cell(40,10, utf8_decode($modelo),0,0,'C',1);
-                $pdf->Cell(20,10, utf8_decode($marca),0,0,'C',1);
-                $pdf->Cell(30,10,utf8_decode($precio_unitario),0,0, 'C',1);
-                $pdf->Cell(30,10,utf8_decode($importe),0,0, 'C',1);
+                $pdf->Cell(40,10, utf8_decode_($modelo),0,0,'C',1);
+                $pdf->Cell(20,10, utf8_decode_($marca),0,0,'C',1);
+                $pdf->Cell(30,10,utf8_decode_($precio_unitario),0,0, 'C',1);
+                $pdf->Cell(30,10,utf8_decode_($importe),0,0, 'C',1);
                 $pdf->Ln(15);
           
             }else{
                 $pdf->Cell(14,12,$cantidad,0,0,'C',1);
-                $pdf->MultiCell(58,6, utf8_decode($descripcion),0,'L',1);
+                $pdf->MultiCell(58,6, utf8_decode_($descripcion),0,'L',1);
                 $pdf->SetY($ejeY);
                 $ejeY = $ejeY + 15;
                 $pdf->SetX(82);
-                $pdf->Cell(40,12, utf8_decode($marca),0,0,'C',1);
-                $pdf->Cell(20,12, utf8_decode($marca),0,0,'C',1);
-                $pdf->Cell(30,12,utf8_decode($precio_unitario),0,0, 'C',1);
-                $pdf->Cell(30,12,utf8_decode($importe),0,0, 'C',1);
+                $pdf->Cell(40,12, utf8_decode_($marca),0,0,'C',1);
+                $pdf->Cell(20,12, utf8_decode_($marca),0,0,'C',1);
+                $pdf->Cell(30,12,utf8_decode_($precio_unitario),0,0, 'C',1);
+                $pdf->Cell(30,12,utf8_decode_($importe),0,0, 'C',1);
                 $pdf->Ln(15);
             }
     
@@ -489,12 +490,12 @@ function cuerpoTabla(){
             $pdf->SetLineWidth(1);
             //$pdf->Line(11,95,192,95);
             
-            $pdf->Cell(19,8,utf8_decode("Cantidad"),0,0);  
-            $pdf->Cell(55,8,utf8_decode("Concepto"),0,0, 'C');
-            $pdf->Cell(30,8,utf8_decode("Modelo"),0,0, 'C');
-            $pdf->Cell(30,8,utf8_decode("Marca"),0,0, 'C');
-            $pdf->Cell(30,8,utf8_decode("Precio Uni"),0,0, 'C');
-            $pdf->Cell(30,8,utf8_decode("Importe"),0,0, 'C');
+            $pdf->Cell(19,8,utf8_decode_("Cantidad"),0,0);  
+            $pdf->Cell(55,8,utf8_decode_("Concepto"),0,0, 'C');
+            $pdf->Cell(30,8,utf8_decode_("Modelo"),0,0, 'C');
+            $pdf->Cell(30,8,utf8_decode_("Marca"),0,0, 'C');
+            $pdf->Cell(30,8,utf8_decode_("Precio Uni"),0,0, 'C');
+            $pdf->Cell(30,8,utf8_decode_("Importe"),0,0, 'C');
             $pdf->Ln(0);
             $pdf->Line(11,81,196,81);
         
@@ -528,38 +529,38 @@ function cuerpoTabla(){
             
             if ($caracteres < 25) {
                 $pdf->Cell(10,10,$cantidad,0,0,'C',1);
-                $pdf->MultiCell(58,5, utf8_decode($descripcion),1,'L',1); //$descripcion
+                $pdf->MultiCell(58,5, utf8_decode_($descripcion),1,'L',1); //$descripcion
                 $pdf->SetY($ejeY);
                 $ejeY = $ejeY + 15;
                 $pdf->SetX(82);
-                $pdf->Cell(40,10, utf8_decode($modelo),0,0,'C',1);
-                $pdf->Cell(20,10, utf8_decode($marca),0,0,'C',1);
-                $pdf->Cell(30,10,utf8_decode($precio_unitario),0,0, 'C',1);
-                $pdf->Cell(30,10,utf8_decode($importe),0,0, 'C',1);
+                $pdf->Cell(40,10, utf8_decode_($modelo),0,0,'C',1);
+                $pdf->Cell(20,10, utf8_decode_($marca),0,0,'C',1);
+                $pdf->Cell(30,10,utf8_decode_($precio_unitario),0,0, 'C',1);
+                $pdf->Cell(30,10,utf8_decode_($importe),0,0, 'C',1);
                 $pdf->Ln(15);
           
             }else if ($caracteres > 25 && $caracteres < 45) {
                 $pdf->Cell(14,10,$cantidad,0,0,'C',1);
-                $pdf->MultiCell(58,5, utf8_decode($descripcion),0,'L',1);
+                $pdf->MultiCell(58,5, utf8_decode_($descripcion),0,'L',1);
                 $pdf->SetY($ejeY);
                 $ejeY = $ejeY + 15;
                 $pdf->SetX(82);
-                $pdf->Cell(40,10, utf8_decode($modelo),0,0,'C',1);
-                $pdf->Cell(20,10, utf8_decode($marca),0,0,'C',1);
-                $pdf->Cell(30,10,utf8_decode($precio_unitario),0,0, 'C',1);
-                $pdf->Cell(30,10,utf8_decode($importe),0,0, 'C',1);
+                $pdf->Cell(40,10, utf8_decode_($modelo),0,0,'C',1);
+                $pdf->Cell(20,10, utf8_decode_($marca),0,0,'C',1);
+                $pdf->Cell(30,10,utf8_decode_($precio_unitario),0,0, 'C',1);
+                $pdf->Cell(30,10,utf8_decode_($importe),0,0, 'C',1);
                 $pdf->Ln(15);
           
             }else{
                 $pdf->Cell(14,12,$cantidad,0,0,'C',1);
-                $pdf->MultiCell(58,6, utf8_decode($descripcion),0,'L',1);
+                $pdf->MultiCell(58,6, utf8_decode_($descripcion),0,'L',1);
                 $pdf->SetY($ejeY);
                 $ejeY = $ejeY + 15;
                 $pdf->SetX(82);
-                $pdf->Cell(40,12, utf8_decode($marca),0,0,'C',1);
-                $pdf->Cell(20,12, utf8_decode($marca),0,0,'C',1);
-                $pdf->Cell(30,12,utf8_decode($precio_unitario),0,0, 'C',1);
-                $pdf->Cell(30,12,utf8_decode($importe),0,0, 'C',1);
+                $pdf->Cell(40,12, utf8_decode_($marca),0,0,'C',1);
+                $pdf->Cell(20,12, utf8_decode_($marca),0,0,'C',1);
+                $pdf->Cell(30,12,utf8_decode_($precio_unitario),0,0, 'C',1);
+                $pdf->Cell(30,12,utf8_decode_($importe),0,0, 'C',1);
                 $pdf->Ln(15);
             }
     
@@ -577,12 +578,12 @@ function cuerpoTabla(){
             $pdf->SetLineWidth(1);
             //$pdf->Line(11,95,192,95);
             
-            $pdf->Cell(19,8,utf8_decode("Cantidad"),0,0);  
-            $pdf->Cell(55,8,utf8_decode("Concepto"),0,0, 'C');
-            $pdf->Cell(30,8,utf8_decode("Modelo"),0,0, 'C');
-            $pdf->Cell(30,8,utf8_decode("Marca"),0,0, 'C');
-            $pdf->Cell(30,8,utf8_decode("Precio Uni"),0,0, 'C');
-            $pdf->Cell(30,8,utf8_decode("Importe"),0,0, 'C');
+            $pdf->Cell(19,8,utf8_decode_("Cantidad"),0,0);  
+            $pdf->Cell(55,8,utf8_decode_("Concepto"),0,0, 'C');
+            $pdf->Cell(30,8,utf8_decode_("Modelo"),0,0, 'C');
+            $pdf->Cell(30,8,utf8_decode_("Marca"),0,0, 'C');
+            $pdf->Cell(30,8,utf8_decode_("Precio Uni"),0,0, 'C');
+            $pdf->Cell(30,8,utf8_decode_("Importe"),0,0, 'C');
             $pdf->Ln(0);
             $pdf->Line(11,81,196,81);
         
@@ -708,14 +709,13 @@ function cuerpoTabla(){
     $pdf->Ln(8);
     $pdf->SetFont('Courier','',12);
     $formatTotal = $GLOBALS["formatTotal"];
-    $pdf->Cell(180,8,utf8_decode($formatTotal),0,0,'L',1);
+    $pdf->Cell(180,8,utf8_decode_($formatTotal),0,0,'L',1);
     $pdf->Ln(15);
-
     $pdf->SetFont('Times','B',12);
     $pdf->Cell(189,6,'Oservaciones: ',0,0);
     $pdf->Ln(8);
     $pdf->SetFont('Courier','',12);
-    $observacion = $GLOBALS["comentario"];
+    $observacion = empty($GLOBALS["comentario"])? '': $GLOBALS["comentario"];
     if($observacion == "" || $observacion == null || $observacion == " "){
         $pdf->Ln(8);
         $pdf->SetFont('Courier','',12);
@@ -740,31 +740,33 @@ function cuerpoTabla(){
     $text6 = ' AUTOMATICAMENTE PIERDE LA GARANTIA; EN CASO DE PROCEDER GARANTIA SE COBRARÁEL DESGASTE SI ES EL CASO;';
     $text7 = ' TIEMPO ESTIMADO DE RESPUESTA DE 1-2 SEMANAS. APLICA RESTRICCIONES.';
     
-    $pdf->Cell(189,6,utf8_decode($text),0,0,'L');
+    $pdf->Cell(189,6,utf8_decode_($text),0,0,'L');
     $pdf->Ln(2);
-    $pdf->Cell(189,6,utf8_decode($text2),0,0,'L');
+    $pdf->Cell(189,6,utf8_decode_($text2),0,0,'L');
     $pdf->Ln(2);
-    $pdf->Cell(189,6,utf8_decode($text3),0,0,'L');
+    $pdf->Cell(189,6,utf8_decode_($text3),0,0,'L');
     $pdf->Ln(2);
-    $pdf->Cell(189,6,utf8_decode($text4),0,0,'L');
+    $pdf->Cell(189,6,utf8_decode_($text4),0,0,'L');
     $pdf->Ln(2);
-    $pdf->Cell(189,6,utf8_decode($text5),0,0,'L');
+    $pdf->Cell(189,6,utf8_decode_($text5),0,0,'L');
     $pdf->Ln(2);
-    $pdf->Cell(189,6,utf8_decode($text6),0,0,'L');
+    $pdf->Cell(189,6,utf8_decode_($text6),0,0,'L');
     $pdf->Ln(2);
-    $pdf->Cell(189,6,utf8_decode($text7),0,0,'L');
+    $pdf->Cell(189,6,utf8_decode_($text7),0,0,'L');
    
     
     $pdf->Ln(10);
 
     $pdf->SetTextColor(1, 1, 1);
     $pdf->SetFont('Arial','B',10);
-    $pdf->Cell(185,6,utf8_decode("Gracias por su compra"),0,0,'C');
+    $pdf->Cell(185,6,utf8_decode_("Gracias por su compra"),0,0,'C');
     $pdf->Ln(18);
-    $pdf->Line(78,268,130,268);
+    $pdf->Line(20,272,97,272);
+    $pdf->Line(120,272,180,272);
     $pdf->SetTextColor(1, 1, 1);
     $pdf->SetFont('Arial','B',10);
-    $pdf->Cell(193,6,utf8_decode("Recibido"),0,0,'C');
+    $pdf->Cell(93,6,utf8_decode_("Recibido cliente"),0,0,'C');
+    $pdf->Cell(93,6,utf8_decode_("Entregado por"),0,0,'C');
 
     $pdf->SetDrawColor(194, 34, 16);
     $pdf->SetLineWidth(1);

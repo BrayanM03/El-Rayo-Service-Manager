@@ -832,7 +832,7 @@ function cuerpoTabla(){
     $pdf->Cell(35,5,$GLOBALS['pago_transferencia'],0,0,'L',1);
     $pdf->Cell(30,5,$GLOBALS['pago_cheque'],0,0,'L',1);
     $pdf->Cell(38,5,$GLOBALS['pago_sin_definir'],0,0,'L',1);
-    $pdf->Ln(3);
+    $pdf->Ln(7);
 
     $pdf->SetFont('Exo2-Bold','B',12);
     //Subtotal
@@ -843,14 +843,12 @@ function cuerpoTabla(){
     $pdf->SetFont('Arial','',10);
     //Subtotal
     /* $pdf->Cell(132,6,  utf8_decode_($GLOBALS["comentario"]),0,0); */
-    $pdf->Ln(4.5);
     $pdf->MultiCell(70,6,  utf8_decode_($GLOBALS["comentario"]),0,0,'L',0);
-    $pdf->Ln(4.5);
     $pdf->SetFont('Arial','',8);
     $pdf->MultiCell(150,3,  utf8_decode_("GARANTÍA DE UN AÑO CONTRA DEFECTO DE FABRICA A PARTIR DE ESTA FECHA
     FAVOR DE PRESENTAR ESTE COMPROBANTE DE VENTA PARA HACER VALIDO LA GARANTÍA"),0,0,'C',0);
     
-    $ejeY = $ejeY +17;
+    $ejeY = $ejeY +26;
     $pdf->SetY($ejeY);
     $pdf->SetX(142);
     
@@ -895,7 +893,8 @@ function cuerpoTabla(){
     $pdf->Ln(58);
     $pdf->SetTextColor(1, 1, 1);
     $pdf->SetFont('Arial','',10);
-    $pdf->Cell(193,6, utf8_decode_("Recibido"),0,0,'C'); 
+    $pdf->Cell(93,6, utf8_decode_("Recibido cliente"),0,0,'C'); 
+    $pdf->Cell(93,6, utf8_decode_("Entregado por"),0,0,'C'); 
     $pdf->Ln(7);
     $pdf->SetFont('Arial','B',11);
     
