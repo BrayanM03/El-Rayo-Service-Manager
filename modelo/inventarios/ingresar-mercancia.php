@@ -129,15 +129,37 @@ if(isset($_POST)){
             $result->close();
     
             //Trayendo descripcion de la llanta 
-            $traer = "SELECT Descripcion FROM llantas WHERE id = ?";
+            $traer = "SELECT Ancho, Proporcion, Diametro, Descripcion FROM llantas WHERE id = ?";
             $result = $con->prepare($traer);
             $result->bind_param('s', $id_llanta);
             $result->execute();
-            $result->bind_result($llanta_descripcion);
+            $result->bind_result($llanta_ancho, $llanta_proporcion, $llanta_diametro, $llanta_descripcion);
             $result->fetch();
             $result->close();
             $mercancia = $mercancia . ", " . $llanta_descripcion . ", ";
     
+              //Trayendo codigo y nombre de sucursal destino
+            $comprobar = "SELECT COUNT(*) FROM medidas_stock WHERE ancho = ? AND perfil = ? AND rin = ? AND id_sucursal = ?";
+            $result = $con->prepare($comprobar);
+            $result->bind_param('ssss', $llanta_ancho, $llanta_proporcion, $llanta_diametro, $id_destino);
+            $result->execute();
+            $result->bind_result($medidas_encontradas);
+            $result->fetch();
+            $result->close();
+
+            if($medidas_encontradas==1){
+                $comprobar = "SELECT stock_minimo, stock_maximo, estatus FROM medidas_stock WHERE ancho = ? AND perfil = ? AND rin = ? AND id_sucursal = ?";
+                $result = $con->prepare($comprobar);
+                $result->bind_param('ssss', $llanta_ancho, $llanta_proporcion, $llanta_diametro, $id_destino);
+                $result->execute();
+                $result->bind_result($stock_minimo, $stock_maximo, $stock_estatus);
+                $result->fetch();
+                $result->close();
+            }else{
+                $stock_minimo=0;
+                $stock_maximo =0;
+                $stock_estatus = 2;
+            }
             //Trayendo codigo y nombre de sucursal destino
             $comprobar = "SELECT code, nombre FROM sucursal WHERE id = ?";
             $result = $con->prepare($comprobar);
@@ -153,9 +175,9 @@ if(isset($_POST)){
     
                     //Insertando llanta a sucursal destino
                     $codigo = $code . $id_llanta;
-                    $insertar = "INSERT INTO inventario(id, id_Llanta, Codigo, Sucursal, id_sucursal, Stock) VALUES(null, ?,?,?,?,?)";
+                    $insertar = "INSERT INTO inventario(id, id_Llanta, Codigo, Sucursal, id_sucursal, Stock, stock_minimo, stock_maximo, medida_stock_estatus) VALUES(null, ?,?,?,?,?,?,?,?)";
                     $result = $con->prepare($insertar);
-                    $result->bind_param('sssss',$id_llanta, $codigo, $nombre_sucursal, $id_destino, $cantidad);
+                    $result->bind_param('ssssssss',$id_llanta, $codigo, $nombre_sucursal, $id_destino, $cantidad, $stock_minimo, $stock_maximo, $stock_estatus);
                     $result->execute();
                     $result->close();
     

@@ -12,11 +12,12 @@ function traerSucursales(){
       $("#sucursal").append(
         `<option value="${element.id}">${element.nombre}</option>`
       )
-      });  
+      });
+      $('#sucursal').selectpicker().css('z-index',9999);  
     }
   });
 }
-
+ 
 function obtenerNombreSucursal(idSucursal, sucursales) {
     const sucursalEncontrada = sucursales.find(sucursal => sucursal.id == idSucursal);
     return sucursalEncontrada ? sucursalEncontrada.nombre : "";
@@ -54,7 +55,7 @@ function tablaMedidas(){
             return '';
         }
      }},
-     { title: "Creación",     data: 10    },
+     { title: "Creación",     data: 10    }, 
      { title: "Acción",
        data: null,
        className: "celda-acciones",
@@ -88,6 +89,7 @@ function tablaMedidas(){
 function agregarMedida(){
     Swal.fire({
         title: 'Agregar medida',
+        showCloseButton: true,
         html: `
         <div class="container">
         <!--- <div class="row mb-3">
@@ -129,7 +131,8 @@ function agregarMedida(){
             <div class="row mt-3">
             <div class="col-md-12">
                 <label for="sucursal">Sucursal</label>
-                <select class="form-control" id="sucursal">
+                <select class="form-control" id="sucursal" multiple>
+               
                 </select>
             </div>
         </div>
@@ -326,8 +329,14 @@ function editarMedida(id_medida){
     success: function (response) {
       if(response.estatus){
         let ancho_actual = parseFloat(response.data.ancho);
+        let perfil_actual = parseFloat(response.data.perfil);
+        let rin_actual = parseFloat(response.data.rin);
         Swal.fire({
           title: 'Editar medida',
+          showCancelButton: true,
+          showCloseButton: true,
+          cancelButtonColor: "#DD6B55",
+          cancelButtonText: 'Configuración personalizada',
           html: `
           <div class="container">
           <!--- <div class="row mb-3">
@@ -342,11 +351,11 @@ function editarMedida(id_medida){
                   </div>
                   <div class="col-md-4">
                       <label>Perfil</label>
-                      <input type="number" class="form-control" value="${response.data.perfil}" id="perfil" placeholder="0">
+                      <input type="number" class="form-control" value="${perfil_actual}" id="perfil" placeholder="0">
                   </div>
                   <div class="col-md-4">
                       <label>Rin</label>
-                      <input type="number" class="form-control" id="rin" value="${response.data.rin}" placeholder="0">
+                      <input type="number" class="form-control" id="rin" value="${rin_actual}" placeholder="0">
                   </div>
               </div>
               <div class="row mt-3">
@@ -386,18 +395,18 @@ function editarMedida(id_medida){
                   </div>
                   <div class="col-md-6">
                       <label for="stock_minimo">Stock maximo (opcional)</label>
-                      <input class="form-control" id="stock_maximo" value="${response.data.maximo}" type="number" placeholder="0">
+                      <input class="form-control" id="stock_maximo" value="${response.data.stock_maximo}" type="number" placeholder="0">
                   </div>
               </div>
               
           </div>
           `,
-          confirmButtonText: 'Registrar',
+          confirmButtonText: 'Actualizar',
           didOpen: function(){
               let ancho_input = document.querySelector('#ancho');
               let perfil_input = document.querySelector('#perfil');
               let rin_input = document.querySelector('#rin');
-      
+
               ancho_input.addEventListener("keyup", function(event) {
                   let ancho = $("#ancho").val();
                   let perfil = $("#perfil").val();
@@ -427,8 +436,13 @@ function editarMedida(id_medida){
                 });
       
                traerSucursales()
-               $("#sucursal").val(response.data.id_sucursal)
-               $("#estatus").val(response.data.estatus)
+               console.log(response.data.id_sucursal);
+               setTimeout(()=>{
+                $("#sucursal").val(response.data.id_sucursal)
+                $("#estatus").val(response.data.estatus)
+                $('#sucursal').selectpicker('refresh');
+               },100)
+               
           },
           preConfirm: function(){
               if($("#stock_minimo").val()<=0){
@@ -442,7 +456,8 @@ function editarMedida(id_medida){
               }
           }
       }).then((r)=>{
-      
+            let nombre_sucursal = response.data.nombre_sucursal
+        
           if(r.isConfirmed){
               let ancho = $("#ancho").val();
               let perfil = $("#perfil").val();
@@ -474,6 +489,76 @@ function editarMedida(id_medida){
                        table.ajax.reload(null, false);
                   }
               });
+          }else if(r.isDismissed && r.dismiss == 'cancel'){
+            let id_sucursal = response.data.id_sucursal;
+            $.ajax({
+                type: "post",
+                url: "./modelo/configuraciones/configuracion_stock/traer-llantas-medida.php",
+                data: {id_medida, id_sucursal},
+                dataType: "json",
+                success: function (response) {
+                  if(response.estatus){
+                    Swal.fire({
+                        width:'auto',
+                        title: 'LLantas cargadas de la medida ' + response.da.descripcion +' de la sucursal ' + nombre_sucursal,
+                        html:`
+                            <div class="container">
+                                <span class="mb-4">Desde este panel puedes modificar individualmente el rango de stock a evaluar en el inventario </span>
+                                <table class="table mt-3" id="llantas-x-medidas">
+                                    <thead sty>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>ID</th>
+                                            <th>Descripción</th>
+                                            <th>Marca</th>
+                                            <th>Stock actual</th>
+                                            <th>Stock minimo</th>
+                                            <th>Stock maximo</th>
+                                            <th>Estatus</th>
+                                            <th>Actualizar</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody-llantas-med" style="overflow-y: scroll; font-size: height:5rem !important;"></tbody>
+                                </table>
+                            </div>
+                        `,
+                        didOpen: function(){
+                            let count=0;
+                            response.data.forEach(element => {
+                                count++;
+                                $("#tbody-llantas-med").append(`
+                                <tr>
+                                    <td>${count}</td>
+                                    <td>${element.id}</td>
+                                    <td>${element.Descripcion}</td>
+                                    <td>${element.Marca}</td>
+                                    <td>${element.Stock}</td>
+                                    <td><input class="form-control" value="${element.stock_minimo}" id="stock_minimo_llanta_${element.id_inventario}"></td>
+                                    <td><input class="form-control" value="${element.stock_maximo}" id="stock_maximo_llanta_${element.id_inventario}"></td>
+                                    <td><select class="form-control" id="medida_stock_estatus_${element.id_inventario}">
+                                            <option value="1">Activo</option>
+                                            <option value="2">Inactivo</option>
+                                        </select>
+                                    </td>
+                                    <td><div class="btn btn-primary" onclick="actualizarlLlantaMedidaIndividual(${element.id_inventario})"><i class="fas fa-pen"></i></td>
+                                `)
+
+                                console.log(element.medida_stock_estatus);
+
+                                if(element.medida_stock_estatus==1){
+                                    $("#medida_stock_estatus_"+element.id_inventario).val(1)
+                                }else{
+                                    $("#medida_stock_estatus_"+element.id_inventario).val(2)
+
+                                }
+                            });
+                            $("#llantas-x-medidas").DataTable({
+
+                            })
+                        }
+
+                    });
+                  }}})
           }
       
       })
@@ -514,4 +599,24 @@ function borrarrMedida(id_medida){
             });
         }
     })
+}
+
+function actualizarlLlantaMedidaIndividual(id_inventario){
+    let stock_minimo = $("#stock_minimo_llanta_"+id_inventario).val();
+    let stock_maximo = $("#stock_maximo_llanta_"+id_inventario).val();
+    let estatus = $("#medida_stock_estatus_"+id_inventario).val();
+    $.ajax({
+        type: "post",
+        url: "./modelo/configuraciones/configuracion_stock/actualizar-medida-llanta.php",
+        data: {id_inventario, stock_maximo, stock_minimo, estatus},
+        dataType: "json",
+        success: function (response) {
+            if(response.estatus){
+                toastr.success (response.mensaje, 'Actualizado'); 
+            }else{
+                toastr.error(response.mensaje, 'Error'); 
+            }
+        }
+    });
+
 }

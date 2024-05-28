@@ -24,7 +24,7 @@ function MostrarInventario(id_sucursal) {
     });
 
     table = $('#inventario-pedro').DataTable({   
-        processing: true,
+        processing: true, 
         serverSide: true, 
         rowCallback: function(row, data, index) {
           if(data[15] <= data[16] && data[16] !=0 && data[17] ==1){

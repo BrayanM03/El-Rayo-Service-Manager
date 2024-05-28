@@ -38,5 +38,5 @@ if($total_medidas>0){
     $mensaje = 'No se encontró una medida con ese ID';
 }
 
-echo json_encode(array('estatus'=>$estatus, 'mensaje'=>$mensaje));
+echo json_encode(array('estatus'=>$estatus, 'mensaje'=>$mensaje, 'post'=>$_POST));
 

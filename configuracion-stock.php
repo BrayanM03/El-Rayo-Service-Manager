@@ -96,6 +96,9 @@ if ($_SESSION['rol'] != 4 && $_SESSION['rol'] !=1) {
         .delete-thumbnail:hover{
             background-color: orange;
         }
+        .btn-light{
+            background-color: white !important;
+        }
     </style>
 
 </head>

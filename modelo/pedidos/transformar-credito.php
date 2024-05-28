@@ -42,8 +42,6 @@ if($total_pedidos>0){
             die();
         };
     }
-    print_r("Todo ok");
-    die();
     if($restante == 0){
         $res = array('estatus'=> false, 'mensaje'=> 'El pedido ya fue pagado');
     }else{ 

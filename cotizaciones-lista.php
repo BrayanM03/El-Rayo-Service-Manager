@@ -91,7 +91,7 @@
                         </div>
                         
                       <div class="botones">
-                                    <a href="cotizacion.php" class="btn btn-success btn-icon-split">
+                                    <a href="nueva-cotizacion.php?id=0&nav=nueva_cotizacion" class="btn btn-success btn-icon-split">
                                         <span class="icon text-white-50">
                                             <i class="fas fa-plus-circle"></i>
                                         </span>

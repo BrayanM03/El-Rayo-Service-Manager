@@ -15,7 +15,7 @@ $stmt->bind_result($total_medidas);
 $stmt->fetch();
 $stmt->close();
 if($total_medidas>0){
-    $sel = "SELECT * FROM medidas_stock WHERE id = ?";
+    $sel = "SELECT m.*, s.nombre as nombre_sucursal FROM medidas_stock m INNER JOIN sucursal s ON m.id_sucursal = s.id WHERE m.id = ?";
     $stmt = $con->prepare($sel);
     $stmt->bind_param('s', $id_medida);
     $stmt->execute();
