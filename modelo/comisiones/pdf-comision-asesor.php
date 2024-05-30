@@ -21,6 +21,8 @@ if (!isset($_SESSION['id_usuario'])) {
 $session_sucursal = $_SESSION['id_sucursal'];
 global $session_sucursal;
 
+require('../helpers/utf8_decode.php');
+
 class PDF extends FPDF
 {
     public function RoundedRect($x, $y, $w, $h, $r, $corners = '1234', $style = '')
@@ -177,12 +179,12 @@ class PDF extends FPDF
         $this->AddFont('Exo2-Bold', 'B', 'Exo2-Bold.php');
         // Arial bold 15
         $this->SetFont('Exo2-Bold', 'B', 12);
-        $this->Cell(170, 4, utf8_decode('Reporte de filtro'), 0, 0, 'R');
+        $this->Cell(170, 4, utf8_decode_('Reporte de filtro'), 0, 0, 'R');
         $this->Ln(4);
   
 
       //  $this->RoundedRect(166, 20, 17, 7, 2, '1234', 'DF');
-        //$this->Cell(18, 6, utf8_decode($_GET["id"]), 0, 0, 'C');
+        //$this->Cell(18, 6, utf8_decode_($_GET["id"]), 0, 0, 'C');
 
         $this->SetDrawColor(135, 134, 134);
         $this->SetTextColor(36, 35, 28);
@@ -230,14 +232,15 @@ function cuerpoTabla()
     $pdf->SetDrawColor(135, 134, 134);
     $pdf->SetTextColor(36, 35, 28);
     $pdf->Ln(5);
-    $pdf->Cell(15, 8, utf8_decode('Folio'), 0, 0, 'L');
-    $pdf->Cell(17, 8, utf8_decode('Fecha'), 0, 0, 'L');
-    $pdf->Cell(52, 8, utf8_decode('Cliente'), 0, 0, 'L');
-    $pdf->Cell(12, 8, utf8_decode('Tipo'), 0, 0, 'L');
-    $pdf->Cell(17, 8, utf8_decode('Estatus'), 0, 0, 'L');
-    $pdf->Cell(35, 8, utf8_decode('Vendedor'), 0, 0, 'L');
-    $pdf->Cell(20, 8, utf8_decode('Total'), 0, 0, 'L');
-    $pdf->Cell(15, 8, utf8_decode('Sucursal'), 0, 0, 'L');
+    $pdf->Cell(15, 8, utf8_decode_('Folio'), 0, 0, 'L');
+    $pdf->Cell(17, 8, utf8_decode_('Fecha'), 0, 0, 'L');
+    $pdf->Cell(52, 8, utf8_decode_('Cliente'), 0, 0, 'L');
+    $pdf->Cell(12, 8, utf8_decode_('Tipo'), 0, 0, 'L');
+    $pdf->Cell(12, 8, utf8_decode_('Estatus'), 0, 0, 'L');
+    $pdf->Cell(30, 8, utf8_decode_('Vendedor'), 0, 0, 'L');
+    $pdf->Cell(14, 8, utf8_decode_('Total'), 0, 0, 'L');
+    $pdf->Cell(16, 8, utf8_decode_('Forma pago'), 0, 0, 'L');
+    $pdf->Cell(15, 8, utf8_decode_('Sucursal'), 0, 0, 'L');
     $pdf->Ln(0);
     //$pdf->Line(11,81,196,81);
 
@@ -282,6 +285,8 @@ function cuerpoTabla()
             $estatus = $fila['estatus'];
             $vendedor = $fila['vendedor'];
             $total = $fila['Total'];
+            $forma_pago = $fila['metodo_pago'];
+
             $sucursal = $fila['sucursal']; 
             $importe_sin_servicio = $fila['importe_sin_servicio'] ==null ? 0 : floatval($fila['importe_sin_servicio']); 
             $sumatoria_importe_sin_serv += $importe_sin_servicio;
@@ -291,14 +296,15 @@ function cuerpoTabla()
             if($cliente_strlen > 33){
                 $cliente = substr($cliente, 0, 32);
             }
-            $pdf->Cell(15, 6, utf8_decode($folio), 0, 0, 'L');
-            $pdf->Cell(17, 6, utf8_decode($fecha), 0, 0, 'L');
-            $pdf->Cell(52, 6, utf8_decode($cliente), 0, 0, 'L');
-            $pdf->Cell(12, 6, utf8_decode($tipo), 0, 0, 'L');
-            $pdf->Cell(17, 6, utf8_decode($estatus), 0, 0, 'L');
-            $pdf->Cell(35, 6, utf8_decode($vendedor), 0, 0, 'L');
-            $pdf->Cell(20, 6, utf8_decode($total), 0, 0, 'L');
-            $pdf->Cell(15, 6, utf8_decode($sucursal), 0, 0, 'L');
+            $pdf->Cell(15, 6, utf8_decode_($folio), 0, 0, 'L');
+            $pdf->Cell(17, 6, utf8_decode_($fecha), 0, 0, 'L');
+            $pdf->Cell(52, 6, utf8_decode_($cliente), 0, 0, 'L');
+            $pdf->Cell(12, 6, utf8_decode_($tipo), 0, 0, 'L');
+            $pdf->Cell(12, 6, utf8_decode_($estatus), 0, 0, 'L');
+            $pdf->Cell(30, 6, utf8_decode_($vendedor), 0, 0, 'L');
+            $pdf->Cell(16, 6, utf8_decode_($total), 0, 0, 'L');
+            $pdf->Cell(14, 6, utf8_decode_($forma_pago), 0, 0, 'L');
+            $pdf->Cell(15, 6, utf8_decode_($sucursal), 0, 0, 'L');
             $pdf->Ln(4);
            
             $indexY +=4.1;
@@ -313,14 +319,15 @@ function cuerpoTabla()
                 //$indexY = 3;
                 $k=1;
                 $pdf->Ln(5);
-                $pdf->Cell(15, 8, utf8_decode('Folio'), 0, 0, 'L');
-                $pdf->Cell(17, 8, utf8_decode('Fecha'), 0, 0, 'L');
-                $pdf->Cell(52, 8, utf8_decode('Cliente'), 0, 0, 'L');
-                $pdf->Cell(12, 8, utf8_decode('Tipo'), 0, 0, 'L');
-                $pdf->Cell(17, 8, utf8_decode('Estatus'), 0, 0, 'L');
-                $pdf->Cell(35, 8, utf8_decode('Vendedor'), 0, 0, 'L');
-                $pdf->Cell(20, 8, utf8_decode('Total'), 0, 0, 'L');
-                $pdf->Cell(15, 8, utf8_decode('Sucursal'), 0, 0, 'L');
+                $pdf->Cell(15, 8, utf8_decode_('Folio'), 0, 0, 'L');
+                $pdf->Cell(17, 8, utf8_decode_('Fecha'), 0, 0, 'L');
+                $pdf->Cell(52, 8, utf8_decode_('Cliente'), 0, 0, 'L');
+                $pdf->Cell(12, 8, utf8_decode_('Tipo'), 0, 0, 'L');
+                $pdf->Cell(12, 8, utf8_decode_('Estatus'), 0, 0, 'L');
+                $pdf->Cell(30, 8, utf8_decode_('Vendedor'), 0, 0, 'L');
+                $pdf->Cell(14, 8, utf8_decode_('Total'), 0, 0, 'L');
+                $pdf->Cell(16, 8, utf8_decode_('Forma pago'), 0, 0, 'L');
+                $pdf->Cell(15, 8, utf8_decode_('Sucursal'), 0, 0, 'L');
 
                 $pdf->Ln(12);
                 $pdf->SetDrawColor(1, 1, 1);
@@ -354,21 +361,21 @@ function cuerpoTabla()
                 $pdf->SetFont('Arial', 'B', 7);
                 $pdf->Ln(24);
                 $pdf->Cell(135, 8, '', 0, 0, 'L');
-                $pdf->Cell(30, 8, utf8_decode('Suma:'), 0, 0, 'L');
+                $pdf->Cell(30, 8, utf8_decode_('Suma:'), 0, 0, 'L');
                 $pdf->SetFont('Arial', '', 7);
-                $pdf->Cell(10, 8, utf8_decode('$'.$sumatoria_total_ft), 0, 0, 'L');
+                $pdf->Cell(10, 8, utf8_decode_('$'.$sumatoria_total_ft), 0, 0, 'L');
                 $pdf->Ln(5);
                 $pdf->Cell(135, 8, '', 0, 0, 'L');
                 $pdf->SetFont('Arial', 'B', 7);
-                $pdf->Cell(30, 8, utf8_decode('Suma sin servicios:'), 0, 0, 'L');
+                $pdf->Cell(30, 8, utf8_decode_('Suma sin servicios:'), 0, 0, 'L');
                 $pdf->SetFont('Arial', '', 7);
-                $pdf->Cell(10, 8, utf8_decode('$'.$sumatoria_importe_sin_serv_ft), 0, 0, 'L');
+                $pdf->Cell(10, 8, utf8_decode_('$'.$sumatoria_importe_sin_serv_ft), 0, 0, 'L');
                 $pdf->Ln(5);
                 $pdf->Cell(135, 8, '', 0, 0, 'L');
                 $pdf->SetFont('Arial', 'B', 7);
-                $pdf->Cell(30, 8, utf8_decode('Total de ventas:'), 0, 0, 'L');
+                $pdf->Cell(30, 8, utf8_decode_('Total de ventas:'), 0, 0, 'L');
                 $pdf->SetFont('Arial', '', 7);
-                $pdf->Cell(10, 8, utf8_decode($numero_datos_filtrados), 0, 0, 'L');
+                $pdf->Cell(10, 8, utf8_decode_($numero_datos_filtrados), 0, 0, 'L');
             }
             $k ++;
         }  
@@ -387,21 +394,21 @@ function cuerpoTabla()
             $pdf->SetFont('Arial', 'B', 7);
             $pdf->Ln(15);
             $pdf->Cell(135, 8, '', 0, 0, 'L');
-            $pdf->Cell(30, 8, utf8_decode('Suma:'), 0, 0, 'L');
+            $pdf->Cell(30, 8, utf8_decode_('Suma:'), 0, 0, 'L');
             $pdf->SetFont('Arial', '', 7);
-            $pdf->Cell(10, 8, utf8_decode('$'.$sumatoria_total_ft), 0, 0, 'L');
+            $pdf->Cell(10, 8, utf8_decode_('$'.$sumatoria_total_ft), 0, 0, 'L');
             $pdf->Ln(5);
             $pdf->Cell(135, 8, '', 0, 0, 'L');
             $pdf->SetFont('Arial', 'B', 7);
-            $pdf->Cell(30, 8, utf8_decode('Suma sin servicios:'), 0, 0, 'L');
+            $pdf->Cell(30, 8, utf8_decode_('Suma sin servicios:'), 0, 0, 'L');
             $pdf->SetFont('Arial', '', 7);
-            $pdf->Cell(10, 8, utf8_decode('$'.$sumatoria_importe_sin_serv_ft), 0, 0, 'L');
+            $pdf->Cell(10, 8, utf8_decode_('$'.$sumatoria_importe_sin_serv_ft), 0, 0, 'L');
             $pdf->Ln(5);
             $pdf->Cell(135, 8, '', 0, 0, 'L');
             $pdf->SetFont('Arial', 'B', 7);
-            $pdf->Cell(30, 8, utf8_decode('Total de ventas:'), 0, 0, 'L');
+            $pdf->Cell(30, 8, utf8_decode_('Total de ventas:'), 0, 0, 'L');
             $pdf->SetFont('Arial', '', 7);
-            $pdf->Cell(10, 8, utf8_decode($numero_datos_filtrados), 0, 0, 'L');
+            $pdf->Cell(10, 8, utf8_decode_($numero_datos_filtrados), 0, 0, 'L');
         }
     }
 
