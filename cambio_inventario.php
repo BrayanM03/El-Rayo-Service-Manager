@@ -305,7 +305,7 @@ if ($_SESSION['rol'] == 3) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous"></script>
     <script src="src/js/maximize-select2-height.js"></script>
 
-    <script src="src/js/sb-admin-2.min.js"></script>
+    <script src="src/js/sb-admin-2.min.js?v=1239"></script>
 
  
     <script src="src/js/buscador-llantas-por-sucursal.js"></script>

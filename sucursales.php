@@ -231,7 +231,7 @@ if ($_SESSION['user'] !==  "brayanm03") {
     <script src="src/vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="src/js/sb-admin-2.min.js"></script>
+    <script src="src/js/sb-admin-2.min.js?v=1239"></script>
 
     <!-- Page level plugins -->
     <script src="src/vendor/chart.js/Chart.min.js"></script>

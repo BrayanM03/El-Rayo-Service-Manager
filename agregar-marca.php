@@ -189,7 +189,7 @@
     </div>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="src/vendor/jquery/jquery.min.js"></script>
+    <script src="src/vendor/jquery/jquery.min.js?v=1239"></script>
     <script src="src/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->

@@ -217,7 +217,7 @@ if ($_SESSION['rol'] == 4) {
     <script src="src/vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="src/js/sb-admin-2.min.js"></script>
+    <script src="src/js/sb-admin-2.min.js?v=1239"></script>
 
     <!-- Page level plugins -->
     <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.10.111/build/pdf.min.js"></script>

@@ -385,7 +385,7 @@ if($total_sucu > 0) {
     <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.10.111/build/pdf.min.js"></script>
     <script src="src/js/maximize-select2-height.js"></script>
     
-    <script src="src/js/sb-admin-2.min.js"></script>
+    <script src="src/js/sb-admin-2.min.js?v=1239"></script>
 
     <script src="src/js/bootstrap-select.min.js"></script>
     <script src="src/js/agregar-mercancia-inventario.js"></script>

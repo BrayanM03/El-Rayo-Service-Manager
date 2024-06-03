@@ -129,7 +129,7 @@ switch ($flag) {
         break;
 }
 ?>
-<ul class="navbar-nav sidebar sidebar-dark accordion" style="background-color:#0d0d0d" id="accordionSidebar"><!-- bg-gradient-dark  -->
+<ul class="navbar-nav sidebar sidebar-dark accordion toggled" style="background-color:#0d0d0d" id="accordionSidebar"><!-- bg-gradient-dark  -->
 
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php?id=0&nav=inicio">
@@ -194,7 +194,7 @@ switch ($flag) {
     <?php } ?>
     <!-- Nav Item - Utilities Collapse Menu -->
     <li class="nav-item <?php echo $claseHistorial ?>">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
+        <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
             <i class="fas fa-fw fa-history"></i>
             <span>Historial</span>
         </a>

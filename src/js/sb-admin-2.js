@@ -1,8 +1,15 @@
 (function($) {
   "use strict"; // Start of use strict
-
   // Toggle the side navigation
-  $("#sidebarToggle, #sidebarToggleTop").on('click', function(e) {
+  /* $("#sidebarToggle, #sidebarToggleTop").on('click', function(e) {
+    $("body").toggleClass("sidebar-toggled");
+    $(".sidebar").toggleClass("toggled");
+    if ($(".sidebar").hasClass("toggled")) {
+      $('.sidebar .collapse').collapse('hide');
+    };
+  }); */
+  
+  $("#sidebarToggle").on('click', function(e) {
     $("body").toggleClass("sidebar-toggled");
     $(".sidebar").toggleClass("toggled");
     if ($(".sidebar").hasClass("toggled")) {
@@ -10,17 +17,23 @@
     };
   });
 
+  if($(window).width()>768){
+        $(".sidebar").removeClass("toggled");
+  };
   // Close any open menu accordions when window is resized below 768px
   $(window).resize(function() {
     if ($(window).width() < 768) {
       $('.sidebar .collapse').collapse('hide');
+      
     };
     
     // Toggle the side navigation when window is resized below 480px
     if ($(window).width() < 480 && !$(".sidebar").hasClass("toggled")) {
+      
       $("body").addClass("sidebar-toggled");
-      $(".sidebar").addClass("toggled");
-      $('.sidebar .collapse').collapse('hide');
+
+     // $(".sidebar").addClass("toggled");
+      //$('.sidebar .collapse').collapse('hide');
     };
   });
 
@@ -43,7 +56,7 @@
       $('.scroll-to-top').fadeOut();
     }
   });
-
+ 
   // Smooth scrolling using jQuery easing
   $(document).on('click', 'a.scroll-to-top', function(e) {
     var $anchor = $(this);
@@ -53,4 +66,14 @@
     e.preventDefault();
   });
 
+
 })(jQuery); // End of use strict
+function arrowTransition(id_arrow){
+  let arrow = $(`#${id_arrow}`)
+
+  if(arrow.hasClass('up')){
+    arrow.removeClass('up')
+  }else{
+    arrow.addClass('up')
+  };
+}

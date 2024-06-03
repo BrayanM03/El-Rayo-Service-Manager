@@ -193,7 +193,7 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
     <script src="src/vendor/jquery-easing/jquery.easing.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <!-- Custom scripts for all pages-->
-    <script src="src/js/sb-admin-2.min.js"></script>
+    <script src="src/js/sb-admin-2.min.js?v=1239"></script>
 
  
     <script src="src/js/resumen-cortes.js"></script>
