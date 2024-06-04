@@ -109,12 +109,10 @@ $(document).ready(function() {
                           data: {"codigo" : codigo, "sucursal" : suc},
                           dataType: "json",
                           success: function (response) {
-                          
-                             
-                              $('#select'+row.id).attr("respuesta", response);
-                              valorcillo = $('#select'+row.id).attr("respuesta");  
+                             /*  $('#select'+row.id).attr("respuesta", response);
+                              valorcillo = $('#select'+row.id).attr("respuesta");  */ 
                               valor = $('#select'+row.id).parent().next().text(response.stock); 
-                                            
+                              $("#stock-"+row.id).text(response.stock);         
                              
                           },
                          
@@ -123,7 +121,7 @@ $(document).ready(function() {
             });
 
            
-            return row.stock;
+            return '<span id="stock-'+row.id+'">'+row.stock+'</span>';
           },
         },
         //{ title: "Stock",          data: "stock"          },
