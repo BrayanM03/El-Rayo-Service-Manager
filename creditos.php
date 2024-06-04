@@ -62,11 +62,13 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.css"/>  
      <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
   
+     <link rel="stylesheet" href="src/vendor/bower_components/select2-bootstrap-theme/dist/select2-bootstrap.css">
 
     <!---Librerias de estilos-->
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="src/css/menu-vertical.css" rel="stylesheet">
-   
+    <link href="src/css/filtros.css" rel="stylesheet">
 <style>
     .mostrar-creditos .swal2-content {
     height: 80vh !important;
@@ -105,27 +107,20 @@
 
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid" style="display: flex; justify-content: center; align-items:center; flex-direction:column">
-
-                     <!-- Contenido inventario -->
-                     
-                        <div class="contenedor-tit">
-                        <img class="tyre-decoration-left" src="./src/img/tyre.svg" alt="insertar SVG con la etiqueta image"> 
-                        <div class="titulo-inventario">
-                         <h5 style="margin: 10px 0px;">Creditos</h5>
-                         <p style="color: gray;">Historial de creditos</p>
+                <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h3><b>Historial de creditos realizados</b></h3>
+                            </div>
                         </div>
-                        <img class="tyre-decoration-right" src="./src/img/tyre.svg" alt="insertar SVG con la etiqueta image">   
-                        </div>
-                        <div class="botones">
+                        <hr>  
+                        <div class="mb-3">
                             <a href="modelo/creditos/excel-creditos-vencidos.php"><div class="btn btn-success"><i class="fas fa-file-excel"></i> | Reporte de creditos vencidos</div></a>         
                         </div>
 
                       <table id="creditos" class="table table-striped">    
                      </table>
                 </div>
-            <!-- End of Main Content -->
-  <!-- Footer -->
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
@@ -188,7 +183,7 @@
 
     
    <!-- Cargamos nuestras librerias-->
-    
+   <script src="src/js/vue.min.js"></script> 
    <script src="src/vendor/datatables/jquery.dataTables.min.js"></script> 
     <!-- <script src="src/vendor/datatables-responsive/js/dataTables.responsive.min.js"></script> -->
     <script src="src/vendor/datatables/dataTables.bootstrap4.js"></script>
@@ -199,10 +194,11 @@
     <!-- <script src="src/vendor/datatables/defaults.js"></script> --><!-- 
     <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    
+    <script src="src/js/bootstrap-select.min.js"></script>
     <script src="src/js/creditos.js"></script>
     
-   
+    <script src="./components/filtros.module.js" type="text/javascript"></script>
+    <script src="src/js/filtros.js"></script>
 </body>
 
 </html>

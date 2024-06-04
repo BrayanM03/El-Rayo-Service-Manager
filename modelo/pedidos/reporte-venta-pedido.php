@@ -18,7 +18,11 @@ $ID->bind_result($id_apartados, $sucursal, $vendedor_id, $id_cliente, $cliente, 
 $ID->fetch();
 $ID->close();
 
-$ID = $con->prepare("SELECT pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_sin_definir FROM abonos_pedidos WHERE id_pedido = ? AND estado = 1"); //El 0 indica el estado de apono de liquidacion
+$ID = $con->prepare("SELECT SUM(pago_efectivo) as pago_efectivo, 
+SUM(pago_tarjeta) as pago_tarjeta, 
+SUM(pago_transferencia) as pago_transferencia, 
+SUM(pago_cheque) as pago_cheque, 
+SUM(pago_sin_definir) as pago_sin_definir FROM abonos_pedidos WHERE id_pedido = ?"); //AND estado = 1 El 0 indica el estado de apono de liquidacion
 $ID->bind_param('i', $id_apartados);
 $ID->execute();
 $ID->bind_result($pago_efectivo_abono, $pago_tarjeta_abono, $pago_transferencia_abono, $pago_cheque_abono, $pago_sin_definir_abono);
