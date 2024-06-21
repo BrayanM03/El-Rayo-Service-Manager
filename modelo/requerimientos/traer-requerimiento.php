@@ -40,7 +40,8 @@ if($total_req > 0){
     if ($total_cambios > 0) {
         $querySuc = "SELECT * FROM detalle_requerimientos WHERE id_requerimiento ='$id_req'";
         $respon = mysqli_query($con, $querySuc);
-    
+        $estatus_realizar_movimiento = false;
+        $ids_movimientos=array();
         while ($rows = $respon->fetch_assoc()) {
             $id = $rows['id'];
             $id_llanta = $rows['id_llanta'];
@@ -48,6 +49,13 @@ if($total_req > 0){
             $id_destino = $rows['id_destino'];
             $cantidad = $rows['cantidad'];    
             $estatus = $rows['estatus'];
+            if(isset($rows['id_movimiento'])){
+                $ids_movimientos[]= $rows['id_movimiento'];
+            }
+            if($estatus != 9 && $estatus != 2 && $estatus != 4 && $estatus != 5 && $estatus != 6 && $estatus != 7){
+                $estatus_realizar_movimiento = true;
+            }
+            $id_detalle_movimiento = $rows['id_movimiento'];
     
             $queryDesc = "SELECT Descripcion, Marca, precio_Inicial, precio_Venta, precio_Mayoreo FROM llantas WHERE id =?";
             $resps = $con->prepare($queryDesc);
@@ -74,6 +82,7 @@ if($total_req > 0){
             $resps->fetch();
             $resps->close();
             $data['nombre_usuario'] = $nombre_usuario;
+            $data['ids_movimientos'] = $ids_movimientos;
             $data['data'][] = array('id'=>$id, 'id_llanta'=> $id_llanta, 
                             'descripcion'=> $descripcion, 
                             'id_ubicacion'=> $id_ubicacion,
@@ -82,8 +91,9 @@ if($total_req > 0){
                             'marca' => $marca,
                             'sucursal_destino' => $sucursal_destino,
                             'cantidad'=> $cantidad,
-                            'estatus'=> $estatus
-        );
+                            'estatus'=> $estatus,
+                            'id_movimiento'=> $id_detalle_movimiento);
+            $data['estatus_realizar_movimiento'] = $estatus_realizar_movimiento;            
         }
         $data['estatus']=true;
         $data['sucursal']=$sucursal_usuario;

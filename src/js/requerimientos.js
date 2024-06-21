@@ -16,6 +16,18 @@ toastr.options = {
     "hideMethod": "fadeOut"
   }
 
+  let rol_usuario = $("#emp-title").attr('sesion_rol')
+
+  if(rol_usuario == 1 || rol_usuario == 4){
+     texto_btn_requerimientos= 'Realizar movimiento'
+     mostrar_btn_cancelar = true;
+  }else{
+     texto_btn_requerimientos= 'Aceptar'
+     mostrar_btn_cancelar = false;
+
+    
+  }
+
   MostrarRequerimientos()
   function MostrarRequerimientos() {  
     //$.fn.dataTable.ext.errMode = 'none';
@@ -55,27 +67,32 @@ toastr.options = {
       { title: "Usuario",        data: 5       },
       { title: "Comentario",        data: 8       },
       { title: "Estatus",    data: 7 , render: function(data, type, row){
+        data = parseInt(data)
         switch(data){
-          case '1':
+          case 1:
           var estatus = 'Pendiente';
           var class_btn = 'warning'
           break;
-          case '2':
+          case 2:
           var estatus = 'Cancelado';
           var class_btn = 'danger'
           break;
-          case '3':
+          case 3:
           var estatus = 'Aprobado';
           var class_btn = 'info'
           break;
-          case '4':
+          case 4:
           var estatus = 'Entregada';
           var class_btn = 'success'
           break;
-          case '5':
+          case 5:
             var estatus = 'Aprobado parcialmente';
             var class_btn = 'primary'
             break;
+          case 6:
+              var estatus = 'Movida sistema';
+              var class_btn = 'primary'
+          break;  
           default:
             var estatus ='Sin información'
             var class_btn = 'secondary'
@@ -135,6 +152,16 @@ toastr.options = {
       dataType: "JSON",
       success: function (response) {
         if(response.estatus){
+          if(rol_usuario == 1 || rol_usuario == 4){
+            if(!response.estatus_realizar_movimiento){
+              texto_btn_requerimientos= 'Aceptar'
+              mostrar_btn_cancelar = false;
+            }else{
+              texto_btn_requerimientos= 'Realizar movimiento'
+              mostrar_btn_cancelar = true;
+            }
+         }
+        
           Swal.fire({
             width: '1000px',
             title: 'Aprobar llantas',
@@ -190,8 +217,16 @@ toastr.options = {
                   const fecha_ft = formatearFecha(response.fecha); 
                   $("#fecha").text(fecha_ft);
                   $("#hora").text(response.hora);
-                  if(response.id_movimiento){
-                    $("#folio_mov").text(response.id_movimiento);
+                  if(response.ids_movimientos.length > 0){
+                    $("#folio_mov").empty();
+                   // Crear un Set para eliminar duplicados y luego convertirlo de nuevo a una matriz
+                  let uniqueFolios = [...new Set(response.ids_movimientos)];
+
+                  // Unir los folios únicos con comas y añadir un punto al final
+                  let folios = uniqueFolios.join(', ') + '.';
+
+                  // Agregar los folios al elemento con el id folio_mov
+                  $("#folio_mov").append(folios);
 
                   }
                   rol = $("#emp-title").attr("sesion_rol");
@@ -199,7 +234,10 @@ toastr.options = {
                   //Conversion de arreglo de objectos a arreglos de arrays
                   response.data = response.data.length == 0 ? [] : response.data;
                   const data_convertida = response.data.map((objeto) => {
-                    
+
+                    if(objeto.id_movimiento == null) { objeto.id_movimiento == ''; var enlace_id_movimiento=''}else{
+                      var enlace_id_movimiento = `<a target="_blank" href="./modelo/movimientos/remision-salida.php?id=${objeto.id_movimiento}">${objeto.id_movimiento}</a>`;
+                    }
                       switch (objeto.estatus) {
                         case '1':
                         var estatus = 'Pendiente';
@@ -245,6 +283,11 @@ toastr.options = {
                           var class_btn = 'dark'
                           var aprobar_btns ='';
                         break;  
+                        case '9':
+                          var estatus = 'Movida por sistema';
+                          var class_btn = 'primary'
+                          var aprobar_btns ='';
+                        break;  
                         /* var aprobar_btns= `<div style="display:flex;"><div class='btn btn-primary mr-2' title='Aprobar' onclick='procesarLlanta(${objeto.id},5)'><i class='fas fa-undo'></i></div>
                         </div>`; */
                         break;
@@ -259,7 +302,6 @@ toastr.options = {
                       }
                    
 
-                   
                     return [
                     objeto.cantidad,
                     objeto.descripcion,
@@ -267,6 +309,7 @@ toastr.options = {
                     objeto.sucursal_remitente,
                     objeto.sucursal_destino,
                     boton_est,
+                    enlace_id_movimiento,
                     aprobar_btns
 
                 ]});
@@ -279,6 +322,7 @@ toastr.options = {
                     { title: 'Ubicación'},
                     { title: 'Destino'},
                     { title: 'Estatus' },
+                    { title: 'ID Movimiento' },
                     { title: 'Acción' },
                     ],
                     data: data_convertida,
@@ -287,6 +331,59 @@ toastr.options = {
 
             
             },
+
+            confirmButtonText: texto_btn_requerimientos,
+            showCancelButton:  mostrar_btn_cancelar,
+            cancelButtonText: 'Cancelar'
+          }).then(function(r){
+            if(rol_usuario ==1||rol_usuario ==4){
+              if(response.estatus_realizar_movimiento){
+              if(r.isConfirmed){
+                Swal.fire({
+                  icon:'warning',
+                  html: `
+                    <div class="container">
+                        <div class="row">
+                          <div class="col-12 col-md-12">
+                              <h3>¿Deseas generar el movimiento?</h3>
+                              <p> Las llantas aprobadas generaran unn nuevo movimiento</p>
+                          </div>
+                        </div>
+                    </div>
+                  `,
+                  showCancelButton: true,
+                  confirmButtonColor: 'tomato',
+                  cancelButtonText: 'Cancelar',
+                  confirmButtonText: 'Realizar'
+                }).then(function(rr){
+                  if(rr.isConfirmed){
+                    $.ajax({
+                      type: "post",
+                      url: "./modelo/requerimientos/aprobar-llanta.php",
+                      data: {id_requerimiento},
+                      dataType: "json",
+                      success: function (response) {
+                        if(response.estatus){
+                          Swal.fire({
+                            icon:'success',
+                            html: `<h3>${response.mensaje}</h3>`
+                          })
+                          table.ajax.reload(null, false);
+                        }else{
+                          Swal.fire({
+                            icon:'error',
+                            html: `<h3>${response.mensaje}</h3>`
+                          })
+                          table.ajax.reload(null, false);
+                        }
+                      }
+                    });
+                  }
+                })
+              }}
+            }else{
+              console.log('No administrador');
+            }
           });
         }
       }
@@ -323,7 +420,7 @@ function obtenerNombreMes(numeroMes) {
 
 function procesarLlanta(id_detalle, tipo){
   if(tipo == 1){
-    Swal.fire({
+    /* Swal.fire({
       icon:'question',
       html: `
         <div class="container">
@@ -338,29 +435,32 @@ function procesarLlanta(id_detalle, tipo){
       showCancelButton: true,
       cancelButtonText: 'Cancelar',
       confirmButtonText: 'Aprobar y mover'
-    }).then(function(res){
-        if(res.isConfirmed){
+    }).then(function(res){ 
+        if(res.isConfirmed){*/
           $.ajax({
             type: "post",
-            url: "./modelo/requerimientos/aprobar-llanta.php",
-            data: {id_detalle},
+            url: "./modelo/requerimientos/aprobar-llanta-2.php",
+            data: {id_detalle, tipo},
             dataType: "JSON",
             success: function (response) {
-              icon = response.estatus == true ? 'success' : 'error';
-              Swal.fire({
-                icon: icon,
-                title: response.mensaje
-              }).then(()=>{
-                verRequerimiento(response.id_requerimiento)
-              })
+              if(response.estatus){
+                icon = response.estatus == true ? 'success' : 'error';
+                Swal.fire({
+                  icon: icon,
+                  title: response.mensaje
+                }).then(()=>{
+                  verRequerimiento(response.id_requerimiento)
+                })
+              }
+              
             }
           });
-        }else{
+       /*  }else{
           verRequerimiento(response.id_requerimiento)
         }
-    })
+    }) */
   }else if(tipo == 2){
-    Swal.fire({
+    /* Swal.fire({
       icon:'warning',
       html: `
         <div class="container">
@@ -377,11 +477,11 @@ function procesarLlanta(id_detalle, tipo){
       cancelButtonText: 'Cancelar',
       confirmButtonText: 'Desaprobar'
     }).then(function(res){
-          if(res.isConfirmed){
+          if(res.isConfirmed){ */
             $.ajax({
               type: "post",
-              url: "./modelo/requerimientos/desaprobar-llanta.php",
-              data: {id_detalle},
+              url: "./modelo/requerimientos/aprobar-llanta-2.php",
+              data: {id_detalle, tipo},
               dataType: "JSON",
               success: function (response) {
                 icon = response.estatus == true ? 'success' : 'error';
@@ -395,10 +495,10 @@ function procesarLlanta(id_detalle, tipo){
                 })
               }
             });
-          }else{
+         /*  }else{
             verRequerimiento(response.id_requerimiento)
           }
-    })
+    }) */
   }else if(tipo == 3){
     Swal.fire({
       icon:'warning',
@@ -417,10 +517,10 @@ function procesarLlanta(id_detalle, tipo){
       cancelButtonText: 'Cancelar',
       confirmButtonText: 'Desaprobar'
     }).then(function(res){
-          if(res.isConfirmed){
+          if(res.isConfirmed){ 
             $.ajax({
               type: "post",
-              url: "./modelo/requerimientos/deshacer-cambio.php",
+              url: "./modelo/requerimientos/aprobar-llanta-2.php",
               data: {id_detalle, tipo},
               dataType: "JSON",
               success: function (response) {
@@ -460,7 +560,7 @@ function procesarLlanta(id_detalle, tipo){
           if(res.isConfirmed){
             $.ajax({
               type: "post",
-              url: "./modelo/requerimientos/deshacer-cambio.php",
+              url: "./modelo/requerimientos/aprobar-llanta-2.php",
               data: {id_detalle, tipo},
               dataType: "JSON",
               success: function (response) {
