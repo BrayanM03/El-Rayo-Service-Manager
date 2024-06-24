@@ -28,6 +28,7 @@ if(isset($_POST)) {
     $pago_deposito = 0;
     $pago_sin_definir = 0;
     $monto_total_abono = 0;
+ 
     foreach ($_POST['metodos_pago'] as $key => $value) {
         $metodo_id = isset($value['id_metodo']) ? $value['id_metodo'] : $key;
         switch ($metodo_id) {
@@ -162,7 +163,7 @@ if(isset($_POST)) {
             $liquidacion = true;
 
             $insertar = $con->prepare("INSERT INTO ventas (Fecha, sucursal, id_sucursal, id_Usuarios, id_Cliente, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_deposito, pago_sin_definir, Total, tipo, estatus, metodo_pago, hora, comentario, fecha_corte, hora_corte) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-            $insertar->bind_param('sssssssssssssssssss', $fecha_actual, $sucursal, $id_sucursal, $id_usuario, $id_cliente, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_deposito, $pago_sin_definir, $importe_total, $tipo, $estatus, $metodo_pago, $hora, $comentario, $fecha_corte, $hora_corte);
+            $insertar->bind_param('sssssssssssssssssss', $fecha_actual, $sucursal, $id_sucursal, $id_usuario, $id_cliente, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_deposito, $pago_sin_definir, $importe_total, $tipo, $estatus, $desc_metodos, $hora, $comentario, $fecha_corte, $hora_corte);
             $insertar->execute();
             // Obtener el ID insertado
             $id_Venta = $con->insert_id;

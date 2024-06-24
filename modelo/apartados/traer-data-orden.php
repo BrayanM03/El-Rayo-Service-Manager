@@ -23,6 +23,7 @@ $ID->close();
 $vendedor_usuario = $vendedor_name . " " . $vendedor_apellido;
 
 //Haciendo consulta a detalle del apartado
+$data_servicios = array();
 
 $detalles = $con->prepare("SELECT da.modelo, da.cantidad,servicios.descripcion, da.precio_unitario, da.importe FROM detalle_apartado da INNER JOIN servicios ON da.id_llanta = servicios.id WHERE da.id_apartado = ?");
 $detalles->bind_param('i', $id);
@@ -30,11 +31,58 @@ $detalles->execute();
 $resultadoServ = $detalles->get_result();
 $detalles->close(); 
 
-$detalle = $con->prepare("SELECT da.modelo, da.cantidad,llantas.descripcion, llantas.Marca, da.precio_unitario, da.importe FROM detalle_apartado da INNER JOIN llantas ON da.id_llanta = llantas.id WHERE da.id_apartado = ?  AND da.modelo != 'no aplica'");
-$detalle->bind_param('i', $id);
-$detalle->execute();
-$resultado = $detalle->get_result(); 
-$detalle->close();
+//Iterando servicios
+while($fila = $resultadoServ->fetch_assoc()) {
+
+    $cantidad = $fila["cantidad"];
+    $modelo = "N/A";
+    $descripcion = $fila["descripcion"];
+    $marca = "N/A";
+    $precio_unitario = $fila["precio_unitario"];
+    $importe = $fila["importe"];
+    $caracteres = mb_strlen($descripcion);
+    $data_servicios[] = array(
+        'cantidad' => $cantidad,
+        'modelo' => $modelo,
+        'descripcion' => $descripcion,
+        'marca' => $marca,
+        'precio_unitario' => $precio_unitario,
+        'importe' => $importe,
+        'caracteres' => $caracteres
+    );
+}
+
+$query = "SELECT da.modelo, da.cantidad, llantas.descripcion, llantas.Marca, da.precio_unitario, da.importe FROM detalle_apartado da INNER JOIN llantas ON da.id_llanta = llantas.id WHERE da.id_apartado = ? AND da.modelo != 'no aplica'";
+$detallep = $con->prepare($query);
+$detallep->bind_param('s', $id);
+$detallep->execute();
+$resultadoProd = $detallep->get_result();
+
+//Iterando productos
+$data_productos = array();  // Inicializar el array para evitar problemas si está vacío
+while ($filaP = $resultadoProd->fetch_assoc()) {
+    $cantidad = $filaP["cantidad"];
+    $modelo = $filaP["modelo"];
+    $descripcion = $filaP["descripcion"];
+    $marca = $filaP["Marca"];
+    $precio_unitario = $filaP["precio_unitario"];
+    $importe = $filaP["importe"];
+    $caracteres = mb_strlen($descripcion);
+
+    $data_productos[] = array(
+        'cantidad' => $cantidad,
+        'modelo' => $modelo,
+        'descripcion' => $descripcion,
+        'marca' => $marca,
+        'precio_unitario' => $precio_unitario,
+        'importe' => $importe,
+        'caracteres' => $caracteres
+    );
+}
+
+$detallep->free_result(); // Mover free_result() después de iterar
+$detallep->close();
+    
 
 $detalle = $con->prepare("SELECT COUNT(*) FROM abonos_apartados WHERE id_apartado = ?");
 $detalle->bind_param('i', $id);
@@ -86,50 +134,6 @@ if($no_abonos > 0){
 }
 
 
-//Iterando servicios
-$data_servicios = array();
-$data_productos = array();
-while($fila = $resultadoServ->fetch_assoc()) {
-
-    $cantidad = $fila["cantidad"];
-    $modelo = "N/A";
-    $descripcion = $fila["descripcion"];
-    $marca = "N/A";
-    $precio_unitario = $fila["precio_unitario"];
-    $importe = $fila["importe"];
-    $caracteres = mb_strlen($descripcion);
-    $data_servicios[] = array(
-        'cantidad' => $cantidad,
-        'modelo' => $modelo,
-        'descripcion' => $descripcion,
-        'marca' => $marca,
-        'precio_unitario' => $precio_unitario,
-        'importe' => $importe,
-        'caracteres' => $caracteres
-    );
-}
-
-//Iterando productos
-while($fila = $resultado->fetch_assoc()) {
-
-    $cantidad = $fila["cantidad"];
-    $modelo = $fila["modelo"];
-    $descripcion = $fila["descripcion"];
-    $marca = $fila["Marca"];
-    $precio_unitario = $fila["precio_unitario"];
-    $importe = $fila["importe"];
-    $caracteres = mb_strlen($descripcion);
-
-    $data_productos[] = array(
-        'cantidad' => $cantidad,
-        'modelo' => $modelo,
-        'descripcion' => $descripcion,
-        'marca' => $marca,
-        'precio_unitario' => $precio_unitario,
-        'importe' => $importe,
-        'caracteres' => $caracteres
-    );
-}
 
 $arreglo_final = array_merge($data_servicios, $data_productos);
 
