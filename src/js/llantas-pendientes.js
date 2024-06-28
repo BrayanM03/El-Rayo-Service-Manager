@@ -99,3 +99,34 @@ function procesarMercancia(id_dc, tipo, accion, comentario, id_movimiento){
         }
     });
 }
+
+setTimeout(function(){
+        // Selecciona el tbody
+        const tbody_enviar = document.querySelector("#mercancia-pendiente-enviar tbody");
+        const filas_enviar = tbody_enviar.querySelectorAll("tr");       
+
+    if (filas_enviar.length > 1 || (filas_enviar.length === 1 && filas_enviar[0].textContent.trim() !== "No hay mercancia pendiente de enviar")) {
+        $("#mercancia-pendiente-enviar").DataTable( {
+            responsive: false,
+            scrollY: "50vh",
+        } )
+    } else {
+    }
+
+    const tbody_recibir = document.querySelector("#mercancia-pendiente-recibir tbody");
+if(tbody_recibir != null) {
+    const filas_recibir = tbody_recibir.querySelectorAll("tr");
+    if (filas_recibir.length > 1 || (filas_recibir.length === 1 && filas_recibir[0].textContent.trim() !== "No hay mercancia pendiente de recibir")) {
+        console.log("La tabla tiene datos.");
+        $("#mercancia-pendiente-recibir").DataTable( {
+            responsive: false,
+            scrollY: "50vh",
+        } )
+    } else {
+    }
+}
+    
+    
+}, 1500);
+
+
