@@ -14,7 +14,8 @@ if (!isset($_SESSION['id_usuario'])) {
     header("Location:../login.php");
 }
 
-$comision = $_POST['comision'];
+$comision_venta = $_POST['comision_venta'];
+$comision_credito = $_POST['comision_credito'];
 $id_usuario = $_POST['id'];
 
 $consultar_usuario = "SELECT COUNT(*) FROM usuarios WHERE id = ?";
@@ -26,9 +27,9 @@ $resultado->fetch();
 $resultado->close();
 
 if($total > 0) {
-    $query = "UPDATE usuarios SET comision = ? WHERE id = ?";
+    $query = "UPDATE usuarios SET comision_venta = ?, comision_credito = ? WHERE id = ?";
     $resultado = $con->prepare($query);
-    $resultado->bind_param('di', $comision, $id_usuario);
+    $resultado->bind_param('ddi', $comision_venta, $comision_credito, $id_usuario);
     $resultado->execute();
     $resultado->close();
 

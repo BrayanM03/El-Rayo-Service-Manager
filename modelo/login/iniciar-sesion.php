@@ -15,7 +15,7 @@ if(isset($_POST)){
     $rows= $query_mostrar->num_rows();
 
     if ($rows > 0 ) {
-        $query_mostrar->bind_result($id, $nombre, $apellidos, $user, $password, $cumple, $rol, $numero, $direccion, $sucursal, $id_sucursal, $aperturado, $comision, $id_departamento);
+        $query_mostrar->bind_result($id, $nombre, $apellidos, $user, $password, $cumple, $rol, $numero, $direccion, $sucursal, $id_sucursal, $aperturado, $comision, $comision_credito, $id_departamento);
         $query_mostrar->fetch();
         $validar_pass = password_verify($contraseña, $password);
         if ($validar_pass) {

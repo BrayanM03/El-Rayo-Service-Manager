@@ -33,7 +33,8 @@ $columns = array(
 	array( 'db' => 'nombre',  'dt' => 1 ),
 	array( 'db' => 'apellidos',  'dt' => 2 ),
 	array( 'db' => 'sucursal',  'dt' => 3 ),
-	array( 'db' => 'comision',  'dt' => 4 )
+	array( 'db' => 'comision_venta',  'dt' => 4 ),
+	array( 'db' => 'comision_credito',  'dt' => 5 )
 );
 
 // SQL server connection information

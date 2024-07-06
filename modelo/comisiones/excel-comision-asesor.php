@@ -38,11 +38,11 @@ $hoja_activa = $spreadsheet->getActiveSheet();
 $hoja_activa->setTitle("Reporte de comisiones");
 
 
-$consultaAsesor = "SELECT nombre, apellidos, id_sucursal, comision FROM usuarios WHERE id = ?";
+$consultaAsesor = "SELECT nombre, apellidos, id_sucursal, comision_venta, comision_credito FROM usuarios WHERE id = ?";
 $resp = $con->prepare($consultaAsesor);
 $resp->bind_param('s', $id_asesor);
 $resp->execute();
-$resp->bind_result($nombre_asesor, $apellido_asesor, $id_sucursal, $porcentaje_comision);
+$resp->bind_result($nombre_asesor, $apellido_asesor, $id_sucursal, $porcentaje_comision, $porcentaje_comision_credito);
 $resp->fetch();
 $resp->close();
 
@@ -54,6 +54,7 @@ $resp->bind_result($nombre_sucursal);
 $resp->fetch();
 $resp->close();
 if(empty($porcentaje_comision)){$porcentaje_comision=0;}
+if(empty($porcentaje_comision_credito)){$porcentaje_comision_credito=0;}
 
 switch ($mes) {
     case '01':
@@ -140,7 +141,7 @@ $hoja_activa->getStyle('A1:H1')->getFont()->getColor()->setARGB(\PhpOffice\PhpSp
                 
                // $comisiones =  obtenerComisiones($con, $id_sucursal, $fecha_inicio, $fecha_final);
                $comisiones = informacionFiltros($con);
-               /*  echo json_encode($comisiones);
+                /* echo json_encode($comisiones);
                 die(); */
 
                 $bandera = 0;
@@ -274,13 +275,14 @@ if(count($comisiones['data']) > 0) {
             
             if($bandera == 0) {
                 $sumatoria_creditos =0;
+                $comision_creditos =0;
             }else{
                 $index++;
                 $hoja_activa->setCellValue('F'.$index, 'Sumatoria creditos pagados sin serv');
                 $hoja_activa->setCellValue('G'.$index, $sumatoria_creditos);
                 $index++;
-                $comision_creditos = ($sumatoria_creditos * floatval($porcentaje_comision))/100;
-                $hoja_activa->setCellValue('F'.$index, 'Ganacia comisión creditos ('.$porcentaje_comision.'%): ');
+                $comision_creditos = ($sumatoria_creditos * floatval($porcentaje_comision_credito))/100;
+                $hoja_activa->setCellValue('F'.$index, 'Ganacia comisión creditos ('.$porcentaje_comision_credito.'%): ');
                 $hoja_activa->setCellValue('G'.$index, $comision_creditos);
                 $hoja_activa->getStyle('F'.($index-1).':F'.$index)->getFont()->setBold(true);  
             }
@@ -291,8 +293,10 @@ if(count($comisiones['data']) > 0) {
             $hoja_activa->setCellValue('F'.$index, 'Sumatoria total sin serv');
             $hoja_activa->setCellValue('G'.$index, $sumatoria_total);
             $index++;
-            $comision_total = ($sumatoria_total * floatval($porcentaje_comision))/100;
-            $hoja_activa->setCellValue('F'.$index, 'Total comisión ('.$porcentaje_comision.'%): ');
+
+            $comision_venta = ($sumatoria_ventas * floatval($porcentaje_comision))/100;
+            $comision_total = $comision_venta + $comision_creditos;
+            $hoja_activa->setCellValue('F'.$index, 'Total comisión: (Venta:'.$porcentaje_comision.'%)(Credito: '.$porcentaje_comision_credito.'): ');
             $hoja_activa->setCellValue('G'.$index, $comision_total);
             $hoja_activa->getStyle('F'.($index-1).':F'.$index)->getFont()->setBold(true);
 
