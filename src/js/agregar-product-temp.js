@@ -192,7 +192,7 @@ function agregarInfo(){
     sucursalSession= $("#agregar-producto").attr("sucursal"); 
     idSucursalSession =$("#agregar-producto").attr("id_sucursal"); 
     rolSession = $("#agregar-producto").attr("rol");
-
+    let id_sesion = $("#emp-title").attr('sesion_id');
      if(sucursalVal == ""){
       
       toastr.warning('Necesita especificar una sucursal', 'Alerta' );
@@ -205,7 +205,7 @@ function agregarInfo(){
     
    
     //console.log(valitationQuanty);
-    if(sucursalVal !== idSucursalSession  && rolSession !== "1"){
+    if(sucursalVal !== idSucursalSession  && (rolSession !== "1" || id_sesion == 11)){ //ID de Liz, para que no venda afuera de su sucursal
       toastr.warning('No puedes vender una llanta que no sea de tu sucursal', 'warning' );
       
     }else if (valitationQuanty == false ) {
