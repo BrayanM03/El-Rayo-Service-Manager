@@ -16,28 +16,46 @@ toastr.options = {
   "hideMethod": "fadeOut"
 }
 
-
+permiso_agregar_llanta = false;
     $("#ubicacion").on("change", function (e) {
 
-         if($(this).val() == 0){
-            $("#buscador").empty();
-            $('#buscador').prop("disabled", true);
-            $("#btn-mover").attr("id_item", "");
-            $("#stock").removeClass("is-invalid").prop("disabled", true).val("");
-            validador();
-            console.log(validador());
-        }else{
+        let esta_sucursal = $(this).val();
+        $.ajax({
+          type: "post",
+          url: "./modelo/cambios/comprobar_llantas_aprobadas.php",
+          data: {'id_sucursal': esta_sucursal},
+          dataType: "json",
+          success: function (response) {
+            $("#alerta-llantas-pendientes").remove();
+            if(response.total_cambios > 4){
+              $("#area-btn-mover").append(`
+              <div class="alert alert-danger mt-3" role="alert" id="alerta-llantas-pendientes">No se puede requerir mercancia porque hay llantas pendientes por aprobar, movimientos pendientes: ${response.total_cambios}</div>
+              `)
+            }else{
 
-            $("#buscador").val('').trigger('change');
-            $("#stock").removeClass().addClass("form-control").val(0).prop("disabled", true);
-            validador();
-            $('#buscador').prop("disabled", false);
-            ide_sucursal = $(this).val();
+              if(esta_sucursal == 0){
+                $("#buscador").empty();
+                $('#buscador').prop("disabled", true);
+                $("#btn-mover").attr("id_item", "");
+                $("#stock").removeClass("is-invalid").prop("disabled", true).val("");
+                validador();
+            }else{
+               
+                $("#buscador").val('').trigger('change');
+                $("#stock").removeClass().addClass("form-control").val(0).prop("disabled", true);
+                validador();
+                $('#buscador').prop("disabled", false);
+                ide_sucursal = esta_sucursal;
+    
+            } 
+    
+            
+            traerSucEspecficia(esta_sucursal, "destino");
+            }
+          }
+        });
 
-        } 
-
-        ubi = $(this).val()
-        traerSucEspecficia(ubi, "destino");
+         
 
     });
 
@@ -104,27 +122,50 @@ toastr.options = {
 
 
     $("#destino").on("change", function (e) {
+
+        let sucusal_ubicacion = $(this).val();
+        let esta_sucursal = $(this).val();
+        $.ajax({
+          type: "post",
+          url: "./modelo/cambios/comprobar_llantas_aprobadas.php",
+          data: {'id_sucursal': sucusal_ubicacion,'id_sucursal_contraria': esta_sucursal},
+          dataType: "json",
+          success: function (response) {
+            $("#alerta-llantas-pendientes").remove();
+            if(response.total_cambios > 4){
+              permiso_agregar_llanta = false;
+              $("#area-btn-mover").append(`
+              <div class="alert alert-danger mt-3" role="alert" id="alerta-llantas-pendientes">No se puede requerir mercancia porque hay llantas pendientes por aprobar, movimientos pendientes: ${response.total_cambios}</div>
+              `)
+              $("#btn-mover").addClass('disabled');
+
+            }else{
+
+              if(esta_sucursal ==0){
+
+                validador();
+        
+              }else{
+                if($("#destino").val() == $("#ubicacion")){
+                  $("#buscador").val('').trigger('change');
+                  $("#stock").removeClass().addClass("form-control").val(0).prop("disabled", true);
+                  comprobarStock();
+                }else{
+                  if($("#btn-mover").attr("id_item") !== ""){
+                  comprobarStock();
+                }
+              }
+                validador();
+              }
+              permiso_agregar_llanta = true;
+              traerSucEspecficia(esta_sucursal, "ubicacion");
+              
+
+            }
+          }
+        })
       
-      if($(this).val() ==0){
-
-        validador();
-
-      }else{
-        if($("#destino").val() == $("#ubicacion")){
-          $("#buscador").val('').trigger('change');
-          $("#stock").removeClass().addClass("form-control").val(0).prop("disabled", true);
-          comprobarStock();
-        }else{
-          if($("#btn-mover").attr("id_item") !== ""){
-          comprobarStock();
-        }
-      }
-        validador();
-      }
-
- 
-      ubi = $(this).val()
-      traerSucEspecficia(ubi, "ubicacion");
+      
     });
 
 
@@ -425,8 +466,13 @@ function traerDetalleCambio(){
 
   
 function todas(){
+if(permiso_agregar_llanta){
   agregarLlantas();
   comprobarStock();
+}else{
+  toastr.error('Hay movimientos pendientes', 'Respuesta' );
+}
+  
 }
 
 function eliminarLlanta(id){

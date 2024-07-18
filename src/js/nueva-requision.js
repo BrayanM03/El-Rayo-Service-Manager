@@ -3,6 +3,7 @@
     $.fn.dataTable.ext.errMode = 'none';
     let id_usuario = $("#emp-title").attr('sesion_id');
     id_sucursal_destino = $("#emp-title").attr('sesion_sucursal_id');
+    permiso_agregar_llanta = false;
     //depurarTabla()
     
     function depurarTabla(){
@@ -245,15 +246,38 @@
         return repo.text || repo.Descripcion;
       }
 
-    function resetearSelect2(){
-      $("#btn-agregar").attr("id_llanta", '');
-      $("#btn-agregar").attr("descripcion", '');
-      $("#contenedor-llantas-buscador").empty().append(`
-        <label for="busquedaLlantas" class="">Selecciona una llanta</label>
-        <select style="width:100%" class="form-control" id="busquedaLlantas" value="" name="search"></select> 
-        `)
+    function resetearSelect2(){ 
 
-      inicializarSelect2()
+      let sucursal_actual = $("#sucursal-ubicacion").val();
+      $.ajax({
+        type: "post",
+        url: "./modelo/cambios/comprobar_llantas_aprobadas.php",
+        data: {'id_sucursal': sucursal_actual},
+        dataType: "json",
+        success: function (response) {
+          $("#alerta-llantas-pendientes").remove();
+          if(response.total_cambios > 4){
+            permiso_agregar_llanta = false;
+              $("#area-btn-agregar").append(`
+              </br><div class="alert alert-danger mt-2" role="alert" id="alerta-llantas-pendientes">No se puede requerir mercancia porque hay llantas pendientes por aprobar, movimientos pendientes: ${response.total_cambios}</div>
+              `)
+              $("#btn-agregar").addClass('disabled');
+              $("#btn-agregar").attr('onclick', '');
+            
+          }else{
+            permiso_agregar_llanta = true;
+            $("#btn-agregar").removeClass('disabled');
+            $("#btn-agregar").attr('onclick', 'agregarProducto()');
+            $("#btn-agregar").attr("id_llanta", '');
+            $("#btn-agregar").attr("descripcion", '');
+            $("#contenedor-llantas-buscador").empty().append(`
+              <label for="busquedaLlantas" class="">Selecciona una llanta</label>
+              <select style="width:100%" class="form-control" id="busquedaLlantas" value="" name="search"></select> 
+              `)
+      
+            inicializarSelect2()
+          }}
+        });
      } 
 
      function inicializarSelect2(){

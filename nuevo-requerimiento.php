@@ -137,6 +137,7 @@
                                 <div class="col-md-6">
                                     <label for="sucursal-ubicacion" class="">Sucursal</label>
                                     <select style="width:100%" class="form-control" id="sucursal-ubicacion" onchange="resetearSelect2()" name="clientes">
+                                    <option value="">Seleccionar sucursal</option>
                                     <?php 
                                     while ($fila_suc = $result_data->fetch_assoc()) {
                                         $nombre_sucursal = $fila_suc['nombre'];
@@ -154,9 +155,10 @@
                                     <input type="number" id="cantidad" class="form-control" placeholder="0">
                                 </div>    
                             </div>
-                            <div class="form-group mt-3 row"  style="width: 100%;">
-                           
-                            <div class="btn btn-success m-auto" cotizacion="0" id="btn-agregar"onclick="agregarProducto();">Agregar</div>
+                            <div class="form-group mt-3 row justify-content-center"  style="width: 100%;">
+                                <div class="col-8 d-flex flex-column justifiy-content-center" id="area-btn-agregar">
+                                    <div class="btn btn-success m-auto" cotizacion="0" id="btn-agregar"onclick="agregarProducto();">Agregar</div>
+                                </div>
                             </div>
 
                             </form>

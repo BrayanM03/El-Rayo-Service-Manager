@@ -13,6 +13,10 @@ if ($_SESSION['rol'] == 3) {
     header("Location:nueva-venta.php");
 } 
 
+/* $id_usuario = $_SESSION['id_usuario'] ;
+
+ */
+
 
 ?>
 
@@ -28,7 +32,7 @@ if ($_SESSION['rol'] == 3) {
     <meta name="author" content="">
     <link rel="shortcut icon" href="src/img/rayo.svg" />
 
-    <title>El Rayo | Service Manager</title>
+    <title>Mover llanta | El Rayo Service Manager</title>
 
     <!-- Custom fonts for this template-->
     <link href="src/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -230,8 +234,24 @@ if ($_SESSION['rol'] == 3) {
                     </div>
 
                     <div class="row m-4 justify-content-center">
-                        <div class="col-12 col-md-8 text-center">
+                        <div class="col-12 col-md-8 text-center" id="area-btn-mover">
+                            <?php
+                            /*     if($total_cambios > 4){
+                                    $disabled_btn = 'disabled';
+                                    $mesage = 'No se puede requerir mercancia porque hay llantas pendientes por aprobar, total movimientos pendientes: '. $total_cambios;
+                                }else{
+                                    $disabled_btn = '';
+                                    $mesage ='';
+                                } */
+                            ?>
                             <div class="btn btn-success" id="btn-mov" onclick="realizarMovimiento(<?php echo $_SESSION['id_usuario']; ?>);">Realizar el movimiento</div>
+                            <?php 
+                           /*  if($total_cambios > 4){
+                                echo '<div class="alert alert-danger mt-3" role="alert">
+                                '. $mesage .'
+                              </div>';
+                            } */
+                            ?>
                         </div>
                     </div>
                      
