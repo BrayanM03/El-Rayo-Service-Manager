@@ -18,14 +18,14 @@
 
     $fecha_hoy = date("Y-m-d");    
     $hora_actual = date('h:i a');
-    $fecha_hoy_hora_actual = date('Y-m-d h:i a');
+    $fecha_hoy_hora_actual = date('Y-m-d h:i a'); //Esto srive por si queremos usar la hora para defirni vencidos
   
     $estatusvencido = 4;
     $res =0.00;
     $abierta = "Abierta"; 
      
-    //$update = "UPDATE creditos SET estatus = ? WHERE estatus <> 5 AND pagado <> total AND restante <> ? AND fecha_final <= ?";
-    $update = "
+    $update = "UPDATE creditos SET estatus = ? WHERE estatus <> 5 AND pagado <> total AND restante <> ? AND fecha_final <= ?";
+    /* $update = "
     UPDATE creditos c
     JOIN ventas v ON c.id_venta = v.id
     SET c.estatus = ?
@@ -35,9 +35,10 @@
         AND (
             c.fecha_final < ? OR 
             (c.fecha_final = ? AND STR_TO_DATE(CONCAT(c.fecha_final, ' ', v.hora), '%Y-%m-%d %h:%i %p') <= STR_TO_DATE(?, '%Y-%m-%d %h:%i %p'))
-        )";
+        )"; */
     $result = $con->prepare($update);
-    $result->bind_param('sssss', $estatusvencido, $res, $fecha_hoy, $fecha_hoy, $fecha_hoy_hora_actual);
+    $result->bind_param('sss', $estatusvencido, $res, $fecha_hoy);
+    //$result->bind_param('sssss', $estatusvencido, $res, $fecha_hoy, $fecha_hoy, $fecha_hoy_hora_actual); // Este bind param toma en cuenta la hora
     $result->execute();
     $result->close(); 
   
