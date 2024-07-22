@@ -79,7 +79,7 @@ $res->close();
 
 if($total_creditos>0)
 {
-    $traer_creditos = "SELECT c.*,s.nombre as nombre_sucursal FROM creditos c
+    $traer_creditos = "SELECT c.*,s.nombre as nombre_sucursal, v.hora FROM creditos c
     LEFT JOIN ventas v ON v.id = c.id_venta INNER JOIN sucursal s ON v.id_sucursal =s.id WHERE c.estatus=4";
     $resp = $con->prepare($traer_creditos);
     $resp->execute();
@@ -127,8 +127,8 @@ if($total_creditos>0)
                     break;
             }
 
-        $fecha_inicio=$value["fecha_inicio"];
-        $fecha_final=$value["fecha_final"];
+        $fecha_inicio=$value["fecha_inicio"] . ' ' . $value['hora'];
+        $fecha_final=$value["fecha_final"]. ' ' . $value['hora'];
         
         $id_venta=$value["id_venta"];
 

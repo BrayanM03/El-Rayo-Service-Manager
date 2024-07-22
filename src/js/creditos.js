@@ -31,8 +31,13 @@ function MostrarCreditos() {
       {title: "id",data: 10},
       { title: "cod", data: 0 },
       { title: "Cliente", data: 9 },
-      { title: "Fecha inicio", data: 5 },
-      { title: "Fecha final", data: 6 },
+      { title: "Fecha inicio", data: 5, render: function(data, display, row){
+       
+          return row[5] + " " + row[12];
+      }},
+      { title: "Fecha final", data: 6, render: function(data, display, row){
+        return row[6] + " " + row[12];
+    }},
       { title: "Total", data: 3 },
       { title: "Pagado", data: 1 },
       { title: "Restante", data: 2 },

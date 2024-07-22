@@ -41,6 +41,7 @@ $columns = array(
 	array( 'db' => 'Nombre_Cliente',  'dt' => 9 ), 
 	array( 'db' => 'folio_credito',  'dt' => 10 ), 
 	array( 'db' => 'folio_venta',  'dt' => 11 ), 
+	array( 'db' => 'hora',  'dt' => 12 ), 
 /* 	array(
 		'db'        => 'start_date',
 		'dt'        => 4,

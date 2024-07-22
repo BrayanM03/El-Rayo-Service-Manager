@@ -40,7 +40,7 @@ error_reporting(E_ALL);
     $result->execute();
     $result->close(); */
 
-    $traer = "SELECT * FROM `creditos` WHERE estatus =? AND id_cliente =?";
+    $traer = "SELECT c.*, v.hora FROM `creditos` as c INNER JOIN ventas v ON c.id_venta = v.id  WHERE c.estatus =? AND c.id_cliente =?";
     $result = $con->prepare($traer);
     if ($result) {
      
@@ -60,9 +60,9 @@ error_reporting(E_ALL);
         $total = $fila['total'];
         $total_f = form_moneda($total);
 
-        $fecha_inicio = $fila['fecha_inicio'];
+        $fecha_inicio = $fila['fecha_inicio'] .' '. $fila['hora'];
         $fecha_inicio_f = form_date($fecha_inicio);
-        $fecha_final = $fila['fecha_final'];
+        $fecha_final = $fila['fecha_final'] .' '. $fila['hora'];
         $fecha_final_f = form_date($fecha_final);
         $id_cred = $fila['id']; 
         $id_venta = $fila['id_venta']; 
@@ -75,7 +75,7 @@ error_reporting(E_ALL);
         $result->fetch();
         $result->close();
 
-        $arreglo[] = array('id_venta'=>$id_venta, 'cliente'=> $cliente,'total'=>$total_f, 'pagado'=> $pagado_f, 'restante'=> $restante_f, 'fecha_inicio'=>$fecha_inicio_f, 'fecha_final'=> $fecha_final_f, 'id_cred'=> $id_cred);
+        $arreglo[] = array('id_venta'=>$id_venta, 'cliente'=> $cliente,'total'=>$total_f, 'pagado'=> $pagado_f, 'restante'=> $restante_f, 'fecha_inicio'=>$fecha_inicio, 'fecha_final'=> $fecha_final, 'id_cred'=> $id_cred);
     }
 
 
