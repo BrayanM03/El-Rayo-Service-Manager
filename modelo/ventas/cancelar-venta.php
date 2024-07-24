@@ -74,7 +74,6 @@ if(isset($_POST)) {
 
             $cantidad_llantas_movimiento = 0;
             $bandera_producto_servicio = 0;
-            $mercancia = '';
             while ($row = $resultado->fetch_array()) {
                 $id_llanta = $row["id_Llanta"];
                 $cantidad = $row["Cantidad"];
@@ -143,9 +142,11 @@ if(isset($_POST)) {
                     
                     while ($row = $resultado_ll->fetch_array()) {
                         $descripcion_llanta = $row['Descripcion'];
-                        $mercancia .= $descripcion_llanta . ', ';
-
-                    };
+                        $mercancia[] = $descripcion_llanta; // Guardamos cada descripción en un array
+                    }
+                    
+                    $mercancia = implode(', ', $mercancia); // Unimos las descripciones con coma y espacio
+                    $mercancia .= '.'; // Agregamos el punto al final
 
                     $cantidad_llantas_movimiento += $cantidad;
                 }else{

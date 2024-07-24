@@ -451,7 +451,9 @@ table = $('#apartados').DataTable({
    
   columns: [   
   { title: "#",              data: null             },
-  { title: "Folio",          data: 1},
+  { title: "Folio",          data: 1, render: function(data){
+    return 'AP'+data;
+  }},
   {title: 'id',              data: 2},
   { title: "Fecha inicial",  data: 3         },
   { title: "Fecha final",    data: 4          },
@@ -507,7 +509,7 @@ info: false,
 responsive: false,
 ordering: "enable",
 multiColumnSort: true,
-order: [[1, "desc"]],
+order: [[3, "desc"], [10, 'desc']],
 'columnDefs': [
   { 'orderData':[2], 'targets': [1] },
   {

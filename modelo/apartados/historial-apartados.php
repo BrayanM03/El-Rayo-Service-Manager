@@ -29,7 +29,7 @@ $where = "estatus = 'Activo' or estatus = 'Cancelada'";
 // parameter represents the DataTables column identifier. In this case simple
 // indexes
 $columns = array(
-	array( 'db' => 'folio',   'dt' => 1),
+	array( 'db' => 'id',   'dt' => 1),
 	array( 'db' => 'id', 'dt' => 2 ),
 	array( 'db' => 'fecha_inicial',  'dt' => 3 ), 
     array( 'db' => 'fecha_final',  'dt' => 4 ), 
