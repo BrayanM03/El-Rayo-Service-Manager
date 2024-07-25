@@ -50,10 +50,10 @@ $vendedor_usuario = $vendedor_name . " " . $vendedor_apellido;
 
 
 //Trayendo datos de la sucursal
-$ID = $con->prepare("SELECT code, nombre, calle, numero, colonia, ciudad, estado, pais, Telefono, RFC, CP, correo  FROM sucursal WHERE id = ?");
+$ID = $con->prepare("SELECT code, nombre, calle, numero, colonia, ciudad, estado, pais, telefono, RFC, CP, correo, telefono_2  FROM sucursal WHERE id = ?");
 $ID->bind_param('i', $sucursal_id);
 $ID->execute();
-$ID->bind_result($codigo_sucursal, $sucursal_nombre, $calle_suc, $numero_suc, $colonia_suc, $ciudad_suc, $estado_suc, $pais_suc, $telefono_suc, $rfc_suc, $cp_suc, $correo_suc);
+$ID->bind_result($codigo_sucursal, $sucursal_nombre, $calle_suc, $numero_suc, $colonia_suc, $ciudad_suc, $estado_suc, $pais_suc, $telefono_suc, $rfc_suc, $cp_suc, $correo_suc, $telefono_suc_2);
 $ID->fetch();
 $ID->close();
 
@@ -67,6 +67,7 @@ global $ciudad_suc;
 global $estado_suc;
 global $pais_suc;
 global $telefono_suc;
+global $telefono_suc_2;
 global $rfc_suc;
 global $cp_suc;
 global $vendedor_usuario;
@@ -331,8 +332,8 @@ function Header()
    
     $estatus = "Reporte";
     $this->SetFont('Arial','',9);
-    $this->Cell(32,10,   utf8_decode_($direccion . " "),0,0,'L', false);
-    $this->Cell(88,10,   utf8_decode_($colonia . ", " . $cp),0,0,'L', false);
+    $this->Cell(120,10,   utf8_decode_($direccion . " ". $colonia . ", " . $cp),0,0,'L', false);
+   // $this->Cell(88,10,   utf8_decode_($colonia . ", " . $cp),0,0,'L', false);
     $this->SetFont('Arial','B',9);
     $this->Cell(25,10,   utf8_decode_("Fecha abono: "),0,0,'L', false);
     $this->SetFont('Arial','',9);
@@ -350,13 +351,17 @@ function Header()
     $this->Ln(4);
 
     $this->SetFont('Arial','B',9);
-    $this->Cell(15,10,   utf8_decode_("Telefono: "),0,0,'L', false);
+    $this->Cell(26,10,utf8_decode_("Telefono ventas: "),0,0,'L', false);
     $this->SetFont('Arial','',9);
-    $this->Cell(105,10,   utf8_decode_($telefono),0,0,'L', false);
+    $this->Cell(25,10,utf8_decode_($GLOBALS['telefono_suc']),0,0,'L', false);
     $this->SetFont('Arial','B',9);
-    $this->Cell(25,10,   utf8_decode_("Sucursal: "),0,0,'L', false);
+    $this->Cell(34,10,utf8_decode_("Telefono facturación: "),0,0,'L', false);
     $this->SetFont('Arial','',9);
-    $this->Cell(50,10,   utf8_decode_($sucursal_nombre),0,0,'L', false);
+    $this->Cell(35,10,utf8_decode_($GLOBALS['telefono_suc_2']),0,0,'L', false);
+    $this->SetFont('Arial','B',9);
+    $this->Cell(25,10,utf8_decode_("Sucursal: "),0,0,'L', false);
+    $this->SetFont('Arial','',9);
+    $this->Cell(50,10,utf8_decode_($GLOBALS['sucursal_nombre']),0,0,'L', false);
     $this->Ln(4);
 
     $this->SetFont('Arial','B',9);

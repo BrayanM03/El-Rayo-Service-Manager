@@ -43,10 +43,10 @@ $vendedor_usuario = $vendedor_name . " " . $vendedor_apellido;
 
 
 //Trayendo datos de la sucursal
-$ID = $con->prepare("SELECT code, nombre, calle, numero, colonia, ciudad, estado, pais, Telefono, RFC, CP  FROM sucursal WHERE id = ?");
+$ID = $con->prepare("SELECT code, nombre, calle, numero, colonia, ciudad, estado, pais, telefono, RFC, CP, telefono_2  FROM sucursal WHERE id = ?");
 $ID->bind_param('i', $id_sucursal);
 $ID->execute();
-$ID->bind_result($codigo_sucursal, $sucursal, $calle_suc, $numero_suc, $colonia_suc, $ciudad_suc, $estado_suc, $pais_suc, $telefono_suc, $rfc_suc, $cp_suc);
+$ID->bind_result($codigo_sucursal, $sucursal, $calle_suc, $numero_suc, $colonia_suc, $ciudad_suc, $estado_suc, $pais_suc, $telefono_suc, $rfc_suc, $cp_suc, $telefono_suc_2);
 $ID->fetch();
 $ID->close();
 
@@ -60,6 +60,7 @@ global $ciudad_suc;
 global $estado_suc;
 global $pais_suc;
 global $telefono_suc;
+global $telefono_suc_2;
 global $rfc_suc;
 global $cp_suc;
 global $vendedor_usuario;
@@ -131,6 +132,7 @@ function Header()
     $estado = $GLOBALS["estado_suc"];
     $pais = $GLOBALS["pais_suc"];
     $telefono = $GLOBALS["telefono_suc"];
+    $telefono_2 = $GLOBALS["telefono_suc_2"];
     $rfc = $GLOBALS["rfc_suc"];
     $cp = $GLOBALS["cp_suc"];
     if($GLOBALS['asesor_name']!=''){
@@ -187,7 +189,9 @@ function Header()
     $this->Ln(4);
     $this->Cell(160,10,utf8_decode_("RFC: " .$rfc),0,0,'C', false);
     $this->Ln(4);
-    $this->Cell(160,10,utf8_decode_("Telefono: " .$telefono),0,0,'C', false);
+    $this->Cell(40,10,'',0,0,'C', false);
+    $this->Cell(43,10,utf8_decode_("Telefono ventas: " .$telefono),0,0,'C', false);
+    $this->Cell(60,10,utf8_decode_("Telefono facturación: " .$telefono),0,0,'C', false);
     $this->Ln(17);
 
     //$this->Rect(133, 58, 20, 7, 'F');
@@ -198,19 +202,19 @@ function Header()
     $this->Cell(24,10,utf8_decode_("Cliente:"),0,0,'L', 1);
     $this->SetFont('Times','',12);
     $this->SetFillColor(236, 236, 236);
-    $this->Cell(70,10,utf8_decode_($GLOBALS["cliente"]),0,0, 'L',1);
+    $this->Cell(96,10,utf8_decode_($GLOBALS["cliente"]),0,0, 'L',1);
     $this->SetFont('Arial','B',12);
     $this->SetTextColor(194, 34, 16);
-    $this->Cell(30,7,utf8_decode_("Metodo pago:"),0,0,'', false);
+    $this->Cell(20,7,utf8_decode_("F. pago:"),0,0,'', false);
     $this->SetFont('Times','',12);
     $this->SetTextColor(36, 35, 28);
     $this->Cell(20,7,utf8_decode_($GLOBALS["metodo_pago"]),0,0,'', false);
     $this->SetFont('Arial','B',12);
     $this->SetTextColor(194, 34, 16);
-    $this->Cell(20,7,utf8_decode_("Folio:"),0,0, false);
+    $this->Cell(13,7,utf8_decode_("Folio:"),0,0, false);
     $this->SetFont('Times','',12);
     $this->SetTextColor(36, 35, 28);
-    $this->Cell(50,7,utf8_decode_($GLOBALS["folio"]),0,0,'', false);
+    $this->Cell(30,7,utf8_decode_($GLOBALS["folio"]),0,0,'', false);
 
     $this->Ln(7);
 
@@ -220,27 +224,28 @@ function Header()
     $this->Cell(24,7,utf8_decode_("Vendedor:"),0,0,'L', 1);
     $this->SetFont('Times','',12);
     $this->SetFillColor(236, 236, 236);
-    $this->Cell(70,7,utf8_decode_($GLOBALS["vendedor_usuario"]),0,0, 'L',1);
+    $this->Cell(96,7,utf8_decode_($GLOBALS["vendedor_usuario"]),0,0, 'L',1);
     $this->SetFont('Arial','B',12);
     $this->SetTextColor(194, 34, 16);
-    $this->Cell(30,7,'Hora: ',0,0,'R', false);
+    $this->Cell(6,7,'',0,0,'R', false);
+    $this->Cell(13,7,'Hora: ',0,0,'R', false);
     $this->SetFont('Times','',12);
     $this->SetTextColor(36, 35, 28);
-    $this->Cell(20,7,utf8_decode_($GLOBALS["hora"]),0,0,'', false);
+    $this->Cell(19,7,utf8_decode_($GLOBALS["hora"]),0,0,'', false);
 
     $this->SetFont('Arial','B',12);
     $this->SetTextColor(194, 34, 16);
-    $this->Cell(20,7,utf8_decode_("Fecha:"),0,0, false);
+    $this->Cell(15,7,utf8_decode_("Fecha:"),0,0, false);
     $this->SetFont('Times','',12);
     $this->SetTextColor(36, 35, 28);
-    $this->Cell(50,7,utf8_decode_($GLOBALS["fecha"]),0,0,'', false);
+    $this->Cell(30,7,utf8_decode_($GLOBALS["fecha"]),0,0,'', false);
     $this->Ln(7);
     $this->SetFont('Times','B',12);
     $this->SetFillColor(253, 229, 2);
     $this->Cell(24,7,utf8_decode_("Asesor:"),0,0,'L', 1);
     $this->SetFont('Times','',12);
     $this->SetFillColor(236, 236, 236);
-    $this->Cell(70,7,utf8_decode_($nombre_asesor),0,0, 'L',1);
+    $this->Cell(96,7,utf8_decode_($nombre_asesor),0,0, 'L',1);
 
     // Salto de línea
     $this->Ln(11);
