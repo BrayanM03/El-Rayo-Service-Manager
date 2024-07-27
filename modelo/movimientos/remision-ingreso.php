@@ -10,10 +10,10 @@ $folio =  $_GET["id"];
 $idMov = $_GET["id"];
 global $folio;
 
-$ID = $con->prepare("SELECT id, descripcion, mercancia, fecha, hora, usuario, tipo, sucursal, proveedor_id, folio_factura FROM movimientos WHERE id = ?");
+$ID = $con->prepare("SELECT id, descripcion, mercancia, fecha, hora, usuario, tipo, sucursal, proveedor_id, folio_factura, estado_factura FROM movimientos WHERE id = ?");
 $ID->bind_param('i', $idMov);
 $ID->execute();
-$ID->bind_result($id_mov, $descripcion_mov, $cantidad_movida, $fecha_mov, $hora_mov, $usuario, $tipo, $sucursal_id, $proveedor_id, $folio_factura);
+$ID->bind_result($id_mov, $descripcion_mov, $cantidad_movida, $fecha_mov, $hora_mov, $usuario, $tipo, $sucursal_id, $proveedor_id, $folio_factura, $estado_factura);
 $ID->fetch();
 $ID->close();
  
@@ -35,6 +35,7 @@ global $tipo;
 global $sucursal;
 global $folio_factura;
 global $nombre_proveedor;
+global $estado_factura;
 
 $ID = $con->prepare("SELECT code, nombre, calle, numero, colonia, ciudad, estado, pais, Telefono, RFC, CP  FROM sucursal WHERE id = ?");
 $ID->bind_param('i', $sucursal_id);
@@ -65,7 +66,13 @@ if (!isset($_SESSION['id_usuario'])) {
     header("Location:../../login.php");
 }
 
-
+function utf8_decode_($str_){
+    $str = [$str_];
+    $result = array_map(function($item){
+        return mb_convert_encoding($item, 'UTF-8', mb_detect_encoding($item));
+    }, $str);
+    return implode('', $result);
+}
 
 class PDF extends FPDF
 {
@@ -239,17 +246,17 @@ function Header()
     $this->AddFont('Exo2-Bold','B','Exo2-Bold.php');
     // Arial bold 15
     $this->SetFont('Arial','B',11);
-    $this->Cell(170,4,utf8_decode('Folio'),0,0,'R');
+    $this->Cell(170,4,utf8_decode_('Folio'),0,0,'R');
     $this->Ln(4);
     $this->SetDrawColor(253,144,138);
     $this->SetLineWidth(0.5);
     /* $this->Line(166,15,183,15); */
     $this->Ln(1.7);
-    $this->Cell(155.5,10,utf8_decode(''),0,0,'L', false);
+    $this->Cell(155.5,10,utf8_decode_(''),0,0,'L', false);
     $this->SetFillColor(197, 203, 212);
     
     $this->RoundedRect(166, 20, 17, 7, 2, '1234', 'DF');
-    $this->Cell(18,6,utf8_decode($_GET["id"]),0,0,'C');
+    $this->Cell(18,6,utf8_decode_($_GET["id"]),0,0,'C');
 
    
 
@@ -299,50 +306,50 @@ function Header()
    
     $estatus = "Reporte";
     $this->SetFont('Arial','',9);
-    $this->Cell(32,10,utf8_decode($direccion . " "),0,0,'L', false);
-    $this->Cell(88,10,utf8_decode($colonia . ", " . $cp),0,0,'L', false);
+    $this->Cell(32,10,utf8_decode_($direccion . " "),0,0,'L', false);
+    $this->Cell(88,10,utf8_decode_($colonia . ", " . $cp),0,0,'L', false);
     $this->SetFont('Arial','B',9);
     $this->Cell(25,10,utf8_decode("Fecha emisión: "),0,0,'L', false);
     $this->SetFont('Arial','',9);
-    $this->Cell(50,10,utf8_decode($fecha_mov),0,0,'L', false);
+    $this->Cell(50,10,utf8_decode_($fecha_mov),0,0,'L', false);
     $this->Ln(4);
 
    
-    $this->Cell(21,10,utf8_decode($ciudad.","),0,0,'L', false);
-    $this->Cell(18,10,utf8_decode($estado.","),0,0,'L', false);
-    $this->Cell(81,10,utf8_decode($pais),0,0,'L', false);
+    $this->Cell(21,10,utf8_decode_($ciudad.","),0,0,'L', false);
+    $this->Cell(18,10,utf8_decode_($estado.","),0,0,'L', false);
+    $this->Cell(81,10,utf8_decode_($pais),0,0,'L', false);
     $this->SetFont('Arial','B',9);
     $this->Cell(25,10,utf8_decode("Hora emisión: "),0,0,'L', false);
     $this->SetFont('Arial','',9);
-    $this->Cell(50,10,utf8_decode($hora_mov),0,0,'L', false);
+    $this->Cell(50,10,utf8_decode_($hora_mov),0,0,'L', false);
     $this->Ln(4);
 
     $this->SetFont('Arial','B',9);
-    $this->Cell(15,10,utf8_decode("Telefono: "),0,0,'L', false);
+    $this->Cell(15,10,utf8_decode_("Telefono: "),0,0,'L', false);
     $this->SetFont('Arial','',9);
-    $this->Cell(105,10,utf8_decode($telefono),0,0,'L', false);
+    $this->Cell(105,10,utf8_decode_($telefono),0,0,'L', false);
     $this->SetFont('Arial','B',9);
-    $this->Cell(25,10,utf8_decode("Sucursal: "),0,0,'L', false);
+    $this->Cell(25,10,utf8_decode_("Sucursal: "),0,0,'L', false);
     $this->SetFont('Arial','',9);
-    $this->Cell(50,10,utf8_decode($sucursal_nombre),0,0,'L', false);
+    $this->Cell(50,10,utf8_decode_($sucursal_nombre),0,0,'L', false);
     $this->Ln(4);
 
     $this->SetFont('Arial','B',9);
-    $this->Cell(15,10,utf8_decode("RFC: "),0,0,'L', false);
+    $this->Cell(15,10,utf8_decode_("RFC: "),0,0,'L', false);
     $this->SetFont('Arial','',9);
-    $this->Cell(105,10,utf8_decode($rfc),0,0,'L', false);  
+    $this->Cell(105,10,utf8_decode_($rfc),0,0,'L', false);  
     $this->SetFont('Arial','B',9);
-    $this->Cell(25,10,utf8_decode("Correo: "),0,0,'L', false);
+    $this->Cell(25,10,utf8_decode_("Correo: "),0,0,'L', false);
     $this->SetFont('Arial','',9);
-    $this->Cell(50,10,utf8_decode("karlasanchezr@gmail.com"),0,0,'L', false);
+    $this->Cell(50,10,utf8_decode_("karlasanchezr@gmail.com"),0,0,'L', false);
 
    
 
     $this->Ln(10);
     
     $this->SetFont('Exo2-Bold','B',12);
-    $this->Cell(50,10,utf8_decode("Movimiento:"),0,0,'L', false);
-    $this->Ln(12);
+    $this->Cell(50,10,utf8_decode_("Movimiento:"),0,0,'L', false);
+    $this->Ln(11);
     $this->SetDrawColor(253,144,138);
     $this->SetFillColor(255,255,255);//(235, 238, 242);
     
@@ -350,27 +357,51 @@ function Header()
     $H1 = $this->GetY();
     $this->SetFont('Arial','B',10);
     $this->Cell(3,3,'',0,0,'L', false);
-    $this->Cell(48,3,utf8_decode("Descripcion: "),0,0,'L', false);
+    $this->Cell(48,3,utf8_decode_("Descripcion: "),0,0,'L', false);
     $this->SetFont('Arial','',10);
-    $this->MultiCell(130,3,utf8_decode($descripcion_mov),0,0,'L', false); //$descripcion_mov
+    $this->MultiCell(130,3,utf8_decode_($descripcion_mov),0,0,'L', false); //$descripcion_mov
+    $this->Ln(2);
+    $this->SetFont('Arial','B',10);
+    $this->Cell(3,3,'',0,0,'L', false);
+    $this->Cell(47.5,3,utf8_decode_("Usuario:"),0,0,'L', false);
+    $this->SetFont('Arial','',10);
+    $this->Cell(30,3,utf8_decode_($usuario),0,0,'L', false);
     $this->Ln(5);
     $this->SetFont('Arial','B',10);
     $this->Cell(3,3,'',0,0,'L', false);
-    $this->Cell(47.5,3,utf8_decode("Usuario:"),0,0,'L', false);
+    $this->Cell(47.5,3,utf8_decode_("Proveedor: "),0,0,'L', false);
     $this->SetFont('Arial','',10);
-    $this->Cell(30,3,utf8_decode($usuario),0,0,'L', false);
-    $this->Ln(7);
+    $this->Cell(30,3,utf8_decode_($GLOBALS['nombre_proveedor']),0,0,'L', false);
+    $this->Ln(5);
     $this->SetFont('Arial','B',10);
     $this->Cell(3,3,'',0,0,'L', false);
-    $this->Cell(47.5,3,utf8_decode("Proveedor: "),0,0,'L', false);
+    $this->Cell(47.5,3,utf8_decode_("Folio Factura: "),0,0,'L', false);
     $this->SetFont('Arial','',10);
-    $this->Cell(30,3,utf8_decode($GLOBALS['nombre_proveedor']),0,0,'L', false);
-    $this->Ln(7);
+    $this->Multicell(80,3,utf8_decode_($GLOBALS['folio_factura']),0,0,'L', false);
+    $this->Ln(2);
     $this->SetFont('Arial','B',10);
     $this->Cell(3,3,'',0,0,'L', false);
-    $this->Cell(47.5,3,utf8_decode("Folio Factura: "),0,0,'L', false);
+    $this->Cell(47.5,3,utf8_decode_("Estatus Factura: "),0,0,'L', false);
     $this->SetFont('Arial','',10);
-    $this->Multicell(130,3,utf8_decode($GLOBALS['folio_factura']),0,0,'L', false);
+    switch ($GLOBALS['estado_factura']) {
+        case 1:
+            $estatus_factura = 'Sin factura'; 
+            break;
+
+        case 2:
+            $estatus_factura = 'Factura completa';
+            break;
+        case 3:
+            $estatus_factura = 'Factura incompleta';
+            break; 
+        case 4:
+            $estatus_factura = 'Factura pagada';
+            break;        
+        default:
+            $estatus_factura = 'No aplica';
+            break;
+    }
+    $this->Multicell(160,3,utf8_decode_($estatus_factura),0,0,'L', false);
     $this->Ln(6); 
 
     $altura = $this->GetY();
@@ -417,14 +448,14 @@ function cuerpoTabla(){
     $pdf->SetDrawColor(135, 134, 134);
     $pdf->SetTextColor(36, 35, 28);
     $pdf->SetFontSize(7);
-    $pdf->Cell(15,8,utf8_decode("Cantidad"),0,0,'C');  
+    $pdf->Cell(15,8,utf8_decode_("Cantidad"),0,0,'C');  
     $pdf->Cell(40,8,utf8_decode("Descripción"),0,0, 'L');
-    $pdf->Cell(23,8,utf8_decode("Modelo"),0,0, 'L');
-    $pdf->Cell(20,8,utf8_decode("Marca"),0,0, 'C');
+    $pdf->Cell(23,8,utf8_decode_("Modelo"),0,0, 'L');
+    $pdf->Cell(20,8,utf8_decode_("Marca"),0,0, 'C');
     $pdf->Cell(26,8,utf8_decode("Ubicación"),0,0, 'C');
-    $pdf->Cell(25,8,utf8_decode("Destino"),0,0, 'L');
-    $pdf->Cell(23,8,utf8_decode("Stock anterior"),0,0, 'L');
-    $pdf->Cell(20,8,utf8_decode("Stock nuevo"),0,0, 'L');
+    $pdf->Cell(25,8,utf8_decode_("Destino"),0,0, 'L');
+    $pdf->Cell(23,8,utf8_decode_("Stock anterior"),0,0, 'L');
+    $pdf->Cell(20,8,utf8_decode_("Stock nuevo"),0,0, 'L');
     $pdf->Ln(0);
     //$pdf->Line(11,81,196,81);
     $line_height =$pdf->GetY();
@@ -511,45 +542,45 @@ function cuerpoTabla(){
             if ($caracteres <= 25) {
               
                 $pdf->Cell(15,10,$cantidad,0,0,'C',1);
-                $pdf->MultiCell(40,5, utf8_decode($descripcion_llanta),0,'L',1); //$descripcion
+                $pdf->MultiCell(40,5, utf8_decode_($descripcion_llanta),0,'L',1); //$descripcion
                 $pdf->SetY($ejeY);
                 $ejeY = $ejeY + 15;
                 $pdf->SetX(65);
-                $pdf->Cell(20,10, utf8_decode($modelo_llanta),0,0,'C',1);
-                $pdf->Cell(20,10, utf8_decode($marca_llanta),0,0,'C',1);
-                $pdf->Cell(23,10,utf8_decode($nombre_ubicacion),0,0, 'L',1);
-                $pdf->Cell(20,10,utf8_decode($nombre_destino),0,0, 'L',1);
-                $pdf->Cell(23,10,utf8_decode($stock_anterior),0,0, 'C',1);
-                $pdf->Cell(20,10,utf8_decode($stock_actual),0,0, 'C',1);
+                $pdf->Cell(20,10, utf8_decode_($modelo_llanta),0,0,'C',1);
+                $pdf->Cell(20,10, utf8_decode_($marca_llanta),0,0,'C',1);
+                $pdf->Cell(23,10,utf8_decode_($nombre_ubicacion),0,0, 'L',1);
+                $pdf->Cell(20,10,utf8_decode_($nombre_destino),0,0, 'L',1);
+                $pdf->Cell(23,10,utf8_decode_($stock_anterior),0,0, 'C',1);
+                $pdf->Cell(20,10,utf8_decode_($stock_actual),0,0, 'C',1);
                 $pdf->Ln(15);
           
             }else if ($caracteres > 25 && $caracteres < 45) {
                 
                 $pdf->Cell(15,10,$cantidad,0,0,'C',1);
-                $pdf->MultiCell(40,4, utf8_decode($descripcion_llanta),0,'L',1);
+                $pdf->MultiCell(40,4, utf8_decode_($descripcion_llanta),0,'L',1);
                 $pdf->SetY($ejeY);
                 $ejeY = $ejeY + 12;
                 $pdf->SetX(65);
-                $pdf->Cell(30,10, utf8_decode($modelo_llanta),0,0,'L',1);
-                $pdf->Cell(18,10, utf8_decode($marca_llanta),0,0,'L',1);
-                $pdf->Cell(23,10,utf8_decode($nombre_ubicacion),0,0, 'L',1);
-                $pdf->Cell(20,10,utf8_decode($nombre_destino),0,0, 'L',1);
-                $pdf->Cell(23,10,utf8_decode($stock_anterior),0,0, 'C',1);
-                $pdf->Cell(20,10,utf8_decode($stock_actual),0,0, 'C',1);
+                $pdf->Cell(30,10, utf8_decode_($modelo_llanta),0,0,'L',1);
+                $pdf->Cell(18,10, utf8_decode_($marca_llanta),0,0,'L',1);
+                $pdf->Cell(23,10,utf8_decode_($nombre_ubicacion),0,0, 'L',1);
+                $pdf->Cell(20,10,utf8_decode_($nombre_destino),0,0, 'L',1);
+                $pdf->Cell(23,10,utf8_decode_($stock_anterior),0,0, 'C',1);
+                $pdf->Cell(20,10,utf8_decode_($stock_actual),0,0, 'C',1);
                 $pdf->Ln(15);
           
             }else{
                 $pdf->Cell(15,12,$cantidad,0,0,'C',1);
-                $pdf->MultiCell(40,6, utf8_decode($descripcion_llanta),0,'L',1);
+                $pdf->MultiCell(40,6, utf8_decode_($descripcion_llanta),0,'L',1);
                 $pdf->SetY($ejeY);
                 $ejeY = $ejeY + 15;
                 $pdf->SetX(65);
-                $pdf->Cell(30,12, utf8_decode($modelo_llanta),0,0,'L',1);
-                $pdf->Cell(18,12, utf8_decode($marca_llanta),0,0,'L',1);
-                $pdf->Cell(23,12,utf8_decode($nombre_ubicacion),0,0, 'L',1);
-                $pdf->Cell(20,12,utf8_decode($nombre_destino),0,0, 'C',1);
-                $pdf->Cell(23,10,utf8_decode($stock_anterior),0,0, 'C',1);
-                $pdf->Cell(20,10,utf8_decode($stock_actual),0,0, 'C',1);
+                $pdf->Cell(30,12, utf8_decode_($modelo_llanta),0,0,'L',1);
+                $pdf->Cell(18,12, utf8_decode_($marca_llanta),0,0,'L',1);
+                $pdf->Cell(23,12,utf8_decode_($nombre_ubicacion),0,0, 'L',1);
+                $pdf->Cell(20,12,utf8_decode_($nombre_destino),0,0, 'C',1);
+                $pdf->Cell(23,10,utf8_decode_($stock_anterior),0,0, 'C',1);
+                $pdf->Cell(20,10,utf8_decode_($stock_actual),0,0, 'C',1);
                 $pdf->Ln(15);
             }
     
@@ -565,14 +596,14 @@ function cuerpoTabla(){
             $pdf->SetTextColor(36, 35, 28);
             $pdf->SetFontSize(7);
             //$pdf->Line(11,95,192,95);
-            $pdf->Cell(15,8,utf8_decode("Cantidad"),0,0,'C');  
-            $pdf->Cell(40,8,utf8_decode("Descripción"),0,0, 'L');
-            $pdf->Cell(23,8,utf8_decode("Modelo"),0,0, 'L');
-            $pdf->Cell(20,8,utf8_decode("Marca"),0,0, 'C');
-            $pdf->Cell(26,8,utf8_decode("Ubicación"),0,0, 'C');
-            $pdf->Cell(25,8,utf8_decode("Destino"),0,0, 'L');
-            $pdf->Cell(23,8,utf8_decode("Stock anterior"),0,0, 'L');
-            $pdf->Cell(20,8,utf8_decode("Stock nuevo"),0,0, 'L');
+            $pdf->Cell(15,8,utf8_decode_("Cantidad"),0,0,'C');  
+            $pdf->Cell(40,8,utf8_decode_("Descripción"),0,0, 'L');
+            $pdf->Cell(23,8,utf8_decode_("Modelo"),0,0, 'L');
+            $pdf->Cell(20,8,utf8_decode_("Marca"),0,0, 'C');
+            $pdf->Cell(26,8,utf8_decode_("Ubicación"),0,0, 'C');
+            $pdf->Cell(25,8,utf8_decode_("Destino"),0,0, 'L');
+            $pdf->Cell(23,8,utf8_decode_("Stock anterior"),0,0, 'L');
+            $pdf->Cell(20,8,utf8_decode_("Stock nuevo"),0,0, 'L');
             $pdf->Ln(0);
            // $pdf->Line(11,81,196,81);
             $pdf->Ln(12);
@@ -612,9 +643,9 @@ function cuerpoTabla(){
     $pdf->Ln(6.5);
     $pdf->SetFont('Arial','',10);
     //Subtotal
-    /* $pdf->Cell(132,6, utf8_decode($GLOBALS["comentario"]),0,0); */
+    /* $pdf->Cell(132,6, utf8_decode_($GLOBALS["comentario"]),0,0); */
     $pdf->Ln(4.5);
-    $pdf->MultiCell(70,6, utf8_decode(""),0,0,'L',0);
+    $pdf->MultiCell(70,6, utf8_decode_(""),0,0,'L',0);
     $pdf->Ln(4.5);
     $pdf->SetFont('Arial','',8);
     $pdf->MultiCell(150,3, utf8_decode("Remisión de ingreso por la cantidad de llantas mostradas en el presente documento."),0,0,'C',0);
@@ -627,7 +658,7 @@ function cuerpoTabla(){
 
     $pdf->SetTextColor(1, 1, 1);
     $pdf->SetFont('Arial','',10);
-    $pdf->Cell(193,6,utf8_decode("Recibido"),0,0,'C'); 
+    $pdf->Cell(193,6,utf8_decode_("Recibido"),0,0,'C'); 
     $pdf->Ln(7);
     $pdf->SetFont('Arial','B',11);
     
@@ -661,7 +692,7 @@ function cuerpoTabla(){
     $pdf->Ln(8);
     $pdf->SetFont('Courier','',12);
     $formatTotal = $GLOBALS["formatTotal"];
-    $pdf->Cell(180,8,utf8_decode($formatTotal),0,0,'L',1);
+    $pdf->Cell(180,8,utf8_decode_($formatTotal),0,0,'L',1);
     $pdf->Ln(15); */
 
    /*  $pdf->SetFont('Times','B',12);
@@ -673,28 +704,28 @@ function cuerpoTabla(){
     }
     $pdf->Ln(8);
     $pdf->SetFont('Courier','',12);
-    $pdf->MultiCell(140,6,utf8_decode($observacion),0,'L',1);
+    $pdf->MultiCell(140,6,utf8_decode_($observacion),0,'L',1);
     $pdf->Ln(52); */
 
   /*   $pdf->SetTextColor(0, 32, 77);
     $pdf->SetFont('Arial','B',5);
     $text = 'GARANTÍA DE UN AÑO CONTRA DEFECTO DE FABRICA A PARTIR DE ESTA FECHA';
     $text2 = 'FAVOR DE PRESENTAR ESTE COMPROBANTE DE VENTA PARA HACER VALIDO LA GARANTÍA';
-    $pdf->Cell(189,6,utf8_decode($text),0,0,'L');
+    $pdf->Cell(189,6,utf8_decode_($text),0,0,'L');
     $pdf->Ln(2);
-    $pdf->Cell(189,6,utf8_decode($text2),0,0,'L'); */
+    $pdf->Cell(189,6,utf8_decode_($text2),0,0,'L'); */
    
     
 /*     $pdf->Ln(10);
 
     $pdf->SetTextColor(1, 1, 1);
     $pdf->SetFont('Arial','B',10);
-   // $pdf->Cell(185,6,utf8_decode("Gracias por su compra"),0,0,'C');
+   // $pdf->Cell(185,6,utf8_decode_("Gracias por su compra"),0,0,'C');
     $pdf->Ln(18);
     $pdf->Line(78,268,130,268);
     $pdf->SetTextColor(1, 1, 1);
     $pdf->SetFont('Arial','B',10);
-    $pdf->Cell(193,6,utf8_decode("Recibido"),0,0,'C'); */
+    $pdf->Cell(193,6,utf8_decode_("Recibido"),0,0,'C'); */
     
    /*  $pdf->Image('../../../vistas/dist/img/QR_code.png',20,238,35); */
     $pdf->SetDrawColor(253, 144, 138);

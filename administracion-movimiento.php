@@ -133,6 +133,10 @@
             border: 2px dashed #55A38B;
             cursor: pointer;
          }
+
+         #tbody-llantas-remision{
+            color: black !important;
+         }
     </style>
 </head>
 <body id="page-top"> 
