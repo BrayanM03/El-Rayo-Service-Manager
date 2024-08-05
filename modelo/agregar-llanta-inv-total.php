@@ -13,7 +13,7 @@
       $nulo = null;
       $fecha = date("Y-m-d"); 
       $id_usuario = $_SESSION['id_usuario'];
-      $query = "INSERT INTO llantas (Ancho, Proporcion, Diametro, Descripcion, Marca, Modelo, precio_Inicial, precio_Venta, precio_Mayoreo, Fecha) VALUES (?,?,?,?,?,?,?,?,?,?)";
+      $query = "INSERT INTO llantas (Ancho, Proporcion, Diametro, Descripcion, Marca, Modelo, precio_Inicial, precio_Venta, precio_Mayoreo, Fecha, promocion, precio_promocion) VALUES (?,?,?,?,?,?,?,?,?,?, 0,0.00)";
       $resultado = $con->prepare($query);
       $resultado->bind_param(
           'ssssssssss',

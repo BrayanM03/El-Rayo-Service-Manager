@@ -19,10 +19,14 @@
  */
 
 // DB table to use
-$table = 'view_marcas';
-
+session_start();
 // Table's primary key
 $primaryKey = 'id';
+
+$table = "vista_promociones";
+$id_sucursal = $_GET['id_sucursal'];
+$where = "promocion = 1"; 
+ 
 
 // Array of database columns which should be read and sent back to DataTables.
 // The `db` parameter represents the column name in the database, while the `dt`
@@ -30,8 +34,16 @@ $primaryKey = 'id';
 // indexes
 $columns = array(
 	array( 'db' => 'id', 'dt' => 0 ),
-	array( 'db' => 'Nombre',  'dt' => 1 ),
-	array( 'db' => 'Imagen',  'dt' => 2 ),
+	array( 'db' => 'Ancho',  'dt' => 1 ),
+	array( 'db' => 'Proporcion', 'dt' => 2 ),
+	array( 'db' => 'Diametro', 'dt' => 3 ),
+	array( 'db' => 'Descripcion', 'dt' => 4 ),
+	array( 'db' => 'Marca',  'dt' => 5 ),
+	array( 'db' => 'Modelo',   'dt' => 6 ),
+	array( 'db' => 'precio_Inicial',   'dt' => 7 ),
+	array( 'db' => 'precio_Venta',   'dt' => 8 ),
+	array( 'db' => 'precio_Mayoreo',   'dt' => 9 ),
+	array( 'db' => 'precio_promocion',   'dt' => 10 ),
 /* 	array(
 		'db'        => 'start_date',
 		'dt'        => 4,
@@ -48,21 +60,20 @@ $columns = array(
 	) */
 );
 
+ 
 // SQL server connection information
-include_once '../credenciales.php';
+include_once '../../credenciales.php';
 $sql_details = $credenciales_db;
-
-
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * If you just want to use the basic configuration for DataTables with PHP
  * server-side, there is no need to edit below this line.
  */
 
-require( '../cortes/ssp.class.php' );
+require( '../../ssp.class.php' );
 
 echo json_encode(
-	SSP::simple( $_GET, $sql_details, $table, $primaryKey, $columns )
+	SSP::simple( $_GET, $sql_details, $table, $primaryKey, $columns, $where)
 );
 
 

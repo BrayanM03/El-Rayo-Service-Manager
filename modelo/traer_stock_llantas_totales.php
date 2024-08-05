@@ -47,18 +47,19 @@
         $resultado = mysqli_query($con, $sqlTraerLlanta);
        
         while($fila= $resultado->fetch_assoc()){
-            $id = $fila["id"];
-            $ancho = $fila["Ancho"];
-            $alto = $fila["Proporcion"];
-            $rin = $fila["Diametro"];
-            $descripcion = $fila["Descripcion"]; 
-            $modelo = $fila["Modelo"];
-            $marca = $fila["Marca"];
-            $costo = $fila["precio_Inicial"];
-            $precio = $fila["precio_Venta"];
-            $mayoreo = $fila["precio_Mayoreo"];
-            $data[] = array("id" => $id, "ancho" => $ancho, "alto" => $alto, "rin" => $rin, "descripcion"=>$descripcion, "modelo" => $modelo, "marca"=> $marca,
-                             "costo"=> $costo, "precio"=>$precio, "mayoreo"=>$mayoreo);
+            $id = $fila['id'];
+            $ancho = $fila['Ancho'];
+            $alto = $fila['Proporcion'];
+            $rin = $fila['Diametro'];
+            $descripcion = $fila['Descripcion']; 
+            $modelo = $fila['Modelo'];
+            $marca = $fila['Marca'];
+            $costo = $fila['precio_Inicial'];
+            $precio = $fila['precio_Venta'];
+            $mayoreo = $fila['precio_Mayoreo'];
+            $promocion = intval($fila['promocion']);
+            $data[] = array('id' => $id, 'ancho' => $ancho, 'alto' => $alto, 'rin' => $rin, 'descripcion' =>$descripcion, 'modelo' => $modelo, 'marca'=> $marca,
+                             'costo'=> $costo, 'precio'=>$precio, 'mayoreo'=>$mayoreo, 'promocion'=>$promocion);
         }
 
         $response = array(
