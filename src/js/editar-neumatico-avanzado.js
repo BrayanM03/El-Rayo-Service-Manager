@@ -119,8 +119,6 @@ $(document).ready(function(){
                    urls[key] = 'NA.JPG';
                 }
             }
-
-            console.log(urls);
         
             let keys = Object.keys(urls);
             setTimeout(function () {
@@ -147,10 +145,10 @@ $(document).ready(function(){
             }, 650);
         }else{
           setTimeout(function(){
-            $("#img_principal").attr('src', './src/img/neumaticos/NA.jpg').attr('style', 'border-radius:9px; width:90%; margin:auto;').addClass('border')
-            $("#img_perfil").attr('src', './src/img/neumaticos/NA.jpg').attr('style', 'border-radius:9px; width:90%; margin:auto;').addClass('border')
-            $("#img_frontal").attr('src', './src/img/neumaticos/NA.jpg').attr('style', 'border-radius:9px; width:90%; margin:auto;').addClass('border')
-            $("#img_piso").attr('src', './src/img/neumaticos/NA.jpg').attr('style', 'border-radius:9px; width:90%; margin:auto;').addClass('border')
+            $("#img_principal").attr('src', './src/img/neumaticos/NA.jpg').attr('style', 'border-radius:9px; width:90%; margin:auto;').addClass('border') .attr('eliminar', false)
+            $("#img_perfil").attr('src', './src/img/neumaticos/NA.jpg').attr('style', 'border-radius:9px; width:90%; margin:auto;').addClass('border') .attr('eliminar', false)
+            $("#img_frontal").attr('src', './src/img/neumaticos/NA.jpg').attr('style', 'border-radius:9px; width:90%; margin:auto;').addClass('border') .attr('eliminar', false)
+            $("#img_piso").attr('src', './src/img/neumaticos/NA.jpg').attr('style', 'border-radius:9px; width:90%; margin:auto;').addClass('border') .attr('eliminar', false)
           },650)
         }
         }
@@ -310,7 +308,7 @@ function actualizarDatosLlanta(){
       icono_response = 'error';
     }
 
-    Swal.fire({icon: icono_response, title: response.mensaje})
+    Swal.fire({icon: icono_response, title: response.mensaje, confirmButtonText: 'Enterado'})
   }
 });
 
