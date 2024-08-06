@@ -25,6 +25,11 @@
         $precio_promocion = $_POST['precio_promocion'];
         $aplicacion = $_POST['aplicacion'];
         $tipo_vehiculo = $_POST['tipo_vehiculo'];
+        $indice_carga_1 = $_POST['indice_carga_1'];
+        $indice_carga_2 = $_POST['indice_carga_2'];
+        $indice_velocidad = $_POST['indice_velocidad'];
+        $psi = $_POST['psi'];
+        $posicion = $_POST['posicion'];
         $arreglo_permisos = $_POST['arreglo_permisos'];
         
       /*   echo json_encode($_POST);
@@ -45,10 +50,12 @@
          
             $update = "UPDATE llantas SET Ancho = ?, Proporcion = ?, Diametro = ?, Descripcion = ?, Marca = ?,
              Modelo = ?, precio_Inicial = ?, Precio_Venta = ?, precio_Mayoreo = ?, construccion = ?,
-            id_aplicacion = ?, id_tipo_vehiculo = ?, promocion = ?, precio_promocion = ?  WHERE id = ?";
+            id_aplicacion = ?, id_tipo_vehiculo = ?, promocion = ?, precio_promocion = ?,
+            id_indice_carga_1 = ?, id_indice_carga_2 = ?, id_indice_velocidad = ?, posicion = ?, psi = ? WHERE id = ?";
             $stmt_ = $con->prepare($update);
-            $stmt_->bind_param('sssssssssssssss', $ancho, $alto, $diametro, $descripcion, $marca, $modelo, $costo, $precio, $precio_mayoreo,
-            $construccion, $aplicacion, $tipo_vehiculo, $promocion, $precio_promocion, $id_llanta);
+            $stmt_->bind_param('ssssssssssssssiiiiii', $ancho, $alto, $diametro, $descripcion, $marca, $modelo, $costo, $precio, $precio_mayoreo,
+            $construccion, $aplicacion, $tipo_vehiculo, $promocion, $precio_promocion, $indice_carga_1,
+            $indice_carga_2, $indice_velocidad, $posicion, $psi, $id_llanta);
             $stmt_->execute();
             $stmt_->close();
         }

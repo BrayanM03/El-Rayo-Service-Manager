@@ -2,8 +2,7 @@
 function editarRegistro(id){
     //codigo_llanta = $(id).attr("id");
   
-   // alert("El codigo de la llanta es " + codigo_llanta);
-
+   
    $.ajax({
        type: "POST",
        url: "./modelo/catalogo/editar-llanta-inv-total.php",

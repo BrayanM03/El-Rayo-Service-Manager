@@ -80,6 +80,11 @@ $(document).ready(function(){
           $("#tipo_vehiculo").val(response.datos.tipo_vehiculo)
           $("#activar_promocion").val(response.datos.promocion)
           $("#precio_promocion").val(response.datos.precio_promocion)
+          $("#rango_carga_1").val(response.datos.indice_carga_1)
+          $("#rango_carga_2").val(response.datos.indice_carga_2)
+          $("#indice_velocidad").val(response.datos.indice_velocidad)
+          $("#posicion").val(response.datos.posicion)
+          $("#psi").val(response.datos.psi)
           select2Marca(response.datos.marca)
           desactivarPrecioPromocion()
           /* if(response.datos.urls!=null){
@@ -252,6 +257,12 @@ function actualizarDatosLlanta(){
   let tipo_vehiculo = $('#tipo_vehiculo').val();
   let activar_promocion = $('#activar_promocion').val();
   let precio_promocion = $('#precio_promocion').val();
+  let rango_carga_1 = $('#rango_carga_1').val();
+  let rango_carga_2 = $('#rango_carga_2').val();
+  let indice_velocidad = $('#indice_velocidad').val();
+  let posicion = $('#posicion').val();
+  let presion = $('#psi').val();
+
 
   //Obteniendo pemisos de eliminación
   let eliminar_img_principal = $("#img_principal").attr('eliminar')
@@ -271,7 +282,7 @@ function actualizarDatosLlanta(){
     {'indice': 'img_piso', 'eliminar': eliminar_img_piso, 'url': 'url_piso', 'id_img': 4},
   ]
  
-  formData = new FormData();
+  formData = new FormData(); 
   formData.append('id_llanta', id_llanta);
   formData.append('marca', marca);
   formData.append('modelo', modelo);
@@ -287,6 +298,11 @@ function actualizarDatosLlanta(){
   formData.append('precio_promocion', precio_promocion);
   formData.append('aplicacion', aplicacion);
   formData.append('tipo_vehiculo', tipo_vehiculo);
+  formData.append('indice_carga_1', rango_carga_1);
+  formData.append('indice_carga_2', rango_carga_2);
+  formData.append('indice_velocidad', indice_velocidad);
+  formData.append('posicion', posicion);
+  formData.append('psi', presion);
   formData.append('arreglo_permisos', JSON.stringify(arreglo_permisos));
   
   formData.append('file_img_principal', file_img_principal);

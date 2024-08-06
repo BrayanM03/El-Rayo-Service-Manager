@@ -53,6 +53,11 @@
              $construccion = $fila['construccion'];
              $aplicacion = $fila['id_aplicacion'];
              $tipo_vehiculo = $fila['id_tipo_vehiculo'];
+             $indice_carga_1 = $fila['id_indice_carga_1'];
+             $indice_carga_2 = $fila['id_indice_carga_2'];
+             $indice_velocidad = $fila['id_indice_velocidad'];
+             $posicion = $fila['posicion'];
+             $psi = $fila['psi'];
  
              $data = array("id" => $codigo, "ancho" => $ancho,"alto" => $alto,"rin" => $rin, "descripcion"=>$descripcion, 
                                      "modelo" => $modelo, "marca"=> $marca, "costo"=> $costo, "precio"=>$precio, 
@@ -61,7 +66,12 @@
                                      'construccion'=>$construccion,
                                      'aplicacion'=>$aplicacion,
                                      'tipo_vehiculo'=>$tipo_vehiculo,
-                                     'urls' => $fila_imagenes);
+                                     'urls' => $fila_imagenes,
+                                     'indice_carga_1'=> $indice_carga_1,
+                                     'indice_carga_2'=> $indice_carga_2,
+                                     'indice_velocidad'=> $indice_velocidad,
+                                     'posicion'=> $posicion,
+                                      'psi'=> $psi,);
         
                                      $response = array('estatus'=>true, 'mensaje'=>'Datos de la llanta encontrados', 'datos'=> $data);
        }else{

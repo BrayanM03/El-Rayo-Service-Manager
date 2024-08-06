@@ -131,7 +131,7 @@
         <div class="col-md-4 order-md-2 mb-4">
           <h4 class="d-flex justify-content-between align-items-center mb-3">
             <span class="text-muted">Carga de imagenes:</span>
-            <span class="badge badge-secondary badge-pill">3</span>
+            <!-- <span class="badge badge-secondary badge-pill">3</span> -->
           </h4>
          
           <div class="card pt-3 pb-3">
@@ -169,7 +169,7 @@
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label for="firstName">Marca</label>
-                <select class="form-control" id="marca"required>
+                <select class="form-field" id="marca"required>
                 </select>
                 <div class="invalid-feedback">
                   Valid first name is required.
@@ -177,7 +177,7 @@
               </div>
               <div class="col-md-6 mb-3">
                 <label for="lastName">Modelo</label>
-                <input type="text" class="form-control" id="modelo" placeholder="" value="" required>
+                <input type="text" class="form-field" id="modelo" placeholder="" value="" required>
                 <div class="invalid-feedback">
                   Valid last name is required.
                 </div>
@@ -188,15 +188,15 @@
               <div class="row">
                 <div class="col-3">
                   <label for="ancho">Ancho</label>
-                  <input type="text" id="ancho" class="form-control" placeholder="Ejem. 255">
+                  <input type="text" id="ancho" class="form-field" placeholder="Ejem. 255">
                 </div>
                 <div class="col-3">
                   <label for="alto">Alto</label>
-                  <input type="text" id="alto" class="form-control" placeholder="Ejem. 65">
+                  <input type="text" id="alto" class="form-field" placeholder="Ejem. 65">
                 </div>
                 <div class="col-3">
                   <label for="construccion">Contrucción</label>
-                  <select type="text" id="construccion" class="form-control">
+                  <select type="text" id="construccion" class="form-field">
                       <option value="">Selecciona una construcción</option>
                       <option value="R">R (Radial)</option>
                       <option value="D">D (Diagonal)</option>
@@ -205,24 +205,124 @@
                 </div>
                 <div class="col-3">
                   <label for="rin">Rin</label>
-                  <input type="text" id="rin" class="form-control" placeholder="Ejem. 16">
+                  <input type="text" id="rin" class="form-field" placeholder="Ejem. 16">
                 </div>
               </div>
             </div>
 
-            <div class="mb-3">
-              <label for="email">Descripción</label>
-              <textarea class="form-control" id="descripcion" placeholder="Descripción del neumatico"></textarea>
-              <div class="invalid-feedback">
-                Please enter a valid email address for shipping updates.
+            <div class="row">
+              <div class="col-8 mb-3">
+                <label for="descripcion">Descripción</label>
+                <textarea class="form-field" id="descripcion" placeholder="Descripción del neumatico"></textarea>
+                <div class="invalid-feedback">
+                  Please enter a valid email address for shipping updates.
+                </div>
+              </div>
+              <div class="col-4">
+              <label for="psi">Presión maxima (PSI)</label>
+              <input type="number" class="form-field" id="psi" placeholder="0">
               </div>
             </div>
             <div class="row mb-3">
+            <?php
+            $sel = 'SELECT count(*) FROM indices_carga';
+            $stmt = $con->prepare($sel);
+            $stmt->execute();
+            $stmt->bind_result($total_ind_carga);
+            $stmt->fetch();
+            $stmt->close();
+
+            $sel = 'SELECT count(*) FROM indices_velocidad';
+            $stmt = $con->prepare($sel);
+            $stmt->execute();
+            $stmt->bind_result($total_ind_velocidad);
+            $stmt->fetch();
+            $stmt->close();
+
+            if($total_ind_carga>0){
+              $query = 'SELECT * FROM indices_carga';
+              $stmt = $con->prepare($query);
+              $stmt->execute();
+              $result = $stmt->get_result();
+              $stmt->free_result();
+              $stmt->close();
+
+              while ($value = $result->fetch_assoc()){
+                $arreglo_carga[] = $value;
+              }
+            }else{
+                $arreglo_carga = array();
+            }
+
+            if($total_ind_velocidad>0){
+              $query = 'SELECT * FROM indices_velocidad';
+              $stmt = $con->prepare($query);
+              $stmt->execute();
+              $result = $stmt->get_result();
+              $stmt->free_result();
+              $stmt->close();
+
+              while ($value = $result->fetch_assoc()){
+                $arreglo_velocidad[] = $value;
+              }
+            }else{
+                $arreglo_velocidad = array();
+            }
+            
+            ?>
                 <div class="col-3">
                     <label for="activar_promocion">Activar promoción</label>
-                    <select name="" id="activar_promocion" onchange="desactivarPrecioPromocion()" class="form-control">
+                    <select name="" id="activar_promocion" onchange="desactivarPrecioPromocion()" class="form-field">
                       <option value="1">Si</option>
                       <option value="0">No</option>
+                    </select>
+                </div>
+                <div class="col-3">
+                    <label for="activar_promocion">Rango de carga 1</label>
+                    <select name="" id="rango_carga_1" class="form-field">
+                      <option value="">Seleccione un indice de carga</option>
+                    <?php
+                        if(count($arreglo_carga)>0){
+                          foreach ($arreglo_carga as $key => $value) {
+                            $id_carga = $value['id']; 
+                            $indice_carga = $value['indice_carga']; 
+                            $kg_max = $value['kg_max']; 
+                            print_r("<option value='$id_carga'>$indice_carga($kg_max kg)</option>");
+                          }
+                        }
+                      ?>
+                    </select>
+                </div>
+                <div class="col-3">
+                    <label for="activar_promocion">Rango de carga 2</label>
+                    <select name="" id="rango_carga_2" class="form-field">
+                    <option value="">Seleccione un indice de carga</option>
+                    <?php
+                        if(count($arreglo_carga)>0){
+                          foreach ($arreglo_carga as $key => $value) {
+                            $id_carga = $value['id']; 
+                            $indice_carga = $value['indice_carga']; 
+                            $kg_max = $value['kg_max']; 
+                            print_r("<option value='$id_carga'>$indice_carga ($kg_max kg)</option>");
+                          }
+                        }
+                      ?>
+                    </select>
+                </div>
+                <div class="col-3">
+                    <label for="activar_promocion">Indice de velocidad</label>
+                    <select name="" id="indice_velocidad" class="form-field">
+                    <option value="">Seleccione un indice de velocidad</option>
+                    <?php
+                        if(count($arreglo_velocidad)>0){
+                          foreach ($arreglo_velocidad as $key => $value) {
+                            $id_velocidad = $value['id']; 
+                            $codigo_velocidad = $value['codigo']; 
+                            $velocidad_max = $value['velocidad_max']; 
+                            print_r("<option value='$id_velocidad'>$codigo_velocidad ($velocidad_max)</option>");
+                          }
+                        }
+                      ?>
                     </select>
                 </div>
             </div>
@@ -230,19 +330,19 @@
               <div class="row">
                 <div class="col-3">
                   <label for="costo">Costo</label>
-                  <input type="number" id="costo" class="form-control" placeholder="0.00">
+                  <input type="number" id="costo" class="form-field" placeholder="0.00">
                 </div>
                 <div class="col-3">
                   <label for="precio">Precio</label>
-                  <input type="number" id="precio" class="form-control" placeholder="0.00">
+                  <input type="number" id="precio" class="form-field" placeholder="0.00">
                 </div>
                 <div class="col-3">
                   <label for="precio_mayoreo">Precio mayoreo</label>
-                  <input type="number" id="precio_mayoreo" class="form-control" placeholder="0.00">
+                  <input type="number" id="precio_mayoreo" class="form-field" placeholder="0.00">
                 </div>
                 <div class="col-3">
                   <label for="precio_mayoreo">Precio promoción</label>
-                  <input type="number" id="precio_promocion" class="form-control" placeholder="0.00">
+                  <input type="number" id="precio_promocion" class="form-field" placeholder="0.00">
                 </div>
               </div>
             </div>
@@ -295,9 +395,9 @@
             ?>
             <div class="mb-3">
               <div class="row">
-                <div class="col-6">
+                <div class="col-4">
                    <label for="aplicacion">Aplicación</label>
-                  <select name="" id="aplicacion" class="form-control">
+                  <select name="" id="aplicacion" class="form-field">
                       <option value="">Selecciona una aplicación</option>
                       <?php
                         if(count($arreglo_aplicacion)>0){
@@ -310,9 +410,9 @@
                       ?>
                   </select>
                 </div>
-                <div class="col-6">
+                <div class="col-4">
                 <label for="tipo_vehiculo">Tipo de vehiculo</label>
-                  <select name="" id="tipo_vehiculo" class="form-control">
+                  <select name="" id="tipo_vehiculo" class="form-field">
                   <option value="">Selecciona un tipo de vehiculo</option>
                         
                   <?php
@@ -324,6 +424,15 @@
                           }
                         }
                       ?>
+                  </select>
+                </div>
+                <div class="col-4">
+                <label for="tipo_vehiculo">Posición (llantas de camión)</label>
+                  <select name="" id="posicion" class="form-field">
+                    <option value="">Selecciona una posición</option>
+                    <option value="1">Toda posición / Dirección</option>
+                    <option value="2">Tracción</option>
+                    <option value="3">Arrastre</option>
                   </select>
                 </div>
               </div>
