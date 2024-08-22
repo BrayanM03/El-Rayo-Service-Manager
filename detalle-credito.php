@@ -33,7 +33,7 @@
  
 	
 
-    <title>Credito venta: </title>
+    <title>Credito venta </title>
 
     <!-- Custom fonts for this template-->
     <link rel="stylesheet" href="src/css/inventario.css">
@@ -85,122 +85,8 @@
             <div id="content">
 
                 <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-info bg-info topbar mb-4 static-top shadow">
+                <?php include 'views/navbar.php'; ?>
 
-                    <!-- Sidebar Toggle (Topbar) -->
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                        <i class="fa fa-bars"></i>
-                    </button>
-
-                    <!-- Topbar Search -->
-                    <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                aria-label="Search" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-
-                    <!-- Topbar Navbar -->
-                    <ul class="navbar-nav ml-auto">
-
-                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-                        <li class="nav-item dropdown no-arrow d-sm-none">
-                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-search fa-fw"></i>
-                            </a>
-                            <!-- Dropdown - Messages -->
-                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                                aria-labelledby="searchDropdown">
-                                <form class="form-inline mr-auto w-100 navbar-search">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control bg-light border-0 small"
-                                            placeholder="Search for..." aria-label="Search"
-                                            aria-describedby="basic-addon2">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-primary" type="button">
-                                                <i class="fas fa-search fa-sm"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </li>
-
-                        <!-- Nav Item - Alerts -->
-                        <li class="nav-item dropdown no-arrow mx-1">
-                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-bell fa-fw icon-menu"></i>
-                                <!-- Counter - Alerts -->
-                                <span id="contador-notifi" class="badge badge-danger badge-counter">0</span>
-                            </a>
- 
-                            <!-- Dropdown - Alerts -->
-                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="alertsDropdown">
-                                <h6 class="dropdown-header">
-                                   Notificaciones
-                                </h6>
-                                <div class="empty-notification">
-                                 <img src="src/img/undraw_Notify_re_65on.svg" alt="" width="400px">
-                                 <span>Ups, por el momento no hay nada por aqui</span> 
-                              </div>
-                              
-                              <div id="contenedor-alertas"></div>
-                              <a class="dropdown-item text-center small text-gray-500" href="#">Mostrar mas notificaciones</a>
-                             
-                            </div>
-                        </li>
-
-                       
-
-                        <div class="topbar-divider d-none d-sm-block"></div>
-
-                        <!-- Nav Item - User Information -->
-                        <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline  small" style="color: aliceblue;"><?php
-                                
-                                echo $_SESSION['nombre'] . " " . $_SESSION['apellidos'];
-                            
-                            ?></span>
-                                <img class="img-profile rounded-circle"
-                                    src="src/img/undraw_profile.svg">
-                            </a>
-                            <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Perfil
-                                </a>
-                                <a class="dropdown-item" href="configuraciones.php?id=0&nav=configuraciones">
-                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Configuraciones
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Registro de actividad
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Cerrar sesión
-                                </a>
-                            </div>
-                        </li>
-
-                    </ul>
-
-                </nav>
                 <!-- End of Topbar --> 
 
 
@@ -209,39 +95,231 @@
 
                      <!-- Contenido inventario -->
                      
-                        <div class="contenedor-tit">
-                        <img class="tyre-decoration-left" src="./src/img/tyre.svg" alt="insertar SVG con la etiqueta image"> 
-                        <div class="titulo-inventario">
-                         <h5 style="margin: 10px 0px;">Credito </h5>
-                         <p style="color: gray;">Detalle de credito para la venta </p>
+                     <div class="row">
+                            <div class="col-md-12">
+                                <h3><b>Detalle de credito</b></h3>
+                            </div>
                         </div>
-                        <img class="tyre-decoration-right" src="./src/img/tyre.svg" alt="insertar SVG con la etiqueta image">   
-                        </div>
-                        <div class="botones">
-                                   
-                                    
-                      </div>
+                        <hr>  
                      <!--  <table id="creditos" class="table table-striped">  </table> --> 
+
+                        <?php
+                        $id_credito = $_GET['id_credito'];
+                            $count = "SELECT COUNT(*) FROM creditos c INNER JOIN ventas v ON v.id = c.id_venta WHERE c.id = ?";
+                            $stmt = $con->prepare($count);
+                            $stmt->bind_param('s', $id_credito);
+                            $stmt->execute();
+                            $stmt->bind_result($count_creditos);
+                            $stmt->fetch();
+                            $stmt->close();
+
+                            if($count_creditos>0){
+                                $sel = "SELECT v.*, cl.Nombre_Cliente as cliente, 
+                                c.fecha_inicio, c.fecha_final, c.pagado, c.restante, c.total, c.plazo, c.estatus as estatus_credito FROM creditos c INNER JOIN ventas v ON v.id = c.id_venta
+                                INNER JOIN clientes cl ON cl.id = v.id_Cliente
+                                WHERE c.id = ?";
+                                $stmt = $con->prepare($sel);
+                                $stmt->bind_param('s', $id_credito);
+                                $stmt->execute();
+                                $res = Arreglo_Get_Result($stmt);
+                                $stmt->fetch();
+                                $stmt->close(); 
+
+                                foreach ($res as $key => $value) {
+                                    $id_venta = $value['id'];
+                                    $cliente = $value['cliente'];
+                                    $dateTime_fecha_inicio = new DateTime($value['fecha_inicio']);
+                                    $dateTime_fecha_final = new DateTime($value['fecha_final']);
+
+                                    $fechaFormateada_inicio = $dateTime_fecha_inicio->format('l j \d\e F Y');
+                                    $fechaFormateada_final = $dateTime_fecha_final->format('l j \d\e F Y');
+                                    $fechaFormateada_inicio = str_replace(array_keys($diaSemana), array_values($diaSemana), $fechaFormateada_inicio);
+                                    $fechaFormateada_final = str_replace(array_keys($diaSemana), array_values($diaSemana), $fechaFormateada_final);
+                                    $fechaFormateada_inicio = str_replace(array_keys($meses), array_values($meses), $fechaFormateada_inicio);
+                                    $fechaFormateada_final = str_replace(array_keys($meses), array_values($meses), $fechaFormateada_final);
+            
+                                    //plazo 
+                                    switch ($value['plazo']) {
+                                        case '1':
+                                        $plazo = '1 semana';
+                                        break;
+                                        
+                                        case '2':
+                                        $plazo = '15 dias';
+                                        break;
+                                        
+                                        case '3':
+                                        $plazo = '1 mes';
+                                        break;
+                            
+                                        case '4':
+                                        $plazo = '1 año';
+                                        break;
+                            
+                                        case '5':
+                                        $plazo = 'Sin definir';
+                                        break;
+                            
+                                        case '6':
+                                            $plazo = '1 día';
+                                        break;
+                                    
+                                    default:
+                                        $plazo = 'No definido';
+                                        break;
+                                }
+
+                                //Estatus
+                                switch ($value['estatus_credito']) {
+                                    case "0":
+                                      $estatus_credito= '<h3><span class="badge badge-primary">Sin abono</span></h3>';
+                                      break;
+                        
+                                    case "1":
+                                      $estatus_credito ='<h3><span class="badge badge-info">Primer abono</span></h3>';
+                                      break;
+                                    case "2":
+                                      $estatus_credito = '<h3><span class="badge badge-warning">Pagando</span></h3>';
+                                      break;
+                                    case "3":
+                                        $estatus_credito = '<h3><span class="badge badge-success">Finalizado</span></h3>';
+                                      break;
+                                    case "4":
+                                        $estatus_credito ='<h3><span class="badge badge-lg badge-danger">Vencido</span></h3>';
+                                      break;
+                                    case "5":
+                                        $estatus_credito = '<h3><span class="badge badge-dark">Cancelada</span></h3>';
+                                      break;
+                                    default:
+                                    $estatus_credito = 'Sin definir';
+                                      break;
+                                  }
+                                //Formatear montos
+                                    $abonado = number_format($value['pagado'], 2, '.', ',');
+                                    $restante = number_format($value['restante'], 2, '.', ',');
+                                    $total = number_format($value['total'], 2, '.', ',');
+                                }
+                            }
+                            
+                        ?>
                         <div class="contenedor-detalle-credito">
                             <div class="row">
-                               <div class="col-12 col-md-4">
+                               <div class="col-12 col-md-3">
                                    <div class="form-group">
-                                       <label  for="">Cliente:</label>
-                                       <input class="form-control"  type="text" id="cliente">
+                                       <label  for="">Folio venta:</label>
+                                       <input class="form-control" value="<?php echo $id_venta; ?>" type="text" id="cliente">
                                    </div>
                                </div>
-                               <div class="col-12 col-md-4">
+                               <div class="col-12 col-md-9">
                                    <div class="form-group">
                                        <label  for="">Cliente:</label>
-                                       <input class="form-control"  type="text" id="cliente">
+                                       <input class="form-control" value="<?= $cliente; ?>" type="text" id="cliente">
                                    </div>
                                </div>
-                               <div class="col-12 col-md-12">
+                               <div class="col-6 col-md-3">
                                    <div class="form-group">
-                                       <label  for="">Cliente:</label>
-                                       <input class="form-control"  type="text" id="cliente">
+                                       <label  for="">Fecha inicio</label>
+                                       <input class="form-control" value="<?= $fechaFormateada_inicio; ?>" type="text" id="cliente">
                                    </div>
                                </div>
+                               <div class="col-6 col-md-3">
+                                   <div class="form-group">
+                                       <label  for="">Fecha vencimiento</label>
+                                       <input class="form-control bg-white" value="<?= $fechaFormateada_final; ?>" disabled type="text" id="cliente">
+                                   </div>
+                               </div>
+                               <div class="col-6 col-md-3">
+                                   <div class="form-group">
+                                       <label  for="">Plazo</label>
+                                       <input class="form-control bg-white" disabled  value="<?= $plazo; ?>" type="text" id="cliente">
+                                   </div>
+                               </div>
+                               <div class="col-6 col-md-3">
+                                   <div class="form-group">
+                                       <label  for="">Estatus</label><br>
+                                       <?= $estatus_credito; ?>
+                                      <!--  <input class="form-control"  value="<?= $estatus_credito; ?>" type="text" id="cliente">
+                                    --></div>
+                               </div>
+                               <div class="col-6 col-md-3">
+                                   <div class="form-group">
+                                       <label  for="">Abonado</label>
+                                       <input class="form-control bg-white" disabled value="<?= $abonado; ?>" type="text" id="cliente">
+                                   </div>
+                               </div>
+                               <div class="col-6 col-md-3">
+                                   <div class="form-group">
+                                       <label  for="">Restante</label>
+                                       <input class="form-control bg-white" disabled type="text"  value="<?= $restante; ?>" id="cliente">
+                                   </div>
+                               </div>
+                               <div class="col-6 col-md-3">
+                                   <div class="form-group">
+                                       <label  for="">Monto total</label>
+                                       <input class="form-control"  value="<?= $total; ?>" type="text" id="cliente">
+                                   </div>
+                               </div>
+                               
+                            </div>
+
+                            <div class="row p-3">
+                                <div class="col-12">
+                                    <label for="">Mercancia:</label>
+                                </div>
+                                <div class="col-12">
+                                    <table class="my-5 table table-primary table-bordered table-hover">
+                                        <thead>
+                                            <th>ID</th>
+                                            <th>Descripcion</th>
+                                            <th>Marca</th>
+                                            <th>Cantidad</th>
+                                            <th>P. unit</th>
+                                            <th>Importe</th>
+                                        </thead>
+                                        <tbody>
+                                        <?php
+                                        if($count_creditos >0){
+                                            $count = "SELECT COUNT(*) FROM detalle_venta WHERE id_Venta = ?";
+                                            $stmt = $con->prepare($count);
+                                            $stmt->bind_param('s', $id_venta);
+                                            $stmt->execute();
+                                            $stmt->bind_result($count_detalles);
+                                            $stmt->fetch();
+                                            $stmt->close(); 
+
+                                            if($count_detalles>0){
+                                                $count = "SELECT l.*, dv.Cantidad, dv.precio_Unitario, dv.Importe FROM detalle_venta dv INNER JOIN llantas l ON l.id = dv.id_Llanta WHERE dv.id_Venta = ?";
+                                                $stmt = $con->prepare($count);
+                                                $stmt->bind_param('s', $id_venta);
+                                                $stmt->execute();
+                                                $resu = Arreglo_Get_Result($stmt);
+                                                $stmt->fetch();
+                                                $stmt->close();
+
+                                                foreach ($resu as $key => $value) {
+                                                    $id_llanta = $value['id'];
+                                                    $descripcion = $value['Descripcion'];
+                                                    $marca = $value['Marca'];
+                                                    $cantidad = $value['Cantidad'];
+                                                    $precio_unitario =number_format($value['precio_Unitario'], 2, '.', ',');
+                                                    $importe =number_format($value['Importe'], 2, '.', ',');
+
+                                                    echo '<tr class="bg-white">
+                                                            <td>'.$id_llanta.'</td>
+                                                            <td>'.$descripcion.'</td>
+                                                            <td>'.$marca.'</td>
+                                                            <td>'.$cantidad.'</td>
+                                                            <td>'.$precio_unitario.'</td>
+                                                            <td>'.$importe.'</td>
+                                                         </tr>';
+                                                }
+                                            }
+                                        }
+                                        ?>
+
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>                    
                 </div>

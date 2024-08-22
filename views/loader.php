@@ -107,7 +107,7 @@
                 </div>  
                 <span class="span-text-loader">Cargando
                 </span>
-                <div class="dots">
+                <div class="dots ml-2">
                         <div class="dot">&#9679;</div>
                         <div class="dot">&#9679;</div>
                         <div class="dot">&#9679;</div>

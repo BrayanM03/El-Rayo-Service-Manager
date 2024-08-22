@@ -1,9 +1,39 @@
 <?php
-
+ $host = "localhost";
+ $user = "root";
+ $password = "root";
+ $db = "el_rayo";  
+$con = mysqli_connect($host, $user, $password, $db);
+mysqli_set_charset($con,"utf8");
 
 date_default_timezone_set("America/Matamoros");
 $fecha = date("Y-m-d");
 $dia_de_la_semana = date("l");
+
+$diaSemana = array(
+    'Monday' => 'Lunes',
+    'Tuesday' => 'Martes',
+    'Wednesday' => 'Miércoles',
+    'Thursday' => 'Jueves',
+    'Friday' => 'Viernes',
+    'Saturday' => 'Sábado',
+    'Sunday' => 'Domingo'
+);
+
+$meses = array(
+    'January' => 'Enero',
+    'February' => 'Febrero',
+    'March' => 'Marzo',
+    'April' => 'Abril',
+    'May' => 'Mayo',
+    'June' => 'Junio',
+    'July' => 'Julio',
+    'August' => 'Agosto',
+    'September' => 'Septiembre',
+    'October' => 'Octubre',
+    'November' => 'Noviembre',
+    'December' => 'Diciembre'
+)
 
 ?>
 <style>
@@ -343,20 +373,19 @@ $dia_de_la_semana = date("l");
             <i class="fas fa-question icon-menu"></i>
         </li> -->
 
-        <!-- Nav Item - Alerts -->
         <li class="nav-item dropdown no-arrow mx-1">
-            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-bell fa-fw icon-menu"></i>
+            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" style="color:white" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                 <i class="fas fa-cart-plus"></i>
                 <!-- Counter - Alerts -->
-                <span id="contador-notificaciones" class="badge badge-danger badge-counter">0</span>
+                <span id="contador-items-carrito" class="badge badge-danger badge-counter">0</span>
             </a>
 
             <!-- Dropdown - Alerts -->
             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
-                <h6 class="dropdown-header">
-                    Notificaciones
+                <h6 class="dropdown-header" style="background-color: orangered; border:1px solid red;">
+                    Carrito de compra
                 </h6>
-                <div id="cuerpo_notificaciones">
+                <div id="carrito_compra">
                     <div class="empty-notification">
                         <img src="src/img/undraw_Notify_re_65on.svg" alt="" width="400px">
                         <span>Ups, por el momento no hay nada por aqui</span>
@@ -364,6 +393,95 @@ $dia_de_la_semana = date("l");
                 </div>
                
                 <a class="dropdown-item text-center small text-black" href="#">Mostrar mas notificaciones</a>
+
+            </div>
+        </li>
+
+        <!-- Nav Item - Alerts -->
+
+        <?php 
+            $select_count = 'SELECT COUNT(*) FROM notificaciones_usuarios WHERE id_usuario = ?';
+            $stmt = $con->prepare($select_count);
+            $stmt->bind_param('s', $_SESSION['id_usuario']);
+            $stmt->execute();
+            $stmt->bind_result($notifications_count);
+            $stmt->fetch();
+            $stmt->close();
+
+            $select_count = 'SELECT COUNT(*) FROM notificaciones_usuarios WHERE id_usuario = ? AND estatus_vista =0';
+            $stmt = $con->prepare($select_count);
+            $stmt->bind_param('s', $_SESSION['id_usuario']);
+            $stmt->execute();
+            $stmt->bind_result($notifications_vista_count);
+            $stmt->fetch();
+            $stmt->close();
+            
+        ?>
+        <li class="nav-item dropdown no-arrow mx-1">
+            <a class="nav-link dropdown-toggle" href="#" onclick="abrirCampana(<?php echo $user_id ?>)" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-bell fa-fw icon-menu"></i>
+                <!-- Counter - Alerts -->
+                <?php if($notifications_vista_count>0){?>
+
+                <span id="contador-notificaciones" class="badge badge-danger badge-counter"><?php echo $notifications_vista_count ?></span>
+                <?php  }?>
+            </a>
+
+            <!-- Dropdown - Alerts -->
+            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
+                <h6 class="dropdown-header" style="background-color: orange; border:1px solid orange;">
+                    Notificaciones
+                </h6>
+                <div id="cuerpo_notificaciones">
+                <?php if($notifications_count>0){
+                    $select_count = 'SELECT n.*, nu.estatus_abierta, nu.id as nu_id FROM notificaciones_usuarios nu INNER JOIN notificaciones n
+                    ON nu.id_notificacion = n.id WHERE nu.id_usuario = ? ORDER BY n.id DESC LIMIT 10';
+                    $stmt = $con->prepare($select_count);
+                    $stmt->bind_param('s', $_SESSION['id_usuario']);
+                    $stmt->execute();
+                    $response = Arreglo_Get_Result($stmt);
+                    $stmt->close(); 
+        
+                    foreach ($response as $key => $value) {
+                        // Convertir la fecha a un objeto DateTime
+                        $fecha_notificacion = $value['fecha'];
+                        $dateTime = new DateTime($fecha_notificacion);
+                        $id_notificacion = $value['id'];
+                        $nu_id = $value['nu_id'];
+                        $class_estatus_abierta = $value['estatus_abierta'] == 0 ? 'font-weight-bold' : '';
+                        // Formatear la fecha
+                        $fechaFormateada = $dateTime->format('l j \d\e F Y');
+                        $fechaFormateada = str_replace(array_keys($diaSemana), array_values($diaSemana), $fechaFormateada);
+                        $fechaFormateada = str_replace(array_keys($meses), array_values($meses), $fechaFormateada);
+
+                        ?>
+                         <a class="dropdown-item d-flex align-items-center" href="./modelo/configuraciones/configuracion_notificaciones/abrir_notificacion.php?visto=1&abierto=1&id_nu=<?= $nu_id;?>&id_notificacion=<?=$id_notificacion?>">
+                        <div class="mr-3">
+                            <div class="icon-circle bg-danger">
+                               <i class="fas fa-clock text-white"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="small text-gray-500"><?=  $fechaFormateada . ', ' . $value['hora']; ?></div>
+                               <span class="<?= $class_estatus_abierta;?>"><?= $value['mensaje']; ?></span>
+                               <?php if($value['estatus_abierta'] ==0){?>
+                               <span class="badge badge-lg badge-warning">Nuevo</span>
+                               <?php }; ?>
+                            </div>
+                        </a>
+                        <?php
+                    }
+                    ?>
+                   
+                <?php }else{ ?>
+                    <div class="empty-notification">
+                        <img src="src/img/undraw_Notify_re_65on.svg" alt="" width="400px">
+                        <span>Ups, por el momento no hay nada por aqui</span>
+                    </div> 
+                <?php } ?>
+                </div>
+               
+                <a class="dropdown-item text-center small text-black" href="panel_notificaciones.php">Mostrar mas notificaciones</a>
 
             </div>
         </li>
@@ -416,7 +534,7 @@ $dia_de_la_semana = date("l");
     </ul>
 
 </nav>
-
+<script src="./src/vendor/jquery/jquery.min.js"></script>
 <script src="src/js/navbar.js"></script>
 <script>
     function showTime() {
@@ -440,5 +558,50 @@ $dia_de_la_semana = date("l");
 
     }
     showTime()
+
+  /*   $.ajax({
+        type: "post",
+        url: "./modelo/configuraciones/configuracion_notificaciones/comprobacion_credito_vencido.php",
+        data: "data",
+        dataType: "json",
+        success: function (response) {
+        
+        }
+    }); */
+
+    function abrirCampana(id_usuario){
+
+        $.ajax({
+        type: "post",
+        url: "./modelo/configuraciones/configuracion_notificaciones/abrir_notificacion.php?visto=all",
+        data: {id_usuario},
+        dataType: "json",
+        success: function (response) {
+           if(response.estatus == true){
+            $("#contador-notificaciones").remove();
+           }
+        }
+    });
+    }
+    //Esto simula un web socket
+    //const evtSource = new EventSource("./modelo/configuraciones/configuracion_notificaciones/notificaciones.php");
+
 </script>
+
+<?php
+function Arreglo_Get_Result( $Statement ) {
+    $RESULT = array();
+    $Statement->store_result();
+    for ( $i = 0; $i < $Statement->num_rows; $i++ ) {
+        $Metadata = $Statement->result_metadata();
+        $PARAMS = array();
+        while ( $Field = $Metadata->fetch_field() ) {
+            $PARAMS[] = &$RESULT[ $i ][ $Field->name ];
+        }
+        call_user_func_array( array( $Statement, 'bind_result' ), $PARAMS );
+        $Statement->fetch();
+    } 
+    return $RESULT;
+}
+?>
 <!-- End of Topbar -->

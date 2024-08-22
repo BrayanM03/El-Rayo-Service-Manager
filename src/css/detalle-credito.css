@@ -1,10 +1,12 @@
 .contenedor-detalle-credito{
-    padding: 10px;
-    width: 80%;
-    height: 500px;
-    border: 1px solid gray;
+    padding: 2rem;
+    width: 90%;
+    border: 1px solid white;
     border-radius: 8px;
     background-color: white;
     margin-bottom: 50px;
+    -webkit-box-shadow: 9px 17px 8px -4px rgba(0,0,0,0.11);
+    -moz-box-shadow: 9px 17px 8px -4px rgba(0,0,0,0.11);
+    box-shadow: 9px 17px 8px -4px rgba(0,0,0,0.11);
 
 }

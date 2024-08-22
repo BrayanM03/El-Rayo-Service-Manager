@@ -88,10 +88,10 @@ $(document).ready(function(){
           select2Marca(response.datos.marca)
           desactivarPrecioPromocion()
           /* if(response.datos.urls!=null){
-              let url_principal = response.datos.urls['url_principal'] != null ? response.datos.urls['url_principal'] : 'NA.JPG'
-              let url_perfil = response.datos.urls['url_perfil'] != null ? response.datos.urls['url_perfil'] : 'NA.JPG'
-              let url_frontal = response.datos.urls['url_frontal'] != null ? response.datos.urls['url_frontal'] : 'NA.JPG'
-              let url_piso = response.datos.urls['url_piso'] != null ? response.datos.urls['url_piso'] : 'NA.JPG'
+              let url_principal = response.datos.urls['url_principal'] != null ? response.datos.urls['url_principal'] : 'NA.jpg'
+              let url_perfil = response.datos.urls['url_perfil'] != null ? response.datos.urls['url_perfil'] : 'NA.jpg'
+              let url_frontal = response.datos.urls['url_frontal'] != null ? response.datos.urls['url_frontal'] : 'NA.jpg'
+              let url_piso = response.datos.urls['url_piso'] != null ? response.datos.urls['url_piso'] : 'NA.jpg'
 
               let boton_borrar = '<div class="btn btn-danger" id="'+url_frontal+'" style="position:absolute !important; right:50px !important; top:34px;"><i class="fas fa-trash-alt"></i></div>'
               setTimeout(function(){
@@ -111,17 +111,17 @@ $(document).ready(function(){
           } */
           if (response.datos.urls != null) {
             let urls = {
-                'url_principal': 'NA.JPG',
-                'url_perfil': 'NA.JPG',
-                'url_frontal': 'NA.JPG',
-                'url_piso': 'NA.JPG'
+                'url_principal': 'NA.jpg',
+                'url_perfil': 'NA.jpg',
+                'url_frontal': 'NA.jpg',
+                'url_piso': 'NA.jpg'
             };
         
             for (let key in urls) {
                 if (response.datos.urls[key] != null && response.datos.urls[key] != '') {
                     urls[key] = response.datos.urls[key];
                 }else{
-                   urls[key] = 'NA.JPG';
+                   urls[key] = 'NA.jpg';
                 }
             }
         
@@ -141,7 +141,7 @@ $(document).ready(function(){
                               .addClass('border');
                              
                     
-                    if (urls[key] != 'NA.JPG') {
+                    if (urls[key] != 'NA.jpg') {
                         let boton_borrar = '<div class="btn btn-danger" url_imagen="' + urls[key] + '" id="'+imgId+'_delete_btn" style="position:absolute !important; right:50px !important; top:34px;" onclick="eliminarPreview(`'+imgId+'`)"><i class="fas fa-trash-alt"></i></div>';
                         colElement.append(boton_borrar);
                         imgElement .attr('onclick', '')
