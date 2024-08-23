@@ -130,6 +130,10 @@ $(document).ready(function() {
           
           return '<img src="./src/img/logos/'+ data +'.jpg" style="width: 60px; border-radius: 8px">'; 
           }}, 
+        { title: "llanta",         data: 'id', render: function(data,type,row) {
+            
+            return '<img src="./src/img/neumaticos/llanta_'+ data +'_1.png" style="width: 60px; border-radius: 8px">'; 
+          }}, 
         {
           data: null,
           className: "celda-acciones",
