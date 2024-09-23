@@ -22,11 +22,11 @@
     <div class="container-fluid">
     <div class="row align-items-center justify-content-center">
     <div class="col-12 col-md-3 col-sm-12">
-            <div class="col-12 col-md-12 mt-3">
+            <!-- <div class="col-12 col-md-12 mt-3">
                 <div class="option-card text-center" id="card-check">
                     <lottie-player src="https://lottie.host/b456286d-19b4-4303-be60-5eaea6bdacca/0V7LI9PuA7.json" background="transparent" speed="1" style="width: 250px; height: 250px;" loop autoplay></lottie-player>
                 </div>
-            </div>
+            </div> -->
         </div>
         <div class="col-12 col-md-3 col-sm-12 justify-self-center">
             <div class="simple-login-container" style="border:1px solid #c8c8c8;">
@@ -71,11 +71,11 @@
             </div>
         </div>
         <div class="col-12 col-md-3 col-sm-12">
-            <div class="col-12 col-md-12 mt-3">
+            <!-- <div class="col-12 col-md-12 mt-3">
                 <div class="option-card text-center" id="card-check">
                     <lottie-player src="https://lottie.host/b456286d-19b4-4303-be60-5eaea6bdacca/0V7LI9PuA7.json" background="transparent" speed="1" style="width: 250px; height: 250px;" loop autoplay></lottie-player>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
     </div>
