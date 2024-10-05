@@ -5,17 +5,23 @@
         width: 100%;
         height: 100%;
         z-index: 999999;
-        overflow: hidden;
+    }
+    #contenedor-loader-2{
+        width: 100vw;
+        position: absolute;
+        height: 100vh;
+       
     }
 
         .loader-principal{
             width: 30rem;
             position:absolute;
-            right: 50%;
-            left: 44%;
+            right: 51%;
+            left: 43.5%;
             top: 30%;
             bottom: 50%;
             z-index: 999999;
+            margin-right: 10rem;
         }
 
         .span-text-loader{
@@ -69,7 +75,6 @@
         @media ( (max-width: 1900px) ){
             .loader-principal{
             width: auto;
-
             position:absolute;
             right: 50%;
             left: 45%;
@@ -102,6 +107,7 @@
     </style>
 
 <div id="contenedor-loader" class="d-none">
+    <div id="contenedor-loader-2">
                 <div class="option-card text-center loader-principal">
                     <lottie-player src="https://lottie.host/9ff4fc94-43ef-467b-aaf1-dafe7abaf53b/GFRYdl5GrJ.json" background="transparent" speed="1" style="width: 250px; height: 250px" loop autoplay></lottie-player>
                 </div>  
@@ -112,4 +118,5 @@
                         <div class="dot">&#9679;</div>
                         <div class="dot">&#9679;</div>
                     </div>
+    </div>
 </div>

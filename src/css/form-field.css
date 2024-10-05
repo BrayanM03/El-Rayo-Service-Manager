@@ -1,6 +1,6 @@
 :root {
 
-    --input-color: #99A3BA;
+    --input-color: /* #99A3BA */ black;
     --input-border: #CDD9ED;
     --input-background: #fff;
     --input-placeholder: #CBD1DC;

@@ -211,7 +211,7 @@ if(isset($_POST)){
 
             }else{
                 echo "Error";
-                $resultado->close();
+               // $resultado->close();
             }
             
     

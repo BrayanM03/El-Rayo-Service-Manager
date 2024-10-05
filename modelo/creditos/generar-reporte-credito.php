@@ -189,9 +189,9 @@ function Header()
     $this->Ln(4);
     $this->Cell(160,10,utf8_decode_("RFC: " .$rfc),0,0,'C', false);
     $this->Ln(4);
-    $this->Cell(40,10,'',0,0,'C', false);
-    $this->Cell(43,10,utf8_decode_("Telefono ventas: " .$telefono),0,0,'C', false);
-    $this->Cell(60,10,utf8_decode_("Telefono facturación: " .$telefono),0,0,'C', false);
+    $this->Cell(47,10,'',0,0,'C', false);
+    $this->Cell(43,10,utf8_decode_("ventas: " .$telefono),0,0,'C', false);
+    $this->Cell(40,10,utf8_decode_("facturación: " .$telefono_2),0,0,'L', false);
     $this->Ln(17);
 
     //$this->Rect(133, 58, 20, 7, 'F');

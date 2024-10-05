@@ -428,7 +428,7 @@ table = $('#pedidos').DataTable({
               return '<div style="display: flex; width: auto;">'+
               '<button onclick="traerPdfApartado(' +row[1]+ ');" title="Ver reporte" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px">'+
               '<span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>'+
-              '<button type="button" onclick="cancelarApartadox('+ row[1] +');" title="Cancelar apartado" class="buttonBorrar btn btn-primary">'+
+              '<button type="button" onclick="cancelarPedido('+ row[1] +');" title="Cancelar apartado" class="buttonBorrar btn btn-primary">'+
               '<span class="fa fa-ban"></span><span class="hidden-xs"></span></button>'+
               '<button type="button" onclick="procesarOrden('+ row[1] +');" title="Procesar venta" class="buttonBorrar btn btn-success" style="margin-left: 8px">'+
               '<span class="fa fa-check"></span><span class="hidden-xs"></span></button>'+
@@ -837,11 +837,11 @@ function calcularMontosApartado(importe, restante){
 const audio_2 = new Audio("./src/sounds/success-sound.mp3");
 audio_2.volume = 0.5;
 
-function cancelarApartado(id) { 
+function cancelarPedido(id) { 
 
   Swal.fire({
-      title: "Cancelar Venta",
-      html: '<span>¿Estas seguro de cancelar este apartado?</span><br><br>'+
+      title: "Cancelar Pedido",
+      html: '<span>¿Estas seguro de cancelar este pedido?</span><br><br>'+
       '<div class="m-auto"><label>Motivo de la cancelación.</label><br><textarea id="motivo" name="motivo" placeholder="Escribe el motivo del porque estas cancelando esta venta." class="form-control m-auto" style="width:300px;height:80px;" ></textarea></div>',
       showCancelButton: true,
       cancelButtonText: 'Cerrar',
@@ -857,14 +857,15 @@ function cancelarApartado(id) {
               motivo = $("#motivo").val();
               $.ajax({
                   type: "POST",
-                  url: "./modelo/apartados/cancelar-apartado.php",
-                  data: {"id_venta": id, "motivo_cancel": motivo},
+                  url: "./modelo/pedidos/cancelar-pedido.php",
+                  data: {"id_pedido": id, "motivo": motivo},
+                  dataType: "json",
                   success: function (response) {
-                      if(response == 0){
+                      if(response.data == 0){
 
                           Swal.fire({
                               title: 'Error',
-                              html: "<span>El apartado no se pudo cancelar</span>",
+                              html: "<span>El pedido no se pudo cancelar</span>",
                               icon: "error",
                               cancelButtonColor: '#00e059',
                               showConfirmButton: true,
@@ -876,10 +877,10 @@ function cancelarApartado(id) {
                                   table.ajax.reload(null, false);
                               }});
                               table.ajax.reload(null, false);
-                      }else if(response == 1 || response ==11){
+                      }else if(response.data == 1){
                           Swal.fire({ 
-                              title: 'Apartado cancelado',
-                              html: "<span>El apartado se a cancelado.</span>",
+                              title: 'Pedido cancelado',
+                              html: "<span>El pedido se a cancelado.</span>",
                               icon: "success",
                               cancelButtonColor: '#00e059',
                               showConfirmButton: true,
@@ -892,10 +893,10 @@ function cancelarApartado(id) {
                               }});
                               table.ajax.reload(null, false);
 
-                      }else if(response == 3){
+                      }else if(response.data == 3){
                           Swal.fire({
-                              title: 'Apartado ya cancelado',
-                              html: "<span>Este apartado ya esta cancelado.</span>",
+                              title: 'Pedido ya cancelado',
+                              html: "<span>El pedido ya esta cancelado.</span>",
                               icon: "warning",
                               cancelButtonColor: '#00e059',
                               showConfirmButton: true,

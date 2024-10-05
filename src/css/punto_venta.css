@@ -1,0 +1,64 @@
+.filtros_principales{
+    list-style:none;
+
+}
+
+.checkbox_grande{
+    width: 35px;
+    height: 17px;
+}
+
+.boton-close-preview-neumatico{
+    cursor:pointer;
+}
+.boton-close-preview-neumatico:hover{
+    color: red;
+}
+
+
+.item-cart{
+    width:100%;
+    background-color: wheate;
+   /*  border:1px solid gray; */
+    border-radius:8px;
+}
+
+@media only screen and (min-width : 901px) {
+    .prevista_neumatico{
+        width:60% !important; margin-top:130px !important; margin-left:20% !important;
+        position:fixed !important;
+        animation: fadeInDown; /* referring directly to the animation's @keyframe declaration */
+        animation-duration: .5s;
+        cursor: pointer;
+    }
+
+    .card_promocion {
+        cursor:pointer;border-radius: 15px !important; 
+    }
+    .card_promocion:hover{
+        box-shadow: rgba(0,0,0,0.1) 0 0 30px 0;
+    }
+    }
+
+    .card_busqueda{
+        border-radius: 15px !important; 
+        cursor: pointer;
+    }
+    .card_busqueda:hover{
+        box-shadow: rgba(0,0,0,0.1) 0 0 30px 0;
+    }
+@media only screen and (max-width : 900px) {
+    .prevista_neumatico{
+        width:98% !important; margin-top:130px !important; margin-left:20% !important;
+        position:fixed !important;
+    }
+    .card_busqueda{
+        border-radius: 15px !important; 
+        cursor:pointer;
+    }
+    .card_busqueda:hover{
+        box-shadow: rgba(0,0,0,0.1) 0 0 30px 0;
+    }
+    }
+
+

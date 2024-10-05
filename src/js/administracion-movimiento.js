@@ -1867,7 +1867,7 @@ function cargarComprobante(extension_archivo){
   
               // Renderiza la página en el canvas
               pdfDoc.getPage(pageNumber).then(function(page) {
-                  var viewport = page.getViewport({ scale: 0.3 });
+                  var viewport = page.getViewport({ scale: 0.2 });
                   var context = canvas.getContext('2d');
                   canvas.width = viewport.width;
                   canvas.height = viewport.height;

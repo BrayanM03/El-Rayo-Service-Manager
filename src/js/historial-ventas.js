@@ -214,8 +214,6 @@ function borrarVenta(id, tipo) {
         
             if(result.isConfirmed){ 
                 motivo = $("#motivo").val();
-               // if($("#motivo").val())
-                motivo = $("#motivo").val();
                 $.ajax({
                     type: "POST",
                     url: "./modelo/ventas/cancelar-venta.php",
@@ -248,10 +246,8 @@ function borrarVenta(id, tipo) {
                                 cancelButtonColor:'#ff764d',
                             }).then((result) => {  
                 
-                                if(result.isConfirmed){
-                                    table.ajax.reload(null, false);
-                                }});
                                 table.ajax.reload(null, false);
+                                });
 
                         }else if(response == 3){
                             Swal.fire({
@@ -264,10 +260,8 @@ function borrarVenta(id, tipo) {
                                 cancelButtonColor:'#ff764d',
                             }).then((result) => {  
                 
-                                if(result.isConfirmed){
-                                    table.ajax.reload(null, false);
-                                }});
                                 table.ajax.reload(null, false);
+                                });
                         }
                       
                     }

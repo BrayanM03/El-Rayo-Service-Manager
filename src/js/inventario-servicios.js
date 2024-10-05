@@ -139,7 +139,7 @@ function reloadTabla() {
                          <div class="col-12 col-md-1">${element.precio}</div>
                          <div class="col-12 col-md-2">${element.estatus}</div>
                          <div class="col-12 col-md-2">
-                         <img src="./src/img/services/${element.img}.jpg" style="width:53px;"></div>
+                         <img src="./src/img/services/${element.img}.png" style="width:53px;"></div>
                          <div class="col-12 col-md-1" style="display: flex;">
                              <div class="btn btn-warning mr-1 d-flex align-items-center" onclick="editar(${element.id})"><i class="fas fa-pen"></i></div>
                              <div class="btn btn-danger d-flex align-items-center" onclick="eliminar(${element.id})"><i class="fas fa-trash"></i></div>

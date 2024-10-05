@@ -3,6 +3,10 @@
  $user = "root";
  $password = "root";
  $db = "el_rayo";  
+ /* $host = "llanteraelrayo.com";
+ $user = "llante14_brayanm03";
+ $password = "siemprefiel0";
+ $db = "llante14_servicemanager"; */
 $con = mysqli_connect($host, $user, $password, $db);
 mysqli_set_charset($con,"utf8");
 
@@ -304,7 +308,7 @@ $meses = array(
   </div>
  
 </div>
-<nav class="navbar navbar-expand navbar-info bg-info topbar mb-4 static-top shadow bg-warning">
+<nav class="navbar navbar-expand navbar-info bg-info topbar static-top shadow bg-warning">
 
     <!-- Sidebar Toggle (Topbar) -->
     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -374,14 +378,14 @@ $meses = array(
         </li> -->
 
         <li class="nav-item dropdown no-arrow mx-1">
-            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" style="color:white" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <a class="nav-link dropdown-toggle" href="#" onclick="mostrarSidebarCart()" id="alertsDropdown!" style="color:white" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                  <i class="fas fa-cart-plus"></i>
                 <!-- Counter - Alerts -->
                 <span id="contador-items-carrito" class="badge badge-danger badge-counter">0</span>
             </a>
 
             <!-- Dropdown - Alerts -->
-            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
+           <!-- <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
                 <h6 class="dropdown-header" style="background-color: orangered; border:1px solid red;">
                     Carrito de compra
                 </h6>
@@ -394,7 +398,7 @@ $meses = array(
                
                 <a class="dropdown-item text-center small text-black" href="#">Mostrar mas notificaciones</a>
 
-            </div>
+            </div>-->
         </li>
 
         <!-- Nav Item - Alerts -->
