@@ -20,11 +20,12 @@ if(isset($_POST)) {
     $stmt->fetch();
     $stmt->close();
     if($total>0){
-        $select = "SELECT c.Nombre_Cliente as cliente, v.sucursal, v.id_sucursal, v.id_Cliente FROM ventas v INNER JOIN clientes c ON v.id_cliente = c.id WHERE v.id = ?";
+        $select = "SELECT c.Nombre_Cliente as cliente, v.sucursal, v.id_sucursal, v.id_Cliente, v.id_Usuarios as id_usuario 
+        FROM ventas v INNER JOIN clientes c ON v.id_cliente = c.id WHERE v.id = ?";
         $stmt = $con->prepare($select);
         $stmt->bind_param('s',$folio);
         $stmt->execute();
-        $stmt->bind_result($nombre_cliente, $sucursal, $id_sucursal, $id_cliente);
+        $stmt->bind_result($nombre_cliente, $sucursal, $id_sucursal, $id_cliente, $id_vendedor);
         $stmt->fetch();
         $stmt->close();
 
@@ -68,6 +69,7 @@ if(isset($_POST)) {
         $response = array(
             'estatus'=> true,
             'nombre_cliente'=>$nombre_cliente,
+            'vendedor'=>$id_vendedor,
             'id_cliente'=>$id_cliente,
             'id_sucursal'=>$id_sucursal,
             'sucursal'=>$sucursal,

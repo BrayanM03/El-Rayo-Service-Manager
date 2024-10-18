@@ -144,7 +144,7 @@ if ($_SESSION['rol'] == 4) {
                             </div>
                         </div>
 
-                        <table id="garantias" class="table table-striped table-bordered table-hover">
+                        <table id="garantias" style="font-size: 12px;" class="table table-striped table-bordered table-hover">
                         </table>
                     </div>
                     <!-- /.container-fluid -->

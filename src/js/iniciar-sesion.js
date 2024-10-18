@@ -21,57 +21,34 @@
                         label.removeClass("alert-danger");
                         label.addClass("alert-warning");
                         label.html("<i class='fas fa-exclamation-triangle'></i> Ingrese credenciales");
+                        label.addClass('')
+                        setTimeout(function(){
+                            $("#iniciar-sesion").empty().append(`
+                            Iniciar sesión
+                            `);
+                        },1000)
+                        
         }else{
-
+ 
             loginform = $("#login-form");
             datos = loginform.serialize();
-            console.log(datos);
             $.ajax({
                 type: "POST",
-                url: "./modelo/login/iniciar-sesion.php?",
+                url: "./modelo/login/iniciar-sesion.php",
                 data: datos,
                
                 success: function (response) {
-                    if(response == 0){
-                        alerta = $("#alerta");
-                        alerta.removeClass();
-                        alerta.addClass("mensaje-sesion");
-                        label = $("#label-alert");
-                        label.removeClass();
-                        label.addClass("alert alert-danger");
-                        label.html("<i class='fas fa-exclamation-circle'></i> Contraseña incorrecta")
-                        alerta = $("#mensaje-sesion");
-                        alerta.removeClass("hidden");
-
-                        $("#iniciar-sesion").empty().append(`
-                        Iniciar sesión
-                        `);
-                        
-                    }else if(response == 1){
-                        window.location = "./index.php?id=0&nav=inicio";;
-                    }else if(response == 2){
-                        alerta = $("#alerta");
-                        alerta.removeClass();
-                        alerta.addClass("mensaje-sesion");
-                        label = $("#label-alert");
-                        label.removeClass();
-                        label.addClass("alert alert-danger");
-                        label.html("<i class='fas fa-exclamation-circle'></i> Usuario inexistente")
-                        alerta = $("#mensaje-sesion");
-                        alerta.removeClass("hidden");
+                    if(response.estatus){
+                        insertarMensaje(response)
+                        window.location = "./index.php?id=0&nav=inicio";
+                    }else{
+                        insertarMensaje(response)
                     }
-
-                    $("#iniciar-sesion").empty().append(`
-                        Iniciar sesión
-                        `);
+                   
                 }
             });
 
         }
-    
-       // console.log("Usuario: " + user +"   COntraseña: " + pass );
-    
-       
     }
 
 
@@ -93,3 +70,29 @@
             iniciarSesion();
         }
     });
+
+function insertarMensaje(response){
+    console.log(response);
+    alerta = $("#alerta");
+        alerta.removeClass("mensaje-oculto");
+        alerta.addClass("mensaje-sesion");
+        label = $("#label-alert");
+        label.removeClass();
+    if(response.tipo=='warning'){
+        label.addClass("alert alert-warning");
+    }else if(response.tipo=='danger'){
+        label.addClass("alert alert-danger");
+    }
+    else if(response.tipo == 'success'){
+        label.addClass("alert alert-success");
+    }
+
+    label.html(`<i class='fas fa-exclamation-triangle'></i> ${response.mensaje}`);
+    label.addClass('')
+    
+    setTimeout(function(){
+        $("#iniciar-sesion").empty().append(`
+        Iniciar sesión
+        `);
+    },1000)
+}

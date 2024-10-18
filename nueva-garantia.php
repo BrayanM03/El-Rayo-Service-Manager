@@ -64,9 +64,11 @@ if ($_SESSION['rol'] == 4) {
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="src/css/menu-vertical.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.css" integrity="sha512-oe8OpYjBaDWPt2VmSFR+qYOdnTjeV9QPLJUeqZyprDEQvQLJ9C5PCFclxwNuvb/GQgQngdCXzKSFltuHD3eCxA==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
 
     <!-- PDF viewer and library -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.10.111/web/pdf_viewer.min.css">
+
     <style>
         .tooltip span {
             display: none;
@@ -93,7 +95,7 @@ if ($_SESSION['rol'] == 4) {
             z-index: 999999999 !important;
         }
 
-        .delete-thumbnail {
+        .delete-thumbnail {  
             border: 1px solid red !important;
             position: fixed;
             left: 52% !important;
@@ -108,11 +110,27 @@ if ($_SESSION['rol'] == 4) {
         .delete-thumbnail:hover {
             background-color: orange;
         }
+        #my-awesome-dropzone{
+            border: 2px dashed #c8c8c8;
+            color: #b7b9cc
+        }
+        #my-awesome-dropzone:hover{
+            border: 2px dashed #82addc;
+            color: #82addc;
+        }
+
+        .rayin-validacion{
+            position: absolute;
+            right: 22%;
+            z-index: 1;
+        }
+        
     </style>
 
 </head>
 
 <body id="page-top">
+<?php include 'views/loader.php'; ?>
     <!-- Page Wrapper -->
     <div id="wrapper">
 
@@ -136,7 +154,7 @@ if ($_SESSION['rol'] == 4) {
                     <div class="row">
                         <div class="col-12">
                             <div class="row mt-3 mb-3">
-                                <div class="col-md-6">
+                                <div class="col-md-12 text-center">
                                     <h5><b>Nueva garantia</b></h5>
                                 </div>
                             </div>
@@ -148,25 +166,23 @@ if ($_SESSION['rol'] == 4) {
                                 </div>
                                 </div>
                                 <div class="col-4">
-                                    <label for="">Folio</label>
+                                    <label for="">Folio RAY</label>
                                     <div style="display: flex; flex-direction:row">
-                                        <input type="text" id="folio" class="form-control" placeholder="No Folio..." style="border-radius:8px 0px 0px 8px">
+                                        <input placeholder="ejemplo: 23400..." type="text" id="folio" class="form-control" style="border-radius:8px 0px 0px 8px">
                                         <div class="btn btn-info" onclick="buscarRay()" id="btn-buscar" style="border-radius:0px 8px 8px 0px"><i class="fas fa-fw fa-search"></i></div>
                                     </div>
                                 </div>
                             </div>
                             <div class="row justify-content-center mt-3">
-                                <div class="col-5">
+                                <div class="col-4">
                                     <label for="">Cliente</label>
-                                    <input type="text" class="form-control" id="nombre_cliente">
-                                    <label for="comentario-garantia">Comentario</label>
-                                    <textarea class="form-control" id="comentario-garantia" placeholder="¿Porque razón se estan mandando a garantia?"></textarea>
-
+                                    <input type="text" class="form-control" id="nombre-cliente" placeholder="Nombre completo del cliente">
+                                   
                                 </div>
-                                <div class="col-3">
-                                    <label for="">Sucursal</label>
-                                    <select type="text" disabled class="disabled form-control" id="sucursal">
-                                        <option value=""></option>
+                                <div class="col-2">
+                                    <label for="">Sucursal venta</label>
+                                    <select onchange="validarFormulario()" type="text" disabled class="disabled form-control" id="sucursal">
+                                        <option value="">Selecciona una sucursal</option>
                                        <?php 
                                             $sql = "SELECT * FROM sucursal";
                                             $stmt = $con->prepare($sql);
@@ -178,16 +194,80 @@ if ($_SESSION['rol'] == 4) {
                                             }
                                         ?>
                                     </select>
+                                </div>
+                                <div class="col-2">
+                                    <label for="">Sucursal que recibe</label>
+                                    <select type="text" onchange="validarFormulario()" class="disabled form-control" id="id-sucursal-recibe">
+                                        <option value="">Selecciona una sucursal</option>
+                                       <?php 
+                                            $sql = "SELECT * FROM sucursal";
+                                            $stmt = $con->prepare($sql);
+                                            $stmt->execute();
+                                            $get_resultz = $stmt->get_result();
+                                            $datos_sucu= $get_resultz->fetch_all(MYSQLI_ASSOC);
+                                            foreach ($datos_sucu as $key => $value) {
+                                                echo "<option value=".$value['id'].">".$value['nombre']."</option>";
+                                            }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row justify-content-center mt-3">
+                                <div class="col-8">
+                                    <label for="comentario-garantia">Comentario</label>
+                                    <textarea onkeyup="validarFormulario()" class="form-control" id="comentario-garantia" placeholder="¿Porque razón se estan mandando a garantia?"></textarea>
+                                </div>
+                                <!-- <div class="col-3">
                                     <label for="factura">Folio factura</label>
-                                    <input type="text" class="form-control" id="folio_factura">
+                                    <input type="text" class="form-control" placeholder="ejemplo: TS58064..." id="folio_factura">
+                                 </div> -->
+                            </div>
+
+                            <div class="row mt-4 justify-content-center">
+                                    <div class="col-12 col-md-4" id="area-nombres-vendedor-recibe">
+                                        <label for="">Nombre del vendedor</label>
+                                        <select onchange="validarFormulario()" class="form-control" name="" id="id-usuario-vendedor">
+                                            <option value="">Selecciona un usuario</option>
+                                            <?php 
+
+                                            $sql = "SELECT * FROM usuarios";
+                                            $stmt = $con->prepare($sql);
+                                            $stmt->execute();
+                                            $get_resultz = $stmt->get_result();
+                                            $datos_sucu= $get_resultz->fetch_all(MYSQLI_ASSOC);
+                                            foreach ($datos_sucu as $key => $value) {
+                                                echo "<option value=".$value['id'].">".$value['nombre']." ".$value['apellidos']."</option>";
+                                            }
+                                        ?>
+                                        </select>
+                                    </div>
+                                <div class="col-12 col-md-4" id="area-nombres-vendedor-recibe-2">
+                                    <label for="">Nombre de quien recibe</label>
+                                    <select onchange="validarFormulario()" class="form-control" name="" id="id-usuario-recibe">
+                                            <option value="">Selecciona un usuario</option>
+                                            <?php 
+
+                                            $sql = "SELECT * FROM usuarios";
+                                            $stmt = $con->prepare($sql);
+                                            $stmt->execute();
+                                            $get_resultz = $stmt->get_result();
+                                            $datos_sucu= $get_resultz->fetch_all(MYSQLI_ASSOC);
+                                            foreach ($datos_sucu as $key => $value) {
+                                                echo "<option value=".$value['id'].">".$value['nombre']." ".$value['apellidos']."</option>";
+                                            }
+                                        ?>
+                                        </select>
                                 </div>
                             </div>
                             <hr>
+
+                            <!-- Este campo estará oculto a menos que se indique en el checkboton que no pertencé a un folio -->
                             <div id="contenedor-datos-llanta" class="d-none">
                                 <div class="row justify-content-center mt-3">
                                 
                                 <div class="col-12 col-md-5">
-                                    <label for="">Buscador</label>
+                                    <label for="">Buscador (Solo se podrá agregar 1 llanta)</label>
                                     <select class="form-control" id="search"></select>
                                 </div>
                                 <div class="col-12 col-md-3">
@@ -195,10 +275,11 @@ if ($_SESSION['rol'] == 4) {
                                     <input class="form-control" id="dot-llanta">
                                 </div>
                             </div>
+
                             <div class="row mt-3 justify-content-center">
                                 <div class="col-12 col-md-3">
                                     <label for="">Cantidad</label>
-                                    <input class="form-control" placeholder="0" id="cantidad-llantas">
+                                    <input class="form-control" type="number" placeholder="0" id="cantidad-llantas">
                                 </div>
                                 <div class="col-12 col-md-2 mt-4">
                                     <div class="btn btn-info" id="btn-agregar-llanta" onclick="agregarLlantaSinVenta()">Agregar</div>
@@ -208,8 +289,10 @@ if ($_SESSION['rol'] == 4) {
                             </div>
                             </div>
                             
+
                             <div class="row justify-content-center">
-                                <div class="col-8">
+                                <div class="col-12 col-md-8">
+                                    <label>Mercancia que se añadirá a la garantia, solo 1 registro por folio</label>
                                     <table class="table table-bordered mt-3">
                                         <thead style="border-radius: 6px 6px 0px 0px !important; background-color:#36b9cc; color:white">
                                             <tr>
@@ -233,16 +316,42 @@ if ($_SESSION['rol'] == 4) {
                                     </table>
                                 </div>
                             </div>
-                            <div class="row justify-content-center">
+                            <!-- <div class="row justify-content-center">
                                 <div class="col-8">
-                                   <label> Comprobante de garantia</label>
+                                   <label><b>Evidencia fotografica</b></label>
+                                   <span>Evidencia del daño de la llanta, favor de anexar por fuera y por dentro del neumatico asi como
+                                    distintos angulos requeridos.</span>
                                    <input type="file" class="form-control" id="comprobante-entrega" onchange="cargarComprobanteRegistro()">
                                    <div id="area-canvas" class="mt-3">
                                         <canvas id="thumbnailCanvas" width="100" height="150"></canvas>
                                         <img src="" height="200" id="gasto-imagen">
                                     </div>
+                                 </div>
+                            </div> -->
+
+                            <div class="row mt-3 justify-content-center">
+                                <div class="col-8">
+                                <label><b>Evidencia fotografica</b></label>
+                                   <span>Evidencia del daño de la llanta, favor de anexar por fuera y por dentro del neumatico asi como
+                                    distintos angulos requeridos.</span>
+                                <div class="dropzone" id="my-awesome-dropzone">
+                                    <div class="dz-message" data-dz-message><span>Haz click o suelta tus documentos aquí (.jpg, .jpeg, .png)</span></div>
+                                </div>
+                                </div>
                             </div>
+
+
+                            <div id="area-mensaje-validacion" class="d-none row justify-content-center mt-3 mb-3 justify-content-center">
+                                <div class="col-md-6 text-start">
+                                    <div class="alert alert-danger" role="alert">
+                                        <span><b>Completa los datos del formulario, revisa estos mensajes de validación:</b></span>
+                                       <ul id="mensajes-validacion">
+                                       </ul>
+                                    </div>
+                                </div>
+                                <img src="src/img/rayin_question.png" class="rayin-validacion" alt="" width="200px">
                             </div>
+
                             <div class="row justify-content-center mt-3 mb-3 justify-content-center">
                                 <div class="col-md-6 text-center">
                                     <div class="btn btn-secondary disabled" disabled id="btn-reg-garantia" onclick="registrarGarantia()">Registrar garantia</div>
@@ -309,6 +418,7 @@ if ($_SESSION['rol'] == 4) {
     <script src="src/js/sb-admin-2.min.js?v=1239"></script>
 
     <!-- Page level plugins -->
+    <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.10.111/build/pdf.min.js"></script>
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <script src="src/vendor/chart.js/Chart.min.js"></script>
@@ -322,7 +432,32 @@ if ($_SESSION['rol'] == 4) {
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="src/js/bootstrap-select.min.js"></script>
     <script src="src/js/garantias.js"></script>
+    <script>
+         myDropzone = new Dropzone("#my-awesome-dropzone", { 
+            addRemoveLinks: true,
+            url: "#",
+            autoProcessQueue: false ,
+            removedfile: function(file) {
+                    file.previewElement.remove();
+                    validarFormulario()
+            },
+            accept: function(file, done) {
+             done(); //Primero acepta el archivo (para que se visualize en la area Dropzone)
+             validarFormulario(); //Luego valida el formulario jeje
+            }
+            });
 
+            const input = document.getElementById('folio');
+            // Agregamos un evento 'keydown' al input
+            input.addEventListener('keydown', (event) => {
+
+            // Si la tecla presionada es Enter (código 13)
+            if (event.keyCode === 13) {
+                // Ejecutamos la función
+                buscarRay()
+            }
+            });
+    </script>
 </body>
 
 </html>

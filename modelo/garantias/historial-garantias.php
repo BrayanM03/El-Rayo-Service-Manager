@@ -45,7 +45,11 @@ $columns = array(
 	array( 'db' => 'id_sucursal',  'dt' => 13),
 	array( 'db' => 'cliente',  'dt' => 14),
 	array( 'db' => 'sucursal',  'dt' => 15),
-	array( 'db' => 'comprobante_extension',  'dt' => 16),
+	array( 'db' => 'sucursal_recibe',  'dt' => 16),
+	array( 'db' => 'cliente',  'dt' => 17),
+	array( 'db' => 'usuario_recibe',  'dt' => 18),
+	array( 'db' => 'usuario_vendedor',  'dt' => 19),
+	array( 'db' => 'proveedor',  'dt' => 20),
 );
 
 // SQL server connection information

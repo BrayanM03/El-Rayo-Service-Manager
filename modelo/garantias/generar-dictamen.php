@@ -7,7 +7,7 @@ $con = $conectando->conexion();
 global $con;
 
 $folio =  $_GET["id"];
-$idMov = $_GET["id"];
+$idMov = $_GET["id"]; 
 global $folio;
 
 $ID = $con->prepare("SELECT id, cantidad, dot, descripcion, marca, comentario_inicial, analisis, dictamen, lugar_expedicion, fecha_expedicion, factura, id_sucursal, cliente, sucursal, id_venta FROM vista_garantias WHERE id = ?");
@@ -53,6 +53,18 @@ global $telefono_suc;
 global $rfc_suc;
 global $cp_suc;
 
+$sel = "SELECT * FROM garantias_imagenes WHERE id_garantia = ?";
+$res = $con->prepare($sel);
+$res->bind_param('s', $id_garantia);
+$res->execute();
+$resultado_imagenes = $res->get_result();  
+$res->free_result();
+$res->close();
+while($fila_ = $resultado_imagenes->fetch_assoc()){
+    $data_img[] = $fila_;
+}
+
+global $data_img;
 
 require('../../src/vendor/fpdf/fpdf.php');
 //require('../../../vistas/plugins/fpdf/rounded_rect2.php');
@@ -63,7 +75,7 @@ if (!isset($_SESSION['id_usuario'])) {
     header("Location:../../login.php");
 }
 
-
+require('../helpers/utf8_decode.php');
 
 class PDF extends FPDF
 {
@@ -245,16 +257,16 @@ function Header()
     $this->AddFont('Exo2-Bold','B','Exo2-Bold.php');
     // Arial bold 15
     $this->SetFont('Arial','B',11);
-    $this->Cell(170,4,utf8_decode('Folio'),0,0,'R');
+    $this->Cell(170,4,utf8_decode_('Folio'),0,0,'R');
     /* $this->Line(166,15,183,15); */
     $this->SetDrawColor(253,144,138);
     $this->Ln(5);
-    $this->Cell(155.5,10,utf8_decode(''),0,0,'L', false);
+    $this->Cell(155.5,10,utf8_decode_(''),0,0,'L', false);
     $this->SetFillColor(197, 203, 212);
     $this->RoundedRect(166, 20, 17, 7, 2, '1234', 'DF');
-    $this->Cell(18,6,utf8_decode($_GET["id"]),0,0,'C');
+    $this->Cell(18,6,utf8_decode_($_GET["id"]),0,0,'C');
     $this->Ln(8);
-    $this->Cell(173,4,utf8_decode('Garantia'),0,0,'R');
+    $this->Cell(173,4,utf8_decode_('Garantia'),0,0,'R');
     $this->SetLineWidth(0.5);
 
    
@@ -275,50 +287,50 @@ function Header()
     $this->Cell(108.3,10,$titulo_sucursal,0,0, 'L');
     $this->SetFont('Exo2-Bold','B',12);
     
-    $this->Cell(60,10,utf8_decode('Dictamen: ' .$dictamen),0,0,'C');
+    $this->Cell(60,10,utf8_decode_('Dictamen: ' .$dictamen),0,0,'C');
     $this->Ln(5);
 
     $this->SetFont('Arial','',9);
-    $this->Cell(32,10,utf8_decode($direccion . " "),0,0,'L', false);
-    $this->Cell(88,10,utf8_decode($colonia . ", " . $cp),0,0,'L', false);
+    $this->Cell(32,10,utf8_decode_($direccion . " "),0,0,'L', false);
+    $this->Cell(88,10,utf8_decode_($colonia . ", " . $cp),0,0,'L', false);
     $this->SetFont('Arial','B',9);
-    $this->Cell(25,10,utf8_decode("Fecha expedición: "),0,0,'L', false);
+    $this->Cell(25,10,utf8_decode_("Fecha expedición: "),0,0,'L', false);
     $this->SetFont('Arial','',9);
-    $this->Cell(50,10,utf8_decode($fecha_expedicion),0,0,'L', false);
+    $this->Cell(50,10,utf8_decode_($fecha_expedicion),0,0,'L', false);
     $this->Ln(4);
    
-    $this->Cell(21,10,utf8_decode($ciudad.","),0,0,'L', false);
-    $this->Cell(18,10,utf8_decode($estado.","),0,0,'L', false);
-    $this->Cell(81,10,utf8_decode($pais),0,0,'L', false);
+    $this->Cell(21,10,utf8_decode_($ciudad.","),0,0,'L', false);
+    $this->Cell(18,10,utf8_decode_($estado.","),0,0,'L', false);
+    $this->Cell(81,10,utf8_decode_($pais),0,0,'L', false);
     $this->SetFont('Arial','B',9); */
-    /* $this->Cell(25,10,utf8_decode("Hora emisión: "),0,0,'L', false);
+    /* $this->Cell(25,10,utf8_decode_("Hora emisión: "),0,0,'L', false);
     $this->SetFont('Arial','',9);
-    $this->Cell(50,10,utf8_decode($hora_mov),0,0,'L', false);
+    $this->Cell(50,10,utf8_decode_($hora_mov),0,0,'L', false);
     $this->Ln(4); */
 
    /*  $this->SetFont('Arial','B',9);
-    $this->Cell(15,10,utf8_decode("Telefono: "),0,0,'L', false);
+    $this->Cell(15,10,utf8_decode_("Telefono: "),0,0,'L', false);
     $this->SetFont('Arial','',9);
-    $this->Cell(105,10,utf8_decode($telefono),0,0,'L', false);
+    $this->Cell(105,10,utf8_decode_($telefono),0,0,'L', false);
     $this->SetFont('Arial','B',9);
-    $this->Cell(25,10,utf8_decode("Sucursal: "),0,0,'L', false);
+    $this->Cell(25,10,utf8_decode_("Sucursal: "),0,0,'L', false);
     $this->SetFont('Arial','',9);
-    $this->Cell(50,10,utf8_decode($sucursal_nombre),0,0,'L', false);
+    $this->Cell(50,10,utf8_decode_($sucursal_nombre),0,0,'L', false);
     $this->Ln(4);
 
     $this->SetFont('Arial','B',9);
-    $this->Cell(15,10,utf8_decode("RFC: "),0,0,'L', false);
+    $this->Cell(15,10,utf8_decode_("RFC: "),0,0,'L', false);
     $this->SetFont('Arial','',9);
-    $this->Cell(105,10,utf8_decode($rfc),0,0,'L', false);  
+    $this->Cell(105,10,utf8_decode_($rfc),0,0,'L', false);  
     $this->SetFont('Arial','B',9);
-    $this->Cell(25,10,utf8_decode("Correo: "),0,0,'L', false);
+    $this->Cell(25,10,utf8_decode_("Correo: "),0,0,'L', false);
     $this->SetFont('Arial','',9);
-    $this->Cell(50,10,utf8_decode("karlasanchezr@gmail.com"),0,0,'L', false);
+    $this->Cell(50,10,utf8_decode_("karlasanchezr@gmail.com"),0,0,'L', false);
  */
     $this->Ln(1);
     
     $this->SetFont('Exo2-Bold','B',12);
-    /* $this->Cell(50,10,utf8_decode("Movimiento:"),0,0,'L', false); */
+    /* $this->Cell(50,10,utf8_decode_("Movimiento:"),0,0,'L', false); */
     $this->Ln(12);
     $this->SetDrawColor(253,144,138);
     $this->SetFillColor(255,255,255);//(235, 238, 242);
@@ -329,7 +341,6 @@ function Header()
    //RoundedRect($left, $top, $width, $height, $radius, $corners = '1234', $style = '')
    /* $this->RoundedRect(10, 71, 186, $nH, 2, '34');
    $this->Ln(6); */
-
 
 }
 
@@ -384,22 +395,22 @@ function cuerpoTabla(){
      II.- ARTICULO; IV DEL ACUERDO SOBRE BASE MINIMAS DE POLIZAS DE GARANTIA
                             (DIARIO OFICIAL DE MAYO 4 DE 1976)
      III.- GARANTIA DEL FABRICANTE";
-     $pdf->MultiCell(130,3, utf8_decode($articulos),0,1,'C',0);
+     $pdf->MultiCell(130,3, utf8_decode_($articulos),0,1,'C',0);
      $pdf->Ln(1);
      $pdf->SetFont('Exo2-Bold','B',10);
-     $pdf->Cell(17,19,utf8_decode("Cliente: "),0,0,'C');
+     $pdf->Cell(17,19,utf8_decode_("Cliente: "),0,0,'C');
      $pdf->SetFont('Arial','',10);
-     $pdf->Cell(40,19,utf8_decode($cliente),0,0,'C');  
+     $pdf->Cell(40,19,utf8_decode_($cliente),0,0,'C');  
      $pdf->SetFont('Exo2-Bold','B',10);
 
      $pdf->Ln(15);
     $pdf->SetDrawColor(135, 134, 134);
     $pdf->SetTextColor(36, 35, 28);
     $pdf->SetFontSize(10);
-    $pdf->Cell(20,9,utf8_decode("Cantidad"),0,0,'C');  
-    $pdf->Cell(90,9,utf8_decode("Descripción"),0,0, 'L');
-    $pdf->Cell(23,9,utf8_decode("Marca"),0,0, 'L');
-    $pdf->Cell(20,9,utf8_decode("No Serie / DOT"),0,0, 'C');
+    $pdf->Cell(20,9,utf8_decode_("Cantidad"),0,0,'C');  
+    $pdf->Cell(90,9,utf8_decode_("Descripción"),0,0, 'L');
+    $pdf->Cell(23,9,utf8_decode_("Marca"),0,0, 'L');
+    $pdf->Cell(20,9,utf8_decode_("No Serie / DOT"),0,0, 'C');
     $pdf->Ln(0);
     //$pdf->Line(11,81,196,81);
    
@@ -413,9 +424,9 @@ function cuerpoTabla(){
     $conexion = $GLOBALS["con"];
 
     $pdf->Cell(20,9,$cantidad,0,0,'C',1);
-    $pdf->Cell(90,9, utf8_decode($descripcion),0,0,'L',1); //$descripcion
-    $pdf->Cell(23,9, utf8_decode($marca),0,0,'L',1);
-    $pdf->Cell(20,9, utf8_decode($dot),0,0,'C',1);
+    $pdf->Cell(90,9, utf8_decode_($descripcion),0,0,'L',1); //$descripcion
+    $pdf->Cell(23,9, utf8_decode_($marca),0,0,'L',1);
+    $pdf->Cell(20,9, utf8_decode_($dot),0,0,'C',1);
     $pdf->Ln(15);
 
     /*CAMBIOSSSSSSSSSSSSSSSSS */
@@ -427,8 +438,8 @@ function cuerpoTabla(){
     $pdf->SetLineWidth(0.5);
     $pdf->Line(10,95,198,95);
     $pdf->Ln(3);
-    $pdf->Cell(46,9, utf8_decode('Del Analisis: '),0,0,'C',0); 
-    $pdf->multiCell(100,3.5, utf8_decode($analisis),0,1,'L',0); 
+    $pdf->Cell(46,9, utf8_decode_('Del Analisis: '),0,0,'C',0); 
+    $pdf->multiCell(100,3.5, utf8_decode_($analisis),0,1,'L',0); 
     $pdf->Ln(20);
   
     $pdf->SetFont('Exo2-Bold','B',10);
@@ -436,7 +447,7 @@ function cuerpoTabla(){
     $pdf->Cell(22,6,'Dictamen',0,0);
     $pdf->SetFont('Arial','',10);
 
-    $pdf->Cell(47,6, utf8_decode('La presente reclamación es: '), 0,0);
+    $pdf->Cell(47,6, utf8_decode_('La presente reclamación es: '), 0,0);
     $pdf->SetFont('Arial','B',10);
 
     if($dictamen == 'pendiente'){
@@ -455,24 +466,24 @@ function cuerpoTabla(){
     $pdf->Ln(5);
     $pdf->Cell(22,6,'Importante',0,0);
     $pdf->SetFont('Arial','',10);
-    $pdf->Cell(100,6, utf8_decode('La garantia cubre unicamente defectos de fabricacíon y/o mano de obra'), 0,0);
+    $pdf->Cell(100,6, utf8_decode_('La garantia cubre unicamente defectos de fabricacíon y/o mano de obra'), 0,0);
     $pdf->SetFont('Exo2-Bold','B',10);
 
     $pdf->Ln(5);
     $pdf->Cell(22,6,'Comentario',0,0);
     $pdf->SetFont('Arial','',10);
-    $pdf->Cell(100,6, utf8_decode('Folio venta RAY' . $id_venta), 0,0);
+    $pdf->Cell(100,6, utf8_decode_('Folio venta RAY' . $id_venta), 0,0);
     $pdf->SetFont('Exo2-Bold','B',10);
   
     $pdf->Ln(10);
-    $pdf->Cell(50,6,utf8_decode('Lugar y fecha de expedición: '),0,0);
+    $pdf->Cell(50,6,utf8_decode_('Lugar y fecha de expedición: '),0,0);
     $pdf->SetFont('Arial','',10);
-    $pdf->Cell(100,6, utf8_decode($lugar_expedicion . ' ' . $fecha_expedicion), 0,0);
+    $pdf->Cell(100,6, utf8_decode_($lugar_expedicion . ' ' . $fecha_expedicion), 0,0);
     $pdf->SetFont('Exo2-Bold','B',10);
     $pdf->Ln(6);
-    $pdf->Cell(50,6,utf8_decode('Nombre y firma del ajustador: '),0,0);
+    $pdf->Cell(50,6,utf8_decode_('Nombre y firma del ajustador: '),0,0);
     $pdf->SetFont('Arial','',10);
-    $pdf->Cell(100,6, utf8_decode(''), 0,0);
+    $pdf->Cell(100,6, utf8_decode_(''), 0,0);
     $pdf->SetFont('Exo2-Bold','B',10);
     
     $ejeY = $ejeY +17;
@@ -483,7 +494,7 @@ function cuerpoTabla(){
 
     $pdf->SetTextColor(1, 1, 1);
     $pdf->SetFont('Arial','',10);
-    $pdf->Cell(193,6,utf8_decode("Recibido"),0,0,'C'); 
+    $pdf->Cell(193,6,utf8_decode_("Recibido"),0,0,'C'); 
     $pdf->Ln(7);
     $pdf->SetFont('Arial','B',11);
 
@@ -515,7 +526,7 @@ function cuerpoTabla(){
     $pdf->Ln(8);
     $pdf->SetFont('Courier','',12);
     $formatTotal = $GLOBALS["formatTotal"];
-    $pdf->Cell(180,8,utf8_decode($formatTotal),0,0,'L',1);
+    $pdf->Cell(180,8,utf8_decode_($formatTotal),0,0,'L',1);
     $pdf->Ln(15); */
 
    /*  $pdf->SetFont('Times','B',12);
@@ -527,35 +538,48 @@ function cuerpoTabla(){
     }
     $pdf->Ln(8);
     $pdf->SetFont('Courier','',12);
-    $pdf->MultiCell(140,6,utf8_decode($observacion),0,'L',1);
+    $pdf->MultiCell(140,6,utf8_decode_($observacion),0,'L',1);
     $pdf->Ln(52); */
 
   /*   $pdf->SetTextColor(0, 32, 77);
     $pdf->SetFont('Arial','B',5);
     $text = 'GARANTÍA DE UN AÑO CONTRA DEFECTO DE FABRICA A PARTIR DE ESTA FECHA';
     $text2 = 'FAVOR DE PRESENTAR ESTE COMPROBANTE DE VENTA PARA HACER VALIDO LA GARANTÍA';
-    $pdf->Cell(189,6,utf8_decode($text),0,0,'L');
+    $pdf->Cell(189,6,utf8_decode_($text),0,0,'L');
     $pdf->Ln(2);
-    $pdf->Cell(189,6,utf8_decode($text2),0,0,'L'); */
+    $pdf->Cell(189,6,utf8_decode_($text2),0,0,'L'); */
    
     
 /*     $pdf->Ln(10);
 
     $pdf->SetTextColor(1, 1, 1);
     $pdf->SetFont('Arial','B',10);
-   // $pdf->Cell(185,6,utf8_decode("Gracias por su compra"),0,0,'C');
+   // $pdf->Cell(185,6,utf8_decode_("Gracias por su compra"),0,0,'C');
     $pdf->Ln(18);
     $pdf->Line(78,268,130,268);
     $pdf->SetTextColor(1, 1, 1);
     $pdf->SetFont('Arial','B',10);
-    $pdf->Cell(193,6,utf8_decode("Recibido"),0,0,'C'); */
+    $pdf->Cell(193,6,utf8_decode_("Recibido"),0,0,'C'); */
     
    /*  $pdf->Image('../../../vistas/dist/img/QR_code.png',20,238,35); */
     $pdf->SetDrawColor(253, 144, 138);
     $pdf->SetLineWidth(1);
     $pdf->Line(10,285,200,285);
 
+       //Imagenes
+    $pdf->Ln(110);
+    $pdf->Cell(40,10,'Evidencia fotografica',0,0, 'L');
+
+    $img_array = $GLOBALS["data_img"];
+    $m_left = 10;
+    $altura_y = 200;
+    foreach ($img_array as $key => $value) {
+        $pdf->Image('../../src/docs/garantias/'.$GLOBALS['id_garantia'].'/'.$value['ruta'],$m_left,$altura_y,43);
+        $m_left+=50;
+    }
+    
     $pdf->Output("Remision " . $_GET["id"] .".pdf", "I");
+    
 }
 
 cuerpoTabla();

@@ -13,6 +13,8 @@ if(isset($_POST)) {
     $dictamen = $_POST['dictamen'];
     $lugar_expedicion = $_POST['lugar_expedicion'];
     $fecha_expedicion = $_POST['fecha_expedicion'];    
+    $estatus_fisico = $_POST['estatus_fisico'];    
+    $id_proveedor = $_POST['id_proveedor'];    
     $id_garantia = $_POST['id_garantia'];
     $count = "SELECT COUNT(*) FROM garantias WHERE id = ?";
     $stmt = $con->prepare($count);
@@ -23,9 +25,10 @@ if(isset($_POST)) {
     $stmt->close();
 
     if($total_count > 0){
-        $updt = "UPDATE garantias SET analisis = ?, dictamen = ?, lugar_expedicion = ?, fecha_expedicion = ? WHERE id = ?";
+        $updt = "UPDATE garantias SET analisis = ?, dictamen = ?, lugar_expedicion = ?, fecha_expedicion = ?, id_proveedor = ?,
+        estatus_fisico = ? WHERE id = ?";
         $stmt = $con->prepare($updt);
-        $stmt->bind_param('ssssi', $analisis, $dictamen, $lugar_expedicion, $fecha_expedicion, $id_garantia);
+        $stmt->bind_param('ssssiii', $analisis, $dictamen, $lugar_expedicion, $fecha_expedicion, $id_proveedor, $estatus_fisico, $id_garantia);
         $stmt->execute();
         $stmt->close();
 

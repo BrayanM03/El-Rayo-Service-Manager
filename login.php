@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+<?php
+session_start();
 
+if (empty($_SESSION['csrf_token'])) {
+    // Genera un token CSRF aleatorio y único
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}?>
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -20,6 +26,7 @@
 
 <body>
     <div class="container-fluid">
+        
     <div class="row align-items-center justify-content-center">
     <div class="col-12 col-md-3 col-sm-12">
             <!-- <div class="col-12 col-md-12 mt-3">
@@ -32,6 +39,7 @@
             <div class="simple-login-container" style="border:1px solid #c8c8c8;">
                 <div class="formulario">
                     <form action="" id="login-form">
+                    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                         <h2><img id="logo-login" src="./src/img/Optimized-logo-horizintal.png" alt=""></h2>
                         <div class="row">
                             <div class="col-md-12 form-group">
@@ -85,6 +93,6 @@
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://kit.fontawesome.com/31a28ea63e.js" crossorigin="anonymous"></script>
-<script src="src/js/iniciar-sesion.js"></script>
+<script src="src/js/iniciar-sesion.js"></script> 
 
 </html>

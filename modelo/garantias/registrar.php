@@ -2,6 +2,7 @@
 
 session_start();
 include '../conexion.php';
+include '../helpers/response_helper.php';
 $con = $conectando->conexion();
 
 if (!isset($_SESSION['id_usuario'])) {
@@ -11,6 +12,7 @@ if (!isset($_SESSION['id_usuario'])) {
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+
 if(isset($_POST)) {
     /* 
     $comentario = $_POST['comentario']; */
@@ -18,66 +20,87 @@ if(isset($_POST)) {
     $datos = json_decode($datos);
     $comentario = $_POST['comentario'];
     $factura = $_POST['folio_factura'];
-    $id_cliente = $_POST['id_cliente'] == 'undefined' ? 1 : $_POST['id_cliente'];
-    $id_sucursal = $_POST['sucursal'];
-  /*   print_r($id_sucursal);
-    die(); */
-   // $id_sucursal = $_POST['id_sucursal'];
+    $id_cliente = $_POST['id_cliente'] == 'undefined' ? 0 : $_POST['id_cliente'];
+    $id_vendedor = empty($_POST['id_vendedor']) ? 0 : $_POST['id_vendedor'];
+    $id_sucursal = $_POST['id_sucursal'] == 'undefined' ? 0 : $_POST['id_sucursal'];
+    $id_sucursal_recibe = $_POST['id_sucursal_recibe'];
+    $id_usuario_recibe = $_POST['id_usuario_recibe'];
+
     $id_venta = $_POST['id_venta'] == '' ? 0: $_POST['id_venta'];
     
-    if(empty($_FILES['comprobante'])){
-        $comprobante = 0;
-        $imageFileType = 'NA';
-    }else{
-        $comprobante = 1;
-        $targetDir = '../../src/docs/garantias/';
-        $targetFile = $targetDir . basename($_FILES['comprobante']['name']);
-        $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
-    }
-    $id_garantia =0;
-    
-    foreach ($datos as $key => $value) {
-        $numero=$value->numero;
-        $id_llanta = intval($value->codigo);
-        $cantidad= $value->cantidad;
-        $descripcion= $value->descripcion;
-        $marca = $value->marca;
-        $precio = $value->precio;
-        $dot = $value->dot;
-        $dictamen = 'pendiente';
-        $insert = "INSERT INTO garantias(id, id_cliente, cantidad, id_llanta, dot, descripcion, marca, comentario_inicial, dictamen, factura, id_sucursal, id_venta, comprobante_extension) VALUES(null,?,?,?,?,?,?,?,?,?,?,?,?)";
-        $stmt = $con->prepare($insert);
-        $stmt->bind_param('ssssssssssss', $id_cliente, $cantidad, $id_llanta, $dot, $descripcion, $marca, $comentario, $dictamen, $factura, $id_sucursal, $id_venta, $imageFileType);
-        $stmt->execute();
-        $error = $stmt->error;
-        if($error){
-            print_r($error);
-        }
-        $id_garantia = $con->insert_id;
-        $stmt->close();
-    }
-    // Directorio de destino para guardar el archivo
-    if(empty($_FILES['comprobante'])){
-        $mensaje_archivo = 'No se subio un archivo';
-    }else{
-        /* $targetDir = '../../src/docs/gastos/';
-        $targetFile = $targetDir . basename($_FILES['comprobante']['name']);
-   
-        // Verificar si el archivo es una imagen (por ejemplo, JPG, PNG)
-        $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION)); */
-        if ($imageFileType != 'jpg' && $imageFileType != 'png' && $imageFileType != 'jpeg' && $imageFileType != 'pdf') {
-            echo json_encode(["error" => "El archivo no es una imagen válida."]);
-            exit;
-        }
+    if(count($_FILES)>0){
+            //Validacion de comprobantes y adjuntos de la garantias
+            
 
-        // Mover el archivo al directorio de destino
-        if (move_uploaded_file($_FILES["comprobante"]["tmp_name"], $targetDir . 'GT' . $id_garantia.'.' .$imageFileType)) {
-            $mensaje_archivo ="El archivo se ha subido correctamente.";
-        } else {
-            $mensaje_archivo ="Hubo un error al subir el archivo.";
-        }
-    }
+            foreach ($datos as $key => $value) {
+                $numero=$value->numero;
+                $id_llanta = intval($value->codigo);
+                $cantidad= $value->cantidad;
+                $descripcion= $value->descripcion;
+                $marca = $value->marca;
+                $precio = $value->precio;
+                $dot = $value->dot;
+                $dictamen = 'pendiente';
+                $insert = "INSERT INTO garantias(id, id_cliente, cantidad, id_llanta, dot, 
+                descripcion, marca, comentario_inicial, dictamen, factura, id_sucursal, id_venta, id_usuario, id_sucursal_recibe,
+                id_usuario_recibe, estatus_fisico) 
+                VALUES(null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,1)";
+                $stmt = $con->prepare($insert);
+                $stmt->bind_param('ssssssssssssss', $id_cliente, $cantidad, $id_llanta, $dot, $descripcion, 
+                $marca, $comentario, $dictamen, $factura, $id_sucursal, $id_venta, $id_vendedor, $id_sucursal_recibe,
+                 $id_usuario_recibe);
+                $stmt->execute();
+                $error = $stmt->error;
+                if($error){
+                    responder(false, 'Ocurrio un error, mensaje: ' . $error, 'danger', null, true);
+                }
+                $id_garantia = $con->insert_id;
+                $stmt->close();
+            }
+            
+                $estructura = '../../src/docs/garantias/'.$id_garantia;
+                if(!mkdir($estructura, 0777, true)) {
+                    responder(false, 'Ocurrio un error al crear la estructura de carpetas', 'danger', null, true);
+                }
 
-    $response = array('estatus'=>true, 'mensaje'=>'Garantia registrada correctamente', 'error'=>$error, 'POST'=>$_POST);
-    echo json_encode($response);
+            //Recorremos los ficheros adjuntos
+            foreach ($_FILES as $key => $value) {
+                $insert ="INSERT INTO garantias_imagenes(id, id_garantia) VALUES(null,?)";
+                $stmt = $con->prepare($insert);
+                $stmt->bind_param('i',$id_garantia);
+                $stmt->execute();
+                $stmt->close();
+                $id_garantia_imagen = $con->insert_id;
+
+                $targetDir = '../../src/docs/garantias/';
+                $targetFile = $targetDir . basename($value['name']);
+                $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+
+                if ($imageFileType != 'jpg' && $imageFileType != 'png' && $imageFileType != 'jpeg' && $imageFileType != 'pdf') {
+                    responder(false, 'El archivo no es una imagen válida ', 'danger', null, true);
+                }
+
+                $ruta_final = '../../src/docs/garantias/'.$id_garantia.'/'.$id_garantia_imagen . '.'. $imageFileType;
+                $ruta_db = $id_garantia_imagen .  '.'. $imageFileType;
+                $updt ="UPDATE garantias_imagenes SET ruta = ? WHERE id = ?";
+                $stmt = $con->prepare($updt);
+                $stmt->bind_param('si',$ruta_db, $id_garantia_imagen);
+                $stmt->execute();
+                $stmt->close();
+
+                
+                // Mover el archivo al directorio de destino
+                if (move_uploaded_file($value["tmp_name"], $ruta_final)) {
+                         $mensaje_archivo ="El archivo se ha subido correctamente.";
+                } else {
+                        $mensaje_archivo ="Hubo un error al subir el archivo.";
+                        responder(false, $mensaje_archivo, 'danger', null, true);
+                }
+
+            }    
+            responder(true, 'Garantía registrada correctamente', 'success', null, true);
+            
+    }else{
+        responder(false, 'Debes adjuntar archivos de evidencia fotografica', 'danger', null, true);
+    }
 }

@@ -25,7 +25,17 @@ if($total_garantias>0){
         $data = $fila;
     }
 
-    $res = array('estatus'=> true, 'mensaje'=> 'Se encontraron datos', 'data'=>$data, 'error'=> $error);
+    $sel = "SELECT * FROM proveedores";
+    $res = $con->prepare($sel);
+    $res->execute();
+    $resultado_proveedores = $res->get_result();  
+    $res->free_result();
+    $res->close();
+    while($fila_ = $resultado_proveedores->fetch_assoc()){
+        $data_provs[] = $fila_;
+    }
+
+    $res = array('estatus'=> true, 'mensaje'=> 'Se encontraron datos', 'data'=>$data, 'error'=> $error, 'proveedores'=> $data_provs);
 
 }else{
     $res = array('estatus'=> false, 'mensaje'=> 'El folio no coincide con el gasto');
