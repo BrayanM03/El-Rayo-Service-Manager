@@ -50,7 +50,7 @@ if($total>0){
         }
         $resultado_f[] = $numero;
     }
-    
+    $resultado_f = eliminarRepetidosYOrdenar($resultado_f);
     $response = array(
         'estatus'=> true,
         'mensaje'=>'Se encontrarón los siguientes resultados',
@@ -66,5 +66,13 @@ if($total>0){
 
 echo json_encode($response);
 
-
+function eliminarRepetidosYOrdenar($array) {
+    // Usamos array_unique para eliminar elementos duplicados
+    $arrayUnico = array_unique($array, SORT_REGULAR);
+    // Reindexamos el arreglo para que las claves sean consecutivas
+    $arrayUnico = array_values($arrayUnico);
+    // Ordenamos el arreglo
+    sort($arrayUnico);
+    return $arrayUnico;
+}
 ?>

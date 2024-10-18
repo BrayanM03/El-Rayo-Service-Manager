@@ -10,7 +10,7 @@ if (!isset($_SESSION['id_usuario'])) {
 }
 
 ///Redirección opcional
-if ($_SESSION['id_usuario'] == 1 || $_SESSION['id_usuario'] == 8) {
+if (/* $_SESSION['id_usuario'] == 1 || */ $_SESSION['id_usuario'] == 8 || $_SESSION['id_usuario'] == 11) {
     header("Location:dashboard.php?nav=inicio&id=0");
 }
 

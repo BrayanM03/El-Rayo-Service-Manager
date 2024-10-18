@@ -159,7 +159,7 @@ switch ($flag) {
         Punto de venta
     </div>
     <?php
-    if ($user_jerarquia == 1 || $user_jerarquia == 2 || $user_jerarquia == 3) { ?>
+    if ($user_jerarquia == 1 || $user_jerarquia == 2 || $user_jerarquia == 3 || $_SESSION['id_usuario'] ==24) { ?>
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item <?php echo $claseNuevaVenta ?> rol-4">
             <a class="nav-link" href="nueva-venta.php?id=0&nav=nueva_venta">
@@ -420,7 +420,7 @@ switch ($flag) {
     </div>
     <?php 
 
-if ($user_jerarquia == 1 || $_SESSION['id_usuario'] ==7) { // 7 de Kari
+if ($user_jerarquia == 1 || $_SESSION['id_usuario'] ==7 || $_SESSION['id_usuario'] ==24) { // 7 de Kari
 ?>
     
 

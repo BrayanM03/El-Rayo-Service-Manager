@@ -524,7 +524,7 @@ function informacionFiltros($con)
         //$sucursal_ = $con->real_escape_string($sucursal)
         $mes_anterior = intval($mes) - 2;
         $sql .= " AND MONTH(v.fecha) = " . $mes . "";
-        $sql_creditos .= " AND MONTH(a.fecha) = ". $mes ." AND (MONTH(v.fecha) = " . $mes . " OR MONTH(v.fecha) = ".$mes_anterior.")";
+        $sql_creditos .= " AND MONTH(a.fecha) = " . $mes . " AND MONTH(v.fecha) BETWEEN " . $mes_anterior . " AND " . $mes;
     }
     if (!empty($year)) { 
         //$sucursal_ = $con->real_escape_string($sucursal);
