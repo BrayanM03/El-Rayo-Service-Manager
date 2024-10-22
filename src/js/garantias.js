@@ -296,16 +296,16 @@ function tablaGarantias(){
          var length = info.length;
          let estatus_dicaten = data.dictamen
          var columnIndex = 0; // Índice de la primera columna a enumerar
-   
+      console.log(data);
          $('td:eq(' + columnIndex + ')', row).html(page * length + index + 1);
-         if(data[9] == 'entregado' || data[9] == 'procedente'){
+         if(data[9] == 'entregado' || data[9] == 'procedente' ){
            $(row).css('background-color','#c0f6b4')
           }else if(data[9] == 'pendiente'){
           $(row).css('background-color','#ffffbf')
         }else if(data[9]=='improcedente'){
           $(row).css('background-color','#FF6347')
           $(row).css('color','white')
-        }else if(data[9]=='concluido'){
+        }else if(data[9]=='concluido' || data[21] == 5){
           $(row).css('background-color','gray')
           $(row).css('color','white')
         }
@@ -314,6 +314,7 @@ function tablaGarantias(){
      columns: [   
      { title: "#",                 data: null   },
      { title: "Folio",             data: 0   },
+     { title: "Fecha",             data: 23   },
      { title: "Cliente",           data: 17, render: function(data){
       if(data==null) return 'No aplica'
       return data;
@@ -374,7 +375,7 @@ function tablaGarantias(){
    responsive: false,
    ordering: "enable",
    multiColumnSort: true,
-   order: [8, "desc"],
+   order: [11, "desc"],
    });
    //table.columns( [6] ).visible( true );
    $("table.dataTable thead").addClass("table-info")
@@ -401,9 +402,9 @@ function procesarGarantia(id_garantia){
                               <input class="form-control disabled" placeholder="cliente" id="cliente" value="${nombre_cliente}" disabled>
                           </div>
                       </div>
-                      <div class="row">
+                      <div class="row mt-3">
                           <div class="col-12">
-                              <label>Cliente:</label>
+                              <label>Proveedor:</label>
                               <select class="form-control" id="id_proveedor"></select>
                           </div>
                       </div>   
@@ -437,6 +438,12 @@ function procesarGarantia(id_garantia){
                               <option value="4">Entregado de proveedor a dep. garantias</option>
                               <option value="5">Entregado a cliente</option>
                           </select>
+                      </div>
+                  </div>
+                  <div class="row mt-3">
+                      <div class="col-12">
+                          <label>Factura</label>
+                          <input class="form-control" id="factura-garantia" value="${response.data.factura}">
                       </div>
                   </div>
                   <div class="row mt-3">
@@ -479,10 +486,11 @@ function procesarGarantia(id_garantia){
               let lugar_expedicion = $("#lugar_expedicion").val();
               let estatus_fisico = $("#estatus_fisico").val();
               let id_proveedor = $("#id_proveedor").val();
+              let factura = $("#factura-garantia").val();
               $.ajax({
                 type: "POST",
                 url: "./modelo/garantias/actualizar.php",
-                data: {analisis, dictamen, fecha_expedicion, lugar_expedicion, id_garantia, estatus_fisico, id_proveedor},
+                data: {analisis, dictamen, fecha_expedicion, lugar_expedicion, id_garantia, estatus_fisico, id_proveedor, factura},
                 dataType: "JSON",
                 success: function (response) {
                   if(response.estatus){

@@ -50,6 +50,8 @@ $columns = array(
 	array( 'db' => 'usuario_recibe',  'dt' => 18),
 	array( 'db' => 'usuario_vendedor',  'dt' => 19),
 	array( 'db' => 'proveedor',  'dt' => 20),
+	array( 'db' => 'estatus_fisico',  'dt' => 21),
+	array( 'db' => 'fecha_registro',  'dt' => 23),
 );
 
 // SQL server connection information

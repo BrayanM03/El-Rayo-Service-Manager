@@ -4,6 +4,7 @@ session_start();
 include '../conexion.php';
 include '../helpers/response_helper.php';
 $con = $conectando->conexion();
+date_default_timezone_set("America/Matamoros");
 
 if (!isset($_SESSION['id_usuario'])) {
     header("Location:../../login.php");
@@ -12,7 +13,7 @@ if (!isset($_SESSION['id_usuario'])) {
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-
+$fecha = date('Y-m-d');
 if(isset($_POST)) {
     /* 
     $comentario = $_POST['comentario']; */
@@ -43,12 +44,12 @@ if(isset($_POST)) {
                 $dictamen = 'pendiente';
                 $insert = "INSERT INTO garantias(id, id_cliente, cantidad, id_llanta, dot, 
                 descripcion, marca, comentario_inicial, dictamen, factura, id_sucursal, id_venta, id_usuario, id_sucursal_recibe,
-                id_usuario_recibe, estatus_fisico) 
-                VALUES(null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,1)";
+                id_usuario_recibe, estatus_fisico, fecha_registro) 
+                VALUES(null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,1,?)";
                 $stmt = $con->prepare($insert);
-                $stmt->bind_param('ssssssssssssss', $id_cliente, $cantidad, $id_llanta, $dot, $descripcion, 
+                $stmt->bind_param('sssssssssssssss', $id_cliente, $cantidad, $id_llanta, $dot, $descripcion, 
                 $marca, $comentario, $dictamen, $factura, $id_sucursal, $id_venta, $id_vendedor, $id_sucursal_recibe,
-                 $id_usuario_recibe);
+                 $id_usuario_recibe, $fecha);
                 $stmt->execute();
                 $error = $stmt->error;
                 if($error){
