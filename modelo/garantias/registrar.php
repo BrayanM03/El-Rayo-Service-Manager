@@ -43,7 +43,7 @@ if(isset($_POST)) {
                 $dot = $value->dot;
                 $dictamen = 'pendiente';
                 $insert = "INSERT INTO garantias(id, id_cliente, cantidad, id_llanta, dot, 
-                descripcion, marca, comentario_inicial, dictamen, factura, id_sucursal, id_venta, id_usuario, id_sucursal_recibe,
+                descripcion, marca, comentario_inicial, dictamen, folio_ray, id_sucursal, id_venta, id_usuario, id_sucursal_recibe,
                 id_usuario_recibe, estatus_fisico, fecha_registro) 
                 VALUES(null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,1,?)";
                 $stmt = $con->prepare($insert);
@@ -78,7 +78,7 @@ if(isset($_POST)) {
                 $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
 
                 if ($imageFileType != 'jpg' && $imageFileType != 'png' && $imageFileType != 'jpeg' && $imageFileType != 'pdf') {
-                    responder(false, 'El archivo no es una imagen válida ', 'danger', null, true);
+                    responder(false, 'El archivo no es una imagefn válida ', 'danger', null, true);
                 }
 
                 $ruta_final = '../../src/docs/garantias/'.$id_garantia.'/'.$id_garantia_imagen . '.'. $imageFileType;

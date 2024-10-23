@@ -330,6 +330,7 @@ function tablaGarantias(){
      { title: "comentario inicial",     data: 7      },
      { title: "Analisis",        data: 8      },
      { title: "Dictamen",    data: 9     },
+     { title: "RAY",       data: 22      },
      { title: "Factura",       data: 12      },
      { title: "Sucursal vendedora",       data: 15,render: function(data){
       if(data==null) return 'No aplica'

@@ -51,6 +51,7 @@ $columns = array(
 	array( 'db' => 'usuario_vendedor',  'dt' => 19),
 	array( 'db' => 'proveedor',  'dt' => 20),
 	array( 'db' => 'estatus_fisico',  'dt' => 21),
+	array( 'db' => 'folio_ray',  'dt' => 22),
 	array( 'db' => 'fecha_registro',  'dt' => 23),
 );
 
