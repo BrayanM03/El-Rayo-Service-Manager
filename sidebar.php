@@ -219,7 +219,7 @@ switch ($flag) {
                 </a>
                 <?php
 
-                if ($user_jerarquia == 1 || $user_jerarquia == 2) { ?>
+                if ($user_jerarquia == 1 || $user_jerarquia == 2 || $user_jerarquia == 4) { ?>
                 <a class="collapse-item <?php echo $claseGarantias ?> rol-4" href="garantias.php?id=0&nav=garantias">
                     <img src="src/img/warranty.png" width="18px" />
                     <span style="margin-left:12px;"> Garantias</span>
