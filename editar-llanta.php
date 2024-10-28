@@ -159,6 +159,10 @@
                 <img src="./src/img/preload.gif" onclick="cargarImagen(4)" id="img_piso" class="img_llanta" style="border-radius:9px; width:90%; margin:auto;" alt="">
                 <input type="file" id="file_img_piso" accept="image/png" onchange="setearImagen('img_piso', event)" hidden>
               </div>
+              <div class="col-md-6" id="img_piso_col_">
+                <span>3D:</span>
+                <div class="sketchfab-embed-wrapper"> <iframe title="MAXIMUS M1 - MAXTREK" frameborder="0" allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true" allow="autoplay; fullscreen; xr-spatial-tracking" xr-spatial-tracking execution-while-out-of-viewport execution-while-not-rendered web-share width="615" height="475" src="https://sketchfab.com/models/9e31b850eb984a5280acffaeed59def3/embed?autospin=1&autostart=1&preload=1&transparent=1&ui_theme=dark"> </iframe> </div>
+              </div>
             </div>
           </div>
 
@@ -433,6 +437,7 @@
                     <option value="1">Toda posición / Dirección</option>
                     <option value="2">Tracción</option>
                     <option value="3">Arrastre</option>
+                    <option value="4">Servicio mixto</option>
                   </select>
                 </div>
               </div>
