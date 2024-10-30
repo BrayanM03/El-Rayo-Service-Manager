@@ -109,7 +109,7 @@
 <div id="contenedor-loader" class="d-none">
     <div id="contenedor-loader-2">
                 <div class="option-card text-center loader-principal">
-                    <lottie-player src="https://lottie.host/9ff4fc94-43ef-467b-aaf1-dafe7abaf53b/GFRYdl5GrJ.json" background="transparent" speed="1" style="width: 250px; height: 250px" loop autoplay></lottie-player>
+                    <dotlottie-player src="https://lottie.host/9ff4fc94-43ef-467b-aaf1-dafe7abaf53b/GFRYdl5GrJ.json" background="transparent" speed="1" style="width: 250px; height: 250px" loop autoplay></dotlottie-player>
                 </div>  
                 <span class="span-text-loader">Cargando
                 </span>

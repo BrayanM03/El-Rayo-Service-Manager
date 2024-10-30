@@ -251,12 +251,12 @@ if ($_SESSION['rol'] == 4) {
                                 <div class="row">
                                         <div class="col-6">
                                             <div class="option-card text-center text-center">
-                                                <lottie-player src="https://lottie.host/3b8fd7df-9115-47ec-a822-a8d71128c79d/AMeYTap4Re.json" background="transparent" speed="1" style="width: 250px; height: 250px;" loop autoplay></lottie-player>
+                                                <dotlottie-player src="https://lottie.host/3b8fd7df-9115-47ec-a822-a8d71128c79d/AMeYTap4Re.json" background="transparent" speed="1" style="width: 250px; height: 250px;" loop autoplay></dotlottie-player>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="option-card text-center text-center">
-                                                <lottie-player src="https://lottie.host/3969e87e-dd5c-4991-8ed9-8c9e2ce41ae6/hIR8pef1be.json" background="transparent" speed="1" style="width: 250px; height: 250px;" loop autoplay></lottie-player>
+                                                <dotlottie-player src="https://lottie.host/3969e87e-dd5c-4991-8ed9-8c9e2ce41ae6/hIR8pef1be.json" background="transparent" speed="1" style="width: 250px; height: 250px;" loop autoplay></dotlottie-player>
                                             </div>
                                         </div>
                                 </div>
@@ -321,7 +321,7 @@ if ($_SESSION['rol'] == 4) {
     <!-- Bootstrap core JavaScript-->
     <script src="src/vendor/jquery/jquery.min.js"></script>
     <script src="src/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
     <!-- Core plugin JavaScript-->
     <script src="src/vendor/jquery-easing/jquery.easing.min.js"></script>
 

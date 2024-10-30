@@ -468,7 +468,7 @@ function traerPdfCredito(id) {
      var html_contenedor = `
         <div class="row">
             <div class="col-12 d-flex justify-content-center">
-            <lottie-player src="https://lottie.host/b456286d-19b4-4303-be60-5eaea6bdacca/0V7LI9PuA7.json" background="transparent" speed="1" style="width: 120px; height: 120px;" loop autoplay></lottie-player>
+            <dotlottie-player src="https://lottie.host/b456286d-19b4-4303-be60-5eaea6bdacca/0V7LI9PuA7.json" background="transparent" speed="1" style="width: 120px; height: 120px;" loop autoplay></dotlottie-player>
             </div>
             <div class="col-12 d-flex justify-content-center">
             <span><b>Cargando ...</b></span>

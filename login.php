@@ -31,7 +31,7 @@ if (empty($_SESSION['csrf_token'])) {
     <div class="col-12 col-md-3 col-sm-12">
             <!-- <div class="col-12 col-md-12 mt-3">
                 <div class="option-card text-center" id="card-check">
-                    <lottie-player src="https://lottie.host/b456286d-19b4-4303-be60-5eaea6bdacca/0V7LI9PuA7.json" background="transparent" speed="1" style="width: 250px; height: 250px;" loop autoplay></lottie-player>
+                    <dotlottie-player src="https://lottie.host/b456286d-19b4-4303-be60-5eaea6bdacca/0V7LI9PuA7.json" background="transparent" speed="1" style="width: 250px; height: 250px;" loop autoplay></dotlottie-player>
                 </div>
             </div> -->
         </div>
@@ -81,7 +81,7 @@ if (empty($_SESSION['csrf_token'])) {
         <div class="col-12 col-md-3 col-sm-12">
             <!-- <div class="col-12 col-md-12 mt-3">
                 <div class="option-card text-center" id="card-check">
-                    <lottie-player src="https://lottie.host/b456286d-19b4-4303-be60-5eaea6bdacca/0V7LI9PuA7.json" background="transparent" speed="1" style="width: 250px; height: 250px;" loop autoplay></lottie-player>
+                    <dotlottie-player src="https://lottie.host/b456286d-19b4-4303-be60-5eaea6bdacca/0V7LI9PuA7.json" background="transparent" speed="1" style="width: 250px; height: 250px;" loop autoplay></dotlottie-player>
                 </div>
             </div> -->
         </div>
@@ -89,7 +89,7 @@ if (empty($_SESSION['csrf_token'])) {
     </div>
 
 </body>
-<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+<!-- <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> -->
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://kit.fontawesome.com/31a28ea63e.js" crossorigin="anonymous"></script>
