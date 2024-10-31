@@ -52,6 +52,7 @@
              $fecha = $fila['Fecha'];
              $construccion = $fila['construccion'];
              $aplicacion = $fila['id_aplicacion'];
+             $tipo_carga = $fila['id_tipo_carga'];
              $tipo_vehiculo = $fila['id_tipo_vehiculo'];
              $indice_carga_1 = $fila['id_indice_carga_1'];
              $indice_carga_2 = $fila['id_indice_carga_2'];
@@ -65,6 +66,7 @@
                                      "mayoreo"=>$mayoreo, "fecha"=>$fecha,
                                      'construccion'=>$construccion,
                                      'aplicacion'=>$aplicacion,
+                                     'tipo_carga'=>$tipo_carga,
                                      'tipo_vehiculo'=>$tipo_vehiculo,
                                      'urls' => $fila_imagenes,
                                      'indice_carga_1'=> $indice_carga_1,

@@ -159,10 +159,10 @@
                 <img src="./src/img/preload.gif" onclick="cargarImagen(4)" id="img_piso" class="img_llanta" style="border-radius:9px; width:90%; margin:auto;" alt="">
                 <input type="file" id="file_img_piso" accept="image/png" onchange="setearImagen('img_piso', event)" hidden>
               </div>
-              <div class="col-md-6" id="img_piso_col_">
+              <!-- <div class="col-md-6" id="img_piso_col_">
                 <span>3D:</span>
                 <div class="sketchfab-embed-wrapper"> <iframe title="MAXIMUS M1 - MAXTREK" frameborder="0" allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true" allow="autoplay; fullscreen; xr-spatial-tracking" xr-spatial-tracking execution-while-out-of-viewport execution-while-not-rendered web-share width="615" height="475" src="https://sketchfab.com/models/9e31b850eb984a5280acffaeed59def3/embed?autospin=1&autostart=1&preload=1&transparent=1&ui_theme=dark"> </iframe> </div>
-              </div>
+              </div> -->
             </div>
           </div>
 
@@ -359,10 +359,17 @@
             $stmt->fetch();
             $stmt->close();
 
-            $sel = 'SELECT count(*) FROM tipo_vehiculos';
+            $sel = 'SELECT count(*) FROM tipo_cargas';
             $stmt = $con->prepare($sel);
             $stmt->execute();
             $stmt->bind_result($total_tipo);
+            $stmt->fetch();
+            $stmt->close();
+
+            $sel = 'SELECT count(*) FROM tipo_vehiculos';
+            $stmt = $con->prepare($sel);
+            $stmt->execute();
+            $stmt->bind_result($total_tipo_vehiculos);
             $stmt->fetch();
             $stmt->close();
 
@@ -382,7 +389,7 @@
             }
 
             if($total_tipo>0){
-              $query = 'SELECT * FROM tipo_vehiculos';
+              $query = 'SELECT * FROM tipo_cargas';
               $stmt = $con->prepare($query);
               $stmt->execute();
               $result = $stmt->get_result();
@@ -396,9 +403,41 @@
                 $arreglo_tipo = array();
             }
             
+            if($total_tipo_vehiculos>0){
+              $query = 'SELECT * FROM tipo_vehiculos';
+              $stmt = $con->prepare($query);
+              $stmt->execute();
+              $result = $stmt->get_result();
+              $stmt->free_result();
+              $stmt->close();
+
+              while ($value = $result->fetch_assoc()){
+                $arreglo_tipo_vehiculos[] = $value;
+              }
+            }else{
+                $arreglo_tipo_vehiculos = array();
+            }
             ?>
             <div class="mb-3">
               <div class="row">
+
+              <div class="col-4">
+                <label for="tipo_vehiculo">Tipo de vehiculo</label>
+                  <select name="" id="tipo_vehiculo" onchange="setearAplicacion()" class="form-field">
+                  <option value="">Selecciona un tipo de vehiculo</option>
+                        
+                  <?php
+                        if(count($arreglo_tipo_vehiculos)>0){
+                          foreach ($arreglo_tipo_vehiculos as $key => $value) {
+                            $id_tipo = $value['id']; 
+                            $nombre_tipo_vehiculo = $value['nombre']; 
+                            print_r("<option value='$id_tipo'>$nombre_tipo_vehiculo</option>");
+                          }
+                        }
+                      ?>
+                  </select>
+                </div>
+
                 <div class="col-4">
                    <label for="aplicacion">Aplicación</label>
                   <select name="" id="aplicacion" class="form-field">
@@ -415,9 +454,9 @@
                   </select>
                 </div>
                 <div class="col-4">
-                <label for="tipo_vehiculo">Tipo de vehiculo</label>
-                  <select name="" id="tipo_vehiculo" class="form-field">
-                  <option value="">Selecciona un tipo de vehiculo</option>
+                <label for="tipo_carga">Tipo de carga</label>
+                  <select name="" id="tipo_carga" class="form-field">
+                  <option value="">Selecciona un tipo de carga</option>
                         
                   <?php
                         if(count($arreglo_tipo)>0){
@@ -430,8 +469,8 @@
                       ?>
                   </select>
                 </div>
-                <div class="col-4">
-                <label for="tipo_vehiculo">Posición (llantas de camión)</label>
+                <!-- <div class="col-3">
+                <label for="tipo_carga">Posición (llantas de camión)</label>
                   <select name="" id="posicion" class="form-field">
                     <option value="">Selecciona una posición</option>
                     <option value="1">Toda posición / Dirección</option>
@@ -439,7 +478,9 @@
                     <option value="3">Arrastre</option>
                     <option value="4">Servicio mixto</option>
                   </select>
-                </div>
+                </div> -->
+
+                
               </div>
             </div>
 

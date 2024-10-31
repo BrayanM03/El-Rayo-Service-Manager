@@ -66,6 +66,8 @@ $(document).ready(function(){
     dataType: "json",
     success: function (response) {
         if(response.estatus){
+          setearAplicacion()
+          
           $("#modelo").val(response.datos.modelo)
           $("#ancho").val(response.datos.ancho)
           $("#alto").val(response.datos.alto)
@@ -77,6 +79,7 @@ $(document).ready(function(){
           $("#precio_mayoreo").val(response.datos.mayoreo)
           $("#modelo").val(response.datos.modelo)
           $("#aplicacion").val(response.datos.aplicacion)
+          $("#tipo_carga").val(response.datos.tipo_carga)
           $("#tipo_vehiculo").val(response.datos.tipo_vehiculo)
           $("#activar_promocion").val(response.datos.promocion)
           $("#precio_promocion").val(response.datos.precio_promocion)
@@ -156,6 +159,7 @@ $(document).ready(function(){
             $("#img_piso").attr('src', './src/img/neumaticos/NA.jpg').attr('style', 'border-radius:9px; width:90%; margin:auto;').addClass('border') .attr('eliminar', false)
           },650)
         }
+        
         }
     }
   });
@@ -254,13 +258,13 @@ function actualizarDatosLlanta(){
   let precio = $('#precio').val();
   let precio_mayoreo = $('#precio_mayoreo').val();
   let aplicacion = $('#aplicacion').val();
+  let tipo_carga = $('#tipo_carga').val();
   let tipo_vehiculo = $('#tipo_vehiculo').val();
   let activar_promocion = $('#activar_promocion').val();
   let precio_promocion = $('#precio_promocion').val();
   let rango_carga_1 = $('#rango_carga_1').val();
   let rango_carga_2 = $('#rango_carga_2').val();
   let indice_velocidad = $('#indice_velocidad').val();
-  let posicion = $('#posicion').val();
   let presion = $('#psi').val();
 
 
@@ -297,11 +301,11 @@ function actualizarDatosLlanta(){
   formData.append('promocion', activar_promocion);
   formData.append('precio_promocion', precio_promocion);
   formData.append('aplicacion', aplicacion);
+  formData.append('tipo_carga', tipo_carga);
   formData.append('tipo_vehiculo', tipo_vehiculo);
   formData.append('indice_carga_1', rango_carga_1);
   formData.append('indice_carga_2', rango_carga_2);
   formData.append('indice_velocidad', indice_velocidad);
-  formData.append('posicion', posicion);
   formData.append('psi', presion);
   formData.append('arreglo_permisos', JSON.stringify(arreglo_permisos));
   
@@ -380,6 +384,34 @@ function getParameterByName(name) {
   var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
   results = regex.exec(location.search);
   return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
+
+function setearAplicacion(){
+let id_tipo_vehiculo = $("#tipo_vehiculo").val();
+
+$.ajax({
+  type: "post",
+  url: "./modelo/catalogo/traer-aplicacion-tipo-vehiculo.php",
+  data: {id_tipo_vehiculo},
+  dataType: "json",
+  success: function (response) {
+    let select_aplicaciones = $("#aplicacion")
+      if(response.estatus){
+        console.log(response);
+        select_aplicaciones.empty()
+        response.data.forEach(element => {
+          select_aplicaciones.append(`
+          <option value="${element.id}">${element.nombre}</option>
+          `)
+        });
+      }else{
+        select_aplicaciones.append(`
+        <option value="0">No aplica</option>
+        `)
+      }
+  }
+});
 }
 
 
