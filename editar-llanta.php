@@ -203,8 +203,9 @@
                   <select type="text" id="construccion" class="form-field">
                       <option value="">Selecciona una construcción</option>
                       <option value="R">R (Radial)</option>
-                      <option value="D">D (Diagonal)</option>
-                      <option value="A">Autoportante</option>
+                      <option value="C">C(Convencional)</option>
+                      <!-- <option value="D">D (Diagonal)</option>
+                      <option value="A">Autoportante</option> -->
                   </select>
                 </div>
                 <div class="col-3">

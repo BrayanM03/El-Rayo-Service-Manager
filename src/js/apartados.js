@@ -494,9 +494,27 @@ table = $('#apartados').DataTable({
               '<span class="fa fa-ban"></span><span class="hidden-xs"></span></button></div>';
           }
       }else{
-        return '<div style="display: flex; width: auto;">'+
-        '<button onclick="traerPdfApartado(' +row[2]+ ');" title="Ver reporte" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px">'+
-        '<span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br></div>'
+        if(row[10] == "Cancelada"){
+          return '<div style="display: flex; width: auto;">'+
+          '<button onclick="traerPdfApartado(' +row[2]+ ');" title="Ver reporte" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px">'+
+          '<span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>'+
+          '<button type="button" title="Ya esta cancelada" onclick="ventaYaCancelada()" class="buttonBorrar btn btn-secondary">'+
+          '<span class="fa fa-ban"></span><span class="hidden-xs"></span></button></div>';
+   
+      }else{
+        return '<div class="row">'+
+        '<div class="col-5">'+
+        '<button onclick="traerPdfApartado(' +row[2]+ ');" title="Ver reporte" type="button" class="buttonPDF btn btn-danger">'+
+        '<span class="fa fa-file-pdf"></span></button>'+
+        '</div>'+
+        '<div class="col-5">'+
+        '<button type="button" onclick="procesarOrden('+ row[2] +');" title="Procesar venta" class="buttonBorrar btn btn-success">'+
+        '<span class="fa fa-check"></span></button>'+
+        '</div>'+
+        '</div>';
+      }
+
+       
       }
       
        },
