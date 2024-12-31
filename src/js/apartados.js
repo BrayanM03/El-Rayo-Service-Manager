@@ -468,7 +468,7 @@ table = $('#apartados').DataTable({
     className: "celda-acciones",
     render: function (row, data) {
       rol = $("#titulo-hv").attr("rol");
-      
+      let id_usuario = $("#emp-title").attr("sesion_id");
       if(rol == "1" || rol == '2'){
           if (row[10] == "Activo") {
               return '<div style="display: flex; width: auto;">'+
@@ -493,7 +493,7 @@ table = $('#apartados').DataTable({
               '<button type="button" onclick="cancelarVenta('+ row[2] +');" class="buttonBorrar btn btn-primary">'+
               '<span class="fa fa-ban"></span><span class="hidden-xs"></span></button></div>';
           }
-      }else{
+      }else if((rol != "1" || rol != '2') && id_usuario!= 4){
         if(row[10] == "Cancelada"){
           return '<div style="display: flex; width: auto;">'+
           '<button onclick="traerPdfApartado(' +row[2]+ ');" title="Ver reporte" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px">'+
@@ -515,6 +515,11 @@ table = $('#apartados').DataTable({
       }
 
        
+      }else{
+        return '<div style="display: flex; width: auto;">'+
+        '<button onclick="traerPdfApartado(' +row[1]+ ');" title="Ver reporte" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px">'+
+        '<span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>'+
+        '</div>'
       }
       
        },

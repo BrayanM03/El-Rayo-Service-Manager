@@ -421,8 +421,9 @@ table = $('#pedidos').DataTable({
     className: "celda-acciones",
     render: function (row, data) {
       rol = $("#titulo-hv").attr("rol");
-
-      if(rol == "1" || rol == '2'){
+      let id_usuario = $("#emp-title").attr("sesion_id");
+      console.log(id_usuario);
+      if((rol == "1" || rol == '2') && id_usuario!= 4){
           if (row[9] == "Activo") {
             
               return '<div style="display: flex; width: auto;">'+
@@ -444,7 +445,7 @@ table = $('#pedidos').DataTable({
           }else{
             return '';
           }
-      }else{
+      }else if((rol != "1" || rol != '2') && id_usuario!= 4){
         if (row[9] == "Activo") {
           return '<div style="display: flex; width: auto;">'+
           '<button onclick="traerPdfApartado(' +row[1]+ ');" title="Ver reporte" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px">'+
@@ -459,6 +460,11 @@ table = $('#pedidos').DataTable({
           '</div>'
         }
         
+      }else{
+        return '<div style="display: flex; width: auto;">'+
+        '<button onclick="traerPdfApartado(' +row[1]+ ');" title="Ver reporte" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px">'+
+        '<span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>'+
+        '</div>'
       }
       
        },
