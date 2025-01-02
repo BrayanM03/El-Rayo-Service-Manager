@@ -81,6 +81,9 @@
     .selectpicker{
             z-index: 9999;  
         }
+        .swal2-content { /*Este estilo oculta el boton del sweetalert que se sobreponen en los selects*/
+            z-index: 2 !important;
+            }
 </style>
 </head>
 
@@ -114,9 +117,25 @@
                             </div>
                         </div>
                         <hr>  
-                        <div class="mb-3">
-                            <a href="modelo/creditos/excel-creditos-vencidos.php"><div class="btn btn-success"><i class="fas fa-file-excel"></i> | Reporte de creditos vencidos</div></a>         
+                        
+
+                        <div class="row mt-2 mb-2 justify-content-center">
+                            <div class="col-12 col-md-10">
+                                    <a href="modelo/creditos/excel-creditos-vencidos.php" class="btn btn-success btn-icon-split">
+                                        <span class="icon text-white-50">
+                                        <i class="fas fa-file-excel"></i>
+                                        </span>
+                                        <span class="text">Reporte de creditos vencidos</span>
+                                    </a>
+                                    <a href="#" class="btn btn-info btn-icon-split" onclick="traerModalEstadoCuenta()">
+                                        <span class="icon text-white-50">
+                                        <i class="fas fa-users"></i>
+                                        </span>
+                                        <span class="text">Estado de cuenta</span>
+                                    </a>
+                            </div>
                         </div>
+                        
 
                       <table id="creditos" class="table table-striped">    
                      </table>
@@ -196,8 +215,9 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="src/js/bootstrap-select.min.js"></script>
     <script src="src/js/creditos.js"></script>
+    <script src="src/js/estado-cuenta.js"></script>
     
-    <script src="./components/filtros.module.js" type="text/javascript"></script>
+    <!-- <script src="./components/filtros-creditos.module.js" type="text/javascript"></script> -->
     <script src="src/js/filtros.js"></script>
 </body>
 
