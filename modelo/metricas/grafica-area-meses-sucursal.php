@@ -27,8 +27,7 @@ date_default_timezone_set("America/Matamoros");
     $diciembre = '12';
 
     $suc = $_POST["id_suc"];
-    $ganancia_mes_sql = $con->prepare("SELECT SUM(CASE WHEN v.tipo = 'Credito' THEN COALESCE(a.abono, 0) ELSE v.Total END) AS Total_Ingresos FROM ventas v 
-    LEFT JOIN creditos c ON v.id = c.id_venta LEFT JOIN abonos a ON c.id = a.id_credito 
+    $ganancia_mes_sql = $con->prepare("SELECT SUM(v.Total) AS Total_Ingresos FROM ventas v
     WHERE MONTH(v.Fecha) = ? AND YEAR(v.Fecha) = ? AND v.id_sucursal =? AND v.estatus != ?");
                $ganancia_mes_sql->bind_param('ssss', $enero, $año, $suc, $estatus);
                $ganancia_mes_sql->execute();
@@ -40,9 +39,8 @@ date_default_timezone_set("America/Matamoros");
                    $ganancia_ene = 0;
                } 
 
-               $ganancia_mes_sql = $con->prepare("SELECT SUM(CASE WHEN v.tipo = 'Credito' THEN COALESCE(a.abono, 0) ELSE v.Total END) AS Total_Ingresos FROM ventas v 
-               LEFT JOIN creditos c ON v.id = c.id_venta LEFT JOIN abonos a ON c.id = a.id_credito 
-               WHERE MONTH(v.Fecha) = ? AND YEAR(v.Fecha) = ? AND v.id_sucursal =? AND v.estatus != ?");
+               $ganancia_mes_sql = $con->prepare("SELECT SUM(v.Total) AS Total_Ingresos FROM ventas v
+    WHERE MONTH(v.Fecha) = ? AND YEAR(v.Fecha) = ? AND v.id_sucursal =? AND v.estatus != ?");
                $ganancia_mes_sql->bind_param('ssss', $febrero, $año, $suc, $estatus);
                $ganancia_mes_sql->execute();
                $ganancia_mes_sql->bind_result($ganancia_feb);
@@ -53,9 +51,8 @@ date_default_timezone_set("America/Matamoros");
                    $ganancia_feb = 0;
                } 
 
-               $ganancia_mes_sql = $con->prepare("SELECT SUM(CASE WHEN v.tipo = 'Credito' THEN COALESCE(a.abono, 0) ELSE v.Total END) AS Total_Ingresos FROM ventas v 
-               LEFT JOIN creditos c ON v.id = c.id_venta LEFT JOIN abonos a ON c.id = a.id_credito 
-               WHERE MONTH(v.Fecha) = ? AND YEAR(v.Fecha) = ? AND v.id_sucursal =? AND v.estatus != ?");
+               $ganancia_mes_sql = $con->prepare("SELECT SUM(v.Total) AS Total_Ingresos FROM ventas v
+    WHERE MONTH(v.Fecha) = ? AND YEAR(v.Fecha) = ? AND v.id_sucursal =? AND v.estatus != ?");
                $ganancia_mes_sql->bind_param('ssss', $marzo, $año, $suc, $estatus);
                $ganancia_mes_sql->execute();
                $ganancia_mes_sql->bind_result($ganancia_mar);
@@ -66,9 +63,8 @@ date_default_timezone_set("America/Matamoros");
                    $ganancia_mar = 0;
                } 
 
-               $ganancia_mes_sql = $con->prepare("SELECT SUM(CASE WHEN v.tipo = 'Credito' THEN COALESCE(a.abono, 0) ELSE v.Total END) AS Total_Ingresos FROM ventas v 
-               LEFT JOIN creditos c ON v.id = c.id_venta LEFT JOIN abonos a ON c.id = a.id_credito 
-               WHERE MONTH(v.Fecha) = ? AND YEAR(v.Fecha) = ? AND v.id_sucursal =? AND v.estatus != ?");
+               $ganancia_mes_sql = $con->prepare("SELECT SUM(v.Total) AS Total_Ingresos FROM ventas v
+    WHERE MONTH(v.Fecha) = ? AND YEAR(v.Fecha) = ? AND v.id_sucursal =? AND v.estatus != ?");
                $ganancia_mes_sql->bind_param('ssss', $abril, $año, $suc, $estatus);
                $ganancia_mes_sql->execute();
                $ganancia_mes_sql->bind_result($ganancia_abr);
@@ -79,9 +75,8 @@ date_default_timezone_set("America/Matamoros");
                    $ganancia_abr = 0;
                } 
 
-               $ganancia_mes_sql = $con->prepare("SELECT SUM(CASE WHEN v.tipo = 'Credito' THEN COALESCE(a.abono, 0) ELSE v.Total END) AS Total_Ingresos FROM ventas v 
-               LEFT JOIN creditos c ON v.id = c.id_venta LEFT JOIN abonos a ON c.id = a.id_credito 
-               WHERE MONTH(v.Fecha) = ? AND YEAR(v.Fecha) = ? AND v.id_sucursal =? AND v.estatus != ?");
+               $ganancia_mes_sql = $con->prepare("SELECT SUM(v.Total) AS Total_Ingresos FROM ventas v
+    WHERE MONTH(v.Fecha) = ? AND YEAR(v.Fecha) = ? AND v.id_sucursal =? AND v.estatus != ?");
                $ganancia_mes_sql->bind_param('ssss', $mayo, $año, $suc, $estatus);
                $ganancia_mes_sql->execute();
                $ganancia_mes_sql->bind_result($ganancia_may);
@@ -92,9 +87,8 @@ date_default_timezone_set("America/Matamoros");
                    $ganancia_may = 0;
                } 
 
-               $ganancia_mes_sql = $con->prepare("SELECT SUM(CASE WHEN v.tipo = 'Credito' THEN COALESCE(a.abono, 0) ELSE v.Total END) AS Total_Ingresos FROM ventas v 
-               LEFT JOIN creditos c ON v.id = c.id_venta LEFT JOIN abonos a ON c.id = a.id_credito 
-               WHERE MONTH(v.Fecha) = ? AND YEAR(v.Fecha) = ? AND v.id_sucursal =? AND v.estatus != ?");
+               $ganancia_mes_sql = $con->prepare("SELECT SUM(v.Total) AS Total_Ingresos FROM ventas v
+    WHERE MONTH(v.Fecha) = ? AND YEAR(v.Fecha) = ? AND v.id_sucursal =? AND v.estatus != ?");
                $ganancia_mes_sql->bind_param('ssss', $junio, $año, $suc, $estatus);
                $ganancia_mes_sql->execute();
                $ganancia_mes_sql->bind_result($ganancia_jun);
@@ -105,9 +99,8 @@ date_default_timezone_set("America/Matamoros");
                    $ganancia_jun = 0;
                } 
 
-               $ganancia_mes_sql = $con->prepare("SELECT SUM(CASE WHEN v.tipo = 'Credito' THEN COALESCE(a.abono, 0) ELSE v.Total END) AS Total_Ingresos FROM ventas v 
-               LEFT JOIN creditos c ON v.id = c.id_venta LEFT JOIN abonos a ON c.id = a.id_credito 
-               WHERE MONTH(v.Fecha) = ? AND YEAR(v.Fecha) = ? AND v.id_sucursal =? AND v.estatus != ?");
+               $ganancia_mes_sql = $con->prepare("SELECT SUM(v.Total) AS Total_Ingresos FROM ventas v
+    WHERE MONTH(v.Fecha) = ? AND YEAR(v.Fecha) = ? AND v.id_sucursal =? AND v.estatus != ?");
                $ganancia_mes_sql->bind_param('ssss', $julio, $año, $suc, $estatus);
                $ganancia_mes_sql->execute();
                $ganancia_mes_sql->bind_result($ganancia_jul);
@@ -118,9 +111,8 @@ date_default_timezone_set("America/Matamoros");
                    $ganancia_jul = 0;
                } 
 
-               $ganancia_mes_sql = $con->prepare("SELECT SUM(CASE WHEN v.tipo = 'Credito' THEN COALESCE(a.abono, 0) ELSE v.Total END) AS Total_Ingresos FROM ventas v 
-               LEFT JOIN creditos c ON v.id = c.id_venta LEFT JOIN abonos a ON c.id = a.id_credito 
-               WHERE MONTH(v.Fecha) = ? AND YEAR(v.Fecha) = ? AND v.id_sucursal =? AND v.estatus != ?");
+               $ganancia_mes_sql = $con->prepare("SELECT SUM(v.Total) AS Total_Ingresos FROM ventas v
+    WHERE MONTH(v.Fecha) = ? AND YEAR(v.Fecha) = ? AND v.id_sucursal =? AND v.estatus != ?");
                $ganancia_mes_sql->bind_param('ssss', $agosto, $año, $suc, $estatus);
                $ganancia_mes_sql->execute();
                $ganancia_mes_sql->bind_result($ganancia_ago);
@@ -131,9 +123,8 @@ date_default_timezone_set("America/Matamoros");
                    $ganancia_ago = 0;
                } 
 
-               $ganancia_mes_sql = $con->prepare("SELECT SUM(CASE WHEN v.tipo = 'Credito' THEN COALESCE(a.abono, 0) ELSE v.Total END) AS Total_Ingresos FROM ventas v 
-               LEFT JOIN creditos c ON v.id = c.id_venta LEFT JOIN abonos a ON c.id = a.id_credito 
-               WHERE MONTH(v.Fecha) = ? AND YEAR(v.Fecha) = ? AND v.id_sucursal =? AND v.estatus != ?");
+               $ganancia_mes_sql = $con->prepare("SELECT SUM(v.Total) AS Total_Ingresos FROM ventas v
+    WHERE MONTH(v.Fecha) = ? AND YEAR(v.Fecha) = ? AND v.id_sucursal =? AND v.estatus != ?");
                $ganancia_mes_sql->bind_param('ssss', $septiembre, $año, $suc, $estatus);
                $ganancia_mes_sql->execute();
                $ganancia_mes_sql->bind_result($ganancia_sep);
@@ -144,9 +135,8 @@ date_default_timezone_set("America/Matamoros");
                    $ganancia_sep = 0;
                } 
 
-               $ganancia_mes_sql = $con->prepare("SELECT SUM(CASE WHEN v.tipo = 'Credito' THEN COALESCE(a.abono, 0) ELSE v.Total END) AS Total_Ingresos FROM ventas v 
-               LEFT JOIN creditos c ON v.id = c.id_venta LEFT JOIN abonos a ON c.id = a.id_credito 
-               WHERE MONTH(v.Fecha) = ? AND YEAR(v.Fecha) = ? AND v.id_sucursal =? AND v.estatus != ?");
+               $ganancia_mes_sql = $con->prepare("SELECT SUM(v.Total) AS Total_Ingresos FROM ventas v
+    WHERE MONTH(v.Fecha) = ? AND YEAR(v.Fecha) = ? AND v.id_sucursal =? AND v.estatus != ?");
                $ganancia_mes_sql->bind_param('ssss', $octubre, $año, $suc, $estatus);
                $ganancia_mes_sql->execute();
                $ganancia_mes_sql->bind_result($ganancia_oct);
@@ -157,9 +147,8 @@ date_default_timezone_set("America/Matamoros");
                    $ganancia_oct = 0;
                } 
 
-               $ganancia_mes_sql = $con->prepare("SELECT SUM(CASE WHEN v.tipo = 'Credito' THEN COALESCE(a.abono, 0) ELSE v.Total END) AS Total_Ingresos FROM ventas v 
-               LEFT JOIN creditos c ON v.id = c.id_venta LEFT JOIN abonos a ON c.id = a.id_credito 
-               WHERE MONTH(v.Fecha) = ? AND YEAR(v.Fecha) = ? AND v.id_sucursal =? AND v.estatus != ?");
+               $ganancia_mes_sql = $con->prepare("SELECT SUM(v.Total) AS Total_Ingresos FROM ventas v
+    WHERE MONTH(v.Fecha) = ? AND YEAR(v.Fecha) = ? AND v.id_sucursal =? AND v.estatus != ?");
                $ganancia_mes_sql->bind_param('ssss', $noviembre, $año, $suc, $estatus);
                $ganancia_mes_sql->execute();
                $ganancia_mes_sql->bind_result($ganancia_nov);
@@ -171,9 +160,8 @@ date_default_timezone_set("America/Matamoros");
                } 
 
 
-               $ganancia_mes_sql = $con->prepare("SELECT SUM(CASE WHEN v.tipo = 'Credito' THEN COALESCE(a.abono, 0) ELSE v.Total END) AS Total_Ingresos FROM ventas v 
-               LEFT JOIN creditos c ON v.id = c.id_venta LEFT JOIN abonos a ON c.id = a.id_credito 
-               WHERE MONTH(v.Fecha) = ? AND YEAR(v.Fecha) = ? AND v.id_sucursal =? AND v.estatus != ?");
+               $ganancia_mes_sql = $con->prepare("SELECT SUM(v.Total) AS Total_Ingresos FROM ventas v
+    WHERE MONTH(v.Fecha) = ? AND YEAR(v.Fecha) = ? AND v.id_sucursal =? AND v.estatus != ?");
                $ganancia_mes_sql->bind_param('ssss', $diciembre, $año, $suc, $estatus);
                $ganancia_mes_sql->execute();
                $ganancia_mes_sql->bind_result($ganancia_dic);
