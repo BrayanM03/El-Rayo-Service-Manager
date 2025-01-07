@@ -205,7 +205,7 @@ function agregarInfo(){
     
    
     //console.log(valitationQuanty);
-    if(sucursalVal !== idSucursalSession  && (rolSession !== "1" || id_sesion == 11)){ //ID de Liz, para que no venda afuera de su sucursal
+    if(sucursalVal !== idSucursalSession  && (rolSession !== "1")){ //ID de Liz, para que no venda afuera de su sucursal
       toastr.warning('No puedes vender una llanta que no sea de tu sucursal', 'warning' );
       
     }else if (valitationQuanty == false ) {
