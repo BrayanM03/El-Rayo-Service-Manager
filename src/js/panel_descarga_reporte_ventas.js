@@ -138,6 +138,7 @@ function ejecutarPanelReporteComisionesEncargado(){
                         <select class="form-control" id="year-comision">
                             <option value="2023">2023</option>
                             <option value="2024">2024</option>
+                            <option value="2025">2025</option>
                         </select>
                     </div>
                 </div>
@@ -226,6 +227,7 @@ function ejecutarPanelReporteComisionesVendedor(){
                         <select class="form-control" id="year-comision">
                             <option value="2023">2023</option>
                             <option value="2024">2024</option>
+                            <option value="2025">2025</option>
                         </select>
                     </div>
                 </div>
