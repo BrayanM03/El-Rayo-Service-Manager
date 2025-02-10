@@ -5,7 +5,6 @@ include '../conexion.php';
 $con= $conectando->conexion(); 
 
 require_once('../movimientos/mover_clientes.php');
-require_once('../helpers/algoritmo_levenshtein.php');
 
 if (!isset($_SESSION['id_usuario'])) {
     header("Location:../../login.php");

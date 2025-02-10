@@ -87,63 +87,85 @@ class Clientes {
     $result->execute();
     $result->close(); */
 
-    $traer = "SELECT c.*, v.hora FROM `creditos` as c INNER JOIN ventas v ON c.id_venta = v.id  WHERE c.estatus =? AND c.id_cliente =?";
-    $result = $con->prepare($traer);
-    if ($result) {
-     
-    $result->bind_param('ss', $estatusvencido, $id_cliente);
-    $result->execute();
-    $array_resultados = $result->get_result();
-    $result->close();
-    $arreglo =[];
-    $suma_restante=0;
-    while($fila = $array_resultados->fetch_assoc()){
-        
-        $cliente_id = $fila['id_cliente'];
-        $pagado = $fila['pagado'];
-        $pagado_f = form_moneda($pagado);
-        $restante = $fila['restante'];
-        $restante_f = form_moneda($restante);
+    $sqlContarLlantas = $this->con->prepare("SELECT * FROM clientes WHERE id = ?");
+    $sqlContarLlantas->bind_param('i', $id_cliente);
+    $sqlContarLlantas->execute();
+    $resultado = $sqlContarLlantas->get_result();
+    $fila = $resultado->fetch_assoc();
+    $sqlContarLlantas->close();
 
-        $total = $fila['total'];
-        $total_f = form_moneda($total);
+    
+    $tiene_credito = $fila['Credito'];
 
-        $fecha_inicio = $fila['fecha_inicio'] .' '. $fila['hora'];
-        $fecha_inicio_f = form_date($fecha_inicio);
-        $fecha_final = $fila['fecha_final'] .' '. $fila['hora'];
-        $fecha_final_f = form_date($fecha_final);
-        $id_cred = $fila['id']; 
-        $id_venta = $fila['id_venta']; 
 
-        $cliente='';
-        $sql_customer_name = "SELECT Nombre_Cliente FROM `clientes` WHERE id = ?";
-        $result = $con->prepare($sql_customer_name);
-        $result->bind_param('s', $cliente_id);
+    if($tiene_credito==1){
+        $traer = "SELECT c.*, v.hora FROM `creditos` as c INNER JOIN ventas v ON c.id_venta = v.id  WHERE c.estatus =? AND c.id_cliente =?";
+        $result = $con->prepare($traer);
+        if ($result) {
+         
+        $result->bind_param('ss', $estatusvencido, $id_cliente);
         $result->execute();
-        $result->bind_result($cliente);
-        $result->fetch();
+        $array_resultados = $result->get_result();
         $result->close();
-        $suma_restante += $restante;
-        $arreglo[] = array('id_venta'=>$id_venta, 'cliente'=> $cliente,'total'=>$total_f, 'pagado'=> $pagado_f, 'restante'=> $restante_f, 'fecha_inicio'=>$fecha_inicio, 'fecha_final'=> $fecha_final, 'id_cred'=> $id_cred);
-    }
-
-    $suma_restante_ = form_moneda($suma_restante);
-    if(count($arreglo)==0){
-        return [
-            'estatus' => false,
-            'credito_vencidos' => [],
-            'mensaje' => 'Cliente con credito OK'
-            ];
+        $arreglo =[];
+        $suma_restante=0;
+        while($fila = $array_resultados->fetch_assoc()){
+            
+            $cliente_id = $fila['id_cliente'];
+            $pagado = $fila['pagado'];
+            $pagado_f = form_moneda($pagado);
+            $restante = $fila['restante'];
+            $restante_f = form_moneda($restante);
+    
+            $total = $fila['total'];
+            $total_f = form_moneda($total);
+    
+            $fecha_inicio = $fila['fecha_inicio'] .' '. $fila['hora'];
+            $fecha_inicio_f = form_date($fecha_inicio);
+            $fecha_final = $fila['fecha_final'] .' '. $fila['hora'];
+            $fecha_final_f = form_date($fecha_final);
+            $id_cred = $fila['id']; 
+            $id_venta = $fila['id_venta']; 
+    
+            $cliente='';
+            $sql_customer_name = "SELECT Nombre_Cliente FROM `clientes` WHERE id = ?";
+            $result = $con->prepare($sql_customer_name);
+            $result->bind_param('s', $cliente_id);
+            $result->execute();
+            $result->bind_result($cliente);
+            $result->fetch();
+            $result->close();
+            $suma_restante += $restante;
+            $arreglo[] = array('id_venta'=>$id_venta, 'cliente'=> $cliente,'total'=>$total_f, 'pagado'=> $pagado_f, 'restante'=> $restante_f, 'fecha_inicio'=>$fecha_inicio, 'fecha_final'=> $fecha_final, 'id_cred'=> $id_cred);
+        }
+    
+        $suma_restante_ = form_moneda($suma_restante);
+        if(count($arreglo)==0){
+            return [
+                'estatus' => false,
+                'credito_vencidos' => [],
+                'mensaje' => 'Cliente con credito OK'
+                ];
+        }else{
+            return [
+                'estatus' => true,
+                'credito_vencidos' => $arreglo,
+                'sumatoria_deuda'=>$suma_restante_,
+                'mensaje' => '<h5 class="mt-3">El cliente cuenta con <span style="color:tomato;">creditos vencidos</span>, debes desbloquearlos con un token</h5>'
+                ];
+        }
+    
+        }
     }else{
         return [
             'estatus' => true,
-            'credito_vencidos' => $arreglo,
-            'sumatoria_deuda'=>$suma_restante_,
-            'mensaje' => 'Cliente con credito vencido'
+            'credito_vencidos' => [],
+            'sumatoria_deuda'=>0,
+            'mensaje' => 'El cliente no cuenta con credito, usa un token para desbloquearlo en esta venta.'
             ];
     }
 
-    }
+    
 
 
     }

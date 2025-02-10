@@ -3,7 +3,7 @@
  $user = "root";
  $password = "root";
  $db = "el_rayo";  
- /* $host = "llanteraelrayo.com";
+/*  $host = "llanteraelrayo.com";
  $user = "llante14_brayanm03";
  $password = "siemprefiel0";
  $db = "llante14_servicemanager"; */

@@ -1693,7 +1693,7 @@ function cargarTipoVenta(){
           `);
           setTimeout(function(){
             contenedor.empty();
-            contenedor.append(`<h5 class="mt-3">El cliente cuenta con <span style="color:tomato;">creditos vencidos</span>, debes desbloquearlos con un token</h5>
+            contenedor.append(`${response.mensaje}
       
                  <div class="col-12 mb-3">
                    <div class="btn btn-info m-auto" onclick="setearCreditosVencidos()">Ver creditos vencidos</div><br>
