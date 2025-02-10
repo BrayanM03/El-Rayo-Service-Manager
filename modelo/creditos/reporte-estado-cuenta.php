@@ -28,7 +28,7 @@ $detalle->fetch();
 $detalle->close();
 
 
-$stmt = $con->prepare("SELECT cr.id, c.Nombre_Cliente as cliente, c.Correo, c.Direccion, cr.pagado, cr.restante, cr.total FROM creditos cr INNER JOIN clientes c 
+$stmt = $con->prepare("SELECT cr.id, c.Nombre_Cliente as cliente, c.Correo, c.Direccion, cr.estatus, cr.pagado, cr.restante, cr.total FROM creditos cr INNER JOIN clientes c 
 ON c.id = cr.id_cliente WHERE cr.id_cliente = ? AND cr.estatus != 5 AND cr.estatus != 3");
 $stmt->bind_param('i', $id_cliente);
 $stmt->execute();
@@ -37,10 +37,14 @@ $data = array();
 $pagado=0;
 $restante=0;
 $total_deuda=0;       
+$restante_vencido=0;
 while ($fila = $resultado->fetch_assoc()) {
 
     $pagado += floatval($fila['pagado']);
     $restante += floatval($fila['restante']);
+    if($fila['estatus']==4){
+        $restante_vencido += floatval($fila['restante']);
+    }
     $total_deuda += floatval($fila['total']);
     $cliente = $fila['cliente'];
     $correo_cliente = $fila['Correo'];
@@ -83,6 +87,7 @@ global $direccion_cliente;
 global $hora;
 global $no_abonos_realizados;
 global $resultado;
+global $restante_vencido;
 /* $formatterES = new NumberFormatter("es-ES", NumberFormatter::SPELLOUT);
 $izquierda = intval(floor($total));
 $derecha = intval(($total - floor($total)) * 100);
@@ -391,27 +396,28 @@ function Header()
     $this->SetFont('Arial','B',10);
     $this->Cell(40,8,utf8_decode_('Saldo pendiente'),1,0,'C', false);
     $this->Cell(10,8,utf8_decode_(''),0,0,'C', false);
-    $this->Cell(40,8,utf8_decode_('Total abonado'),1,0,'C', false);
-    $this->Cell(10,8,utf8_decode_(''),0,0,'C', false);
-    $this->Cell(40,8,utf8_decode_('Total credito'),1,0,'C', false);
-    $this->Cell(10,8,utf8_decode_(''),0,0,'C', false);
-    $this->Cell(40,8,utf8_decode_('Abonos realizados'),1,0,'C', false);
+    $this->Cell(40,8,utf8_decode_('Saldo vencido'),1,0,'C', false);
+   /*  $this->Cell(10,8,utf8_decode_(''),0,0,'C', false);
+    $this->Cell(40,8,utf8_decode_('Total credito'),1,0,'C', false); */
+    /* $this->Cell(10,8,utf8_decode_(''),0,0,'C', false);
+    $this->Cell(40,8,utf8_decode_('Abonos realizados'),1,0,'C', false); */
     $this->Ln(10);
     $this->RoundedRect(60, 105, 40, 20, 2, '34', '');
-    $this->RoundedRect(110, 105, 40, 20, 2, '34', '');
-    $this->RoundedRect(160, 105, 40, 20, 2, '34', '');
+/*     $this->RoundedRect(110, 105, 40, 20, 2, '34', '');
+    $this->RoundedRect(160, 105, 40, 20, 2, '34', ''); */
     $this->SetFont('Arial','',10);
     $restante = $this->asDollars($GLOBALS['restante']);
+    $restante_vencido = $this->asDollars($GLOBALS['restante_vencido']);
     $pagado = $this->asDollars($GLOBALS['pagado']);
     $total_deuda = $this->asDollars($GLOBALS['total_deuda']);
     $total_abonos_realizados = $GLOBALS['no_abonos_realizados']==0?'0':$GLOBALS['no_abonos_realizados'];
     $this->Cell(40,8,utf8_decode_($restante),0,0,'C', false);
     $this->Cell(10,8,utf8_decode_(''),0,0,'C', false);
-    $this->Cell(40,8,utf8_decode_($pagado),0,0,'C', false);
+    $this->Cell(40,8,utf8_decode_($restante_vencido),0,0,'C', false);
     $this->Cell(10,8,utf8_decode_(''),0,0,'C', false);
-    $this->Cell(40,8,utf8_decode_($total_deuda),0,0,'C', false);
+ /*    $this->Cell(40,8,utf8_decode_($total_deuda),0,0,'C', false); */
     $this->Cell(10,8,utf8_decode_(''),0,0,'C', false);
-    $this->Cell(40,8,utf8_decode_($total_abonos_realizados),0,0,'C', false);
+   /*  $this->Cell(40,8,utf8_decode_($total_abonos_realizados),0,0,'C', false); */
 
     $this->Ln(18);
 
@@ -505,7 +511,7 @@ function cuerpoTabla(){
 
     while ($fila = $resultado->fetch_assoc()) {
         $data[] =$fila;
-        $fecha_inicio = new DateTime($fila['fecha_inicio']);
+        $fecha_inicio = new DateTime($fila['fecha_inicio']); 
         $formato_fecha_inicio = $fecha_inicio->format('d-M-y');
         $fecha_final = new DateTime($fila['fecha_final']);
         $formato_fecha_final = $fecha_final->format('d-M-y');
@@ -531,10 +537,15 @@ function cuerpoTabla(){
 
       
         $fecha_actual = new DateTime();
-        $diferencia = $fecha_inicio->diff($fecha_actual);
+        if ($fecha_final <= $fecha_actual) {
+            $diferencia = $fecha_actual->diff($fecha_final);
+            $dias_transcurridos = $diferencia->days;
+        } else {
+            $dias_transcurridos = 0;
+        }
        /*  print_r($diferencia);
         die(); */
-        $pdf->Cell(20,8,$diferencia->days,0,0, 'L');
+        $pdf->Cell(20,8,$dias_transcurridos,0,0, 'L');
         $pdf->Ln(10);
     }
     $stmt->close();

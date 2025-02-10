@@ -11,7 +11,7 @@
                 </div>
             </div>
           
-          <div class="item-cart mt-2">
+          <div class="item-cart mt-2" id="productos-preventa">
                 <div class="row mx-2">
                     <div class="row">
                         <div class="col-12 col-md-4">
@@ -43,6 +43,23 @@
                 </div>
                 <hr>
             </div>
+            <div id="area-importe-procesar">
+            <div class="row pt-2">
+                <div class="col-9 text-right">
+                    <h4><b>Importe total:</b></h4>
+                </div>
+                <div class="col-3">
+                <h4><b><span style="color:#faa300" id="importe-total"></span></b></h4>
+                </div>
+            </div>
+            <div class="row mt-2 mb-2">
+                <div class="col-12 text-right">
+                    <div class="btn btn-warning mr-2" onclick="limpiarPreventa()">Limpiar</div>
+                    <div class="btn btn-success" onclick="configuracionDeVenta()">Procesar</div>
+                </div>
+            </div>
+            </div>
+            
         
         </div>
       </div>
@@ -50,7 +67,7 @@
 
     <style>
         #sidebar-cart{
-            width: 25rem;
+            width: 30rem;
             height: 100vh;
             margin-top: -5rem;
             right:0px;
@@ -63,6 +80,33 @@
             animation-duration: .3s;  */
             /*animation: slideOutRight;*/
         }
+
+
+        #productos-preventa{
+            max-height: 80vh; 
+            overflow-y: auto;
+            margin-bottom: 1rem;
+            padding-left: 1rem;
+        }
+        #productos-preventa::-webkit-scrollbar {
+            display: none;
+        }
+        @media (max-width: 768px) {
+        #sidebar-cart {
+            width: 100%; /* Ocupa toda la pantalla */
+            margin-top: 0; /* Ajuste de márgenes */
+            border-left: none; /* Quita el borde izquierdo */
+        }
+
+        #productos-preventa {
+            background-color: whitesmoke;
+            max-height: 55vh; /* Reduce la altura para acomodar mejor */
+            padding-left: 0.5rem; /* Reduce el padding */
+        }
+        #area-importe-procesar h4{
+            font-size: 17px !important;
+        }
+    }
     </style>
 
     <script>
@@ -76,6 +120,10 @@
                 flag=1
                 r_sidebar.style.animation = 'slideInRight'
                 r_sidebar.style.animationDuration = '.3s'
+
+                cargarPreventa()
+
+
             }else{
                 r_sidebar.style.animation = 'slideOutRight'
                 r_sidebar.style.animationDuration = '.3s'
@@ -87,7 +135,7 @@
                 },280)
                 flag=0
             }
-           
+            
         }
 
 

@@ -11,7 +11,7 @@ if (!isset($_SESSION['id_usuario'])) {
 if (!$con) {
     echo "maaaaal";
 }
-
+ 
 
 if(isset($_POST)){
     $id_cliente = $_POST["id_cliente"];

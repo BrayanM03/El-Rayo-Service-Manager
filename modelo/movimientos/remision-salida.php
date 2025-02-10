@@ -229,7 +229,7 @@ function Header()
     $this->AddFont('Exo2-Bold','B','Exo2-Bold.php');
     // Arial bold 15
     $this->SetFont('Arial','B',11);
-    $this->Cell(170,4,utf8_decode('Folio'),0,0,'R');
+    $this->Cell(170,4,'Folio',0,0,'R');
     $this->Ln(4);
     $this->SetDrawColor(253,144,138);
     $this->SetLineWidth(0.5);

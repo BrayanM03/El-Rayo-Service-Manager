@@ -59,7 +59,7 @@
     <!---Librerias de estilos-->
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="src/css/menu-vertical.css" rel="stylesheet">
-
+    <link href="src/css/punto_venta.css" rel="stylesheet">
 </head>
 
 <body id="page-top"> 
@@ -85,30 +85,29 @@
 
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid" style="display: flex; justify-content: center; align-items:center; flex-direction:column">
-
-                     <!-- Contenido inventario -->
-                     
-                        <div class="contenedor-tit">
-                        <img class="tyre-decoration-left" src="./src/img/tyre.svg" alt="insertar SVG con la etiqueta image"> 
-                        <div class="titulo-inventario">
-                         <h5 style="margin: 10px 0px;">Clientes</h5>
-                         <p style="color: gray;">Registro de clientes</p>
-                        </div>
-                        <img class="tyre-decoration-right" src="./src/img/tyre.svg" alt="insertar SVG con la etiqueta image">   
-                        </div>
-                        <div class="botones">
+               
+                        <div class="row mt-5 justify-content-center">
+                            <div class="col-12 col-md-10">
                                     <a href="#" class="btn btn-success btn-icon-split" onclick="agregarCliente();">
                                         <span class="icon text-white-50">
-                                            <i class="fas fa-user-plus"></i>
+                                        <i class="fas fa-user-plus"></i>
                                         </span>
                                         <span class="text">Agregar cliente</span>
                                     </a>
-                                    
-                      </div>
-                      <table id="ventas" class="table table-striped">    
-                     </table>
-                </div>
+                                   <!--  <a href="#" class="btn btn-info btn-icon-split" onclick="agregarCliente();">
+                                        <span class="icon text-white-50">
+                                        <i class="fas fa-users"></i>
+                                        </span>
+                                        <span class="text">Grupos de clientes</span>
+                                    </a> -->
+                            </div>
+                        </div>
+                        <div class="row mt-3 justify-content-center">
+                            <div class="col-12 col-md-10">
+                                <table id="ventas" class="table table-striped">    
+                                </table>
+                            </div>
+                        </div>
             <!-- End of Main Content -->
   <!-- Footer -->
             <footer class="sticky-footer bg-white">
@@ -183,6 +182,8 @@
     
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js"></script>
     <script src="src/js/clientes.js"></script>
+    <script src="src/js/agregar-cliente.js"></script>
+    <script src="src/js/control-inputs-token.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
      <!-- Make sure you put this AFTER Leaflet's CSS -->
    
@@ -201,7 +202,12 @@
    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBDaeWicvigtP9xPv919E-RNoxfvC-Hqik"></script>
     --->
-   
+   <script>
+    const audio = new Audio("./src/sounds/success-sound.mp3");
+    const audio_error = new Audio("./src/sounds/error-sound.mp3");
+    audio.volume = 0.5;
+    audio_error.volume = 0.5;
+   </script>
 </body>
 
 </html>

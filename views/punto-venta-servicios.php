@@ -16,6 +16,18 @@
                             </p>
                         </div>
                     </div>
+                    <div class="row mt-3">
+                        <div class="col-11">
+                            <label for="cliente">Cliente</label>
+                            <select id="cliente" onchange="setLocalStorageCliente()" class="form-control selectpicker" data-live-search="true">
+
+                            </select>
+                        </div> 
+                        <div class="col-1">   
+                        <label for="">&ensp;<span style="color:white">.LOL</span></label>
+                            <div class="btn btn-info" onclick="agregarCliente()"><i class="fas fa-user-plus"></i></div>
+                        </div> 
+                    </div>
                     <div class="row justify-content-center">
                         <div class="col-12 col-md-5 m-3 text-center">
                             <span>Elija el servicio requerido</span>
@@ -75,13 +87,13 @@
                                         </div>
                                         <div class="col-12 col-md-3">
                                             <div style="display:flex">
-                                                <div class="btn btn-info" style="border-radius:10px 0px 0px 10px !important;" onclick="aumentarCantidad(0,'cantidad_id_<?=$row['codigo']?>',event)"><b>-</b></div>
+                                                <div class="btn btn-info" style="border-radius:10px 0px 0px 10px !important;" onclick="aumentarCantidadServicio(0,'cantidad_id_<?=$row['codigo']?>',event)"><b>-</b></div>
                                                 <input type="number" id="cantidad_id_<?=$row['codigo']?>" style="border-radius:0px !important;" class="form-control" placeholder="0" value="1">
-                                                <div class="btn btn-info" style="border-radius:0px 10px 10px 0px !important;" onclick="aumentarCantidad(1,'cantidad_id_<?=$row['codigo']?>',event)"><b>+</b></div>
+                                                <div class="btn btn-info" style="border-radius:0px 10px 10px 0px !important;" onclick="aumentarCantidadServicio(1,'cantidad_id_<?=$row['codigo']?>',event)"><b>+</b></div>
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-2 text-right">
-                                            <div class="btn btn-warning mr-3">Agregar</div>
+                                            <div class="btn btn-warning mr-3" onclick="agregarPreventa(<?=$row['id']?>, '<?=$row['codigo']?>', 0, 2, 'cantidad_id_<?=$row['codigo']?>', event, 0, 1,0)">Agregar</div>
                                         </div>
                                     </div>
                                     <div class="row mt-2">

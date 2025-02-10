@@ -25,12 +25,12 @@
         $sqlContarLlantas= $con->prepare("
         SELECT l.*, 
             a.nombre as nombre_aplicacion, a.descripcion as descripcion_aplicacion,
-            tv.nombre as nombre_tipo_vehiculo, tv.descripcion as descripcion_tipo_vehiculo,
+            tv.nombre as nombre_tipo_carga, tv.descripcion as descripcion_tipo_carga,
             ic1.kg_max as kg_max_1, ic2.kg_max as kg_max_2,
             iv.codigo as codigo_velocidad, iv.velocidad_max
         FROM llantas l 
         LEFT JOIN aplicacion a ON a.id = l.id_aplicacion 
-        LEFT JOIN tipo_vehiculos tv ON tv.id = l.id_tipo_vehiculo 
+        LEFT JOIN tipo_cargas tv ON tv.id = l.id_tipo_carga 
         LEFT JOIN indices_carga ic1 ON ic1.id = l.id_indice_carga_1 
         LEFT JOIN indices_carga ic2 ON ic2.id = l.id_indice_carga_2 
         LEFT JOIN indices_velocidad iv ON iv.id = l.id_indice_velocidad
@@ -65,7 +65,7 @@
              $fecha = $fila['Fecha'];
              $construccion = $fila['construccion'];
              $aplicacion = $fila['id_aplicacion'];
-             $tipo_vehiculo = $fila['id_tipo_vehiculo'];
+             $tipo_carga = $fila['id_tipo_carga'];
              $indice_carga_1 = $fila['id_indice_carga_1'];
              $indice_carga_2 = $fila['id_indice_carga_2'];
              $indice_velocidad = $fila['id_indice_velocidad'];
@@ -74,8 +74,8 @@
  
              $nombre_aplicacion = $fila['nombre_aplicacion'];
              $descripcion_aplicacion = $fila['descripcion_aplicacion'];
-             $nombre_tipo_vehiculo = $fila['nombre_tipo_vehiculo'];
-             $descripcion_tipo_vehiculo = $fila['descripcion_tipo_vehiculo'];
+             $nombre_tipo_carga = $fila['nombre_tipo_carga'];
+             $descripcion_tipo_carga = $fila['descripcion_tipo_carga'];
              $kg_max_1 = $fila['kg_max_1'];
              $kg_max_2 = $fila['kg_max_2'];
              $codigo_velocidad = $fila['codigo_velocidad'];
@@ -87,7 +87,7 @@
                                      "mayoreo"=>$mayoreo, "fecha"=>$fecha,
                                      'construccion'=>$construccion,
                                      'aplicacion'=>$aplicacion,
-                                     'tipo_vehiculo'=>$tipo_vehiculo,
+                                     'tipo_carga'=>$tipo_carga,
                                      'urls' => $fila_imagenes,
                                      'indice_carga_1'=> $indice_carga_1,
                                      'indice_carga_2'=> $indice_carga_2,
@@ -96,8 +96,8 @@
                                       'psi'=> $psi,
                                       "nombre_aplicacion" => $nombre_aplicacion,
                                       "descripcion_aplicacion" => $descripcion_aplicacion,
-                                      "nombre_tipo_vehiculo" => $nombre_tipo_vehiculo,
-                                      "descripcion_tipo_vehiculo" => $descripcion_tipo_vehiculo,
+                                      "nombre_tipo_carga" => $nombre_tipo_carga,
+                                      "descripcion_tipo_carga" => $descripcion_tipo_carga,
                                       "kg_max_1" => $kg_max_1,
                                       "kg_max_2" => $kg_max_2,
                                       "codigo_velocidad" => $codigo_velocidad,

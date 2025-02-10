@@ -23,6 +23,41 @@
     border-radius:8px;
 }
 
+.filtros-aplicaciones{
+    padding-top:1rem;
+    border:1px solid whitesmoke;
+    overflow:scroll;
+    overflow-x:none;
+    height: 17rem;
+}
+
+.form-control_code{
+    border:1px solid #e2e2e2;
+    width:50px;
+    border-radius: 5px;
+    padding:5px;
+    text-align:center;
+
+}
+
+.form-control_code::placeholder {
+    text-align: center; 
+ }
+
+ .form-control_code_apartado{
+    border:1px solid #e2e2e2;
+    width:50px;
+    border-radius: 5px;
+    padding:5px;
+    text-align:center;
+
+}
+
+.form-control_code_apartado::placeholder {
+    text-align: center; 
+ }
+ 
+
 @media only screen and (min-width : 901px) {
     .prevista_neumatico{
         width:60% !important; margin-top:130px !important; margin-left:20% !important;
@@ -32,11 +67,29 @@
         cursor: pointer;
     }
 
+    .centrado_telefono_descripcion{
+        text-align: left;
+    }
+
+    .justificacion_der_telefono{
+        justify-content: right !important;
+    }
+
+    .justificacion_izq_telefono{
+        justify-content: left !important;
+    }
     .card_promocion {
         cursor:pointer;border-radius: 15px !important; 
     }
     .card_promocion:hover{
         box-shadow: rgba(0,0,0,0.1) 0 0 30px 0;
+    }
+    .altura_boton_agregar{
+        height: 38px !important;
+    }
+    .margenes-col-precio{
+        flex: 0 0 50%;
+        max-width: 50%;
     }
     }
 
@@ -47,10 +100,38 @@
     .card_busqueda:hover{
         box-shadow: rgba(0,0,0,0.1) 0 0 30px 0;
     }
-@media only screen and (max-width : 900px) {
+
+@media only screen and (max-width : 900px) { //Estilos para telefonos
     .prevista_neumatico{
-        width:98% !important; margin-top:130px !important; margin-left:20% !important;
+        border: 5px solid red;
+        width:95% !important; 
         position:fixed !important;
+        animation: fadeInDown; /* referring directly to the animation's @keyframe declaration */
+        animation-duration: .5s;
+        cursor: pointer;
+    }
+
+    .centrado_telefono_descripcion{
+        text-align: center;
+    }
+
+    .justificacion_der_telefono{
+        justify-content: center!important;
+    }
+
+    .justificacion_izq_telefono{
+        justify-self: center!important;
+    }
+    .margenes-col-precio{
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .boton_precio_estilos{
+        width:80%;
+        margin-left:auto;
+        margin-right:auto;
+        margin-top:1rem; 
     }
     .card_busqueda{
         border-radius: 15px !important; 

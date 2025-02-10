@@ -476,7 +476,7 @@ function cuerpoTabla(){
     $conexion = $GLOBALS["con"];
     $id_venta = $GLOBALS["idVenta"];
     $total = 0;
-    $stmt=$conexion->prepare("SELECT COUNT(*) total FROM detalle_venta INNER JOIN servicios ON detalle_venta.id_llanta = servicios.id WHERE id_Venta = ?");
+    $stmt=$conexion->prepare("SELECT COUNT(*) total FROM detalle_venta INNER JOIN servicios ON detalle_venta.id_llanta = servicios.id WHERE id_Venta = ? AND detalle_venta.Unidad = 'servicio'");
     $stmt->bind_param('i',$id_venta);
     $stmt->execute();
     $stmt->bind_result($total);
@@ -486,7 +486,7 @@ function cuerpoTabla(){
     if($total == 0){
     
         
-        $detalle = $conexion->prepare("SELECT detalle_venta.Modelo, detalle_venta.Cantidad,llantas.Descripcion, llantas.Marca, detalle_venta.precio_Unitario, detalle_venta.Importe FROM detalle_venta INNER JOIN llantas ON detalle_venta.id_llanta = llantas.id WHERE id_Venta = ?");
+        $detalle = $conexion->prepare("SELECT detalle_venta.Modelo, detalle_venta.Cantidad,llantas.Descripcion, llantas.Marca, detalle_venta.precio_Unitario, detalle_venta.Importe FROM detalle_venta INNER JOIN llantas ON detalle_venta.id_llanta = llantas.id WHERE id_Venta = ? AND detalle_venta.Unidad = 'pieza'");
         $detalle->bind_param('i', $id_venta);
         $detalle->execute();
         $resultado = $detalle->get_result();  
@@ -565,13 +565,13 @@ function cuerpoTabla(){
     }else if($total > 0){ 
 
     
-        $detalles = $conexion->prepare("SELECT detalle_venta.Modelo, detalle_venta.Cantidad,servicios.descripcion, detalle_venta.precio_Unitario, detalle_venta.Importe FROM detalle_venta INNER JOIN servicios ON detalle_venta.id_llanta = servicios.id WHERE id_Venta = ?");
+        $detalles = $conexion->prepare("SELECT detalle_venta.Modelo, detalle_venta.Cantidad,servicios.descripcion, detalle_venta.precio_Unitario, detalle_venta.Importe FROM detalle_venta INNER JOIN servicios ON detalle_venta.id_llanta = servicios.id WHERE id_Venta = ? AND detalle_venta.Unidad = 'servicio'");
         $detalles->bind_param('i', $id_venta);
         $detalles->execute();
         $resultadoServ = $detalles->get_result();
         $detalles->close(); 
 
-        $detalle = $conexion->prepare("SELECT detalle_venta.Modelo, detalle_venta.Cantidad,llantas.Descripcion, llantas.Marca, detalle_venta.precio_Unitario, detalle_venta.Importe FROM detalle_venta INNER JOIN llantas ON detalle_venta.id_llanta = llantas.id WHERE id_Venta = ?  AND detalle_venta.Modelo != 'no aplica'");
+        $detalle = $conexion->prepare("SELECT detalle_venta.Modelo, detalle_venta.Cantidad,llantas.Descripcion, llantas.Marca, detalle_venta.precio_Unitario, detalle_venta.Importe FROM detalle_venta INNER JOIN llantas ON detalle_venta.id_llanta = llantas.id WHERE id_Venta = ?  AND detalle_venta.Modelo != 'no aplica' AND detalle_venta.Unidad = 'pieza'");
         $detalle->bind_param('i', $id_venta);
         $detalle->execute();
         $resultado = $detalle->get_result(); 

@@ -5,11 +5,14 @@ include '../conexion.php';
 $con= $conectando->conexion(); 
 
 require_once('../movimientos/mover_clientes.php');
+require_once('../helpers/algoritmo_levenshtein.php');
 
 if (!isset($_SESSION['id_usuario'])) {
     header("Location:../../login.php");
 }
 
+/* $distancia = levenshtein('JAVIER SALDIÑO PERES', 'JAVIER TREVIÑO');
+print_r($distancia); */
 if($_POST){ 
 
 
@@ -24,9 +27,11 @@ if($_POST){
     $asesor = $_POST["asesor"];
     $intento = $_POST["intento"];
 
+ 
     if($intento == 1){
 
         $comp = comprobar_existencia_cliente($nombre, $telefono, $correo, $rfc, $con);
+
     }else{
         $comp = false;
     }
@@ -60,14 +65,37 @@ if($_POST){
 
 function comprobar_existencia_cliente($nombre, $telefono, $correo, $rfc, $con){
     $nombre= "%$nombre%";
-    $consulta = "SELECT * FROM clientes WHERE Nombre_Cliente LIKE ?";
+    $consulta = "SELECT * FROM clientes";
     $resultado = $con->prepare($consulta);
-    $resultado->bind_param('s', $nombre);
     $resultado->execute();
     $resultados = $resultado->get_result();
-    $concidenciasEncontradas = $resultados->fetch_all(MYSQLI_ASSOC);
-    $numero_filas = count($concidenciasEncontradas);
-    
+    $arreglo_clientes = $resultados->fetch_all(MYSQLI_ASSOC);
+    $umbral = 4;
+    $encontrado=false;
+    $numero_filas=0;
+    foreach ($arreglo_clientes as $cliente) {
+       /*  print_r($nombre. ' -- ' .$cliente['Nombre_Cliente']); */
+       $nombre_cliente = $cliente['Nombre_Cliente'];
+        if (levenshtein(strtolower($nombre), strtolower($nombre_cliente)) <= $umbral) {
+            $encontrado = true;
+            $concidenciasEncontradas[]=$cliente;
+            $numero_filas=1;
+            //print_r("El nombre '$nombre' es muy similar a '$nombre_cliente'. Puede estar duplicado.<br>");
+        }
+    }
+
+    if($encontrado==false){
+        $consulta = "SELECT * FROM clientes WHERE Nombre_Cliente LIKE ?";
+        $resultado = $con->prepare($consulta);
+        $resultado->bind_param('s', $nombre);
+        $resultado->execute();
+        $resultados = $resultado->get_result();
+        $concidenciasEncontradas = $resultados->fetch_all(MYSQLI_ASSOC);
+        $numero_filas = count($concidenciasEncontradas);
+    }
+
+  
+  
     if ($numero_filas > 0) {
         return $concidenciasEncontradas;
     }else{

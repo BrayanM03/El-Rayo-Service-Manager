@@ -382,6 +382,7 @@ $(document).ready(function() {
                 $('#area-loader').append(`
                 <div class="loader"></div>
                 `);
+                
                 return new Promise((resolve) =>{
                   $.ajax({
                     type: "POST",

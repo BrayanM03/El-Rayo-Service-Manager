@@ -2,6 +2,7 @@
 <?php
 session_start();
 include '../conexion.php';
+include '../helpers/condiciones_comentarios.php';
 $con = $conectando->conexion(); 
 global $con;
 
@@ -9,7 +10,6 @@ $folio = "AP" . $_GET["id"];
 $idVenta = $_GET["id"];
 $id_abono = $_GET["id_abono"];
 date_default_timezone_set("America/Matamoros");
-
 global $folio;
 
 $ID = $con->prepare("SELECT a.id_sucursal, a.id_usuario, c.id, c.Nombre_Cliente, c.Telefono, a.primer_abono, a.restante, a.pago_efectivo, a.pago_tarjeta, a.pago_transferencia, a.pago_cheque, a.pago_sin_definir, a.total,  a.tipo, a.estatus, a.metodo_pago, a.hora, a.comentario, a.plazo, a.fecha_inicial, a.fecha_final FROM apartados a INNER JOIN clientes c ON a.id_cliente = c.id WHERE a.id = ?");
@@ -107,6 +107,7 @@ global $estado_abono;
 global $suma_abonos;
 global $asesor_name;
 global $asesor_apellido;
+global $condiciones_generales;
 
 $formatterES = new NumberFormatter("es-ES", NumberFormatter::SPELLOUT);
 $abono_realizado = floatval($GLOBALS["pago_efectivo_abono"]) + floatval($GLOBALS["pago_tarjeta_abono"])+ floatval($GLOBALS["pago_transferencia_abono"])+ floatval($GLOBALS["pago_cheque_abono"])+ floatval($GLOBALS["pago_sin_definir_abono"]);
@@ -481,7 +482,7 @@ function cuerpoTabla(){
     $conexion = $GLOBALS["con"];
     $id_venta = $GLOBALS["idVenta"];
     $total = 0;
-    $detalles = $conexion->prepare("SELECT da.modelo, da.cantidad,servicios.descripcion, da.precio_unitario, da.importe FROM detalle_apartado da INNER JOIN servicios ON da.id_llanta = servicios.id WHERE da.id_apartado = ?");
+    $detalles = $conexion->prepare("SELECT da.modelo, da.cantidad,servicios.descripcion, da.precio_unitario, da.importe FROM detalle_apartado da INNER JOIN servicios ON da.id_llanta = servicios.id WHERE da.id_apartado = ? AND da.Unidad = 'servicio'");
         $detalles->bind_param('i', $id_venta);
         $detalles->execute();
         $resultadoServ = $detalles->get_result();
@@ -489,7 +490,7 @@ function cuerpoTabla(){
 
     if($total == 0){
     
-        $detalle = $conexion->prepare("SELECT da.modelo, da.cantidad,llantas.Descripcion, llantas.Marca, da.precio_unitario, da.importe FROM detalle_apartado da INNER JOIN llantas ON da.id_llanta = llantas.id WHERE da.id_apartado = ?  AND da.modelo != 'no aplica'");
+        $detalle = $conexion->prepare("SELECT da.modelo, da.cantidad,llantas.Descripcion, llantas.Marca, da.precio_unitario, da.importe FROM detalle_apartado da INNER JOIN llantas ON da.id_llanta = llantas.id WHERE da.id_apartado = ? AND da.modelo != 'no aplica' AND da.Unidad = 'pieza'");
         $detalle->bind_param('i', $id_venta);
         $detalle->execute();
         $resultado = $detalle->get_result(); 
@@ -508,7 +509,6 @@ function cuerpoTabla(){
             $precio_unitario = $fila["precio_unitario"];
             $importe = $fila["importe"];
             $caracteres = mb_strlen($descripcion);
-           
 
             if($caracteres >=75){
                 $pdf->Cell(12,6,$cantidad,0,0,'C',0);
@@ -548,8 +548,6 @@ function cuerpoTabla(){
                 $pdf->Ln(9);
 
             }
-
-           
  
         } 
         //print_r($ejeY);
@@ -855,7 +853,7 @@ function cuerpoTabla(){
     $pdf->MultiCell(70,6, utf8_decode_($GLOBALS["comentario"]),0,0,'L',0);
     $pdf->Ln(4.5);
     $pdf->SetFont('Arial','',6);
-    $pdf->MultiCell(180,4, utf8_decode_("GARANTÍA DE UN AÑO CONTRA DEFECTO DE FABRICACION; NO GOLPES, NO CORTES PROVOCADOS POR MAL MANEJO, PRESION DE AIRE INADECUADA,EXCESO DE PESO, ETC. A PARTIR DE ESTA FECHA FAVOR DE PRESENTAR ESTA NOTA PARA EMPEZAR EL PROCEDIMIENTO ADECUADO PARA GARANTIA. SI NO SE PRESENTA LA NOTA NO SE PODRA SEGUIR EL PROCESO; EN MALA INSTALACION SOLAMENTE SERA VALIDA LA GARANTIA DENTRO DEL PRIMER MES DESPUES DE LA COMPRA, SI TIENE PARCHE AUTOMATICAMENTE PIERDE LA GARANTIA; EN CASO DE PROCEDER GARANTIA SE COBRARÁEL DESGASTE SI ES EL CASO; TIEMPO ESTIMADO DE RESPUESTA DE 1-2 SEMANAS.  VENTAS DE APARTADO: EL PLAZO PARA PAGAR ES DE 1 MES, EN CASO DE NO CUMPLIR EL PAGO A TIEMPO EL MONTO DEL ADELANTO NO SERÁ REEMBOLSABLE. APLICA RESTRICCIONES."),0,0,'C',0);
+    $pdf->MultiCell(180,4, utf8_decode_($GLOBALS['condiciones_generales']),0,0,'C',0);
     
     $ejeY = $ejeY +17;
     $pdf->SetY($ejeY);

@@ -27,7 +27,7 @@
     <meta name="author" content="">
     <link rel="shortcut icon" href="src/img/rayo.svg" />
 
-    <title>Nueva Venta</title>
+    <title>Nueva Venta | El Rayo Service Manager</title>
 
     <!-- Custom fonts for this template-->
  
@@ -108,6 +108,20 @@ input[type=number] {
                 border: 1px solid red !important;
             }
         } */
+
+        .swal2-content { /*Este estilo oculta el boton del sweetalert que se sobreponen en los selects*/
+            z-index: 2 !important;
+            }
+        
+        .precio-promocion{
+            border: 1px tomato solid;
+            width: 40%;
+            padding: .5rem;
+            color: black;
+            position: absolute;
+            background-color: #ffce1b;
+            text-align: center;
+            }    
 </style>
 </head>
 
@@ -211,7 +225,7 @@ input[type=number] {
     <script src="src/vendor/datatables/defaults.js"></script>
     <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js"></script>
@@ -222,14 +236,17 @@ input[type=number] {
     <!-- <script src="src/vendor/node_modules/@splidejs/splide/dist/js/splide.min.js"></script> -->
     <script src="src/js/bootstrap-select.min.js"></script>
     <script src="src/js/punto-venta.js?v=<?php echo(rand()); ?>"></script>
-    <script src="src/js/agregar-product-temp.js?v=<?php echo(rand()); ?>"></script>
-    <script src="src/js/generar-token.js?v=<?php echo(rand()); ?>"></script>
-    <script src="src/js/nueva-venta-credito.js?v=<?php echo(rand()); ?>"></script>
-    <!-- <script src="src/js/splide_notifications.js"></script> -->
-    <!-- <script src="src/js/consultar-llanta-nv.js?v=<?php echo(rand()); ?>"></script> -->
-    <script src="src/js/apartados.js?v=<?php echo(rand()); ?>"></script>
-  <!--  <script src="src/js/notificaciones.js"></script>   -->
-   
+    <script src="src/js/agregar-cliente.js?v=<?php echo(rand()); ?>"></script>
+    <script src="src/js/control-inputs-token.js?v=<?php echo(rand()); ?>"></script>
+
+   <script>
+     document.addEventListener('keydown', function(event) {
+            // Verifica si la tecla presionada es 'Tab'
+            if (event.key === 'Tab') {
+                mostrarSidebarCart()
+            }
+        });
+   </script>
    
 </body>
 

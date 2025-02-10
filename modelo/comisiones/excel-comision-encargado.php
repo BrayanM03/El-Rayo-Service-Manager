@@ -175,7 +175,7 @@ if(count($comisiones['data']) > 0) {
                         $hoja_activa->setCellValue('G'.$index, $sumatoria_ventas);
                         $index++;
                         $comision_venta = ($sumatoria_ventas * floatval($porcentaje_comision))/100;
-                        $hoja_activa->setCellValue('F'.$index, 'Ganacia comisión ('.$porcentaje_comision.'%): ');
+                        $hoja_activa->setCellValue('F'.$index, 'Ganancia comisión ('.$porcentaje_comision.'%): ');
                         $hoja_activa->setCellValue('G'.$index, $comision_venta);
                         $hoja_activa->getStyle('F'.($index-1).':F'.$index)->getFont()->setBold(true);
 
@@ -184,15 +184,15 @@ if(count($comisiones['data']) > 0) {
                         $hoja_activa->mergeCells("A$index:H$index");
                         $hoja_activa->setCellValue('A'.$index,'Ventas de creditos pagadas Sucursal: '.$nombre_sucursal . ' | Llantera el rayo ');
                         $hoja_activa->mergeCells('A'.($index+1).':D'.($index+1));
-                        $hoja_activa->mergeCells('E'.($index+1).':I'.($index+1));
+                        $hoja_activa->mergeCells('E'.($index+1).':J'.($index+1));
                         $hoja_activa->setCellValue('A'.($index+1), 'Sucursal: '.$nombre_sucursal);
                         $hoja_activa->setCellValue('E'.($index+1), 'Mes de '. $mes_letra);
-                        $hoja_activa->getStyle('A'.($index).':I'.($index+1))->getAlignment()->setHorizontal('center');
-                        $hoja_activa->getStyle('A'.$index.':I'.($index+1))->getAlignment()->setVertical('center');
+                        $hoja_activa->getStyle('A'.($index).':J'.($index+1))->getAlignment()->setHorizontal('center');
+                        $hoja_activa->getStyle('A'.$index.':J'.($index+1))->getAlignment()->setVertical('center');
                         $hoja_activa->getRowDimension($index)->setRowHeight(30);
-                        $hoja_activa->getStyle('A'.($index+2).':I'.($index+2))->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('dfe6f2');
-                        $hoja_activa->getStyle('A'.($index).':I'.($index))->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('007bcc');
-                        $hoja_activa->getStyle('A'.$index.':I'.$index)->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE); 
+                        $hoja_activa->getStyle('A'.($index+2).':J'.($index+2))->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('dfe6f2');
+                        $hoja_activa->getStyle('A'.($index).':J'.($index))->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('007bcc');
+                        $hoja_activa->getStyle('A'.$index.':J'.$index)->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE); 
 
                         $index+=2;
 
@@ -213,11 +213,13 @@ if(count($comisiones['data']) > 0) {
                         $hoja_activa->setCellValue('H'.$index, 'Total');
                         $hoja_activa->getColumnDimension('I')->setWidth(20);
                         $hoja_activa->setCellValue('I'.$index, 'Sucursal');
+                        $hoja_activa->getColumnDimension('J')->setWidth(20);
+                        $hoja_activa->setCellValue('J'.$index, 'Dias transcurridos');
          
-                        $hoja_activa->getStyle('A'.$index.':I'.$index)->getFont()->setBold(true);
+                        $hoja_activa->getStyle('A'.$index.':J'.$index)->getFont()->setBold(true);
                         $hoja_activa->getRowDimension('2')->setRowHeight(20);
-                        $hoja_activa->getStyle('A'.$index.':I'.$index)->getAlignment()->setHorizontal('center');
-                        $hoja_activa->getStyle('A'.$index.':I'.$index)->getAlignment()->setVertical('center');
+                        $hoja_activa->getStyle('A'.$index.':J'.$index)->getAlignment()->setHorizontal('center');
+                        $hoja_activa->getStyle('A'.$index.':J'.$index)->getAlignment()->setVertical('center');
                         $index++;
                        
                     }else{
@@ -281,12 +283,18 @@ if(count($comisiones['data']) > 0) {
                         $hoja_activa->setCellValue('H'.$index, $importe_sin_servicio);
                         $hoja_activa->getColumnDimension('I')->setWidth(20);
                         $hoja_activa->setCellValue('I'.$index, $sucursal);
-                        $hoja_activa->getStyle('A'.$index.':I'.$index)->getAlignment()->setHorizontal('center');
-                        $hoja_activa->getStyle('A'.$index.':I'.$index)->getAlignment()->setVertical('center');
+                        $hoja_activa->getColumnDimension('J')->setWidth(20);
+                        $hoja_activa->setCellValue('J'.$index, $dias_transcurridos . ' dias');
+                        $hoja_activa->getStyle('A'.$index.':J'.$index)->getAlignment()->setHorizontal('center');
+                        $hoja_activa->getStyle('A'.$index.':J'.$index)->getAlignment()->setVertical('center');
                         //$hoja_activa->getStyle('A'.$index.':F'.$index)->getFont()->setBold(true);
-                        $hoja_activa->getStyle('A'.$index.':I'.$index)->getFont()->setSize(12);
-                        $hoja_activa->getStyle('A'.$index.':I'.$index)->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_BLACK);
+                        $hoja_activa->getStyle('A'.$index.':J'.$index)->getFont()->setSize(12);
+                        $hoja_activa->getStyle('A'.$index.':J'.$index)->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_BLACK);
                         $sumatoria_creditos += intval($importe_sin_servicio);
+                        if($dias_transcurridos>30){
+                            $hoja_activa->getStyle('A'.($index).':J'.($index))->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('ffc302');
+                            //$hoja_activa->getStyle('A'.$index.':J'.$index)->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+                        }
                         } else {
                             $index--;
                             //echo "Han pasado más de 45 días desde el último abono.";
@@ -520,17 +528,32 @@ function informacionFiltros($con)
 
 
 
-    if (!empty($mes)) { 
-        //$sucursal_ = $con->real_escape_string($sucursal)
-        $mes_anterior = intval($mes) - 2;
-        $sql .= " AND MONTH(v.fecha) = " . $mes . "";
-        $sql_creditos .= " AND MONTH(a.fecha) = " . $mes . " AND MONTH(v.fecha) BETWEEN " . $mes_anterior . " AND " . $mes;
+if (!empty($mes)) {
+    //$fecha_limite = date('Y-m-d', strtotime("$fecha_inicial +45 days"));
+    if($mes ==1 || $mes ==2){
+        if($mes==1){
+            $mes_anterior_2 = 11;
+        }else if($mes==2){
+            $mes_anterior_2 = 12;
+        }
+    }else{
+        $mes_anterior_2 = $mes -2;
     }
-    if (!empty($year)) { 
-        //$sucursal_ = $con->real_escape_string($sucursal);
-        $sql .= " AND YEAR(v.fecha) = " . $year . "";
-        $sql_creditos .= " AND YEAR(a.fecha) = " . $year . "";
+   
+    $sql .= " AND MONTH(v.fecha) = " . $mes . "";
+    $sql_creditos .= " AND MONTH(a.fecha) = ". $mes ." AND (MONTH(cr.fecha_inicio) BETWEEN  " . $mes_anterior_2 . " AND MONTH(cr.fecha_inicio) = ".$mes.")";
+}
+if (!empty($year)) { 
+    if($mes ==1 || $mes ==2){
+        $year_credito = $year-1;
+        $sql_creditos .= " AND YEAR(v.fecha) BETWEEN " . $year_credito . " AND ". $year;
+    }else{
+        $year_credito=$year;
+        $sql_creditos .= " AND YEAR(v.fecha) = " . $year_credito . "";
     }
+    $sql .= " AND YEAR(v.fecha) = " . $year . "";
+   
+}
 
 
     // Filtra por sucursal si está definida

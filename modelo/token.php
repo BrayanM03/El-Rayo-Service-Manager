@@ -1,13 +1,19 @@
 <?php
      
-    include 'conexion.php';
-    $con= $conectando->conexion(); 
-   /*  ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL); */
-    if (!$con) {
-        echo "maaaaal";
-    }
+include 'conexion.php';
+include 'helpers/response_helper.php';
+
+$con= $conectando->conexion(); 
+    // Función para generar un token operativo de 4 dígitos
+define('TOKEN_LENGTH_OPERATIVO', 4);
+define('TOKEN_LENGTH_ADMINISTRATIVO', 5);
+/* ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL); */
+//$_POST = json_decode(file_get_contents('php://input'),true);
+if (!$con) {
+    responder(false, 'Conexión erronea', 'danger', [], true);
+}
  
     if(isset($_POST["traer-token"])){
 
@@ -54,14 +60,15 @@
 
 
     if (isset($_POST["comprobar-token"])) {
-
+   
         $token_in = $_POST["comprobar-token"];
-        $new_token = $_POST["nuevo-token"];
-        $tipo_token = $_POST["tipo-token"];
+        $tipo_token = $_POST["tipo_token"];
         if($tipo_token==1){
             $columna_token = 'codigo';
+            $new_token = generarTokenOperativo();
         }else if($tipo_token==2){
             $columna_token = 'codigo_administrativo';
+            $new_token = generarTokenAdministrativo();
         }
         $sqlComprobartoken= $con->prepare("SELECT $columna_token FROM token WHERE $columna_token = ?");
         $sqlComprobartoken->bind_param('s', $token_in);
@@ -78,13 +85,31 @@
            
             $sqlUpdatetoken="UPDATE token SET $columna_token = '$new_token'";
             $result = mysqli_query($con, $sqlUpdatetoken);
-            print_r(3);
+            
+            responder(true, 'Token correcto', 'success', [], true);
 
         }else{
-            print_r(4);
+            responder(false, 'Token incorrecto', 'danger', [], true);
         }
 
 
+    }
+
+    function generarTokenOperativo() {
+        return str_pad(random_int(0, 9999), TOKEN_LENGTH_OPERATIVO, '0', STR_PAD_LEFT);
+    }
+    
+    // Función para generar un token administrativo de 5 caracteres alfanuméricos
+    function generarTokenAdministrativo() {
+        $caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $longitud = strlen($caracteres);
+        $token = '';
+    
+        for ($i = 0; $i < TOKEN_LENGTH_ADMINISTRATIVO; $i++) {
+            $token .= $caracteres[random_int(0, $longitud - 1)];
+        }
+    
+        return $token;
     }
     
 

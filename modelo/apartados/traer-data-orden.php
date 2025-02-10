@@ -25,7 +25,7 @@ $vendedor_usuario = $vendedor_name . " " . $vendedor_apellido;
 //Haciendo consulta a detalle del apartado
 $data_servicios = array();
 
-$detalles = $con->prepare("SELECT da.modelo, da.cantidad,servicios.descripcion, da.precio_unitario, da.importe FROM detalle_apartado da INNER JOIN servicios ON da.id_llanta = servicios.id WHERE da.id_apartado = ?");
+$detalles = $con->prepare("SELECT da.modelo, da.cantidad,servicios.descripcion, da.precio_unitario, da.importe FROM detalle_apartado da INNER JOIN servicios ON da.id_llanta = servicios.id WHERE da.id_apartado = ? AND da.Unidad = 'servicio'");
 $detalles->bind_param('i', $id);
 $detalles->execute();
 $resultadoServ = $detalles->get_result();

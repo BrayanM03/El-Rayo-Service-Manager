@@ -38,6 +38,7 @@ if($_POST){
     $latitud   = $_POST["latitud"];  
     $longitud  = $_POST["longitud"];
     $asesor    = $_POST["asesor"];
+    $tipo_cliente = $_POST["tipo_cliente"];
 
     $select = "SELECT * FROM clientes WHERE id = ?";
     $ress = $con->prepare($select);
@@ -89,9 +90,9 @@ if($_POST){
    
 
     
-    $update_cliente = "UPDATE clientes SET Nombre_Cliente = ?, Telefono = ?, Direccion = ?, Correo = ?, Credito = ?, RFC = ?, Latitud = ?, Longitud = ?, id_asesor = ? WHERE id = ?";
+    $update_cliente = "UPDATE clientes SET Nombre_Cliente = ?, Telefono = ?, Direccion = ?, Correo = ?, Credito = ?, RFC = ?, Latitud = ?, Longitud = ?, tipo_cliente =?, id_asesor = ? WHERE id = ?";
     $resultado = $con->prepare($update_cliente);
-    $resultado->bind_param('sisssssssi', $nombre, $telefono, $direccion, $correo, $credito, $rfc, $latitud, $longitud, $asesor, $id);
+    $resultado->bind_param('sissssssssi', $nombre, $telefono, $direccion, $correo, $credito, $rfc, $latitud, $longitud, $tipo_cliente, $asesor, $id);
     $resultado->execute();
     
     if ($resultado) {

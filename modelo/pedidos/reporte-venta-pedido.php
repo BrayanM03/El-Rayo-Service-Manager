@@ -2,6 +2,8 @@
 <?php
 session_start();
 include '../conexion.php';
+include '../helpers/condiciones_comentarios.php';
+
 $con = $conectando->conexion(); 
 global $con;
 
@@ -128,6 +130,7 @@ global $ultimo_abono;
 global $asesor_name;
 global $asesor_apellido;
 global $telefono_suc_2;
+global $condiciones_generales;
 
 $formatterES = new NumberFormatter("es-ES", NumberFormatter::SPELLOUT);
 $izquierda = intval(floor($ultimo_abono));
@@ -787,9 +790,7 @@ function cuerpoTabla(){
     $pdf->MultiCell(170,6, $GLOBALS["comentario"],0,0,'L',0);
     $pdf->Ln(4.5);
     $pdf->SetFont('Arial','',5);
-    $pdf->MultiCell(180,4, utf8_decode_("GARANTÍA DE UN AÑO CONTRA DEFECTO DE FABRICACION; NO GOLPES, NO CORTES PROVOCADOS POR MAL MANEJO, PRESION DE AIRE INADECUADA,EXCESO DE PESO, ETC. A PARTIR DE ESTA FECHA
-FAVOR DE PRESENTAR ESTA NOTA PARA EMPEZAR EL PROCEDIMIENTO ADECUADO PARA GARANTIA. SI NO SE PRESENTA LA NOTA NO SE PODRA SEGUIR EL PROCESO; EN MALA INSTALACION
-SOLAMENTE SERA VALIDA LA GARANTIA DENTRO DEL PRIMER MES DESPUES DE LA COMPRA, SI TIENE PARCHE AUTOMATICAMENTE PIERDE LA GARANTIA; EN CASO DE PROCEDER GARANTIA SE COBRARÁEL DESGASTE SI ES EL CASO; TIEMPO ESTIMADO DE RESPUESTA DE 1-2 SEMANAS. APLICA RESTRICCIONES. VENTAS DE APARTADO: EL PLAZO PARA PAGAR ES DE 1 MES, EN CASO DE NO CUMPLIR EL PAGO A TIEMPO EL MONTO DEL ADELANTO NO SERÁ REEMBOLSABLE"),0,0,'C',0);
+    $pdf->MultiCell(180,4, utf8_decode_($GLOBALS['condiciones_generales']),0,0,'C',0);
     
     $ejeY = $ejeY +17;
     $pdf->SetY($ejeY);

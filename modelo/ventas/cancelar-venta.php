@@ -19,7 +19,7 @@ if ($_SESSION["rol"]  !== "1") {
 date_default_timezone_set("America/Matamoros");
 $hora = date("h:i a");
 $fecha = date('Y-m-d');
-
+$mercancia ='';
 if(isset($_POST)) {
     $id_venta = $_POST["id_venta"];
     $motivo = $_POST["motivo_cancel"];
@@ -129,7 +129,7 @@ if(isset($_POST)) {
                     $rr->execute();
                     $rr->close();
 
-
+                    $mercancia_ = [];
                     //Obtener la descripcion de las llantas para insertarlas en los movimientos
                     $select_llanta = "SELECT * FROM llantas WHERE id = ?";
                     $res = $con->prepare($select_llanta);
@@ -141,11 +141,11 @@ if(isset($_POST)) {
                     //Actualizar detalle historial de movimientos con la cancelación
                     
                     while ($row = $resultado_ll->fetch_array()) {
-                        $descripcion_llanta = $row['Descripcion'];
-                        $mercancia[] = $descripcion_llanta; // Guardamos cada descripción en un array
+                        $descripcion_llanta = $row['Descripcion']; 
+                        $mercancia_[] = $descripcion_llanta; // Guardamos cada descripción en un array
                     }
                     
-                    $mercancia = implode(', ', $mercancia); // Unimos las descripciones con coma y espacio
+                    $mercancia = implode(', ', $mercancia_); // Unimos las descripciones con coma y espacio
                     $mercancia .= '.'; // Agregamos el punto al final
 
                     $cantidad_llantas_movimiento += $cantidad;

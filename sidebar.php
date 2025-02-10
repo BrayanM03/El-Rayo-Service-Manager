@@ -162,7 +162,7 @@ switch ($flag) {
     if ($user_jerarquia == 1 || $user_jerarquia == 2 || $user_jerarquia == 3 || $_SESSION['id_usuario'] ==24) { ?>
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item <?php echo $claseNuevaVenta ?> rol-4">
-            <a class="nav-link" href="nueva-venta.php?id=0&nav=nueva_venta">
+            <a class="nav-link" href="punto-venta.php?id=0&nav=nueva_venta">
                 <i class="fas fa-fw fa-cart-plus"></i>
                 <span>Nueva venta</span>
             </a>

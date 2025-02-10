@@ -398,9 +398,9 @@ function cuerpoTabla(){
      $pdf->MultiCell(130,3, utf8_decode_($articulos),0,1,'C',0);
      $pdf->Ln(1);
      $pdf->SetFont('Exo2-Bold','B',10);
-     $pdf->Cell(17,19,utf8_decode_("Cliente: "),0,0,'C');
+     $pdf->Cell(17,19,utf8_decode_("Cliente: "),0,0,'R');
      $pdf->SetFont('Arial','',10);
-     $pdf->Cell(40,19,utf8_decode_($cliente),0,0,'C');  
+     $pdf->Cell(170,19,utf8_decode_($cliente),0,0,'L');  
      $pdf->SetFont('Exo2-Bold','B',10);
 
      $pdf->Ln(15);

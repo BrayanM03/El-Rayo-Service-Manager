@@ -377,11 +377,20 @@ $meses = array(
             <i class="fas fa-question icon-menu"></i>
         </li> -->
 
-        <li class="nav-item dropdown no-arrow mx-1">
+        <li class="nav-item dropdown no-arrow mx-1" id="area-icono-carrito">
             <a class="nav-link dropdown-toggle" href="#" onclick="mostrarSidebarCart()" id="alertsDropdown!" style="color:white" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                  <i class="fas fa-cart-plus"></i>
                 <!-- Counter - Alerts -->
-                <span id="contador-items-carrito" class="badge badge-danger badge-counter">0</span>
+                <?php
+                        $select_count = 'SELECT COUNT(*) FROM productos_preventa WHERE id_usuario = ?';
+                        $stmt = $con->prepare($select_count);
+                        $stmt->bind_param('s', $_SESSION['id_usuario']);
+                        $stmt->execute();
+                        $stmt->bind_result($productos_count);
+                        $stmt->fetch();
+                        $stmt->close()
+                ?>
+                <span id="contador-items-carrito" class="badge badge-danger badge-counter"><?= $productos_count?></span>
             </a>
 
             <!-- Dropdown - Alerts -->
@@ -508,7 +517,7 @@ $meses = array(
             </a>
             <!-- Dropdown - User Information -->
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="perfil.php?id_usuario=<?= $_SESSION['id_usuario']?>">
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                     Perfil
                 </a>
@@ -556,9 +565,9 @@ $meses = array(
         if (minutes < 10) minutes = "0" + minutes;
         if (seconds < 10) seconds = "0" + seconds;
 
-        var currentTime = hours + ":" + minutes + ":" + seconds + " " + ampm;
+       /*  var currentTime = hours + ":" + minutes + ":" + seconds + " " + ampm;
         document.getElementById('hora-actual').value = currentTime;
-        setTimeout(showTime, 1000);
+        setTimeout(showTime, 1000); */
 
     }
     showTime()

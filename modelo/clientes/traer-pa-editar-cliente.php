@@ -34,10 +34,11 @@ if($_POST){
          $latitud = $fila["Latitud"];
          $longitud = $fila["Longitud"];
          $asesor = $fila["id_asesor"];
+         $tipo_cliente = $fila["tipo_cliente"];
          
 
          $data = array("id" => $id, "nombre" => $nombre, "telefono" => $telefono, "direccion" => $direccion,
-                        "correo"=> $correo, "credito" => $credito, "rfc" => $rfc, "latitud" => $latitud, "longitud" => $longitud, "asesor"=> $asesor);
+                        "correo"=> $correo, "credito" => $credito, "rfc" => $rfc, "latitud" => $latitud, "longitud" => $longitud, "asesor"=> $asesor, 'tipo_cliente'=> $tipo_cliente);
      
          echo json_encode($data, JSON_UNESCAPED_UNICODE);
   

@@ -607,7 +607,8 @@ if ($total_suc > 0) {
                                                         <option value="2021">2021</option>
                                                         <option value="2022">2022</option>
                                                         <option value="2023">2023</option>
-                                                        <option value="2024" selected>2024</option>
+                                                        <option value="2024">2024</option>
+                                                        <option value="2025" selected>2025</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-6 col-md-1 d-flex flex-row align-items-center justify-content-end">
