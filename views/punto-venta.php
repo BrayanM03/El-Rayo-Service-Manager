@@ -146,7 +146,7 @@
                                 if($row['url_principal']!=null){
                                     $url_imagen = $row['url_principal'];
                                 }else{
-                                    $url_imagen = 'NA.jpg';
+                                    $url_imagen = 'NA.JPG';
                                 }
                                 echo '
 <div class="col-12 col-sm-6 col-md-4">

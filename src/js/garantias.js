@@ -539,7 +539,7 @@ function compranteGarantia(id_garantia, file_extension){
               $("#area-imagenes-garantia").append(`
                 <div class="col-12 col-md-4">
                   <img src="./src/docs/garantias/${id_garantia}/${element.ruta}" style="width:260px; border-radius:10px;"
-                  onerror="this.src='./src/img/neumaticos/NA.jpg';"
+                  onerror="this.src='./src/img/neumaticos/NA.JPG';"
                   >
                 </div>
               `)

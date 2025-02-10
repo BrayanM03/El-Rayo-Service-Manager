@@ -91,10 +91,10 @@ $(document).ready(function(){
           select2Marca(response.datos.marca)
           desactivarPrecioPromocion()
           /* if(response.datos.urls!=null){
-              let url_principal = response.datos.urls['url_principal'] != null ? response.datos.urls['url_principal'] : 'NA.jpg'
-              let url_perfil = response.datos.urls['url_perfil'] != null ? response.datos.urls['url_perfil'] : 'NA.jpg'
-              let url_frontal = response.datos.urls['url_frontal'] != null ? response.datos.urls['url_frontal'] : 'NA.jpg'
-              let url_piso = response.datos.urls['url_piso'] != null ? response.datos.urls['url_piso'] : 'NA.jpg'
+              let url_principal = response.datos.urls['url_principal'] != null ? response.datos.urls['url_principal'] : 'NA.JPG'
+              let url_perfil = response.datos.urls['url_perfil'] != null ? response.datos.urls['url_perfil'] : 'NA.JPG'
+              let url_frontal = response.datos.urls['url_frontal'] != null ? response.datos.urls['url_frontal'] : 'NA.JPG'
+              let url_piso = response.datos.urls['url_piso'] != null ? response.datos.urls['url_piso'] : 'NA.JPG'
 
               let boton_borrar = '<div class="btn btn-danger" id="'+url_frontal+'" style="position:absolute !important; right:50px !important; top:34px;"><i class="fas fa-trash-alt"></i></div>'
               setTimeout(function(){
@@ -106,25 +106,25 @@ $(document).ready(function(){
               },650)
           }else{
             setTimeout(function(){
-              $("#img_principal").attr('src', './src/img/neumaticos/NA.jpg').attr('style', 'border-radius:9px; width:90%; margin:auto;').addClass('border')
-              $("#img_perfil").attr('src', './src/img/neumaticos/NA.jpg').attr('style', 'border-radius:9px; width:90%; margin:auto;').addClass('border')
-              $("#img_frontal").attr('src', './src/img/neumaticos/NA.jpg').attr('style', 'border-radius:9px; width:90%; margin:auto;').addClass('border')
-              $("#img_piso").attr('src', './src/img/neumaticos/NA.jpg').attr('style', 'border-radius:9px; width:90%; margin:auto;').addClass('border')
+              $("#img_principal").attr('src', './src/img/neumaticos/NA.JPG').attr('style', 'border-radius:9px; width:90%; margin:auto;').addClass('border')
+              $("#img_perfil").attr('src', './src/img/neumaticos/NA.JPG').attr('style', 'border-radius:9px; width:90%; margin:auto;').addClass('border')
+              $("#img_frontal").attr('src', './src/img/neumaticos/NA.JPG').attr('style', 'border-radius:9px; width:90%; margin:auto;').addClass('border')
+              $("#img_piso").attr('src', './src/img/neumaticos/NA.JPG').attr('style', 'border-radius:9px; width:90%; margin:auto;').addClass('border')
             },650)
           } */
           if (response.datos.urls != null) {
             let urls = {
-                'url_principal': 'NA.jpg',
-                'url_perfil': 'NA.jpg',
-                'url_frontal': 'NA.jpg',
-                'url_piso': 'NA.jpg'
+                'url_principal': 'NA.JPG',
+                'url_perfil': 'NA.JPG',
+                'url_frontal': 'NA.JPG',
+                'url_piso': 'NA.JPG'
             };
         
             for (let key in urls) {
                 if (response.datos.urls[key] != null && response.datos.urls[key] != '') {
                     urls[key] = response.datos.urls[key];
                 }else{
-                   urls[key] = 'NA.jpg';
+                   urls[key] = 'NA.JPG';
                 }
             }
         
@@ -144,7 +144,7 @@ $(document).ready(function(){
                               .addClass('border');
                              
                     
-                    if (urls[key] != 'NA.jpg') {
+                    if (urls[key] != 'NA.JPG') {
                         let boton_borrar = '<div class="btn btn-danger" url_imagen="' + urls[key] + '" id="'+imgId+'_delete_btn" style="position:absolute !important; right:50px !important; top:34px;" onclick="eliminarPreview(`'+imgId+'`)"><i class="fas fa-trash-alt"></i></div>';
                         colElement.append(boton_borrar);
                         imgElement .attr('onclick', '')
@@ -153,10 +153,10 @@ $(document).ready(function(){
             }, 650);
         }else{
           setTimeout(function(){
-            $("#img_principal").attr('src', './src/img/neumaticos/NA.jpg').attr('style', 'border-radius:9px; width:90%; margin:auto;').addClass('border') .attr('eliminar', false)
-            $("#img_perfil").attr('src', './src/img/neumaticos/NA.jpg').attr('style', 'border-radius:9px; width:90%; margin:auto;').addClass('border') .attr('eliminar', false)
-            $("#img_frontal").attr('src', './src/img/neumaticos/NA.jpg').attr('style', 'border-radius:9px; width:90%; margin:auto;').addClass('border') .attr('eliminar', false)
-            $("#img_piso").attr('src', './src/img/neumaticos/NA.jpg').attr('style', 'border-radius:9px; width:90%; margin:auto;').addClass('border') .attr('eliminar', false)
+            $("#img_principal").attr('src', './src/img/neumaticos/NA.JPG').attr('style', 'border-radius:9px; width:90%; margin:auto;').addClass('border') .attr('eliminar', false)
+            $("#img_perfil").attr('src', './src/img/neumaticos/NA.JPG').attr('style', 'border-radius:9px; width:90%; margin:auto;').addClass('border') .attr('eliminar', false)
+            $("#img_frontal").attr('src', './src/img/neumaticos/NA.JPG').attr('style', 'border-radius:9px; width:90%; margin:auto;').addClass('border') .attr('eliminar', false)
+            $("#img_piso").attr('src', './src/img/neumaticos/NA.JPG').attr('style', 'border-radius:9px; width:90%; margin:auto;').addClass('border') .attr('eliminar', false)
           },650)
         }
         
@@ -343,7 +343,7 @@ function eliminarPreview(id_imagen){
   img_preview.src = './src/img/preload.gif';
   img_preview.setAttribute('eliminar', true);
   setTimeout(function(){
-    img_preview.src = './src/img/neumaticos/NA.jpg';
+    img_preview.src = './src/img/neumaticos/NA.JPG';
     file_input.value = ''
 
     switch (id_imagen) {

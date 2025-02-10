@@ -1,5 +1,8 @@
 <?php
 session_start();
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 include '../conexion.php';
 $con= $conectando->conexion(); 
 
@@ -16,7 +19,7 @@ $fuente = $_POST['fuente'];
 
 if($fuente == 'Ancho'){
     //Filtro a anchos diferetes de 0 para el ancho del neumatico
-    $query= "SELECT COUNT(*) FROM $tabla WHERE $fuente !=0";   
+    $query= "SELECT COUNT(*) FROM $tabla WHERE $fuente >=0";   
 }else{
     $query= "SELECT COUNT(*) FROM $tabla";   
 }
@@ -30,7 +33,7 @@ $res->close();
 if($total>0){
     if($fuente == 'Ancho'){
         $select = "SELECT DISTINCT l.$fuente FROM llantas l INNER JOIN inventario i ON l.id = i.id_Llanta 
-         WHERE $fuente != 0 AND i.Stock > 0 ORDER BY l.$fuente ASC";
+         WHERE $fuente >= 0 AND i.Stock > 0 ORDER BY l.$fuente ASC";
     }else{
         $ancho = isset($_POST['ancho']) ? floatval($_POST['ancho']): 0;
         $alto = isset($_POST['alto']) ? floatval($_POST['alto']): 0;
@@ -43,7 +46,7 @@ if($total>0){
         } 
         $select.= " ORDER BY l.$fuente ASC";
     }
-  
+   
     $res = $con->prepare($select);
     switch ($fuente) {
         case 'Proporcion':

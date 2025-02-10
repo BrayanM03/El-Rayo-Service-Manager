@@ -173,7 +173,7 @@ function buscarNeumaticoPuntoVenta() {
       if (response.estatus) {
         response.datos.forEach((element) => {
           if (element.url_principal == null) {
-            src_imagen_llanta = "./src/img/neumaticos/NA.jpg";
+            src_imagen_llanta = "./src/img/neumaticos/NA.JPG";
           } else {
             src_imagen_llanta = `./src/img/neumaticos/${element.url_principal}`;
           }
@@ -621,7 +621,7 @@ function cargarPreventa() {
                     <div class="row">
                         <div class="col-12 col-md-4">
                             <img src="./src/img/neumaticos/llanta_${element.id_llanta}_1.png" style="width:100px !important;"
-                            onerror="this.src='./src/img/neumaticos/NA.jpg';" alt="Imagen de ${element.descripcion}"/>
+                            onerror="this.src='./src/img/neumaticos/NA.JPG';" alt="Imagen de ${element.descripcion}"/>
                         </div>
                         <div class="col-12 col-md-8 p-2">
                             <div class="row">
@@ -670,7 +670,7 @@ function cargarPreventa() {
                     <div class="row">
                         <div class="col-12 col-md-4">
                             <img src="./src/img/services/${element.modelo}.png" style="width:80px;"
-                            onerror="this.src='./src/img/neumaticos/NA.jpg';" alt="Imagen de ${element.descripcion}"/>
+                            onerror="this.src='./src/img/neumaticos/NA.JPG';" alt="Imagen de ${element.descripcion}"/>
                         </div>
                         <div class="col-12 col-md-8">
                             <div class="row">
