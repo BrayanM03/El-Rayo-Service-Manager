@@ -15,6 +15,7 @@ function editarRegistro(id){
                 let datos = response.datos;
                 Swal.fire({
                     title: "Editar llanta",
+                    width: '700px',
                     html: '<form class="mt-4" id="agregar-llanta-inv-total">'+
                 
                     '<div class="row">'+
@@ -78,19 +79,25 @@ function editarRegistro(id){
                     '</div>'+
                 
                     '<div class="row" id="precios_area">'+
-                        '<div class="col-4">'+
+                        '<div class="col-3">'+
                             '<div class="form-group">'+
                                 '<label><b>Costo</b></label>'+
                                 '<input type="number" class="form-control" value="'+ datos.costo+'" id="costo" name="costo" placeholder="0.00">'+
                             '</div>'+
                         '</div>'+
-                        '<div class="col-4">'+
+                        '<div class="col-3">'+
+                            '<div class="form-group">'+
+                                '<label><b>Precio lista</b></label>'+
+                                '<input type="number" class="form-control" value="'+ datos.precio_lista+'" id="precio_lista" name="costo" placeholder="0.00">'+
+                            '</div>'+
+                        '</div>'+
+                        '<div class="col-3">'+
                         '<div class="form-group">'+
-                        '<label><b>Precio</b></label>'+
+                        '<label><b>Precio desc.</b></label>'+
                         '<input type="number" class="form-control" value="'+ datos.precio+'" name="precio" id="precio" placeholder="0.00">'+
                     '</div>'+
                 '</div>'+
-                '<div class="col-4">'+
+                '<div class="col-3">'+
                         '<div class="form-group">'+
                         '<label><b>Mayorista</b></label>'+
                         '<input type="number" class="form-control" value="'+ datos.mayoreo+'" name="mayorista" id="mayorista" placeholder="0.00">'+
@@ -106,7 +113,7 @@ function editarRegistro(id){
                     '<textarea class="form-control" style="height:100px" name="descripcion"  id="descripcion" form="formulario-editar-registro" placeholder="Escriba la descripcion del producto">'+ datos.descripcion +'</textarea>'+
                     '</div>'+
                     '</div>'+
-                    '</div>'+
+                    '</div>'+ 
                             '</div>'+
                 '</form>',
                     showCancelButton: true,
@@ -220,6 +227,7 @@ function editarRegistro(id){
                         modelo      = $("#modelo").val();
                         fecha       = $("#fecha").val();
                         costo       = $("#costo").val();
+                        precio_lista      = $("#precio_lista").val();
                         precio      = $("#precio").val();
                         mayorista   = $("#mayorista").val();
                         descripcion = $("#descripcion").val();
@@ -240,6 +248,7 @@ function editarRegistro(id){
                                    modelo      : modelo,
                                    fecha       : fecha,
                                    costo       : costo,
+                                   precio_lista,
                                    precio      : precio,
                                    mayorista   : mayorista,
                                    descripcion : descripcion},

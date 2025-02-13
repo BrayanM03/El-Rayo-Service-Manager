@@ -179,6 +179,7 @@ if (isset($_POST)) {
                 $precio_unitario = $value['precio'];
                 $importe = $value['importe'];
                 $unidad_producto = $value['tipo'];
+                $id_llanta = $value['id_llanta'];
 
 
                 if ($unidad_producto == 2) {
@@ -194,7 +195,9 @@ if (isset($_POST)) {
                     $ID->fetch();
                     $ID->close();
 
+                
                     if ($stockActual > 0) {
+                   
                         $resultStock = $stockActual - $cantidad;
                         $updateStockSendero = $con->prepare("UPDATE inventario SET Stock = ? WHERE id_Llanta = ? AND id_sucursal = ?");
                         $updateStockSendero->bind_param('iii', $resultStock, $id_llanta, $id_sucursal);

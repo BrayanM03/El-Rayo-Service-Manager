@@ -23,18 +23,19 @@ if (isset($_POST)) {
         $e_fecha       = $_POST["fecha"];
         $e_costo       = $_POST["costo"];
         $e_precio      = $_POST["precio"];
+        $e_precio_lista  = $_POST['precio_lista'];
         $e_mayorista   = $_POST["mayorista"];
         $e_descripcion = $_POST["descripcion"];
-        $e_marca       = $_POST["marca"];
+        $e_marca       = $_POST["marca"]; 
     
-         $editar_llanta= $con->prepare("UPDATE llantas SET Ancho = ?, Proporcion = ?, Diametro = ?, Descripcion = ?, Marca = ?, Modelo = ?,precio_Inicial = ?, precio_Venta = ?, precio_Mayoreo = ?, Fecha = ? WHERE id = ?");
-         $editar_llanta->bind_param('ssssssdddsi', $e_ancho, $e_alto, $e_rin, $e_descripcion, $e_marca, $e_modelo, $e_costo, $e_precio, $e_mayorista, $e_fecha, $codigo);
+         $editar_llanta= $con->prepare("UPDATE llantas SET Ancho = ?, Proporcion = ?, Diametro = ?, Descripcion = ?, 
+         Marca = ?, Modelo = ?,precio_Inicial = ?, precio_Venta = ?, precio_Mayoreo = ?, Fecha = ?, precio_lista = ? 
+         WHERE id = ?");
+         $editar_llanta->bind_param('ssssssdddsis', $e_ancho, $e_alto, $e_rin, $e_descripcion, $e_marca, $e_modelo, $e_costo, $e_precio, $e_mayorista, $e_fecha, $e_precio_lista, $codigo);
          $editar_llanta->execute();
          $editar_llanta->close();
          
         print_r(1);
-
-
 
 }else{
     print_r(2);

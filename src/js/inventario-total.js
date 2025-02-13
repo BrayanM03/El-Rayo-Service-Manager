@@ -205,6 +205,7 @@ function agregarLLanta() {
 
   Swal.fire({
     title: "Agregar llanta nueva",
+    width: '700px',
     html: '<form class="mt-4" id="agregar-llanta-inv-total">'+
 
     '<div class="row">'+
@@ -268,19 +269,25 @@ function agregarLLanta() {
     '</div>'+
 
     '<div class="row">'+
-        '<div class="col-4">'+
+        '<div class="col-3">'+
             '<div class="form-group">'+
                 '<label><b>Costo</b></label>'+
                 '<input type="number" class="form-control" id="costo" value=""name="costo" placeholder="0.00">'+
             '</div>'+
         '</div>'+
-        '<div class="col-4">'+
+        '<div class="col-3">'+
+          '<div class="form-group">'+
+                '<label><b>Precio lista</b></label>'+
+                '<input type="number" class="form-control" id="precio_lista" value="" name="precio_lista" placeholder="0.00">'+
+            '</div>'+
+        '</div>'+
+        '<div class="col-3">'+
         '<div class="form-group">'+
-        '<label><b>Precio</b></label>'+
+        '<label><b>Precio desc.</b></label>'+
         '<input type="number" class="form-control" value="" name="precio" id="precio" placeholder="0.00">'+
     '</div>'+
 '</div>'+
-'<div class="col-4">'+
+'<div class="col-3">'+
         '<div class="form-group">'+
         '<label><b>Mayorista</b></label>'+
         '<input type="number" class="form-control" value="" name="mayorista" id="mayorista" placeholder="0.00">'+
@@ -504,6 +511,7 @@ function agregarLLanta() {
       "alto":           $("#alto").val(),
       "rin":            $("#rin").val(),
       "costo":          $("#costo").val(),
+      "precio_lista":   $("#precio_lista").val(),
       "precio":         $("#precio").val(),
       "mayorista":      $("#mayorista").val(),
       "modelo":         $("#modelo").val(),

@@ -13,20 +13,21 @@
       $nulo = null;
       $fecha = date("Y-m-d"); 
       $id_usuario = $_SESSION['id_usuario'];
-      $query = "INSERT INTO llantas (Ancho, Proporcion, Diametro, Descripcion, Marca, Modelo, precio_Inicial, precio_Venta, precio_Mayoreo, Fecha, promocion, precio_promocion) VALUES (?,?,?,?,?,?,?,?,?,?, 0,0.00)";
+      $query = "INSERT INTO llantas (Ancho, Proporcion, Diametro, Descripcion, Marca, Modelo, precio_Inicial, precio_Venta, precio_Mayoreo, Fecha, promocion, precio_promocion, precio_lista) VALUES (?,?,?,?,?,?,?,?,?,?, 0,0.00, ?)";
       $resultado = $con->prepare($query);
       $resultado->bind_param(
-          'ssssssssss',
+          'sssssssssss',
           $_POST['ancho'],
           $_POST['alto'],
           $_POST['rin'],
           $_POST['descripcion'],
-          $_POST['marca'],
+          $_POST['marca'], 
           $_POST['modelo'],
           $_POST['costo'],
           $_POST['precio'],
           $_POST['mayorista'],
-          $fecha 
+          $fecha ,
+          $_POST['precio_lista']
 
       );
 

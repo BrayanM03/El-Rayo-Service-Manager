@@ -59,6 +59,7 @@
              $indice_velocidad = $fila['id_indice_velocidad'];
              $posicion = $fila['posicion'];
              $psi = $fila['psi'];
+             $precio_lista = $fila['precio_lista'];
  
              $data = array("id" => $codigo, "ancho" => $ancho,"alto" => $alto,"rin" => $rin, "descripcion"=>$descripcion, 
                                      "modelo" => $modelo, "marca"=> $marca, "costo"=> $costo, "precio"=>$precio, 
@@ -73,7 +74,8 @@
                                      'indice_carga_2'=> $indice_carga_2,
                                      'indice_velocidad'=> $indice_velocidad,
                                      'posicion'=> $posicion,
-                                      'psi'=> $psi,);
+                                      'psi'=> $psi,
+                                      'precio_lista'=> $precio_lista);
         
                                      $response = array('estatus'=>true, 'mensaje'=>'Datos de la llanta encontrados', 'datos'=> $data);
        }else{
