@@ -21,6 +21,7 @@ toastr.options = {
   hideMethod: "fadeOut",
 };
 let rol_usuario = $("#emp-title").attr("sesion_rol");
+
 const checkboxes = document.querySelectorAll('input[type="checkbox"]');
 
 // Recorre cada checkbox y verifica si está marcado
@@ -135,7 +136,7 @@ function buscarNeumaticoPuntoVenta() {
   let ancho = $("#ancho").val();
   let alto = $("#alto").val();
   let diametro = $("#rin").val();
-  let id_cliente = $("#cliente").val();
+  let id_cliente = localStorage.getItem('id_cliente');
 
   if (ancho == "" || alto == "" || diametro == "") {
     Swal.fire({
@@ -182,6 +183,11 @@ function buscarNeumaticoPuntoVenta() {
             style: "currency",
             currency: "MXN",
           }).format(element.precio_Venta);
+          let precio_lista = Intl.NumberFormat("es-MX", {
+            style: "currency",
+            currency: "MXN",
+          }).format(element.precio_lista);
+
           let precio_mayoreo = Intl.NumberFormat("es-MX", {
             style: "currency",
             currency: "MXN",
@@ -198,8 +204,7 @@ function buscarNeumaticoPuntoVenta() {
           }
           let sucursal_producto = element.id_sucursal;
           let sucursal_usuario = $("#emp-title").attr("sesion_sucursal_id");
-          console.log(sucursal_producto);
-          console.log(sucursal_usuario);
+      
           if (sucursal_usuario != sucursal_producto && rol_usuario == 1) {
             display_btn_add = "d-none";
           } else if (
@@ -210,16 +215,20 @@ function buscarNeumaticoPuntoVenta() {
           } else if (sucursal_usuario == sucursal_producto) {
             display_btn_add = "d-flex";
           }
-          console.log(display_btn_add);
+         
 
+          let precio_final_desc;
           if(element.cliente_mayoreo){
             etiqueta_precio = 'Precio mayoreo';
-            background_color_precio = '#12a18e';
+            tipo_cliente = 'mayoreo'
+            precio_final_desc=precio_mayoreo;
+            background_color_precio = '#a03472';
           }else{
-            etiqueta_precio = 'Precio normal'
-            background_color_precio = '#FF7F50';
-
+            etiqueta_precio = 'Precio normal desc.'
+            precio_final_desc=precio
+            background_color_precio = '#12a18e';
           }
+
           $("#contenedor-resultados-llantas").append(`
    <div class="card mb-3 card_busqueda" onclick="previsualizarNeumatico(${element.id})" style="border-radius: 10px; overflow: hidden;">
        <img class="${display_promo}" src="./src/img/promo-image.png" 
@@ -255,7 +264,7 @@ function buscarNeumaticoPuntoVenta() {
                                </button>
                            </div>
                            <button class="btn btn-warning ml-2" style="border-radius: 10px;" 
-                               onclick="aplicarPromocion(${element.id}, '${element.Codigo}', ${element.id_sucursal}, 1, 'cantidad_id_${element.Codigo}', event, 0, 1, ${element.promocion})">
+                               onclick="agregarPreventa(${element.id}, '${element.Codigo}', ${element.id_sucursal}, 1, 'cantidad_id_${element.Codigo}', event, 0, 1, 0)">
                                Agregar
                            </button>
                        </div>
@@ -268,19 +277,29 @@ function buscarNeumaticoPuntoVenta() {
                            <span><b>Stock:</b> ${element.Stock}</span>
                            <span class="ml-3"><b>Codigo:</b> ${element.Codigo}</span>
                            </div>
-                           <div class="row p-2 mt-2">
-                               <!-- Precio -->
+                           <div class="row p-2 mt-2 tarjetas-precios" codigo="${element.Codigo}" id="tarjeta-codigo-${element.Codigo}">
+                               <!-- Precio lista -->
                                <div class="margenes-col-precio text-center">
-                                   <div style="background-color: ${background_color_precio}; color: white; border-radius: 8px;" class="boton_precio_estilos p-2">
-                                       <span>${etiqueta_precio}</span><br>
-                                       <h3><b>${precio}</b></h3>
+                                   <div id="tarjeta-lista" onclick="selectorPrecio(event, this, '${element.Codigo}')" style="background-color: #4682b4; color: white; border-radius: 8px;" class="boton_precio_estilos p-2">
+                                       <span>Precio lista</span><br>
+                                       <h3><b>${precio_lista}</b></h3>
+                                       <img src="./src/img/checked.png" class="checked-icon-lista checked-icon d-none" id="icon-checked-lista-${element.Codigo}">
                                    </div>
                                </div>
+                               <!-- Precio -->
+                               <div  class="margenes-col-precio ml-2 text-center">
+                                   <div id="tarjeta-precio" onclick="selectorPrecio(event, this, '${element.Codigo}')" style="background-color: ${background_color_precio}; color: white; border-radius: 8px;" class="boton_precio_estilos p-2">
+                                       <span>${etiqueta_precio}</span><br>
+                                       <h3><b>${precio_final_desc}</b></h3>
+                                       <img src="./src/img/checked.png" class="checked-icon-precio checked-icon d-none" id="icon-checked-precio-${element.Codigo}">
+                                       </div>
+                               </div>
                                <!-- Promoción -->
-                               <div class="margenes-col-precio text-center ${display_promo}">
-                                   <div style="background-color: #4682b4; color: white; border-radius: 8px;" class="boton_precio_estilos p-2">
+                               <div class="margenes-col-precio ml-2 text-center ${display_promo}">
+                                   <div id="tarjeta-promocion" onclick="selectorPrecio(event, this, '${element.Codigo}')" style="background-color: #FF7F50; color: white; border-radius: 8px;" class="boton_precio_estilos p-2">
                                        <span>Promoción</span><br>
                                        <h3><b>${precio_promocion}</b></h3>
+                                       <img src="./src/img/checked.png" class="checked-icon-promo checked-icon d-none" id="icon-checked-promo-${element.Codigo}">
                                    </div>
                                </div>
                            </div>
@@ -785,14 +804,14 @@ if(promocion==0){
     }
   })
 }
-  
 }
+
 
 function agregarPreventa(
   id_producto,
   codigo,
   id_sucursal,
-  tipo,
+  tipo, //1 producto - 2 servicio
   id_input,
   e = null,
   ocultar_sidebar,
@@ -803,6 +822,35 @@ function agregarPreventa(
   if (e != null) {
     e.stopPropagation();
   }
+
+
+  if(promocion ==0 && tipo ==1){
+    let tarjeta_seleccionada = document.getElementById('tarjeta-codigo-'+codigo)
+       precio_seleccionado =  tarjeta_seleccionada.hasAttribute('precio_seleccionado') ? tarjeta_seleccionada.getAttribute('precio_seleccionado') : 'false';
+       tipo_precio_seleccionado = tarjeta_seleccionada.getAttribute('tipo_precio')
+      }else{
+        precio_seleccionado='true';
+        tipo_precio_seleccionado='true'
+    }
+   
+
+  if((tipo==1 && promocion!=1) && precio_seleccionado != 'true'){
+    Swal.fire({
+      icon: 'error',
+      title: 'Elige un precio para el producto'
+    })
+    return false;
+  }
+
+  
+  if(promocion==1 && tipo_precio_seleccionado=='true' && tipo ==1){
+    tipo_precio='promo'
+  }
+
+  if(tipo==2){
+    tipo_precio='precio'
+  }
+
   let cantidad = $(`#${id_input}`).val() == undefined ? 1 : $(`#${id_input}`).val();
 
   if (tipo == 1) {
@@ -825,7 +873,8 @@ function agregarPreventa(
       ocultar_sidebar,
       sumar_restar_cantidad,
       promocion,
-      comparar_pu_preventa
+      comparar_pu_preventa,
+      tipo_precio
     },
     dataType: "json",
     success: function (response) {
@@ -1034,7 +1083,6 @@ function setearPrecioToken(codigo){
     
 }
 
-//configuracionDeVenta();
 $("#cliente").selectpicker();
 let currentPage = 1;
 let isLoading = false;
@@ -1053,6 +1101,7 @@ async function cargarClientes(query = "", page = 1) {
           const option = document.createElement("option");
           option.value = cliente.id;
           option.textContent = cliente.nombre_cliente;
+          option.setAttribute("data-tipo", cliente.tipo_cliente);
           $("#cliente").append(option);
         });
 
@@ -1089,10 +1138,21 @@ $("#cliente").on("shown.bs.select", function () {
 function setLocalStorageCliente(){
   setTimeout(function(){
     nombre_cliente =  $('#cliente').siblings('.dropdown-toggle').find('.filter-option-inner-inner').text();
-    id_cliente = document.querySelector('#cliente').value 
- 
+    let tipo_cliente_actual =  $('#cliente').siblings('.dropdown-toggle').find('.filter-option-inner-inner').text();
+    id_cliente = document.querySelector('#cliente').value
+    const selectedOption = $("#cliente option:selected");
+    const tipoCliente = selectedOption.data("tipo");
+    
     localStorage.setItem("id_cliente", id_cliente);
     localStorage.setItem("nombre_cliente", nombre_cliente);
+    localStorage.setItem('tipo_cliente', tipoCliente)
+
+    let ancho = $("#ancho").val();
+    let alto = $("#ancho").val();
+    let rin = $("#ancho").val();
+    if(ancho !='' || alto !='' || rin !=''){
+      buscarNeumaticoPuntoVenta()
+    }
   },100)
   
 }
@@ -1847,4 +1907,79 @@ function limpiarPreventa(){
       }
     }
   });
+}
+
+
+function selectorPrecio(e, this_e, codigo){
+  e?.stopPropagation(); // Solo si 'e' no es null
+  let id_tarjeta = this_e?.id || "Sin ID";
+  let tarjetas_contenedor = this_e.closest(".tarjetas-precios");
+  let iconos_checked = tarjetas_contenedor.querySelectorAll('.checked-icon')
+  let tarjetas = tarjetas_contenedor.querySelectorAll('.boton_precio_estilos');
+  let icon_checked;
+  let tarjeta_seleccionada = document.getElementById('tarjeta-codigo-'+codigo)
+
+  switch (id_tarjeta) {
+    case 'tarjeta-lista':
+        icon_checked = document.getElementById('icon-checked-lista-'+codigo);
+        tipo_precio='lista'
+        
+      break;
+    case 'tarjeta-precio':
+      tipo_cliente=  localStorage.getItem("tipo_cliente");
+      if(tipo_cliente==1){
+      tipo_precio='mayoreo'
+      }else{
+        tipo_precio='precio'
+      }
+
+        icon_checked = document.getElementById('icon-checked-precio-'+codigo);
+      break;
+     
+    case 'tarjeta-promocion':
+        tipo_precio='promo'
+        icon_checked = document.getElementById('icon-checked-promo-'+codigo);
+      break;
+
+    default:
+      break;
+  }
+
+  if(this_e.classList.contains('activo')){
+    tarjetas.forEach(tarjeta=>{
+      tarjeta.style.backgroundColor=tarjeta.getAttribute('data-original');
+      tarjeta.classList.remove('activo');
+      tipo_precio=null;
+    })
+    iconos_checked.forEach(icono => {
+      icono.classList.add('d-none');
+  });
+  tarjeta_seleccionada.setAttribute('precio_seleccionado', false);
+  tarjeta_seleccionada.setAttribute('tipo_precio', false);
+  }else{
+        // Guardar el color original si no está almacenado
+    tarjetas.forEach(tarjeta=>{
+      if(!tarjeta.hasAttribute('data-original')){
+        tarjeta.setAttribute('data-original', tarjeta.style.backgroundColor)
+      }
+    })
+     // Convertir todos a gris
+     tarjetas.forEach(tarjeta => {
+          tarjeta.style.backgroundColor = "gray";
+          tarjeta.classList.remove("activo");
+          icon_checked.classList.add('d-none');
+      });
+      iconos_checked.forEach(icono => {
+        icono.classList.add('d-none');
+    });
+
+  // Restaurar el color del clickeado y marcarlo como activo
+  this_e.style.backgroundColor = this_e.getAttribute("data-original");
+  this_e.classList.add("activo");
+  icon_checked.classList.remove("d-none");
+ 
+  tarjeta_seleccionada.setAttribute('precio_seleccionado', true);
+  tarjeta_seleccionada.setAttribute('tipo_precio', tipo_precio);
+  }
+
 }

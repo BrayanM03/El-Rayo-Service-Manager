@@ -125,7 +125,7 @@ function avisoCreditoVencido(nombre_cliente){
                 return $.ajax({
                 type: "post",
                 url: "./modelo/token.php",
-                data: {"comprobar-token" : token, "nuevo-token": nuevoToken, 'tipo-token' : 2},
+                data: {"comprobar-token" : token, "nuevo-token": nuevoToken, 'tipo_token' : 2},
                 dataType: "json",
                 success: function (response) {
 

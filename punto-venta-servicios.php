@@ -223,7 +223,7 @@ input[type=number] {
     <script src="src/js/bootstrap-select.min.js"></script>
     <script src="src/js/punto-venta.js?v=<?php echo(rand()); ?>"></script>
     <script src="src/js/agregar-cliente.js?v=<?php echo(rand()); ?>"></script>
-    
+    <script src="src/js/control-inputs-token.js?v=<?php echo(rand()); ?>"></script>
   <script>
      document.addEventListener('keydown', function(event) {
             // Verifica si la tecla presionada es 'Tab'

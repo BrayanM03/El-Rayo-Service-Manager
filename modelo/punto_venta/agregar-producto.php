@@ -22,6 +22,8 @@ if(isset($_POST)){
     $tipo = $_POST['tipo'];
     $sidebar = $_POST['ocultar_sidebar']; //Aqui el tipo es desde el sidebar
     $promocion = $_POST['promocion'];
+    $tipo_precio = $_POST['tipo_precio'];
+ 
 
     $catalogo = new Catalogo($con);
     $producto_arreglo = $catalogo->obtenerProducto($id_producto);
@@ -29,10 +31,10 @@ if(isset($_POST)){
         responder(false, $producto_arreglo['mensaje'], 'danger', [], true);
     }
 
-    $comparar_pu_preventa = $_POST['comparar_pu_preventa'];
+   /*  $comparar_pu_preventa = $_POST['comparar_pu_preventa']; */
     $producto = $producto_arreglo['producto'];
     
-    if($comparar_pu_preventa=='false'){
+    /* if($comparar_pu_preventa=='false'){
         if($promocion==1){
             $precio_unitario = floatval($producto['precio_promocion']);
             $importe = $precio_unitario * $cantidad;
@@ -40,8 +42,28 @@ if(isset($_POST)){
             $precio_unitario=floatval($producto['precio_Venta']);
             $importe =  $precio_unitario * $cantidad;
         }
+    } */
+    switch ($tipo_precio) {
+        case 'lista':
+            $precio_unitario = floatval($producto['precio_lista']);
+            break;
+            case 'precio':
+                $precio_unitario = floatval($producto['precio_Venta']);
+                break;
+                case 'mayoreo':
+                    $precio_unitario = floatval($producto['precio_Mayoreo']);
+                    break;
+                case 'promo':
+                    $precio_unitario = floatval($producto['precio_promocion']);
+                    break;
+        
+        default:
+            $precio_unitario = floatval($producto['precio_lista']);
+            break;
     }
 
+    $importe = $precio_unitario * $cantidad;
+   
 
     $comprobacion = $catalogo->comprobarStock($id_producto, $id_sucursal, $cantidad);
    

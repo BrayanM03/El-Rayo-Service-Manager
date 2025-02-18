@@ -93,7 +93,7 @@
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-2 text-right">
-                                            <div class="btn btn-warning mr-3" onclick="agregarPreventa(<?=$row['id']?>, '<?=$row['codigo']?>', 0, 2, 'cantidad_id_<?=$row['codigo']?>', event, 0, 1,0)">Agregar</div>
+                                            <div class="btn btn-warning mr-3" onclick="agregarPreventa(<?=$row['id']?>, '<?=$row['codigo']?>', 0, 2, 'cantidad_id_<?=$row['codigo']?>', event, 0, 0,0)">Agregar</div>
                                         </div>
                                     </div>
                                     <div class="row mt-2">

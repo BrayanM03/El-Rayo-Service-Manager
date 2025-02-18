@@ -217,9 +217,11 @@ toastr.options = {
   
           $("#costo-actual").val(repo.precio_Inicial);
           $("#precio-actual").val(repo.precio_Venta);
+          $("#precio-lista").val(repo.precio_lista);
           $("#mayoreo-actual").val(repo.precio_Mayoreo);
           $("#costo-actual").attr('costo',repo.precio_Inicial);
           $("#precio-actual").attr('precio',repo.precio_Venta);
+          $("#precio-lista").attr('precio_lista',repo.precio_lista);
           $("#mayoreo-actual").attr('mayoreo',repo.precio_Mayoreo);
   
           return repo.text || repo.Descripcion;
@@ -246,12 +248,14 @@ toastr.options = {
       
       let costo_actual = $("#costo-actual").attr('costo');
       let precio_actual = $("#precio-actual").attr('precio');
+      let precio_lista_actual = $("#precio-lista").attr('precio_lista');
       let mayoreo_actual = $("#mayoreo-actual").attr('mayoreo');
       let costo_= $("#costo-actual").val();
       let precio_= $("#precio-actual").val();
+      let precio_lista_= $("#precio-lista").val();
       let mayoreo_= $("#mayoreo-actual").val();
       let id_llanta =  $("#btn-mover").attr("id_item")
-      if(costo_actual != costo_ || precio_actual != precio_ ||  mayoreo_actual != mayoreo_) {
+      if(costo_actual != costo_ || precio_actual != precio_ ||  mayoreo_actual != mayoreo_ || precio_actual != precio_lista_) {
         Swal.fire({
           icon: 'question',
           html: `¿Quieres actualizar los precios de esta llanta en el catalogo?`,
@@ -263,12 +267,13 @@ toastr.options = {
             $.ajax({
               type: "post",
               url: "./modelo/inventarios/actualizar-precios.php",
-              data: {'costo':costo_, 'precio': precio_, 'mayoreo': mayoreo_, 'id_llanta': id_llanta},
+              data: {'costo':costo_, 'precio': precio_, 'precio_lista': precio_lista_, 'mayoreo': mayoreo_, 'id_llanta': id_llanta},
               dataType: "JSON",
               success: function (response) {
                 if(response.estatus){
                    $("#costo-actual").attr('costo', response.costo);
                    $("#precio-actual").attr('precio', response.precio);
+                   $("#precio-lista").attr('precio_lista', response.precio_actual);
                    $("#mayoreo-actual").attr('mayoreo', response.mayoreo);
                   agregarLlantasTablaPremovimiento(response.mensaje)
                 }}
@@ -276,6 +281,7 @@ toastr.options = {
           }else{
            $("#costo-actual").val(costo_actual);
            $("#precio-actual").val(precio_actual);
+           $("#precio-lista").val(precio_lista_actual);
            $("#mayoreo-actual").val(mayoreo_actual);
            agregarLlantasTablaPremovimiento()
           }

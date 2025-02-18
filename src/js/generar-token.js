@@ -39,11 +39,11 @@ function generarToken(){
                                         $.ajax({
                                         type: "post",
                                         url: "./modelo/token.php",
-                                        data: {"comprobar-token" : token_validar, "nuevo-token": nuevoToken, 'tipo-token' : 1},
+                                        data: {"comprobar-token" : token_validar, "nuevo-token": nuevoToken, 'tipo_token' : 1},
                                         dataType: "json",
                                         success: function (response) {
 
-                                            if (response == 3) {
+                                            if (response.estatus) {
                                                 Swal.fire({
                                                     title: 'Token correcto',
                                                     html: "<span>Ahora puedes cambiar el precio de la llanta</br></span>",   
@@ -58,7 +58,7 @@ function generarToken(){
                                                     document.getElementById('precio').disabled = false;
                                                     $("#precio-tok").attr("onclick", ""); 
 
-                                                }else if(response == 4){
+                                                }else{
 
                                                     Swal.fire({
                                                         title: 'Token incorrecto',
@@ -107,7 +107,6 @@ function random(tipo_token) {
             dataType: "json",
             success: function (response) {
               if(response.estatus){
-                console.log(tipo_token);
                 if(tipo_token==1){
                     $("#token-actual").empty().text(response.token_op)
                 }else if(tipo_token==2){
@@ -119,7 +118,7 @@ function random(tipo_token) {
                
             }
         });
-    },1300)
+    },300)
 };
 
 function generarCodigoAlfanumerico() {

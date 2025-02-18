@@ -2,6 +2,7 @@ $(document).ready(function() {
 
   let user_sesion = $("#emp-title").attr("sesion_rol");
   let id_usuario = $("#emp-title").attr("sesion_id");
+  let rol_usuario = $('#emp-title').attr('sesion_rol');
   user_sesion = parseInt(user_sesion);
   if(user_sesion != 1 && id_usuario !=7 && user_sesion != 4){
     visible_value = false;
@@ -36,7 +37,7 @@ $(document).ready(function() {
         { title: "Codigo",    data: "id"    },
         { title: "Descripcion",    data: "descripcion"    },
         { title: "Marca",          data: "marca"          },
-        { title: "Modelo",         data: "modelo"         },
+       /*  { title: "Modelo",         data: "modelo"         }, */
         { title: "Costo",          data: "costo", visible: visible_value, render: function(data){
           // Convert the string to a number using parseFloat()
           const numero = parseFloat(data);
@@ -49,7 +50,19 @@ $(document).ready(function() {
             return "N/A"; // Or any other default value
           }
         }},
-        { title: "Precio",         data: "precio",       render: function(data){
+        { title: "Precio lista",         data: "precio_lista",       render: function(data){
+          // Convert the string to a number using parseFloat()
+          const numero = parseFloat(data);
+      
+          // Check if the conversion was successful (returns NaN if not a number)
+          if (!isNaN(numero)) {
+            let resultado = numero.toFixed(2);
+            return resultado;
+          } else {
+            return "N/A"; // Or any other default value
+          }
+        }  },
+        { title: "Precio desc.",         data: "precio",       render: function(data){
           // Convert the string to a number using parseFloat()
           const numero = parseFloat(data);
       
@@ -73,7 +86,7 @@ $(document).ready(function() {
             return "N/A"; // Or any other default value
           }
         }   },   
-        { title: "id",             data: "id"        },
+/*         { title: "id",             data: "id"        }, */
         {title: "Sucursal",
           data: 'sucursales',
           className: "celda-select",
@@ -125,25 +138,24 @@ $(document).ready(function() {
           },
         },
         //{ title: "Stock",          data: "stock"          },
-        { title: "Fecha",          data: "fecha"          },
+      /*   { title: "Fecha",          data: "fecha"          }, */
         { title: "Imagen",         data: "marca", render: function(data,type,row) {
           
-          return '<img src="./src/img/logos/'+ data +'.jpg" style="width: 60px; border-radius: 8px">'; 
+          return '<img onerror="this.src=`./src/img/neumaticos/NA.JPG`;" src="./src/img/logos/'+ data +'.jpg" style="width: 60px; border-radius: 8px">'; 
           }}, 
         { title: "llanta",         data: 'id', render: function(data,type,row) {
             
-            return '<img src="./src/img/neumaticos/llanta_'+ data +'_1.png" style="width: 60px; border-radius: 8px">'; 
+            return '<img onerror="this.src=`./src/img/neumaticos/NA.JPG`;" src="./src/img/neumaticos/llanta_'+ data +'_1.png" style="width: 60px; border-radius: 8px" >'; 
           }}, 
         {
           data: null,
           className: "celda-acciones",
           render: function (row) {
-            let rol = $('#id_rol').attr('role');
-            let id_usuario = $('#emp-title').attr('sesion_id');
-            if(rol ==1 || id_usuario == 24 | id_usuario == 27){
+            
+            if(rol_usuario ==1 || id_usuario == 24 | id_usuario == 27){
               return `<div style="display: flex"><button type="button" onclick="editarRegistro(${row.id});" id="${row.id}" class="buttonEditar btn btn-warning" style="margin-right: 8px"><span class="fa fa-edit"></span><span class="hidden-xs"></span></button></br></div>`; //<button type="button" onclick="borrarRegistro(${row.id});" class="buttonBorrar btn btn-danger"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button>
             }else{
-              return '';
+              return 'lol';
             //return '<div style="display: flex"><button type="button" onclick="editarRegistro('+row.id+');" id="'+ row.id +'" class="buttonEditar btn btn-warning" style="margin-right: 8px"><span class="fa fa-edit"></span><span class="hidden-xs"></span></button>';
           }
           },
@@ -165,7 +177,7 @@ $(document).ready(function() {
       processing: true, // Show processing indicator
       pageLength: 10, // Number of rows per page
       lengthMenu: [10, 25, 50, 100],
-      scrollY: "300px",
+      scrollY: "800px",
       info: true,
       dom: 'Blfrtip',
       responsive: true,

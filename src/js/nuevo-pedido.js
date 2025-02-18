@@ -359,7 +359,8 @@ $(document).ready(function() {
               let con_token = $("#validador-adelanto").attr("token");
               let valid_token = $("#validador-adelanto").attr("valid-token");
               let token = $("#token").val() === undefined ? 0 : $("#token").val();
-             
+             console.log(con_token);
+             console.log(token);
 
               if(con_token === 'true' && (token == undefined || token == '' || token == null || token == 0)){
                 Swal.showValidationMessage(
@@ -386,11 +387,11 @@ $(document).ready(function() {
                 return new Promise((resolve) =>{
                   $.ajax({
                     type: "POST",
-                    url: "./modelo/token.php",
+                    url: "./modelo/token.php", 
                     data: {"traer-token": true},
                     dataType: "JSON",
                     success: function (response) {
-                      if(response.codigo== token){
+                      if(response.codigo == token){
                         resolve();
                       }else{
                         setTimeout(()=>{
@@ -408,7 +409,7 @@ $(document).ready(function() {
               }else{
                 if($("#validador-adelanto").attr("is-valid") == "false"){
                   Swal.showValidationMessage(
-                    `No se puede apartar, corrija los montos`
+                    `El porcentaje del monto es menor al requerido, ingrese un token o corrija el monto`
                   )
                 }
               }
@@ -601,7 +602,7 @@ $(document).ready(function() {
         text_message.classList.remove("text-success");
         text_message.classList.remove("text-danger");
         text_message.classList.add("text-secondary");
-        $("#validador-adelanto").attr("token", "false");
+        $("#validador-adelanto").attr("token", "true");
         
         text_message.textContent = `Agregue un monto minimo del ${porcentajeFormateado} = ${monto_formateado}`;
         $("#validador-adelanto").attr("is-valid", "false")

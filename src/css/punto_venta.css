@@ -88,7 +88,7 @@
         height: 38px !important;
     }
     .margenes-col-precio{
-        flex: 0 0 50%;
+        flex: 0 0 25%;
         max-width: 50%;
     }
     }
@@ -142,4 +142,29 @@
     }
     }
 
+
+    .boton_precio_estilos:hover{
+        box-shadow: rgba(0,0,0,0.3) 0 0 30px 0;
+    }
+
+    .checked-icon-lista{
+        position: absolute;
+        left: 10rem;
+        bottom: .6rem;
+        width:33px;
+    }
+
+    .checked-icon-precio{
+        position: absolute;
+        left: 21.6rem;
+        bottom: .6rem;
+        width:33px;
+    }
+
+    .checked-icon-promo{
+        position: absolute;
+        left: 33.5rem;
+        bottom: .6rem;
+        width:33px;
+    }
 

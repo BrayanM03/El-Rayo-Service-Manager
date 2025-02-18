@@ -14,9 +14,8 @@ error_reporting(E_ALL); */
 if (!$con) {
     responder(false, 'Conexión erronea', 'danger', [], true);
 }
- 
     if(isset($_POST["traer-token"])){
-
+        
         $sqltoken="SELECT * FROM token";
 
         $result = mysqli_query($con, $sqltoken);
@@ -60,9 +59,12 @@ if (!$con) {
 
 
     if (isset($_POST["comprobar-token"])) {
-   
         $token_in = $_POST["comprobar-token"];
+   
+
         $tipo_token = $_POST["tipo_token"];
+       
+
         if($tipo_token==1){
             $columna_token = 'codigo';
             $new_token = generarTokenOperativo();

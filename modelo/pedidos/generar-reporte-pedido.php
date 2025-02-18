@@ -2,6 +2,7 @@
 <?php
 session_start();
 include '../conexion.php';
+include '../helpers/condiciones_comentarios.php';
 $con = $conectando->conexion(); 
 global $con;
 
@@ -95,6 +96,7 @@ global $suma_pago_transferencia;
 global $suma_pago_sin_definir;
 global $asesor_name;
 global $asesor_apellido;
+global $condiciones_generales;
 
 $formatterES = new NumberFormatter("es-ES", NumberFormatter::SPELLOUT);
 $izquierda = intval(floor($primer_abono));
@@ -475,7 +477,7 @@ function cuerpoTabla(){
     $id_venta = $GLOBALS["idVenta"];
     $total = 0;
     $detalles = $conexion->prepare("SELECT ll.Modelo, da.Cantidad,servicios.descripcion, da.precio_Unitario, da.Importe FROM detalle_pedido da INNER JOIN servicios ON da.id_llanta = servicios.id
-    INNER JOIN llantas ll ON da.id_Llanta = ll.id WHERE da.id_pedido = ?");
+    INNER JOIN llantas ll ON da.id_Llanta = ll.id WHERE da.id_pedido = ? AND da.Unidad = 'pieza'");
         $detalles->bind_param('i', $id_venta);
         $detalles->execute();
         $resultadoServ = $detalles->get_result();
@@ -483,7 +485,7 @@ function cuerpoTabla(){
 
     if($total == 0){
     
-        $detalle = $conexion->prepare("SELECT ll.Modelo, da.Cantidad,ll.Descripcion, ll.Marca, da.precio_Unitario, da.Importe FROM detalle_pedido da INNER JOIN llantas ll ON da.id_llanta = ll.id WHERE da.id_pedido = ? "); //AND da.modelo != 'no aplica'
+        $detalle = $conexion->prepare("SELECT ll.Modelo, dp.Cantidad,ll.Descripcion, ll.Marca, dp.precio_Unitario, dp.Importe FROM detalle_pedido dp INNER JOIN llantas ll ON dp.id_llanta = ll.id WHERE dp.id_pedido = ? AND dp.Unidad = 'pieza'"); //AND da.modelo != 'no aplica'
         $detalle->bind_param('i', $id_venta);
         $detalle->execute();
         $resultado = $detalle->get_result(); 
@@ -565,13 +567,13 @@ function cuerpoTabla(){
     }else if($total > 0){ 
 
     
-        $detalles = $conexion->prepare("SELECT detalle_venta.Modelo, detalle_venta.Cantidad,servicios.descripcion, detalle_venta.precio_Unitario, detalle_venta.Importe FROM detalle_venta INNER JOIN servicios ON detalle_venta.id_llanta = servicios.id WHERE id_Venta = ?");
+        $detalles = $conexion->prepare("SELECT detalle_venta.Modelo, detalle_venta.Cantidad,servicios.descripcion, detalle_venta.precio_Unitario, detalle_venta.Importe FROM detalle_venta INNER JOIN servicios ON detalle_venta.id_llanta = servicios.id WHERE id_Venta = ? AND detalle_venta.Unidad = 'servicio'");
         $detalles->bind_param('i', $id_venta);
         $detalles->execute();
         $resultadoServ = $detalles->get_result();
         $detalles->close(); 
 
-        $detalle = $conexion->prepare("SELECT detalle_venta.Modelo, detalle_venta.Cantidad,llantas.Descripcion, llantas.Marca, detalle_venta.precio_Unitario, detalle_venta.Importe FROM detalle_venta INNER JOIN llantas ON detalle_venta.id_llanta = llantas.id WHERE id_Venta = ?  AND detalle_venta.Modelo != 'no aplica'");
+        $detalle = $conexion->prepare("SELECT detalle_venta.Modelo, detalle_venta.Cantidad,llantas.Descripcion, llantas.Marca, detalle_venta.precio_Unitario, detalle_venta.Importe FROM detalle_venta INNER JOIN llantas ON detalle_venta.id_llanta = llantas.id WHERE id_Venta = ? AND detalle_venta.Modelo != 'no aplica' AND detalle_venta.Unidad = 'pieza'");
         $detalle->bind_param('i', $id_venta);
         $detalle->execute();
         $resultado = $detalle->get_result(); 
@@ -852,7 +854,7 @@ function cuerpoTabla(){
     $pdf->MultiCell(70,6, utf8_decode_($GLOBALS["comentario"]),0,0,'L',0);
     $pdf->Ln(4.5);
     $pdf->SetFont('Arial','',6);
-    $pdf->MultiCell(180,4, utf8_decode_("GARANTÍA DE UN AÑO CONTRA DEFECTO DE FABRICACION; NO GOLPES, NO CORTES PROVOCADOS POR MAL MANEJO, PRESION DE AIRE INADECUADA,EXCESO DE PESO, ETC. A PARTIR DE ESTA FECHA FAVOR DE PRESENTAR ESTA NOTA PARA EMPEZAR EL PROCEDIMIENTO ADECUADO PARA GARANTIA. SI NO SE PRESENTA LA NOTA NO SE PODRA SEGUIR EL PROCESO; EN MALA INSTALACION SOLAMENTE SERA VALIDA LA GARANTIA DENTRO DEL PRIMER MES DESPUES DE LA COMPRA, SI TIENE PARCHE AUTOMATICAMENTE PIERDE LA GARANTIA; EN CASO DE PROCEDER GARANTIA SE COBRARÁEL DESGASTE SI ES EL CASO; TIEMPO ESTIMADO DE RESPUESTA DE 1-2 SEMANAS.  VENTAS DE APARTADO: EL PLAZO PARA PAGAR ES DE 1 MES, EN CASO DE NO CUMPLIR EL PAGO A TIEMPO EL MONTO DEL ADELANTO NO SERÁ REEMBOLSABLE. APLICA RESTRICCIONES."),0,0,'C',0);
+    $pdf->MultiCell(180,4, utf8_decode_($GLOBALS['condiciones_generales']),0,0,'C',0);
     
     $ejeY = $ejeY +17;
     $pdf->SetY($ejeY);

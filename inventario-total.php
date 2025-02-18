@@ -85,15 +85,17 @@
 
 
                 <!-- Begin Page Content -->
-                <div class="containe" style="width:80%; margin:auto;">
+                <div class="containe" style="width:80%; margin-top: 3rem; margin-left:auto; margin-right:auto; margin-bottom: 1px">
 
                      <!-- Contenido inventario -->
-                     <div class="titulo-inventario m-auto" id="id_rol" role="<?php echo $_SESSION['rol']; ?>">
-                         <h5 style="margin: 10px 0px;">Stock total de llantas en existencia</h5>
-                         <p style="color: gray;">Inventario completo</p>
+                     <div class="row">
+                            <div class="col-md-6">
+                                <h3><b>Catalogo de existencias</b></h3>
+                            </div>
                         </div>
+                        <hr>
                         
-                      <div class="botones">
+                      <div class="mt-4 mb-3">
                                     <a href="#" class="btn btn-success btn-icon-split" onclick="agregarLLanta();">
                                         <span class="icon text-white-50">
                                             <i class="fas fa-check-circle"></i>

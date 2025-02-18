@@ -21,7 +21,7 @@ if (isset($_GET['query'])) {
     $offset = ($page - 1) * $limit;
 
     // Consulta con paginación usando mysqli
-    $query = "SELECT id, Nombre_Cliente as nombre_cliente 
+    $query = "SELECT id, Nombre_Cliente as nombre_cliente, tipo_cliente
               FROM clientes 
               WHERE Nombre_Cliente LIKE ? 
               LIMIT ?, ?";
@@ -42,7 +42,8 @@ if (isset($_GET['query'])) {
         while ($row = $result->fetch_assoc()) {
             $clientes[] = [
                 'id' => $row['id'],
-                'nombre_cliente' => $row['nombre_cliente']
+                'nombre_cliente' => $row['nombre_cliente'],
+                'tipo_cliente' => $row['tipo_cliente']
             ];
         }
         responder(true, 'Clientes encontrados', 'success', $clientes, true, true);

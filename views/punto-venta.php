@@ -174,7 +174,7 @@
             </div>
         </div>
         <button class="mt-2 '. $display_button .' btn btn-danger w-100" 
-                onclick="aplicarPromocion('.$row['id'].', `'.$row['Codigo'].'`, '.$row['id_Sucursal'].', 1, `cantidad_id_'.$row['Codigo'].'`, event, 0, 1, 1)">
+                onclick="agregarPreventa('.$row['id'].', `'.$row['Codigo'].'`, '.$row['id_Sucursal'].', 1, `cantidad_id_'.$row['Codigo'].'`, event, 0, 1, 1)">
             Agregar
         </button>
     </div>

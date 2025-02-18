@@ -20,12 +20,14 @@ $diametro = $_POST['diametro'];
 $filtros = isset($_POST['filtros']) == true ? $_POST['filtros'] : [];
 $id_sucursal_sesion = $_SESSION['id_sucursal'];
 $id_cliente = isset($_POST['id_cliente']) ? $_POST['id_cliente'] : 0;
+
 if($id_cliente>0){
     $catalogo = new Clientes($con);
     $cliente_arreglo = $catalogo->obtenerCliente($id_cliente);
     if(!$cliente_arreglo['estatus']){
         responder(false, $cliente_arreglo['mensaje'], 'danger', [], true);
     }
+   
 $tipo_cliente = $cliente_arreglo['cliente']['tipo_cliente'];
 }else{
     $tipo_cliente=$id_cliente;
@@ -154,6 +156,7 @@ if($total > 0) {
             $value['cliente_mayoreo']=false;
 
         }
+        $value['tipo_cliente']=$tipo_cliente;
         $resultado_f[]= $value;
 
     }

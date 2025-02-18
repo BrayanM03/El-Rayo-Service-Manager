@@ -193,14 +193,20 @@ if($total_sucu > 0) {
                                         <input type="number" placeholder="0" class="form-control" id="costo-actual"> 
                                     </div>
 
-                                    <div class="col-12 col-md-4 text-center">
-                                        <label for="precio-actual">Precio</label>
+                                    <div class="col-12 col-md-2 text-center">
+                                        <label for="precio-actual">Precio lista</label>
+                                        <input type="number" placeholder="0" class="form-control" id="precio-lista" valido>
+                                        <div class="invalid-feedback" id="label-validator">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-3 text-center">
+                                        <label for="precio-actual">Precio desc.</label>
                                         <input type="number" placeholder="0" class="form-control" id="precio-actual" valido>
                                         <div class="invalid-feedback" id="label-validator">
                                         </div>
                                     </div>
 
-                                    <div class="col-12 col-md-3 text-center">
+                                    <div class="col-12 col-md-2 text-center">
                                         <label for="mayoreo-actual">Mayoreo</label>
                                         <input type="number" value="0" placeholder="0" class="form-control" id="mayoreo-actual" valido>
                                     </div>

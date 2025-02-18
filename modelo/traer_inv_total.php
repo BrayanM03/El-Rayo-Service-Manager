@@ -93,23 +93,24 @@ if (isset($_POST)) {
 
         while ($fila = $resultado->fetch_assoc()) {
             
-            $id = $fila["id"];
+            $id = $fila['id'];
             $stock = $fila['total_stock'];
-            $ancho = $fila["Ancho"];
+            $ancho = $fila['Ancho'];
             $alto = $fila["Proporcion"];
-            $rin = $fila["Diametro"];
-            $descripcion = $fila["Descripcion"];
-            $modelo = $fila["Modelo"];
-            $marca = $fila["Marca"];
-            $costo = $fila["precio_Inicial"];
-            $precio = $fila["precio_Venta"];
-            $mayoreo = $fila["precio_Mayoreo"];
-            $fecha = $fila["Fecha"];
+            $rin = $fila['Diametro'];
+            $descripcion = $fila['Descripcion'];
+            $modelo = $fila['Modelo'];
+            $marca = $fila['Marca'];
+            $costo = $fila['precio_Inicial'];
+            $precio = $fila['precio_Venta'];
+            $mayoreo = $fila['precio_Mayoreo'];
+            $fecha = $fila['Fecha'];
+            $precio_lista = $fila['precio_lista'];
 
             $data['data'][] = array(
-                "id" => $id, "ancho" => $ancho, "alto" => $alto, "rin" => $rin, "descripcion" => $descripcion,
-                "modelo" => $modelo, "marca" => $marca, "costo" => $costo, "precio" => $precio,
-                "mayoreo" => $mayoreo, "fecha" => $fecha, "sucursales" => $sucursales, "stock" => $stock
+                'id' => $id, 'ancho' => $ancho, 'alto' => $alto, 'rin' => $rin, 'descripcion' => $descripcion,
+                'modelo' => $modelo, 'marca' => $marca, 'costo' => $costo, 'precio_lista' => $precio_lista, 'precio' => $precio,
+                'mayoreo' => $mayoreo, 'fecha' => $fecha, 'sucursales' => $sucursales, 'stock' => $stock
             );
         }
 
