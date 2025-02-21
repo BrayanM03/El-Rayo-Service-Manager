@@ -10,7 +10,7 @@ if (!isset($_SESSION['id_usuario'])) {
 }
 
 if ($_SESSION['rol'] == 3) {
-    header("Location:nueva-venta.php");
+    header("Location:punto-venta.php");
 } 
 
 /* $id_usuario = $_SESSION['id_usuario'] ;
@@ -165,7 +165,7 @@ if ($_SESSION['rol'] == 3) {
                                 </div>
 
                                 <div class="row justify-content-center mt-3">
-                                    <div class="col-12 col-md-10 text-center">
+                                    <div class="col-12 col-md-8 text-center">
                                         <label for="destino">Mover hacia: </label>
                                         <select name="destino" class="form-control" id="destino">
                                             <option value="0">Selecciona una sucursal</option>
@@ -195,9 +195,12 @@ if ($_SESSION['rol'] == 3) {
                                         ?>
                                         </select>
                                     </div>
+                                    <div class="col-12 col-md-2 text-center">
+                                            <label for="stock-destino">Stock destino:</label>
+                                            <input type="text" class="form-control" id="stock-destino" placeholder="0" disabled>
+                                    </div>
                                 </div>
 
-                                
 
                                 <div class="row justify-content-center mt-3 mb-3">
                                     <div class="col-12 col-md-10 text-center">

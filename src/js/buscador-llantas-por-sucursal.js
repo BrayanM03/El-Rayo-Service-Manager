@@ -18,7 +18,7 @@ toastr.options = {
 
 permiso_agregar_llanta = false;
     $("#ubicacion").on("change", function (e) {
-
+        $("#stock-destino").val(0)
         let esta_sucursal = $(this).val();
         $.ajax({
           type: "post",
@@ -125,13 +125,16 @@ permiso_agregar_llanta = false;
 
         let sucusal_ubicacion = $(this).val();
         let esta_sucursal = $(this).val();
+        let id_llanta = $("#btn-mover").attr("id_llanta");
+        console.log(id_llanta);
         $.ajax({
-          type: "post",
+          type: "post", 
           url: "./modelo/cambios/comprobar_llantas_aprobadas.php",
-          data: {'id_sucursal': sucusal_ubicacion,'id_sucursal_contraria': esta_sucursal},
+          data: {'id_sucursal': sucusal_ubicacion,'id_sucursal_contraria': esta_sucursal, id_llanta},
           dataType: "json",
           success: function (response) {
             $("#alerta-llantas-pendientes").remove();
+            $("#stock-destino").val(response.stock_destino)
             if(response.total_cambios > 4){
               permiso_agregar_llanta = false;
               $("#area-btn-mover").append(`
@@ -158,6 +161,7 @@ permiso_agregar_llanta = false;
                 validador();
               }
               permiso_agregar_llanta = true;
+
               traerSucEspecficia(esta_sucursal, "ubicacion");
               
 
@@ -554,9 +558,11 @@ function realizarMovimiento(id_user){
           } 
 
           if(response){
+            let datos = response['data']
+            window.open('./modelo/movimientos/remision-salida.php?id='+ datos.id_movimiento, '_blank');
             Swal.fire({
               icon: 'success',
-              html: '<b>Movimiento realizado, se agregarón ' + response + ' item(s)</b>',
+              html: '<b>Movimiento realizado, se agregarón ' + datos['total_llantas'] + ' item(s)</b>',
             }).then(()=>{
               window.location.reload();
 

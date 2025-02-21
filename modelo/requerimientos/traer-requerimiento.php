@@ -2,13 +2,15 @@
 
 session_start();
 include '../conexion.php';
+require_once '../catalogo/Catalogo.php';
 $con = $conectando->conexion();
 setlocale(LC_MONETARY, 'en_US');
 if (!isset($_SESSION['id_usuario'])) {
     header("Location:../../login.php");
-}
+} 
 
 $id_req = $_POST['id_requerimiento'];
+$catalogo = new Catalogo($con);
 
 $queryChange = "SELECT COUNT(*) FROM requerimientos WHERE id =?";
 $resps = $con->prepare($queryChange);
@@ -42,11 +44,17 @@ if($total_req > 0){
         $respon = mysqli_query($con, $querySuc);
         $estatus_realizar_movimiento = false;
         $ids_movimientos=array();
+
         while ($rows = $respon->fetch_assoc()) {
             $id = $rows['id'];
             $id_llanta = $rows['id_llanta'];
             $id_ubicacion = $rows['id_ubicacion'];
             $id_destino = $rows['id_destino'];
+            $response_stock_ubicacion = $catalogo->obtenerStock($id_llanta, $id_ubicacion);
+            $response_stock_destino = $catalogo->obtenerStock($id_llanta, $id_destino);
+            $stock_ubicacion = $response_stock_ubicacion['data'];
+            $stock_destino = $response_stock_destino['data'];
+            
             $cantidad = $rows['cantidad'];    
             $estatus = $rows['estatus'];
             if(isset($rows['id_movimiento'])){
@@ -91,6 +99,8 @@ if($total_req > 0){
                             'marca' => $marca,
                             'sucursal_destino' => $sucursal_destino,
                             'cantidad'=> $cantidad,
+                            'stock_ubicacion'=> $stock_ubicacion,
+                            'stock_destino'=> $stock_destino,
                             'estatus'=> $estatus,
                             'id_movimiento'=> $id_detalle_movimiento);
             $data['estatus_realizar_movimiento'] = $estatus_realizar_movimiento;            

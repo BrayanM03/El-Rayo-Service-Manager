@@ -1,8 +1,9 @@
 <?php
 session_start();
 include '../conexion.php';
+include '../helpers/response_helper.php';
 $con= $conectando->conexion(); 
-date_default_timezone_set("America/Matamoros");
+date_default_timezone_set("America/Matamoros"); 
 
 if (!isset($_SESSION['id_usuario'])) {
     header("Location:../../login.php");
@@ -293,7 +294,9 @@ if(isset($_POST)){
     $respp->close();
  
 
-    print_r($total_llantas);
+ 
+    $datos = array('total_llantas'=>$total_llantas, 'id_movimiento'=>$id_movimiento);
+    responder(true,  "Se encontrarón productos", 'success', $datos, true);
 
 }
 

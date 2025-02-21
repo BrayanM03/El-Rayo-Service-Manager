@@ -150,6 +150,44 @@ class Catalogo {
             ];
         }
     }
+
+    public function obtenerStock($id_llanta, $id_sucursal){
+        $total =0;
+        $count = "SELECT count(*) FROM inventario WHERE id_Llanta =? AND id_sucursal =?";
+        $res = $this->con->prepare($count);
+        $res->bind_param('ss', $id_llanta, $id_sucursal);
+        $res->execute();
+        $res->bind_result($total);
+        $res->fetch();
+        $res->close();
+
+        if($total >0){
+            $sel = 'SELECT * FROM inventario WHERE id_Llanta = ? AND id_sucursal = ?';
+            $stmt= $this->con->prepare($sel);
+            $stmt->bind_param('ss', $id_llanta, $id_sucursal);
+            $stmt->execute();
+            $resultado_ = $stmt->get_result();
+            $fila = $resultado_->fetch_assoc();
+            $stmt->close();
+            $stock_actual = $fila['Stock'];
+           
+                return [
+                    'estatus' => true,
+                    'mensaje' => 'Stock actual:',
+                    'tipo'=>'success',
+                    'data'=>$stock_actual
+                ];
+            
+        }else{
+            return [
+                'estatus' => false,
+                'tipo'=>'danger',
+                'mensaje' => 'No se encontrarón llantas en el inventario',
+                'data'=>0
+            ];
+        }
+    }
+
 }
 
 ?>

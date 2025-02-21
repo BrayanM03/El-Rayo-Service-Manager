@@ -163,7 +163,7 @@ toastr.options = {
          }
         
           Swal.fire({
-            width: '1000px',
+            width: '1300px',
             title: 'Aprobar llantas',
             html:`
             <div class="container">
@@ -307,20 +307,24 @@ toastr.options = {
                     objeto.descripcion,
                     objeto.marca,
                     objeto.sucursal_remitente,
+                    objeto.stock_ubicacion,
                     objeto.sucursal_destino,
+                    objeto.stock_destino,
                     boton_est,
                     enlace_id_movimiento,
                     aprobar_btns
 
                 ]});
-        
+         
                   table_requerimiento = $('#detalle_requerimiento').DataTable({
                     columns: [   
                     { title: 'Cantidad' },
                     {title:  'Descripcion'},
                     { title: 'Marca'},
                     { title: 'Ubicación'},
+                    { title: 'Stock ubic.'},
                     { title: 'Destino'},
+                    { title: 'Stock dest.'},
                     { title: 'Estatus' },
                     { title: 'ID Movimiento' },
                     { title: 'Acción' },
