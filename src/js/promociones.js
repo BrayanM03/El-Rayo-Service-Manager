@@ -272,6 +272,13 @@ function MostrarPromociones(id_sucursal) {
       }
       $("#select2-busquedaLlantas-container").attr("id_llanta", repo.id);
 
+      $("#costo").val(repo.costo)
+      $("#precio_lista").val(repo.precio_lista)
+      $("#precio_mayoreo").val(repo.mayoreo)
+      $("#precio_descuento").val(repo.precio)
+      $("#stock_total").val(repo.stock_total)
+      
+
       return repo.text || repo.descripcion;
     }
   

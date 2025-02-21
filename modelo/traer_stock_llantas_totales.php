@@ -1,12 +1,13 @@
 <?php
     
     include 'conexion.php';
+    require_once 'catalogo/Catalogo.php';
     $con= $conectando->conexion(); 
 
     if (!$con) {
         echo "Problemas con la conexion";
     }
-
+    $catalogo = new Catalogo($con);
     if (isset($_POST["searchTerm"])) {
       
         $term = $_POST["searchTerm"];
@@ -48,6 +49,8 @@
        
         while($fila= $resultado->fetch_assoc()){
             $id = $fila['id'];
+            $response_stock_total = $catalogo->obtenerStockTotal($id);
+            $stock_total = $response_stock_total['data'];
             $ancho = $fila['Ancho'];
             $alto = $fila['Proporcion'];
             $rin = $fila['Diametro'];
@@ -57,9 +60,10 @@
             $costo = $fila['precio_Inicial'];
             $precio = $fila['precio_Venta'];
             $mayoreo = $fila['precio_Mayoreo'];
+            $precio_lista = $fila['precio_lista'];
             $promocion = intval($fila['promocion']);
             $data[] = array('id' => $id, 'ancho' => $ancho, 'alto' => $alto, 'rin' => $rin, 'descripcion' =>$descripcion, 'modelo' => $modelo, 'marca'=> $marca,
-                             'costo'=> $costo, 'precio'=>$precio, 'mayoreo'=>$mayoreo, 'promocion'=>$promocion);
+                             'costo'=> $costo, 'precio'=>$precio, 'mayoreo'=>$mayoreo, 'promocion'=>$promocion, 'precio_lista'=>$precio_lista, 'stock_total'=> $stock_total);
         }
 
         $response = array(

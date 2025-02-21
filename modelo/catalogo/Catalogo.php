@@ -188,6 +188,43 @@ class Catalogo {
         }
     }
 
+    public function obtenerStockTotal($id_llanta){
+        $total =0;
+        $count = "SELECT count(*) FROM inventario WHERE id_Llanta =?";
+        $res = $this->con->prepare($count);
+        $res->bind_param('s', $id_llanta);
+        $res->execute();
+        $res->bind_result($total);
+        $res->fetch();
+        $res->close();
+
+        if($total >0){
+            $sel = 'SELECT SUM(Stock) as suma FROM inventario WHERE id_Llanta = ?';
+            $stmt= $this->con->prepare($sel);
+            $stmt->bind_param('s', $id_llanta);
+            $stmt->execute();
+            $resultado_ = $stmt->get_result();
+            $fila = $resultado_->fetch_assoc();
+            $stmt->close();
+            $stock_total = $fila['suma'];
+           
+                return [
+                    'estatus' => true,
+                    'mensaje' => 'Stock total:',
+                    'tipo'=>'success',
+                    'data'=>$stock_total
+                ];
+            
+        }else{
+            return [
+                'estatus' => false,
+                'tipo'=>'danger',
+                'mensaje' => 'No se encontrarón llantas en el inventario',
+                'data'=>0
+            ];
+        }
+    }
+
 }
 
 ?>
