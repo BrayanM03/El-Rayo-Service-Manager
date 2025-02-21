@@ -79,7 +79,7 @@ $meses = array(
     <?php } 
     if ($user_jerarquia == 1 || $user_jerarquia == 2 || $user_jerarquia == 3) { ?>
         <li class="list-group-item" style="background-color: #0d0d0d !important;">
-            <a href="nueva-venta.php?id=0&nav=nueva_venta">
+            <a href="punto-venta.php?id=0&nav=nueva_venta">
                 <i class="fas fa-fw fa-cart-plus" style="color:white"></i>
                 <span style="color:white">Nueva venta</span>
             </a>

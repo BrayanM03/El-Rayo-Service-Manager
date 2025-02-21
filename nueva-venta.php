@@ -13,6 +13,8 @@
         header("Location:login.php");
     }
 
+    header("Location:punto-venta.php");
+
     
     ?>
 <!DOCTYPE html>
