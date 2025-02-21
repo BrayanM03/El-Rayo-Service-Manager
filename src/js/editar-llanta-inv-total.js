@@ -207,9 +207,9 @@ function editarRegistro(id){
                 
                               let rol = $('#id_rol').attr('role');
                               if(rol != 1 && rol != 4){
-                                $("#precio").prop('disabled', true);
+                                /* $("#precio").prop('disabled', true);
                                 $("#costo").prop('disabled', true);
-                                $("#mayorista").prop('disabled', true);
+                                $("#mayorista").prop('disabled', true); */
                               }
                         });
                     } 

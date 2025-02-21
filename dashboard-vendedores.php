@@ -332,8 +332,8 @@ if ($_SESSION['rol'] == 4) {
     <script src="src/vendor/chart.js/Chart.min.js"></script>
 
     <!-- Page level custom scripts -->
-    <script src="src/js/demo/chart-area-demo.js"></script>
-    <script src="src/js/demo/chart-pie-demo.js"></script>
+   <!--  <script src="src/js/demo/chart-area-demo.js"></script>
+    <script src="src/js/demo/chart-pie-demo.js"></script> -->
    <!--  <script src="src/js/notificaciones.js"></script> -->
     <script src="src/js/panel-vendedores.js"></script>
 

@@ -8,7 +8,7 @@ function ventasHoy(id_sucursal = '%'){
         url: "./modelo/metricas/ventas-hoy.php",
         data: {id_sucursal, 'tipo_accion':1},
         dataType: "json",
-        success: function (response) {
+        success: function (response) { 
             if(response.estatus){
                   //Validacion de clases en ingresos
                 if(response.data.ingreso_efectivo>0){
@@ -176,8 +176,9 @@ function ventasRelizadasHoy(){
                                     <div class="col-md-1">${contador}</div>
                                     <div class="col-md-3">${element.Nombre_Cliente}</div>
                                     <div class="col-md-1">${element.id}</div>
-                                    <div class="col-md-2">${element.Total}</div>
-                                    <div class="col-md-2">${element.sucursal}</div>
+                                    <div class="col-md-1">${element.Total}</div>
+                                    <div class="col-md-2">${element.metodo_pago}</div>
+                                    <div class="col-md-1">${element.sucursal}</div>
                                     <div class="col-md-2">${element.nombre}</div>
                                     <div class="col-md-1">
                                     <div style="display: flex"><button onclick="${celda_pdf}" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>
@@ -303,8 +304,9 @@ function abonosRealizados(){
                              <div class="col-md-1">${contador}</div>
                              <div class="col-md-3">${element.cliente}</div>
                              <div class="col-md-1">${element.id_credito}</div>
-                             <div class="col-md-2">${element.abono}</div>
-                             <div class="col-md-2">${element.sucursal}</div>
+                             <div class="col-md-1">${element.abono}</div>
+                             <div class="col-md-2">${element.metodo}</div>
+                             <div class="col-md-1">${element.sucursal}</div>
                              <div class="col-md-2">${element.usuario}</div>
                              <div class="col-md-1">
                              <button type="button" onclick="pdfAbono(${element.id}, ${element.id_credito}, ${element.id_venta})" class="btn ml-2 btn-danger"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button>   
@@ -484,8 +486,9 @@ function traerPdfCredito(id) {
                 <div class="col-md-1">#</div>
                 <div class="col-md-3">Cliente</div>
                 <div class="col-md-1">Folio</div>
-                <div class="col-md-2">Total</div>
-                <div class="col-md-2">Sucursal</div>
+                <div class="col-md-1">Total</div>
+                <div class="col-md-2">Forma p.</div>
+                <div class="col-md-1">Sucursal</div>
                 <div class="col-md-2">Vendedor</div>
                 <div class="col-md-1">PDF</div>
             </div>
