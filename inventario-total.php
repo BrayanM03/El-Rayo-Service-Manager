@@ -195,6 +195,8 @@
     
     <script src="src/js/inventario-total.js"></script>
     <script src="src/js/editar-llanta-inv-total.js"></script>
+    <script src="src/js/agregar-llanta-catalogo.js"></script>
+
    <script>
 ocultarSidebar();
 function ocultarSidebar(){

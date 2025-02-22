@@ -393,8 +393,9 @@ if($total_sucu > 0) {
     
     <script src="src/js/sb-admin-2.min.js?v=1239"></script>
 
-    <script src="src/js/bootstrap-select.min.js"></script>
+    <script src="src/js/bootstrap-select.min.js"></script> 
     <script src="src/js/agregar-mercancia-inventario.js"></script>
+    <script src="src/js/agregar-llanta-catalogo.js"></script>
     <script>
     ocultarSidebar();
     function ocultarSidebar(){
