@@ -349,6 +349,8 @@ function tablaGarantias(){
         estado_fisico = 'Entregada de proveedor a dep. de garantias'
       }else if(row[21]==5){
         estado_fisico = 'Entregada a cliente'
+      }else{
+        estado_fisico = 'Sin estatus'
       }
 
       return estado_fisico;
