@@ -116,7 +116,8 @@ print_r($total);
 die(); */
 
 if($total > 0) {
-    $sel = "SELECT l.*, i.Stock, i.Codigo, s.nombre, s.id as id_sucursal, li.url_principal, li.url_frontal, li.url_perfil, li.url_piso, l.promocion, l.precio_promocion FROM llantas l 
+    $sel = "SELECT DISTINCT l.*, i.Stock, i.Codigo, s.nombre, s.id as id_sucursal, li.url_principal, li.url_frontal, 
+    li.url_perfil, li.url_piso, l.promocion, l.precio_promocion, i.id_sucursal FROM llantas l 
     INNER JOIN inventario i ON l.id = i.id_Llanta 
     INNER JOIN sucursal s ON s.id = i.id_sucursal 
     LEFT JOIN llantas_imagenes li ON l.id = li.id_llanta WHERE i.Stock > 0 

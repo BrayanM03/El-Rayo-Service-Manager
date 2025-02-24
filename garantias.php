@@ -32,7 +32,7 @@ if ($_SESSION['rol'] == 5) {
     <meta name="author" content="">
     <link rel="shortcut icon" href="src/img/rayo.svg" />
 
-    <title>Garantias - El Rayo | Service Manager</title>
+    <title>Garantias | El Rayo Service Manager</title>
 
     <!-- Custom fonts for this template-->
     <link href="src/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">

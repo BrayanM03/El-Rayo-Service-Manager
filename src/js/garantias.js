@@ -294,14 +294,22 @@ function tablaGarantias(){
          var info = this.api().page.info();
          var page = info.page;
          var length = info.length;
-         let estatus_dicaten = data.dictamen
          var columnIndex = 0; // Índice de la primera columna a enumerar
-      console.log(data);
          $('td:eq(' + columnIndex + ')', row).html(page * length + index + 1);
+        
+           // Definir el valor de orden
+           $('td:eq(19)', row).html(1)
+         if(data[21] == 5){
+          $(row).css('background-color','gray')
+          $(row).css('color','white')
+          return false;
+         }
          if(data[9] == 'entregado' || data[9] == 'procedente' ){
            $(row).css('background-color','#c0f6b4')
+
           }else if(data[9] == 'pendiente'){
           $(row).css('background-color','#ffffbf')
+
         }else if(data[9]=='improcedente'){
           $(row).css('background-color','#FF6347')
           $(row).css('color','white')
@@ -328,7 +336,23 @@ function tablaGarantias(){
      { title: "Descripcion",    data: 5      }, 
      { title: "Marca",          data: 6      },
      { title: "comentario inicial",     data: 7      },
-     { title: "Analisis",        data: 8      },
+     { title: "Est. fisico",        data: 21 ,  render:function(data, type, row, meta){
+      console.log(row);
+      let estado_fisico;
+      if(row[21]==1){
+        estado_fisico = 'Recibida por el vendedor'
+      }else if(row[21]==2){
+        estado_fisico = 'Recibida por dep. garantias'
+      }else if(row[21]==3){
+        estado_fisico = 'Entregada a proveedor'
+      }else if(row[21]==4){
+        estado_fisico = 'Entregada de proveedor a dep. de garantias'
+      }else if(row[21]==5){
+        estado_fisico = 'Entregada a cliente'
+      }
+
+      return estado_fisico;
+     }},
      { title: "Dictamen",    data: 9     },
      { title: "RAY",       data: 22      },
      { title: "Factura",       data: 12      },
@@ -367,7 +391,7 @@ function tablaGarantias(){
              `;
          }
           },
-     },
+     }
    ],
    paging: true,
    searching: true,
@@ -376,7 +400,8 @@ function tablaGarantias(){
    responsive: false,
    ordering: "enable",
    multiColumnSort: true,
-   order: [11, "desc"],
+   order: [[10, "asc"], [11, 'desc']], // Primero ordena por color, luego por dictamen
+
    });
    //table.columns( [6] ).visible( true );
    $("table.dataTable thead").addClass("table-info")
