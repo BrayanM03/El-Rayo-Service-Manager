@@ -408,7 +408,7 @@ function cuerpoTabla(){
        }else{
             if($caracteres >103) $altura_multicell = 4;
             if($caracteres >=60 && $caracteres <104) $altura_multicell = 6;
-            if($caracteres >=46 && $caracteres <60) $altura_multicell = 10;
+            if($caracteres >=45 && $caracteres <60) $altura_multicell = 10;
            $pdf->Cell(10,10,$cantidad,0,0,'C',1);
            $pdf->MultiCell(100, $altura_multicell, utf8_decode_($descripcion . ' '. $altura_multicell)/*  . '.---' .$caracteres */, 0,'L',1);
            $pdf->SetY($ejeY);
