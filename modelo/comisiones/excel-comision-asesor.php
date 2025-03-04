@@ -527,7 +527,7 @@ function informacionFiltros($con)
         }
        
         $sql .= " AND MONTH(v.fecha) = " . $mes . "";
-        $sql_creditos .= " AND MONTH(a.fecha) = ". $mes ." AND (MONTH(cr.fecha_inicio) BETWEEN  " . $mes_anterior_2 . " AND MONTH(cr.fecha_inicio) = ".$mes.")";
+        $sql_creditos .= " AND MONTH(a.fecha) = ". $mes ." AND MONTH(cr.fecha_inicio) IN (" . $mes_anterior_2 . ", " . ($mes == 1 ? 12 : $mes - 1) . ", " . $mes . ")";
     }
     if (!empty($year)) { 
         if($mes ==1 || $mes ==2){
@@ -598,8 +598,8 @@ function informacionFiltros($con)
     $data = $result->fetch_all(MYSQLI_ASSOC);
     $stmt->close();
 
-   /*  print_r($sql_creditos);
-    die(); */
+    print_r($sql_creditos);
+    die();
   
     $stmt = $con->prepare($sql_creditos);
     $stmt->execute();

@@ -541,7 +541,8 @@ if (!empty($mes)) {
     }
    
     $sql .= " AND MONTH(v.fecha) = " . $mes . "";
-    $sql_creditos .= " AND MONTH(a.fecha) = ". $mes ." AND (MONTH(cr.fecha_inicio) BETWEEN  " . $mes_anterior_2 . " AND MONTH(cr.fecha_inicio) = ".$mes.")";
+    $sql_creditos .= " AND MONTH(a.fecha) = ". $mes ." AND MONTH(cr.fecha_inicio) IN (" . $mes_anterior_2 . ", " . ($mes == 1 ? 12 : $mes - 1) . ", " . $mes . ")";
+
 }
 if (!empty($year)) { 
     if($mes ==1 || $mes ==2){
