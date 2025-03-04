@@ -92,7 +92,7 @@ if($_POST){
     
     $update_cliente = "UPDATE clientes SET Nombre_Cliente = ?, Telefono = ?, Direccion = ?, Correo = ?, Credito = ?, RFC = ?, Latitud = ?, Longitud = ?, tipo_cliente =?, id_asesor = ? WHERE id = ?";
     $resultado = $con->prepare($update_cliente);
-    $resultado->bind_param('sissssssssi', $nombre, $telefono, $direccion, $correo, $credito, $rfc, $latitud, $longitud, $tipo_cliente, $asesor, $id);
+    $resultado->bind_param('ssssssssssi', $nombre, $telefono, $direccion, $correo, $credito, $rfc, $latitud, $longitud, $tipo_cliente, $asesor, $id);
     $resultado->execute();
     
     if ($resultado) {

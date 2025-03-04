@@ -265,7 +265,7 @@ function borrarCliente(id) {
                '<div class="col-6">'+
                 '<div class="form-group">'+
                 '<label for="telefono"><b>Telefono:</b></label></br>'+
-                '<input type="number" class="form-control" id="telefono" value="'+ response.telefono +'" name="telefono" placeholder="Telefono" autocomplete="off">'+
+                '<input type="text" class="form-control" id="telefono" value="'+ response.telefono +'" name="telefono" placeholder="Telefono" autocomplete="off">'+
                 '</div>'+
                 '</div>'+
             
