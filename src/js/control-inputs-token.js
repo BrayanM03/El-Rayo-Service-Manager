@@ -1,4 +1,5 @@
 let bandera_token_credito_incorrecto=false;
+let bandera_cliente_aceptado=false;
 function controlCodeInputs(tipo, clase, id_etiqueta_error){
   const inputs = document.querySelectorAll(clase);
   const totalInputs = inputs.length;
@@ -18,7 +19,7 @@ function controlCodeInputs(tipo, clase, id_etiqueta_error){
   
               // Si todos están completos, enviar los datos
               if (Array.from(inputs).every(input => input.value !== '')) {
-                  enviarDatos(tipo, clase,id_etiqueta_error);
+                  return enviarDatos(tipo, clase,id_etiqueta_error);
               }
           });
 
@@ -110,8 +111,7 @@ function enviarDatos(tipo, clase, id_etiqueta_error) {
                 let button_confirm = document.querySelector('.swal2-confirm');
                 button_confirm.style.backgroundColor = '#1cc88a';
               }
-             
-
+              
             }else{
               color_border_input='tomato';
               $(id_etiqueta_error).append(`
@@ -122,6 +122,7 @@ function enviarDatos(tipo, clase, id_etiqueta_error) {
               let button_confirm = document.querySelector('.swal2-confirm');
               button_confirm.style.backgroundColor = '#858796';
               audio_error.play();
+              
             }
             Array.from(inputs).map((input) => {
               document.activeElement.blur()
@@ -129,6 +130,9 @@ function enviarDatos(tipo, clase, id_etiqueta_error) {
              // if(!data.estatus) input.value =''
             })
 
+            if(tipo=='clientes'){
+              bandera_cliente_aceptado = response.estatus;
+            }
 
 
         }})

@@ -218,12 +218,15 @@ function buscarNeumaticoPuntoVenta() {
          
 
           let precio_final_desc;
+          let desaparecer_precio 
           if(element.cliente_mayoreo){
-            etiqueta_precio = 'Precio mayoreo';
+            desaparecer_precio = ''
+            etiqueta_precio = 'Convenio';
             tipo_cliente = 'mayoreo'
             precio_final_desc=precio_mayoreo;
             background_color_precio = '#a03472';
           }else{
+            desaparecer_precio = ''
             etiqueta_precio = 'Precio normal desc.'
             precio_final_desc=precio
             background_color_precio = '#12a18e';
@@ -279,7 +282,7 @@ function buscarNeumaticoPuntoVenta() {
                            </div>
                            <div class="row p-2 mt-2 tarjetas-precios" codigo="${element.Codigo}" id="tarjeta-codigo-${element.Codigo}">
                                <!-- Precio lista -->
-                               <div class="margenes-col-precio text-center">
+                               <div class="margenes-col-precio text-center ${desaparecer_precio}">
                                    <div id="tarjeta-lista" onclick="selectorPrecio(event, this, '${element.Codigo}')" style="background-color: #4682b4; color: white; border-radius: 8px;" class="boton_precio_estilos p-2">
                                        <span>Precio lista</span><br>
                                        <h3><b>${precio_lista}</b></h3>
@@ -295,7 +298,7 @@ function buscarNeumaticoPuntoVenta() {
                                        </div>
                                </div>
                                <!-- Promoción -->
-                               <div class="margenes-col-precio ml-2 text-center ${display_promo}">
+                               <div class="margenes-col-precio ml-2 text-center ${display_promo} ${desaparecer_precio}">
                                    <div id="tarjeta-promocion" onclick="selectorPrecio(event, this, '${element.Codigo}')" style="background-color: #FF7F50; color: white; border-radius: 8px;" class="boton_precio_estilos p-2">
                                        <span>Promoción</span><br>
                                        <h3><b>${precio_promocion}</b></h3>
@@ -1142,17 +1145,72 @@ function setLocalStorageCliente(){
     id_cliente = document.querySelector('#cliente').value
     const selectedOption = $("#cliente option:selected");
     const tipoCliente = selectedOption.data("tipo");
-    
-    localStorage.setItem("id_cliente", id_cliente);
-    localStorage.setItem("nombre_cliente", nombre_cliente);
-    localStorage.setItem('tipo_cliente', tipoCliente)
-
     let ancho = $("#ancho").val();
     let alto = $("#ancho").val();
     let rin = $("#ancho").val();
-    if(ancho !='' || alto !='' || rin !=''){
-      buscarNeumaticoPuntoVenta()
+
+    if(tipoCliente==1){
+      Swal.fire({
+        icon: 'info',
+        title: 'Coloque token para vender a este cliente',
+        didOpen: ()=>{
+          controlCodeInputs('clientes','.form-control_code_apartado','#mensaje-error-token-apartado')
+        },
+        html: `
+        <div class="row m-auto justify-content-center">
+            <div class="col-12 mt-3">
+                <label>Token:</label> 
+            </div>
+            <div class="col-12 text-center mb-3">
+                <input id="token-cliente-1" autocomplete="off" class="form-control_code_apartado" placeholder="0"></input>
+                <input id="token-cliente-2" autocomplete="off" class="form-control_code_apartado" placeholder="0"></input>
+                <input id="token-cliente-3" autocomplete="off" class="form-control_code_apartado" placeholder="0"></input>
+                <input id="token-cliente-4" autocomplete="off" class="form-control_code_apartado" placeholder="0"></input>
+            </div>
+            <div class="col-12" id="mensaje-error-token-apartado">
+              
+            </div>
+        </div>
+        `,
+        showCloseButton:true,
+        confirmButtonText: 'Procesar'
+      }).then((r)=>{
+        if(r.isConfirmed){
+            if(bandera_cliente_aceptado){
+              localStorage.setItem("id_cliente", id_cliente);
+              localStorage.setItem("nombre_cliente", nombre_cliente);
+              localStorage.setItem('tipo_cliente', tipoCliente)
+              if(ancho !='' || alto !='' || rin !=''){
+                buscarNeumaticoPuntoVenta()
+              }
+            }else{
+              localStorage.setItem("id_cliente", 1);
+              localStorage.setItem("nombre_cliente", 'Publico en general');
+              localStorage.setItem('tipo_cliente', 0)
+              $("#cliente").val(1)
+              $("#cliente").selectpicker('refresh')
+            }
+            bandera_cliente_aceptado=false;
+        }else{
+          localStorage.setItem("id_cliente", 1);
+              localStorage.setItem("nombre_cliente", 'Publico en general');
+              localStorage.setItem('tipo_cliente', 0)
+              $("#cliente").val(1)
+              $("#cliente").selectpicker('refresh')
+        }
+      })
+    }else{
+      localStorage.setItem("id_cliente", id_cliente);
+      localStorage.setItem("nombre_cliente", nombre_cliente);
+      localStorage.setItem('tipo_cliente', tipoCliente)
+
+      if(ancho !='' || alto !='' || rin !=''){
+        buscarNeumaticoPuntoVenta()
+      }
     }
+
+   
+   
   },100)
   
 }
