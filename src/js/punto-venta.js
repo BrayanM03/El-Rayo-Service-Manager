@@ -1,3 +1,4 @@
+
 traerAnchos();
 const audio = new Audio("./src/sounds/success-sound.mp3");
 const audio_error = new Audio("./src/sounds/error-sound.mp3");
@@ -1086,7 +1087,7 @@ function setearPrecioToken(codigo){
     
 }
 
-$("#cliente").selectpicker();
+
 let currentPage = 1;
 let isLoading = false;
 
@@ -1138,7 +1139,7 @@ $("#cliente").on("shown.bs.select", function () {
         });
 });
 
-function setLocalStorageCliente(){
+function setLocalStorageCliente(tipo_vta=1){
   setTimeout(function(){
     nombre_cliente =  $('#cliente').siblings('.dropdown-toggle').find('.filter-option-inner-inner').text();
     let tipo_cliente_actual =  $('#cliente').siblings('.dropdown-toggle').find('.filter-option-inner-inner').text();
@@ -1205,7 +1206,9 @@ function setLocalStorageCliente(){
       localStorage.setItem('tipo_cliente', tipoCliente)
 
       if(ancho !='' || alto !='' || rin !=''){
-        buscarNeumaticoPuntoVenta()
+        if(tipo_vta==1){
+          buscarNeumaticoPuntoVenta()
+        }
       }
     }
 
@@ -1217,16 +1220,16 @@ function setLocalStorageCliente(){
 
 getLocalStorageCliente()
 function getLocalStorageCliente(){
-  let id_cliente = localStorage.getItem("id_cliente");
-  let nombre_cliente = localStorage.getItem("nombre_cliente", id_cliente);
+  let id_cliente_ = localStorage.getItem("id_cliente");
+  //let nombre_cliente = localStorage.getItem("nombre_cliente", id_cliente);
+ // document.querySelector('#cliente').setAttribute('title', nombre_cliente);
+  $('#cliente').val(1) 
+  //$('#cliente').selectpicker('refresh'); 
 
-  document.querySelector('#cliente').setAttribute('title', nombre_cliente);
-  document.querySelector('#cliente').value = parseInt(id_cliente)
-  $('#cliente').selectpicker('refresh'); 
 }
 
 function configuracionDeVenta() {
-      let id_cliente = localStorage.getItem("id_cliente");
+      let id_cliente = $("#cliente").val();
       let nombre_cliente = localStorage.getItem("nombre_cliente");
       if(id_cliente==null||id_cliente==''){
         toastr.error('Selecciona un cliente', "Error");
@@ -1692,7 +1695,9 @@ function procesarVenta(){
           }
           cargarPreventa()
           localStorage.setItem('id_cliente', '');
+          $("#cliente").val()
           localStorage.setItem('nombre_cliente', 'Selecciona un cliente')
+          buscarNeumaticoPuntoVenta()
         })
         }else{
           toastr.warning(response.mensaje, "Advertencia");
@@ -2041,3 +2046,4 @@ function selectorPrecio(e, this_e, codigo){
   }
 
 }
+
