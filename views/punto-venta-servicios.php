@@ -19,7 +19,7 @@
                     <div class="row mt-3">
                         <div class="col-11">
                             <label for="cliente">Cliente</label>
-                            <select id="cliente" onchange="setLocalStorageCliente()" class="form-control selectpicker" data-live-search="true">
+                            <select id="cliente" onchange="setLocalStorageCliente(2)" class="form-control selectpicker" data-live-search="true">
 
                             </select>
                         </div> 

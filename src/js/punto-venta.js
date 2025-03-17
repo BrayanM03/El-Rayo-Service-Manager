@@ -137,7 +137,7 @@ function buscarNeumaticoPuntoVenta() {
   let ancho = $("#ancho").val();
   let alto = $("#alto").val();
   let diametro = $("#rin").val();
-  let id_cliente = localStorage.getItem('id_cliente');
+  let id_cliente = $("#cliente").val();
 
   if (ancho == "" || alto == "" || diametro == "") {
     Swal.fire({
@@ -841,6 +841,7 @@ function agregarPreventa(
   if((tipo==1 && promocion!=1) && precio_seleccionado != 'true'){
     Swal.fire({
       icon: 'error',
+      showDenyButton:true,
       title: 'Elige un precio para el producto'
     })
     return false;
@@ -978,6 +979,7 @@ function generarToken(codigo) {
               title: "Token correcto",
               html: "<span>Ahora puedes cambiar el precio de la llanta</br></span>",
               icon: "success",
+              showDenyButton:true,
               cancelButtonColor: "#00e059",
               showConfirmButton: true,
               confirmButtonText: "Aceptar",
@@ -1000,6 +1002,7 @@ function generarToken(codigo) {
           } else {
             Swal.fire({
               title: "Token incorrecto",
+              showDenyButton:true,
               html: "<span>El token que ingresaste es incorrecto.</br></span>",
               icon: "error",
               cancelButtonColor: "#00e059",
@@ -1100,7 +1103,7 @@ async function cargarClientes(query = "", page = 1) {
           `./modelo/punto_venta/busqueda-clientes.php?query=${query}&page=${page}`
         );
         const clientes = await response.json();
-
+        
         clientes.data.forEach((cliente) => {
           const option = document.createElement("option");
           option.value = cliente.id;
@@ -1115,17 +1118,28 @@ async function cargarClientes(query = "", page = 1) {
 
  // Escuchar el evento de apertura del selectpicker para cargar la primera página
 $("#cliente").on("shown.bs.select", function () {
+  $("#cliente").append(`<option value="">Selecciona un cliente </option>`)
         cargarClientes(); // Cargar la primera página
         var $bsSearchbox = $(this).parent().find(".bs-searchbox input");
 
         $bsSearchbox.off("keyup"); // Asegurarnos de no duplicar eventos
         $bsSearchbox.on("keyup", function (e) {
-          $("#cliente").empty();
-          currentPage = 1;
-          cargarClientes(e.target.value, currentPage); // Nueva búsqueda, reiniciar la página
+          var codigo_tecla = e.which || e.keyCode;
+          if(codigo_tecla!=37 && codigo_tecla!=38 && codigo_tecla!=39 && codigo_tecla !=40){
+            $("#cliente").empty(); // Limpiar opciones previas
+            $("#cliente").append(`<option value="">Selecciona un cliente </option>`)
+            currentPage = 1;
+            cargarClientes(e.target.value, currentPage).then(() => {
+                // Forzar la ejecución del onchange cuando solo hay un resultado
+                if ($("#cliente option").length === 1) {
+                  $("#cliente").val('')
+                }
+            });
+          }
+         
         });
 
-        $(".dropdown-menu.inner.dropdown-menu").on("scroll", function () {
+        /* $(".dropdown-menu.inner.dropdown-menu").on("scroll", function () {
          
           const scrollPosition = $(this).scrollTop() + $(this).innerHeight();
           const scrollHeight = $(this)[0].scrollHeight;
@@ -1136,85 +1150,134 @@ $("#cliente").on("shown.bs.select", function () {
             const query = $(".bs-searchbox input").val();
             cargarClientes(query, currentPage);
           }
-        });
+        }); */
 });
 
+
+tipoCliente=0;
 function setLocalStorageCliente(tipo_vta=1){
-  setTimeout(function(){
-    nombre_cliente =  $('#cliente').siblings('.dropdown-toggle').find('.filter-option-inner-inner').text();
-    let tipo_cliente_actual =  $('#cliente').siblings('.dropdown-toggle').find('.filter-option-inner-inner').text();
-    id_cliente = document.querySelector('#cliente').value
-    const selectedOption = $("#cliente option:selected");
-    const tipoCliente = selectedOption.data("tipo");
-    let ancho = $("#ancho").val();
-    let alto = $("#ancho").val();
-    let rin = $("#ancho").val();
 
-    if(tipoCliente==1){
-      Swal.fire({
-        icon: 'info',
-        title: 'Coloque token para vender a este cliente',
-        didOpen: ()=>{
-          controlCodeInputs('clientes','.form-control_code_apartado','#mensaje-error-token-apartado')
-        },
-        html: `
-        <div class="row m-auto justify-content-center">
-            <div class="col-12 mt-3">
-                <label>Token:</label> 
-            </div>
-            <div class="col-12 text-center mb-3">
-                <input id="token-cliente-1" autocomplete="off" class="form-control_code_apartado" placeholder="0"></input>
-                <input id="token-cliente-2" autocomplete="off" class="form-control_code_apartado" placeholder="0"></input>
-                <input id="token-cliente-3" autocomplete="off" class="form-control_code_apartado" placeholder="0"></input>
-                <input id="token-cliente-4" autocomplete="off" class="form-control_code_apartado" placeholder="0"></input>
-            </div>
-            <div class="col-12" id="mensaje-error-token-apartado">
-              
-            </div>
-        </div>
-        `,
-        showCloseButton:true,
-        confirmButtonText: 'Procesar'
-      }).then((r)=>{
-        if(r.isConfirmed){
-            if(bandera_cliente_aceptado){
-              localStorage.setItem("id_cliente", id_cliente);
-              localStorage.setItem("nombre_cliente", nombre_cliente);
-              localStorage.setItem('tipo_cliente', tipoCliente)
-              if(ancho !='' || alto !='' || rin !=''){
-                buscarNeumaticoPuntoVenta()
+  if($("#cliente").val()!=''){
+    setTimeout(function(){
+      nombre_cliente =  $('#cliente').siblings('.dropdown-toggle').find('.filter-option-inner-inner').text();
+     /*  let tipo_cliente_actual =  $('#cliente').siblings('.dropdown-toggle').find('.filter-option-inner-inner').text(); */
+      id_cliente = document.querySelector('#cliente').value
+      const selectedOption = $("#cliente option:selected");
+      tipoCliente = selectedOption.data("tipo");
+      let ancho = $("#ancho").val();
+      let alto = $("#ancho").val();
+      let rin = $("#ancho").val();
+  
+      if(tipoCliente=='Desactivado temporalmente'){
+        Swal.fire({
+          icon: 'info',
+          title: 'Coloque token para vender a este cliente',
+          didOpen: ()=>{
+            controlCodeInputs('clientes','.form-control_code_apartado','#mensaje-error-token-apartado')
+          },
+          html: `
+          <div class="row m-auto justify-content-center">
+              <div class="col-12 mt-3">
+                  <label>Token:</label> 
+              </div>
+              <div class="col-12 text-center mb-3">
+                  <input id="token-cliente-1" autocomplete="off" class="form-control_code_apartado" placeholder="0"></input>
+                  <input id="token-cliente-2" autocomplete="off" class="form-control_code_apartado" placeholder="0"></input>
+                  <input id="token-cliente-3" autocomplete="off" class="form-control_code_apartado" placeholder="0"></input>
+                  <input id="token-cliente-4" autocomplete="off" class="form-control_code_apartado" placeholder="0"></input>
+              </div>
+              <div class="col-12" id="mensaje-error-token-apartado">
+                
+              </div>
+          </div>
+          `,
+          showCloseButton:true,
+          confirmButtonText: 'Procesar'
+        }).then((r)=>{
+          if(r.isConfirmed){
+              if(bandera_cliente_aceptado){
+                localStorage.setItem("id_cliente", id_cliente);
+                localStorage.setItem("nombre_cliente", nombre_cliente);
+                localStorage.setItem('tipo_cliente', tipoCliente)
+                if(ancho !='' || alto !='' || rin !=''){
+                  buscarNeumaticoPuntoVenta()
+                }
+              }else{
+                localStorage.setItem("id_cliente", 1);
+                localStorage.setItem("nombre_cliente", 'Publico en general');
+                localStorage.setItem('tipo_cliente', 0)
+                $("#cliente").val(1)
+                $("#cliente").selectpicker('refresh')
               }
-            }else{
-              localStorage.setItem("id_cliente", 1);
-              localStorage.setItem("nombre_cliente", 'Publico en general');
-              localStorage.setItem('tipo_cliente', 0)
-              $("#cliente").val(1)
-              $("#cliente").selectpicker('refresh')
-            }
-            bandera_cliente_aceptado=false;
-        }else{
-          localStorage.setItem("id_cliente", 1);
-              localStorage.setItem("nombre_cliente", 'Publico en general');
-              localStorage.setItem('tipo_cliente', 0)
-              $("#cliente").val(1)
-              $("#cliente").selectpicker('refresh')
-        }
-      })
-    }else{
-      localStorage.setItem("id_cliente", id_cliente);
-      localStorage.setItem("nombre_cliente", nombre_cliente);
-      localStorage.setItem('tipo_cliente', tipoCliente)
-
-      if(ancho !='' || alto !='' || rin !=''){
-        if(tipo_vta==1){
-          buscarNeumaticoPuntoVenta()
+              bandera_cliente_aceptado=false;
+          }else{
+            localStorage.setItem("id_cliente", 1);
+                localStorage.setItem("nombre_cliente", 'Publico en general');
+                localStorage.setItem('tipo_cliente', 0)
+                $("#cliente").val(1)
+                $("#cliente").selectpicker('refresh')
+          }
+        })
+      }else{
+        localStorage.setItem("id_cliente", id_cliente);
+        localStorage.setItem("nombre_cliente", nombre_cliente);
+        localStorage.setItem('tipo_cliente', tipoCliente)
+  
+        if(ancho !='' || alto !='' || rin !=''){
+          if(tipo_vta==1){
+            buscarNeumaticoPuntoVenta()
+          }
         }
       }
-    }
+    },100)
+  }
+  
+  
+}
 
-   
-   
-  },100)
+
+function comprobacionConToken(){
+  if(tipoCliente==1){
+    Swal.fire({
+      icon: 'info',
+      title: 'Coloque token para vender a este cliente',
+      didOpen: ()=>{
+        controlCodeInputs('clientes','.form-control_code_apartado','#mensaje-error-token-apartado')
+      },
+      html: `
+      <div class="row m-auto justify-content-center">
+          <div class="col-12 mt-3">
+              <label>Token:</label> 
+          </div>
+          <div class="col-12 text-center mb-3">
+              <input id="token-cliente-1" autocomplete="off" class="form-control_code_apartado" placeholder="0"></input>
+              <input id="token-cliente-2" autocomplete="off" class="form-control_code_apartado" placeholder="0"></input>
+              <input id="token-cliente-3" autocomplete="off" class="form-control_code_apartado" placeholder="0"></input>
+              <input id="token-cliente-4" autocomplete="off" class="form-control_code_apartado" placeholder="0"></input>
+          </div>
+          <div class="col-12" id="mensaje-error-token-apartado">
+            
+          </div>
+      </div>
+      `,
+      showCloseButton:true,
+      confirmButtonText: 'Procesar'
+    }).then((r)=>{
+          if(bandera_cliente_aceptado){
+              configuracionDeVenta()
+          }else{
+            Swal.fire({
+              icon: 'warning',
+              title: 'Coloca el token correcto si quieres vender a este cliente.',
+              confirmButtonText: 'Enterado',
+              showDenyButton:true,
+            })
+          }
+          bandera_cliente_aceptado=false;
+    })
+  }else{
+    configuracionDeVenta()
+  }
   
 }
 
@@ -1229,116 +1292,118 @@ function getLocalStorageCliente(){
 }
 
 function configuracionDeVenta() {
-      let id_cliente = $("#cliente").val();
-      let nombre_cliente = localStorage.getItem("nombre_cliente");
-      if(id_cliente==null||id_cliente==''){
-        toastr.error('Selecciona un cliente', "Error");
-        return false;
-      }
-
-      let importe=localStorage.getItem("importe_total");
-      let importe_total = new Intl.NumberFormat().format(
-        importe
-      );
-
-      Swal.fire({
-        html: `
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <span style="color:#a0a0a0;"><b>Configuración de la venta</b></span><br>
-                    <h4 class="mt-2"><b>${nombre_cliente}</b></h4>
-                </div>    
-            </div>
-
-            <!---<div class="row mt-3">
-                <div class="col-12">
-                    <label for="cliente">Cliente</label>
-                    <select id="cliente" class="form-control selectpicker" data-live-search="true">
-
-                    </select>
-                </div>    
-            </div>-->
-            <hr>
-            <div class="row mt-4">
-              <div class="col-12 col-md-6">
-                    <label for="tipo-venta">Tipo de venta</label>
-                    <select id="tipo-venta" class="form-control selectpicker" onchange="cargarTipoVenta()">
-                        <option value="Normal">Contado</option>
-                        <option value="Credito">Credito</option>
-                        <option value="Apartado">Apartado</option>
-                    </select>
-                </div> 
-
+  
+        let id_cliente = $("#cliente").val();
+        let nombre_cliente = localStorage.getItem("nombre_cliente");
+        if(id_cliente==null||id_cliente==''){
+          toastr.error('Selecciona un cliente', "Error");
+          return false;
+        }
+  
+        let importe=localStorage.getItem("importe_total");
+        let importe_total = new Intl.NumberFormat().format(
+          importe
+        );
+  
+        Swal.fire({
+          html: `
+          <div class="container">
+              <div class="row">
+                  <div class="col-12">
+                      <span style="color:#a0a0a0;"><b>Configuración de la venta</b></span><br>
+                      <h4 class="mt-2"><b>${nombre_cliente}</b></h4>
+                  </div>    
+              </div>
+  
+              <!---<div class="row mt-3">
+                  <div class="col-12">
+                      <label for="cliente">Cliente</label>
+                      <select id="cliente" class="form-control selectpicker" data-live-search="true">
+  
+                      </select>
+                  </div>    
+              </div>-->
+              <hr>
+              <div class="row mt-4">
                 <div class="col-12 col-md-6">
-                    <label for="forma-pago" id="label-formas-pago">Forma(s) de pago</label>
-                    <select id="forma-pago" onchange="setearInputsFormaPago('${importe_total}')" class="form-control selectpicker" multiple>
-                        <option value="0">Efectivo</option>
-                        <option value="1">Tarjeta</option>
-                        <option value="2">Transferencia</option>
-                        <option value="3">Cheque</option>
-                        <option value="4">Sin definir</option>
-                    </select>
-                </div> 
-                   
-            </div>
-            <div id="area-inputs-formas-pago" class="row mt-4 d-none">
-
-            </div>
-            <div id="area-plazo-credito" class="row mt-4 d-none">
-
-            </div>
-            <div id="area-mensaje-creditos" class="row mt-4 d-none">
-
-            </div>
-
-            <div class="row mb-2 mt-4">
-                <div class="col-12">
-                    <label for="comentarios">Comentarios</label>
-                    <textarea class="form-control" id="comentarios" placeholder="Escribe aqui un comentario..."></textarea>
-                </div>  
-            </div>
-            <hr>
-            <div class="row mt-4" id="area-importe-total">
-                <div class="col-12">
-                    <label for="comentarios">Total:</label>
-                    <b><span style="color:gray" id="importe-total-confg"></span></b>
-                </div>  
-            </div>  
-        </div>`,
-    width: "700px",
-    confirmButtonText: `Procesar venta`,
-    preConfirm: ()=>{
-      let sumatoria_forma_pago_valida = $("#importe-total-confg").attr("is-valid");
-      let validacion_mensaje_error = $("#importe-total-confg").attr("mensaje_error");
-   
-      if(sumatoria_forma_pago_valida=='false'){
-        return Swal.showValidationMessage(`
-          ${validacion_mensaje_error}
-      `);
+                      <label for="tipo-venta">Tipo de venta</label>
+                      <select id="tipo-venta" class="form-control selectpicker" onchange="cargarTipoVenta()">
+                          <option value="Normal">Contado</option>
+                          <option value="Credito">Credito</option>
+                          <option value="Apartado">Apartado</option>
+                      </select>
+                  </div> 
+  
+                  <div class="col-12 col-md-6">
+                      <label for="forma-pago" id="label-formas-pago">Forma(s) de pago</label>
+                      <select id="forma-pago" onchange="setearInputsFormaPago('${importe_total}')" class="form-control selectpicker" multiple>
+                          <option value="0">Efectivo</option>
+                          <option value="1">Tarjeta</option>
+                          <option value="2">Transferencia</option>
+                          <option value="3">Cheque</option>
+                          <option value="4">Sin definir</option>
+                      </select>
+                  </div> 
+                     
+              </div>
+              <div id="area-inputs-formas-pago" class="row mt-4 d-none">
+  
+              </div>
+              <div id="area-plazo-credito" class="row mt-4 d-none">
+  
+              </div>
+              <div id="area-mensaje-creditos" class="row mt-4 d-none">
+  
+              </div>
+  
+              <div class="row mb-2 mt-4">
+                  <div class="col-12">
+                      <label for="comentarios">Comentarios</label>
+                      <textarea class="form-control" id="comentarios" placeholder="Escribe aqui un comentario..."></textarea>
+                  </div>  
+              </div>
+              <hr>
+              <div class="row mt-4" id="area-importe-total">
+                  <div class="col-12">
+                      <label for="comentarios">Total:</label>
+                      <b><span style="color:gray" id="importe-total-confg"></span></b>
+                  </div>  
+              </div>  
+          </div>`,
+      width: "700px",
+      confirmButtonText: `Procesar venta`,
+      preConfirm: ()=>{
+        let sumatoria_forma_pago_valida = $("#importe-total-confg").attr("is-valid");
+        let validacion_mensaje_error = $("#importe-total-confg").attr("mensaje_error");
+     
+        if(sumatoria_forma_pago_valida=='false'){
+          return Swal.showValidationMessage(`
+            ${validacion_mensaje_error}
+        `);
+        }
+      },
+      didOpen: () => {
+        $("#importe-total-confg").attr("is-valid", "false")
+        $("#importe-total-confg").attr("mensaje_error", 'Selecciona una forma de pago');
+        $("#importe-total-confg").text("$" + importe_total);
+        $('#forma-pago').selectpicker('render');
+        $('#tipo-venta').selectpicker('render');
+        let button_confirm = document.querySelector('.swal2-confirm');
+        button_confirm.style.backgroundColor = '#858796';
+        button_confirm.style.borderColor = '#858796';
+      },
+    }).then(function(r){
+      if(r.isConfirmed){
+        let venta_valida = $("#importe-total-confg").attr("is-valid")
+        
+        if(venta_valida=='true'){
+          procesarVenta()
+        }else{
+  
+        }
       }
-    },
-    didOpen: () => {
-      $("#importe-total-confg").attr("is-valid", "false")
-      $("#importe-total-confg").attr("mensaje_error", 'Selecciona una forma de pago');
-      $("#importe-total-confg").text("$" + importe_total);
-      $('#forma-pago').selectpicker('render');
-      $('#tipo-venta').selectpicker('render');
-      let button_confirm = document.querySelector('.swal2-confirm');
-      button_confirm.style.backgroundColor = '#858796';
-      button_confirm.style.borderColor = '#858796';
-    },
-  }).then(function(r){
-    if(r.isConfirmed){
-      let venta_valida = $("#importe-total-confg").attr("is-valid")
+    })
       
-      if(venta_valida=='true'){
-        procesarVenta()
-      }else{
-
-      }
-    }
-  })
 }
 //configuracionDeVenta()
 function setearInputsFormaPago(importe_){
@@ -1644,7 +1709,7 @@ function procesarVenta(){
   let tipo_venta = $('#tipo-venta').val();
   let plazo = tipo_venta =='Credito' ? $("#plazo-credito").val() : null;
   let pagare =  tipo_venta =='Credito' ? $("#pagare").val() : null;
-  let id_cliente = localStorage.getItem('id_cliente'); //
+  let id_cliente = $("#cliente").val() //
   let comentario = $("#comentarios").val()
   let importe=localStorage.getItem("importe_total");
   let metodos_formateado = formas_pagos.reduce(function(result, key) {

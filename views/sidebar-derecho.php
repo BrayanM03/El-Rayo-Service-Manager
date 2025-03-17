@@ -55,7 +55,7 @@
             <div class="row mt-2 mb-2">
                 <div class="col-12 text-right">
                     <div class="btn btn-warning mr-2" onclick="limpiarPreventa()">Limpiar</div>
-                    <div class="btn btn-success" onclick="configuracionDeVenta()">Procesar</div>
+                    <div class="btn btn-success" onclick="comprobacionConToken()">Procesar</div>
                 </div>
             </div>
             </div>
