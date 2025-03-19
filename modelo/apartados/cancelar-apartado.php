@@ -3,6 +3,7 @@
 
 session_start();
 include '../conexion.php';
+include '../helpers/response_helper.php';
 $con= $conectando->conexion(); 
 
 if (!isset($_SESSION['id_usuario'])) {
@@ -20,6 +21,7 @@ if ($_SESSION["rol"]  !== "1" ) {
 if(isset($_POST)){
     $id_venta = $_POST['id_venta'];
     $motivo = $_POST['motivo_cancel'];
+    $mercancia ='';
     //Conseguir susucusal
 
     $hora = date("h:i a");
@@ -43,7 +45,7 @@ if(isset($_POST)){
     $stmt->close();
 
     if($estatus == 'Cancelada'){
-        print_r(3);
+      responder(false, 'Apartado ya cancelado', 'error', []);
     }else{
 
     //Continuamos con la validad de llantas con esa venta
@@ -56,7 +58,7 @@ if(isset($_POST)){
     $stmt->close();
 
     if ($total == 0) {
-        print_r(0);
+      responder(false, 'No se encontraron detalles de apartado relacionados', 'error', []);
     }else{
         
       //Actualizar historial de movimientos con la cancelación
@@ -72,7 +74,7 @@ if(isset($_POST)){
       $movimiento_id = $con->insert_id;
       $ress->close();
 
-        $llantasaDevolver = "SELECT id_llanta, cantidad FROM detalle_apartado WHERE id_apartado = ?";
+        $llantasaDevolver = "SELECT * FROM detalle_apartado WHERE id_apartado = ?";
         $stmt = $con->prepare($llantasaDevolver);
         $stmt->bind_param('s', $id_venta);
         $stmt->execute();
@@ -81,7 +83,11 @@ if(isset($_POST)){
                
         $cantidad_llantas_movimiento = 0;
         while ($row = $resultado->fetch_array()) {
-          $id_llanta = $row['id_llanta'];  
+
+       
+          if($row['unidad']== 'pieza'){
+
+            $id_llanta = $row['id_llanta'];  
           $cantidad = $row['cantidad'];
          
           /* print_r($id_llanta .'  - ');
@@ -104,23 +110,12 @@ if(isset($_POST)){
           $editar_llanta->execute();
           $editar_llanta->close();
 
-          //Actualizamos estatus de venta normal
-          if($estatus== 'Pagado'){
+          if($estatus == 'Activo'){
             $newStatus = 'Cancelada';
             $editar_status= $con->prepare("UPDATE apartados SET estatus = ?, comentario = ? WHERE id = ?");
             $editar_status->bind_param('ssi', $newStatus, $motivo, $id_venta);
             $editar_status->execute();
             $editar_status->close();
-            print_r(1);
-
-          }else if($estatus == 'Activo'){
-            $newStatus = 'Cancelada';
-            $editar_status= $con->prepare("UPDATE apartados SET estatus = ?, comentario = ? WHERE id = ?");
-            $editar_status->bind_param('ssi', $newStatus, $motivo, $id_venta);
-            $editar_status->execute();
-            $editar_status->close();
-
-            print_r(1);
           }
          
           //Actualizar historial de movimientos con la cancelación
@@ -131,7 +126,7 @@ if(isset($_POST)){
           $rr->execute();
           $rr->close();
 
-
+          $mercancia_ = [];
           //Obtener la descripcion de las llantas para insertarlas en los movimientos
           $select_llanta = "SELECT * FROM llantas WHERE id = ?";
           $res = $con->prepare($select_llanta);
@@ -144,13 +139,16 @@ if(isset($_POST)){
           
           while ($row = $resultado_ll->fetch_array()) {
             $descripcion_llanta = $row['Descripcion'];
-            $mercancia[] = $descripcion_llanta; // Guardamos cada descripción en un array
-        }
+            $mercancia_[] = $descripcion_llanta; // Guardamos cada descripción en un array
+        } 
         
-        $mercancia = implode(', ', $mercancia); // Unimos las descripciones con coma y espacio
+        $mercancia = implode(', ', $mercancia_); // Unimos las descripciones con coma y espacio
         $mercancia .= '.'; // Agregamos el punto al final
 
           $cantidad_llantas_movimiento += $cantidad;
+
+          }
+          
         }
        
         if($total >= 1){
@@ -161,6 +159,8 @@ if(isset($_POST)){
           $respp->execute();
           $respp->close();
         }
+
+        responder(true, 'Apartado cancelado con exito', 'success', ['id_movimiento'=>$movimiento_id]);
        
     }
 

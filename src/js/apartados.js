@@ -1047,54 +1047,32 @@ function cancelarApartado(id) {
                   url: "./modelo/apartados/cancelar-apartado.php",
                   data: {"id_venta": id, "motivo_cancel": motivo},
                   success: function (response) {
-                      if(response == 0){
+                    return false;
+                    if(response.estatus){
+                      window.open('./modelo/movimientos/remision-salida.php?id='+ response.data.id_movimiento, '_blank');
+                      icon_swal = 'success'
+                      title_swal = 'Cancelado'
+                    }else{
+                      title_swal = 'Ocurrio un'
 
-                          Swal.fire({
-                              title: 'Error',
-                              html: "<span>El apartado no se pudo cancelar</span>",
-                              icon: "error",
-                              cancelButtonColor: '#00e059',
-                              showConfirmButton: true,
-                              confirmButtonText: 'Aceptar', 
-                              cancelButtonColor:'#ff764d',
-                          }).then((result) => {  
-              
-                              if(result.isConfirmed){
-                                  table.ajax.reload(null, false);
-                              }});
-                              table.ajax.reload(null, false);
-                      }else if(response == 1 || response ==11){
-                          Swal.fire({ 
-                              title: 'Apartado cancelado',
-                              html: "<span>El apartado se a cancelado.</span>",
-                              icon: "success",
-                              cancelButtonColor: '#00e059',
-                              showConfirmButton: true,
-                              confirmButtonText: 'Aceptar', 
-                              cancelButtonColor:'#ff764d',
-                          }).then((result) => {  
-              
-                              if(result.isConfirmed){
-                                  table.ajax.reload(null, false);
-                              }});
-                              table.ajax.reload(null, false);
+                      icon_swal = 'error'
+                    }
 
-                      }else if(response == 3){
-                          Swal.fire({
-                              title: 'Apartado ya cancelado',
-                              html: "<span>Este apartado ya esta cancelado.</span>",
-                              icon: "warning",
-                              cancelButtonColor: '#00e059',
-                              showConfirmButton: true,
-                              confirmButtonText: 'Aceptar', 
-                              cancelButtonColor:'#ff764d',
-                          }).then((result) => {  
-              
-                              if(result.isConfirmed){
-                                  table.ajax.reload(null, false);
-                              }});
-                              table.ajax.reload(null, false);
-                      }
+                    Swal.fire({
+                      title: title_swal,
+                      html: response.mensaje,
+                      icon: icon_swal,
+                      cancelButtonColor: '#00e059',
+                      showConfirmButton: true,
+                      confirmButtonText: 'Aceptar', 
+                      cancelButtonColor:'#ff764d',
+                  }).then((result) => {  
+                      
+                      if(result.isConfirmed){
+                          table.ajax.reload(null, false);
+                      }});
+                      table.ajax.reload(null, false);
+
                     
                   }
               });
