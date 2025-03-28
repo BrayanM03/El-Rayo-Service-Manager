@@ -18,6 +18,8 @@ $costo_actual = $_POST['costo_actual'];
 $costo_antes = $_POST['costo_antes'];
 $precio_actual = $_POST['precio_actual'];
 $precio_antes = $_POST['precio_antes'];
+$precio_desc_actual = $_POST['precio_desc_actual'];
+$precio_desc_antes = $_POST['precio_desc_antes'];
 $mayoreo_actual = $_POST['mayoreo_actual'];
 $mayoreo_antes = $_POST['mayoreo_antes'];
 $tipo_remision = $_POST['tipo_remision'];
@@ -34,7 +36,7 @@ $stmt->close();
 
 if($total_movimientos>0){
     if($actualizar_precio== 'true'){
-        actualizarPrecioLlanta($con, $costo_actual, $precio_actual, $mayoreo_actual, $id_llanta);
+        actualizarPrecioLlanta($con, $costo_actual, $precio_actual, $precio_desc_actual, $mayoreo_actual, $id_llanta);
     };
     $qr = "SELECT id_usuario FROM movimientos WHERE id =?";
     $stmt = $con->prepare($qr);
@@ -46,14 +48,14 @@ if($total_movimientos>0){
 
     //Validamos el tipo de remision y redirijo a la funcion correcta
     if($tipo_remision == 2){
-        actualizarRemisionIngreso($con, $id_movimiento, $id_sucursal, $id_llanta, $cantidad, $costo_actual, $costo_antes, $precio_actual, $precio_antes, $mayoreo_actual, $mayoreo_antes, $id_usuario, $permiso_act_inv);
+        actualizarRemisionIngreso($con, $id_movimiento, $id_sucursal, $id_llanta, $cantidad, $costo_actual, $costo_antes, $precio_actual, $precio_antes, $precio_desc_actual, $precio_desc_antes, $mayoreo_actual, $mayoreo_antes, $id_usuario, $permiso_act_inv);
     }
 }else{
     $estatus = false;
     $mensaje = "No se encontro un movimiento con este ID $id_movimiento";
 }
 
-function actualizarRemisionIngreso($con, $id_movimiento, $id_sucursal, $id_llanta, $cantidad, $costo_actual, $costo_antes, $precio_actual, $precio_antes, $mayoreo_actual, $mayoreo_antes, $id_usuario, $permiso_act_inv){
+function actualizarRemisionIngreso($con, $id_movimiento, $id_sucursal, $id_llanta, $cantidad, $costo_actual, $costo_antes, $precio_actual, $precio_antes, $precio_desc_actual, $precio_desc_antes, $mayoreo_actual, $mayoreo_antes, $id_usuario, $permiso_act_inv){
     $stock_destino_anterior =0;
     if($permiso_act_inv == 1){
         $resp_updt = actualizarInventario($id_sucursal, $id_llanta, $cantidad, $con);
@@ -209,10 +211,10 @@ function actualizarInventario($id_sucursal, $id_llanta, $cantidad, $con){
     return $r;
 };
 
-function actualizarPrecioLlanta($con, $precio_actual, $costo_actual, $mayoreo_actual, $id_llanta){
-    $update = "UPDATE llantas SET precio_Inicial = ?, precio_Venta = ?, precio_Mayoreo = ? WHERE id = ?";
+function actualizarPrecioLlanta($con, $costo_actual, $precio_actual, $precio_desc_actual, $mayoreo_actual, $id_llanta){
+    $update = "UPDATE llantas SET precio_Inicial = ?, precio_lista = ? ,precio_Venta = ?, precio_Mayoreo = ? WHERE id = ?";
     $respp = $con->prepare($update);
-    $respp->bind_param('ssss', $precio_actual, $costo_actual, $mayoreo_actual, $id_llanta);
+    $respp->bind_param('sssss', $costo_actual, $precio_actual, $precio_desc_actual, $mayoreo_actual, $id_llanta);
     $respp->execute();
     $respp->close();
 };

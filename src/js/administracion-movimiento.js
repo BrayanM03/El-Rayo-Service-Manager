@@ -753,7 +753,12 @@ function modalAgregarLlantas(){
                                     </div>
 
                                     <div class="col-12 col-md-3 text-center">
-                                        <label for="mayoreo-actual">Mayoreo</label>
+                                        <label for="precio-descuento">Precio descuento</label>
+                                        <input type="number" value="0" placeholder="0" class="form-control" id="precio-desc-actual" valido>
+                                    </div>
+
+                                    <div class="col-12 col-md-3 text-center">
+                                        <label for="mayoreo-actual">Convenio</label>
                                         <input type="number" value="0" placeholder="0" class="form-control" id="mayoreo-actual" valido>
                                     </div>
                                 </div>
@@ -914,10 +919,13 @@ function formatRepoSelection (repo) {
       traerStockSucursales(repo.id); 
 
       $("#costo-actual").val(repo.precio_Inicial);
-      $("#precio-actual").val(repo.precio_Venta);
+      $("#precio-actual").val(repo.precio_lista);
       $("#mayoreo-actual").val(repo.precio_Mayoreo);
+      $("#precio-desc-actual").val(repo.precio_Venta);
+
       $("#costo-actual").attr('costo',repo.precio_Inicial);
-      $("#precio-actual").attr('precio',repo.precio_Venta);
+      $("#precio-desc-actual").attr('precio-desc',repo.precio_Venta);
+      $("#precio-actual").attr('precio',repo.precio_lista);
       $("#mayoreo-actual").attr('mayoreo',repo.precio_Mayoreo);
 
       return repo.text || repo.Descripcion;
@@ -957,6 +965,8 @@ function validarAgregarLlantasARemision(){
     let costo_antes = $("#costo-actual").attr('costo');
     let precio_actual = $("#precio-actual").val();
     let precio_antes = $("#precio-actual").attr('precio');
+    let precio_desc_actual = $("#precio-desc-actual").val();
+    let precio_desc_antes = $("#precio-desc-actual").attr('precio-desc');
     let mayoreo_actual = $("#mayoreo-actual").val();
     let mayoreo_antes = $("#mayoreo-actual").attr('mayoreo');
     let sucursal_remision = $("#sucursal-remision").val();
@@ -976,27 +986,27 @@ function validarAgregarLlantasARemision(){
           }).then((r)=>{
             if(r.isConfirmed){
                 let actualizar_precio = true;
-                agregarLlantasARemision(id_llanta, sucursal_remision, cantidad, costo_actual, costo_antes, precio_actual, precio_antes, mayoreo_actual, mayoreo_antes, tipo_remision, actualizar_precio)
+                agregarLlantasARemision(id_llanta, sucursal_remision, cantidad, costo_actual, costo_antes, precio_actual, precio_antes, precio_desc_actual, precio_desc_antes, mayoreo_actual, mayoreo_antes, tipo_remision, actualizar_precio)
             }else{
                 let actualizar_precio = false;
 
-                agregarLlantasARemision(id_llanta, sucursal_remision, cantidad, costo_actual, costo_antes, precio_actual, precio_antes, mayoreo_actual, mayoreo_antes, tipo_remision, actualizar_precio)
+                agregarLlantasARemision(id_llanta, sucursal_remision, cantidad, costo_actual, costo_antes, precio_actual, precio_antes, precio_desc_actual, precio_desc_antes, mayoreo_actual, mayoreo_antes, tipo_remision, actualizar_precio)
 
             }
           })
     }else{
         let actualizar_precio = false;
-        agregarLlantasARemision(id_llanta, sucursal_remision, cantidad, costo_actual, costo_antes, precio_actual, precio_antes, mayoreo_actual, mayoreo_antes, tipo_remision, actualizar_precio)
+        agregarLlantasARemision(id_llanta, sucursal_remision, cantidad, costo_actual, costo_antes, precio_actual, precio_antes, precio_desc_actual, precio_desc_antes, mayoreo_actual, mayoreo_antes, tipo_remision, actualizar_precio)
     }
       }
 
 
-function agregarLlantasARemision(id_llanta, id_sucursal, cantidad, costo_actual, costo_antes, precio_actual, precio_antes, mayoreo_actual, mayoreo_antes, tipo_remision, actualizar_precio){
+function agregarLlantasARemision(id_llanta, id_sucursal, cantidad, costo_actual, costo_antes, precio_actual, precio_antes, precio_desc_actual, precio_desc_antes, mayoreo_actual, mayoreo_antes, tipo_remision, actualizar_precio){
         
         $.ajax({
             type: "post",
             url: "./modelo/movimientos/ingresar-nuevo-a-remision.php",
-            data: {id_llanta, id_sucursal, cantidad, costo_actual, costo_antes, precio_actual, precio_antes, mayoreo_actual, mayoreo_antes, tipo_remision, actualizar_precio, id_movimiento, permiso_act_inv},
+            data: {id_llanta, id_sucursal, cantidad, costo_actual, costo_antes, precio_actual, precio_antes, precio_desc_actual, precio_desc_antes, mayoreo_actual, mayoreo_antes, tipo_remision, actualizar_precio, id_movimiento, permiso_act_inv},
             dataType: "JSON",
             success: function (response) {
                 if(response.estatus){
