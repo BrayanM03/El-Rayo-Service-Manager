@@ -76,22 +76,22 @@ function MostrarCreditos() {
         data: null,
         render: function (data) {
           switch (data[7]) {
-            case 1:
+            case '1':
               return "<span>7 dias</span>";
               break;
-            case 2:
+            case '2':
               return "<span>15 dias</span>";
               break;
-            case 3:
+            case '3':
               return "<span>1 mes</span>";
               break;
-            case 4:
+            case '4':
               return "<span>1 año</span>";
               break;
-            case 5:
+            case '5':
               return "<span>7 dias</span>";
               break;
-              case 6:
+              case '6':
                 return "<span>1 día</span>";
                 break;
             default:

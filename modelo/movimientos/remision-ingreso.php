@@ -66,13 +66,8 @@ if (!isset($_SESSION['id_usuario'])) {
     header("Location:../../login.php");
 }
 
-function utf8_decode_($str_){
-    $str = [$str_];
-    $result = array_map(function($item){
-        return mb_convert_encoding($item, 'UTF-8', mb_detect_encoding($item));
-    }, $str);
-    return implode('', $result);
-}
+require('../helpers/utf8_decode.php');
+
 
 class PDF extends FPDF
 {
@@ -301,7 +296,7 @@ function Header()
     global $tipo_remision;
 
     
-    $this->Cell(60,10,utf8_decode($titulo_remision),0,0,'C');
+    $this->Cell(60,10,utf8_decode_($titulo_remision),0,0,'C');
     $this->Ln(5);
    
     $estatus = "Reporte";
@@ -309,7 +304,7 @@ function Header()
     $this->Cell(32,10,utf8_decode_($direccion . " "),0,0,'L', false);
     $this->Cell(88,10,utf8_decode_($colonia . ", " . $cp),0,0,'L', false);
     $this->SetFont('Arial','B',9);
-    $this->Cell(25,10,utf8_decode("Fecha emisión: "),0,0,'L', false);
+    $this->Cell(25,10,utf8_decode_("Fecha emisión: "),0,0,'L', false);
     $this->SetFont('Arial','',9);
     $this->Cell(50,10,utf8_decode_($fecha_mov),0,0,'L', false);
     $this->Ln(4);
@@ -319,7 +314,7 @@ function Header()
     $this->Cell(18,10,utf8_decode_($estado.","),0,0,'L', false);
     $this->Cell(81,10,utf8_decode_($pais),0,0,'L', false);
     $this->SetFont('Arial','B',9);
-    $this->Cell(25,10,utf8_decode("Hora emisión: "),0,0,'L', false);
+    $this->Cell(25,10,utf8_decode_("Hora emisión: "),0,0,'L', false);
     $this->SetFont('Arial','',9);
     $this->Cell(50,10,utf8_decode_($hora_mov),0,0,'L', false);
     $this->Ln(4);
@@ -448,11 +443,11 @@ function cuerpoTabla(){
     $pdf->SetDrawColor(135, 134, 134);
     $pdf->SetTextColor(36, 35, 28);
     $pdf->SetFontSize(7);
+    $y_ = $pdf->GetY();
     $pdf->Cell(15,8,utf8_decode_("Cantidad"),0,0,'C');  
-    $pdf->Cell(40,8,utf8_decode("Descripción"),0,0, 'L');
-    $pdf->Cell(23,8,utf8_decode_("Modelo"),0,0, 'L');
+    $pdf->Cell(70,8,utf8_decode_("Descripción "),0,0, 'L');
     $pdf->Cell(20,8,utf8_decode_("Marca"),0,0, 'C');
-    $pdf->Cell(26,8,utf8_decode("Ubicación"),0,0, 'C');
+    $pdf->Cell(26,8,utf8_decode_("Ubicación"),0,0, 'C');
     $pdf->Cell(25,8,utf8_decode_("Destino"),0,0, 'L');
     $pdf->Cell(23,8,utf8_decode_("Stock anterior"),0,0, 'L');
     $pdf->Cell(20,8,utf8_decode_("Stock nuevo"),0,0, 'L');
@@ -492,143 +487,33 @@ function cuerpoTabla(){
 
         $pdf->SetFillColor(255,255,255);
         $ejeY = $line_height;
-        $k=1;
 
         //Recorriendo resultado
+        $GLOBALS['paginas_extras']=0;
+        $datos = [];
         while($fila = $resultado->fetch_assoc()) {
-            $cantidad = $fila["cantidad"];
-            $id_llanta = $fila["id_llanta"];
-            $id_ubicacion= $fila["id_ubicacion"];
-            $id_destino = $fila["id_destino"];
-            $stock_anterior = $fila["stock_destino_anterior"] == null ? 0 : $fila["stock_destino_anterior"];
-            $stock_actual = $fila["stock_destino_actual"] == null ? 0 : $fila["stock_destino_actual"];
-           
+            $datos[] = $fila;
+        }
+        $ultimo = end($datos);
 
-            $descripcion_llanta =""; $marca_llanta=""; $modelo_llanta="";
-            $tyre=$conexion->prepare("SELECT Descripcion, Marca, Modelo FROM llantas WHERE id= ?");
-            $tyre->bind_param('i',$id_llanta);
-            $tyre->execute();
-            $tyre->bind_result($descripcion_llanta, $marca_llanta, $modelo_llanta);
-            $tyre->fetch();
-            $tyre->close();
-
-            if($tipo_remision == 4){
-                $nombre_ubicacion = "NA";
-                $nombre_destino = "NA";
-            }else{
-                $nombre_ubicacion ="";
-                if($id_ubicacion ==0){
-                    $nombre_ubicacion ='Bodega';
-                }else{
-                    $sucu_ubi=$conexion->prepare("SELECT nombre FROM sucursal WHERE id= ?");
-                    $sucu_ubi->bind_param('i',$id_ubicacion);
-                    $sucu_ubi->execute();
-                    $sucu_ubi->bind_result($nombre_ubicacion);
-                    $sucu_ubi->fetch();
-                    $sucu_ubi->close();
-                }
-
-                $nombre_destino ="";
-                $sucu_dest=$conexion->prepare("SELECT nombre FROM sucursal WHERE id= ?");
-                $sucu_dest->bind_param('i',$id_destino);
-                $sucu_dest->execute();
-                $sucu_dest->bind_result($nombre_destino);
-                $sucu_dest->fetch();
-                $sucu_dest->close();
-            }
-
-          $caracteres = mb_strlen($descripcion_llanta);
-            $pdf->SetFontSize(7);
-            if ($caracteres <= 25) {
-              
-                $pdf->Cell(15,10,$cantidad,0,0,'C',1);
-                $pdf->MultiCell(40,5, utf8_decode_($descripcion_llanta),0,'L',1); //$descripcion
-                $pdf->SetY($ejeY);
-                $ejeY = $ejeY + 15;
-                $pdf->SetX(65);
-                $pdf->Cell(20,10, utf8_decode_($modelo_llanta),0,0,'C',1);
-                $pdf->Cell(20,10, utf8_decode_($marca_llanta),0,0,'C',1);
-                $pdf->Cell(23,10,utf8_decode_($nombre_ubicacion),0,0, 'L',1);
-                $pdf->Cell(20,10,utf8_decode_($nombre_destino),0,0, 'L',1);
-                $pdf->Cell(23,10,utf8_decode_($stock_anterior),0,0, 'C',1);
-                $pdf->Cell(20,10,utf8_decode_($stock_actual),0,0, 'C',1);
-                $pdf->Ln(15);
-          
-            }else if ($caracteres > 25 && $caracteres < 45) {
-                
-                $pdf->Cell(15,10,$cantidad,0,0,'C',1);
-                $pdf->MultiCell(40,4, utf8_decode_($descripcion_llanta),0,'L',1);
-                $pdf->SetY($ejeY);
-                $ejeY = $ejeY + 12;
-                $pdf->SetX(65);
-                $pdf->Cell(30,10, utf8_decode_($modelo_llanta),0,0,'L',1);
-                $pdf->Cell(18,10, utf8_decode_($marca_llanta),0,0,'L',1);
-                $pdf->Cell(23,10,utf8_decode_($nombre_ubicacion),0,0, 'L',1);
-                $pdf->Cell(20,10,utf8_decode_($nombre_destino),0,0, 'L',1);
-                $pdf->Cell(23,10,utf8_decode_($stock_anterior),0,0, 'C',1);
-                $pdf->Cell(20,10,utf8_decode_($stock_actual),0,0, 'C',1);
-                $pdf->Ln(15);
-          
-            }else{
-                $pdf->Cell(15,12,$cantidad,0,0,'C',1);
-                $pdf->MultiCell(40,6, utf8_decode_($descripcion_llanta),0,'L',1);
-                $pdf->SetY($ejeY);
-                $ejeY = $ejeY + 15;
-                $pdf->SetX(65);
-                $pdf->Cell(30,12, utf8_decode_($modelo_llanta),0,0,'L',1);
-                $pdf->Cell(18,12, utf8_decode_($marca_llanta),0,0,'L',1);
-                $pdf->Cell(23,12,utf8_decode_($nombre_ubicacion),0,0, 'L',1);
-                $pdf->Cell(20,12,utf8_decode_($nombre_destino),0,0, 'C',1);
-                $pdf->Cell(23,10,utf8_decode_($stock_anterior),0,0, 'C',1);
-                $pdf->Cell(20,10,utf8_decode_($stock_actual),0,0, 'C',1);
-                $pdf->Ln(15);
-            }
-    
-           if($k==12){
-            /* print_r('Hola');
-            die(); */
-            $pdf->AddPage();
-            $pdf->SetFont('Times','B',12);
-            //$pdf->Rect(10, 80, 189, 8, 'F');
-            $pdf->SetDrawColor(194, 34, 16);
-           // $pdf->SetLineWidth(1);
-            $pdf->SetDrawColor(135, 134, 134);
-            $pdf->SetTextColor(36, 35, 28);
-            $pdf->SetFontSize(7);
-            //$pdf->Line(11,95,192,95);
-            $pdf->Cell(15,8,utf8_decode_("Cantidad"),0,0,'C');  
-            $pdf->Cell(40,8,utf8_decode_("Descripción"),0,0, 'L');
-            $pdf->Cell(23,8,utf8_decode_("Modelo"),0,0, 'L');
-            $pdf->Cell(20,8,utf8_decode_("Marca"),0,0, 'C');
-            $pdf->Cell(26,8,utf8_decode_("Ubicación"),0,0, 'C');
-            $pdf->Cell(25,8,utf8_decode_("Destino"),0,0, 'L');
-            $pdf->Cell(23,8,utf8_decode_("Stock anterior"),0,0, 'L');
-            $pdf->Cell(20,8,utf8_decode_("Stock nuevo"),0,0, 'L');
-            $pdf->Ln(0);
-           // $pdf->Line(11,81,196,81);
-            $pdf->Ln(12);
-            $pdf->SetDrawColor(1, 1, 1);
-            $pdf->SetLineWidth(0);
-            $pdf->SetFont('Arial','',10);
-            //$pdf->SetFillColor(236, 236, 236);
-            
-           // $pdf->SetFont('Times','',12);
-            $ejeY = 125;
-           }
-            
-           $k=$k+1;
-           
+        $num_datos = count($datos);
+        foreach ($datos as $fila) {
+            $esUltimo = ($fila === $ultimo);
+            dibujarFilaPDF($pdf, $fila, $conexion, $tipo_remision, $esUltimo, $num_datos);
         }
 
-
-/*CAMBIOSSSSSSSSSSSSSSSSS */
-    $pdf->SetDrawColor(218, 223, 230);
-    $nueva_altura = $ejeY - 100.6;
-    //Dibujando cuadro de detalle gris y linea narjando divisora
-    $pdf->RoundedRect(9.9, $line_height, 188, $nueva_altura, 2, '34', '');
-    $pdf->SetDrawColor(253, 144, 138);
-    $pdf->SetLineWidth(0.5);
-    $pdf->Line(10,$line_height,198,$line_height);
+        
+        if($GLOBALS['paginas_extras']==0){
+            $pdf->SetDrawColor(218, 223, 230);
+            $nueva_altura = $ejeY - 100.6;
+            //Dibujando cuadro de detalle gris y linea narjando divisora
+            $pdf->RoundedRect(9.9, $line_height, 195, $nueva_altura, 2, '34', '');
+            $pdf->SetDrawColor(253, 144, 138);
+            $pdf->SetLineWidth(0.5);
+            $pdf->Line(10,$line_height,205,$line_height);
+        }
+        
+    
         
     }
 
@@ -648,7 +533,7 @@ function cuerpoTabla(){
     $pdf->MultiCell(70,6, utf8_decode_(""),0,0,'L',0);
     $pdf->Ln(4.5);
     $pdf->SetFont('Arial','',8);
-    $pdf->MultiCell(150,3, utf8_decode("Remisión de ingreso por la cantidad de llantas mostradas en el presente documento."),0,0,'C',0);
+    $pdf->MultiCell(150,3, utf8_decode_("Remisión de ingreso por la cantidad de llantas mostradas en el presente documento."),0,0,'C',0);
     
     $ejeY = $ejeY +17;
     $pdf->SetY($ejeY);
@@ -663,71 +548,6 @@ function cuerpoTabla(){
     $pdf->SetFont('Arial','B',11);
     
 
-
-    /*
-
-    
-    $pdf->Cell(129,6,'',0,0);
-    $pdf->SetFont('Arial','B',10);
-    $pdf->SetTextColor(0, 32, 77);
-    $pdf->Cell(30,6,'IVA',0,0, 'R');
-    $pdf->SetTextColor(1, 1, 1);
-    $pdf->SetFont('Courier','',10);
-    $pdf->Cell(30,6,'$1510,00',0,0, 'C',1);
-    $pdf->Ln(7);*/
-
-    /* $pdf->Cell(129,6,'',0,0);
-    $pdf->SetFont('Arial','B',12);
-    $pdf->SetTextColor(0, 32, 77);
-    $pdf->Cell(30,8,'Total',0,0, 'R');
-    $pdf->SetTextColor(1, 1, 1);
-    $pdf->SetFont('Courier','',12);
-    $pdf->Cell(30,8,"0",0,0, 'C',1);
-    $pdf->Ln(20); */
-
-
-    //Importe y observaciones
-    /* $pdf->SetFont('Times','B',12);
-    $pdf->Cell(189,6,'Importe total con letra: ',0,0);
-    $pdf->Ln(8);
-    $pdf->SetFont('Courier','',12);
-    $formatTotal = $GLOBALS["formatTotal"];
-    $pdf->Cell(180,8,utf8_decode_($formatTotal),0,0,'L',1);
-    $pdf->Ln(15); */
-
-   /*  $pdf->SetFont('Times','B',12);
-    $pdf->Cell(189,6,'Oservaciones: ',0,0);
-    if(isset($GLOBALS["comentario"])){
-        $observacion = $GLOBALS["comentario"];
-    }else{
-        $observacion ="";
-    }
-    $pdf->Ln(8);
-    $pdf->SetFont('Courier','',12);
-    $pdf->MultiCell(140,6,utf8_decode_($observacion),0,'L',1);
-    $pdf->Ln(52); */
-
-  /*   $pdf->SetTextColor(0, 32, 77);
-    $pdf->SetFont('Arial','B',5);
-    $text = 'GARANTÍA DE UN AÑO CONTRA DEFECTO DE FABRICA A PARTIR DE ESTA FECHA';
-    $text2 = 'FAVOR DE PRESENTAR ESTE COMPROBANTE DE VENTA PARA HACER VALIDO LA GARANTÍA';
-    $pdf->Cell(189,6,utf8_decode_($text),0,0,'L');
-    $pdf->Ln(2);
-    $pdf->Cell(189,6,utf8_decode_($text2),0,0,'L'); */
-   
-    
-/*     $pdf->Ln(10);
-
-    $pdf->SetTextColor(1, 1, 1);
-    $pdf->SetFont('Arial','B',10);
-   // $pdf->Cell(185,6,utf8_decode_("Gracias por su compra"),0,0,'C');
-    $pdf->Ln(18);
-    $pdf->Line(78,268,130,268);
-    $pdf->SetTextColor(1, 1, 1);
-    $pdf->SetFont('Arial','B',10);
-    $pdf->Cell(193,6,utf8_decode_("Recibido"),0,0,'C'); */
-    
-   /*  $pdf->Image('../../../vistas/dist/img/QR_code.png',20,238,35); */
     $pdf->SetDrawColor(253, 144, 138);
     $pdf->SetLineWidth(1);
     $pdf->Line(10,285,200,285);
@@ -738,6 +558,111 @@ function cuerpoTabla(){
 cuerpoTabla();
 
 
+function dibujarFilaPDF($pdf, $fila, $conexion, $tipo_remision, $esUltimo, $num_datos) {
+    $cantidad = $fila["cantidad"];
+    $id_llanta = $fila["id_llanta"];
+    $id_ubicacion= $fila["id_ubicacion"];
+    $id_destino = $fila["id_destino"];
+    $stock_anterior = $fila["stock_destino_anterior"] ?? 0;
+    $stock_actual = $fila["stock_destino_actual"] ?? 0;
+
+    // --- Llanta ---
+    $descripcion_llanta =""; $marca_llanta=""; $modelo_llanta="";
+    $tyre=$conexion->prepare("SELECT Descripcion, Marca, Modelo FROM llantas WHERE id= ?");
+    $tyre->bind_param('i',$id_llanta);
+    $tyre->execute();
+    $tyre->bind_result($descripcion_llanta, $marca_llanta, $modelo_llanta);
+    $tyre->fetch();
+    $tyre->close();
+
+    // --- Ubicación y destino ---
+    if($tipo_remision == 4){
+        $nombre_ubicacion = "NA";
+        $nombre_destino = "NA";
+    } else {
+        $nombre_ubicacion = ($id_ubicacion == 0) ? "Bodega" : "";
+        if ($id_ubicacion != 0) {
+            $sucu_ubi=$conexion->prepare("SELECT nombre FROM sucursal WHERE id= ?");
+            $sucu_ubi->bind_param('i',$id_ubicacion);
+            $sucu_ubi->execute();
+            $sucu_ubi->bind_result($nombre_ubicacion);
+            $sucu_ubi->fetch();
+            $sucu_ubi->close();
+        }
+        $nombre_destino='';
+
+        $sucu_dest=$conexion->prepare("SELECT nombre FROM sucursal WHERE id= ?");
+        $sucu_dest->bind_param('i',$id_destino);
+        $sucu_dest->execute();
+        $sucu_dest->bind_result($nombre_destino);
+        $sucu_dest->fetch();
+        $sucu_dest->close();
+    }
+
+    // --- Calcular altura de la fila ---
+    $pdf->SetFontSize(7);
+    $x = $pdf->GetX();
+    $y = $pdf->GetY();
+
+    //$pdf->MultiCell(40, 4, utf8_decode_($descripcion_llanta), 0, 'L');
+    $altura = max(10, $pdf->GetY() - $y);
+    $pdf->SetXY($x, $y);
+
+    // --- Salto de página si no cabe ---
+    if ($pdf->GetY() + $altura > 270) {
+
+        $pdf->SetDrawColor(218, 223, 230);
+        $pdf->RoundedRect(9.9, 117, 195, 157, 2, '34', '');
+        $pdf->SetDrawColor(253, 144, 138);
+        $pdf->SetLineWidth(0.5);
+        $pdf->Line(10, 117,205, 117);
+        $GLOBALS['paginas_extras']=1;
+        $pdf->AddPage();
+        // Redibujar cabecera
+        $pdf->SetFont('Exo2-Bold','B',10);
+        $pdf->SetDrawColor(135, 134, 134);
+        $pdf->SetTextColor(36, 35, 28);
+        $pdf->SetFontSize(7);
+
+        $pdf->Cell(15,8,utf8_decode_("Cantidad"),0,0,'C');  
+        $pdf->Cell(70,8,utf8_decode_("Descripción "),0,0, 'L');
+        $pdf->Cell(20,8,utf8_decode_("Marca"),0,0, 'C');
+        $pdf->Cell(26,8,utf8_decode_("Ubicación"),0,0, 'C');
+        $pdf->Cell(25,8,utf8_decode_("Destino"),0,0, 'L');
+        $pdf->Cell(23,8,utf8_decode_("Stock anterior"),0,0, 'L');
+        $pdf->Cell(20,8,utf8_decode_("Stock nuevo"),0,0, 'L');
+
+        $pdf->Ln(12);
+        $pdf->SetFont('Arial','',7);
+        $y =  120;
+    }
+
+    // --- Imprimir fila ---
+    $pdf->Cell(15, 4, $cantidad, 0, 0, 'C');
+    $pdf->MultiCell(70, 4, utf8_decode_($descripcion_llanta), 0, 'L');
+    $pdf->SetXY($x + 85, $y);
+
+    $pdf->Cell(20, $altura, utf8_decode_($marca_llanta), 0, 0, 'C');
+    $pdf->Cell(26, $altura, utf8_decode_($nombre_ubicacion), 0, 0, 'C');
+    $pdf->Cell(25, $altura, utf8_decode_($nombre_destino), 0, 0, 'L');
+    $pdf->Cell(23, $altura, $stock_anterior, 0, 0, 'C');
+    $pdf->Cell(20, $altura, utf8_decode_($stock_actual), 0, 0, 'C');
+    $pdf->Ln($altura);
+
+ 
+    if ($esUltimo && $num_datos>1) {
+        // Lógica especial para el último
+        $pdf->SetDrawColor(218, 223, 230);
+        $nueva_altura = $pdf->getY()-110;
+        //Dibujando cuadro de detalle gris y linea narjando divisora
+        $pdf->RoundedRect(9.9, 117, 195, $nueva_altura, 2, '34', '');
+        $pdf->SetDrawColor(253, 144, 138);
+        $pdf->SetLineWidth(0.5);
+        $pdf->Line(10,117,205,117);
+    }
+
+
+}
 
 
 
