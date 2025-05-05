@@ -1,34 +1,35 @@
 <!-- Sidebar -->
 <?php
 $flag = isset($_GET['nav']) ? $_GET['nav'] : 0;
-$claseInicio = "";
-$claseNuevaVenta = "";
-$claseNuevaCotizacion = "";
-$claseNuevaPedido = "";
-$claseHistorial = "";
-$showHistorial = "";
-$claseVentas = "";
-$claseCotizaciones = "";
-$claseGastos = "";
-$claseCustomer = "";
-$showClientes = "";
-$claseClientes = "";
-$claseCreditos = "";
-$claseToken = "";
-$showMisLlantas = "";
-$claseMisLlantas = "";
-$claseExistencia = "";
+$claseInicio = '';
+$claseNuevaVenta = '';
+$claseNuevaCotizacion = '';
+$claseNuevaPedido = '';
+$claseHistorial = '';
+$showHistorial = '';
+$claseVentas = '';
+$claseCotizaciones = '';
+$claseGastos = '';
+$claseCustomer = '';
+$showClientes = '';
+$claseClientes = '';
+$claseCreditos = '';
+$claseToken = '';
+$showMisLlantas = '';
+$claseMisLlantas = '';
+$claseExistencia = '';
 $claseApartados = '';
-$claseServicios = "";
+$claseServicios = '';
 $claseGarantias = '';
 $claseMovimientos = '';
 $showLogistica='';
 $claseRequerimientos = '';
 $claseHistorialRequerimientos ='';
-$claseMovimientosClientes = "";
+$claseMovimientosClientes = '';
+$claseEmpleados='';
 $user_jerarquia = $_SESSION['rol'];
 $user_id = $_SESSION['id_usuario'];
-
+ 
 
 
 switch ($flag) {
@@ -112,6 +113,9 @@ switch ($flag) {
     case 'cuentas-por-pagar':
         $claseCuentasPorPagar = 'active';
         break;
+    case 'empleados':
+            $claseEmpleados = 'active';
+        break;    
     case 'requerimientos':
         $claseRequerimientos = 'active';
         $showLogistica = 'show';
@@ -162,7 +166,7 @@ switch ($flag) {
     if ($user_jerarquia == 1 || $user_jerarquia == 2 || $user_jerarquia == 3 || $_SESSION['id_usuario'] ==24) { ?>
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item <?php echo $claseNuevaVenta ?> rol-4">
-            <a class="nav-link" href="punto-venta.php?id=0&nav=nueva_venta">
+            <a class="nav-link" href="punto-venta.php?id=0&nav=nueva_venta&venta_tp=1">
                 <i class="fas fa-fw fa-cart-plus"></i>
                 <span>Nueva venta</span>
             </a>
@@ -437,6 +441,13 @@ if ($user_jerarquia == 1 || $_SESSION['id_usuario'] ==7 || $_SESSION['id_usuario
             <span>Proveedores</span>
         </a>
     </li> -->
+
+    <li class="nav-item <?php echo $claseEmpleados; ?>">
+        <a class="nav-link" href="empleados.php?id=0&nav=empleados">
+            <i class="fas fa-fw fa-user"></i>
+            <span>Empleados</span>
+        </a>
+    </li>
     <?php } 
     
 ?>

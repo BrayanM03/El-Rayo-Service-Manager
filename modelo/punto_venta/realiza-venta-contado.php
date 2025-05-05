@@ -25,6 +25,10 @@ if (isset($_POST)) {
     $id_cliente =  $_POST['id_cliente'];
     $total =   0;
 
+    if(!$id_sucursal || $id_cliente==0 || !$id_cliente){
+        responder(false, 'El id del cliente o sucursal esta en 0, no se hizó la venta. Intente recargar la pagina: Control + shift + R', 'warning', [], true);
+    }
+
     //Obtenemos datos de la sucursal
     $querySuc = "SELECT nombre, hora_corte_normal, hora_corte_sabado FROM sucursal WHERE id =?";
     $resp = $con->prepare($querySuc);

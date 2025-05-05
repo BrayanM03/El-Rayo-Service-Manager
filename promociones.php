@@ -111,6 +111,7 @@ if (!isset($_SESSION['id_usuario'])) {
                                 <select style="width:100%" class="form-control" id="busquedaLlantas" value="" name="search"></select>
                             </div>
                         </div>
+                       
                         <div class="col-4 col-md-2">
                             <div class="form-group">
                                 <label for="precio_promocion">Precio de promoción</label>
@@ -125,6 +126,38 @@ if (!isset($_SESSION['id_usuario'])) {
                         </div>
                     </div>
 
+                    <div class="row">
+                        <div class="col-4 col-md-2">
+                            <div class="form-group">
+                                <label for="costo">Costo</label>
+                                <input type="number" class="form-control" id="costo" placeholder="0.00" disabled>
+                            </div>
+                        </div>
+                        <div class="col-4 col-md-2">
+                            <div class="form-group">
+                                <label for="precio_lista">Precio lista</label>
+                                <input type="number" class="form-control" id="precio_lista" placeholder="0.00" disabled>
+                            </div>
+                        </div>
+                        <div class="col-4 col-md-2">
+                            <div class="form-group">
+                                <label for="precio_descuento">Precio descuento</label>
+                                <input type="number" class="form-control" id="precio_descuento" placeholder="0.00" disabled>
+                            </div>
+                        </div>
+                        <div class="col-4 col-md-2">
+                            <div class="form-group">
+                                <label for="precio_mayoreo">Precio mayoreo</label>
+                                <input type="number" class="form-control" id="precio_mayoreo" placeholder="0.00" disabled>
+                            </div>
+                        </div>
+                        <div class="col-4 col-md-2">
+                            <div class="form-group">
+                                <label for="stock_total">Stock total</label>
+                                <input type="number" class="form-control" id="stock_total" placeholder="0" disabled>
+                            </div>
+                        </div>
+                    </div>
 
                     <table id="inventario-pedro" class="table table-striped table-bordered table-hover">
                     </table>

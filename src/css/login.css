@@ -6,11 +6,11 @@ body{
    
     /* backdrop-filter: blur(10px); */
   /*-webkit-backdrop-filter: blur(10px);  */
-    //background-image: url(../img/bb.jpeg);
+    /* //background-image: url(../img/bb.jpeg); */
     background-image: url(../img/moon.jpg);
-   // background-color: #fee970;
+   /* // background-color: #fee970; */
     display: flex;
-    //background-size: contain;
+    background-size: contain;
     background-size: cover;
     flex-direction: column;
     justify-content: center;
@@ -61,10 +61,11 @@ margin: 0px 50px;
 
 .simple-login-container .btn-login{
    /*  background-color:#36b9cc; */
-   background-color: #da843c;
+   background-color: #7f8cc3;
     color:#fff;
     margin-top: 40px;
 }
+
 a{
     color:#fff;
 }

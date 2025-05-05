@@ -2054,7 +2054,7 @@ function selectorPrecio(e, this_e, codigo){
         
       break;
     case 'tarjeta-precio':
-      tipo_cliente=  localStorage.getItem("tipo_cliente");
+      tipo_cliente=  tipoCliente;
       if(tipo_cliente==1){
       tipo_precio='mayoreo'
       }else{

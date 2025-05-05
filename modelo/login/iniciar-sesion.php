@@ -29,7 +29,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     if ($rows > 0 ) {
         $query_mostrar->bind_result($id, $nombre, $apellidos, $user, $password, $cumple, 
         $rol, $numero, $direccion, $sucursal, $id_sucursal, $aperturado, $comision, $comision_credito, $id_departamento,
-    $intentos_fallidos, $ultima_falla, $bloqueado_hasta);
+    $intentos_fallidos, $ultima_falla, $bloqueado_hasta, $estatus);
         $query_mostrar->fetch();
 
         // Verificar si el usuario está temporalmente bloqueado

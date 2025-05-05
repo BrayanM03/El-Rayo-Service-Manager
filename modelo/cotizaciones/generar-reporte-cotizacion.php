@@ -83,7 +83,7 @@ function Header()
         $titulo_sucursal = "Llantas y Servicios 'EL Rayo'";
         $direccion = "Avenida Pedro Cardenas KM5 No.207";
         $colonia = "Col. Francisco Castellanos";
-        $telefono = "8688244404";
+        $telefono = "8682348049";
         $rfc = "SARK9104063L6";
         $this->Image('../../src/img/logo.jpg',20,10,25);
         

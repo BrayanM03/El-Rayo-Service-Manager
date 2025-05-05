@@ -1,0 +1,56 @@
+.contenedor-dias{
+    margin-top: 1rem;
+    display:flex;
+    justify-content: center;
+}
+
+.contenedor-horas{
+    margin-top: .7rem;
+    width: 100%;
+}
+
+.contenedor-dias ol{
+    display:flex;
+    flex-direction: row;
+    list-style: none;
+}
+
+
+.contenedor-dias ol li{
+    border: 1px solid #d1d3e0;
+    padding: 1rem;
+}
+
+.contenedor-dias ol li:hover{
+    border: 1px solid #ef6d31;
+    background-color: #f8d8c9;
+    color: #ef6d31;
+    cursor: pointer;
+}
+
+#primer-dia{
+    border-radius: 8px 0 0 8px;
+}
+
+#ultimo-dia{
+    border-radius: 0 8px 8px 0;
+}
+
+.letra-dia{
+    color: #ef6d31;
+}
+
+.dia_seleccionado{
+    border: 1px solid #ef6d31 !important;
+    background-color: #f5ddd2;
+    color: #ef6d31;
+}
+
+.sin-elementos{
+    margin-top: 2rem;
+    background-color: white;
+    border-radius: 6px;
+    border: 1px solid #d1d3e0;
+    padding: 1rem;
+    width: 100%;
+}

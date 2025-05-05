@@ -1,0 +1,224 @@
+.contenedor-calendario{
+    position: absolute;
+    margin-top: 16.5rem;
+    top: 50%;
+    transform-origin: top center;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+    z-index: 1000;
+
+   /* min-height: 400px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   background-color: transparent;
+   overflow: hidden;
+   border-radius: 10px;
+   box-shadow: 0 0 10px rgba(0,0,0,0.3); */
+}
+
+.calendar-wrapper {
+    position: relative;
+    width: 850px; /* Lo ajustamos al tamaño real del calendario */
+    height: 410px; /* Asegura que el calendario no se vea antes de la animación */
+    overflow: hidden;
+}
+
+.calendar{
+    /* margin-top: 2px;
+    margin-left: 2px; */
+    position: absolute;
+    left: 0; /* Lo iniciamos fuera de la pantalla */
+    width: 800px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    background: #fff;
+
+}
+
+/* Animación de entrada */
+@keyframes slide-in {
+    100% { left: 0; }
+}
+
+/* Animación para moverse hacia la izquierda (siguiente mes) */
+@keyframes slide-left {
+    0% { left: 0; opacity: 1; }
+    100% { left: -850px; opacity: 0; }
+}
+
+/* Animación para moverse hacia la derecha (mes anterior) */
+@keyframes slide-right {
+    0% { left: 0; opacity: 1; }
+    100% { left: 850px; opacity: 0; }
+}
+
+/* Nueva posición del mes */
+@keyframes slide-in-left {
+    0% { left: 850px; opacity: 0; }
+    100% { left: 0; opacity: 1; }
+}
+
+@keyframes slide-in-right {
+    0% { left: -850px; opacity: 0; }
+    100% { left: 0; opacity: 1; }
+}
+
+.calendar .header-calendar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.monthYear{
+    text-align: center;
+    font-weight: 600;
+    width: 150px;
+}
+
+.header-calendar button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 50%;
+    background: #fff;
+    cursor:pointer; 
+    width: 40px;
+    height: 40px;
+    box-shadow: 0 0 4px rgba(0,0,0,0.2);
+}
+
+.days{
+    display: grid;
+    grid-template-columns: repeat(7,1fr);
+}
+
+.day{
+    text-align: center;
+    padding: 5px;
+    color: #999FA6;
+    font-weight: 500;
+}
+
+.dates{
+    display: grid;
+    grid-template-columns: repeat(7,1fr);
+    gap: 5px
+}
+
+.date{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 10px;
+    margin: auto;
+    cursor: pointer;
+    font-weight: 600;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    transition: 0.2s;
+}
+
+.date:hover,
+.date.active{
+    background-color: rgb(255, 221, 216);
+    color: #fff;
+}
+
+.date.inactive{
+    color: #d2d2d2;
+}
+
+.date.inactive:hover{
+    color: #fff;
+}
+
+/* Primer día seleccionado */
+.selected-start {
+    background-color: lightgreen;
+    color: white;
+    border-radius: 50%;
+}
+
+.selected-end {
+    background-color: tomato;
+    color: white;
+    border-radius: 50%;
+}
+
+.selected-range {
+    background-color: rgba(0, 255, 0, 0.412);
+    color: black;
+}
+
+.hover-range {
+    background-color: rgba(0, 255, 0, 0.2);
+}
+
+.today {
+    background-color: tomato;
+    color: white;
+    font-weight: bold;
+    border-radius: 50%;
+}
+
+
+/*Efectos burbuja*/
+
+/* Mostrar con efecto burbuja */
+.contenedor-calendario.mostrar {
+    transform: translate(-25%, -47%) scale(1);
+    transition-duration: 240ms;
+    opacity: 1;
+}
+
+/* Botón de cerrar */
+.btn-cerrar {
+    position: absolute;
+    top: 13px;
+    right: 15px;
+    background-color: rgba(252, 178, 165, 0.799);
+    color: white !important;
+    border: none;
+    padding: 10px 9px;
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s;
+}
+
+.btn-reset {
+    position: absolute;
+    top: 80px;
+    right: 15px;
+    background-color: rgba(252, 178, 165, 0.799);
+    color: white !important;
+    border: none;
+    padding: 11px 7px;
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s;
+}
+
+.btn-cerrar:hover,.btn-reset:hover  {
+    background-color: tomato;
+}
