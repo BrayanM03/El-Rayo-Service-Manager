@@ -509,7 +509,8 @@ $.ajax({
 
 }
 
-depurarTabla();
+//depurarTabla();
+traerDetalleCambio();
 function depurarTabla() {
   let id_usuario = $("#btn-mover").attr("id_usuario");
 $.ajax({
