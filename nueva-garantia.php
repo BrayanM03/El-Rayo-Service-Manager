@@ -110,11 +110,11 @@ if ($_SESSION['rol'] == 4) {
         .delete-thumbnail:hover {
             background-color: orange;
         }
-        #my-awesome-dropzone{
+        .dropzone{
             border: 2px dashed #c8c8c8;
             color: #b7b9cc
         }
-        #my-awesome-dropzone:hover{
+        .dropzone:hover{
             border: 2px dashed #82addc;
             color: #82addc;
         }
@@ -271,20 +271,26 @@ if ($_SESSION['rol'] == 4) {
                                     <select class="form-control" id="search"></select>
                                 </div>
                                 <div class="col-12 col-md-3">
-                                    <label for="">DOT</label>
-                                    <input class="form-control" id="dot-llanta">
+                                    <label for="">Serie / Lote</label>
+                                    <input class="form-control" id="serie-llanta" placeholder="Escribe serie/lote...">
                                 </div>
                             </div>
 
                             <div class="row mt-3 justify-content-center">
-                                <div class="col-12 col-md-3">
+                            <div class="col-12 col-md-2">
+                                    <label for="">DOT fecha producción</label>
+                                    <input class="form-control" type="text" placeholder="Escribe DOT producción..." id="dot-prod-llanta">
+                                </div>
+                                <div class="col-12 col-md-2">
+                                    <label for="">DOT fabricación</label>
+                                    <input class="form-control" type="text" placeholder="Escribe DOT fabricación..." id="dot-fab-llanta">
+                                </div>
+                                <div class="col-12 col-md-2">
                                     <label for="">Cantidad</label>
                                     <input class="form-control" type="number" placeholder="0" id="cantidad-llantas">
                                 </div>
                                 <div class="col-12 col-md-2 mt-4">
-                                    <div class="btn btn-info" id="btn-agregar-llanta" onclick="agregarLlantaSinVenta()">Agregar</div>
-                                </div>
-                                <div class="col-12 col-md-3">
+                                    <div class="btn btn-info mt-3" id="btn-agregar-llanta" onclick="agregarLlantaSinVenta()">Agregar</div>
                                 </div>
                             </div>
                             </div>
@@ -302,13 +308,15 @@ if ($_SESSION['rol'] == 4) {
                                                 <td>Descripción</td>
                                                 <td>Marca</td>
                                                 <td>Precio</td>
-                                                <td>DOT</td>
+                                                <td>Serie/Lote</td>
+                                                <td>DOT producción</td>
+                                                <td>DOT Fabricación</td>
                                                 <td>Acción</td>
                                             </tr>
                                         </thead>
                                         <tbody id="detalle-garantia" style="background-color: white;">
                                             <tr>
-                                                <td colspan="8" class="text-center">
+                                                <td colspan="10" class="text-center">
                                                     <small>No hay elementos en la tabla</small>
                                                 </td>
                                             </tr>
@@ -332,11 +340,52 @@ if ($_SESSION['rol'] == 4) {
                             <div class="row mt-3 justify-content-center">
                                 <div class="col-8">
                                 <label><b>Evidencia fotografica</b></label>
-                                   <span>Evidencia del daño de la llanta, favor de anexar por fuera y por dentro del neumatico asi como
-                                    distintos angulos requeridos.</span>
-                                <div class="dropzone" id="my-awesome-dropzone">
-                                    <div class="dz-message" data-dz-message><span>Haz click o suelta tus documentos aquí (.jpg, .jpeg, .png)</span></div>
-                                </div>
+                                   <span>Evidencia del daño de la llanta, favor de anexar 1 foto por campo y adjuntar la foto requerida para cada uno.</span>
+
+                                   <div class="container">
+  <div class="row g-3">
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+      <div class="dropzone" id="foto-piso">
+        <div class="dz-message" data-dz-message><h5><b>Foto del piso</b></h5></div>
+        <div class="dz-message" data-dz-message><span>Haz click o suelta tus documentos aquí (.jpg, .jpeg, .png)</span></div>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+      <div class="dropzone" id="foto-daño">
+        <div class="dz-message" data-dz-message><h5><b>Foto del daño</b></h5></div>
+        <div class="dz-message" data-dz-message><span>Haz click o suelta tus documentos aquí (.jpg, .jpeg, .png)</span></div>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+      <div class="dropzone" id="foto-costado">
+        <div class="dz-message" data-dz-message><h5><b>Foto del costado</b></h5></div>
+        <div class="dz-message" data-dz-message><span>Haz click o suelta tus documentos aquí (.jpg, .jpeg, .png)</span></div>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+      <div class="dropzone" id="remanente">
+        <div class="dz-message" data-dz-message><h5><b>Remanente (mm)</b></h5></div>
+        <div class="dz-message" data-dz-message><span>Haz click o suelta tus documentos aquí (.jpg, .jpeg, .png)</span></div>
+      </div>
+    </div>
+    </div>
+    <div class="row mt-3 g-3">
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+      <div class="dropzone" id="foto-dot">
+        <div class="dz-message" data-dz-message><h5><b>Foto DOT</b></h5></div>
+        <div class="dz-message" data-dz-message><span>Haz click o suelta tus documentos aquí (.jpg, .jpeg, .png)</span></div>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+      <div class="dropzone" id="foto-no-serie">
+        <div class="dz-message" data-dz-message><h5><b>Foto No. Serie</b></h5></div>
+        <div class="dz-message" data-dz-message><span>Haz click o suelta tus documentos aquí (.jpg, .jpeg, .png)</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+                               
                                 </div>
                             </div>
 
@@ -433,30 +482,29 @@ if ($_SESSION['rol'] == 4) {
     <script src="src/js/bootstrap-select.min.js"></script>
     <script src="src/js/garantias.js"></script>
     <script>
-         myDropzone = new Dropzone("#my-awesome-dropzone", { 
-            addRemoveLinks: true,
-            url: "#",
-            autoProcessQueue: false ,
-            removedfile: function(file) {
+        Dropzone.autoDiscover = false;
+
+        const dropzones = {}
+        document.querySelectorAll('.dropzone').forEach((dzElement) => {
+            const id = dzElement.id;
+        console.log(dzElement.id);
+           dropzones[id] = new Dropzone('#'+dzElement.id, {
+                addRemoveLinks: true,
+                url: "#",
+                autoProcessQueue: false,
+                removedfile: function(file) {
                     file.previewElement.remove();
-                    validarFormulario()
-            },
-            accept: function(file, done) {
-             done(); //Primero acepta el archivo (para que se visualize en la area Dropzone)
-             validarFormulario(); //Luego valida el formulario jeje
-            }
+                    validarFormulario();
+                },
+                accept: function(file, done) {
+                    done(); // Mostrar el archivo
+                    validarFormulario(); // Validar el formulario
+                }
             });
+        });
 
-            const input = document.getElementById('folio');
-            // Agregamos un evento 'keydown' al input
-            input.addEventListener('keydown', (event) => {
 
-            // Si la tecla presionada es Enter (código 13)
-            if (event.keyCode === 13) {
-                // Ejecutamos la función
-                buscarRay()
-            }
-            });
+            
     </script>
 </body>
 

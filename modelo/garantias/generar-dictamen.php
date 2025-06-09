@@ -567,15 +567,31 @@ function cuerpoTabla(){
     $pdf->Line(10,285,200,285);
 
        //Imagenes
-    $pdf->Ln(110);
+    $pdf->Ln(100);
+    $pdf->AddPage();
     $pdf->Cell(40,10,'Evidencia fotografica',0,0, 'L');
-
-    $img_array = $GLOBALS["data_img"];
+    $pdf->Ln(8);
+    
+    $img_array = $GLOBALS['data_img'];
     $m_left = 10;
-    $altura_y = 200;
+    $altura_y = 75;
+    $cont=0;
+    $pdf->SetFont('Arial','',11);
+    $tipos_img = array(0=>'Foto del piso', 1=>'Foto del daño', 2=>'Foto del costado', 3=>'Remanente(mm)',
+    4=>'Foto DOT', 5=>'Foto No. Serie');
+    
+  
     foreach ($img_array as $key => $value) {
-        $pdf->Image('../../src/docs/garantias/'.$GLOBALS['id_garantia'].'/'.$value['ruta'],$m_left,$altura_y,43);
+
+        if($cont==3){
+        $m_left=10;
+        $altura_y = 158;
+        $pdf->Ln(85);
+        }
+        $pdf->Cell(50,9,utf8_decode_($tipos_img[$value['tipo']]),0,0, 'L');
+        $pdf->Image('../../src/docs/garantias/'.$GLOBALS['id_garantia'].'/'.$value['ruta'],$m_left,$altura_y,45);
         $m_left+=50;
+        $cont++;
     }
     
     $pdf->Output("Remision " . $_GET["id"] .".pdf", "I");

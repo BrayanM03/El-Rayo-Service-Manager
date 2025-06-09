@@ -35,7 +35,9 @@ function buscarRay() {
                                 <td>${element.Descripcion}</td>
                                 <td>${element.Marca}</td>
                                 <td>${element.Precio}</td>
-                                <td><input placeholder="Escribe el DOT de la llanta" value="" class="form-control" id="dot_llanta_${element.id}"></td>
+                                <td><input placeholder="Numero de serie" value="" class="form-control" id="no_serie_${element.id}"></td>
+                                <td><input placeholder="DOT fecha de producción" value="" class="form-control" id="dot_prod_${element.id}"></td>
+                                <td><input placeholder="DOT de fabricación" value="" class="form-control" id="dot_fab_${element.id}"></td>
                                 <td><div class="btn btn-danger" onclick="retirarLlanta(${element.id})"><span class="fa fa-trash"></span></div></td>
                             </tr>
                         `);
@@ -146,12 +148,20 @@ function registrarGarantia() {
       let descripcion = celdas[3].textContent;
       let marca = celdas[4].textContent;
       let precio = celdas[5].textContent;
-      let dot = celdas[6].getElementsByTagName("input")[0].value; // Obtén el valor del input en la segunda celda
+      let serie = celdas[6].getElementsByTagName("input")[0].value; // Obtén el valor del input en la segunda celda
+      let dot_produccion = celdas[7].getElementsByTagName("input")[0].value; // Obtén el valor del input en la segunda celda
+      let dot_fabricacion = celdas[8].getElementsByTagName("input")[0].value; // Obtén el valor del input en la segunda celda
 
-      if(dot.length<1){
+      if(serie.length<1){
+        toastr.error(`Ingresa una serie en la llanta: ${descripcion}`, 'ERROR' ); 
+        return false;
+      }/* if(dot.length<1){
         toastr.error(`Ingresa un DOT en la llanta: ${descripcion}`, 'ERROR' ); 
         return false;
-      }else{
+      }if(dot.length<1){
+        toastr.error(`Ingresa un DOT en la llanta: ${descripcion}`, 'ERROR' ); 
+        return false;
+       }*/else{
         datos.push({
           codigo: codigo,
           numero: numero,
@@ -159,7 +169,9 @@ function registrarGarantia() {
           descripcion: descripcion,
           marca: marca,
           precio: precio,
-          dot: dot
+          serie: serie,
+          dot: dot_fabricacion,
+          dot_produccion: dot_produccion
         });
       }
     }
@@ -180,16 +192,46 @@ function registrarGarantia() {
 
       //Nuevo codigo Dropzone
       // Recorrer cada input y select
-      if (myDropzone.getQueuedFiles().length > 0) {
+      for (const dzId in dropzones) {
+        if (dropzones[dzId].getQueuedFiles().length > 0) {
+          dropzones[dzId].processQueue();
+        }
+      }
+     /*  if (myDropzone.getQueuedFiles().length > 0) {
         // Procesar los archivos subidos
         myDropzone.processQueue();
-      }
+      } */
       // Obtener archivos de Dropzone (si estás usando Dropzone.js)
-      const dropzone = Dropzone.forElement("#my-awesome-dropzone");
+      const dropzoneFotoPiso = Dropzone.forElement("#foto-piso");
+      const dropzoneFotoDaño = Dropzone.forElement("#foto-daño");
+      const dropzoneFotoCostado = Dropzone.forElement("#foto-costado");
+      const dropzoneRemanente = Dropzone.forElement("#remanente");
+      const dropzoneDot = Dropzone.forElement("#foto-dot");
+      const dropzoneSerie = Dropzone.forElement("#foto-no-serie");
       
       // Agregar cada archivo de Dropzone al FormData
-      dropzone.files.forEach((file, index) => {
-        formData.append('file_' + index, file);
+      dropzoneFotoPiso.files.forEach((file, index) => {
+        formData.append('file_' + 0, file);
+      });
+
+      dropzoneFotoDaño.files.forEach((file, index) => {
+        formData.append('file_' + 1, file);
+      });
+
+      dropzoneFotoCostado.files.forEach((file, index) => {
+        formData.append('file_' + 2, file);
+      });
+
+      dropzoneRemanente.files.forEach((file, index) => {
+        formData.append('file_' + 3, file);
+      });
+
+      dropzoneDot.files.forEach((file, index) => {
+        formData.append('file_' + 4, file);
+      });
+
+      dropzoneSerie.files.forEach((file, index) => {
+        formData.append('file_' + 5, file);
       });
 /* 
       formData.append('comprobante', file); */
@@ -793,7 +835,9 @@ function agregarLlantaSinVenta(){
   let descripcion = btn_add.attr('descripcion')
   let marca = btn_add.attr('marca')
   let precio = btn_add.attr('precio')
-  let dot = $("#dot-llanta").val()
+  let serie = $("#serie-llanta").val()
+  let dot_produccion = $("#dot-prod-llanta").val()
+  let dot_fabricacion = $("#dot-fab-llanta").val()
   let cantidad = $("#cantidad-llantas").val()
 
   let response =[{
@@ -813,7 +857,9 @@ function agregarLlantaSinVenta(){
     <td>${element.Descripcion}</td>
     <td>${element.Marca}</td>
     <td>${element.Precio}</td>
-    <td><input placeholder="Escribe el DOT de la llanta" value="" class="form-control" id="dot_llanta_${element.id}"></td>
+    <td><input placeholder="Numero de serie" value="${serie}" class="form-control" id="no_serie_${element.id}"></td>
+    <td><input placeholder="DOT fecha de producción" value="${dot_produccion}" class="form-control" id="dot_prod_${element.id}"></td>
+    <td><input placeholder="DOT de fabricación" value="${dot_fabricacion}" class="form-control" id="dot_fab_${element.id}"></td>
     <td><div class="btn btn-danger" onclick="retirarLlanta(${element.id})"><span class="fa fa-trash"></span></div></td>
     </tr>
     `);         
@@ -832,10 +878,11 @@ function load(flag) {
 
 //Validacion de los documentos
 function validar_archivos_adjuntos(){
-  if (myDropzone.getQueuedFiles().length > 0) {
-   return true;
-  }else{
-    return false;
+  for (const dzId in dropzones) {
+    if (dropzones[dzId].getQueuedFiles().length === 0) {
+      return false;
+    }
   }
+  return true;
 }
 

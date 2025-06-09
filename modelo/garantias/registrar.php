@@ -40,16 +40,18 @@ if(isset($_POST)) {
                 $descripcion= $value->descripcion;
                 $marca = $value->marca;
                 $precio = $value->precio;
-                $dot = $value->dot;
+                $serie = $value->serie;
+                $dot_fabricacion = $value->dot;
+                $dot_produccion = $value->dot_produccion;
                 $dictamen = 'pendiente';
                 $insert = "INSERT INTO garantias(id, id_cliente, cantidad, id_llanta, dot, 
                 descripcion, marca, comentario_inicial, dictamen, folio_ray, id_sucursal, id_venta, id_usuario, id_sucursal_recibe,
-                id_usuario_recibe, estatus_fisico, fecha_registro) 
-                VALUES(null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,1,?)";
+                id_usuario_recibe, estatus_fisico, fecha_registro, dot_produccion, serie) 
+                VALUES(null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,1,?,?,?)";
                 $stmt = $con->prepare($insert);
-                $stmt->bind_param('sssssssssssssss', $id_cliente, $cantidad, $id_llanta, $dot, $descripcion, 
+                $stmt->bind_param('sssssssssssssssss', $id_cliente, $cantidad, $id_llanta, $dot_fabricacion, $descripcion, 
                 $marca, $comentario, $dictamen, $factura, $id_sucursal, $id_venta, $id_vendedor, $id_sucursal_recibe,
-                 $id_usuario_recibe, $fecha);
+                 $id_usuario_recibe, $fecha, $dot_produccion, $serie);
                 $stmt->execute();
                 $error = $stmt->error;
                 if($error){
@@ -66,9 +68,16 @@ if(isset($_POST)) {
 
             //Recorremos los ficheros adjuntos
             foreach ($_FILES as $key => $value) {
-                $insert ="INSERT INTO garantias_imagenes(id, id_garantia) VALUES(null,?)";
+                if (str_starts_with($key, 'file_')) {
+                    $partes = explode('_', $key); // divide por "_"
+                    $tipo= $partes[1];    // lo que viene después del "_"
+                }else{
+                    $tipo=0;
+                }
+
+                $insert ="INSERT INTO garantias_imagenes(id, id_garantia, tipo) VALUES(null,?,?)";
                 $stmt = $con->prepare($insert);
-                $stmt->bind_param('i',$id_garantia);
+                $stmt->bind_param('is',$id_garantia, $tipo);
                 $stmt->execute();
                 $stmt->close();
                 $id_garantia_imagen = $con->insert_id;
@@ -78,11 +87,11 @@ if(isset($_POST)) {
                 $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
 
                 if ($imageFileType != 'jpg' && $imageFileType != 'png' && $imageFileType != 'jpeg' && $imageFileType != 'pdf') {
-                    responder(false, 'El archivo no es una imagefn válida ', 'danger', null, true);
+                    responder(false, 'El archivo no es una imagen válida ', 'danger', null, true);
                 }
 
-                $ruta_final = '../../src/docs/garantias/'.$id_garantia.'/'.$id_garantia_imagen . '.'. $imageFileType;
-                $ruta_db = $id_garantia_imagen .  '.'. $imageFileType;
+                $ruta_final = '../../src/docs/garantias/'.$id_garantia .'/'. $id_garantia_imagen .'.'. $imageFileType;
+                $ruta_db = $id_garantia_imagen .'.'. $imageFileType;
                 $updt ="UPDATE garantias_imagenes SET ruta = ? WHERE id = ?";
                 $stmt = $con->prepare($updt);
                 $stmt->bind_param('si',$ruta_db, $id_garantia_imagen);
