@@ -16,9 +16,9 @@ if ($_SESSION['rol'] == 5) {
     header('Location:ventas-pv.php?id=0&nav=ventas');
 }
  
-if ($_SESSION['rol'] == 4) {
+/* if ($_SESSION['rol'] == 4) {
     header("Location:inventario.php?id=1&nav=inv");
-}
+} */
 
 
 ?>

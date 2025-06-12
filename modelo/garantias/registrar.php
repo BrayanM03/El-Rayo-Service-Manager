@@ -32,7 +32,6 @@ if(isset($_POST)) {
     if(count($_FILES)>0){
             //Validacion de comprobantes y adjuntos de la garantias
             
-
             foreach ($datos as $key => $value) {
                 $numero=$value->numero;
                 $id_llanta = intval($value->codigo);

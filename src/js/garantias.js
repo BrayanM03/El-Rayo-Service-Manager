@@ -374,7 +374,9 @@ function tablaGarantias(){
       return data;
      }},
      { title: "Cantidad",          data: 2},
-     { title: "DOT",               data: 4      },
+     { title: "DOT fecha fabricación",               data: 4      },
+     { title: "DOT producción",               data: 25      },
+     { title: "Serie",               data: 26      },
      { title: "Descripcion",    data: 5      }, 
      { title: "Marca",          data: 6      },
      { title: "comentario inicial",     data: 7      },

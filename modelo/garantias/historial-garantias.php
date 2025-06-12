@@ -53,6 +53,9 @@ $columns = array(
 	array( 'db' => 'estatus_fisico',  'dt' => 21),
 	array( 'db' => 'folio_ray',  'dt' => 22),
 	array( 'db' => 'fecha_registro',  'dt' => 23),
+	array( 'db' => 'factura',  'dt' => 24),
+	array( 'db' => 'dot_produccion',  'dt' => 25),
+	array( 'db' => 'serie',  'dt' => 26),
 );
 
 // SQL server connection information
