@@ -340,7 +340,7 @@ function tablaGarantias(){
          $('td:eq(' + columnIndex + ')', row).html(page * length + index + 1);
         
            // Definir el valor de orden
-           $('td:eq(19)', row).html(1)
+          /*  $('td:eq(19)', row).html(1) */
          if(data[21] == 5){
           $(row).css('background-color','gray')
           $(row).css('color','white')
@@ -411,7 +411,9 @@ function tablaGarantias(){
       if(data==null) return 'No aplica'
       return data;
      }},
-     { title: "Usuario recibe",       data: 18},
+     { title: "Usuario recibess",       data: 18, render: function(data){
+      if(data==null) return 'No aplica'
+      return data;}},
      { title: "Acción",
        data: null,
        className: "celda-acciones",

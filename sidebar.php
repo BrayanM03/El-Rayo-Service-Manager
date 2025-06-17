@@ -49,6 +49,7 @@ switch ($flag) {
         $claseNuevaGarantia = "active";
         break;
     case 'ventas':
+        $claseGarantias = "";
         $claseHistorial = "active";
         $claseVentas = "active";
         $showHistorial = "show";
@@ -59,29 +60,35 @@ switch ($flag) {
         $showHistorial = "show";
         break;
     case 'apartados':
+        $claseGarantias = "";
         $claseHistorial = "active";
         $claseApartados = "active";
         $showHistorial = "show";
         break;
     case 'pedidos':
+        $claseGarantias = "";
         $claseHistorial = "active";
         $clasePedidos = "active";
         $showHistorial = "show";
         break;
     case 'garantias':
         $claseHistorial = "active";
-        $clasePedidos = "active";
+        $claseGarantias = "active";
+        $clasePedidos = "";
         $showHistorial = "show";
         break;
     case "inv":
+        $claseGarantias = "active";
         $showMisLlantas = "show";
         $claseMisLlantas = "active";
         break;
     case 'existencia':
+        $claseGarantias = "active";
         $claseExistencia = "active";
         $showMisLlantas = "show";
         break;
     case 'servicios':
+        $claseGarantias = "active";
         $claseServicios = "active";
         $showMisLlantas = "show";
         break;
@@ -163,7 +170,8 @@ switch ($flag) {
         Punto de venta
     </div>
     <?php
-    if ($user_jerarquia == 1 || $user_jerarquia == 2 || $user_jerarquia == 3 || $_SESSION['id_usuario'] ==24) { ?>
+    
+    if ($user_jerarquia == 1 || $user_jerarquia == 2 || $user_jerarquia == 3 || $user_jerarquia == 4 || $_SESSION['id_usuario'] ==24) { ?>
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item <?php echo $claseNuevaVenta ?> rol-4">
             <a class="nav-link" href="punto-venta.php?id=0&nav=nueva_venta&venta_tp=1">
@@ -185,7 +193,7 @@ switch ($flag) {
                 <span>Nuevo pedido</span>
             </a>
         </li>
-        <?php if ($user_jerarquia == 1 || $user_jerarquia == 2 || $_SESSION['id_usuario'] ==19) { ?>
+        <?php if ($user_jerarquia == 1 || $user_jerarquia == 2 || $user_jerarquia == 4 || $_SESSION['id_usuario'] ==19) { ?>
 
         <li class="nav-item <?php echo $claseNuevaGarantia ?> rol-4">
             <a class="nav-link" href="nueva-garantia.php?id=0&nav=nueva_garantia">
