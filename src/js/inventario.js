@@ -56,7 +56,7 @@ function MostrarInventario(id_sucursal) {
             return "N/A"; // Or any other default value
           }
         }},
-        { title: "Precio",         data: 8,    render: function(data){
+        { title: "Precio lista",         data: 18,    render: function(data){
           // Convert the string to a number using parseFloat()
           const numero = parseFloat(data);
       
@@ -68,7 +68,7 @@ function MostrarInventario(id_sucursal) {
             return "N/A"; // Or any other default value
           }
         }},
-        { title: "Mayoreo",        data: 9,  render: function(data){
+        { title: "Precio desc.",        data: 8,  render: function(data){
           // Convert the string to a number using parseFloat()
           const numero = parseFloat(data);
       

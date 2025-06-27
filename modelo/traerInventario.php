@@ -51,6 +51,7 @@ $columns = array(
 	array( 'db' => 'Stock',   'dt' => 15 ),
 	array( 'db' => 'stock_minimo',   'dt' => 16 ),
 	array( 'db' => 'medida_stock_estatus',   'dt' => 17 ),
+	array( 'db' => 'precio_lista',   'dt' => 18),
 /* 	array(
 		'db'        => 'start_date',
 		'dt'        => 4,
