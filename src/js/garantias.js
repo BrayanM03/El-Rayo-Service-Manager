@@ -381,7 +381,6 @@ function tablaGarantias(){
      { title: "Marca",          data: 6      },
      { title: "comentario inicial",     data: 7      },
      { title: "Est. fisico",        data: 21 ,  render:function(data, type, row, meta){
-      console.log(row);
       let estado_fisico;
       if(row[21]==1){
         estado_fisico = 'Recibida por el vendedor'
@@ -411,7 +410,7 @@ function tablaGarantias(){
       if(data==null) return 'No aplica'
       return data;
      }},
-     { title: "Usuario recibess",       data: 18, render: function(data){
+     { title: "Usuario recibes",       data: 18, render: function(data){
       if(data==null) return 'No aplica'
       return data;}},
      { title: "Acción",
@@ -448,7 +447,7 @@ function tablaGarantias(){
    responsive: false,
    ordering: "enable",
    multiColumnSort: true,
-   order: [[10, "asc"], [11, 'desc']], // Primero ordena por color, luego por dictamen
+   order: [[12, "asc"], [13, 'desc']], // Primero ordena por color, luego por dictamen
 
    });
    //table.columns( [6] ).visible( true );
@@ -561,6 +560,7 @@ function procesarGarantia(id_garantia){
               let estatus_fisico = $("#estatus_fisico").val();
               let id_proveedor = $("#id_proveedor").val();
               let factura = $("#factura-garantia").val();
+              console.log(dictamen);
               $.ajax({
                 type: "POST",
                 url: "./modelo/garantias/actualizar.php",
@@ -890,3 +890,288 @@ function validar_archivos_adjuntos(){
   return true;
 }
 
+
+//FILTROS CLIENTES
+let currentPage = 1;
+let isLoading = false;
+
+async function cargarClientes(query = "", page = 1) {
+        // Si ya está cargando, no haga otra solicitud
+        if (isLoading) return;
+        isLoading = true;
+
+        const response = await fetch(
+          `./modelo/punto_venta/busqueda-clientes.php?query=${query}&page=${page}`
+        );
+        const clientes = await response.json();
+        
+        clientes.data.forEach((cliente) => {
+          const option = document.createElement("option");
+          option.value = cliente.id;
+          option.textContent = cliente.nombre_cliente;
+          option.setAttribute("data-tipo", cliente.tipo_cliente);
+          $("#cliente_").append(option);
+        });
+
+        $("#cliente_").selectpicker("refresh");
+        isLoading = false;
+}
+
+async function cargarLlantas(query = "", page = 1) {
+  // Si ya está cargando, no haga otra solicitud
+  if (isLoading) return;
+  isLoading = true;
+
+  const response = await fetch(
+    `./modelo/filtros/busqueda-llantas.php?query=${query}&page=${page}`
+  );
+  const llantas = await response.json();
+  
+  llantas.data.forEach((llanta) => {
+    const option = document.createElement("option");
+    option.value = llanta.id;
+    option.textContent = llanta.descripcion + ' Marca: ' + llanta.marca;
+   /*  option.setAttribute("data-tipo", llanta.tipo_cliente); */
+    $("#llanta").append(option);
+  });
+
+  $("#llanta").selectpicker("refresh");
+  isLoading = false;
+}
+
+ // Escuchar el evento de apertura del selectpicker para cargar la primera página
+$("#cliente_").on("shown.bs.select", function () {
+  $("#cliente_").append(`<option value="">Selecciona un cliente </option>`)
+        cargarClientes(); // Cargar la primera página
+        var $bsSearchbox = $(this).parent().find(".bs-searchbox input");
+
+        $bsSearchbox.off("keyup"); // Asegurarnos de no duplicar eventos
+        $bsSearchbox.on("keyup", function (e) {
+          var codigo_tecla = e.which || e.keyCode;
+          if(codigo_tecla!=37 && codigo_tecla!=38 && codigo_tecla!=39 && codigo_tecla !=40){
+            $("#cliente_").empty(); // Limpiar opciones previas
+            $("#cliente_").append(`<option value="">Selecciona un cliente </option>`)
+            currentPage = 1;
+            cargarClientes(e.target.value.trim(), currentPage).then(() => {
+                // Forzar la ejecución del onchange cuando solo hay un resultado
+                if ($("#cliente_ option").length === 1) {
+                  $("#cliente_").val('')
+                }
+            });
+          }
+         
+        });
+});
+
+ // Escuchar el evento de apertura del selectpicker para cargar la primera página
+ $("#llanta").on("shown.bs.select", function () {
+  $("#llanta").append(`<option value="">Selecciona una llanta </option>`)
+        cargarLlantas(); // Cargar la primera página
+        var $bsSearchbox = $(this).parent().find(".bs-searchbox input");
+
+        $bsSearchbox.off("keyup"); // Asegurarnos de no duplicar eventos
+        $bsSearchbox.on("keyup", function (e) {
+          var codigo_tecla = e.which || e.keyCode;
+          if(codigo_tecla!=37 && codigo_tecla!=38 && codigo_tecla!=39 && codigo_tecla !=40){
+            $("#llanta").empty(); // Limpiar opciones previas
+            $("#llanta").append(`<option value="">Selecciona una llanta </option>`)
+            currentPage = 1;
+            cargarLlantas(e.target.value, currentPage).then(() => {
+                // Forzar la ejecución del onchange cuando solo hay un resultado
+                if ($("#llanta option").length === 1) {
+                  $("#llanta").val('')
+                }
+            });
+          }
+         
+        });                                                                                                                                                                                                                                                                                                                                                                                                            
+});
+
+
+function buscarGarantias(){
+  var tabla_garantias = $('#garantias');
+
+  let folio = $("#folio").val()
+  let descripcion_llanta = $("#llanta").val() //Multiple values
+  let cliente = $("#cliente_").val()
+  let proveedor = $("#proveedor").val()
+  let fecha_inicial = $("#fecha-inicio").val()
+  let fecha_final = $("#fecha-fin").val()
+  let estatus_fisico = $("#estatus-fisico_").val()
+  let dictamen = $("#dictamen_").val() 
+  let ray = $("#ray_").val()
+  let factura = $("#factura_").val() 
+  let serie = $("#serie_").val() 
+  let dot_fabricacion = $("#dot-fabricacion").val() 
+  let dot_produccion = $("#dot-produccion").val() 
+  /* let sucursal = $("#buscador-sucursal").val()
+  let vendedor = $("#buscador-vendedor").val() */
+
+
+ /*  table.destroy()
+    if ($.fn.DataTable.isDataTable( '#garantias' ) ) {
+        tabla_garantias.destroy();
+      } */
+      console.log(tabla_garantias);
+    tabla_garantias.empty();
+    tabla_garantias.append(`
+    <div class="row" style="background-color:white !important;">
+        <div class="col-12 col-md-12 text-center"><img src="./src/img/preload.gif" style="width:70px;"><br></img>Buscando...</div>
+    </div>
+    `);
+
+    $.ajax({
+        type: "post",
+        url: "./modelo/filtros/filtros-garantias.php",
+        data: {folio, fecha_final, fecha_inicial,descripcion_llanta, proveedor, estatus_fisico, cliente,
+           dictamen, ray, factura, serie, dot_fabricacion, dot_produccion},
+        dataType: "JSON",
+        success: function (response) {
+            let estatus_fisico_arr = {"1":'Recibida por el vendedor',
+            "2":'Recibida por dep. garantias',
+            "3":'Entregado a proveedor',
+            "4":'Entregado de proveedor a dep. garantias',
+            "5":'Entregado a cliente</option>'};
+            if(response.estatus){
+                
+                //Conversion de arreglo de objectos a arreglos de arrays
+                response.data = response.data.length == 0 ? [] : response.data;
+                const data_convertida = response.data.map(objeto => [
+                    '',
+                    objeto.id,
+                    objeto.fecha_registro,
+                    objeto.cliente,
+                    objeto.proveedor,
+                    objeto.cantidad,
+                    objeto.dot,
+                    objeto.dot_produccion,
+                    objeto.serie,
+                    objeto.descripcion,
+                    objeto.marca,
+                    objeto.comentario_inicial,
+                    estatus_fisico_arr[objeto.estatus_fisico],
+                    objeto.dictamen,
+                    objeto.folio_ray,
+                    objeto.factura,
+                    objeto.sucursal,
+                    objeto.sucursal_recibe,
+                    objeto.usuario_vendedor,
+                    objeto.usuario_recibe,
+                ]);
+                clearTimeout();
+                setTimeout(function(){
+                tabla_garantias.empty();
+                tabla_garantias.DataTable({    
+                  rowCallback: function(row, data, index) {
+                    console.log(data);
+                    var info = this.api().page.info();
+                    var page = info.page;
+                    var length = info.length;
+                    var columnIndex = 0; // Índice de la primera columna a enumerar
+                    $('td:eq(' + columnIndex + ')', row).html(page * length + index + 1);
+                   
+                      // Definir el valor de orden
+                     /*  $('td:eq(19)', row).html(1) */
+                    if(data[21] == 5){
+                     $(row).css('background-color','gray')
+                     $(row).css('color','white')
+                     return false;
+                    }
+                    if(data[13] == 'entregado' || data[9] == 'procedente' ){
+                      $(row).css('background-color','#c0f6b4')
+           
+                     }else if(data[13] == 'pendiente'){
+                     $(row).css('background-color','#ffffbf')
+           
+                   }else if(data[13]=='improcedente'){
+                     $(row).css('background-color','#FF6347')
+                     $(row).css('color','white')
+                   }else if(data[13]=='concluido' || data[21] == 5){
+                     $(row).css('background-color','gray')
+                     $(row).css('color','white')
+                   }
+                  },
+                "bDestroy": true,
+                columns: [   
+                { title: '#' },
+                { title: 'Folio' },
+                { title: 'Fecha' },
+                { title: 'Cliente' },
+                { title: 'Proveedor' },
+                { title: 'Cantidad' },
+                { title: 'DOT fecha fabricación' },
+                { title: 'DOT fecha producción' },
+                { title: 'Serie' },
+                { title: 'Descripción' },
+                { title: 'Marca' },
+                { title: 'Comentario inicial' },
+                { title: 'Est. fisico' },
+                { title: 'Dictamen' },
+                { title: 'RAY' },
+                { title: 'Factura' },
+                { title: 'Sucursal vendedora' },
+                { title: 'Sucursal recibe' },
+                { title: 'Usuario vendedor' },
+                { title: 'Usuario recibe' },
+             
+                { title: 'Accion', 
+                data: null,
+                className: "celda-acciones",
+                render: function (row, data) {
+                  rol = $("#titulo-hv").attr("rol");
+                  return `
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="btn btn-success" onclick="procesarGarantia(${row[1]});">
+                              <span class="fa fa-check"></span>
+                            </div>
+                            <div class="btn btn-danger" onclick="pdfGarantia(${row[1]});">
+                              <span class="fa fa-file-pdf"></span>
+                            </div>
+                            <div class="btn btn-danger" onclick="compranteGarantia(${row[1]}, '${row[16]}');" >
+                              <span class="fa fa-file-image">
+                            </div>
+                        </div>
+                    </div>
+                  `;
+                  `<button type="button" onclick="procesarGarantia(${row[0]});" title="Procesar garantia" class="buttonBorrar btn-sm btn btn-success" style="margin-left: 8px">
+                  <span class="fa fa-check"></span><span class="hidden-xs"></span></button>
+                  <button type="button" onclick="pdfGarantia(${row[0]});" title="PDF garantia" class="buttonBorrar mx-2 btn-sm btn btn-danger">
+                  <span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button>
+                  <button type="button" onclick="compranteGarantia(${row[0]}, '${row[16]}');" title="comprobante garantia" class="mt-2 buttonBorrar btn btn-sm btn-info" style="margin-left: 8px">
+                  <span class="fa fa-file-image"></span><span class="hidden-xs"></span></button>
+                  </div>`
+                }}
+              ],
+              data: data_convertida,
+              paging: true,
+              searching: true,
+              scrollY: "50vh",
+              info: false,
+              responsive: false,
+              ordering: "enable",
+              multiColumnSort: true,
+              order: [[10, "asc"], [11, 'desc']], // Primero ordena por color, luego por dictamen
+
+              });
+              $("table.dataTable thead").addClass("table-dark")
+              $("table.dataTable thead").addClass("text-white")
+            
+            },500) 
+          }else{
+            tabla_garantias.empty()
+            .append(`
+              <div class="row" style="background-color:white !important;">
+                  <div class="col-12 col-md-12 text-center">No se encontraron resultados</div>
+              </div>
+              `);
+            Swal.fire({
+                icon:'error',
+                html:`
+                    Ocurrio un error, los filtros arrojaron un error en la consulta
+                `
+            })
+          }
+        }})
+              
+}

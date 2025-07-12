@@ -9,7 +9,7 @@ if (!isset($_SESSION['id_usuario'])) {
 }
 
 if(isset($_POST)) {
-    $analisis = $_POST['analisis'];
+    $analisis = $_POST['analisis']; 
     $dictamen = $_POST['dictamen'];
     $lugar_expedicion = $_POST['lugar_expedicion'];
     $fecha_expedicion = $_POST['fecha_expedicion'];    

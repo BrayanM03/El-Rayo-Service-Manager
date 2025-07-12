@@ -80,7 +80,6 @@ if ($_SESSION['rol'] == 5) {
         }
         .bootstrap-select{
             border: 1px solid #ccc !important;
-            max-width: 350px !important;
     
         }
 
@@ -103,6 +102,24 @@ if ($_SESSION['rol'] == 5) {
         .delete-thumbnail:hover{
             background-color: orange;
         }
+
+        .btn-light{
+            height: 37.99px !important;
+            border-radius: 6px !important;
+            /* border: 1px solid #CDD9ED !important; */
+            background: #fff !important;
+            width: 100% !important;
+            color: #99A3BA !important;
+            padding: 8px 16px !important;
+            line-height: 25px !important;
+            font-size: 14px !important;
+            font-weight: 500 !important;
+            font-family: inherit !important;
+            transition: border 0.3s ease !important;
+      
+        }
+
+        
     </style>
 
 </head>
@@ -139,6 +156,117 @@ if ($_SESSION['rol'] == 5) {
                             <div class="col-md-6">
                                 <h5><b>Garantias activas</b></h5>
                             </div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-1">
+                                <label>Folio</label>
+                                <input id="folio" placeholder="0" class="form-control"></input>
+                            </div>
+                            <div class="col-3">
+                                <label>Cliente</label><br>
+                                <select id="cliente_" class="form-control selectpicker" data-live-search="true" multiple></select>
+                            </div>
+                            <div class="col-4">
+                                <label>Llanta</label>
+                                <select id="llanta" class="form-control selectpicker" data-live-search="true" multiple></select>
+                            </div>
+                            <div class="col-2">
+                                <label>Proveedor</label>
+                                <select id="proveedor" class="form-control selectpicker" data-live-search="true" multiple>
+                                    <option value="">Selecciona un proveedor</option>
+                                <?php
+
+                                $querySucu = "SELECT COUNT(*) FROM proveedores";
+                                $resps = $con->prepare($querySucu);
+                                $resps->execute();
+                                $resps->bind_result($total_sucu);
+                                $resps->fetch();
+                                $resps->close();
+
+                                if($total_sucu > 0) {
+                                    $querySuc = "SELECT * FROM proveedores";
+                                    $respon = mysqli_query($con, $querySuc);
+
+
+
+                                    while ($rows = $respon->fetch_assoc()) {
+                                        $suc_identificador = $rows['id'];
+                                        $nombre_suc = $rows['nombre'];
+
+                                        echo "<option value='". $suc_identificador."'>".$nombre_suc."</option>";
+                                    }
+                                }
+
+                                ?>
+                                </select>
+                            </div>
+                            <div class="col-1">
+                                <label>Fecha inicio</label>
+                                <input type="date" id="fecha-inicio" class="form-control"></input>
+                            </div>
+                            <div class="col-1">
+                                <label>Fecha fin</label>
+                                <input type="date" id="fecha-fin" class="form-control"></input>
+                            </div>
+
+                           
+                           
+                        </div>
+                        <div class="row mb-3">
+                            
+                            <div class="col-2">
+                                <label>Estatus fis.</label>
+                                <select id="estatus-fisico_" class="form-control selectpicker" multiple>
+                                <option value=''>Selecciona un estatus</option>
+                                <option value="1">Recibida por el vendedor</option>
+                                <option value="2">Recibida por dep. garantias</option>
+                                <option value="3">Entregado a proveedor</option>
+                                <option value="4">Entregado de proveedor a dep. garantias</option>
+                                <option value="5">Entregado a cliente</option>
+                                </select>
+                            </div>
+                            <div class="col-1">
+                                <label>Dictamen</label>
+                                <select id="dictamen_" class="form-control selectpicker" multiple>
+                                <option value="">Selecciona un dictmen</option>
+                                <option value="pendiente">Pendiente</option>
+                                  <option value="entregado">Entregado al proveedor</option>
+                                  <option value="procedente">Procedente</option>
+                                  <option value="improcedente">Improcedente</option>
+                                  <option value="concluido">Concluido</option>
+                                </select>
+                            </div>
+                            <div class="col-1">
+                                <label>RAY</label>
+                                <input placeholder="Folio RAY" id="ray" class="form-control"></input>
+                            </div>
+                            <div class="col-2">
+                                <label>Factura</label>
+                                <input placeholder="Factura proveedor" id="factura" class="form-control"></input>
+                            </div>
+                            <div class="col-2">
+                                <label>Serie</label>
+                                <input placeholder="Serie" id="serie_" class="form-control"></input>
+                            </div>
+                            <div class="col-1">
+                                <label>DOT fecha fab.</label>
+                                <input type="text" placeholder="Ejem. 1RYF7HFHC" id="dot-fabricacion" class="form-control"></input>
+                            </div>
+                            <div class="col-1">
+                                <label>DOT produccion</label>
+                                <input type="text" placeholder="Ejem.2724 " id="dot-produccion" class="form-control"></input>
+                            </div>
+                            <div class="col-1" style="margin-top: 30px">
+                               <div class="btn btn-primary" onclick="buscarGarantias()">Hacer busqueda</div>
+                            </div>
+                            <div class="col-1" style="margin-top: 30px">
+                               <div class="btn btn-info">Nueva garantia</div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                        
                         </div>
 
                         <table id="garantias" style="font-size: 12px;" class="table table-striped table-bordered table-hover">
