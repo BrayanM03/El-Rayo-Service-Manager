@@ -1,5 +1,6 @@
 
 traerAnchos();
+limpiarPreventa()
 const audio = new Audio("./src/sounds/success-sound.mp3");
 const audio_error = new Audio("./src/sounds/error-sound.mp3");
 audio.volume = 0.5;
@@ -1765,7 +1766,13 @@ function procesarVenta(){
           buscarNeumaticoPuntoVenta()
         })
         }else{
-          toastr.warning(response.mensaje, "Advertencia");
+          Swal.fire({
+            icon:'error',
+            title: 'Error',
+            html: "<span>"+response.mensaje+" Realiza de nuevo la venta, manda este mensaje al administrador</br></span>",
+            confirmButtonText: 'Enterado'
+          })
+          //toastr.warning(response.mensaje, "Advertencia");
         }
       }
     });
@@ -1798,7 +1805,13 @@ function procesarVenta(){
           localStorage.setItem('nombre_cliente', 'Selecciona un cliente')
         })
         }else{
-          toastr.warning(response.mensaje, "Advertencia");
+          Swal.fire({
+            icon:'error',
+            title: 'Error',
+            html: "<span>"+response.mensaje+" Realiza de nuevo la venta, manda este mensaje al administrador</br></span>",
+            confirmButtonText: 'Enterado'
+          })
+          //toastr.warning(response.mensaje, "Advertencia");
         }
       }
     });
