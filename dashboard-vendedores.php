@@ -48,6 +48,25 @@ if ($_SESSION['rol'] == 4) {
     <!-- Custom styles for this template-->
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="src/css/menu-vertical.css" rel="stylesheet">
+    <link rel="stylesheet" href="src/vendor/datatables/dataTables.bootstrap4.css">
+    <link href="src/css/bootstrap-select.min.css" rel="stylesheet" />
+    <link href="src/css/filtros.css" rel="stylesheet">
+    <style>
+
+.selectpicker{
+        background-color: white !important; 
+        z-index: 9999999 !important;
+        }
+        .bootstrap-select{
+            border: 1px solid #ccc !important;
+            max-width: 350px !important;
+            
+        }
+        .btn-light{
+            background-color: white !important;
+
+        }
+    </style>
 
 </head>
 
@@ -264,7 +283,12 @@ if ($_SESSION['rol'] == 4) {
                         </div> -->
 
                 </div>
-                
+                <div class="row justify-content-center">
+                    <div class="col-11">
+
+                        <?php include 'views/llantas-vendidas.php'; ?>
+                    </div>
+                </div>
                 <div class="row" style="display: flex; justify-content: center; margin-top: 80px;">
                         <img src="src/img/undraw_snow_fun_re_plbr.svg" alt="" width="400px">
                 </div>
@@ -327,16 +351,20 @@ if ($_SESSION['rol'] == 4) {
 
     <!-- Custom scripts for all pages-->
     <script src="src/js/sb-admin-2.min.js?v=1239"></script>
-
+    <script src="src/vendor/datatables/jquery.dataTables.min.js"></script> 
+    <script src="src/vendor/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="src/vendor/datatables/dataTables.bootstrap4.js"></script>
     <!-- Page level plugins -->
     <script src="src/vendor/chart.js/Chart.min.js"></script>
-
+    <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="src/js/bootstrap-select.min.js"></script>
     <!-- Page level custom scripts -->
    <!--  <script src="src/js/demo/chart-area-demo.js"></script>
     <script src="src/js/demo/chart-pie-demo.js"></script> -->
    <!--  <script src="src/js/notificaciones.js"></script> -->
     <script src="src/js/panel-vendedores.js"></script>
 
+    <script src="src/js/reporte-llantas-vendidas.js"></script>
   
  
     </script>

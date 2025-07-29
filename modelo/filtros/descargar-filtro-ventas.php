@@ -562,6 +562,8 @@ function informacionFiltros($con)
     $sql .= " ORDER BY v.id DESC";
   
     $stmt = $con->prepare($sql);
+    /* print_r($sql);
+    die(); */
     $stmt->execute();
     $result = $stmt->get_result();
     $data = $result->fetch_all(MYSQLI_ASSOC);

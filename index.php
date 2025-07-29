@@ -2,7 +2,7 @@
 session_start();
 
 include 'modelo/conexion.php';
-$con= $conectando->conexion(); 
+$con = $conectando->conexion();
 
 
 if (!isset($_SESSION['id_usuario'])) {
@@ -40,18 +40,33 @@ if ($_SESSION['rol'] == 4) {
     <meta name="author" content="">
     <link rel="shortcut icon" href="src/img/rayo.svg" />
 
-    <title>El Rayo | Service Manager</title>
+    <title>Panel | El Rayo Service Manager</title>
 
     <!-- Custom fonts for this template-->
     <link href="src/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+    <link rel="stylesheet" href="src/vendor/datatables/dataTables.bootstrap4.css">
     <!-- Custom styles for this template-->
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="src/css/menu-vertical.css" rel="stylesheet">
+    <link href="src/css/bootstrap-select.min.css" rel="stylesheet" />
+    <style>
 
+.selectpicker{
+        background-color: white !important; 
+        z-index: 9999999 !important;
+        }
+        .bootstrap-select{
+            border: 1px solid #ccc !important;
+            max-width: 350px !important;
+            
+        }
+        .btn-light{
+            background-color: white !important;
+
+        }
+    </style>
 </head>
 
 <body id="page-top"> 
@@ -60,9 +75,9 @@ if ($_SESSION['rol'] == 4) {
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <?php 
+        <?php
             require_once 'sidebar.php'
-        ?>
+?>
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
@@ -78,14 +93,14 @@ if ($_SESSION['rol'] == 4) {
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                <div class="d-sm-flex align-items-center justify-content-between mb-4 mt-3">
                         <h3 class="h3 mb-0 text-gray-800">Bievenido al panel <?php echo $_SESSION['nombre']; ?></h3>
                         <a href="ganancias-diarias.php?id=0&nav=ganancias_diarias" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm"><i
                                 class="fas fa-eye fa-sm text-white-50"></i> Ganancias diarias</a>
                         <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                                 class="fas fa-download fa-sm text-white-50"></i> Generar reporte</a> -->
                     </div>
-                        <div class="row justify-content-center">
+                        <!-- <div class="row justify-content-center">
                             <div class="col-12 col-md-5 mt-3 text-center border p-5" style="background-color: white; border-radius:8px;">
                                 <h2><b>MODULO EN REMODELACIÓN</b></h2>
                                 <div class="row">
@@ -93,7 +108,7 @@ if ($_SESSION['rol'] == 4) {
                                             <div class="option-card text-center text-center">
                                            
 
-<dotlottie-player src="https://lottie.host/3b8fd7df-9115-47ec-a822-a8d71128c79d/AMeYTap4Re.json" background="transparent" speed="1" style="width: 300px; height: 300px;" loop autoplay></dotlottie-player>
+                                            <dotlottie-player src="https://lottie.host/3b8fd7df-9115-47ec-a822-a8d71128c79d/AMeYTap4Re.json" background="transparent" speed="1" style="width: 300px; height: 300px;" loop autoplay></dotlottie-player>
                                             </div>
                                         </div>
                                         <div class="col-6">
@@ -103,7 +118,9 @@ if ($_SESSION['rol'] == 4) {
                                         </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
+
+                        <?php include 'views/llantas-vendidas.php'; ?>
 
                 </div>
                 
@@ -164,21 +181,27 @@ if ($_SESSION['rol'] == 4) {
     <script src="src/vendor/jquery/jquery.min.js"></script>
     <script src="src/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> 
- 
+    <script src="src/vendor/datatables/jquery.dataTables.min.js"></script> 
+    <script src="src/vendor/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="src/vendor/datatables/dataTables.bootstrap4.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="src/vendor/datatables/defaults.js"></script>
+    <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
     <!-- Core plugin JavaScript-->
     <script src="src/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="src/js/bootstrap-select.min.js"></script>
 
     <!-- Custom scripts for all pages-->
     <script src="src/js/sb-admin-2.min.js?v=1236569"></script>
+    <script src="src/js/reporte-llantas-vendidas.js"></script>
 
     <!-- Page level plugins -->
-    <script src="src/vendor/chart.js/Chart.min.js"></script>
+   <!--  <script src="src/vendor/chart.js/Chart.min.js"></script>
 
-    <!-- Page level custom scripts -->
+    <!-
     <script src="src/js/demo/chart-area-demo.js"></script>
     <script src="src/js/demo/chart-pie-demo.js"></script>
-   <!--  <script src="src/js/notificaciones.js"></script> -->
-    <script src="src/js/panel.js"></script>
+    <script src="src/js/panel.js"></script> -->
 
   
  
