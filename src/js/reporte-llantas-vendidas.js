@@ -6,6 +6,12 @@ function reporteLlantasVendidas(){
 
     fecha_inicio= $("#fecha-inicio").val()
     fecha_final= $("#fecha-final").val()
+
+    id_marca= $("#id-marca").val()
+    ancho= $("#ancho").val()
+    alto= $("#alto").val()
+    rin= $("#rin").val()
+
     let sucursal= $("#id-sucursal").val()
    /*  table.destroy()
     if ($.fn.DataTable.isDataTable( '#llantas-vendidas' ) ) {
@@ -20,7 +26,7 @@ function reporteLlantasVendidas(){
     $.ajax({
         type: "post",
         url: "./modelo/panel/reporte-llantas-vendidas.php",
-        data: {fecha_inicio, fecha_final, sucursal},
+        data: {fecha_inicio, fecha_final, sucursal, id_marca, ancho, alto, rin},
         dataType: "JSON",
         success: function (response) {
 
@@ -80,6 +86,46 @@ function reporteLlantasVendidas(){
               $("table.dataTable thead").addClass("text-white")
             
             },500);
+
+
+            //Generar los datos de la tabla para el llenado de información de marcas x llanta
+            tablaBody= document.getElementById('tbody-llantas-vendidas-x-marca')
+            $("#tbody-llantas-vendidas-x-marca").empty()
+            let contador_ =0;
+          /*   let contador_ =0;
+            response.tipo.forEach(element => {
+              contador_++
+              $("#tbody-marca-x-llanta").append(`
+              <tr>
+                <th>${contador_}</th>
+                <th>${}</th>
+                <th>Pz vendidas</th>
+              </tr>
+              `)
+            }); */
+            let pz_x_marca= response.tipo;
+            for (const marca in pz_x_marca) {
+              contador_++
+              const cantidad = pz_x_marca[marca];
+          
+              const fila = document.createElement("tr");
+              fila.style.backgroundColor='white'
+          
+              const celdaMarca = document.createElement("td");
+              celdaMarca.textContent = marca;
+          
+              const celdaContador= document.createElement("td");
+              const celdaCantidad = document.createElement("td");
+              celdaContador.textContent = contador_;
+              celdaCantidad.textContent = cantidad;
+          
+              fila.appendChild(celdaContador);
+              fila.appendChild(celdaMarca);
+              fila.appendChild(celdaCantidad);
+          
+              tablaBody.appendChild(fila);
+            }
+
           }else{
             tabla_ventas.empty()
             .append(`
@@ -104,12 +150,12 @@ function reporteLlantasVendidas(){
 
         </tbody>
               `);
-            /* Swal.fire({
-                icon:'error',
-                html:`
-                    Ocurrio un error, los filtros arrojaron un error en la consulta
-                `
-            }) */
+          
+              $("#tbody-llantas-vendidas-x-marca").empty().append(`
+              <tr style="background-color:white">
+              <th colspan="10" class="text-center p-3">Sin datos</th>
+          </tr>
+              `)
           }
         }
     });
