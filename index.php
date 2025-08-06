@@ -59,8 +59,8 @@ if ($_SESSION['rol'] == 4) {
         }
         .bootstrap-select{
             border: 1px solid #ccc !important;
-            max-width: 350px !important;
-            
+/*             max-width: 350px !important;
+ */            
         }
         .btn-light{
             background-color: white !important;
