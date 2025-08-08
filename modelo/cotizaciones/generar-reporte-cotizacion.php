@@ -109,6 +109,14 @@ function Header()
     $telefono = "89-99-30-51-03";
     $rfc = "XAXX010101000";
     $this->Image('../../src/img/logo-del-rio.jpg',16,7,35);
+
+   }else if($GLOBALS["sucursal"] == "Cavazos Lerma"){
+    $titulo_sucursal = "Llantas y Servicios 'EL Rayo'";
+    $direccion = "Av. Manuel Cavazos Lerma C. 18 Julio #2 Interior, 87389";
+    $colonia = "Chapultepec";
+    $telefono = "868 127 4584";
+    $rfc = "SARK9104063L6";
+    $this->Image('../../src/img/logo.jpg',20,10,25);
    }
 
     // Logo
