@@ -1,6 +1,6 @@
 <?php
 
-$password_hash = password_hash("Quantyx2025*", PASSWORD_BCRYPT);
+$password_hash = password_hash("HD23K", PASSWORD_BCRYPT);
 echo $password_hash;
 
 ?>
