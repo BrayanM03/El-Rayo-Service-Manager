@@ -17,6 +17,9 @@ function MostrarCuentasPorPagar() {
           if(data[11] == 4){
             $(row).css('background-color','#eaefc8')
           }
+          if(data[11] == 5){
+            $(row).css('background-color','#feajb6')
+          }
         },
       columns: [   
         { title: "#",              data: null             },
@@ -41,6 +44,8 @@ function MostrarCuentasPorPagar() {
             estado_factura_ = 'Factura incompleta';
           }else if(data == 4){
             estado_factura_ = '<span class="badge bg-success p-2 text-white">Factura pagada</span>';
+          }else if(data == 5){
+            estado_factura_ = '<span class="badge bg-danger p-2 text-white">Factura vencida</span>';
           }else{
             estado_factura_ = 'No aplica'
           }
@@ -130,4 +135,50 @@ function remisionIngreso(id){
 
   window.open('./modelo/movimientos/remision-ingreso.php?id='+ id, '_blank');
 }
+
+function modalEstadoCuenta(){
+  $.ajax({
+    type: "post",
+    url: "./modelo/cuentas_pagar/obtener-proveedores.php",
+    data: {'data':'data'},
+    dataType: "json",
+    success: function (response) {
+      Swal.fire({
+        icon: 'question',
+        title: 'Generar estado de cuenta',
+        html: `
+        <div class="container">
+            <div class="row">  
+                <div class="col-12">
+                    <label>Proveedor</label>
+                    <select class="form-control" id="proveedores-ed">
+
+                    </select>
+                </div> 
+            </div>  
+        </div>
+        `,
+        didOpen: ()=>{
+          $("#proveedores-ed").empty()
+          response.data.forEach(element => {
+            $("#proveedores-ed").append(`
+                <option value="${element.id}">${element.nombre}</option>
+            `)
+          });
+        },
+        confirmButtonText:'Generar estado de cuenta',  
+      }).then((r)=>{
+        if(r.isConfirmed){
+          let id_proveedor = $("#proveedores-ed").val();
+          window.open('estado-cuenta-proveedor.php?id_proveedor='+id_proveedor, '_blank')
+        }
+
+      })
+    }
+  });
+  
+
+}
+
+
 

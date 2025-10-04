@@ -26,6 +26,14 @@ if(isset($_POST)){
     $folio_factura = $_POST['folio_factura'];
     $id_proveedor = $_POST['id_proveedor'];
     $estado_movimiento = $_POST['estado_movimiento'];
+    $fecha_emision_fact = $_POST['fecha_emision'];
+    $fecha_vencido_fact = $_POST['fecha_vencido'];
+
+    if($estado_movimiento == 1){
+        $fecha_emision_fact = '';
+        $fecha_vencido_fact = '';
+    }
+
    
     $tipo = 2; //categoria tipo ingreso
     $pagado = 0;
@@ -96,10 +104,14 @@ if(isset($_POST)){
                                               estatus, 
                                               id_usuario, 
                                               estado_factura, 
-                                              archivo) VALUES(null, ?,?,?,?,?,?,?,?,?, 'Pendiente',?,?,?)";
+                                              archivo,
+                                              fecha_emision,
+                                              fecha_vencido) VALUES(null, ?,?,?,?,?,?,?,?,?, 'Pendiente',?,?,?,?,?)";
                     $result = $con->prepare($insertar);
-                    $result->bind_param('sssssssisssi',$descripcion_movimiento, $total_llantas,
-                                                    $fecha, $hora, $nombre_completo_usuario, $tipo, $sucursal_id, $id_proveedor, $folio_factura, $id_usuario, $estado_movimiento, $comprobante);
+                    $result->bind_param('sssssssisssiss',$descripcion_movimiento, $total_llantas,
+                                                    $fecha, $hora, $nombre_completo_usuario, $tipo, 
+                                                    $sucursal_id, $id_proveedor, $folio_factura, $id_usuario, 
+                                                    $estado_movimiento, $comprobante, $fecha_emision_fact, $fecha_vencido_fact);
                                                     
                     $result->execute();
                     $id_movimiento = $con->insert_id;

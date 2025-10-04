@@ -149,8 +149,11 @@ if($total_sucu > 0) {
                                                         while ($rows = $respon->fetch_assoc()) {
                                                             $suc_identificador = $rows['id'];
                                                             $nombre_suc = $rows['nombre'];
+                                                            $tipo_plazo = $rows['tipo_plazo'];
+                                                            $cantidad_plazo = $rows['cantidad_plazo'];
 
-                                                            echo "<option value='". $suc_identificador."'>".$nombre_suc."</option>";
+                                                            echo "<option tipo_plazo='".$tipo_plazo."' 
+                                                            cantidad_plazo='".$cantidad_plazo."' value='". $suc_identificador."'>".$nombre_suc."</option>";
                                                         }
                                                     }
 
@@ -161,7 +164,7 @@ if($total_sucu > 0) {
                                         <label>No. Factura</label>
                                         <input class="form-control mb-2" placeholder="Folio" type="text" id="folio-factura">
                                     </div>
-                                    <div class="col-12 col-md-10 mt-4">
+                                    <div class="col-12 col-md-4 mt-4">
                                         <label>Estado de remisión</label>
                                         <select class="form-control mb-2" id="estado-movimientos">
                                             <option value="">Selecciona una opción</option>
@@ -169,6 +172,14 @@ if($total_sucu > 0) {
                                             <option value="2">Factura completa</option>
                                             <option value="3">Factura incompleta</option>
                                         </select>
+                                    </div>
+                                    <div class="col-12 col-md-3 mt-4">
+                                        <label>Fecha emisión</label>
+                                        <input id="fecha-emision" class="form-control" type="date" disabled>
+                                    </div>
+                                    <div class="col-12 col-md-3 mt-4">
+                                        <label>Fecha vencimiento</label>
+                                        <input id="fecha-vencido" class="form-control" type="date" disabled>
                                     </div>
                                 </div>
                                 

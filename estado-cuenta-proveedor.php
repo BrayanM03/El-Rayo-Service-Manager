@@ -3,6 +3,7 @@
     session_start();
 
     include 'modelo/conexion.php';
+    include 'modelo/proveedores/Proveedor.php';
     $con= $conectando->conexion(); 
 
     if (!$con) {
@@ -13,7 +14,18 @@
         header("Location:login.php");
     }
 
+    $empleado= new Proveedor($con);
+    $documentos_response = $empleado->obtenerEstadoCuenta($_GET['id_proveedor']);
+    $data = $documentos_response['data'];
+    $fmt = new NumberFormatter('es_MX', NumberFormatter::CURRENCY);
     
+    $restante_vencido = $data['restante_vencido'];
+    $restante_sin_vencer = $data['restante_sin_vencer'];
+    $restante_total = $data['restante'];
+    
+    $restante_vencido = $fmt->format($restante_vencido);
+    $restante_sin_vencer = $fmt->format($restante_sin_vencer);
+    $restante_total = $fmt->format($restante_total);
     ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -29,7 +41,7 @@
  
 	
 
-    <title>Cuentas por pagar | El Rayo Service Manager</title>
+    <title>Estado de cuenta | El Rayo Service Manager</title>
 
     <!-- Custom fonts for this template-->
     <link rel="stylesheet" href="src/css/inventario.css">
@@ -54,11 +66,16 @@
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="src/css/bootstrap-select.min.css" rel="stylesheet" />
     <link href="src/css/menu-vertical.css" rel="stylesheet">
-    <link href="src/css/filtros.css" rel="stylesheet">
     <style>
         #content-wrapper{
             font-size: 12px !important;
         }
+
+        .campos-ed{
+            background-color: white !important;
+        }
+
+        
     </style>
 </head>
 <body id="page-top"> 
@@ -85,18 +102,41 @@
                 <!-- Begin Page Content -->
                 <div class="d-none" id="titulo-hv" sucursal="<?php echo $_SESSION['sucursal']?>" id_sucursal="<?php echo $_SESSION['id_sucursal']?>" rol="<?php echo $_SESSION['rol'] ?>" id_usuario="<?php echo $_SESSION['id_usuario'] ?>"  nombre_usuario="<?php echo $_SESSION['nombre'] . ' ' . $_SESSION['apellidos'] ?>"></div>
                 <div class="container-fluid" >
-                    
-                    <div id="filter-movimientos-container" v-cloak>
-                        
-                    </div> 
-                    <div class="row mb-3">
-                        <div class="col-12">
-                            <div class="btn btn-danger" onclick="modalEstadoCuenta()">Estado de cuenta</div>
+                
+                    <div class="row mb-3 mt-4">
+                        <div class="col-12 text-center">
+                            <h3><?= $data['proveedor']; ?></h3>
+                            <h6>Estado de cuenta</h6>
                         </div>
                     </div> 
                     <div id="contenedor-cuentas-pagar">
-                        <table id="cuentas-por-pagar" class="table table-striped table-bordered table-hover">                   
-                        </table>
+                        <div class="row mb-3 justify-content-center">
+                          
+                            <div class="col-12 col-md-3">
+                                <label for="">Restante vencido</label>
+                                <input id="restante-vencido" class="form-control campos-ed" disabled value="<?= $restante_vencido?>"></input>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <label for="">Restante sin vencer</label>
+                                <input id="restante-sin-vencido" class="form-control campos-ed" disabled value="<?= $restante_sin_vencer?>"></input>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <label for="">Restante total</label>
+                                <input id="restante-total" class="form-control campos-ed" disabled value="<?= $restante_total ?>"></input>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center">
+                            <div class="col-12 col-md-11 text-center">
+                                <div class="btn btn-danger" onclick="estadoCuentaPdf(<?php echo $_GET['id_proveedor']?>)">Descargar PDF</div>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center">
+                            <div class="col-12 col-md-11">
+                                <table id="cuentas-por-pagar" style="background-color: white;" class="table table-hovered">
+
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             <!-- End of Main Content -->
@@ -171,10 +211,18 @@
     <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="src/js/bootstrap-select.min.js"></script>
-    <script src="src/js/cuentas-por-pagar.js"></script>
-    <script src="./components/filtros-cuentas.module.js" type="text/javascript"></script>
-    <script src="src/js/filtros.js"></script> 
+    <script src="src/js/estado-cuenta-proveedor.js"></script>
 
+    <script>
+        function administrarCuenta(id, tipo_remision){
+  window.open("administracion-movimiento.php?id=" + id + "&tipo_remision="+tipo_remision, '_blank');
+}
+
+function remisionIngreso(id){
+
+  window.open('./modelo/movimientos/remision-ingreso.php?id='+ id, '_blank');
+}
+    </script>
    
    
 </body>

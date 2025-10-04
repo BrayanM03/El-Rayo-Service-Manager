@@ -31,14 +31,52 @@ toastr.options = {
             $("#stock").removeClass().addClass("form-control").val(0).prop("disabled", true);
             validador();
               $('#buscador').prop("disabled", false);
+            /*   let option = $(this).find("option:selected");
+              tipo_plazo = option.getAttribute("tipo_plazo"); // ej. "M"
+              cantidad_plazo = parseInt(option.getAttribute("cantidad_plazo")); // ej. 2
+              document.getElementById("fecha-vencido").value = fechaVencido; */
+
               ide_sucursal = $(this).val();
-  
+
           } 
   
           ubi = $(this).val()
           traerSucEspecficia(ubi, "destino");
   
       });
+
+      function calcularFechaVencido(fechaEmision, tipo, cantidad) {
+        let fecha = new Date(fechaEmision);
+    
+        switch (tipo) {
+            case "D": // días
+                fecha.setDate(fecha.getDate() + cantidad);
+                break;
+            case "W": // semanas
+                fecha.setDate(fecha.getDate() + (cantidad * 7));
+                break;
+            case "M": // meses
+                fecha.setMonth(fecha.getMonth() + cantidad);
+                break;
+        }
+    
+        return fecha.toISOString().split("T")[0]; // formato yyyy-mm-dd
+    }
+    
+    // ejemplo uso
+    document.getElementById("fecha-emision").addEventListener("change", function () {
+        let fechaEmision = this.value; // formato yyyy-mm-dd
+        
+        // aquí deberías tomar el proveedor seleccionado
+        let option = document.getElementById("proveedor").selectedOptions[0];
+        let tipo = option.getAttribute("tipo_plazo"); // ej. "M"
+        let cantidad = parseInt(option.getAttribute("cantidad_plazo")); // ej. 2
+    
+        let fechaVencido = calcularFechaVencido(fechaEmision, tipo, cantidad);
+    
+        document.getElementById("fecha-vencido").value = fechaVencido;
+    });
+    
   
       function traerSucEspecficia(ubi, inputx){
        
@@ -56,7 +94,7 @@ toastr.options = {
   
               response.forEach(element => {
                 $("#"+inputx).append(`
-                  <option value="${element.id}">${element.nombre}</option>
+                  <option value="${element.id}" >${element.nombre}</option>
                 `);
               });
             }else{
@@ -165,9 +203,12 @@ toastr.options = {
         if($(this).val() ==1){
           $('#folio-factura').prop('disabled',true);
           $("#area-adjuntar-archivo").css('display', 'none');
+          $("#fecha-emision").prop('disabled',true);
+
         }else{
           $('#folio-factura').prop('disabled',false);
           $("#area-adjuntar-archivo").css('display', '');
+          $("#fecha-emision").prop('disabled',false);
 
         }
       })
@@ -522,6 +563,9 @@ toastr.options = {
       let proveedor = $('#proveedor').val();
       let id_sucursal = $('#btn-mover').attr('id_sucursal');
       let estado_movimiento = $('#estado-movimientos').val();
+      let fecha_emision = $('#fecha-emision').val();
+      let fecha_vencido = $('#fecha-vencido').val();
+
       if(estado_movimiento == null ||  estado_movimiento == '' || estado_movimiento == undefined){
         toastr.error('Selecciona un tipo de factura', 'Respuesta' );
           return false;
@@ -549,6 +593,10 @@ toastr.options = {
       formData.append('folio_factura', folio_factura);
       formData.append('id_sucursal', id_sucursal);
       formData.append('estado_movimiento', estado_movimiento);
+      formData.append('fecha_emision', fecha_emision);
+      formData.append('fecha_vencido', fecha_vencido);
+
+
       $.ajax({
           type: "POST",
           url: "./modelo/inventarios/ingresar-mercancia.php",

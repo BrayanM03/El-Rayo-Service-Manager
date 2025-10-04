@@ -1,5 +1,10 @@
 <!-- Sidebar -->
 <?php
+
+include 'modelo/configuraciones/configuracion_permisos/Permiso.php';
+
+$permiso_model = new Permiso($con);
+
 $flag = isset($_GET['nav']) ? $_GET['nav'] : 0;
 $claseInicio = '';
 $claseNuevaVenta = '';
@@ -134,6 +139,10 @@ switch ($flag) {
         break;
     case 'proveedores':
         $claseProveedores = 'active';
+        break;
+        break;
+    case 'nominas':
+        $claseNomina = 'active';
         break;    
     default:
         $clase = "";
@@ -431,8 +440,10 @@ switch ($flag) {
         Administración
     </div>
     <?php 
-
-if ($user_jerarquia == 1 || $_SESSION['id_usuario'] ==7 || $_SESSION['id_usuario'] ==24) { // 7 de Kari
+    $permiso_cuentas = $permiso_model->tienePermiso($_SESSION['id_usuario'], 'ver_cuentas_pagar');
+ 
+//if ($user_jerarquia == 1 || $_SESSION['id_usuario'] ==7 || $_SESSION['id_usuario'] ==24 || $_SESSION['id_usuario'] == 18) { // 7 de Kari
+if($permiso_cuentas){
 ?>
     
 
@@ -456,6 +467,13 @@ if ($user_jerarquia == 1 || $_SESSION['id_usuario'] ==7 || $_SESSION['id_usuario
             <span>Empleados</span>
         </a>
     </li>
+
+    <!-- <li class="nav-item <?php //echo $claseNomina; ?>">
+        <a class="nav-link" href="nominas.php?id=0&nav=nominas">
+            <i class="fas fa-fw fa-user"></i>
+            <span>Nominas</span>
+        </a>
+    </li> -->
     <?php } 
     
 ?>
