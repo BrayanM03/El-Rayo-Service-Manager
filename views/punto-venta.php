@@ -1,5 +1,6 @@
 
-<?php                       $mes = date('m');
+<?php                      
+                            $mes = date('m');
                             $sel = "CALL llantas_por_anio(YEAR(CURDATE()));";
                             $stmt = $con->prepare($sel);
                             $stmt->execute();

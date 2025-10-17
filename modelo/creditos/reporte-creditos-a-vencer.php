@@ -124,6 +124,8 @@ function obtenerCreditosVencidos($tipo, $con, $fecha_inicio = 0, $fecha_final = 
 
     $id_sucursal_sesion = $_SESSION['id_sucursal'];
     $rol = $_SESSION['rol'];
+    $id_usuario = $_SESSION['id_usuario']; // ← importante para Karina
+
     // Validar tipo
     $dias = 0;
     switch ($tipo) {
@@ -133,12 +135,12 @@ function obtenerCreditosVencidos($tipo, $con, $fecha_inicio = 0, $fecha_final = 
         default: $dias = 7; // Valor por defecto
     }
 
-    // Query SQL
+    // Query base
     $query = "
         SELECT 
             c.id AS id_credito,
-            s.nombre as sucursal,
-            cl.Nombre_Cliente as cliente,
+            s.nombre AS sucursal,
+            cl.Nombre_Cliente AS cliente,
             c.id_Venta,
             c.plazo,
             c.fecha_inicio,
@@ -158,33 +160,31 @@ function obtenerCreditosVencidos($tipo, $con, $fecha_inicio = 0, $fecha_final = 
           AND c.estatus NOT IN (3, 4, 5)
     ";
 
-    if ($rol != 1 && $id_sucursal_sesion != 7) {
+    // Si NO es rol 1 y NO es Karina → se filtra por sucursal
+    $filtraSucursal = ($rol != 1 && $id_usuario != 7);
+    if ($filtraSucursal) {
         $query .= ' AND v.id_sucursal = ?';
     }
-    
-    // Filtro por tipo
+
+    // --- FILTRO POR TIPO ---
     if ($tipo == 'p' && $fecha_inicio != 0 && $fecha_final != 0) {
         $query .= " AND DATE(c.fecha_final) BETWEEN ? AND ? ORDER BY c.fecha_final ASC";
-    
-        if ($rol != 1 && $id_sucursal_sesion != 7) {
-            // Rol distinto de 1 → incluye sucursal
+
+        if ($filtraSucursal) {
             $stmt = $con->prepare($query);
             $stmt->bind_param("ssi", $fecha_inicio, $fecha_final, $id_sucursal_sesion);
         } else {
-            // Rol 1 → sin filtro de sucursal
             $stmt = $con->prepare($query);
             $stmt->bind_param("ss", $fecha_inicio, $fecha_final);
         }
-    
+
     } else {
         $query .= " AND DATE(c.fecha_final) BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL ? DAY) ORDER BY c.fecha_final ASC";
-        
-        if ($rol != 1 && $id_sucursal_sesion != 7) {
-            // Rol distinto de 1 → incluye sucursal
+
+        if ($filtraSucursal) {
             $stmt = $con->prepare($query);
             $stmt->bind_param("ii", $dias, $id_sucursal_sesion);
         } else {
-            // Rol 1 → sin filtro de sucursal
             $stmt = $con->prepare($query);
             $stmt->bind_param("i", $dias);
         }
@@ -202,77 +202,7 @@ function obtenerCreditosVencidos($tipo, $con, $fecha_inicio = 0, $fecha_final = 
     $con->close();
 
     return $creditos;
-    
 }
 
-function obtenerCreditosVencidosXX($tipo, $con, $fecha_inicio = 0, $fecha_final = 0) {
-   
-    $id_sucursal_sesion = $_SESSION['id_sucursal'];
-    // Validar tipo
-    $dias = 0;
-    switch ($tipo) {
-        case 1: $dias = 1; break;
-        case 7: $dias = 7; break;
-        case 15: $dias = 15; break;
-        default: $dias = 7; // Valor por defecto
-    }
-
-    // Query SQL
-    $query = "
-        SELECT 
-            c.id AS id_credito,
-            s.nombre as sucursal,
-            cl.Nombre_Cliente as cliente,
-            c.id_Venta,
-            c.plazo,
-            c.fecha_inicio,
-            c.fecha_final,
-            c.estatus AS estatus_credito,
-            v.id AS id_venta,
-            v.estatus AS estatus_venta,
-            v.total,
-            c.pagado,
-            c.restante,
-            v.fecha AS fecha_venta
-        FROM creditos c
-        INNER JOIN ventas v ON c.id_Venta = v.id
-        INNER JOIN clientes cl ON cl.id = v.id_cliente
-        INNER JOIN sucursal s ON s.id = v.id_sucursal
-        WHERE v.estatus != 'Cancelada'
-          AND c.estatus NOT IN (3, 4, 5)
-    ";
-
-    if($id_sucursal_sesion == 1 ){
-        $query .=  ' AND v.id_sucursal = ?';
-    }
-
-       // Filtro por tipo
-       if ($tipo == 'p' && $fecha_inicio != 0 && $fecha_final != 0) {
-        // Personalizado
-        $query .= " AND DATE(c.fecha_final) BETWEEN ? AND ? ORDER BY c.fecha_final ASC";
-        $stmt = $con->prepare($query);
-        $stmt->bind_param("ssi", $fecha_inicio, $fecha_final, $id_sucursal_sesion);
-    } else {
-        // Automático por rango de días
-        $query .= " AND DATE(c.fecha_final) BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL ? DAY) ORDER BY c.fecha_final ASC";
-        
-        $stmt = $con->prepare($query);
-        $stmt->bind_param("ii", $dias, $id_sucursal_sesion);
-    }
-
-  
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    $creditos = [];
-    while ($row = $result->fetch_assoc()) {
-        $creditos[] = $row;
-    }
-
-    $stmt->close();
-    $con->close();
-
-    return $creditos;
-}
 
 ?>
