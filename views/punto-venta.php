@@ -1,4 +1,61 @@
-<div class="row mt-5">
+
+<?php                       $mes = date('m');
+                            $sel = "CALL llantas_por_anio(YEAR(CURDATE()));";
+                            $stmt = $con->prepare($sel);
+                            $stmt->execute();
+                            $resultado_ = $stmt->get_result();
+                            $piezas_contado = 0;
+                            $piezas_credito = 0;
+                            while($row = $resultado_->fetch_assoc()){
+                                $id_sucursal = $row['id_sucursal'];
+                                $mes_sql = isset($row['mes']) ? $row['mes'] : 0;
+                                if($mes_sql==$mes && $_SESSION['id_sucursal'] == $id_sucursal){
+                                    $piezas_contado += $row['camion_contado'];
+                                    $piezas_credito += $row['camion_credito'];
+                                }else{
+                                    $piezas_contado += 0;
+                                    $piezas_credito += 0;
+                                }
+                             
+                            };
+                            $stmt->close();
+                            
+                            $suma = $piezas_contado + $piezas_credito;
+                            $meta = 200;
+
+                            if($suma >= $meta){
+                                $color_text = 'green';
+                            }else{
+                                $color_text = 'orange';
+                            }
+                        ?>
+<div class="row mt-3">
+    <div class="col-12 col-md-12 col-sm-12">
+        <div class="card p-3">
+            <div class="row">
+            <div class="col-2">
+                <label><b>Llantas de camión vendidas</b></label>
+            </div>
+            <div class="col-3">
+                <label for="">Llantas a contado:</label>
+                <h3><?= $piezas_contado?></h3>
+            </div>
+
+            <div class="col-3">
+                <label for="">Llantas a credito:</label>
+                <h3><?= $piezas_credito?></h3>
+            </div>
+
+            <div class="col-3">
+                <label for="">META: ⏳🏆</label>
+                <h3><b><span style="color:<?= $color_text?>"><?= $suma?></span> / <span style="color:blue"><?=$meta?></span></b></h3>
+            </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+<div class="row mt-2">
     <div class="col-12 col-md-12 col-sm-12">
         <div class="card" style="margin-bottom: 2vh; padding-bottom: 5vh; padding-left:1rem; padding-right:1rem;">
             <div class="row justify-content-center">

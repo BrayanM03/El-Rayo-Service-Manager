@@ -33,7 +33,7 @@
  
 	
 
-    <title>Creditos</title>
+    <title>Creditos | El Rayo Service Manager</title>
 
     <!-- Custom fonts for this template-->
     <link rel="stylesheet" href="src/css/inventario.css">
@@ -63,13 +63,24 @@
      <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
   
      <link rel="stylesheet" href="src/vendor/bower_components/select2-bootstrap-theme/dist/select2-bootstrap.css">
-
+ 
     <!---Librerias de estilos-->
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="src/css/menu-vertical.css" rel="stylesheet">
     <link href="src/css/filtros.css" rel="stylesheet">
 <style>
+
+.toast-container{
+            z-index: 999999999 !important;
+        }
+        .toast-success{
+            background-color: #55A38B !important;
+        }
+        .toast-error{
+            background-color: tomato !important;
+        }
+        
     .mostrar-creditos .swal2-content {
     height: 80vh !important;
     
@@ -109,17 +120,17 @@
                 <!-- End of Topbar --> 
 
 
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
-                        <div class="row">
+                <!-- Begin Page Content --> 
+                <div class="container-fluid mt-3">
+                        <!-- <div class="row">
                             <div class="col-md-6">
                                 <h3><b>Historial de creditos realizados</b></h3>
                             </div>
                         </div>
                         <hr>  
-                        
-
-                        <div class="row mt-2 mb-2 justify-content-center">
+                         -->
+                        <div class="d-none" id="titulo-hv" sucursal="<?php echo $_SESSION['sucursal']?>" id_sucursal="<?php echo $_SESSION['id_sucursal']?>" rol="<?php echo $_SESSION['rol'] ?>" id_usuario="<?php echo $_SESSION['id_usuario'] ?>"  nombre_usuario="<?php echo $_SESSION['nombre'] . ' ' . $_SESSION['apellidos'] ?>"></div>
+                        <!-- <div class="row mt-2 mb-2 justify-content-center">
                             <div class="col-12 col-md-10">
                                     <a href="modelo/creditos/excel-creditos-vencidos.php" class="btn btn-success btn-icon-split">
                                         <span class="icon text-white-50">
@@ -134,10 +145,12 @@
                                         <span class="text">Estado de cuenta</span>
                                     </a>
                             </div>
-                        </div>
+                        </div> -->
                         
-
-                      <table id="creditos" class="table table-striped">    
+                        <div id="filter-creditos-container" v-cloak>
+                        
+                        </div>  
+                      <table id="creditos" class="table x">    
                      </table>
                 </div>
             <footer class="sticky-footer bg-white">
@@ -206,19 +219,18 @@
    <script src="src/vendor/datatables/jquery.dataTables.min.js"></script> 
     <!-- <script src="src/vendor/datatables-responsive/js/dataTables.responsive.min.js"></script> -->
     <script src="src/vendor/datatables/dataTables.bootstrap4.js"></script>
-    <script src="src/js/bootstrap-select.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <!-- <script src="src/vendor/datatables/defaults.js"></script> --><!-- 
     <script src="src/vendor/datatables-responsive/js/responsive.bootstrap4.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  
     <script src="src/js/bootstrap-select.min.js"></script>
-    <script src="src/js/creditos.js"></script>
-    <script src="src/js/estado-cuenta.js"></script>
-    
-    <!-- <script src="./components/filtros-creditos.module.js" type="text/javascript"></script> -->
     <script src="src/js/filtros.js"></script>
+    <script src="./components/filtros-creditos.module.js" type="text/javascript"></script>
+    
+    <script src="src/js/estado-cuenta.js"></script>
+    <script src="src/js/creditos.js"></script>
 </body>
 
 </html>

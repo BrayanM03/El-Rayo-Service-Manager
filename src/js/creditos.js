@@ -1,3 +1,23 @@
+//Objeto de configuracion de toast
+toastr.options = {
+  "closeButton": true,
+  "debug": false,
+  "newestOnTop": false,
+  "progressBar": true,
+  "positionClass": "toast-bottom-right",
+  "preventDuplicates": false,
+  "onclick": null,
+  "showDuration": "300",
+  "hideDuration": "1000",
+  "timeOut": "5000",
+  "extendedTimeOut": "1000",
+  "showEasing": "swing",
+  "hideEasing": "linear",
+  "showMethod": "fadeIn",
+  "hideMethod": "fadeOut" 
+}
+
+
 function actualizarCreditoVencido() {
   $.ajax({
     type: "POST",
@@ -11,7 +31,181 @@ function actualizarCreditoVencido() {
 
 actualizarCreditoVencido();
 
+ 
 function MostrarCreditos() {
+  //$.fn.dataTable.ext.errMode = 'none';
+
+  table = $("#creditos").DataTable({
+    processing: true,
+    serverSide: true,
+    ajax: {
+      url: './modelo/filtros/aplicar-filtro-creditos.php',
+      type: 'post',
+      data: function (d) {
+         d.folio = $("#filtro-folio").val();
+         d.filtro_ray = $("#filtro-ray").val()
+    d.fecha_final = $("#filtro-fecha-final").val();
+    d.fecha_inicial = $("#filtro-fecha-inicial").val();
+    d.fecha_vencimiento_inicial = $("#filtro-fecha-vencimiento-inicial").val();
+    d.fecha_vencimiento_final = $("#filtro-fecha-vencimiento-final").val();
+    d.sucursal = $("#buscador-sucursal").val();
+    d.vendedor = $("#buscador-vendedor").val();
+    d.cliente = $("#buscador-clientes").val();
+    d.marca_llanta = $("#buscador-marcas").val();
+    d.ancho_llanta = $("#Ancho").val();
+    d.alto_llanta = $("#Proporcion").val();
+    d.rin_llanta = $("#Diametro").val();
+    d.filtro_tipo = $("#filtro-tipo").val();
+    d.filtro_asesor = $("#buscador-asesor").val();
+    d.plazo = $("#filtro-plazo").val();
+    d.estatus = $("#filtro-estatus").val();
+      }},
+    rowCallback: function(row, data, index) {
+      var info = this.api().page.info();
+      var page = info.page;
+      var length = info.length;
+      var columnIndex = 0; // Índice de la primera columna a enumerar
+
+      $('td:eq(' + columnIndex + ')', row).html(page * length + index + 1);
+      if(data['estatus'] == '3'){
+        $(row).css('background-color','#eaefc8')
+      }
+      if(data['estatus'] == '4'){
+        $(row).css('background-color','#ffcac2')
+      }
+    },
+    columns: [
+      { title: "#", data: null },
+      {title: "id",data: 'folio'},
+      { title: "cod", data: 'folio' }, // Columna oculta en teoria sirve para ordenar
+      { title: "Cliente", data: 'cliente' },
+      { title: "Sucursal", data: 'sucursal' },
+      { title: "Fecha inicio", render: function(data, type, row, meta) {
+        return formatearFechaEspanol(row['fecha_inicio']);
+    }},
+      { title: "Fecha final", data: 6,
+        render: function(data, type, row, meta) {
+          return formatearFechaEspanol(row['fecha_final']);
+      }},
+      { title: "Total", data: 'total', render:(data, type, row, meta)=>{
+        return formatearMoneda(row['total'])
+      }},
+      { title: "Pagado", data: 'pagado', render: (data, type, row, met)=>{
+        return formatearMoneda(row['pagado'])
+      }},
+      { title: "Restante", data: 'restante', render: (data, type, row, met)=>{
+        return formatearMoneda(row['restante'])
+      } },
+      {
+        title: "Estatus",
+        data: null,
+        render: function (data) {
+          
+          switch (data['estatus']) {
+            case "0":
+              return '<span class="badge badge-primary">Sin abono</span>';
+              break;
+
+            case "1":
+              return '<span class="badge badge-info">Primer abono</span>';
+              break;
+            case "2":
+              return '<span class="badge badge-warning">Pagando</span>';
+              break;
+            case "3":
+              return '<span class="badge badge-success">Finalizado</span>';
+              break;
+            case "4":
+              return '<span class="badge badge-danger">Vencido</span>';
+              break;
+            case "5":
+              return '<span class="badge badge-dark">Cancelada</span>';
+              break;
+            default:
+              break;
+          }
+        },
+      },
+      {
+        title: "Plazo",
+        data: null,
+        render: function (data) {
+       
+          switch (data['plazo']) {
+            case 1:
+              return "<span>7 dias</span>";
+              break;
+            case 2:
+              return "<span>15 dias</span>";
+              break;
+            case 3:
+              return "<span>1 mes</span>";
+              break;
+            case 4:
+              return "<span>1 año</span>";
+              break;
+            case 5:
+              return "<span>7 dias</span>";
+              break;
+              case 6:
+                return "<span>1 día</span>";
+                break;
+            default:
+              return ''
+              break;
+          }
+        },
+        search: {
+          regex: true, // Habilitar búsqueda con expresiones regulares
+          smart: false // Deshabilitar el procesamiento inteligente del buscador
+          }
+      },
+      {title: "Venta", data: 'id_venta',
+      },
+      {
+        title: "Accion",
+        data: null,
+        className: "celda-acciones",
+        render: function (data) {
+          id_sesion = $("#emp-title").attr("sesion_id");
+
+          if (id_sesion == "5" || id_sesion == "6" || id_sesion == "16") {
+            //Esta configuracion es especifica para el usuario de Mario, Javier y Amita se debe en un futuro hacer mas dinamico
+            return (
+              '<div style="display: flex"><button onclick="traerCredito(' + data['folio'] + ", " + data['id_venta'] + ');" type="button" class="buttonPDF btn btn-primary" style="margin-right: 8px"><span class="fa fa-eye"></span><span class="hidden-xs"></span><br>'+
+              '<button type="button" onclick="traerPdfCredito(' + data[8] + ');" class="btn ml-2 btn-danger"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button></div>'
+            );
+          } else {
+            return (
+              '<div style="display: flex"><button onclick="traerCredito(' +data['folio'] +", " +data['id_venta'] +');" type="button" class="buttonPDF btn btn-primary" style="margin-right: 8px"><span class="fa fa-eye"></span><span class="hidden-xs"></span></button><br>'+
+              //'<button type="button" onclick="borrarCredito(' + data[0] +');" class="buttonBorrar btn btn-warning"><span class="fa fa-trash"></span><span class="hidden-xs"></span></button><br>'+
+              '<button type="button" onclick="traerPdfCredito(' + data['id_venta'] + ');" class="btn ml-2 btn-danger"><span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button></div>'
+            );
+          }
+        },
+      },
+    ],
+    paging: true,
+    searching: true,
+    scrollY: "50vh",
+    info: true,
+    responsive: true,
+    order: [[1, "desc"]],
+    'columnDefs': [
+      { 'orderData':[2], 'targets': [1] },
+      {
+          'targets': [2],
+          'visible': false,
+          'searchable': false
+      },
+  ]
+  });
+
+  $("table.dataTable thead").addClass("table-info");
+  //table.columns([3]).visible(false);
+}
+//FUNCION ANTIGUA PARA CARGAR CREDITIOS_ SE REFCATORIZA 10 oct 2025
+function MostrarCreditosFuncionAntigua() {
   //$.fn.dataTable.ext.errMode = 'none';
 
   table = $("#creditos").DataTable({
@@ -132,7 +326,7 @@ function MostrarCreditos() {
     paging: true,
     searching: true,
     scrollY: "50vh",
-    info: false,
+    info: true,
     responsive: true,
     order: [[1, "desc"]],
     'columnDefs': [
@@ -148,8 +342,9 @@ function MostrarCreditos() {
   $("table.dataTable thead").addClass("table-info");
   //table.columns([3]).visible(false);
 }
-
-MostrarCreditos();
+document.addEventListener('filtrosListos', () => {
+  MostrarCreditos();
+});
 
 function traerPdfCredito(id) {
   window.open(
@@ -999,3 +1194,137 @@ function registrarAbonoEditado(id, monto1, monto2, monto3, monto4, monto5) {
     
 
 }
+
+function aplicarFiltros(){
+  table.ajax.reload(null, true);
+
+}
+
+function resetearFiltros(){
+  let fecha_inicial = $("#filtro-fecha-inicial").val('')
+  let fecha_final = $("#filtro-fecha-final").val('')
+  let fecha_vencimiento_inicial = $("#filtro-fecha-vencimiento-inicial").val('')
+  let fecha_vencimiento_final = $("#filtro-fecha-vencimiento-final").val('')
+  let sucursal = $("#buscador-sucursal")
+  sucursal.val('').selectpicker('refresh')
+  let vendedor = $("#buscador-vendedor")
+  vendedor.val('').selectpicker('refresh')
+  let cliente = $("#buscador-clientes")
+  cliente.val('').selectpicker('refresh')
+  let folio = $("#filtro-folio").val('')
+  let ray = $("#filtro-ray").val('')
+  let marca_llanta = $("#buscador-marcas")
+  marca_llanta.val('').selectpicker('refresh') //Multiple values
+  let ancho_llanta = $("#Ancho").val('')
+  ancho_llanta.selectpicker('refresh')
+  let alto_llanta = $("#Proporcion")
+  alto_llanta.val('').selectpicker('refresh')
+  let rin_llanta = $("#Diametro")
+  rin_llanta.val('').selectpicker('refresh')
+  let filtro_tipo = $("#filtro-tipo")
+  filtro_tipo.val('').selectpicker('refresh') //Multiple values
+  let filtro_estatus = $("#filtro-estatus")
+  filtro_estatus.val('').selectpicker('refresh') //Multiple values
+  let filtro_asesor = $("#buscador-asesor")
+  filtro_asesor.val('').selectpicker('refresh') //Multiple values
+  let plazo = $("#filtro-plazo")
+  plazo.val('').selectpicker('refresh')
+  let estatus = $("#filtro-estatus")
+  estatus.val('').selectpicker('refresh')
+
+  toastr.success('Filtro limpiados con exito' ); 
+
+  
+}
+
+function formatearFechaEspanol(fechaISO) {
+  const fecha = new Date(fechaISO + 'T00:00:00'); // Evita desfasajes por zona horaria
+
+  const opciones = {
+      weekday: 'long',  // Día de la semana
+      day: 'numeric',   // Día del mes
+      month: 'short',   // Mes abreviado
+      year: 'numeric'   // Año
+  };
+
+  // Formatear en español (México)
+  const formateada = fecha.toLocaleDateString('es-MX', opciones);
+
+  // Capitalizar la primera letra (por estética)
+  return formateada.charAt(0).toUpperCase() + formateada.slice(1);
+}
+
+function formatearMoneda(valor) {
+  const numero = parseFloat(valor) || 0;
+  return numero.toLocaleString('es-MX', {
+      style: 'currency',
+      currency: 'MXN',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+  });
+}
+
+
+function reporteCreditosVencidos15dias(){
+  Swal.fire({
+    icon: 'info',
+    title:'Reporte de creditos que estan proximos a vencer',
+    html: `
+    <div class="container">
+        <div class="row">
+           <div class="col-11">
+                <label for="cliente">Selecciona hasta que día quieres ver el reporte </label>
+                <select onchange="setearFiltroPersonalizadoReporte15dias()" id="tipo-reporte" class="form-control selectpicker" data-live-search="true">
+                    <option value="1">1 día</option>
+                    <option value="7">7 días</option>
+                    <option value="15">15 días</option>
+                    <option value="p">Personalizado</option>
+                </select>
+                <small class="mt-2">⚠️ <b>Atención:</b> créditos próximos a vencer entre mañana y los dias que selecciones.</small>
+            </div> 
+        </div>
+        <div class="row mt-3" id="area-filtros-personalizado"></div>
+    </div>
+    `,
+    confirmButtonText:'Obtener',
+    showCloseButton:true,
+    didOpen: ()=>{
+      $("#tipo-reporte").selectpicker();
+
+    }
+}).then((r)=>{
+  if(r.isConfirmed){
+    let tipo_reporte = $("#tipo-reporte").val()
+    let fecha_reporte_inicial;
+    let fecha_reporte_final
+    if(tipo_reporte =='p'){
+      fecha_reporte_inicial = $("#fecha-reporte-inicial").val()
+      fecha_reporte_final = $("#fecha-reporte-final").val()
+    }else{
+      fecha_reporte_inicial=0;
+      fecha_reporte_final=0;
+    }
+    window.open('./modelo/creditos/reporte-creditos-a-vencer.php?tipo='+ tipo_reporte + '&fecha_inicial=' + fecha_reporte_inicial + '&fecha_final='+ fecha_reporte_final, '_blank');
+  }
+})
+}
+
+function setearFiltroPersonalizadoReporte15dias() {
+  if($("#tipo-reporte").val()=='p'){
+    $("#area-filtros-personalizado").append(`
+    <div class="col-11">
+      <label for="cliente">Selecciona el rango que quieras usar</label>
+      <div class="row">
+          <div class="col-6">
+              <input type="date" class="form-control" id="fecha-reporte-inicial">
+          </div>
+          <div class="col-6">
+              <input type="date" class="form-control" id="fecha-reporte-final">
+          </div>
+      </div>
+    </div>  
+    `)
+    document.getElementById('fecha-reporte-inicial').valueAsDate = new Date();
+  }
+};
+
