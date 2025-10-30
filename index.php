@@ -5,7 +5,7 @@ include 'modelo/conexion.php';
 $con = $conectando->conexion();
 
 
-if (!isset($_SESSION['id_usuario'])) {
+if (!isset($_SESSION['id_usuario'])) { 
     header("Location:login.php");
 }
 
@@ -121,6 +121,13 @@ if ($_SESSION['rol'] == 4) {
                         </div> -->
 
                         <?php include 'views/llantas-vendidas.php'; ?>
+                        <hr>
+                        
+                        <?php
+                            if($_SESSION['id_usuario'] != 2){
+                                include 'views/reporte-camion-vendidas.php';
+                            }
+                          ?>
 
                 </div>
                 
