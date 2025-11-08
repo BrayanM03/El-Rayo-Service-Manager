@@ -172,7 +172,7 @@ function obtenerCreditosVencidos($tipo, $con, $fecha_inicio = 0, $fecha_final = 
 
         if ($filtraSucursal) {
             $stmt = $con->prepare($query);
-            $stmt->bind_param("ssi", $fecha_inicio, $fecha_final, $id_sucursal_sesion);
+            $stmt->bind_param("iss", $id_sucursal_sesion, $fecha_inicio, $fecha_final);
         } else {
             $stmt = $con->prepare($query);
             $stmt->bind_param("ss", $fecha_inicio, $fecha_final);
@@ -183,7 +183,7 @@ function obtenerCreditosVencidos($tipo, $con, $fecha_inicio = 0, $fecha_final = 
 
         if ($filtraSucursal) {
             $stmt = $con->prepare($query);
-            $stmt->bind_param("ii", $dias, $id_sucursal_sesion);
+            $stmt->bind_param("ii",$id_sucursal_sesion, $dias);
         } else {
             $stmt = $con->prepare($query);
             $stmt->bind_param("i", $dias);

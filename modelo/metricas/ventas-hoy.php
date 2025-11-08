@@ -194,7 +194,7 @@ function obtenerVentaMetodoPago($con, $id_sucursal, $fecha, $tipo, $metodo_pago)
         $res->fetch();
         $res->close();
 
-        $consulta = "SELECT SUM($col) FROM abonos_apartados WHERE id_sucursal LIKE ? AND fecha_corte = ?";
+        $consulta = "SELECT SUM(aa.$col) FROM abonos_apartados aa INNER JOIN apartados a ON aa.id_apartado = a.id WHERE aa.id_sucursal LIKE ? AND aa.fecha_corte = ? AND a.estatus != 'Cancelada'";
         $res = $con->prepare($consulta);
         $res->bind_param("ss", $id_sucursal, $fecha);
         $res->execute();
@@ -202,7 +202,7 @@ function obtenerVentaMetodoPago($con, $id_sucursal, $fecha, $tipo, $metodo_pago)
         $res->fetch();
         $res->close();
 
-        $consulta = "SELECT SUM($col) FROM abonos_pedidos WHERE id_sucursal LIKE ? AND fecha_corte = ? AND credito != 1";
+        $consulta = "SELECT SUM(ap.$col) FROM abonos_pedidos ap INNER JOIN pedidos p ON ap.id_pedido = p.id WHERE ap.id_sucursal LIKE ? AND ap.fecha_corte = ? AND ap.credito != 1 AND p.estatus != 'Cancelado'";
         $res = $con->prepare($consulta);
         $res->bind_param("ss", $id_sucursal, $fecha);
         $res->execute();
@@ -211,7 +211,7 @@ function obtenerVentaMetodoPago($con, $id_sucursal, $fecha, $tipo, $metodo_pago)
         $res->close();
 
         
-        $consulta = "SELECT SUM($col) FROM abonos WHERE id_sucursal LIKE ? AND fecha_corte = ?";
+        $consulta = "SELECT SUM(a.$col) FROM abonos a INNER JOIN creditos c ON a.id_credito = c.id WHERE a.id_sucursal LIKE ? AND a.fecha_corte = ? AND c.estatus != 5";
         $res = $con->prepare($consulta);
         $res->bind_param("ss", $id_sucursal, $fecha);
         $res->execute();

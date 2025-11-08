@@ -151,7 +151,7 @@ $resp->close();
                 $hoja_activa->setCellValue('M4', 'Estatus');
 
                 //Contamos los abonos de los apartados
-                $select_count = "SELECT COUNT(*) FROM abonos_apartados WHERE fecha_corte = ? AND id_sucursal = ?";
+                $select_count = "SELECT COUNT(*) FROM abonos_apartados aa INNER JOIN apartados a ON aa.id_apartado = a.id WHERE aa.fecha_corte = ? AND aa.id_sucursal = ? AND a.estatus != 'Cancelada'";
                 $re = $con->prepare($select_count);
                 $re->bind_param('si', $fecha, $id_sucursal);
                 $re->execute();
@@ -160,7 +160,7 @@ $resp->close();
                 $re->close();
 
                 //Contamos los abonos de los pedidos
-                $select_count = "SELECT COUNT(*) FROM abonos_pedidos WHERE fecha_corte = ? AND id_sucursal = ? AND credito != 1";
+                $select_count = "SELECT COUNT(*) FROM abonos_pedidos ap INNER JOIN pedidos p ON ap.id_pedido = p.id WHERE ap.fecha_corte = ? AND ap.id_sucursal = ? AND ap.credito != 1 AND p.estatus != 'Cancelado'";
                 $re = $con->prepare($select_count);
                 $re->bind_param('si', $fecha, $id_sucursal);
                 $re->execute();
@@ -172,7 +172,7 @@ $resp->close();
                 if($numero_abonos > 0){
                     $index_ab = 5;
                     if($numero_abonos_apartados > 0){
-                        $select_abono = "SELECT * FROM abonos_apartados WHERE fecha_corte = '$fecha' AND id_sucursal = $id_sucursal";
+                        $select_abono = "SELECT aa.* FROM abonos_apartados aa INNER JOIN apartados a ON aa.id_apartado = a.id WHERE aa.fecha_corte = '$fecha' AND aa.id_sucursal = $id_sucursal AND a.estatus != 'Cancelada'";
                         $resp_abono = mysqli_query($con, $select_abono);
                         
                         while ($fila = mysqli_fetch_array($resp_abono)) {
@@ -1147,7 +1147,7 @@ function obtenerVentaTotal($con, $id_sucursal, $fecha, $tipo, $estatus){
     $total_venta_apartados = 0;
     $total_venta_pedidos = 0;
     if($tipo == "Credito"){
-        $consulta = "SELECT SUM(abono) FROM abonos WHERE id_sucursal=? AND fecha_corte = ?";
+        $consulta = "SELECT SUM(a.abono) FROM abonos a INNER JOIN creditos c ON a.id_credito = c.id WHERE a.id_sucursal=? AND a.fecha_corte = ? AND c.estatus != 5";
         $res = $con->prepare($consulta);
         $res->bind_param("ss", $id_sucursal, $fecha);
         $res->execute();
@@ -1163,7 +1163,7 @@ function obtenerVentaTotal($con, $id_sucursal, $fecha, $tipo, $estatus){
         $res->fetch();
         $res->close();
 
-        $consulta = "SELECT SUM(abono) FROM abonos_apartados WHERE id_sucursal=? AND fecha_corte = ?";
+        $consulta = "SELECT SUM(aa.abono) FROM abonos_apartados aa INNER JOIN apartados a ON aa.id_apartado = a.id WHERE aa.id_sucursal=? AND aa.fecha_corte = ? AND a.estatus != 'Cancelada'";
         $res = $con->prepare($consulta);
         $res->bind_param("ss", $id_sucursal, $fecha);
         $res->execute();
@@ -1171,7 +1171,7 @@ function obtenerVentaTotal($con, $id_sucursal, $fecha, $tipo, $estatus){
         $res->fetch();
         $res->close();
 
-        $consulta = "SELECT SUM(abono) FROM abonos_pedidos WHERE id_sucursal=? AND fecha_corte = ? AND credito != 1";
+        $consulta = "SELECT SUM(ap.abono) FROM abonos_pedidos ap INNER JOIN pedidos p ON ap.id_pedido = p.id WHERE ap.id_sucursal=? AND ap.fecha_corte = ? AND ap.credito != 1 AND p.estatus != 'Cancelado'";
         $res = $con->prepare($consulta);
         $res->bind_param("ss", $id_sucursal, $fecha);
         $res->execute();
@@ -1221,7 +1221,7 @@ function obtenerVentaMetodoPago($con, $id_sucursal, $fecha, $tipo, $estatus, $me
         $res->fetch();
         $res->close();
 
-        $consulta = "SELECT SUM($col) FROM abonos_apartados WHERE id_sucursal=? AND fecha_corte = ?";
+        $consulta = "SELECT SUM(aa.$col) FROM abonos_apartados aa INNER JOIN apartados a ON aa.id_apartado = a.id WHERE aa.id_sucursal=? AND aa.fecha_corte = ? AND a.estatus != 'Cancelada'";
         $res = $con->prepare($consulta);
         $res->bind_param("ss", $id_sucursal, $fecha);
         $res->execute();
@@ -1229,7 +1229,7 @@ function obtenerVentaMetodoPago($con, $id_sucursal, $fecha, $tipo, $estatus, $me
         $res->fetch();
         $res->close();
 
-        $consulta = "SELECT SUM($col) FROM abonos_pedidos WHERE id_sucursal=? AND fecha_corte = ? AND credito != 1";
+        $consulta = "SELECT SUM(ap.$col) FROM abonos_pedidos ap INNER JOIN pedidos p ON ap.id_pedido = p.id WHERE ap.id_sucursal=? AND ap.fecha_corte = ? AND ap.credito != 1 AND p.estatus !='Cancelado'";
         $res = $con->prepare($consulta);
         $res->bind_param("ss", $id_sucursal, $fecha);
         $res->execute();
@@ -1239,7 +1239,7 @@ function obtenerVentaMetodoPago($con, $id_sucursal, $fecha, $tipo, $estatus, $me
 
         $total_venta = $total_venta + $total_venta_apartados + $total_venta_pedidos;
     }else {
-        $consulta = "SELECT SUM($col) FROM abonos WHERE id_sucursal=? AND fecha_corte = ?";
+        $consulta = "SELECT SUM(a.$col) FROM abonos a INNER JOIN creditos c ON a.id_credito = c.id WHERE a.id_sucursal=? AND a.fecha_corte = ? AND c.estatus != 5";
         $res = $con->prepare($consulta);
         $res->bind_param("ss", $id_sucursal, $fecha);
         $res->execute();

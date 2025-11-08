@@ -1,7 +1,7 @@
 
 <?php                      
                             $mes = date('m');
-                            $sel = "CALL llantas_por_anio(YEAR(CURDATE()));";
+                            $sel = "CALL llantas_vendidas_por_mes(YEAR(CURDATE()));";
                             $stmt = $con->prepare($sel);
                             $stmt->execute();
                             $resultado_ = $stmt->get_result();

@@ -21,7 +21,27 @@ if (empty($_SESSION['csrf_token'])) {
 
     <link href="./src/css/login.css" rel="stylesheet">
     <!------ Include the above in your HEAD tag ---------->
+    <style>
+        
+i {
+    position: absolute;
+    
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: inset 0 -1px 1px rgb(114, 114, 114);
+    top: -10px;
+    animation: nieve linear infinite;
+}
 
+@keyframes nieve {
+    0% {
+        top: -10px;
+    }
+    100% {
+        top: calc(100vh + 50px);
+    }
+}
+</style>
 </head>
 
 <body>
@@ -94,5 +114,31 @@ if (empty($_SESSION['csrf_token'])) {
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://kit.fontawesome.com/31a28ea63e.js" crossorigin="anonymous"></script>
 <script src="src/js/iniciar-sesion.js"></script> 
+<script>
+    const body = document.querySelector('body')
 
+const crearNeive = () => {
+    let copo = document.createElement('i')
+    let x = innerWidth * Math.random()
+    let size = (Math.random() * 8) + 2
+    let z = Math.round(Math.random()) * 100
+    let delay = Math.random() * 5
+    let anima = (Math.random() * 10) + 5
+
+    copo.style.left = x + 'px'
+    copo.style.width = size + 'px'
+    copo.style.height = size + 'px'
+    copo.style.zIndex = z
+    copo.style.animationDelay = delay + 's'
+    copo.style.animationDuration = anima + 's'
+
+    body.appendChild(copo)
+
+    setTimeout(() => {
+        copo.remove()
+    }, anima * 1000)
+}
+
+setInterval(crearNeive, 50)
+</script>    
 </html>

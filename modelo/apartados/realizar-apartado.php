@@ -154,12 +154,18 @@ if(isset($_POST)) {
     }
     
    if($stock_ok){
+
     $comentario = $_POST['comentario'];
 
     include '../helpers/verificar-hora-corte.php';
 
+    $con->begin_transaction();
+        
+    try {
+
     $queryInsertar = "INSERT INTO apartados (id, sucursal, id_sucursal, id_usuario, id_cliente, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_deposito, pago_sin_definir, primer_abono, restante, total, tipo, estatus, metodo_pago, hora, comentario, plazo, fecha_inicial, fecha_final) VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     $resultado = $con->prepare($queryInsertar);
+    if (!$resultado) throw new Exception("Error preparando INSERT apartados: " . $con->error);
     $resultado->bind_param('siisdddddddddsssssiss', $sucursal, $id_sucursal, $id_usuario, $cliente , $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_deposito, $pago_sin_definir, $adelanto, $restante, $total, $tipo, $estatus, $desc_metodos, $hora, $comentario, $plazo, $fecha_inicial, $fecha_final);
     $resultado->execute();
     $id_apartado = $resultado->insert_id;
@@ -184,6 +190,7 @@ if(isset($_POST)) {
             if($subcadena == "SERV"){
 
               $ID = $con->prepare("SELECT id FROM servicios WHERE codigo LIKE ?");
+              if (!$ID) throw new Exception("Error preparando SELECT servicios: " . $con->error);
               $ID->bind_param('s', $codigo);
               $ID->execute();
               $ID->bind_result($id_Servicio);
@@ -192,6 +199,7 @@ if(isset($_POST)) {
 
             }else{
               $ID = $con->prepare("SELECT id_Llanta, Stock FROM inventario WHERE Codigo = ?");
+              if (!$ID) throw new Exception("Error preparando SELECT inventario: " . $con->error);
               $ID->bind_param('s', $codigo);
               $ID->execute();
               $ID->bind_result($id_Llanta, $stockActual);
@@ -201,6 +209,7 @@ if(isset($_POST)) {
               $resultStock = $stockActual - $cantidad;
 
              $updateStockSendero = $con->prepare("UPDATE inventario SET Stock = ? WHERE Codigo = ?");
+             if (!$updateStockSendero) throw new Exception("Error preparando actualizacion de inv UPDATE inventario: " . $con->error);
              $updateStockSendero->bind_param('is', $resultStock, $codigo);
              $updateStockSendero->execute();
              $updateStockSendero->close();
@@ -210,6 +219,7 @@ if(isset($_POST)) {
               $unidad = "servicio";
               $queryInsertar = "INSERT INTO detalle_apartado (id, id_apartado, id_llanta, modelo, cantidad, unidad, precio_Unitario, importe) VALUES (null,?,?,?,?,?,?,?)";
               $resultado = $con->prepare($queryInsertar);
+              if (!$resultado) throw new Exception("Error preparando INSERT detalle_apartado: " . $con->error);
               $resultado->bind_param('iisisdd',$id_apartado, $id_Servicio, $modelo, $cantidad, $unidad, $precio_unitario, $importe);
               $resultado->execute();
               $resultado->close();
@@ -217,20 +227,23 @@ if(isset($_POST)) {
               $unidad = "pieza";
               $queryInsertar = "INSERT INTO detalle_apartado (id, id_apartado, id_llanta, modelo, cantidad, unidad, precio_unitario, importe) VALUES (null,?,?,?,?,?,?,?)";
               $resultado = $con->prepare($queryInsertar);
+              if (!$queryInsertar) throw new Exception("Error preparando INSERT detalle_apartado: " . $con->error);
               $resultado->bind_param('iisisdd',$id_apartado, $id_Llanta, $modelo, $cantidad, $unidad, $precio_unitario, $importe);
               $resultado->execute();
               $resultado->close();
-             }     
-
-             $queryInsertar = "DELETE FROM productos_preventa WHERE id_usuario = ?";
-                $resultado = $con->prepare($queryInsertar);
-                $resultado->bind_param('i', $id_usuario);
-                $resultado->execute();
-                $resultado->close();
+             }    
+             
           }else{
             echo "";
           }
         }
+
+              $queryInsertar = "DELETE FROM productos_preventa WHERE id_usuario = ?";
+              $resultado = $con->prepare($queryInsertar);
+              if (!$queryInsertar) throw new Exception("Error preparando DELETE productos_preventa: " . $con->error);
+                $resultado->bind_param('i', $id_usuario);
+                $resultado->execute();
+                $resultado->close();
 
         insertarUtilidadApartado($con, $id_apartado);
         //Insertar abono
@@ -239,6 +252,7 @@ if(isset($_POST)) {
           $estado =1; 
           $queryInsertar = "INSERT INTO abonos_apartados (id, id_apartado, fecha, hora, abono, metodo_pago, pago_efectivo, pago_tarjeta, pago_transferencia, pago_cheque, pago_deposito, pago_sin_definir, usuario, estado, sucursal, id_sucursal, fecha_corte, hora_corte) VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
           $resultado = $con->prepare($queryInsertar);
+          if (!$queryInsertar) throw new Exception("Error preparando INSERT INTO abonos_apartados: " . $con->error);
           $resultado->bind_param('issdsddddddssssss', $id_apartado, $fecha_inicial, $hora, $adelanto, $desc_metodos, $pago_efectivo, $pago_tarjeta, $pago_transferencia, $pago_cheque, $pago_deposito, $pago_sin_definir, $vendedor_usuario, $estado, $sucursal, $id_sucursal, $fecha_corte, $hora_corte);
           $resultado->execute();
           $resultado->close();
@@ -250,8 +264,19 @@ if(isset($_POST)) {
           $utlidad_res= 'Sin abono de apartado';
         }
 
+        // Todo correcto, se hace commit
+        $con->commit();
+
         $response = array('estatus' => true, 'mensaje' => 'Aparado realizado correctamente', 'folio' => $id_apartado, 'utlidad_res' => $utlidad_res);
         echo json_encode($response);
+
+      }catch (Exception $e) {
+        $con->rollback();
+       // error_log("Error en venta: " . $e->getMessage()); // También puedes guardar en tabla si prefieres
+        responder(false, 'Error en la venta: ' . $e->getMessage(), 'error', [], true);
+    
+    }
+
    }else{
         $response = array('estatus' => false, 'mensaje' => 'El stock de la llantas: '. $error_llantas.' no es suficiente. Cantidad solicitada<b>'.$cantidad_post .'</b>  Stock actual:<b>'.$stockActual);
         echo json_encode($response);
