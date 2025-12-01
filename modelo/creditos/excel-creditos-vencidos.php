@@ -33,8 +33,8 @@ $hoja_activa->setTitle("creditos vencidos");
         $hoja_activa->getStyle('B1')->getAlignment()->setHorizontal('center');
         $hoja_activa->getStyle('B1')->getAlignment()->setVertical('center');
 
-$index=3;
-//cabezera
+        $index=3;
+        $ultima_columna = 'L';
 
                 $hoja_activa->getColumnDimension('A')->setWidth(8);
                 $hoja_activa->setCellValue('A'.$index, "#");
@@ -58,13 +58,15 @@ $index=3;
                 $hoja_activa->setCellValue('J'.$index, 'Venta');
                 $hoja_activa->getColumnDimension('K')->setWidth(25);
                 $hoja_activa->setCellValue('K'.$index, 'Sucursal');
+                $hoja_activa->getColumnDimension('L')->setWidth(25);
+                $hoja_activa->setCellValue('L'.$index, 'Asesor');
 
-                $hoja_activa->getStyle('A'.$index.':K'.$index)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('007bcc');
-                $hoja_activa->getStyle('A'.$index.':K'.$index)->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
-                $hoja_activa->getStyle('A'.$index.':K'.$index)->getFont()->setBold(true);
+                $hoja_activa->getStyle('A'.$index.':'. $ultima_columna .$index)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('007bcc');
+                $hoja_activa->getStyle('A'.$index.':'. $ultima_columna .$index)->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+                $hoja_activa->getStyle('A'.$index.':'. $ultima_columna .$index)->getFont()->setBold(true);
                 $hoja_activa->getRowDimension('2')->setRowHeight(20);
-                $hoja_activa->getStyle('A'.$index.':K'.$index)->getAlignment()->setHorizontal('center');
-                $hoja_activa->getStyle('A'.$index.':K'.$index)->getAlignment()->setVertical('center');
+                $hoja_activa->getStyle('A'.$index.':'. $ultima_columna .$index)->getAlignment()->setHorizontal('center');
+                $hoja_activa->getStyle('A'.$index.':'. $ultima_columna .$index)->getAlignment()->setVertical('center');
 
                 $index++;
 
@@ -79,8 +81,13 @@ $res->close();
 
 if($total_creditos>0)
 {
-    $traer_creditos = "SELECT c.*,s.nombre as nombre_sucursal, v.hora FROM creditos c
-    LEFT JOIN ventas v ON v.id = c.id_venta INNER JOIN sucursal s ON v.id_sucursal =s.id WHERE c.estatus=4";
+    $traer_creditos = "SELECT c.*,s.nombre as nombre_sucursal, v.hora, 
+    cl.Nombre_Cliente as cliente, CONCAT(u.nombre,' ',u.apellidos) as asesor
+     FROM creditos c LEFT JOIN ventas v ON v.id = c.id_venta 
+     INNER JOIN clientes cl ON cl.id = v.id_Cliente 
+     INNER JOIN sucursal s ON v.id_sucursal = s.id 
+     INNER JOIN usuarios u ON cl.id_asesor = u.id
+     WHERE c.estatus=4";
     $resp = $con->prepare($traer_creditos);
     $resp->execute();
     $respuesta = Arreglo_Get_Result($resp);
@@ -90,6 +97,8 @@ if($total_creditos>0)
     foreach ($respuesta as $key => $value) {
         //$data[]=$value;
         $cliente_id=$value["id_cliente"];
+        $nombre_cliente = $value['cliente'];
+        $nombre_asesor = $value['asesor'];
         $pagado=$value["pagado"];
         $restante=$value["restante"];
         $sucursal = $value["nombre_sucursal"];
@@ -132,13 +141,13 @@ if($total_creditos>0)
         
         $id_venta=$value["id_venta"];
 
-        $consulta ="SELECT Nombre_Cliente FROM clientes WHERE id=?";
+        /* $consulta ="SELECT Nombre_Cliente FROM clientes WHERE id=?";
         $res =$con->prepare($consulta);
         $res->bind_param("i",$cliente_id);
         $res->execute();
         $res->bind_result($nombre_cliente);
         $res->fetch();
-        $res->close();
+        $res->close(); */
 
         $hoja_activa->getColumnDimension('A')->setWidth(8);
         $hoja_activa->setCellValue('A'.$index, $contador);
@@ -162,6 +171,8 @@ if($total_creditos>0)
         $hoja_activa->setCellValue('J'.$index, $id_venta);
         $hoja_activa->getColumnDimension('K')->setWidth(25);
         $hoja_activa->setCellValue('K'.$index, $sucursal);
+        $hoja_activa->getColumnDimension('L')->setWidth(40);
+        $hoja_activa->setCellValue('L'.$index, $nombre_asesor);
 
         $contador++;
         $index++;

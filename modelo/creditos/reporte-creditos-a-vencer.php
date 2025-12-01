@@ -26,9 +26,9 @@ $sheet = $spreadsheet->getActiveSheet();
 $sheet->setTitle("Créditos vencidos");
 
 // --- Primera fila ---
-$sheet->mergeCells("A1:L1");
-$sheet->getStyle('A1:L1')->getAlignment()->setHorizontal('center');
-$sheet->getStyle('A1:L1')->getAlignment()->setVertical('center');
+$sheet->mergeCells("A1:M1");
+$sheet->getStyle('A1:M1')->getAlignment()->setHorizontal('center');
+$sheet->getStyle('A1:M1')->getAlignment()->setVertical('center');
 $tipo = $_GET['tipo'];
 if($_GET['tipo']=='p'){
     $sheet->setCellValue('A1', 'Reporte de creditos vencidos entre '. $_GET['fecha_inicial']. ' y '. $_GET['fecha_final'] .' dias');
@@ -42,7 +42,7 @@ $fila=3;
 // --- Encabezados ---
 $headers = [
     'ID Credito', 'Sucursal', 'Cliente', 'Fecha inicio', 'Fecha Final',
-    'Total', 'Pagado', 'Restante', 'Estatus Crédito', 'Estatus Venta', 'Plazo', 'RAY',
+    'Total', 'Pagado', 'Restante', 'Estatus Crédito', 'Estatus Venta', 'Plazo', 'RAY', 'Asesor'
 ];
 $estatus_credito = array(0=>'Sin abono', 1=>'Primer abono', 2 => 'Pagando', 3 =>'Finalizado', 4 => 'Vencido' ,5 => 'Cancelado');
 $plazos = ['No borrar', '7 dias', '15 dias', '1 mes', '1 año', '7 dias', '1 dias']; //No borrar porque los plazo empieza no en 0
@@ -61,6 +61,7 @@ $sheet->getColumnDimension('I')->setWidth(13);
 $sheet->getColumnDimension('J')->setWidth(13);
 $sheet->getColumnDimension('K')->setWidth(13);
 $sheet->getColumnDimension('L')->setWidth(14);
+$sheet->getColumnDimension('M')->setWidth(40);
 
 if(count($creditos_avencer)==0){
     $fila = 3;
@@ -68,8 +69,8 @@ if(count($creditos_avencer)==0){
     $sheet->mergeCells("A".$fila.":L".$fila);
     $sheet->setCellValue('A' . $fila, 'No se encontrarón creditos a vencer');
 
-$sheet->getStyle('A1:L1')->getAlignment()->setHorizontal('center');
-$sheet->getStyle('A1:L1')->getAlignment()->setVertical('center');
+$sheet->getStyle('A1:M1')->getAlignment()->setHorizontal('center');
+$sheet->getStyle('A1:M1')->getAlignment()->setVertical('center');
 
 }else{
     foreach ($creditos_avencer as $row) {
@@ -85,6 +86,7 @@ $sheet->getStyle('A1:L1')->getAlignment()->setVertical('center');
         $sheet->setCellValue('J' . $fila, $row['estatus_venta']);
         $sheet->setCellValue('K' . $fila, $plazos[$row['plazo']]);
         $sheet->setCellValue('L' . $fila, $row['id_Venta']);
+        $sheet->setCellValue('M' . $fila, $row['asesor']);
         $fila++;
         }
 }
@@ -101,10 +103,10 @@ for ($i = 2; $i <= $totalRegistros + 1; $i++) {
 } */
 
 // --- Estilos opcionales ---
-$sheet->getStyle('A2:L2')->getFill()->setFillType(Fill::FILL_SOLID)
+$sheet->getStyle('A2:M2')->getFill()->setFillType(Fill::FILL_SOLID)
     ->getStartColor()->setRGB('007bcc');
-$sheet->getStyle('A2:L2')->getFont()->getColor()->setARGB(Color::COLOR_WHITE);
-$sheet->getStyle('A2:L2')->getFont()->setBold(true);
+$sheet->getStyle('A2:M2')->getFont()->getColor()->setARGB(Color::COLOR_WHITE);
+$sheet->getStyle('A2:M2')->getFont()->setBold(true);
 
 // --- Limpieza del buffer antes de enviar ---
 if (ob_get_length()) ob_end_clean();
@@ -151,11 +153,13 @@ function obtenerCreditosVencidos($tipo, $con, $fecha_inicio = 0, $fecha_final = 
             v.total,
             c.pagado,
             c.restante,
-            v.fecha AS fecha_venta
+            v.fecha AS fecha_venta,
+            CONCAT(u.nombre,' ',u.apellidos) as asesor
         FROM creditos c
         INNER JOIN ventas v ON c.id_Venta = v.id
         INNER JOIN clientes cl ON cl.id = v.id_cliente
         INNER JOIN sucursal s ON s.id = v.id_sucursal
+        INNER JOIN usuarios u ON cl.id_asesor = u.id
         WHERE v.estatus != 'Cancelada'
           AND c.estatus NOT IN (3, 4, 5)
     ";
