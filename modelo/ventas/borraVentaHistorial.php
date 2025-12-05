@@ -1,5 +1,5 @@
 <?php
-
+/*---
 include '../conexion.php';
 $con= $conectando->conexion(); 
 
@@ -45,11 +45,11 @@ if (isset($_POST)) {
 
          
         print_r(1); 
-   
+
                   
 }else{
     print_r("No se pudo establecer una conexión");
-}
+}--*/
 
-
+print_r(2);
 ?>

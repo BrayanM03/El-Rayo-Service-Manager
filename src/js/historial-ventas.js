@@ -40,43 +40,43 @@ table = $('#ventas').DataTable({
                 '<button type="button" onclick="cancelarVenta('+ row[0] +');" class="buttonBorrar btn btn-primary">'+
                 '<span class="fa fa-ban"></span><span class="hidden-xs"></span></button>'+
                 '<button type="button" onclick="redirigirCredito('+ row[0] +');" class="buttonBorrar btn btn-info" style="margin-left: 8px">'+
-                '<span class="fa fa-share-square"></span><span class="hidden-xs"></span></button>'+
-                '<button type="button" onclick="borrarVenta('+ row[0] +',2);" class="buttonBorrar btn btn-warning" style="margin-left: 8px">'+
-                '<span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
+                '<span class="fa fa-share-square"></span><span class="hidden-xs"></span></button></div>';
+             /*    '<button type="button" onclick="borrarVenta('+ row[0] +',2);" class="buttonBorrar btn btn-warning" style="margin-left: 8px">'+
+                '<span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>'; */
                 
             }else if(row[7] == "Normal"){
                 return '<div style="display: flex; width: auto;">'+
                 '<button onclick="traerPdf(' +row[0]+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px">'+
                 '<span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>'+
                 '<button type="button" onclick="cancelarVenta('+ row[0] +');" class="buttonBorrar btn btn-primary">'+
-                '<span class="fa fa-ban"></span><span class="hidden-xs"></span></button>'+
-                '<button type="button" onclick="borrarVenta('+ row[0] +',1);" class="buttonBorrar btn btn-warning" style="margin-left: 8px">'+
-                '<span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
+                '<span class="fa fa-ban"></span><span class="hidden-xs"></span></button></div>';
+               /*  '<button type="button" onclick="borrarVenta('+ row[0] +',1);" class="buttonBorrar btn btn-warning" style="margin-left: 8px">'+
+                '<span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>'; */
          
             }else if(row[7] == ""){
                 return '<div style="display: flex; width: auto;">'+
                 '<button onclick="traerPdf(' +row[0]+ ');" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px">'+
                 '<span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>'+
                 '<button type="button" onclick="cancelarVenta('+ row[0] +');" class="buttonBorrar btn btn-primary">'+
-                '<span class="fa fa-ban"></span><span class="hidden-xs"></span></button>'+
-                '<button type="button" onclick="borrarVenta('+ row[0] +');" class="buttonBorrar btn btn-warning" style="margin-left: 8px">'+
-                '<span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
+                '<span class="fa fa-ban"></span><span class="hidden-xs"></span></button></div>';
+                /* '<button type="button" onclick="borrarVenta('+ row[0] +');" class="buttonBorrar btn btn-warning" style="margin-left: 8px">'+
+                '<span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>'; */
             }else if(row[7] == "Apartado"){
                 return '<div style="display: flex; width: auto;">'+
                 '<button onclick="traerPdfApartado(' +row[0]+ ');" title="Ver reporte" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px">'+
                 '<span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>'+
                 '<button type="button" onclick="cancelarVenta('+ row[0] +');" class="buttonBorrar btn btn-primary">'+
-                '<span class="fa fa-ban"></span><span class="hidden-xs"></span></button>'+
-                '<button type="button" onclick="borrarVenta('+ row[0] +',1);" class="buttonBorrar btn btn-warning" style="margin-left: 8px">'+
-                '<span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
+                '<span class="fa fa-ban"></span><span class="hidden-xs"></span></button></div>';
+               /*  '<button type="button" onclick="borrarVenta('+ row[0] +',1);" class="buttonBorrar btn btn-warning" style="margin-left: 8px">'+
+                '<span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>'; */
             }else if(row[7] == "Pedido"){
                 return '<div style="display: flex; width: auto;">'+
                 '<button onclick="traerPdfPedido(' +row[0]+ ');" title="Ver reporte" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px">'+
                 '<span class="fa fa-file-pdf"></span><span class="hidden-xs"></span></button><br>'+
                 '<button type="button" onclick="cancelarVenta('+ row[0] +');" class="buttonBorrar btn btn-primary">'+
-                '<span class="fa fa-ban"></span><span class="hidden-xs"></span></button>'+
-                '<button type="button" onclick="borrarVenta('+ row[0] +',1);" class="buttonBorrar btn btn-warning" style="margin-left: 8px">'+
-                '<span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>';
+                '<span class="fa fa-ban"></span><span class="hidden-xs"></span></button></div>';
+               /*  '<button type="button" onclick="borrarVenta('+ row[0] +',1);" class="buttonBorrar btn btn-warning" style="margin-left: 8px">'+
+                '<span class="fa fa-trash"></span><span class="hidden-xs"></span></button></div>'; */
             }else{
                 return '';
             }
