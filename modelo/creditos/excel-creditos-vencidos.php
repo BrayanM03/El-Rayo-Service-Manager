@@ -87,7 +87,8 @@ if($total_creditos>0)
      INNER JOIN clientes cl ON cl.id = v.id_Cliente 
      INNER JOIN sucursal s ON v.id_sucursal = s.id 
      INNER JOIN usuarios u ON cl.id_asesor = u.id
-     WHERE c.estatus=4";
+     WHERE c.estatus=4
+     ORDER BY s.nombre ASC, c.fecha_final ASC";
     $resp = $con->prepare($traer_creditos);
     $resp->execute();
     $respuesta = Arreglo_Get_Result($resp);

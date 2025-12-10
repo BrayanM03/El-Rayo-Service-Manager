@@ -17,6 +17,13 @@ toastr.options = {
   "hideMethod": "fadeOut" 
 }
 
+let id_usuario = $("#emp-title").attr('sesion_id');
+let clase_dnone;
+if(id_usuario == 1 || id_usuario == 7 || id_usuario == 11 || id_usuario == 21 || id_usuario == 26) { //Cambio temporal del permiso de usuario para añadir creditos
+  clase_dnone = ''
+}else{
+  clase_dnone = 'd-none'
+}
 
 function actualizarCreditoVencido() {
   $.ajax({
@@ -429,6 +436,7 @@ function traerCredito(id, id_venta) {
           $(document).ready(function () {
             let rol_usuario = $("#emp-title").attr('sesion_rol');
             let id_usuario = $("#emp-title").attr('sesion_id');
+
             if(rol_usuario != 1 && id_usuario !=7){
               $("#formas-pago-area-credito").empty();
             }
@@ -674,7 +682,8 @@ function traerCredito(id, id_venta) {
           '<div class="row">' +
 
           '<div class="col-12 col-md-12">' +
-          '<div class="form-group" id="formas-pago-area-credito">' +
+          '<div class="form-group '+clase_dnone+'" id="formas-pago-area-credito">' +
+
           "<label><b>Metodo de pago</b></label>" +
           '<select class="form-control selectpicker" multiple id="metodos_pago" name="metodo_pago" onchange="setearFormPagos('+id+')">' +
           '<option value="0">Efectivo</option>' +
@@ -689,7 +698,7 @@ function traerCredito(id, id_venta) {
           "</div>" +
 
           '<div class="col-12 col-md-12">' +
-              '<textarea class="form-control" placeholder="Observación del abono" id="observacion-abono"></textarea>' +
+              '<textarea class="form-control '+clase_dnone+'" placeholder="Observación del abono" id="observacion-abono"></textarea>' +
           "</div>" +
           '<div id="area-metodos-pagos-creditos" class="col-12 mt-3" style="display:flex;">' +
           "</div>" +

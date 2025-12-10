@@ -527,7 +527,7 @@ $meses = array(
                 </a>
                 <?php
                 $rol = $_SESSION['rol'];
-                if ($rol == 1 || $rol == 2 || $rol == 4 || $_SESSION['id_usuario'] == 19) { //19 es el usuario de javier
+                if ($rol == 1 || $rol == 2 || $rol == 4 || $_SESSION['id_usuario'] == 19 || $_SESSION['id_usuario'] == 33 ) { //19 es el usuario de javier y 33 de pepe
                 ?>
                     <a class="dropdown-item" href="mercancia_pendiente.php?nav=0&id=<?php echo $_SESSION['id_sucursal'] ?>">
                         <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
