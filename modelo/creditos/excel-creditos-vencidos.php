@@ -81,7 +81,7 @@ $res->close();
 
 if($total_creditos>0)
 {
-    $traer_creditos = "SELECT c.*,s.nombre as nombre_sucursal, v.hora, 
+    $traer_creditos = "SELECT c.*,s.nombre as nombre_sucursal, s.id as id_sucursal, v.hora, 
     cl.Nombre_Cliente as cliente, CONCAT(u.nombre,' ',u.apellidos) as asesor
      FROM creditos c LEFT JOIN ventas v ON v.id = c.id_venta 
      INNER JOIN clientes cl ON cl.id = v.id_Cliente 
@@ -95,6 +95,18 @@ if($total_creditos>0)
     $resp->close();
     
     $contador=1;
+
+    // --- MAPA DE COLORES: Asigna un color ARGB a cada nombre de sucursal ---
+    $mapa_colores = [
+        1  => 'FFD9E1F2', // Azul Claro
+        2  => 'FFE2EFDA', // Verde Menta
+        3  => 'FFFFF2CC', // Amarillo Crema
+        5  => 'FFFBE4E1', // Rosa Pálido
+        6  =>'FFFFE6CC', // Naranja Melocotón Pálido (Un color cálido y suave)
+        // Añade más sucursales aquí si es necesario
+    ];
+    $color_default = 'FFF2F2F2'; // Gris suave para cualquier sucursal no mapeada
+   
     foreach ($respuesta as $key => $value) {
         //$data[]=$value;
         $cliente_id=$value["id_cliente"];
@@ -103,9 +115,11 @@ if($total_creditos>0)
         $pagado=$value["pagado"];
         $restante=$value["restante"];
         $sucursal = $value["nombre_sucursal"];
+        $id_sucursal = $value['id_sucursal'];
         $total=$value["total"];
        // $estatus=$value["estatus"];
        $estatus="Vencido";
+
        $plazo_numerico=$value["plazo"];
             switch ($plazo_numerico) {
                case '1':
@@ -174,6 +188,16 @@ if($total_creditos>0)
         $hoja_activa->setCellValue('K'.$index, $sucursal);
         $hoja_activa->getColumnDimension('L')->setWidth(40);
         $hoja_activa->setCellValue('L'.$index, $nombre_asesor);
+
+        $color_a_aplicar = $mapa_colores[$id_sucursal] ?? $color_default;
+
+        // 2. Aplica el estilo
+        $hoja_activa->getStyle('A'.$index.':L'.$index)
+            ->getFill()
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()
+            ->setARGB($color_a_aplicar);
+        // ------------------------------------
 
         $contador++;
         $index++;
