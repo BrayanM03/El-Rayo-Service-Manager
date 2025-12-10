@@ -192,7 +192,7 @@ INNER JOIN sucursal s ON v.id_Sucursal = s.id";
     if (!empty($marca_llanta) || !empty($ancho_llanta) || !empty($alto_llanta) || !empty($rin_llanta)) {
 
         $sql .= " INNER JOIN detalle_venta dv ON v.id = dv.id_Venta";
-        $sql .= " INNER JOIN llantas ll ON ll.id = dv.id_Llanta INNER JOIN marcas m ON ll.Marca = m.Imagen";
+        $sql .= " LEFT JOIN llantas ll ON ll.id = dv.id_Llanta LEFT JOIN marcas m ON ll.Marca = m.Imagen";
         $sql .= " WHERE 1=1";
         
         if (!empty($marca_llanta)) {
