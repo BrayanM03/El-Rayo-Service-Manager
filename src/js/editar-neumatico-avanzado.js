@@ -130,10 +130,15 @@ $(document).ready(function(){
         
             let keys = Object.keys(urls);
             setTimeout(function () {
+
                 keys.forEach(key => {
+                  const cacheBuster = Math.floor(1000 + Math.random() * 9000);
+
                     let imgId = key.replace('url_', 'img_');
                     let colId = imgId + '_col';
-                    let imgSrc = './src/img/neumaticos/' + urls[key];
+                    let version = Date.now(); // fallback
+                   
+                    let imgSrc = './src/img/neumaticos/' + urls[key] + '?v=' + cacheBuster ;
                     let imgElement = $('#' + imgId);
 
                     let colElement = $('#' + colId);
@@ -413,6 +418,7 @@ $.ajax({
   }
 });
 }
+
 
 
 

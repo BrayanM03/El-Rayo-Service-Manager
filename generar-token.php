@@ -8,9 +8,15 @@ if (!$con) {
     echo "maaaaal";
 }
 
-if (!isset($_SESSION['id_usuario']) || $_SESSION['id_usuario'] == 16 || ($_SESSION['rol'] != 4 && $_SESSION['rol'] != 1 && $_SESSION['id_usuario'] != 7)) {
+if(!isset($_SESSION['id_usuario']) ){
     header("Location:login.php");
 }
+
+if (!isset($_SESSION['id_usuario'])  || $_SESSION['id_usuario'] == 2 || $_SESSION['id_usuario'] == 16 || 
+($_SESSION['id_usuario'] != 24 && $_SESSION['rol'] != 1 && $_SESSION['id_usuario'] != 7)) {
+    header('Location:ventas-pv.php');
+}
+
 
 
 ?>
