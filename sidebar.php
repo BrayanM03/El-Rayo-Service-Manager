@@ -14,11 +14,13 @@ $claseHistorial = '';
 $showHistorial = '';
 $claseVentas = '';
 $claseCotizaciones = '';
+$claseNuevaGarantia ='';
 $claseGastos = '';
 $claseCustomer = '';
 $showClientes = '';
 $claseClientes = '';
 $claseCreditos = '';
+$clasePedidos='';
 $claseToken = '';
 $showMisLlantas = '';
 $claseMisLlantas = '';
@@ -32,6 +34,9 @@ $claseRequerimientos = '';
 $claseHistorialRequerimientos ='';
 $claseMovimientosClientes = '';
 $claseEmpleados='';
+$claseCambios='';
+$claseCuentasPorPagar='';
+$claseProveedores='';
 $user_jerarquia = $_SESSION['rol'];
 $user_id = $_SESSION['id_usuario'];
  
@@ -420,7 +425,7 @@ switch ($flag) {
 
     <?php }
 
-    if ($user_jerarquia == 1 || $user_jerarquia == 4 && $_SESSION['id_usuario'] !=16 ||$_SESSION['id_usuario'] ==7) { //16 usuario de Javier Lozano y 7 de Kari
+    if (($user_jerarquia == 1 && $_SESSION['id_usuario'] != 2)|| $user_jerarquia == 4 && $_SESSION['id_usuario'] !=16 ||$_SESSION['id_usuario'] ==7) { //16 usuario de Javier Lozano y 7 de Kari
     ?>
         <!-- Nav Item - Charts -->
         <li class="nav-item <?php echo $claseToken; //rol-4 
@@ -491,7 +496,7 @@ if($permiso_cuentas){
                             <span style="margin-left:7px;">Requerir mercancia</span> 
                     </a>
                     <?php
-                    if ($user_jerarquia == 1 || $user_jerarquia == 4) {
+                    if (($user_jerarquia == 1 || $user_jerarquia == 4) && $_SESSION['id_usuario'] !=2) {
                     ?>
                         <a class="collapse-item <?php echo $claseCambios ?>" href="cambio_inventario.php?id=0&nav=cambios" style="display:flex; flex-direction: row; justify-content:start;">
                             <i class="fas fa-people-carry"></i>

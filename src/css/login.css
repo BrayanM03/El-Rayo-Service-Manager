@@ -7,7 +7,7 @@ body{
     /* backdrop-filter: blur(10px); */
   /*-webkit-backdrop-filter: blur(10px);  */
     /* //background-image: url(../img/bb.jpeg); */
-    background-image: url(../img/moon.jpg);
+    background-image: url(../img/moon.jpg?v=1321);
    /* // background-color: #fee970; */
     display: flex;
     background-size: contain;
