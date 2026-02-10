@@ -77,54 +77,68 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
 
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
-
-                     <!-- Page Heading -->
-                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h3 class="h3 mb-0 text-gray-800">Metrica de ganancias</h3>
-                        <a href="index.php?id=0&nav=inicio" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm"><i
-                                class="fas fa-hand-point-left fa-sm text-white-50"></i> Volver</a>
-
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" onclick="ejecutarPanelReporteVentas();"><i
-                                class="fas fa-download fa-sm text-white-50"></i> Reporte de corte</a>
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-info shadow-sm" onclick="ejecutarPanelTipoComision();"><i
-                                class="fas fa-download fa-sm text-white-50"></i> Reporte comisiones</a>
-                    </div>
-                   
-                            <!-- Content Row -->
-                    <div class="row mb-3">
-
-                    <div class="col-12 col-md-4">
-                            <div class="card p-5 text-center bg-whitesmoke rounded bordered">
-                                <h6>Ganancia de la semana:</h6>
-                                <h4 class="color-black" id="ganancia_semana">$</h4>
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-md-4">
-                            <div class="card p-5 text-center bg-whitesmoke rounded bordered">
-                                <h6>Ganancia de hoy:</h6>
-                                <h4 class="color-black" id="ganancia_hoy">$</h4>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-4">
-                            <div class="card p-5 text-center bg-whitesmoke rounded bordered">
-                                <h6>Ventas de hoy:</h6>
-                                <h4 class="color-black" id="ventas_hoy"></h4>
-                            </div>
-                        </div>
-                    </div>
-
-                    
-
+                <div class="container-fluid px-4 py-4">
+    <!-- Page Heading -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+                <h3 class="h3 mb-0 text-gray-800">Métrica de ganancias (Numeros en revision ya que falta ajustar BD)</h3>
+                
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="index.php?id=0&nav=inicio" class="btn btn-sm btn-success shadow-sm">
+                        <i class="fas fa-hand-point-left fa-sm text-white-50"></i> Volver
+                    </a>
+                    <a href="#" style="background-color: tomato; color: white;" class="btn btn-sm ml-2 mr-2 shadow-sm" onclick="ejecutarPanelReporteVentas();">
+                        <i class="fas fa-download fa-sm text-white-50"></i> Reporte de ventas
+                    </a>
+                    <a href="#" class="btn btn-sm ml-2 mr-2 btn-primary shadow-sm" onclick="ejecutarPanelReporteCorte();">
+                        <i class="fas fa-download fa-sm text-white-50"></i> Reporte de corte
+                    </a>
+                    <a href="#" class="btn btn-sm btn-info shadow-sm" onclick="ejecutarPanelTipoComision();">
+                        <i class="fas fa-download fa-sm text-white-50"></i> Reporte comisiones
+                    </a>
                 </div>
+            </div>
+        </div>
+    </div>
+                   
+    <!-- Content Row -->
+    <div class="row g-3" >
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body p-4 text-center">
+                    <h6 class="text-muted mb-3">Ganancia de la semana</h6>
+                    <h4 class="fw-bold text-dark mb-0" id="ganancia_semana">$0.00</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body p-4 text-center">
+                    <h6 class="text-muted mb-3">Ganancia de hoy</h6>
+                    <h4 class="fw-bold text-dark mb-0" id="ganancia_hoy">$0.00</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body p-4 text-center">
+                    <h6 class="text-muted mb-3">Ventas de hoy</h6>
+                    <h4 class="fw-bold text-dark mb-0" id="ventas_hoy">0</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
                 <!-- /.container-fluid -->
 
 
                 
                     <!-- Content Row -->
 
-                    <div class="row">
+                    <div class="row m-3">
 
                     <div class="col-12 col-xl-8 col-lg-7">
                             <div class="card shadow mb-4">
@@ -278,6 +292,7 @@ if ($_SESSION['rol'] == 3 || $_SESSION['rol'] == 2) {
                         </div>
 
                     </div>
+
                     <div class="row" style="display: flex; justify-content: center; margin-top: 80px;">
                         <img src="src/img/undraw_sobre_ruedas.svg" alt="" width="400px">
                     </div>

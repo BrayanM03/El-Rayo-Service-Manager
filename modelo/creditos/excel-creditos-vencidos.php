@@ -2,236 +2,196 @@
 include '../conexion.php';
 $con = $conectando->conexion();
 
-use PhpOffice\PhpSpreadsheet\helper\Sample;
 use PhpOffice\PhpSpreadsheet\IOFactory;
-use PhpOffice\PhpSpreadsheet\SpreadSheet;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
-use PhpOffice\PhpSpreadsheet\Style\Border;
-use PhpOffice\PhpSpreadsheet\Style\Color;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 require_once '../../vendor/phpoffice/phpspreadsheet/samples/Bootstrap.php'; 
 
 date_default_timezone_set("America/Matamoros");
 session_start(); 
+$id_sucursal_usuario = $_SESSION['id_sucursal'];
+$id_usuario_actual = $_SESSION['id_usuario'];
 
-$spreadsheet = new SpreadSheet();
-$spreadsheet->getProperties()->setCreator("Alvaro M")->setTitle("creditos vencidos");
-$count=0;
-$spreadsheet->setActiveSheetIndex($count);
-$hoja_activa = $spreadsheet->getActiveSheet();
+$arreglo_permisos_ids = [7, 1, 11, 26, 29];
 
-$hoja_activa->setTitle("creditos vencidos");
+// Verificamos si el usuario tiene permiso global
+$tiene_permiso_total = in_array($id_usuario_actual, $arreglo_permisos_ids);
 
-//$hoja_activa->mergeCells("A1:B1");
-        $hoja_activa->mergeCells("B1:G1");
-        $hoja_activa->setCellValue('B1', 'Reporte total de creditos vencidos | Llantera el rayo');
-        $hoja_activa->getStyle('B1')->getFont()->setBold(true);
-        $hoja_activa->getStyle('B1')->getFont()->setSize(16);
-        $hoja_activa->getRowDimension('1')->setRowHeight(50);
-        $hoja_activa->getStyle('B1')->getAlignment()->setHorizontal('center');
-        $hoja_activa->getStyle('B1')->getAlignment()->setVertical('center');
-        $hoja_activa->getStyle('B1')->getAlignment()->setHorizontal('center');
-        $hoja_activa->getStyle('B1')->getAlignment()->setVertical('center');
-
-        $index=3;
-        $ultima_columna = 'L';
-
-                $hoja_activa->getColumnDimension('A')->setWidth(8);
-                $hoja_activa->setCellValue('A'.$index, "#");
-                $hoja_activa->getColumnDimension('B')->setWidth(40);
-                $hoja_activa->setCellValue('B'.$index, "Nombre del cliente");
-                $hoja_activa->getColumnDimension('C')->setWidth(18);
-                $hoja_activa->setCellValue('C'.$index, 'Pagado');
-                $hoja_activa->getColumnDimension('D')->setWidth(18);
-                $hoja_activa->setCellValue('D'.$index, 'Restante');
-                $hoja_activa->getColumnDimension('E')->setWidth(18);
-                $hoja_activa->setCellValue('E'.$index, 'Total');
-                $hoja_activa->getColumnDimension('F')->setWidth(22);
-                $hoja_activa->setCellValue('F'.$index, 'Estatus');
-                $hoja_activa->getColumnDimension('G')->setWidth(18);
-                $hoja_activa->setCellValue('G'.$index, 'Fecha de inicio');
-                $hoja_activa->getColumnDimension('H')->setWidth(20);
-                $hoja_activa->setCellValue('H'.$index, 'Fecha final');
-                $hoja_activa->getColumnDimension('I')->setWidth(20);
-                $hoja_activa->setCellValue('I'.$index, 'plazo');
-                $hoja_activa->getColumnDimension('J')->setWidth(15);
-                $hoja_activa->setCellValue('J'.$index, 'Venta');
-                $hoja_activa->getColumnDimension('K')->setWidth(25);
-                $hoja_activa->setCellValue('K'.$index, 'Sucursal');
-                $hoja_activa->getColumnDimension('L')->setWidth(25);
-                $hoja_activa->setCellValue('L'.$index, 'Asesor');
-
-                $hoja_activa->getStyle('A'.$index.':'. $ultima_columna .$index)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('007bcc');
-                $hoja_activa->getStyle('A'.$index.':'. $ultima_columna .$index)->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
-                $hoja_activa->getStyle('A'.$index.':'. $ultima_columna .$index)->getFont()->setBold(true);
-                $hoja_activa->getRowDimension('2')->setRowHeight(20);
-                $hoja_activa->getStyle('A'.$index.':'. $ultima_columna .$index)->getAlignment()->setHorizontal('center');
-                $hoja_activa->getStyle('A'.$index.':'. $ultima_columna .$index)->getAlignment()->setVertical('center');
-
-                $index++;
-
-$consulta ="SELECT COUNT(*) FROM creditos WHERE estatus=4";
-$res =$con->prepare($consulta);
-
-$res->execute();
-$res->bind_result($total_creditos);
-$res->fetch();
-$res->close();
-//print_r("el total de creditos son: ".$total_creditos);
-
-if($total_creditos>0)
-{
-    $traer_creditos = "SELECT c.*,s.nombre as nombre_sucursal, s.id as id_sucursal, v.hora, 
-    cl.Nombre_Cliente as cliente, CONCAT(u.nombre,' ',u.apellidos) as asesor
-     FROM creditos c LEFT JOIN ventas v ON v.id = c.id_venta 
-     INNER JOIN clientes cl ON cl.id = v.id_Cliente 
-     INNER JOIN sucursal s ON v.id_sucursal = s.id 
-     INNER JOIN usuarios u ON cl.id_asesor = u.id
-     WHERE c.estatus=4
-     ORDER BY s.nombre ASC, c.fecha_final ASC";
-    $resp = $con->prepare($traer_creditos);
-    $resp->execute();
-    $respuesta = Arreglo_Get_Result($resp);
-    $resp->close();
-    
-    $contador=1;
-
-    // --- MAPA DE COLORES: Asigna un color ARGB a cada nombre de sucursal ---
-    $mapa_colores = [
-        1  => 'FFD9E1F2', // Azul Claro
-        2  => 'FFE2EFDA', // Verde Menta
-        3  => 'FFFFF2CC', // Amarillo Crema
-        5  => 'FFFBE4E1', // Rosa Pálido
-        6  =>'FFFFE6CC', // Naranja Melocotón Pálido (Un color cálido y suave)
-        // Añade más sucursales aquí si es necesario
-    ];
-    $color_default = 'FFF2F2F2'; // Gris suave para cualquier sucursal no mapeada
-   
-    foreach ($respuesta as $key => $value) {
-        //$data[]=$value;
-        $cliente_id=$value["id_cliente"];
-        $nombre_cliente = $value['cliente'];
-        $nombre_asesor = $value['asesor'];
-        $pagado=$value["pagado"];
-        $restante=$value["restante"];
-        $sucursal = $value["nombre_sucursal"];
-        $id_sucursal = $value['id_sucursal'];
-        $total=$value["total"];
-       // $estatus=$value["estatus"];
-       $estatus="Vencido";
-
-       $plazo_numerico=$value["plazo"];
-            switch ($plazo_numerico) {
-               case '1':
-                 $plazo="7 dias";
-                break;
-                case '2':
-                    $plazo="15 dias";
-                break;
-                 case '3':
-                     $plazo="1 mes";
-                            
-                 break;
-
-                 case '4':
-                 $plazo="1 año";
-                 break;
-
-                 case '5':
-                    $plazo="7 dias";
-                    break;
-
-                case '6':
-                    $plazos = '1 día';
-                break;
-
-                default:
-                $plazo="Sin definir";
-                    # code...
-                    break;
-            }
-
-        $fecha_inicio=$value["fecha_inicio"] . ' ' . $value['hora'];
-        $fecha_final=$value["fecha_final"]. ' ' . $value['hora'];
-        
-        $id_venta=$value["id_venta"];
-
-        /* $consulta ="SELECT Nombre_Cliente FROM clientes WHERE id=?";
-        $res =$con->prepare($consulta);
-        $res->bind_param("i",$cliente_id);
-        $res->execute();
-        $res->bind_result($nombre_cliente);
-        $res->fetch();
-        $res->close(); */
-
-        $hoja_activa->getColumnDimension('A')->setWidth(8);
-        $hoja_activa->setCellValue('A'.$index, $contador);
-        $hoja_activa->getColumnDimension('B')->setWidth(40);
-        $hoja_activa->setCellValue('B'.$index, $nombre_cliente);
-        $hoja_activa->getColumnDimension('C')->setWidth(18);
-        $hoja_activa->setCellValue('C'.$index,"$". $pagado);
-        $hoja_activa->getColumnDimension('D')->setWidth(18);
-        $hoja_activa->setCellValue('D'.$index, "$". $restante);
-        $hoja_activa->getColumnDimension('E')->setWidth(18);
-        $hoja_activa->setCellValue('E'.$index, "$". $total);
-        $hoja_activa->getColumnDimension('F')->setWidth(22);
-        $hoja_activa->setCellValue('F'.$index, $estatus);
-        $hoja_activa->getColumnDimension('G')->setWidth(18);
-        $hoja_activa->setCellValue('G'.$index, $fecha_inicio);
-        $hoja_activa->getColumnDimension('H')->setWidth(20);
-        $hoja_activa->setCellValue('H'.$index, $fecha_final);
-        $hoja_activa->getColumnDimension('I')->setWidth(20);
-        $hoja_activa->setCellValue('I'.$index, $plazo);
-        $hoja_activa->getColumnDimension('J')->setWidth(15);
-        $hoja_activa->setCellValue('J'.$index, $id_venta);
-        $hoja_activa->getColumnDimension('K')->setWidth(25);
-        $hoja_activa->setCellValue('K'.$index, $sucursal);
-        $hoja_activa->getColumnDimension('L')->setWidth(40);
-        $hoja_activa->setCellValue('L'.$index, $nombre_asesor);
-
-        $color_a_aplicar = $mapa_colores[$id_sucursal] ?? $color_default;
-
-        // 2. Aplica el estilo
-        $hoja_activa->getStyle('A'.$index.':L'.$index)
-            ->getFill()
-            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
-            ->getStartColor()
-            ->setARGB($color_a_aplicar);
-        // ------------------------------------
-
-        $contador++;
-        $index++;
-        //echo "Nombre: " .$nombre_cliente."---correo: " .$correo. 
-        
-
-    }
-    //echo json_encode($respuesta);
-
-
+// Construimos la cláusula extra para el SQL
+$filtro_sucursal = "";
+if (!$tiene_permiso_total) {
+    // Si no tiene permiso, forzamos a que solo vea su sucursal
+    $filtro_sucursal = " AND s.id = $id_sucursal_usuario ";
 }
 
-header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Reporte de creditos vencidos.xlsx"');
-        header('Cache-Control: max-age=0');
+$spreadsheet = new Spreadsheet();
 
-        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+// --- CONFIGURACIÓN DE COLORES POR SUCURSAL ---
+$mapa_colores = [
+    1  => 'FFD9E1F2', 2  => 'FFE2EFDA', 3  => 'FFFFF2CC', 
+    5  => 'FFFBE4E1', 6  => 'FFFFE6CC'
+];
+$color_default = 'FFF2F2F2';
+
+// --- FUNCIÓN PARA DAR FORMATO A CABECERAS ---
+function formatearCabecera($hoja, $titulo) {
+    $hoja->mergeCells("B1:G1");
+    $hoja->setCellValue('B1', $titulo);
+    $hoja->getStyle('B1')->getFont()->setBold(true)->setSize(16);
+    $hoja->getRowDimension('1')->setRowHeight(50);
+    $hoja->getStyle('B1')->getAlignment()->setHorizontal('center')->setVertical('center');
+
+    $columnas = [
+        'A' => ['#', 8], 'B' => ['Nombre del cliente', 40], 'C' => ['Pagado', 18],
+        'D' => ['Restante', 18], 'E' => ['Total', 18], 'F' => ['Estatus', 22],
+        'G' => ['Fecha de inicio', 18], 'H' => ['Fecha final', 20], 'I' => ['Plazo', 20],
+        'J' => ['Venta', 15], 'K' => ['Sucursal', 25], 'L' => ['Asesor', 40]
+    ];
+
+    foreach ($columnas as $col => $info) {
+        $hoja->getColumnDimension($col)->setWidth($info[1]);
+        $hoja->setCellValue($col.'3', $info[0]);
+    }
+
+    $hoja->getStyle('A3:L3')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setRGB('007bcc');
+    $hoja->getStyle('A3:L3')->getFont()->setBold(true)->getColor()->setRGB('FFFFFF');
+    $hoja->getStyle('A3:L3')->getAlignment()->setHorizontal('center');
+}
+
+// --- FUNCIÓN PARA LLENAR DATOS ---
+function llenarDatos($hoja, $datos, $mapa_colores, $color_default) {
+    $index = 4;
+    $contador = 1;
+    $total_monto = 0;
+
+    foreach ($datos as $value) {
+        $plazo = match($value["plazo"]) {
+            '1', '5' => "7 dias",
+            '2' => "15 dias",
+            '3' => "1 mes",
+            '4' => "1 año",
+            '6' => "1 día",
+            default => "Sin definir"
+        };
+
+        $estatus_texto = ($value['estatus'] == 4) ? "Vencido" : "Activo";
         
-        $writer->save('php://output');
-        
- //Funcion que emulara el get_result-----------------*
- 
- function Arreglo_Get_Result( $Statement ) {
+        $hoja->setCellValue('A'.$index, $contador);
+        $hoja->setCellValue('B'.$index, $value['cliente']);
+        $hoja->setCellValue('C'.$index, "$". number_format($value["pagado"], 2));
+        $hoja->setCellValue('D'.$index, "$". number_format($value["restante"], 2));
+        $hoja->setCellValue('E'.$index, "$". number_format($value["total"], 2));
+        $hoja->setCellValue('F'.$index, $estatus_texto);
+        $hoja->setCellValue('G'.$index, $value["fecha_inicio"].' '.$value['hora']);
+        $hoja->setCellValue('H'.$index, $value["fecha_final"].' '.$value['hora']);
+        $hoja->setCellValue('I'.$index, $plazo);
+        $hoja->setCellValue('J'.$index, $value["id_venta"]);
+        $hoja->setCellValue('K'.$index, $value["nombre_sucursal"]);
+        $hoja->setCellValue('L'.$index, $value["asesor"]);
+
+        $color = $mapa_colores[$value['id_sucursal']] ?? $color_default;
+        $hoja->getStyle("A$index:L$index")->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($color);
+
+        $total_monto += $value["restante"];
+        $contador++;
+        $index++;
+    }
+    return $total_monto;
+}
+
+// --- PROCESAMIENTO DE DATOS ---
+
+// 1. Créditos Vencidos (Estatus 4)
+$queryVencidos = "SELECT c.*, s.nombre as nombre_sucursal, s.id as id_sucursal, v.hora, cl.Nombre_Cliente as cliente, CONCAT(u.nombre,' ',u.apellidos) as asesor 
+                  FROM creditos c LEFT JOIN ventas v ON v.id = c.id_venta 
+                  INNER JOIN clientes cl ON cl.id = v.id_Cliente 
+                  INNER JOIN sucursal s ON v.id_sucursal = s.id 
+                  INNER JOIN usuarios u ON cl.id_asesor = u.id 
+                  WHERE c.estatus = 4 $filtro_sucursal ORDER BY s.nombre ASC";
+$resV = $con->prepare($queryVencidos);
+$resV->execute();
+$datosVencidos = Arreglo_Get_Result($resV);
+
+// 2. Créditos Activos (Excepto 3 y 5)
+$queryActivos = "SELECT c.*, s.nombre as nombre_sucursal, s.id as id_sucursal, v.hora, cl.Nombre_Cliente as cliente, CONCAT(u.nombre,' ',u.apellidos) as asesor 
+                 FROM creditos c LEFT JOIN ventas v ON v.id = c.id_venta 
+                 INNER JOIN clientes cl ON cl.id = v.id_Cliente 
+                 INNER JOIN sucursal s ON v.id_sucursal = s.id 
+                 INNER JOIN usuarios u ON cl.id_asesor = u.id 
+                 WHERE c.estatus NOT IN (3, 5, 4) $filtro_sucursal ORDER BY s.nombre ASC";
+$resA = $con->prepare($queryActivos);
+$resA->execute();
+$datosActivos = Arreglo_Get_Result($resA);
+
+// --- CREACIÓN DE HOJAS ---
+
+// Hoja 1: Vencidos
+$hoja1 = $spreadsheet->getActiveSheet();
+$hoja1->setTitle("Vencidos");
+formatearCabecera($hoja1, "Reporte de Créditos Vencidos");
+$sumaVencidos = llenarDatos($hoja1, $datosVencidos, $mapa_colores, $color_default);
+
+// Hoja 2: Activos
+$hoja2 = $spreadsheet->createSheet();
+$hoja2->setTitle("Activos");
+formatearCabecera($hoja2, "Reporte de Créditos Activos (Vigentes)");
+$sumaActivos = llenarDatos($hoja2, $datosActivos, $mapa_colores, $color_default);
+
+// Hoja 3: Balance
+$hoja3 = $spreadsheet->createSheet();
+$hoja3->setTitle("Balance Comparativo");
+$hoja3->setCellValue('B2', 'RESUMEN DE CARTERA');
+$hoja3->getStyle('B2')->getFont()->setBold(true)->setSize(14);
+
+$hoja3->setCellValue('B4', 'Concepto');
+$hoja3->setCellValue('C4', 'Monto Total (Restante)');
+$hoja3->setCellValue('D4', 'Cantidad de Créditos');
+
+$hoja3->setCellValue('B5', 'Créditos Vencidos');
+$hoja3->setCellValue('C5', $sumaVencidos);
+$hoja3->setCellValue('D5', count($datosVencidos));
+
+$hoja3->setCellValue('B6', 'Créditos Activos');
+$hoja3->setCellValue('C6', $sumaActivos);
+$hoja3->setCellValue('D6', count($datosActivos));
+
+$hoja3->setCellValue('B8', 'TOTAL CARTERA');
+$hoja3->setCellValue('C8', $sumaVencidos + $sumaActivos);
+$hoja3->getStyle('B8:C8')->getFont()->setBold(true);
+
+// Estilo de moneda para el balance
+$hoja3->getStyle('C5:C8')->getNumberFormat()->setFormatCode('$#,##0.00');
+$hoja3->getColumnDimension('B')->setWidth(30);
+$hoja3->getColumnDimension('C')->setWidth(25);
+
+// --- SALIDA ---
+header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+header('Content-Disposition: attachment;filename="Reporte_General_Creditos.xlsx"');
+header('Cache-Control: max-age=0');
+
+$writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+$writer->save('php://output');
+
+function Arreglo_Get_Result($Statement) {
     $RESULT = array();
     $Statement->store_result();
-    for ( $i = 0; $i < $Statement->num_rows; $i++ ) {
-        $Metadata = $Statement->result_metadata();
-        $PARAMS = array();
-        while ( $Field = $Metadata->fetch_field() ) {
-            $PARAMS[] = &$RESULT[ $i ][ $Field->name ];
+    $Metadata = $Statement->result_metadata();
+    $fields = $Metadata->fetch_fields();
+    $PARAMS = array();
+    $temp = array();
+    foreach ($fields as $field) {
+        $PARAMS[] = &$temp[$field->name];
+    }
+    call_user_func_array(array($Statement, 'bind_result'), $PARAMS);
+    while ($Statement->fetch()) {
+        $row = array();
+        foreach ($temp as $key => $val) {
+            $row[$key] = $val;
         }
-        call_user_func_array( array( $Statement, 'bind_result' ), $PARAMS );
-        $Statement->fetch();
-    } 
+        $RESULT[] = $row;
+    }
     return $RESULT;
 }
 ?>

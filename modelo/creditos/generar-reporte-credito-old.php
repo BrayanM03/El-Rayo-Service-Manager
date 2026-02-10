@@ -1,0 +1,638 @@
+
+
+<?php
+session_start();
+include '../conexion.php';
+$con = $conectando->conexion(); 
+
+$folio = "RAY" . $_GET['id'];
+$idVenta = $_GET['id'];
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+$ID = $con->prepare("SELECT ventas.Fecha, ventas.id_sucursal, ventas.id_Usuarios, clientes.id, clientes.Nombre_Cliente, ventas.Total,  ventas.tipo, ventas.estatus, ventas.metodo_pago, ventas.hora, ventas.comentario FROM ventas INNER JOIN clientes ON ventas.id_Cliente = clientes.id WHERE ventas.id = ?");
+$ID->bind_param('i', $idVenta);
+$ID->execute();
+$ID->bind_result($fecha, $id_sucursal, $vendedor_id, $id_cliente, $cliente, $total, $tipo, $estatus, $metodo_pago, $hora, $comentario );
+$ID->fetch();
+$ID->close();
+
+$ID = $con->prepare("SELECT nombre, apellidos FROM usuarios WHERE id = ?");
+$ID->bind_param('i', $vendedor_id);
+$ID->execute();
+$ID->bind_result($vendedor_name, $vendedor_apellido);
+$ID->fetch();
+$ID->close();
+
+$ID = $con->prepare("SELECT id_asesor FROM clientes WHERE id = ?");
+$ID->bind_param('i', $id_cliente);
+$ID->execute();
+$ID->bind_result($id_asesor);
+$ID->fetch();
+$ID->close();
+
+$ID = $con->prepare("SELECT nombre, apellidos FROM usuarios WHERE id = ?");
+$ID->bind_param('i', $id_asesor);
+$ID->execute();
+$ID->bind_result($asesor_name, $asesor_apellido);
+$ID->fetch();
+$ID->close();
+
+$vendedor_usuario = $vendedor_name . " " . $vendedor_apellido;
+
+
+//Trayendo datos de la sucursal
+$ID = $con->prepare("SELECT code, nombre, calle, numero, colonia, ciudad, estado, pais, telefono, RFC, CP, telefono_2  FROM sucursal WHERE id = ?");
+$ID->bind_param('i', $id_sucursal);
+$ID->execute();
+$ID->bind_result($codigo_sucursal, $sucursal, $calle_suc, $numero_suc, $colonia_suc, $ciudad_suc, $estado_suc, $pais_suc, $telefono_suc, $rfc_suc, $cp_suc, $telefono_suc_2);
+$ID->fetch();
+$ID->close();
+
+global $codigo_sucursal;
+global $fecha;
+global $sucursal;
+global $calle_suc;
+global $numero_suc;
+global $colonia_suc;
+global $ciudad_suc;
+global $estado_suc;
+global $pais_suc;
+global $telefono_suc;
+global $telefono_suc_2;
+global $rfc_suc;
+global $cp_suc;
+global $vendedor_usuario;
+global $cliente;
+global $total;
+global $tipo;
+global $estatus;
+global $metodo_pago;
+global $hora;
+global $comentario;
+global $asesor_name;
+global $asesor_apellido;
+global $folio;
+global $con;
+
+$CREDITO = $con->prepare("SELECT id, pagado, restante, fecha_inicio, fecha_final, plazo, pagare FROM creditos WHERE id_venta = ?");
+$CREDITO->bind_param('i', $idVenta);
+$CREDITO->execute();
+$CREDITO->bind_result($id_credito, $pagado, $restante, $fecha_inicio, $fecha_final, $plazo, $pagare);
+$CREDITO->fetch();
+$CREDITO->close();
+
+global $id_credito;
+global $pagado;
+global $restante;
+global $fecha_inicio;
+global $fecha_final;
+global $plazo;
+global $pagare;
+
+$formatterES = new NumberFormatter("es-ES", NumberFormatter::SPELLOUT);
+$izquierda = intval(floor($total));
+$derecha = intval(($total - floor($total)) * 100);
+$formatTotalminus = $formatterES->format($izquierda) . " y " . $derecha . "/100 m.n";
+$formatTotal = strtoupper($formatTotalminus);
+// ciento veintitrés coma cuarenta y cinco
+
+global $formatTotal;
+
+//Configs
+$t_fuente_cliente_datos = 9;
+global $t_fuente_cliente_datos; 
+/*
+$detalle = $con->prepare("SELECT detalle_venta.Cantidad,llantas.Descripcion, llantas.Marca, detalle_venta.precio_Unitario, detalle_venta.Importe FROM detalle_venta INNER JOIN llantas ON detalle_venta.id_llanta = llantas.id WHERE id_Venta = ?");
+$detalle->bind_param('i', $id_venta);
+$detalle->execute();
+$resultado = $detalle->get_result(); 
+global $resultado;*/
+
+require('../../src/vendor/fpdf/fpdf.php');
+
+
+
+if (!isset($_SESSION['id_usuario'])) {
+    header("Location:../../login.php");
+}
+
+
+require('../helpers/utf8_decode.php');
+
+class PDF extends FPDF
+{
+
+    
+// Cabecera de página
+function Header()
+
+
+
+{
+    $t_fuente_cliente_datos=$GLOBALS['t_fuente_cliente_datos'];
+    $calle = $GLOBALS["calle_suc"];
+    $numero = $GLOBALS["numero_suc"];
+    $colonia = $GLOBALS["colonia_suc"];
+    $ciudad = $GLOBALS["ciudad_suc"];
+    $estado = $GLOBALS["estado_suc"];
+    $pais = $GLOBALS["pais_suc"];
+    $telefono = $GLOBALS["telefono_suc"];
+    $telefono_2 = $GLOBALS["telefono_suc_2"];
+    $rfc = $GLOBALS["rfc_suc"];
+    $cp = $GLOBALS["cp_suc"];
+    if($GLOBALS['asesor_name']!=''){
+        $nombre_asesor = $GLOBALS['asesor_name'] . ' '. $GLOBALS['asesor_apellido'];
+    }else{
+        $nombre_asesor = 'Sin asesor';
+    }
+
+    if($numero == 0 || $numero == null){
+        $numero = "";
+    }
+
+    $top_direction = $calle . " " . $numero . " " ;
+    $middle_direction = $colonia;
+    $middle_direction_2 = $ciudad . " " . $estado . " " . $pais;
+
+    if($GLOBALS['codigo_sucursal'] == 'RIOB') {
+        $this->Image('../../src/img/logo-del-rio.jpg',10,4,43);
+        $titulo_sucursal = 'Llantera economica "Del Rio"';
+    }else{
+        $titulo_sucursal = 'Llantera y Servicios "El Rayo"';
+        $this->Image('../../src/img/logo.jpg',20,10,24);
+    }
+   
+    
+    $this->SetDrawColor(135, 134, 134);
+    $this->SetTextColor(36, 35, 28);
+    
+    
+    // Movernos a la derecha
+    
+    // Título
+
+    $this->SetFont('Arial','B',13);
+    $this->Cell(30,10,"",0,0, 'C');
+    $this->Cell(100,10, $titulo_sucursal,0,0, 'C');
+    $this->SetFont('Arial','B',14);
+    $this->Cell(60,10,'Reporte de credito',0,0,'C');
+    $this->Ln(5);
+    
+    $estatus = $GLOBALS["estatus"];
+    $this->SetFont('Arial','',$t_fuente_cliente_datos);
+    $this->Cell(25,15,'',0,0,'C');
+    $this->Cell(115,10,utf8_decode_($top_direction),0,0,'C', false);
+    $this->SetFont('Arial','',10);
+    $this->SetTextColor(194, 34, 16);
+    $this->Cell(50,15,$estatus,0,0,'C');
+    $this->SetTextColor(36, 35, 28);
+    $this->SetFont('Arial','',$t_fuente_cliente_datos);
+    $this->Ln(4);
+    $this->Cell(160,10,utf8_decode_($middle_direction),0,0,'C', false);
+    $this->Ln(4);
+    $this->Cell(160,10,utf8_decode_("H. Matamoros Tam"),0,0,'C', false);
+    $this->Ln(4);
+    $this->Cell(160,10,utf8_decode_("RFC: " .$rfc),0,0,'C', false);
+    $this->Ln(4);
+    $this->Cell(47,10,'',0,0,'C', false);
+    $this->Cell(43,10,utf8_decode_("ventas: " .$telefono),0,0,'C', false);
+    $this->Cell(40,10,utf8_decode_("facturación: " .$telefono_2),0,0,'L', false);
+    $this->Ln(15);
+
+    //$this->Rect(133, 58, 20, 7, 'F');
+    //$this->Rect(133, 65, 20, 7, 'F');
+
+    $altura_cuadro_amarillo= 5;
+    $anchura_cuadro_amarillo = 17;
+    $anchura_cuadro_gris = 110;
+    $this->SetFillColor(253, 229, 2);
+    $this->SetFont('Times','B',$t_fuente_cliente_datos);
+    $this->Cell($anchura_cuadro_amarillo, $altura_cuadro_amarillo, utf8_decode_("Cliente:"),0,0,'L', 1);
+    $this->SetFont('Times','',$t_fuente_cliente_datos);
+    $this->SetFillColor(236, 236, 236);
+    $this->Cell($anchura_cuadro_gris, $altura_cuadro_amarillo, utf8_decode_($GLOBALS["cliente"]),0,0, 'L',1);
+    $this->SetFont('Arial','B',$t_fuente_cliente_datos);
+    $this->SetTextColor(194, 34, 16);
+    $this->Cell($anchura_cuadro_amarillo, $altura_cuadro_amarillo, utf8_decode_("F. pago:"),0,0,'', false);
+    $this->SetFont('Times','',$t_fuente_cliente_datos);
+    $this->SetTextColor(36, 35, 28);
+    $this->Cell(20,$altura_cuadro_amarillo,utf8_decode_($GLOBALS["metodo_pago"]),0,0,'', false);
+    $this->SetFont('Arial','B',$t_fuente_cliente_datos);
+    $this->SetTextColor(194, 34, 16);
+    $this->Cell(13,$altura_cuadro_amarillo,utf8_decode_("Folio:"),0,0, false);
+    $this->SetFont('Times','',$t_fuente_cliente_datos);
+    $this->SetTextColor(36, 35, 28);
+    $this->Cell(20,$altura_cuadro_amarillo,utf8_decode_($GLOBALS["folio"]),0,0,'', false);
+
+    $this->Ln(4);
+
+    
+    $this->SetFont('Times','B',$t_fuente_cliente_datos);
+    $this->SetFillColor(253, 229, 2);
+    $this->Cell($anchura_cuadro_amarillo, $altura_cuadro_amarillo, utf8_decode_("Vendedor:"),0,0,'L', 1);
+    $this->SetFont('Times','',$t_fuente_cliente_datos);
+    $this->SetFillColor(236, 236, 236);
+    $this->Cell($anchura_cuadro_gris, $altura_cuadro_amarillo,utf8_decode_($GLOBALS["vendedor_usuario"]),0,0, 'L',1);
+    $this->SetFont('Arial','B',$t_fuente_cliente_datos);
+    $this->SetTextColor(194, 34, 16);
+    $this->Cell($anchura_cuadro_amarillo,$altura_cuadro_amarillo,'Hora: ',0,0,'L', false);
+    $this->SetFont('Times','',$t_fuente_cliente_datos);
+    $this->SetTextColor(36, 35, 28);
+    $this->Cell(20,$altura_cuadro_amarillo,utf8_decode_($GLOBALS["hora"]),0,0,'L', false);
+
+    $this->SetFont('Arial','B',$t_fuente_cliente_datos);
+    $this->SetTextColor(194, 34, 16);
+    $this->Cell(13,$altura_cuadro_amarillo,utf8_decode_("Fecha:"),0,0, false);
+    $this->SetFont('Times','', $t_fuente_cliente_datos);
+    $this->SetTextColor(36, 35, $t_fuente_cliente_datos);
+    $this->Cell(30,$altura_cuadro_amarillo,utf8_decode_($GLOBALS["fecha"]),0,0,'', false);
+    $this->Ln(4);
+    $this->SetFont('Times','B',$t_fuente_cliente_datos);
+    $this->SetFillColor(253, 229, 2);
+    $this->Cell($anchura_cuadro_amarillo, $altura_cuadro_amarillo, utf8_decode_("Asesor:"),0,0,'L', 1);
+    $this->SetFont('Times','',$t_fuente_cliente_datos);
+    $this->SetFillColor(236, 236, 236);
+    $this->Cell($anchura_cuadro_gris, $altura_cuadro_amarillo,utf8_decode_($nombre_asesor),0,0, 'L',1);
+
+    // Salto de línea
+    $this->Ln(11);
+}
+
+// Pie de página
+function Footer()
+{
+    $year = date('Y'); 
+    if($GLOBALS['codigo_sucursal'] == 'RIOB') {
+        $footer_title = 'Del Rio Service Manager';
+    }else{
+        $footer_title = 'El Rayo Service Manager';
+    }
+    // Posición: a 1,5 cm del final
+    $this->SetY(-15);
+    //$this->Image('../src/img/logo-reporte.png',60,142,80);
+    $this->Ln(3);
+    // Arial italic 8
+    $this->SetFont('Arial','',8);
+    $this->SetTextColor(1, 1, 1);
+    // Número de página
+   
+    $this->Cell(0,10,$footer_title . ' ' . $year,0,0,'C');
+}
+}
+
+// Creación del objeto de la clase heredada
+
+function cuerpoTabla(){
+    $pdf = new PDF();
+    $pdf->AddPage();
+    $pdf->SetFont('Times','B', 9);
+    
+    $pdf->SetDrawColor(135, 134, 134);
+    $pdf->SetTextColor(36, 35, 28);
+    
+    
+    
+    //$pdf->Rect(10, 80, 189, 8, 'F');
+    $pdf->SetDrawColor(194, 34, 16);
+    $pdf->SetLineWidth(1);
+    //$pdf->Line(11,95,192,95);
+    
+    $pdf->Cell(19,8,utf8_decode_("Cant"),0,0);  
+    $pdf->Cell(85,8,utf8_decode_("Concepto"),0,0, 'C');
+    $pdf->Cell(30,8,utf8_decode_("Marca"),0,0, 'C');
+    $pdf->Cell(30,8,utf8_decode_("Precio Uni"),0,0, 'C');
+    $pdf->Cell(30,8,utf8_decode_("Importe"),0,0, 'C');
+    $pdf->Ln(0);
+    $pdf->Line(10,73,203,73);
+    $pdf->Ln(9);
+    
+    $pdf->SetDrawColor(1, 1, 1);
+    $pdf->SetLineWidth(0);
+
+    $pdf->SetFillColor(236, 236, 236);
+    
+    $pdf->SetFont('Times','', $GLOBALS['t_fuente_cliente_datos']);
+
+    $conexion = $GLOBALS["con"];
+    $id_venta = $GLOBALS["idVenta"];
+
+    $total_servicios = 0;
+    $stmt=$conexion->prepare("SELECT COUNT(*) total FROM detalle_venta dv INNER JOIN servicios s
+    ON dv.id_llanta = s.id WHERE dv.id_Venta = ? AND dv.Unidad = 'servicio'");
+    $stmt->bind_param('i',$id_venta);
+    $stmt->execute();
+    $stmt->bind_result($total_servicios);
+    $stmt->fetch();
+    $stmt->close();
+
+    $resultado=[];
+    if($total_servicios == 0){
+      
+        $detalle = $conexion->prepare("SELECT dv.Modelo, dv.Cantidad, l.Descripcion descripcion, l.Marca, dv.precio_Unitario, dv.Importe 
+        FROM detalle_venta dv INNER JOIN llantas l ON dv.id_llanta = l.id WHERE dv.id_Venta = ? AND dv.Unidad = 'pieza'");
+        $detalle->bind_param('i', $id_venta);
+        $detalle->execute();
+        $resultado_llantas = $detalle->get_result();  
+        $detalle->close(); 
+        while ($row = $resultado_llantas->fetch_assoc()) {
+            $resultado[] = $row;
+        }
+    }else{
+        $detalles = $conexion->prepare("SELECT dv.Modelo, dv.Cantidad, s.descripcion, dv.precio_Unitario, dv.Importe 
+        FROM detalle_venta dv INNER JOIN servicios s ON dv.id_llanta = s.id WHERE dv.id_Venta = ? AND dv.Unidad = 'servicio'");
+        $detalles->bind_param('i', $id_venta);
+        $detalles->execute();
+        $resultadoServ = $detalles->get_result();
+        $detalles->close(); 
+
+        $detalle = $conexion->prepare("SELECT dv.Modelo, dv.Cantidad, l.Descripcion descripcion, l.Marca, dv.precio_Unitario, 
+        dv.Importe FROM detalle_venta dv INNER JOIN llantas l ON dv.id_llanta = l.id WHERE dv.id_Venta = ?  
+        AND dv.Unidad = 'pieza'  AND dv.Modelo != 'no aplica'");
+        $detalle->bind_param('i', $id_venta);
+        $detalle->execute();
+        $resultado_llantas = $detalle->get_result(); 
+        $detalle->close(); 
+
+         // Convert result objects to arrays and merge them
+        $servicios_array = [];
+        while ($row = $resultadoServ->fetch_assoc()) {
+            $servicios_array[] = $row;
+        }
+        
+        $llantas_array = [];
+        while ($row = $resultado_llantas->fetch_assoc()) {
+            $llantas_array[] = $row;
+        }
+    
+        $resultado = array_merge($servicios_array, $llantas_array);
+    }
+
+  
+   $ejeY = 74;
+   $k=1;
+   foreach ($resultado as $fila) {
+  
+       $cantidad = $fila["Cantidad"];
+       $modelo = "N/A";
+       $descripcion = $fila["descripcion"];
+       $marca = isset($fila['Marca']) ? $fila['Marca'] : "N/A";
+       $precio_unitario = number_format($fila['precio_Unitario'], 2, '.', ',');
+       $importe = number_format($fila['Importe'], 2, '.', ','); 
+       $caracteres = mb_strlen($descripcion);
+       
+       if ($caracteres <= 25) {
+           $pdf->Cell(10,10, $cantidad,0,0,'C',1);
+           $pdf->MultiCell(100,10, utf8_decode_($descripcion)/*  . '.---'. $caracteres */,0,'L',1); 
+           $pdf->SetY($ejeY);
+           $ejeY = $ejeY + 10;
+           $pdf->SetX(120);
+           $pdf->Cell(20,10, utf8_decode_($marca),0,0,'C',1);
+           $pdf->Cell(30,10, utf8_decode_($precio_unitario),0,0, 'C',1);
+           $pdf->Cell(30,10, utf8_decode_($importe),0,0, 'C',1);
+           $pdf->Ln(10);
+     
+       }else if ($caracteres > 25 && $caracteres < 45) {
+           $pdf->Cell(10,10,$cantidad,0,0,'C',1);
+           $pdf->MultiCell(100,10, utf8_decode_($descripcion) /* . '.---'. $caracteres */,0,'L',1);
+           $pdf->SetY($ejeY);
+           $ejeY = $ejeY + 10;
+           $pdf->SetX(120);
+         
+           $pdf->Cell(20,10, utf8_decode_($marca),0,0,'C',1);
+           $pdf->Cell(30,10, $precio_unitario,0,0, 'C',1);
+           $pdf->Cell(30,10,utf8_decode_($importe),0,0, 'C',1);
+           $pdf->Ln(10);
+     
+       }else{
+            if($caracteres >103) $altura_multicell = 4;
+            if($caracteres >=60 && $caracteres <104) $altura_multicell = 6;
+            if($caracteres >=45 && $caracteres <60) $altura_multicell = 10;
+           $pdf->Cell(10,10,$cantidad,0,0,'C',1);
+           $pdf->MultiCell(100, $altura_multicell, utf8_decode_($descripcion)/*  . '.---' .$caracteres */, 0,'L',1);
+           $pdf->SetY($ejeY);
+           $ejeY = $ejeY + 10;
+           $pdf->SetX(120);
+           $pdf->Cell(20,12, utf8_decode_($marca),0,0,'C',1);
+           $pdf->Cell(30,12, utf8_decode_($precio_unitario),0,0, 'C',1);
+           $pdf->Cell(30,12, utf8_decode_($importe),0,0, 'C',1);
+           $pdf->Ln(10);
+       }
+
+      if($k==19){
+       $pdf->AddPage();
+       $pdf->SetFont('Times','B', $GLOBALS['t_fuente_cliente_datos']);
+       $pdf->SetDrawColor(135, 134, 134);
+       $pdf->SetTextColor(36, 35, 28);
+       
+       //$pdf->Rect(10, 80, 189, 8, 'F');
+       $pdf->SetDrawColor(194, 34, 16);
+       $pdf->SetLineWidth(1);
+       //$pdf->Line(11,95,192,95);
+       
+       $pdf->Cell(19,8,utf8_decode_("Cant"),0,0);  
+       $pdf->Cell(85,8,utf8_decode_("Concepto"),0,0, 'C');
+       $pdf->Cell(30,8,utf8_decode_("Marca"),0,0, 'C');
+       $pdf->Cell(30,8,utf8_decode_("Precio Uni"),0,0, 'C');
+       $pdf->Cell(30,8,utf8_decode_("Importe"),0,0, 'C');
+       $pdf->Ln(0);
+       $pdf->Line(10,73,203,73);
+       $pdf->Ln(9);
+       
+       $pdf->SetDrawColor(1, 1, 1);
+       $pdf->SetLineWidth(0);
+   
+       $pdf->SetFillColor(236, 236, 236);
+       
+       $pdf->SetFont('Times','', $GLOBALS['t_fuente_cliente_datos']);
+       $ejeY = 74;
+      }
+       
+      $k=$k+1;
+      
+   }
+  
+    $pdf->Ln(11);
+    /*$pdf->SetFont('Arial','B',10);
+    $pdf->SetTextColor(194, 34, 16);
+    //Subtotal
+    $pdf->Cell(129,6,'',0,0);
+    $pdf->Cell(30,6,'Subtotal',0,0, 'R');
+    $pdf->SetTextColor(1, 1, 1);
+    $pdf->SetFont('Courier','',10);
+    $pdf->Cell(30,6,'$15102,00',0,0, 'C',1);
+    $pdf->Ln(7);
+
+    
+    $pdf->Cell(129,6,'',0,0);
+    $pdf->SetFont('Arial','B',10);
+    $pdf->SetTextColor(194, 34, 16);
+    $pdf->Cell(30,6,'IVA',0,0, 'R');
+    $pdf->SetTextColor(1, 1, 1);
+    $pdf->SetFont('Courier','',10);
+    $pdf->Cell(30,6,'$1510,00',0,0, 'C',1);
+    $pdf->Ln(7);*/
+
+    $pdf->Cell(129,6,'',0,0);
+    $pdf->SetFont('Arial','B',$GLOBALS['t_fuente_cliente_datos']);
+    $pdf->SetTextColor(194, 34, 16);
+    $pdf->Cell(30,8,'Total',0,0, 'R');
+    $pdf->SetTextColor(1, 1, 1);
+    $pdf->SetFont('Courier','',$GLOBALS['t_fuente_cliente_datos']);
+    $total_ = number_format($GLOBALS['total'], 2, '.', ',');
+    $pdf->Cell(30,8,'$ '. $total_,0,0, 'C',1);
+    $pdf->Ln(10);
+    //$pdf->Cell(119,6,'',1,0);
+
+    $pdf->SetFont('Arial','B',$GLOBALS['t_fuente_cliente_datos']);
+    $pdf->SetTextColor(194, 34, 16);
+    $pdf->Cell(29,6,'Plazo',0,0,'C',0);
+    $pdf->Cell(49,6,'Inicio',0,0,'C',0);
+    $pdf->Cell(50,6,'Final',0,0,'C',0); 
+    $pdf->SetFont('Arial','B', $GLOBALS['t_fuente_cliente_datos']);
+    $pdf->SetTextColor(194, 34, 16);
+    $pdf->Cell(30,8,'Pagado',0,0, 'R');
+    $pdf->SetTextColor(1, 1, 1);
+    $pdf->SetFont('Courier','',$GLOBALS['t_fuente_cliente_datos']);
+    $pagado_ = number_format($GLOBALS['pagado'], 2, '.', ',');
+    $pdf->Cell(30,8,'$ '.$pagado_,0,0, 'C',1);
+    $pdf->Ln(10);
+    
+    //die();
+    switch ($GLOBALS['plazo']) {
+            case '1':
+            $plazos = '1 semana';
+            break;
+            
+            case '2':
+            $plazos = '15 dias';
+            break;
+            
+            case '3':
+            $plazos = '1 mes';
+            break;
+
+            case '4':
+            $plazos = '1 año';
+            break;
+
+            case '5':
+            $plazos = 'Sin definir';
+            break;
+
+            case '6':
+                $plazos = '1 día';
+            break;
+        
+        default:
+        $plazos = 'Sin definir';
+            # code...
+            break;
+    }
+ 
+    $pdf->SetFont('Courier','', $GLOBALS['t_fuente_cliente_datos']);
+    $pdf->Cell(29,6,$plazos,0,0,'C',1);
+    $pdf->Cell(49,6,$GLOBALS["fecha_inicio"] ,0,0,'C',1);
+    $pdf->Cell(50,6,$GLOBALS["fecha_final"] ,0,0,'C',1);
+    $pdf->SetFont('Arial','B', $GLOBALS['t_fuente_cliente_datos']);
+    $pdf->SetTextColor(194, 34, 16);
+    $pdf->Cell(30,8,'Restante',0,0, 'R');
+    $pdf->SetTextColor(1, 1, 1);
+    $pdf->SetFont('Courier','', $GLOBALS['t_fuente_cliente_datos']);
+    $restante_ = number_format($GLOBALS["restante"], 2, '.', ',');
+    $pdf->Cell(30,8,'$ '.$restante_,0,0, 'C',1);
+    $pdf->Ln(10);
+
+
+    //Importe y observaciones
+    $pdf->SetFont('Times','B', $GLOBALS['t_fuente_cliente_datos']);
+    $pdf->Cell(199,6,'Importe total con letra: ',0,0);
+    $pdf->Ln(8);
+    $pdf->SetFont('Courier','', $GLOBALS['t_fuente_cliente_datos']);
+    $formatTotal = $GLOBALS["formatTotal"];
+    $pdf->Cell(180,8,utf8_decode_($formatTotal),0,0,'L',1);
+    $pdf->Ln(10);
+    $pdf->SetFont('Times','B', $GLOBALS['t_fuente_cliente_datos']);
+    $pdf->Cell(189,6,'Oservaciones: ',0,0);
+    $pdf->Ln(2);
+    $pdf->SetFont('Courier','', $GLOBALS['t_fuente_cliente_datos']);
+    $observacion = empty($GLOBALS["comentario"])? '': $GLOBALS["comentario"];
+    if($observacion == "" || $observacion == null || $observacion == " "){
+        $pdf->Ln(8);
+        $pdf->SetFont('Courier','', $GLOBALS['t_fuente_cliente_datos']);
+        $pdf->Cell(180,20,utf8_decode_($observacion),0,0,'L',1);
+        $pdf->Ln(22);
+    }else{
+        
+        $pdf->Ln(8);
+        $pdf->SetFont('Courier','', $GLOBALS['t_fuente_cliente_datos']);
+        $pdf->MultiCell(180,6,$observacion,0,'L',1);
+        $pdf->Ln(22);
+    };
+ 
+
+    $pdf->SetTextColor(194, 34, 16);
+    $pdf->SetFont('Arial','B',5);
+    include '../helpers/condiciones_comentarios.php';
+    
+    $pdf->Cell(189,6,utf8_decode_($text),0,0,'L');
+    $pdf->Ln(2);
+    $pdf->Cell(189,6,utf8_decode_($text2),0,0,'L');
+    $pdf->Ln(2);
+    $pdf->Cell(189,6,utf8_decode_($text3),0,0,'L');
+    $pdf->Ln(2);
+    $pdf->Cell(189,6,utf8_decode_($text4),0,0,'L');
+    $pdf->Ln(2);
+    $pdf->Cell(189,6,utf8_decode_($text5),0,0,'L');
+    $pdf->Ln(2);
+    $pdf->Cell(189,6,utf8_decode_($text6),0,0,'L');
+    $pdf->Ln(2);
+    $pdf->Cell(189,6,utf8_decode_($text7),0,0,'L');
+   
+    
+    $pdf->Ln(10);
+
+    $pdf->SetTextColor(1, 1, 1);
+    $pdf->SetFont('Arial','B',10);
+    $pdf->Cell(185,6,utf8_decode_("Gracias por su compra"),0,0,'C');
+    $pdf->Ln(18);
+    $pdf->Line(20,272,97,272);
+    $pdf->Line(120,272,180,272);
+    $pdf->SetTextColor(1, 1, 1);
+    $pdf->SetFont('Arial','B',10);
+    $pdf->Cell(93,6,utf8_decode_("Recibido cliente"),0,0,'C');
+    $pdf->Cell(93,6,utf8_decode_("Entregado por"),0,0,'C');
+
+    $pdf->SetDrawColor(194, 34, 16);
+    $pdf->SetLineWidth(1);
+    $pdf->Line(10,285,200,285);
+
+
+    $pagare=$GLOBALS['pagare'];
+    if($pagare==1){
+        $pdf->AddPage();
+        $pdf->SetFont('Times','', $GLOBALS['t_fuente_cliente_datos']);
+        $pdf->MultiCell(187,5,'DEBO Y PAGARE INCONDICIONALMENTE POR ESTE PAGARE A LA ORDEN DE KARLA KARINA SANCHEZ REYNA EN H.MATAMOROS TAMAULIPAS, LA CANTIDAD DE : ' .$formatTotal. '.
+         
+RECIBIDO A MI ENTERA SATISFACCION, ESTE PAGARE CAUSARA INTERESES A RAZON DEL 3.25% MENSUAL DESDE LA FECHA DE VENCIMIENTO HASTA SU TOTAL LIQUIDACION. PAGADERO CO JUNTAMENTE CON EL PRINCIPAL',0,0,'C',1);
+        $pdf->Ln(10);
+        $pdf->SetFont('Arial','B',10);    
+        $pdf->Cell(187,6,utf8_decode_("Recibido cliente"),0,0,'C');
+        $pdf->SetLineWidth(.4);
+        $pdf->SetTextColor(1, 1, 1);
+        $pdf->SetDrawColor(194, 34, 16);
+        $pdf->Line(70,130,140,130);
+    
+    };
+    
+    $pdf->Line(10,285,200,285);
+    $pdf->Output("Reporte de credito RAY" . $_GET["id"] .".pdf", "I");
+}
+
+cuerpoTabla();
+
+
+
+
+?>

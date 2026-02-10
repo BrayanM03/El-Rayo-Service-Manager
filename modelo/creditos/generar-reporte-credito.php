@@ -320,8 +320,17 @@ $pdf->Cell(30, 5, $plazos, 1, 0, 'C');
 $pdf->Cell(30, 5, $credito['fecha_inicio'], 1, 0, 'C'); // Simplificado
 $pdf->Cell(30, 5, $credito['fecha_final'], 1, 1, 'C');
 
-// --- SECCIÓN GARANTÍA ---
+// --- SECCIÓN COMENTARIOS ---
 $pdf->Ln(5);
+$pdf->SetFont('Arial', 'B', 7);
+$pdf->SetTextColor(194, 34, 16);
+$pdf->Cell(0, 4, utf8_decode_('COMENTARIOS:'), 0, 1);
+$pdf->SetTextColor(80);
+$pdf->SetFont('Arial', '', 7);
+$pdf->Cell(189,6,utf8_decode_($resVenta['comentario']),0,0,'L');
+
+// --- SECCIÓN GARANTÍA ---
+$pdf->Ln(10);
 $pdf->SetFont('Arial', 'B', 7);
 $pdf->SetTextColor(194, 34, 16);
 $pdf->Cell(0, 4, utf8_decode_('TÉRMINOS DE GARANTÍA Y CONDICIONES:'), 0, 1);

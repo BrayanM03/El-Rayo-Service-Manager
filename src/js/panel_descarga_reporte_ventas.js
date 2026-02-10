@@ -24,6 +24,86 @@ function ejecutarPanelReporteVentas(){
             });
 
         },
+        title: 'Reporte de ventas',
+        html: `
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 col-12">
+
+                        <label for="sucursal">Selecciona una sucursal</label>
+                        <select class="form-control" id="sucursal">
+                        </select>
+
+                        <div class="row justify-content-center">
+                            <div class="col-12 col-md-12">
+                                <label class="mt-3" for="fecha-inicio">Selecciona un rango de fechas</label>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <input type="date" class="form-control" id="fecha-inicio-rp">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <input type="date" class="form-control" id="fecha-fin-rp">
+                            </div>
+                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `,
+        confirmButtonText: 'Descargar',
+        showCancelButton: true,
+        showLoaderOnConfirm: true,
+        customClass: {
+            validationMessage: 'my-validation-message'
+          },
+        preConfirm: () => {
+            fecha_inicio = $("#fecha-inicio-rp").val();
+            fecha_fin = $("#fecha-fin-rp").val();
+            console.log(fecha_inicio);
+            if (!fecha_inicio) {
+              Swal.showValidationMessage(
+                '<i class="fa-solid fa-circle-info"></i> La fecha de inicio es requerida'
+              )
+            }
+          }
+    }).then((response) => {
+        if(response.isConfirmed){
+            id_sucursal = $("#sucursal").val();
+            window.open("./modelo/panel/excel-entradas-facturacion.php?f1="+fecha_inicio + "f2="+fecha_fin+"&sucursal="+ id_sucursal);
+  
+        }
+    });
+
+}
+
+function ejecutarPanelReporteCorte(){
+
+    Swal.fire({
+        icon: 'info',
+        didOpen: function () {
+            $.ajax({
+                type: "POST",
+                url: "./modelo/panel/traer_sucursales.php",
+                data: "data",
+                dataType: "JSON",
+                success: function (response) {
+                    
+                    /* $("#sucursal").append(`
+                        <option value="all">Todas las plazas</option>
+                    `);  */
+                    response.forEach(element => {
+                       
+                    $("#sucursal").append(`
+                        <option value="${element.id}">${element.nombre}</option>
+                    `); 
+                    });
+                    
+                }
+            });
+
+        },
+        title: 'Reporte de corte',
+
         html: `
             <div class="container">
                 <div class="row">
@@ -72,6 +152,8 @@ function ejecutarPanelReporteVentas(){
 function ejecutarPanelTipoComision(){
     Swal.fire({
         icon: 'info',
+        title: 'Tipo de comisión',
+
         html: `
             <div class="container">
                 <div class="row">
@@ -124,6 +206,8 @@ function ejecutarPanelReporteComisionesEncargado(){
             });
 
         },
+        title: 'Reporte de comisión',
+
         html: `
             <div class="container">
                 <div class="row">
@@ -139,6 +223,7 @@ function ejecutarPanelReporteComisionesEncargado(){
                             <option value="2023">2023</option>
                             <option value="2024">2024</option>
                             <option value="2025">2025</option>
+                            <option value="2026">2026</option>
                         </select>
                     </div>
                 </div>
@@ -213,6 +298,8 @@ function ejecutarPanelReporteComisionesVendedor(){
                 });
 
         },
+        title: 'Reporte de comisión',
+
         html: `
             <div class="container">
                 <div class="row">
@@ -228,6 +315,7 @@ function ejecutarPanelReporteComisionesVendedor(){
                             <option value="2023">2023</option>
                             <option value="2024">2024</option>
                             <option value="2025">2025</option>
+                            <option value="2026">2026</option>
                         </select>
                     </div>
                 </div>
