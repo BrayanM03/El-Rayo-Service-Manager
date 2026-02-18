@@ -45,10 +45,6 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
         
-    <link href='https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css' rel='stylesheet' />
-
-        
-
 
     <!-- Custom styles for this template-->
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
@@ -65,7 +61,6 @@
      <link rel="stylesheet" href="src/vendor/bower_components/select2-bootstrap-theme/dist/select2-bootstrap.css">
  
     <!---Librerias de estilos-->
-    <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="src/css/menu-vertical.css" rel="stylesheet">
     <link href="src/css/filtros.css" rel="stylesheet">
@@ -122,30 +117,9 @@
 
                 <!-- Begin Page Content --> 
                 <div class="container-fluid mt-3">
-                        <!-- <div class="row">
-                            <div class="col-md-6">
-                                <h3><b>Historial de creditos realizados</b></h3>
-                            </div>
-                        </div>
-                        <hr>  
-                         -->
+                   
                         <div class="d-none" id="titulo-hv" sucursal="<?php echo $_SESSION['sucursal']?>" id_sucursal="<?php echo $_SESSION['id_sucursal']?>" rol="<?php echo $_SESSION['rol'] ?>" id_usuario="<?php echo $_SESSION['id_usuario'] ?>"  nombre_usuario="<?php echo $_SESSION['nombre'] . ' ' . $_SESSION['apellidos'] ?>"></div>
-                        <!-- <div class="row mt-2 mb-2 justify-content-center">
-                            <div class="col-12 col-md-10">
-                                    <a href="modelo/creditos/excel-creditos-vencidos.php" class="btn btn-success btn-icon-split">
-                                        <span class="icon text-white-50">
-                                        <i class="fas fa-file-excel"></i>
-                                        </span>
-                                        <span class="text">Reporte de creditos vencidos</span>
-                                    </a>
-                                    <a href="#" class="btn btn-info btn-icon-split" onclick="traerModalEstadoCuenta()">
-                                        <span class="icon text-white-50">
-                                        <i class="fas fa-users"></i>
-                                        </span>
-                                        <span class="text">Estado de cuenta</span>
-                                    </a>
-                            </div>
-                        </div> -->
+                      
                         
                         <div id="filter-creditos-container" v-cloak>
                         

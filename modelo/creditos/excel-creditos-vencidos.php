@@ -14,7 +14,7 @@ session_start();
 $id_sucursal_usuario = $_SESSION['id_sucursal'];
 $id_usuario_actual = $_SESSION['id_usuario'];
 
-$arreglo_permisos_ids = [7, 1, 11, 26, 29];
+$arreglo_permisos_ids = [7, 1, 11, 26, 29, 21];
 
 // Verificamos si el usuario tiene permiso global
 $tiene_permiso_total = in_array($id_usuario_actual, $arreglo_permisos_ids);
@@ -109,7 +109,7 @@ $queryVencidos = "SELECT c.*, s.nombre as nombre_sucursal, s.id as id_sucursal, 
                   INNER JOIN clientes cl ON cl.id = v.id_Cliente 
                   INNER JOIN sucursal s ON v.id_sucursal = s.id 
                   INNER JOIN usuarios u ON cl.id_asesor = u.id 
-                  WHERE c.estatus = 4 $filtro_sucursal ORDER BY s.nombre ASC";
+                  WHERE c.estatus = 4 $filtro_sucursal ORDER BY s.nombre ASC, c.id_venta ASC";
 $resV = $con->prepare($queryVencidos);
 $resV->execute();
 $datosVencidos = Arreglo_Get_Result($resV);
@@ -120,7 +120,7 @@ $queryActivos = "SELECT c.*, s.nombre as nombre_sucursal, s.id as id_sucursal, v
                  INNER JOIN clientes cl ON cl.id = v.id_Cliente 
                  INNER JOIN sucursal s ON v.id_sucursal = s.id 
                  INNER JOIN usuarios u ON cl.id_asesor = u.id 
-                 WHERE c.estatus NOT IN (3, 5, 4) $filtro_sucursal ORDER BY s.nombre ASC";
+                 WHERE c.estatus NOT IN (3, 5, 4) $filtro_sucursal ORDER BY s.nombre ASC, c.id_venta ASC";
 $resA = $con->prepare($queryActivos);
 $resA->execute();
 $datosActivos = Arreglo_Get_Result($resA);
