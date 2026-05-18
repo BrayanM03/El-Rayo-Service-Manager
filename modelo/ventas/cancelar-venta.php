@@ -26,11 +26,11 @@ if(isset($_POST)) {
     $id_sesion = $_SESSION['id_usuario'];
     //Conseguir susucusal
 
-    $obtenerSuc = "SELECT id_sucursal, sucursal, estatus FROM ventas WHERE id LIKE ?";
+    $obtenerSuc = "SELECT id_sucursal, sucursal, tipo, estatus FROM ventas WHERE id LIKE ?";
     $stmt = $con->prepare($obtenerSuc);
     $stmt->bind_param('i', $id_venta);
     $stmt->execute();
-    $stmt->bind_result($sucursal, $sucursal_nombre, $estatus);
+    $stmt->bind_result($sucursal, $sucursal_nombre, $tipo_nota, $estatus);
     $stmt->fetch();
     $stmt->close();
 
@@ -97,29 +97,6 @@ if(isset($_POST)) {
                     $editar_llanta->execute();
                     $editar_llanta->close();
 
-                    //Actualizamos estatus de venta normal
-                    if($estatus == "Pagado") {
-                        $newStatus = "Cancelada";
-                        $editar_status = $con->prepare("UPDATE ventas SET estatus = ?, comentario = ? WHERE id = ?");
-                        $editar_status->bind_param('ssi', $newStatus, $motivo, $id_venta);
-                        $editar_status->execute();
-                        $editar_status->close();
-
-                    } elseif($estatus == "Abierta") {
-                        $newStatus = "Cancelada";
-                        $editar_status = $con->prepare("UPDATE ventas SET estatus = ?, comentario = ? WHERE id = ?");
-                        $editar_status->bind_param('ssi', $newStatus, $motivo, $id_venta);
-                        $editar_status->execute();
-                        $editar_status->close();
-
-                        $newstatuscredito = 5;
-                        $editar_status_credito = $con->prepare("UPDATE creditos SET estatus = ? WHERE id_venta = ?");
-                        $editar_status_credito->bind_param('si', $newstatuscredito, $id_venta);
-                        $editar_status_credito->execute();
-                        $editar_status_credito->close();
-
-                    }
-
 
                     //Actualizar historial de movimientos con la cancelación
                     $ins = "INSERT INTO historial_detalle_cambio(id_llanta, id_ubicacion, id_destino, cantidad, id_usuario, id_movimiento, stock_destino_actual, stock_destino_anterior, aprobado_receptor, aprobado_emisor, usuario_emisor, usuario_receptor)
@@ -154,7 +131,7 @@ if(isset($_POST)) {
                   $mercancia .= '';
                   $cantidad_llantas_movimiento +=0;
                    //Actualizamos estatus de venta normal
-                   if($estatus == "Pagado") {
+                  /*  if($estatus == "Pagado") {
                     $newStatus = "Cancelada";
                     $editar_status = $con->prepare("UPDATE ventas SET estatus = ?, comentario = ? WHERE id = ?");
                     $editar_status->bind_param('ssi', $newStatus, $motivo, $id_venta);
@@ -174,11 +151,55 @@ if(isset($_POST)) {
                     $editar_status_credito->execute();
                     $editar_status_credito->close();
 
-                }
+                } */
                 
 
                 }
             }
+
+// 1. Unificamos la cancelación de la venta principal (aplica para Pagado y Abierta)
+if ($estatus == "Pagado" || $estatus == "Abierta") {
+    
+    $newStatus = "Cancelada";
+    $editar_status = $con->prepare("UPDATE ventas SET estatus = ?, comentario = ? WHERE id = ?");
+    $editar_status->bind_param('ssi', $newStatus, $motivo, $id_venta);
+    $editar_status->execute();
+    $editar_status->close();
+
+    // 2. Lógica específica cuando el estatus original era "Pagado"
+    if ($estatus == "Pagado") {
+        
+        if ($tipo_nota == 'Credito') {
+            $newstatuscredito = 5;
+            $editar_status_credito = $con->prepare("UPDATE creditos SET estatus = ? WHERE id_venta = ?");
+            $editar_status_credito->bind_param('si', $newstatuscredito, $id_venta);
+            $editar_status_credito->execute();
+            $editar_status_credito->close();
+            
+        } elseif ($tipo_nota == 'Apartado' || $tipo_nota == 'Pedido') {
+            // Definimos la tabla objetivo dinámicamente según el tipo de nota
+            $tablaObjetivo = ($tipo_nota == 'Apartado') ? 'apartados' : 'pedidos';
+            $statusCancelado = "Cancelado";
+            
+            // Al interpolar $tablaObjetivo aquí, ahorramos duplicar todo el bloque de ejecución
+            $editar_secundario = $con->prepare("UPDATE $tablaObjetivo SET estatus = ? WHERE id_venta = ?");
+            $editar_secundario->bind_param('si', $statusCancelado, $id_venta);
+            $editar_secundario->execute();
+            $editar_secundario->close();
+        }
+
+    // 3. Lógica específica cuando el estatus original era "Abierta"
+    } elseif ($estatus == "Abierta") {
+        
+        // Mantenemos tu comportamiento original para notas abiertas
+        $newstatuscredito = 5;
+        $editar_status_credito = $con->prepare("UPDATE creditos SET estatus = ? WHERE id_venta = ?");
+        $editar_status_credito->bind_param('si', $newstatuscredito, $id_venta);
+        $editar_status_credito->execute();
+        $editar_status_credito->close();
+        
+    }
+}
 
             if($total_detalles > 1 || ($total_detalles == 1 && $bandera_producto_servicio > 0)){
               
