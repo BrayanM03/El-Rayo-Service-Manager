@@ -43,7 +43,10 @@ const meses = [
     columns: [   
     { title: "#",              data: null   },
     { title: "Folio",          data: 0      },
-    { title: "Fecha",          data: 1      },
+    { title: 'Fecha',          data: null, render: (data)=>{
+      const miFecha = new Date(data[1]);      
+      return formatearFechaEspanol(miFecha)
+    }},
     { title: "Categoria",      data: 2      },
     { title: "Descripción",    data: 3      }, 
     { title: "Monto",          data: 4      },
@@ -56,14 +59,14 @@ const meses = [
       className: "celda-acciones",
       render: function (row, data) {
         rol = $("#titulo-hv").attr("rol");
-     
+        let btn_edit = `<button onclick="editarGasto(${row[0]}, '${row[9]}');" title="Editar reporte" type="button" class="buttonPDF btn btn-warning" style="margin-right: 8px">
+        <span class="fa fa-edit"></span><span class="hidden-xs"></span>
+    </button>`;
+
         if(row[8] == 1){
           if(rol == "1" ){
             return `
-            <div style="display: flex; width: auto;">
-                <button onclick="editarGasto(${row[0]}, '${row[9]}');" title="Editar reporte" type="button" class="buttonPDF btn btn-warning" style="margin-right: 8px">
-                    <span class="fa fa-edit"></span><span class="hidden-xs"></span>
-                </button>
+          <div style="display: flex; width: auto;">
                 <button onclick="traerTicket(${row[0]}, '${row[9]}');" title="Ver reporte" type="button" class="buttonPDF btn btn-danger" style="margin-right: 8px">
                     <span class="fa fa-file-pdf"></span><span class="hidden-xs"></span>
                 </button>
@@ -85,9 +88,7 @@ const meses = [
           if(rol == "1" ){
             return `
             <div style="display: flex; width: auto;">
-                <button onclick="editarGasto(${row[0]}, '${row[9]}');" title="Editar reporte" type="button" class="buttonPDF btn btn-warning" style="margin-right: 8px">
-                    <span class="fa fa-edit"></span><span class="hidden-xs"></span>
-                </button>
+        
             </div>
             `;
           }else{
@@ -112,7 +113,7 @@ const meses = [
     { 'orderData':[2], 'targets': [1] },
     {
         'targets': [2],
-        'visible': false,
+        'visible': true,
         'searchable': false
     },
   ],
@@ -675,3 +676,41 @@ const meses = [
     toastr.success('Eliminado, click en actualizar para guardar los cambios' ); 
     eliminar_comprobante = true;
   }
+
+  function formatearFechaEspanol(dateObj) {
+    if (!(dateObj instanceof Date)) {
+        return "Error: Se requiere un objeto Date.";
+    }
+
+    // --- Opciones para la FECHA (Día, Mes corto, Año) ---
+    const opcionesFecha = {
+        day: '2-digit',   // Ejemplo: '10'
+        month: 'short', // Ejemplo: 'Nov'
+        year: 'numeric', // Ejemplo: '2025'
+        timeZone: 'UTC'
+    };
+
+    // --- Opciones para la HORA (Hora, Minuto, AM/PM) ---
+    const opcionesHora = {
+        hour: 'numeric',   // Ejemplo: '5'
+        minute: '2-digit', // Ejemplo: '05'
+        hour12: true,       // Formato AM/PM
+        timeZone: 'UTC'
+    };
+
+    // 1. Formatear la parte de la fecha (usamos 'en-GB' para mes abreviado y día/mes/año)
+    const fechaFormateada = dateObj.toLocaleDateString('en-GB', opcionesFecha)
+                                   // Reemplaza el separador de día/mes/año (como '/' o '-') por un espacio.
+                                   .replace(/[/-]/g, ' '); 
+
+    // 2. Formatear la parte de la hora (usamos 'en-US' para el formato 12h y AM/PM)
+    const horaFormateada = dateObj.toLocaleTimeString('en-US', opcionesHora)
+                                 // Normalizar el AM/PM a minúsculas y quitar espacios extra
+                                 .replace(' AM', ' am')
+                                 .replace(' PM', ' pm')
+                                 .replace(/ /g, ''); 
+
+
+    // 3. Unir las partes
+    return `${fechaFormateada} - ${horaFormateada}`;
+}
