@@ -275,6 +275,12 @@ function MostrarCreditosFuncionAntigua() {
             case "5":
               return '<span class="badge badge-dark">Cancelada</span>';
               break;
+              case "6":
+              return '<span class="badge badge-dark">Irrecuperable</span>';
+              break;
+              case "7":
+              return '<span class="badge badge-dark">Garantía</span>';
+              break;
             default:
               break;
           }
