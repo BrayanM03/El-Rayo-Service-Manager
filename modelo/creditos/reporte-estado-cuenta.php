@@ -11,6 +11,9 @@ $id_cliente = $_GET['id_cliente'];
 $id_sucursal = $_SESSION['id_sucursal'];
 $fecha = date('Y-m-d');
 $hora = date('h:s a');
+$no_registros = 0;
+$no_abonos_realizados = 0;
+
 $detalle = $con->prepare("SELECT COUNT(*) FROM creditos cr INNER JOIN clientes c 
 ON c.id = cr.id_cliente WHERE cr.id_cliente = ? AND cr.estatus != 5 AND cr.estatus != 3");
 $detalle->bind_param('i', $id_cliente);
@@ -56,6 +59,19 @@ while ($fila = $resultado->fetch_assoc()) {
 }
 $stmt->close();
 
+$codigo_sucursal = '';
+$sucursal = '';
+$calle_suc = '';
+$numero_suc = '';
+$colonia_suc = '';
+$ciudad_suc = '';
+$estado_suc = '';
+$pais_suc = '';
+$telefono_suc = '';
+$rfc_suc = '';
+$cp_suc = '';
+$correo_suc = '';
+$telefono_suc_2 = '';
 
 //Trayendo datos de la sucursal
 $ID = $con->prepare("SELECT code, nombre, calle, numero, colonia, ciudad, estado, pais, telefono, RFC, CP, correo, telefono_2  FROM sucursal WHERE id = ?");
@@ -470,6 +486,7 @@ function cuerpoTabla(){
     $conexion = $GLOBALS["con"];
     $stmt = $conexion->prepare("SELECT cr.* FROM creditos cr INNER JOIN clientes c 
     ON c.id = cr.id_cliente WHERE cr.id_cliente = ? AND cr.estatus != 5 AND cr.estatus != 3
+    AND cr.estatus != 6 AND cr.estatus != 7
     ORDER BY cr.estatus, cr.fecha_inicio");
     $stmt->bind_param('i', $_GET['id_cliente']);
     $stmt->execute();
@@ -502,14 +519,22 @@ function cuerpoTabla(){
 
     $estatus = [
         '0'=> 'Sin abono',
-        '1'=> 'Prime abono',
+        '1'=> 'Primer abono',
         '2'=> 'Pagando',
         '3'=> 'Finalizado',
         '4'=> 'Vencido',
         '5'=> 'Cancelada',
+        '6'=> 'Irrecuperable',
+        '7'=> 'Garantía'
     ];
 
     while ($fila = $resultado->fetch_assoc()) {
+        if (!strtotime($fila['fecha_inicio']) || !strtotime($fila['fecha_final'])) {
+            print_r($fila);
+            die("Fecha invalida");
+        }
+
+        
         $data[] =$fila;
         $fecha_inicio = new DateTime($fila['fecha_inicio']); 
         $formato_fecha_inicio = $fecha_inicio->format('d-M-y');

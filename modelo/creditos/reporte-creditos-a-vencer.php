@@ -44,7 +44,7 @@ $headers = [
     'ID Credito', 'Sucursal', 'Cliente', 'Fecha inicio', 'Fecha Final',
     'Total', 'Pagado', 'Restante', 'Estatus Crédito', 'Estatus Venta', 'Plazo', 'RAY', 'Asesor'
 ];
-$estatus_credito = array(0=>'Sin abono', 1=>'Primer abono', 2 => 'Pagando', 3 =>'Finalizado', 4 => 'Vencido' ,5 => 'Cancelado');
+$estatus_credito = array(0=>'Sin abono', 1=>'Primer abono', 2 => 'Pagando', 3 =>'Finalizado', 4 => 'Vencido' ,5 => 'Cancelado', 6 => 'Irrecuperable', 7 => 'Garantía');
 $plazos = ['No borrar', '7 dias', '15 dias', '1 mes', '1 año', '7 dias', '1 dias']; //No borrar porque los plazo empieza no en 0
 $sheet->fromArray($headers, null, 'A2');
 
@@ -161,7 +161,7 @@ function obtenerCreditosVencidos($tipo, $con, $fecha_inicio = 0, $fecha_final = 
         INNER JOIN sucursal s ON s.id = v.id_sucursal
         INNER JOIN usuarios u ON cl.id_asesor = u.id
         WHERE v.estatus != 'Cancelada'
-          AND c.estatus NOT IN (3, 4, 5)
+          AND c.estatus NOT IN (3, 4, 5, 6, 7)
     ";
 
     // Si NO es rol 1 y NO es Karina → se filtra por sucursal

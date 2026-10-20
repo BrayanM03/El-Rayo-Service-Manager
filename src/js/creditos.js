@@ -127,6 +127,11 @@ function MostrarCreditos() {
               break;
             case "5":
               return '<span class="badge badge-dark">Cancelada</span>';
+            case "6":
+              return '<span class="badge badge-dark">Irrecuperable</span>';
+              break;
+              case "7":
+              return '<span class="badge badge-dark">Garantía</span>';
               break;
             default:
               break;
@@ -157,6 +162,9 @@ function MostrarCreditos() {
               case 6:
                 return "<span>1 día</span>";
                 break;
+                case 7:
+                  return "<span>45 días</span>";
+                  break;
             default:
               return ''
               break;

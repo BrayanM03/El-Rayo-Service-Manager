@@ -16,7 +16,7 @@ $id_usuario_actual = $_SESSION['id_usuario'];
 
 $arreglo_permisos_ids = [7, 1, 11, 26, 29, 21];
 
-// Verificamos si el usuario tiene permiso global
+// Verificamos si el usuario tiene permiso global 
 $tiene_permiso_total = in_array($id_usuario_actual, $arreglo_permisos_ids);
 
 // Construimos la cláusula extra para el SQL
@@ -47,7 +47,7 @@ function formatearCabecera($hoja, $titulo) {
         'A' => ['#', 8], 'B' => ['Nombre del cliente', 40], 'C' => ['Pagado', 18],
         'D' => ['Restante', 18], 'E' => ['Total', 18], 'F' => ['Estatus', 22],
         'G' => ['Fecha de inicio', 18], 'H' => ['Fecha final', 20], 'I' => ['Plazo', 20],
-        'J' => ['Venta', 15], 'K' => ['Sucursal', 25], 'L' => ['Asesor', 40]
+        'J' => ['Venta', 15], 'K' => ['Sucursal', 25], 'L' => ['Vendedor', 40], 'M' => ['Asesor', 40]
     ];
 
     foreach ($columnas as $col => $info) {
@@ -55,9 +55,9 @@ function formatearCabecera($hoja, $titulo) {
         $hoja->setCellValue($col.'3', $info[0]);
     }
 
-    $hoja->getStyle('A3:L3')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setRGB('007bcc');
-    $hoja->getStyle('A3:L3')->getFont()->setBold(true)->getColor()->setRGB('FFFFFF');
-    $hoja->getStyle('A3:L3')->getAlignment()->setHorizontal('center');
+    $hoja->getStyle('A3:M3')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setRGB('007bcc');
+    $hoja->getStyle('A3:M3')->getFont()->setBold(true)->getColor()->setRGB('FFFFFF');
+    $hoja->getStyle('A3:M3')->getAlignment()->setHorizontal('center');
 }
 
 // --- FUNCIÓN PARA LLENAR DATOS ---
@@ -89,10 +89,11 @@ function llenarDatos($hoja, $datos, $mapa_colores, $color_default) {
         $hoja->setCellValue('I'.$index, $plazo);
         $hoja->setCellValue('J'.$index, $value["id_venta"]);
         $hoja->setCellValue('K'.$index, $value["nombre_sucursal"]);
-        $hoja->setCellValue('L'.$index, $value["asesor"]);
+        $hoja->setCellValue('L'.$index, $value["vendedor"]);
+        $hoja->setCellValue('M'.$index, $value["asesor"]);
 
         $color = $mapa_colores[$value['id_sucursal']] ?? $color_default;
-        $hoja->getStyle("A$index:L$index")->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($color);
+        $hoja->getStyle("A$index:M$index")->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($color);
 
         $total_monto += $value["restante"];
         $contador++;
@@ -104,23 +105,25 @@ function llenarDatos($hoja, $datos, $mapa_colores, $color_default) {
 // --- PROCESAMIENTO DE DATOS ---
 
 // 1. Créditos Vencidos (Estatus 4)
-$queryVencidos = "SELECT c.*, s.nombre as nombre_sucursal, s.id as id_sucursal, v.hora, cl.Nombre_Cliente as cliente, CONCAT(u.nombre,' ',u.apellidos) as asesor 
+$queryVencidos = "SELECT c.*, s.nombre as nombre_sucursal, s.id as id_sucursal, v.hora, concat(u2.nombre,' ', u2.apellidos) as vendedor, cl.Nombre_Cliente as cliente, CONCAT(u.nombre,' ',u.apellidos) as asesor 
                   FROM creditos c LEFT JOIN ventas v ON v.id = c.id_venta 
                   INNER JOIN clientes cl ON cl.id = v.id_Cliente 
                   INNER JOIN sucursal s ON v.id_sucursal = s.id 
                   INNER JOIN usuarios u ON cl.id_asesor = u.id 
+                  INNER JOIN usuarios u2 ON v.id_Usuarios = u2.id
                   WHERE c.estatus = 4 $filtro_sucursal ORDER BY s.nombre ASC, c.id_venta ASC";
 $resV = $con->prepare($queryVencidos);
 $resV->execute();
 $datosVencidos = Arreglo_Get_Result($resV);
 
 // 2. Créditos Activos (Excepto 3 y 5)
-$queryActivos = "SELECT c.*, s.nombre as nombre_sucursal, s.id as id_sucursal, v.hora, cl.Nombre_Cliente as cliente, CONCAT(u.nombre,' ',u.apellidos) as asesor 
+$queryActivos = "SELECT c.*, s.nombre as nombre_sucursal, s.id as id_sucursal, v.hora, concat(u2.nombre,' ', u2.apellidos) as vendedor, cl.Nombre_Cliente as cliente, CONCAT(u.nombre,' ',u.apellidos) as asesor 
                  FROM creditos c LEFT JOIN ventas v ON v.id = c.id_venta 
                  INNER JOIN clientes cl ON cl.id = v.id_Cliente 
                  INNER JOIN sucursal s ON v.id_sucursal = s.id 
                  INNER JOIN usuarios u ON cl.id_asesor = u.id 
-                 WHERE c.estatus NOT IN (3, 5, 4) $filtro_sucursal ORDER BY s.nombre ASC, c.id_venta ASC";
+                 INNER JOIN usuarios u2 ON v.id_Usuarios = u2.id
+                 WHERE c.estatus NOT IN (3, 5, 4, 6, 7) $filtro_sucursal ORDER BY s.nombre ASC, c.id_venta ASC";
 $resA = $con->prepare($queryActivos);
 $resA->execute();
 $datosActivos = Arreglo_Get_Result($resA);

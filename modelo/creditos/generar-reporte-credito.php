@@ -154,6 +154,14 @@ class PDF_Fancy extends FPDF {
                 $estatus_label = "Cancelada";
                 $r = 52; $g = 58; $b = 64; // Dark (Gris oscuro)
                 break;
+            case 6:
+                $estatus_label = "Irrecuperable";
+                $r = 108; $g = 117; $b = 125; // Secondary (Gris)
+                break;
+            case 7:
+                $estatus_label = "Garantía";
+                $r = 23; $g = 162; $b = 184; // Info (Cian)
+                break;
             default:
                 $estatus_label = "N/A";
                 $r = 100; $g = 100; $b = 100;
@@ -312,7 +320,7 @@ $plazos = 'Sin definir';
     break;
 }
 
-$pdf->SetY($pdf->GetY()-18);
+$pdf->SetY($pdf->GetY()-15);
 $pdf->SetFont('Arial', 'B', 7);
 $pdf->Cell(30, 5, 'PLAZO', 1, 0, 'C'); $pdf->Cell(30, 5, 'INICIO', 1, 0, 'C'); $pdf->Cell(30, 5, 'VENCIMIENTO', 1, 1, 'C');
 $pdf->SetFont('Arial', '', 7);
