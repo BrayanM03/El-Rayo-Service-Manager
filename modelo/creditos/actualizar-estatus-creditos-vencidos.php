@@ -24,7 +24,7 @@
     $res =0.00;
     $abierta = "Abierta"; 
      
-    $update = "UPDATE creditos SET estatus = ? WHERE estatus <> 5 AND pagado <> total AND restante <> ? AND fecha_final <= ?";
+    $update = "UPDATE creditos SET estatus = ? WHERE estatus <> 5 AND estatus != 6 AND estatus != 7 AND pagado <> total AND restante <> ? AND fecha_final <= ?";
     /* $update = "
     UPDATE creditos c
     JOIN ventas v ON c.id_venta = v.id
