@@ -433,6 +433,8 @@
                                     <option value="3">Finalizado</option>
                                     <option value="4">Vencido</option>
                                     <option value="5">Cancelada</option>
+                                    <option value="6">Irrecuperable</option>
+                                    <option value="7">Garantía</option>
                                 </select>
                             </div>
                             <div class="col-md-2">
